@@ -1,0 +1,64 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/Flutter/.last_build_id
+
+# Plataformas desktop
+macos/Flutter/ephemeral/
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+
+# Coverage / tests
+coverage/
+test/.test_coverage.dart
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Windows / OS
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Secretos y credenciales
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.pfx
+*.p12
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+oauth-token.json
+
+# Logs
+*.log
+logs/
+
+# Plans (work-in-progress, no van al repo público)
+plan/

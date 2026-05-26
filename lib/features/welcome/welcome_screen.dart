@@ -4,7 +4,6 @@ import '../../core/models/season_state.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
-import '../../shared/widgets/chip_badge.dart';
 import '../../shared/widgets/ghost_button.dart';
 import '../../shared/widgets/primary_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
@@ -31,8 +30,6 @@ class WelcomeScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ChipBadge(label: 'Código abierto · MIT · Gratis'),
-                    const SizedBox(height: AppSpacing.sp6),
                     RichText(
                       text: TextSpan(
                         style: AppTypography.hero(),
@@ -67,6 +64,11 @@ class WelcomeScreen extends StatelessWidget {
                           onPressed: () {},
                         ),
                       ],
+                    ),
+                    const SizedBox(height: AppSpacing.sp6),
+                    Text(
+                      '· MIT · Código abierto · Gratis para siempre ·',
+                      style: AppTypography.eyebrow(color: AppColors.textFaint),
                     ),
                   ],
                 ),

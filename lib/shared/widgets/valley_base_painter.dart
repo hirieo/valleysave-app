@@ -46,10 +46,13 @@ class ValleyBasePainter extends CustomPainter {
   void _drawStars(Canvas canvas, double W, double H, SeasonData d, double t) {
     final paint = Paint();
     for (final s in stars) {
-      final twinkle = 0.4 + 0.6 * ((sin(t * s.speed + s.phase) + 1) / 2);
-      paint.color =
-          Colors.white.withValues(alpha: d.starOpacity * twinkle * s.baseOpacity);
-      canvas.drawCircle(Offset(s.xFrac * W, s.yFrac * H * 0.65), s.radius, paint);
+      // Rango 0.05–1.0: titilación dramática
+      final twinkle = 0.05 + 0.95 * ((sin(t * s.speed + s.phase) + 1) / 2);
+      final alpha = (d.starOpacity * twinkle * s.baseOpacity).clamp(0.0, 1.0);
+      // Pulso de radio: la estrella "crece" en su punto más brillante
+      final r = s.radius * (0.7 + 0.3 * twinkle);
+      paint.color = Colors.white.withValues(alpha: alpha);
+      canvas.drawCircle(Offset(s.xFrac * W, s.yFrac * H * 0.65), r, paint);
     }
   }
 
@@ -99,7 +102,7 @@ class ValleyBasePainter extends CustomPainter {
   void _drawClouds(Canvas canvas, double W, double H, double t) {
     final paint = Paint()..color = Colors.white.withValues(alpha: 0.07);
     for (final c in clouds) {
-      final x = (c.xFrac * W + t * c.speed * 12) % (W + 300) - 150;
+      final x = (c.xFrac * W + t * c.speed * 3) % (W + 300) - 150;
       final y = c.yFrac * H * 0.45;
       _drawCloudBlob(canvas, x, y, c.width, paint);
     }

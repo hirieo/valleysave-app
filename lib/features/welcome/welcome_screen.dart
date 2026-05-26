@@ -54,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sp6),
                   Text(
                     'Sincroniza tus saves de Stardew Valley entre todos tus dispositivos. '
-                    'Tus datos viven en tu Google Drive — sin servidores propios, sin suscripciones.',
+                    'Tus datos viven en tu Google Drive — sin servidores propios, sin suscripciones, bajo tu control.',
                     style: AppTypography.body(),
                   ),
                   const SizedBox(height: AppSpacing.sp8),

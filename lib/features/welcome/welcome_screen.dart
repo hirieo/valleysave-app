@@ -43,11 +43,11 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         const TextSpan(text: 'Nunca pierdas\ntu '),
                         TextSpan(
-                          text: 'granja',
+                          text: 'granja,',
                           style: AppTypography.hero(color: AppColors.accent)
                               .copyWith(fontStyle: FontStyle.normal),
                         ),
-                        const TextSpan(text: '\notra vez.'),
+                        const TextSpan(text: '\nllévala contigo.'),
                       ],
                     ),
                   ),

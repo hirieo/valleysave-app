@@ -68,6 +68,8 @@ plan/
 .specify/
 specs/
 .metadata
+CLAUDE.md
+PROMPT.md
 
 # Mockups y capturas de dev
 mockup_*.html

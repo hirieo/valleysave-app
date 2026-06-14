@@ -10,19 +10,23 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.color,
   });
 
   final String label;
   final VoidCallback? onPressed;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    final bg = color ?? AppColors.accent;
+    final glowColor = bg.withValues(alpha: 0.35);
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: AppRadius.brPill,
         boxShadow: [
           BoxShadow(
-            color: AppColors.accentGlow,
+            color: glowColor,
             blurRadius: 22,
             offset: const Offset(0, 4),
           ),
@@ -31,8 +35,8 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.accent,
-          disabledBackgroundColor: AppColors.accent.withValues(alpha: 0.4),
+          backgroundColor: bg,
+          disabledBackgroundColor: bg.withValues(alpha: 0.4),
           foregroundColor: AppColors.greenTen,
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sp8),
           minimumSize: const Size(0, 52),

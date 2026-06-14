@@ -29,7 +29,7 @@ class _ValleyCanvasWidgetState extends State<ValleyCanvasWidget>
   void initState() {
     super.initState();
     final rng = Random();
-    _stars = generateStars(80, rng);
+    _stars = generateStars(200, rng);
     _clouds = generateClouds(6, rng);
     _particles = [];
 
@@ -39,6 +39,7 @@ class _ValleyCanvasWidgetState extends State<ValleyCanvasWidget>
       if (mounted) setState(() => _t = now);
     })
       ..start();
+
   }
 
   @override

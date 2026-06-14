@@ -24,17 +24,20 @@ class ValleyBasePainter extends CustomPainter {
     _drawSky(canvas, size, d);
     _drawStars(canvas, W, H, d, t);
 
-    if (season == SeasonState.summer || season == SeasonState.initial) {
+    if (season == SeasonState.summer) {
       _drawMoon(canvas, W, H, t, d.accentColor);
     }
     if (season == SeasonState.fall) {
       _drawFallMoon(canvas, W, H);
     }
 
+    if (season == SeasonState.initial) {
+      _drawTwilightGlow(canvas, W, H);
+    }
+
     _drawMountains(canvas, W, H, d);
 
-    // Nubes solo en estaciones futuras (no en initial)
-    if (season != SeasonState.initial) {
+    if (season != SeasonState.initial && season != SeasonState.spring) {
       _drawClouds(canvas, W, H, t);
     }
 
@@ -44,12 +47,29 @@ class ValleyBasePainter extends CustomPainter {
   // ── Sky ───────────────────────────────────────────────────────────────────
 
   void _drawSky(Canvas canvas, Size size, SeasonData d) {
+    final List<Color> colors;
+    final List<double> stops;
+
+    if (season == SeasonState.initial) {
+      colors = const [
+        Color(0xFF093375), // noche profunda
+        Color(0xFF1970C2), // cobalto vibrante
+        Color(0xFF2E9DE6), // cerúleo
+        Color(0xFF55C5F0), // cian brillante
+        Color(0xFF7DF1E1), // aguamarina horizonte
+      ];
+      stops = const [0.0, 0.25, 0.50, 0.75, 1.0];
+    } else {
+      colors = [d.skyTop, d.skyMid, d.skyBottom];
+      stops = const [0.0, 0.50, 1.0];
+    }
+
     final paint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [d.skyTop, d.skyMid, d.skyBottom],
-        stops: const [0.0, 0.50, 1.0],
+        colors: colors,
+        stops: stops,
       ).createShader(Offset.zero & size);
     canvas.drawRect(Offset.zero & size, paint);
   }
@@ -134,6 +154,24 @@ class ValleyBasePainter extends CustomPainter {
     canvas.drawCircle(Offset(cx, cy), mr, moonPaint);
   }
 
+  // ── Twilight horizon glow ─────────────────────────────────────────────────
+
+  void _drawTwilightGlow(Canvas canvas, double W, double H) {
+    // Franja cálida muy sutil en el horizonte — da sensación de crepúsculo
+    final warmGlow = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Colors.transparent,
+          const Color(0xFFa06820).withValues(alpha: 0.10),
+          const Color(0xFF6040a0).withValues(alpha: 0.08),
+        ],
+        stops: const [0.55, 0.80, 1.0],
+      ).createShader(Offset.zero & Size(W, H));
+    canvas.drawRect(Offset.zero & Size(W, H), warmGlow);
+  }
+
   // ── Mountains ─────────────────────────────────────────────────────────────
 
   void _drawMountains(Canvas canvas, double W, double H, SeasonData d) {
@@ -190,14 +228,15 @@ class ValleyBasePainter extends CustomPainter {
   // ── Hills ─────────────────────────────────────────────────────────────────
 
   void _drawHills(Canvas canvas, double W, double H, SeasonData d) {
-    _drawHillLayer(
-        canvas, W, H, d.hillColor.withValues(alpha: 0.7), 0.62, 0.055, 0.038, 1.2);
+    // Colina trasera — más clara, da profundidad
+    _drawHillLayer(canvas, W, H, d.hillBack, 0.62, 0.055, 0.038, 1.2);
     if (season == SeasonState.winter) {
       _drawHillLayer(
           canvas, W, H,
           const Color(0xFFccddf8).withValues(alpha: 0.18),
           0.60, 0.055, 0.038, 1.2);
     }
+    // Colina delantera — más oscura
     _drawHillLayer(canvas, W, H, d.hillColor, 0.72, 0.07, 0.045, 0.8);
   }
 
@@ -254,7 +293,7 @@ List<ValleyStar> generateStars(int n, Random rng) => List.generate(
       n,
       (_) => ValleyStar(
         xFrac:       rng.nextDouble(),
-        yFrac:       rng.nextDouble(),
+        yFrac:       rng.nextDouble() * rng.nextDouble(),
         radius:      0.6 + rng.nextDouble() * 1.2,
         speed:       0.4 + rng.nextDouble() * 1.2,
         phase:       rng.nextDouble() * 2 * pi,

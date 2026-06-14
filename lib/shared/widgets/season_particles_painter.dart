@@ -44,11 +44,15 @@ class SeasonParticlesPainter extends CustomPainter {
     canvas.save();
     canvas.translate(p.x, p.y);
     canvas.rotate(p.angle);
-    canvas.drawOval(
-      Rect.fromCenter(
-          center: Offset.zero, width: p.size * 0.76, height: p.size * 2),
-      Paint()..color = p.color.withValues(alpha: p.opacity),
-    );
+    final s = p.size;
+    final path = Path()
+      ..moveTo(0, s * 0.9)
+      ..cubicTo(-s * 0.7, s * 0.4, -s * 0.85, -s * 0.2, -s * 0.5, -s * 0.6)
+      ..cubicTo(-s * 0.25, -s * 0.85, -s * 0.08, -s * 0.75, 0, -s * 0.65)
+      ..cubicTo(s * 0.08, -s * 0.75, s * 0.25, -s * 0.85, s * 0.5, -s * 0.6)
+      ..cubicTo(s * 0.85, -s * 0.2, s * 0.7, s * 0.4, 0, s * 0.9)
+      ..close();
+    canvas.drawPath(path, Paint()..color = p.color.withValues(alpha: p.opacity));
     canvas.restore();
   }
 
@@ -178,19 +182,20 @@ void updateParticle(Particle p, double W, double H, double t) {
       }
     case ParticleType.petal:
       p.angle += p.rotSpeed;
-      p.x += p.vx + sin(t * .5 + p.phase) * p.drift * .5;
+      p.x += p.vx + sin(t * .5 + p.phase) * p.drift;
       p.y += p.vy;
       if (p.y > H + 20) {
         p.y = -20;
         p.x = _rand(0, W);
       }
     case ParticleType.leaf:
-      p.angle += p.rotSpeed;
-      p.x += p.vx + sin(t * .7 + p.phase) * p.drift;
-      p.y += p.vy;
-      if (p.y > H + 20 || p.x > W + 30) {
-        p.y = _rand(-80, -10);
-        p.x = _rand(-30, W * .4);
+      final gust = pow(max(0.0, sin(t * 0.6)), 3.0).toDouble() * 4.5;
+      p.angle += p.rotSpeed * (1.0 + gust * 0.4);
+      p.x += p.vx + sin(t * .7 + p.phase) * p.drift + gust;
+      p.y += p.vy + gust * 0.15;
+      if (p.y > H + 20 || p.x > W + 40 || p.x < -40) {
+        p.y = _rand(-60, -5);
+        p.x = _rand(0, W);
       }
     case ParticleType.snow:
       p.angle += p.rotSpeed;
@@ -229,8 +234,9 @@ const _petalColors = [
   Color(0xFFffb7c5),
   Color(0xFFffd0dc),
   Color(0xFFffe4ec),
-  Color(0xFFff9eb5),
-  Color(0xFFfff5f8),
+  Color(0xFFe888aa),
+  Color(0xFFe8b0d8),
+  Color(0xFFd8a0e0),
 ];
 const _leafColors = [
   Color(0xFFc8602a),
@@ -257,40 +263,29 @@ List<Particle> createParticles(SeasonState season, double W, double H) {
           color: _pick(_petalColors),
           x: _rand(0, W),
           y: _rand(-H, H),
-          vx: _rand(-.5, .5),
-          vy: _rand(.8, 1.8),
-          size: _rand(4, 9),
-          rotSpeed: _rand(-.045, .045),
-          opacity: _rand(.45, .9),
-          drift: _rand(.5, 1.2),
+          vx: _rand(-.4, .4),
+          vy: _rand(.15, .5),
+          size: _rand(7, 15),
+          rotSpeed: _rand(-.022, .022),
+          opacity: _rand(.35, .72),
+          drift: _rand(1.5, 3.5),
           phase: _rand(0, 2 * pi),
         ));
       }
-      for (int i = 0; i < 130; i++) {
-        ps.add(Particle(
-          type: ParticleType.rain,
-          color: Colors.transparent,
-          x: _rand(0, W),
-          y: _rand(-H, H),
-          vy: _rand(10, 18),
-          len: _rand(8, 18),
-          opacity: _rand(.05, .18),
-        ));
-      }
     case SeasonState.summer:
-      for (int i = 0; i < 48; i++) {
+      for (int i = 0; i < 55; i++) {
         ps.add(Particle(
           type: ParticleType.firefly,
           color: _pick(_fireColors),
           x: _rand(0, W),
-          y: _rand(H * .2, H * .95),
-          vx: _rand(-.3, .3),
-          vy: _rand(-.5, -.2),
-          size: _rand(2, 4.5),
+          y: _rand(H * .45, H * .95),
+          vx: _rand(-.2, .2),
+          vy: _rand(-.08, -.02),
+          size: _rand(3, 6),
           opacity: _rand(.7, 1),
           phase: _rand(0, 2 * pi),
           pulseSpeed: _rand(1.5, 3.5),
-          drift: _rand(.2, .6),
+          drift: _rand(.5, 1.2),
           driftPhase: _rand(0, 2 * pi),
         ));
       }
@@ -305,23 +300,24 @@ List<Particle> createParticles(SeasonState season, double W, double H) {
           vx: _rand(-.15, .15),
           vy: _rand(-.4, -.1),
           size: _rand(1.2, 2.8),
-          opacity: _rand(.2, .55),
+          opacity: _rand(.3, .7),
           phase: _rand(0, 2 * pi),
         ));
       }
     case SeasonState.fall:
-      for (int i = 0; i < 68; i++) {
+      for (int i = 0; i < 90; i++) {
+        final big = _rng.nextDouble() > 0.65;
         ps.add(Particle(
           type: ParticleType.leaf,
           color: _pick(_leafColors),
-          x: _rand(-20, W + 20),
+          x: _rand(0, W),
           y: _rand(-H, H * .5),
-          vx: _rand(1.5, 4.5),
-          vy: _rand(.8, 2.5),
-          size: _rand(5, 14),
-          rotSpeed: _rand(-.07, .07),
-          opacity: _rand(.55, .92),
-          drift: _rand(.8, 2.2),
+          vx: big ? _rand(-1.0, 5.5) : _rand(-1.5, 2.0),
+          vy: big ? _rand(1.2, 3.0) : _rand(0.3, 1.2),
+          size: big ? _rand(9, 18) : _rand(4, 9),
+          rotSpeed: _rand(-.09, .09),
+          opacity: _rand(.55, .95),
+          drift: big ? _rand(1.2, 2.8) : _rand(0.3, 1.2),
           phase: _rand(0, 2 * pi),
         ));
       }

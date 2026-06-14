@@ -62,3 +62,16 @@ logs/
 
 # Plans (work-in-progress, no van al repo público)
 plan/
+
+# Claude Code — configuración interna
+.claude/
+.specify/
+specs/
+.metadata
+
+# Mockups y capturas de dev
+mockup_*.html
+mockup_v*.html
+season_options.html
+flutter_*.png
+run.ps1

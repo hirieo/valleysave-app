@@ -65,16 +65,6 @@ class AppTypography {
         ),
       );
 
-  static TextStyle button({Color color = AppColors.text}) =>
-      GoogleFonts.dmSans(
-        textStyle: TextStyle(
-          color: color,
-          fontSize: 17,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.2,
-        ),
-      );
-
   // ----- Mono (DM Mono) -----
   static TextStyle mono({Color color = AppColors.textFaint, double size = 12}) =>
       GoogleFonts.dmMono(
@@ -83,6 +73,16 @@ class AppTypography {
           fontSize: size,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.8,
+        ),
+      );
+
+  static TextStyle button({Color color = AppColors.text}) =>
+      GoogleFonts.dmSans(
+        textStyle: TextStyle(
+          color: color,
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.2,
         ),
       );
 

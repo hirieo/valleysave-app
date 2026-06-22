@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/models/season_state.dart';
+import '../../core/services/auth_service.dart';
+import '../../core/services/drive_service.dart';
+import '../../core/services/season_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
@@ -9,6 +13,8 @@ import '../../shared/widgets/ghost_button.dart';
 import '../../shared/widgets/primary_button.dart';
 import '../../shared/widgets/season_click_effect.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
+import '../saves/saves_screen.dart';
+import '../settings/settings_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -17,18 +23,112 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with TickerProviderStateMixin {
   SeasonState _season = SeasonState.initial;
+  bool _authLoading = false;
+  bool _authConnected = false;
+  // ignore: unused_field — se pasará a la SyncScreen cuando esté implementada
+  DriveService? _drive;
+
+  late final AnimationController _pulseCtrl;
+  late final Animation<double> _pulseAnim;
 
   @override
   void initState() {
     super.initState();
     HardwareKeyboard.instance.addHandler(_onKey);
+    _resolveInitialSeason();
+    _tryRestoreAuth();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
+    _pulseAnim = Tween<double>(begin: 0.10, end: 0.55).animate(
+      CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut),
+    );
+  }
+
+  Future<void> _tryRestoreAuth() async {
+    final client = await AuthService.instance.tryRestore();
+    if (!mounted || client == null) return;
+    final drive = DriveService(client);
+    _initDrive(drive);
+    setState(() => _authConnected = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _goToSaves(drive));
+  }
+
+  Future<void> _connectDrive() async {
+    if (_authConnected || _authLoading) return;
+    setState(() => _authLoading = true);
+    try {
+      final client = await AuthService.instance.signIn();
+      if (mounted && client != null) {
+        setState(() => _authConnected = true);
+        final drive = DriveService(client);
+        _initDrive(drive);
+        _goToSaves(drive);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: const Color(0xFFC06050),
+            duration: const Duration(seconds: 10),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _authLoading = false);
+    }
+  }
+
+  void _initDrive(DriveService drive) {
+    _drive = drive;
+    drive.ensureFolder().ignore();
+  }
+
+  Future<void> _goToSaves(DriveService drive) async {
+    if (!mounted) return;
+    final disconnected = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => SavesScreen(drive: drive)),
+    );
+    if (mounted && disconnected == true) {
+      setState(() {
+        _authConnected = false;
+        _drive = null;
+      });
+    }
+  }
+
+  Future<void> _resolveInitialSeason() async {
+    final season = await SeasonService().resolve();
+    if (mounted) setState(() => _season = season);
+  }
+
+  Future<void> _openSettings() async {
+    final result = await Navigator.push<String?>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SettingsScreen(showDisconnect: _authConnected),
+      ),
+    );
+    if (mounted && result == 'disconnect') {
+      await AuthService.instance.signOut();
+      setState(() {
+        _authConnected = false;
+        _drive = null;
+      });
+    }
+    if (mounted) _resolveInitialSeason();
   }
 
   @override
   void dispose() {
     HardwareKeyboard.instance.removeHandler(_onKey);
+    _pulseCtrl.dispose();
     super.dispose();
   }
 
@@ -81,11 +181,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Center(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final compact = constraints.maxHeight < 480;
+                final mobile = constraints.maxWidth < 600;
+                final heroSize = mobile ? 52.0 : 84.0;
                 return ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 760),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sp8),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(
+                      mobile ? AppSpacing.sp6 : AppSpacing.sp8,
+                      mobile ? AppSpacing.sp4 : 0,
+                      mobile ? AppSpacing.sp6 : AppSpacing.sp8,
+                      mobile ? 80.0 : 0,
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +199,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         RichText(
                           text: TextSpan(
                             style: AppTypography.hero().copyWith(
-                              fontSize: compact ? 44 : 84,
+                              fontSize: heroSize,
                             ),
                             children: [
                               const TextSpan(text: 'Nunca pierdas\ntu '),
@@ -102,14 +208,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 style: AppTypography.hero(color: AppColors.accent)
                                     .copyWith(
                                   fontStyle: FontStyle.normal,
-                                  fontSize: compact ? 44 : 84,
+                                  fontSize: heroSize,
                                 ),
                               ),
                               const TextSpan(text: '\nllévala contigo.'),
                             ],
                           ),
                         ),
-                        SizedBox(height: compact ? AppSpacing.sp2 : AppSpacing.sp6),
+                        SizedBox(height: mobile ? AppSpacing.sp2 : AppSpacing.sp6),
                         Text(
                           'Sincroniza tus saves de Stardew Valley entre todos tus dispositivos. '
                           'Tus datos viven en tu Google Drive — sin servidores propios, sin suscripciones, bajo tu control.',
@@ -129,34 +235,110 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(height: compact ? AppSpacing.sp3 : AppSpacing.sp8),
-                        Wrap(
-                          spacing: AppSpacing.sp4,
-                          runSpacing: AppSpacing.sp4,
-                          children: [
-                            SeasonClickEffect(
-                              season: _season,
-                              child: PrimaryButton(
-                                label: 'Conectar Google Drive',
-                                onPressed: () {},
-                                color: SeasonData.data[_season]!.accentColor,
+                        SizedBox(height: mobile ? AppSpacing.sp4 : AppSpacing.sp8),
+                        if (_authConnected) ...[
+                          Wrap(
+                            spacing: AppSpacing.sp4,
+                            runSpacing: AppSpacing.sp4,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AnimatedBuilder(
+                                    animation: _pulseAnim,
+                                    builder: (context, child) => DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(999),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: SeasonData.data[_season]!.accentColor
+                                                .withValues(alpha: _pulseAnim.value),
+                                            blurRadius: 32,
+                                            spreadRadius: 6,
+                                          ),
+                                        ],
+                                      ),
+                                      child: child,
+                                    ),
+                                    child: SeasonClickEffect(
+                                      season: _season,
+                                      child: PrimaryButton(
+                                        label: 'Mis partidas',
+                                        onPressed: () => _goToSaves(_drive!),
+                                        color: SeasonData.data[_season]!.accentColor,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/google_drive.svg',
+                                        width: 12,
+                                        height: 12,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        'Drive conectado',
+                                        style: AppTypography.mono(
+                                          color: Colors.white.withValues(alpha: 0.50),
+                                          size: 11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
-                            SeasonClickEffect(
-                              season: _season,
-                              child: GhostButton(
-                                label: 'Cómo funciona',
-                                onPressed: () {},
-                                foregroundColor: Colors.white,
-                                borderColor: SeasonData.data[_season]!.accentColor.withValues(alpha: 0.80),
-                                backgroundColor: Colors.black.withValues(
-                                  alpha: _season == SeasonState.winter ? 0.45 : 0.32,
+                              SeasonClickEffect(
+                                season: _season,
+                                child: GhostButton(
+                                  label: 'Cómo funciona',
+                                  onPressed: () {},
+                                  foregroundColor: Colors.white,
+                                  borderColor: SeasonData.data[_season]!.accentColor
+                                      .withValues(alpha: 0.80),
+                                  backgroundColor: Colors.black.withValues(
+                                    alpha: _season == SeasonState.winter ? 0.45 : 0.32,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: compact ? AppSpacing.sp2 : AppSpacing.sp6),
+                            ],
+                          ),
+                        ] else ...[
+                          Wrap(
+                            spacing: AppSpacing.sp4,
+                            runSpacing: AppSpacing.sp4,
+                            children: [
+                              SeasonClickEffect(
+                                season: _season,
+                                child: PrimaryButton(
+                                  label: _authLoading
+                                      ? 'Conectando…'
+                                      : 'Conectar Google Drive',
+                                  onPressed: _authLoading ? null : _connectDrive,
+                                  color: SeasonData.data[_season]!.accentColor,
+                                ),
+                              ),
+                              SeasonClickEffect(
+                                season: _season,
+                                child: GhostButton(
+                                  label: 'Cómo funciona',
+                                  onPressed: () {},
+                                  foregroundColor: Colors.white,
+                                  borderColor: SeasonData.data[_season]!.accentColor
+                                      .withValues(alpha: 0.80),
+                                  backgroundColor: Colors.black.withValues(
+                                    alpha: _season == SeasonState.winter ? 0.45 : 0.32,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                        SizedBox(height: mobile ? AppSpacing.sp2 : AppSpacing.sp6),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                           decoration: BoxDecoration(
@@ -177,7 +359,47 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               },
             ),
           ),
-          // z=2: chips — sobre todo lo demás, reciben eventos primero
+          // z=2: settings button — alineado con el área de contenido
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 760),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: _openSettings,
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.30),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.15),
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.settings_rounded,
+                              size: 18,
+                              color: Colors.white.withValues(alpha: 0.70),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // z=3: chips — sobre todo lo demás, reciben eventos primero
           Positioned(
             bottom: 24,
             left: 0,

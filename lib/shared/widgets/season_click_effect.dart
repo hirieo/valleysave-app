@@ -19,7 +19,6 @@ class SeasonClickEffect extends StatefulWidget {
 class _SeasonClickEffectState extends State<SeasonClickEffect>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
-  Offset _tapPos = Offset.zero;
   List<_Particle> _particles = [];
 
   @override
@@ -27,7 +26,7 @@ class _SeasonClickEffectState extends State<SeasonClickEffect>
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 5000),
+      duration: const Duration(milliseconds: 900),
     )..addListener(() => setState(() {}));
   }
 
@@ -45,8 +44,7 @@ class _SeasonClickEffectState extends State<SeasonClickEffect>
         Listener(
           onPointerDown: (PointerDownEvent e) {
             setState(() {
-              _tapPos = e.localPosition;
-              _particles = _buildParticles(widget.season, _tapPos);
+              _particles = _buildParticles(widget.season);
             });
             _ctrl.forward(from: 0);
           },
@@ -75,7 +73,6 @@ enum _Shape { star, petal, drop, leaf, snowflake }
 
 class _Particle {
   const _Particle({
-    required this.start,
     required this.vx,
     required this.vy,
     required this.size,
@@ -85,13 +82,12 @@ class _Particle {
     required this.shape,
   });
 
-  final Offset start;
   final double vx, vy, size, angle, rotSpeed;
   final Color color;
   final _Shape shape;
 }
 
-List<_Particle> _buildParticles(SeasonState season, Offset origin) {
+List<_Particle> _buildParticles(SeasonState season) {
   final rng = Random();
   const count = 35;
   final list = <_Particle>[];
@@ -103,7 +99,6 @@ List<_Particle> _buildParticles(SeasonState season, Offset origin) {
     switch (season) {
       case SeasonState.initial:
         list.add(_Particle(
-          start: origin,
           vx: cos(a) * spd,
           vy: sin(a) * spd,
           size: 12 + rng.nextDouble() * 14,
@@ -117,7 +112,6 @@ List<_Particle> _buildParticles(SeasonState season, Offset origin) {
 
       case SeasonState.spring:
         list.add(_Particle(
-          start: origin,
           vx: cos(a) * spd * 0.8,
           vy: sin(a) * spd * 0.8 - 25,
           size: 14 + rng.nextDouble() * 16,
@@ -130,7 +124,6 @@ List<_Particle> _buildParticles(SeasonState season, Offset origin) {
 
       case SeasonState.summer:
         list.add(_Particle(
-          start: origin,
           vx: cos(a) * spd,
           vy: sin(a) * spd,
           size: 10 + rng.nextDouble() * 14,
@@ -143,7 +136,6 @@ List<_Particle> _buildParticles(SeasonState season, Offset origin) {
 
       case SeasonState.fall:
         list.add(_Particle(
-          start: origin,
           vx: cos(a) * spd * 0.7 + (rng.nextDouble() - 0.5) * 30,
           vy: sin(a) * spd * 0.6,
           size: 14 + rng.nextDouble() * 16,
@@ -160,7 +152,6 @@ List<_Particle> _buildParticles(SeasonState season, Offset origin) {
 
       case SeasonState.winter:
         list.add(_Particle(
-          start: origin,
           vx: cos(a) * spd * 0.45,
           vy: sin(a) * spd * 0.45 - 15,
           size: 13 + rng.nextDouble() * 15,
@@ -187,16 +178,22 @@ class _BurstPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
     final t = progress * 1.2;
     final fadeProgress = progress < 0.60 ? 0.0 : (progress - 0.60) / 0.40;
     final fade = 1.0 - Curves.easeIn.transform(fadeProgress);
+
+    final borderR = size.height * 0.5;
 
     for (final p in particles) {
       final alpha = (fade * 255).clamp(0, 255).toInt();
       if (alpha <= 0) continue;
 
-      final x = p.start.dx + p.vx * t;
-      final y = p.start.dy + p.vy * t + 0.5 * _gravity * t * t;
+      final speed = sqrt(p.vx * p.vx + p.vy * p.vy);
+      final startX = center.dx + (p.vx / speed) * borderR;
+      final startY = center.dy + (p.vy / speed) * borderR;
+      final x = startX + p.vx * t;
+      final y = startY + p.vy * t + 0.5 * _gravity * t * t;
       final rot = p.angle + p.rotSpeed * t;
 
       final paint = Paint()..color = p.color.withAlpha(alpha);

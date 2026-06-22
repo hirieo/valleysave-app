@@ -11,11 +11,13 @@ class PrimaryButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.color,
+    this.leading,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final Color? color;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,16 @@ class PrimaryButton extends StatelessWidget {
           shape: const RoundedRectangleBorder(borderRadius: AppRadius.brPill),
           elevation: 0,
         ),
-        child: Text(label, style: AppTypography.button(color: AppColors.greenTen)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: 8),
+            ],
+            Text(label, style: AppTypography.button(color: AppColors.greenTen)),
+          ],
+        ),
       ),
     );
   }

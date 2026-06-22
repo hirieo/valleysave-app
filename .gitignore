@@ -63,6 +63,9 @@ logs/
 # Plans (work-in-progress, no van al repo público)
 plan/
 
+# Credenciales OAuth — nunca al repo
+.credenciales/
+
 # Claude Code — configuración interna
 .claude/
 .specify/

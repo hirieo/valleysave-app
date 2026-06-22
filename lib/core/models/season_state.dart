@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum SeasonState { initial, spring, summer, fall, winter }

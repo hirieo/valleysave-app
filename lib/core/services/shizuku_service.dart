@@ -45,6 +45,15 @@ class ShizukuService {
     }
   }
 
+  /// Versión del SDK de Android (Build.VERSION.SDK_INT). En otras plataformas → 0.
+  Future<int> sdkInt() async {
+    try {
+      return (await _native.invokeMethod<int>('sdkInt')) ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
   /// ¿El usuario ya concedió permiso a ValleySave dentro de Shizuku?
   Future<bool> hasPermission() async => (await _api.checkPermission()) ?? false;
 

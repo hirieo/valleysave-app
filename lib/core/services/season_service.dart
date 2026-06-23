@@ -37,7 +37,7 @@ class SeasonService {
     final geoSeason = await _geoSeason();
     if (geoSeason != null) return geoSeason;
 
-    return _seasonFromMonth(DateTime.now().month, isNorthern: true);
+    return SeasonState.initial;
   }
 
   // ── Settings persistence ──────────────────────────────────────────────────

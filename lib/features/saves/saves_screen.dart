@@ -14,7 +14,7 @@ import '../../core/services/auth_service.dart';
 import '../../core/services/bridge_service.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/save_service.dart';
-import '../../core/services/season_service.dart';
+import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
 import '../../core/services/stardew_paths.dart';
 import '../../core/theme/app_colors.dart';
@@ -26,7 +26,7 @@ import 'save_card.dart';
 /// Vía de acceso a los saves locales en Android.
 /// `chooser` = aún sin elegir · `shizuku` = automático (ADB, única vía fiable en
 /// Android 13+) · `bridge` = puente manual (solo útil en Android 11-12).
-enum AndroidMode { chooser, shizuku, bridge }
+enum AndroidMode { chooser, shizuku, bridge, root }
 
 class SavesScreen extends StatefulWidget {
   const SavesScreen({super.key, this.drive});
@@ -40,13 +40,13 @@ class SavesScreen extends StatefulWidget {
 class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   List<SaveEntry> _entries = [];
   bool _loading = true;
-  SeasonState _season = SeasonState.initial;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
 
   // ── Modo de acceso en Android ──
   static const _modePrefKey = 'android_access_mode';
   AndroidMode? _mode; // null = aún leyendo la preferencia
   String? _bridgeInPath; // ruta de bridge_in (modo puente), para mostrar
+  int _sdkInt = 33; // assume 13+ until native replies; hides bridge by default
   // Estado de Shizuku (solo submodo shizuku). null = comprobando.
   bool? _shizukuRunning;
   bool _shizukuGranted = false;
@@ -58,7 +58,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _init();
-    _resolveSeason();
   }
 
   @override
@@ -80,14 +79,30 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _resolveSeason() async {
-    final season = await SeasonService().resolve();
-    if (mounted && _entries.isEmpty) setState(() => _season = season);
+  /// Comprueba si el dispositivo puede leer gameSavesPath directamente (root).
+  Future<bool> _canAccessDirect() async {
+    try {
+      final dir = Directory(gameSavesPath);
+      if (!await dir.exists()) return false;
+      await dir.list().first;
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> _init() async {
     if (!Platform.isAndroid) {
       _mode = AndroidMode.bridge; // no aplica; evita ramas de gate en desktop
+      await _load();
+      return;
+    }
+    // Detectar versión de Android para condicionar el chooser.
+    _sdkInt = await ShizukuService.instance.sdkInt();
+    // Root / acceso directo: si funciona, carga sin mostrar ningún selector.
+    if (await _canAccessDirect()) {
+      if (!mounted) return;
+      setState(() => _mode = AndroidMode.root);
       await _load();
       return;
     }
@@ -122,6 +137,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         await _load();
       case AndroidMode.chooser:
         if (mounted) setState(() => _loading = false);
+      case AndroidMode.root:
+        await _load(); // acceso directo ya verificado en _init
     }
   }
 
@@ -194,15 +211,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (!ok) _snack('Abre Shizuku desde tu cajón de apps.');
   }
 
-  /// Abre los ajustes de optimización de batería (para excluir Shizuku).
-  Future<void> _openBatterySettings() async {
+  /// Abre la info de la app Shizuku para que el usuario ponga energía → No restringido.
+  Future<void> _openShizukuAppInfo() async {
     try {
       const intent = AndroidIntent(
-        action: 'android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS',
+        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
+        data: 'package:moe.shizuku.privileged.api',
       );
       await intent.launch();
     } catch (_) {
-      _snack('Ajustes → Batería → quita el ahorro para Shizuku.');
+      _snack('Ajustes → Apps → Shizuku → Batería → No restringido.');
     }
   }
 
@@ -213,6 +231,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<List<SaveFile>> _scanLocal() async {
     if (!Platform.isAndroid) return SaveService().scan();
     switch (_mode) {
+      case AndroidMode.root:
+        return SaveService().scanDir(gameSavesPath);
       case AndroidMode.shizuku:
         if (!_shizukuReady) return [];
         final bridge = await ShizukuService.instance.pullSaves();
@@ -257,8 +277,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       setState(() {
         _entries = entries;
         _loading = false;
-        if (entries.isNotEmpty) _season = entries.first.primary.seasonState;
       });
+      SeasonController.instance.setFromSaves(entries);
     }
   }
 
@@ -502,7 +522,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          Positioned.fill(child: ValleyCanvasWidget(season: _season)),
+          Positioned.fill(
+            child: ValueListenableBuilder<SeasonState>(
+              valueListenable: SeasonController.instance.season,
+              builder: (_, season, _) => ValleyCanvasWidget(season: season),
+            ),
+          ),
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -525,7 +550,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 _TopBar(
                   onBack: () => Navigator.pop(context),
                   onSettings: _openSettings,
-                  onDisconnect: _disconnectDrive,
                 ),
                 Expanded(child: _buildBody()),
               ],
@@ -706,16 +730,19 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 'que toques nada. Única vía fiable en Android 13+.',
             onTap: () => _chooseMode(AndroidMode.shizuku),
           ),
-          const SizedBox(height: 12),
-          _modeCard(
-            icon: Icons.swap_horiz_rounded,
-            accent: AppColors.green,
-            badge: 'SOLO ANDROID 11-12',
-            title: 'Puente manual',
-            desc: 'Copias la partida con tu app de Archivos. Solo funciona en '
-                'Android 11 y 12 (en 13+ el sistema lo bloquea).',
-            onTap: () => _chooseMode(AndroidMode.bridge),
-          ),
+          if (_sdkInt < 33) ...[
+            const SizedBox(height: 12),
+            _modeCard(
+              icon: Icons.swap_horiz_rounded,
+              accent: AppColors.green,
+              badge: 'SOLO ANDROID 11-12',
+              title: 'Puente manual',
+              desc: 'Copias la partida con tu app de Archivos. Disponible en '
+                  'Android 11 y 12 porque el gestor del sistema sí puede entrar '
+                  'en la carpeta del juego.',
+              onTap: () => _chooseMode(AndroidMode.bridge),
+            ),
+          ],
           const SizedBox(height: 18),
           _howItWorksLink(),
         ],
@@ -924,20 +951,26 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   'Ajustes → Información del teléfono → Información de software → '
                   'toca "Número de compilación" 7 veces.'),
               _guideStep('3', 'Activa Depuración inalámbrica',
-                  'El botón te lleva ahí y la resalta. Actívala (ON).',
+                  'El botón te lleva ahí y la resalta. Actívala (ON). '
+                  'Después toca "Emparejar dispositivo con código de vinculación" '
+                  '— aparecerá un código de 6 dígitos en pantalla.',
                   action: _smallButton('Abrir y resaltar', _openWirelessDebug,
                       icon: Icons.open_in_new_rounded)),
               _guideStep('4', 'Empareja e INICIA Shizuku',
-                  'Abre Shizuku → "Iniciar mediante depuración inalámbrica". '
-                  'La 1ª vez: Emparejar (código de 6 dígitos). Después pulsa '
-                  'INICIAR — sin ese último toque, Shizuku no queda activo.',
+                  'Abre Shizuku → "Iniciar mediante depuración inalámbrica" → '
+                  '"Emparejar con código de sincronización". '
+                  'Shizuku enviará una notificación indicando que está a la espera. '
+                  'Introduce el código de 6 dígitos que ves en la pantalla de '
+                  'Depuración inalámbrica. Tras emparejar, pulsa INICIAR — '
+                  'sin ese último toque Shizuku no queda activo.',
                   action: _smallButton('Abrir Shizuku', _openShizukuApp,
                       icon: Icons.open_in_new_rounded)),
-              _guideStep('5', 'Evita que el ahorro de batería lo cierre',
-                  'Quita la optimización/ahorro de batería de Shizuku, o el '
-                  'sistema lo cerrará y habría que reactivarlo.',
-                  action: _smallButton('Ajustes de batería',
-                      _openBatterySettings, icon: Icons.open_in_new_rounded)),
+              _guideStep('5', 'Pon la energía de Shizuku en No restringido',
+                  'Abre la info de la app → Batería → No restringido. '
+                  'Si no lo haces, el sistema cerrará Shizuku en segundo '
+                  'plano y tendrás que volver a darle a Iniciar.',
+                  action: _smallButton('Info de app Shizuku',
+                      _openShizukuAppInfo, icon: Icons.open_in_new_rounded)),
               _guideStep(
                 '6',
                 'Concede el permiso a ValleySave',
@@ -1158,12 +1191,10 @@ class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.onBack,
     required this.onSettings,
-    required this.onDisconnect,
   });
 
   final VoidCallback onBack;
   final VoidCallback onSettings;
-  final VoidCallback onDisconnect;
 
   @override
   Widget build(BuildContext context) {
@@ -1189,7 +1220,7 @@ class _TopBar extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              _MenuButton(onSettings: onSettings, onDisconnect: onDisconnect),
+              _IconCircle(icon: Icons.settings_rounded, onTap: onSettings),
             ],
           ),
         ),
@@ -1221,71 +1252,3 @@ class _IconCircle extends StatelessWidget {
   }
 }
 
-class _MenuButton extends StatelessWidget {
-  const _MenuButton({required this.onSettings, required this.onDisconnect});
-  final VoidCallback onSettings;
-  final VoidCallback onDisconnect;
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<String>(
-      tooltip: 'Opciones',
-      elevation: 4,
-      position: PopupMenuPosition.under,
-      color: Colors.black.withValues(alpha: 0.55),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.white.withValues(alpha: 0.10)),
-      ),
-      onSelected: (v) {
-        if (v == 'settings') onSettings();
-        if (v == 'disconnect') onDisconnect();
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'settings',
-          child: Row(
-            children: [
-              const Icon(Icons.tune_rounded, size: 16, color: AppColors.textMuted),
-              const SizedBox(width: 10),
-              Text(
-                'Ajustes',
-                style: GoogleFonts.dmMono(fontSize: 12, color: AppColors.text),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'disconnect',
-          child: Row(
-            children: [
-              const Icon(Icons.logout_rounded, size: 16, color: Color(0xFFC06050)),
-              const SizedBox(width: 10),
-              Text(
-                'Desconectar Drive',
-                style: GoogleFonts.dmMono(
-                  fontSize: 12,
-                  color: const Color(0xFFC06050),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-      child: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.30),
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-        ),
-        child: Icon(
-          Icons.settings_rounded,
-          size: 18,
-          color: Colors.white.withValues(alpha: 0.70),
-        ),
-      ),
-    );
-  }
-}

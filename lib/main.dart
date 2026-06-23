@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'core/services/season_controller.dart';
 import 'core/theme/app_theme.dart';
 import 'features/welcome/welcome_screen.dart';
 
@@ -11,6 +12,7 @@ void main() async {
   } catch (_) {
     // .env no disponible (CI, build sin credenciales): continuar sin él
   }
+  await SeasonController.instance.init();
   runApp(const ValleySaveApp());
 }
 

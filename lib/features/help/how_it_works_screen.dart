@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../core/models/season_state.dart';
+import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
+import '../../shared/widgets/valley_canvas_widget.dart';
 
 /// Pantalla informativa: explica las dos vías de acceso a los saves en Android
 /// (Shizuku automático · Puente manual con la app de Archivos).
@@ -18,30 +21,54 @@ class HowItWorksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg,
-      body: SafeArea(
-        child: Column(
+      body: ValueListenableBuilder<SeasonState>(
+        valueListenable: SeasonController.instance.season,
+        builder: (_, season, _) => Stack(
           children: [
-            _header(context),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 460),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _intro(),
-                        const SizedBox(height: 24),
-                        _shizukuCard(),
-                        const SizedBox(height: 16),
-                        _bridgeCard(),
-                        const SizedBox(height: 24),
-                        _footerNote(),
-                      ],
-                    ),
+            Positioned.fill(child: ValleyCanvasWidget(season: season)),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.40, 1.0],
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.28),
+                      Colors.black.withValues(alpha: 0.62),
+                    ],
                   ),
                 ),
+              ),
+            ),
+            SafeArea(
+              child: Column(
+                children: [
+                  _header(context),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 460),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _intro(),
+                              const SizedBox(height: 24),
+                              _shizukuCard(),
+                              const SizedBox(height: 16),
+                              _bridgeCard(),
+                              const SizedBox(height: 24),
+                              _footerNote(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -136,11 +163,11 @@ class HowItWorksScreen extends StatelessWidget {
     return _viaCard(
       icon: Icons.swap_horiz_rounded,
       accent: AppColors.green,
-      badge: 'SIN INSTALAR NADA',
+      badge: 'ALTERNATIVA MANUAL · ANDROID 11-12',
       title: 'Puente manual',
       subtitle:
-          'No instalas nada extra. A cambio, copias la partida a mano con tu '
-          'app de Archivos cada vez que sincronizas.',
+          'Solo funciona en Android 11 y 12. No instalas nada extra; a cambio, '
+          'copias la partida a mano con tu app de Archivos cada vez que sincronizas.',
       steps: const [
         'Descargar de Drive: ValleySave deja la partida en su carpeta. '
             'Tú la copias con Archivos a la carpeta de Stardew.',

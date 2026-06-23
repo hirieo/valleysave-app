@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
+import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -18,7 +19,6 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final _service  = SeasonService();
   SeasonSettings _settings = const SeasonSettings();
-  SeasonState    _season   = SeasonState.initial;
   bool _loading = true;
 
   @override
@@ -28,12 +28,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _load() async {
-    final s      = await _service.loadSettings();
-    final season = await SeasonService().resolve();
+    final s = await _service.loadSettings();
     if (mounted) {
       setState(() {
         _settings = s;
-        _season   = season;
         _loading  = false;
       });
     }
@@ -42,6 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _save(SeasonSettings s) async {
     setState(() => _settings = s);
     await _service.saveSettings(s);
+    SeasonController.instance.init();
   }
 
   Future<void> _showDisconnectDialog() async {
@@ -138,7 +137,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Stack(
         children: [
           // Canvas animado
-          Positioned.fill(child: ValleyCanvasWidget(season: _season)),
+          Positioned.fill(
+            child: ValueListenableBuilder<SeasonState>(
+              valueListenable: SeasonController.instance.season,
+              builder: (_, season, _) => ValleyCanvasWidget(season: season),
+            ),
+          ),
           // Scrim igual que saves_screen
           Positioned.fill(
             child: DecoratedBox(
@@ -207,7 +211,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         _modeTile(
                           SeasonMode.auto,
                           'Automático',
-                          'Sigue tu partida activa, tu ubicación y la fecha real.',
+                          'Sigue tu partida activa y, sin partidas, tu ubicación real.',
                         ),
                         const SizedBox(height: 8),
                         _modeTile(
@@ -421,7 +425,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 10),
           _step('3', 'Ubicación', 'Detecta tu hemisferio y la estación real de tu región.'),
           const SizedBox(height: 10),
-          _step('4', 'Por defecto', 'Hemisferio norte si no hay ningún dato disponible.'),
+          _step('4', 'Por defecto', 'Inicial (modo nocturno) si no hay ningún dato disponible.'),
         ],
       ),
     );

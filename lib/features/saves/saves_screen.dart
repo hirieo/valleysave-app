@@ -650,14 +650,19 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
-        content: local == null
-            ? Text(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (local == null)
+              Text(
                 'Se copiará "${drive.farmName}" (Día ${drive.dayOfMonth}, '
                 '${drive.playtimeLabel}) a este equipo.',
                 style: GoogleFonts.dmMono(
                     fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
               )
-            : _overwritePreview(
+            else
+              _overwritePreview(
                 intro: 'Esto SOBRESCRIBE tu save local de "${drive.farmName}".',
                 current: local,
                 result: drive,
@@ -665,6 +670,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 resultLabel: 'DESDE DRIVE',
                 resultColor: const Color(0xFF5AA8E0),
               ),
+            if (local != null &&
+                drive.gameVersion.isNotEmpty &&
+                local.gameVersion.isNotEmpty &&
+                drive.gameVersion != local.gameVersion) ...[
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE09020).withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                      color: const Color(0xFFE09020).withValues(alpha: 0.40)),
+                ),
+                child: Text(
+                  '⚠️ Versiones distintas: local ${local.gameVersion} · Drive ${drive.gameVersion}. '
+                  'El juego podría no cargar el save correctamente.',
+                  style: GoogleFonts.dmMono(
+                      fontSize: 10,
+                      height: 1.5,
+                      color: const Color(0xFFE09020).withValues(alpha: 0.90)),
+                ),
+              ),
+            ],
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

@@ -99,6 +99,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                               _sectionConflicts(),
                               const SizedBox(height: 12),
                               _sectionDeletion(),
+                              const SizedBox(height: 12),
+                              _sectionCompatibility(),
                               const SizedBox(height: 28),
                               _androidDivider(),
                               const SizedBox(height: 16),
@@ -566,6 +568,44 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             color: red,
             text: 'ValleySave no puede recuperar partidas borradas definitivamente. '
                 'Los archivos en Drive son tu responsabilidad.',
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Section: compatibility ────────────────────────────────────────────────
+
+  Widget _sectionCompatibility() {
+    const amber = Color(0xFFE09020);
+    return _infoCard(
+      icon: Icons.warning_amber_rounded,
+      color: amber,
+      title: 'Compatibilidad entre plataformas',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _tip(
+            icon: Icons.emoji_events_outlined,
+            color: amber,
+            text: 'Los logros de Steam y Google Play no se transfieren. '
+                'Cada plataforma solo registra los logros que ocurren en ella '
+                'en tiempo real — el save no los activa retroactivamente.',
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.sync_problem_rounded,
+            color: amber,
+            text: 'Si sincronizas desde dos dispositivos sin orden, una partida '
+                'puede sobrescribir a otra. Sube siempre antes de descargar.',
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.system_update_alt_rounded,
+            color: amber,
+            text: 'Las partidas de versiones distintas del juego pueden no cargarse '
+                'correctamente. ValleySave avisa si detecta una diferencia de '
+                'versión antes de descargar.',
           ),
         ],
       ),

@@ -1206,6 +1206,16 @@ class _SideTile extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.42),
               ),
             ),
+            if (save!.gameVersion.isNotEmpty) ...[
+              const SizedBox(height: 1),
+              Text(
+                'v${save!.gameVersion}',
+                style: GoogleFonts.dmMono(
+                  fontSize: 8,
+                  color: Colors.white.withValues(alpha: 0.28),
+                ),
+              ),
+            ],
           ] else
             Text(
               'No está aquí',

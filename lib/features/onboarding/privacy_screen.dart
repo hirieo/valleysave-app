@@ -50,28 +50,54 @@ class PrivacyScreen extends StatelessWidget {
                 children: [
                   // Header
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
                     child: Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 480),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        constraints: const BoxConstraints(maxWidth: 492),
+                        child: Stack(
+                          alignment: Alignment.centerLeft,
                           children: [
-                            Text(
-                              'Antes de empezar',
-                              style: GoogleFonts.fraunces(
-                                fontSize: 24,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white.withValues(alpha: 0.95),
+                            if (viewOnly)
+                              GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.30),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white.withValues(alpha: 0.15),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_back_rounded,
+                                    size: 18,
+                                    color: Colors.white.withValues(alpha: 0.70),
+                                  ),
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Lee y acepta la política de uso para continuar. · Última actualización: junio 2026',
-                              style: GoogleFonts.dmMono(
-                                fontSize: 11,
-                                color: Colors.white.withValues(alpha: 0.45),
+                            Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    viewOnly ? 'Política de uso' : 'Antes de empezar',
+                                    style: GoogleFonts.fraunces(
+                                      fontSize: 24,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white.withValues(alpha: 0.95),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Última actualización: junio 2026',
+                                    style: GoogleFonts.dmMono(
+                                      fontSize: 11,
+                                      color: Colors.white.withValues(alpha: 0.45),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],

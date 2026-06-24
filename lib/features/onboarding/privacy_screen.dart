@@ -67,7 +67,7 @@ class PrivacyScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Lee y acepta la política de uso para continuar.',
+                              'Lee y acepta la política de uso para continuar. · Última actualización: junio 2026',
                               style: GoogleFonts.dmMono(
                                 fontSize: 11,
                                 color: Colors.white.withValues(alpha: 0.45),
@@ -107,11 +107,11 @@ class PrivacyScreen extends StatelessWidget {
                               ),
                               _section(
                                 'Anuncios',
-                                'ValleySave puede mostrar anuncios mediante Google AdMob. Google puede tratar algunos datos técnicos o publicitarios según su propia política de privacidad y según tus preferencias de anuncios.',
+                                'ValleySave puede mostrar anuncios mediante Google AdMob. AdMob puede usar el identificador de publicidad de tu dispositivo (GAID) para personalizar anuncios según la política de privacidad de Google (policies.google.com/privacy).\n\nPuedes desactivar la personalización de anuncios en Ajustes > Google > Anuncios.',
                               ),
                               _section(
                                 'Responsabilidad',
-                                'Tus archivos de guardado son responsabilidad tuya.\n\nAunque ValleySave intenta sincronizar las partidas de forma segura, no puede garantizar que no haya pérdidas, corrupciones, sobrescrituras o eliminaciones accidentales.\n\nAntes de sincronizar o restaurar partidas importantes, te recomendamos hacer una copia de seguridad adicional.',
+                                'Tus archivos de guardado son responsabilidad tuya.\n\nAunque ValleySave intenta sincronizar las partidas de forma segura, no puede garantizar que no haya pérdidas, corrupciones, sobrescrituras o eliminaciones accidentales. Por ejemplo, sincronizar desde dos dispositivos sin orden puede hacer que una partida sobrescriba a otra.\n\nTe recomendamos hacer siempre una copia de seguridad adicional antes de sincronizar o restaurar.',
                                 highlight: true,
                               ),
                               _section(
@@ -119,8 +119,8 @@ class PrivacyScreen extends StatelessWidget {
                                 'Puedes borrar tus copias sincronizadas eliminando manualmente la carpeta ValleySave/ de Google Drive.\n\nTambién puedes borrar los datos locales desde los ajustes de Android o desinstalar la app.',
                               ),
                               _section(
-                                'Código abierto',
-                                'ValleySave es un proyecto open source bajo licencia MIT. Puedes revisar el código, reportar errores o proponer mejoras en el repositorio oficial de GitHub.',
+                                'Código abierto y contacto',
+                                'ValleySave es un proyecto open source bajo licencia MIT. Puedes revisar el código, reportar errores o proponer mejoras en el repositorio oficial:\n\ngithub.com/hirieo/valleysave-app',
                               ),
                               const SizedBox(height: 8),
                             ],

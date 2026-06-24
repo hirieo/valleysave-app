@@ -607,6 +607,15 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                 'correctamente. ValleySave avisa si detecta una diferencia de '
                 'versión antes de descargar.',
           ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.extension_rounded,
+            color: amber,
+            text: 'Los mods de SMAPI añaden datos extra al save. Si cargas una '
+                'partida con mods en un dispositivo donde esos mods no están '
+                'instalados, el juego puede fallar o perder datos del mod.\n\n'
+                'En Android, SMAPI también puede instalarse para usar mods.',
+          ),
         ],
       ),
     );

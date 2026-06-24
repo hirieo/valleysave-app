@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,6 +34,10 @@ Color _tileBg(Color s) =>
         .withValues(alpha: 0.42);
 Color _tileBdr(Color s) => s.withValues(alpha: 0.32);
 
+// Divisor horizontal sutil (compartido por la card y por SaveStatsView).
+final _kDivider =
+    Container(height: 1, color: Colors.white.withValues(alpha: 0.08));
+
 const _kPipFarming  = Color(0xFFC8960A);
 const _kPipMining   = Color(0xFFA878C0);
 const _kPipCombat   = Color(0xFFE07040);
@@ -44,6 +50,15 @@ const _kPipFishing  = Color(0xFF4888C8);
       SaveSyncStatus.driveAhead => (color: _kDrive,  label: 'Drive más avanzada'),
       SaveSyncStatus.localOnly  => (color: _kLocal,  label: 'Solo en este equipo'),
       SaveSyncStatus.driveOnly  => (color: _kDrive,  label: 'Solo en Drive'),
+    };
+
+// Etiqueta de estado corta para la fila de acción (evita truncado en móvil).
+String _shortStatus(SaveSyncStatus s) => switch (s) {
+      SaveSyncStatus.synced     => 'Sync',
+      SaveSyncStatus.localAhead => 'Local +',
+      SaveSyncStatus.driveAhead => 'Drive +',
+      SaveSyncStatus.localOnly  => 'Solo local',
+      SaveSyncStatus.driveOnly  => 'Solo Drive',
     };
 
 String _rel(DateTime t) {
@@ -90,18 +105,17 @@ class SaveCard extends StatelessWidget {
             Container(height: 3, color: st.color),
             _Header(save: save),
             _kDivider,
-            _TilesRow(save: save),
+            SaveStatsView(save: save),
             _kDivider,
-            _SkillsGrid(save: save),
-            _kDivider,
-            _PillsRow(save: save),
-            _kDivider,
-            _PresenceRow(entry: entry),
+            _PresenceRow(
+              entry: entry,
+              onUpload: onUpload,
+              onDownload: onDownload,
+            ),
             _kDivider,
             _Footer(
               entry: entry,
               statusColor: st.color,
-              statusLabel: st.label,
               busy: busy,
               onUpload: onUpload,
               onDownload: onDownload,
@@ -111,8 +125,355 @@ class SaveCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  static final _kDivider = Container(height: 1, color: Colors.white.withValues(alpha: 0.08));
+/// Stats de UNA versión (tiles + skills + pills), reutilizable fuera de la card
+/// principal (p. ej. en la hoja de detalle de una cara de presencia).
+class SaveStatsView extends StatelessWidget {
+  const SaveStatsView({super.key, required this.save});
+  final SaveFile save;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _TilesRow(save: save),
+        _kDivider,
+        _SkillsGrid(save: save),
+        _kDivider,
+        _PillsRow(save: save),
+      ],
+    );
+  }
+}
+
+/// Una cara del detalle (local o Drive) con su identidad y acción.
+class _DetailSide {
+  const _DetailSide({
+    required this.save,
+    required this.color,
+    required this.icon,
+    required this.title,
+    required this.actionLabel,
+    required this.actionIcon,
+    required this.onAction,
+  });
+  final SaveFile save;
+  final Color color;
+  final String icon;
+  final String title;
+  final String actionLabel;
+  final IconData actionIcon;
+  final VoidCallback? onAction;
+}
+
+/// Hoja inferior con los stats completos de una versión, con título de la cara,
+/// swipe entre local↔Drive (si existen ambas) y la acción propia de cada una.
+void _showSaveDetail(
+  BuildContext context, {
+  required SaveEntry entry,
+  required bool startOnLocal,
+  VoidCallback? onUpload,
+  VoidCallback? onDownload,
+}) {
+  final isMobile = Platform.isAndroid || Platform.isIOS;
+
+  // Caras presentes — local primero, Drive después.
+  final sides = <_DetailSide>[
+    if (entry.local != null)
+      _DetailSide(
+        save: entry.local!,
+        color: _kLocal,
+        icon: isMobile ? '📱' : '💻',
+        title: isMobile ? 'En este móvil' : 'En este equipo',
+        actionLabel: 'Subir a Drive',
+        actionIcon: Icons.cloud_upload_outlined,
+        onAction: onUpload,
+      ),
+    if (entry.drive != null)
+      _DetailSide(
+        save: entry.drive!,
+        color: _kDrive,
+        icon: '☁️',
+        title: 'En Drive',
+        actionLabel: 'Descargar partida',
+        actionIcon: Icons.cloud_download_outlined,
+        onAction: onDownload,
+      ),
+  ];
+  if (sides.isEmpty) return;
+
+  // startOnLocal → primera (local si existe); si no, la última (Drive).
+  final initialPage = startOnLocal ? 0 : sides.length - 1;
+  final controller =
+      PageController(initialPage: initialPage.clamp(0, sides.length - 1));
+
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    barrierColor: Colors.black.withValues(alpha: 0.70),
+    isScrollControlled: true,
+    builder: (ctx) {
+      return Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(ctx).padding.top + 40),
+        child: _DetailSheet(sides: sides, controller: controller),
+      );
+    },
+  );
+}
+
+class _DetailSheet extends StatefulWidget {
+  const _DetailSheet({required this.sides, required this.controller});
+  final List<_DetailSide> sides;
+  final PageController controller;
+
+  @override
+  State<_DetailSheet> createState() => _DetailSheetState();
+}
+
+class _DetailSheetState extends State<_DetailSheet> {
+  late int _index = widget.controller.initialPage;
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
+  }
+
+  Widget _navArrow(IconData icon,
+      {required bool enabled,
+      required Color color,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          color: enabled ? color.withValues(alpha: 0.14) : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: enabled
+                ? color.withValues(alpha: 0.40)
+                : Colors.white.withValues(alpha: 0.10),
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: enabled
+              ? color.withValues(alpha: 0.90)
+              : Colors.white.withValues(alpha: 0.20),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sides = widget.sides;
+    final active = sides[_index];
+    final height = MediaQuery.of(context).size.height * 0.80;
+
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          // Opaco (no se pierde contra el canvas) con un leve tinte de la cara.
+          color: Color.alphaBlend(
+            active.color.withValues(alpha: 0.06),
+            const Color(0xFF0B0B0D),
+          ),
+          border: Border(
+            top: BorderSide(
+                color: active.color.withValues(alpha: 0.70), width: 2),
+          ),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.20),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (sides.length > 1) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _navArrow(
+                      Icons.chevron_left_rounded,
+                      enabled: _index > 0,
+                      color: sides[0].color,
+                      onTap: () => widget.controller.animateToPage(
+                        _index - 1,
+                        duration: const Duration(milliseconds: 280),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    ...List.generate(sides.length, (i) {
+                      final on = i == _index;
+                      final c = sides[i].color;
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        width: on ? 18 : 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: on ? c : c.withValues(alpha: 0.35),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      );
+                    }),
+                    const SizedBox(width: 12),
+                    _navArrow(
+                      Icons.chevron_right_rounded,
+                      enabled: _index < sides.length - 1,
+                      color: sides[sides.length - 1].color,
+                      onTap: () => widget.controller.animateToPage(
+                        _index + 1,
+                        duration: const Duration(milliseconds: 280),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+              Expanded(
+                child: PageView.builder(
+                  controller: widget.controller,
+                  onPageChanged: (i) => setState(() => _index = i),
+                  itemCount: sides.length,
+                  itemBuilder: (_, i) => _DetailPage(side: sides[i]),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailPage extends StatelessWidget {
+  const _DetailPage({required this.side});
+  final _DetailSide side;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = side.save;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Cabecera + stats scrollean; el botón de acción queda fijo al pie
+        // para que no quede un hueco vacío bajo él.
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(side.icon, style: const TextStyle(fontSize: 14)),
+                          const SizedBox(width: 7),
+                          Text(
+                            side.title.toUpperCase(),
+                            style: GoogleFonts.dmMono(
+                              fontSize: 10,
+                              letterSpacing: 1.0,
+                              fontWeight: FontWeight.w700,
+                              color: side.color,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        s.farmName,
+                        style: GoogleFonts.fraunces(
+                          fontSize: 24,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.text,
+                          height: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Día ${s.dayOfMonth} · Año ${s.year}',
+                        style: GoogleFonts.dmMono(
+                          fontSize: 11,
+                          color: s.seasonColor.withValues(alpha: 0.90),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _kDivider,
+                SaveStatsView(save: s),
+              ],
+            ),
+          ),
+        ),
+        if (side.onAction != null) ...[
+          _kDivider,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                side.onAction!.call();
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 13),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: side.color.withValues(alpha: 0.16),
+                  border:
+                      Border.all(color: side.color.withValues(alpha: 0.55)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(side.actionIcon, size: 16, color: side.color),
+                    const SizedBox(width: 7),
+                    Text(
+                      side.actionLabel,
+                      style: GoogleFonts.dmMono(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: side.color,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 // ── Header ───────────────────────────────────────────────────────────────────
@@ -226,52 +587,81 @@ class _TilesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mineLabel = save.deepestMineLevel == 0
+    final mineValue = save.deepestMineLevel == 0
         ? 'Sin explorar'
-        : 'Nv. ${save.deepestMineLevel}';
+        : '${save.deepestMineLevel}';
+    final mineLabel = save.deepestMineLevel == 0 ? 'Mina' : 'Mina · Nv';
 
     final bg  = _tileBg(save.seasonColor);
     final bdr = _tileBdr(save.seasonColor);
 
+    final coins = _MiniTile(
+      icon: _CoinIcon(),
+      value: save.currentMoneyLabel,
+      label: 'Monedas',
+      valueColor: _kMoneyNow,
+      bgColor: bg,
+      borderColor: bdr,
+    );
+    final total = _MiniTile(
+      icon: const Text('💰', style: TextStyle(fontSize: 12)),
+      value: save.totalMoneyLabel,
+      label: 'Total',
+      valueColor: _kMoneyTotal,
+      bgColor: bg,
+      borderColor: bdr,
+    );
+    final mine = _MiniTile(
+      icon: const Text('⛏️', style: TextStyle(fontSize: 12)),
+      value: mineValue,
+      label: mineLabel,
+      valueColor: _kMineLevel,
+      bgColor: bg,
+      borderColor: bdr,
+    );
+
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          _BigTile(save: save),
-          const SizedBox(width: 7),
-          Expanded(
-            child: _MiniTile(
-              icon: _CoinIcon(),
-              value: save.currentMoneyLabel,
-              label: 'Monedas',
-              valueColor: _kMoneyNow,
-              bgColor: bg,
-              borderColor: bdr,
-            ),
-          ),
-          const SizedBox(width: 7),
-          Expanded(
-            child: _MiniTile(
-              icon: const Text('💰', style: TextStyle(fontSize: 12)),
-              value: save.totalMoneyLabel,
-              label: 'Total',
-              valueColor: _kMoneyTotal,
-              bgColor: bg,
-              borderColor: bdr,
-            ),
-          ),
-          const SizedBox(width: 7),
-          Expanded(
-            child: _MiniTile(
-              icon: const Text('⛏️', style: TextStyle(fontSize: 12)),
-              value: mineLabel,
-              label: 'Mina',
-              valueColor: _kMineLevel,
-              bgColor: bg,
-              borderColor: bdr,
-            ),
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Estrecho (móvil): apilar Monedas/Total/Mina en columna junto al
+          // BigTile, a su misma altura.
+          if (constraints.maxWidth < 360) {
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _BigTile(save: save),
+                  const SizedBox(width: 7),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(child: coins),
+                        const SizedBox(height: 7),
+                        Expanded(child: total),
+                        const SizedBox(height: 7),
+                        Expanded(child: mine),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          // Amplio (desktop): layout horizontal actual.
+          return Row(
+            children: [
+              _BigTile(save: save),
+              const SizedBox(width: 7),
+              Expanded(child: coins),
+              const SizedBox(width: 7),
+              Expanded(child: total),
+              const SizedBox(width: 7),
+              Expanded(child: mine),
+            ],
+          );
+        },
       ),
     );
   }
@@ -362,14 +752,17 @@ class _MiniTile extends StatelessWidget {
               icon,
               const SizedBox(width: 4),
               Flexible(
-                child: Text(
-                  value,
-                  style: GoogleFonts.dmMono(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: valueColor,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    value,
+                    style: GoogleFonts.dmMono(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: valueColor,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -489,14 +882,16 @@ class _SkillRow extends StatelessWidget {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              const gap = 1.5;
-              final pipW =
-                  ((constraints.maxWidth - gap * 9) / 10).clamp(4.0, 7.0);
+              final available = constraints.maxWidth;
+              final pipW = ((available - 1.5 * 9) / 10).clamp(0.0, 7.0);
+              final actualGap = pipW * 10 < available
+                  ? (available - pipW * 10) / 9
+                  : 0.0;
               return Row(
                 children: List.generate(10, (i) {
                   return Padding(
                     padding: i < 9
-                        ? const EdgeInsets.only(right: gap)
+                        ? EdgeInsets.only(right: actualGap)
                         : EdgeInsets.zero,
                     child: Container(
                       width: pipW,
@@ -586,8 +981,14 @@ class _PillsRow extends StatelessWidget {
 // ── Presencia: este equipo vs Drive ──────────────────────────────────────────
 
 class _PresenceRow extends StatelessWidget {
-  const _PresenceRow({required this.entry});
+  const _PresenceRow({
+    required this.entry,
+    this.onUpload,
+    this.onDownload,
+  });
   final SaveEntry entry;
+  final VoidCallback? onUpload;
+  final VoidCallback? onDownload;
 
   @override
   Widget build(BuildContext context) {
@@ -596,6 +997,7 @@ class _PresenceRow extends StatelessWidget {
         status == SaveSyncStatus.localAhead || status == SaveSyncStatus.localOnly;
     final driveAhead =
         status == SaveSyncStatus.driveAhead || status == SaveSyncStatus.driveOnly;
+    final isMobile = Platform.isAndroid || Platform.isIOS;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 9, 10, 9),
@@ -606,10 +1008,14 @@ class _PresenceRow extends StatelessWidget {
             Expanded(
               child: _SideTile(
                 color: _kLocal,
-                icon: '💻',
-                title: 'EN ESTE EQUIPO',
+                icon: isMobile ? '📱' : '💻',
+                title: isMobile ? 'EN ESTE MÓVIL' : 'EN ESTE EQUIPO',
                 save: entry.local,
                 highlight: localAhead && entry.drive != null,
+                entry: entry,
+                isLocalSide: true,
+                onUpload: onUpload,
+                onDownload: onDownload,
               ),
             ),
             const SizedBox(width: 7),
@@ -620,6 +1026,10 @@ class _PresenceRow extends StatelessWidget {
                 title: 'EN DRIVE',
                 save: entry.drive,
                 highlight: driveAhead && entry.local != null,
+                entry: entry,
+                isLocalSide: false,
+                onUpload: onUpload,
+                onDownload: onDownload,
               ),
             ),
           ],
@@ -636,6 +1046,10 @@ class _SideTile extends StatelessWidget {
     required this.title,
     required this.save,
     required this.highlight,
+    required this.entry,
+    required this.isLocalSide,
+    this.onUpload,
+    this.onDownload,
   });
 
   final Color color;
@@ -643,13 +1057,17 @@ class _SideTile extends StatelessWidget {
   final String title;
   final SaveFile? save;
   final bool highlight;
+  final SaveEntry entry;
+  final bool isLocalSide;
+  final VoidCallback? onUpload;
+  final VoidCallback? onDownload;
 
   @override
   Widget build(BuildContext context) {
     final present = save != null;
     final base = present ? color : Colors.white.withValues(alpha: 0.20);
 
-    return Container(
+    final content = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: present
@@ -711,6 +1129,19 @@ class _SideTile extends StatelessWidget {
         ],
       ),
     );
+
+    if (!present) return content;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _showSaveDetail(
+        context,
+        entry: entry,
+        startOnLocal: isLocalSide,
+        onUpload: onUpload,
+        onDownload: onDownload,
+      ),
+      child: content,
+    );
   }
 }
 
@@ -720,7 +1151,6 @@ class _Footer extends StatelessWidget {
   const _Footer({
     required this.entry,
     required this.statusColor,
-    required this.statusLabel,
     required this.busy,
     this.onUpload,
     this.onDownload,
@@ -728,7 +1158,6 @@ class _Footer extends StatelessWidget {
 
   final SaveEntry entry;
   final Color statusColor;
-  final String statusLabel;
   final bool busy;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
@@ -751,16 +1180,16 @@ class _Footer extends StatelessWidget {
           const SizedBox(width: 6),
           Flexible(
             child: Text(
-              statusLabel,
+              _shortStatus(status),
               style: GoogleFonts.dmMono(
-                fontSize: 9.5,
-                fontWeight: FontWeight.w500,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
                 color: statusColor,
               ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const Spacer(),
+          const SizedBox(width: 8),
           if (busy)
             const SizedBox(
               width: 15,
@@ -775,13 +1204,30 @@ class _Footer extends StatelessWidget {
               filled: false,
             )
           else ...[
-            if (hasLocal && hasDrive && recommendDownload)
-              _TextAlt(label: 'Subir', onTap: onUpload),
-            if (hasLocal && hasDrive && recommendUpload)
-              _TextAlt(label: 'Descargar', onTap: onDownload),
+            // Acción alternativa (ghost) primero; recomendada (filled) a la derecha.
+            if (hasLocal && hasDrive && recommendDownload) ...[
+              _ActionBtn(
+                label: 'Subir',
+                color: _kLocal,
+                icon: Icons.cloud_upload_outlined,
+                filled: false,
+                onTap: onUpload,
+              ),
+              const SizedBox(width: 8),
+            ],
+            if (hasLocal && hasDrive && recommendUpload) ...[
+              _ActionBtn(
+                label: 'Descargar',
+                color: _kDrive,
+                icon: Icons.cloud_download_outlined,
+                filled: false,
+                onTap: onDownload,
+              ),
+              const SizedBox(width: 8),
+            ],
             if (recommendUpload)
               _ActionBtn(
-                label: 'Subir a Drive',
+                label: 'Subir',
                 color: _kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: true,
@@ -856,30 +1302,6 @@ class _ActionBtn extends StatelessWidget {
               style: GoogleFonts.dmMono(fontSize: 10, color: color),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TextAlt extends StatelessWidget {
-  const _TextAlt({required this.label, this.onTap});
-  final String label;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Text(
-          label,
-          style: GoogleFonts.dmMono(
-            fontSize: 9,
-            color: Colors.white.withValues(alpha: 0.45),
-            decoration: TextDecoration.underline,
-          ),
         ),
       ),
     );

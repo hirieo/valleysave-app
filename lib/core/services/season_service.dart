@@ -27,6 +27,12 @@ class SeasonService {
     if (settings.mode == SeasonMode.random) {
       return _randomSeason();
     }
+    if (settings.mode == SeasonMode.savesOnly) {
+      return await _seasonFromLastSave() ?? SeasonState.initial;
+    }
+    if (settings.mode == SeasonMode.geoOnly) {
+      return await _geoSeason() ?? SeasonState.initial;
+    }
 
     // Auto mode
     if (await _isFirstLaunch()) return SeasonState.initial;

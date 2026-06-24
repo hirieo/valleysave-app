@@ -16,14 +16,22 @@ class SeasonController {
     season.value = await SeasonService().resolve();
   }
 
-  /// Solo sobreescribe si el modo es AUTO.
+  /// Sobreescribe solo en modos que dependen de las partidas (auto / savesOnly).
   /// Llamar tras cargar saves — propaga la estación de la partida más reciente.
   Future<void> setFromSaves(List<SaveEntry> entries) async {
     final settings = await SeasonService().loadSettings();
-    if (settings.mode != SeasonMode.auto) return;
-    season.value = entries.isEmpty
-        ? SeasonState.initial
-        : entries.first.primary.seasonState;
+    final m = settings.mode;
+    if (m == SeasonMode.auto || m == SeasonMode.savesOnly) {
+      if (entries.isNotEmpty) {
+        season.value = entries.first.primary.seasonState;
+      } else if (m == SeasonMode.savesOnly) {
+        season.value = SeasonState.initial;
+      } else {
+        // auto sin partidas → re-resolver para caer a geo→initial
+        season.value = await SeasonService().resolve();
+      }
+    }
+    // geoOnly/fixed/random → no tocar (la fuente no depende de las partidas)
   }
 
   /// Cambio directo desde Ajustes al seleccionar modo fixed o random.

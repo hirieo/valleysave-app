@@ -215,6 +215,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         const SizedBox(height: 8),
                         _modeTile(
+                          SeasonMode.savesOnly,
+                          'Según partida',
+                          'Usa siempre la estación de tu partida más reciente.',
+                        ),
+                        const SizedBox(height: 8),
+                        _modeTile(
+                          SeasonMode.geoOnly,
+                          'Según ubicación',
+                          'Usa siempre la estación real de tu ubicación.',
+                        ),
+                        const SizedBox(height: 8),
+                        _modeTile(
                           SeasonMode.fixed,
                           'Fijar estación',
                           'Muestra siempre la misma estación.',

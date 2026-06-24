@@ -1461,8 +1461,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     ),
                     const SizedBox(height: 8),
                     _guideStep('1', 'Instala Shizuku',
-                        'Gratis. Si Google Play te lo bloquea (móviles nuevos como el '
-                        'A16), usa el APK oficial de GitHub.',
+                        'Gratis. Si Google Play te lo bloquea en tu móvil, '
+                        'usa el APK oficial de GitHub.',
                         action: Wrap(spacing: 8, runSpacing: 8, children: [
                           _smallButton('Play Store', _openShizukuPlayStore),
                           _smallButton('APK GitHub', _openShizukuGithub),

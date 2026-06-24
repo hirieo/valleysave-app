@@ -862,9 +862,9 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           ],
           if (pathA != null) ...[
             const SizedBox(height: 16),
-            _pathChip(pathLabelA!, pathA),
+            _pathChip(pathLabelA!, pathA, accent),
             const SizedBox(height: 8),
-            _pathChip(pathLabelB!, pathB!),
+            _pathChip(pathLabelB!, pathB!, accent),
           ],
           if (closing != null) ...[
             const SizedBox(height: 16),
@@ -940,14 +940,14 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
     );
   }
 
-  Widget _pathChip(String label, String path) {
+  Widget _pathChip(String label, String path, Color accent) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: AppColors.bgAlt,
+        color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderSub),
+        border: Border.all(color: accent.withValues(alpha: 0.22)),
       ),
       child: Row(
         children: [

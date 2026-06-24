@@ -1669,7 +1669,7 @@ class _TopBar extends StatelessWidget {
               Text(
                 'Mis partidas',
                 style: GoogleFonts.fraunces(
-                  fontSize: 18,
+                  fontSize: 24,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,
                   color: Colors.white.withValues(alpha: 0.92),

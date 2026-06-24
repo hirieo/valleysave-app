@@ -328,7 +328,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
-                              '· MIT · Código abierto · Gratis para siempre ·',
+                              '· Código abierto · No comercial · Gratis para siempre ·',
                               style: AppTypography.eyebrow(
                                 color: Colors.white.withValues(alpha: 0.80),
                               ),

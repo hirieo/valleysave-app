@@ -120,7 +120,7 @@ class PrivacyScreen extends StatelessWidget {
                               ),
                               _section(
                                 'Código abierto y contacto',
-                                'ValleySave es un proyecto open source bajo licencia MIT. Puedes revisar el código, reportar errores o proponer mejoras en el repositorio oficial:\n\ngithub.com/hirieo/valleysave-app',
+                                'ValleySave es un proyecto de código abierto bajo licencia Polyform Noncommercial. Puedes ver el código, estudiar cómo funciona y contribuir — pero no usarlo con fines comerciales.\n\ngithub.com/hirieo/valleysave-app',
                               ),
                               const SizedBox(height: 8),
                             ],

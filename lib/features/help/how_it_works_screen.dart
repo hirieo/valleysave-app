@@ -128,7 +128,10 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
   Widget _header(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-      child: Stack(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 492),
+          child: Stack(
         alignment: Alignment.center,
         children: [
           const SizedBox(height: 36, width: double.infinity),
@@ -160,6 +163,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             ),
           ),
         ],
+          ),
+        ),
       ),
     );
   }

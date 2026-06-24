@@ -54,13 +54,6 @@ const _kPipFishing  = Color(0xFF4888C8);
     };
 
 // Etiqueta de estado corta para la fila de acción (evita truncado en móvil).
-String _shortStatus(SaveSyncStatus s) => switch (s) {
-      SaveSyncStatus.synced     => 'Sync',
-      SaveSyncStatus.localAhead => 'Local +',
-      SaveSyncStatus.driveAhead => 'Drive +',
-      SaveSyncStatus.localOnly  => 'Solo local',
-      SaveSyncStatus.driveOnly  => 'Solo Drive',
-    };
 
 String _rel(DateTime t) {
   final d = DateTime.now().difference(t);
@@ -1271,7 +1264,62 @@ class _Footer extends StatelessWidget {
         status == SaveSyncStatus.localOnly || status == SaveSyncStatus.localAhead;
     final recommendDownload =
         status == SaveSyncStatus.driveOnly || status == SaveSyncStatus.driveAhead;
+    final isMobile = Platform.isAndroid || Platform.isIOS;
 
+    if (isMobile) {
+      // Mobile: solo iconos, sin texto de estado
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _Dot(color: statusColor),
+            const Spacer(),
+            if (busy)
+              const SizedBox(
+                width: 15,
+                height: 15,
+                child: CircularProgressIndicator(strokeWidth: 1.5),
+              )
+            else if (status == SaveSyncStatus.synced)
+              Icon(Icons.check_rounded, size: 16, color: _kSynced)
+            else ...[
+              if (hasLocal && hasDrive && recommendDownload) ...[
+                _ActionBtn(
+                  label: '', color: _kLocal,
+                  icon: Icons.cloud_upload_outlined,
+                  filled: false, iconOnly: true, onTap: onUpload,
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (hasLocal && hasDrive && recommendUpload) ...[
+                _ActionBtn(
+                  label: '', color: _kDrive,
+                  icon: Icons.cloud_download_outlined,
+                  filled: false, iconOnly: true, onTap: onDownload,
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (recommendUpload)
+                _ActionBtn(
+                  label: '', color: _kLocal,
+                  icon: Icons.cloud_upload_outlined,
+                  filled: true, iconOnly: true, onTap: onUpload,
+                ),
+              if (recommendDownload)
+                _ActionBtn(
+                  label: '', color: _kDrive,
+                  icon: Icons.cloud_download_outlined,
+                  filled: true, iconOnly: true, onTap: onDownload,
+                ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    // Desktop: dot + etiqueta descriptiva + botones con label
+    final statusLabel = _statusStyle(status).label;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
       child: Row(
@@ -1280,9 +1328,9 @@ class _Footer extends StatelessWidget {
           const SizedBox(width: 6),
           Flexible(
             child: Text(
-              _shortStatus(status),
+              statusLabel,
               style: GoogleFonts.dmMono(
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: statusColor,
               ),
@@ -1304,7 +1352,6 @@ class _Footer extends StatelessWidget {
               filled: false,
             )
           else ...[
-            // Acción alternativa (ghost) primero; recomendada (filled) a la derecha.
             if (hasLocal && hasDrive && recommendDownload) ...[
               _ActionBtn(
                 label: 'Subir',
@@ -1372,6 +1419,7 @@ class _ActionBtn extends StatelessWidget {
     required this.color,
     required this.icon,
     required this.filled,
+    this.iconOnly = false,
     this.onTap,
   });
 
@@ -1379,6 +1427,7 @@ class _ActionBtn extends StatelessWidget {
   final Color color;
   final IconData icon;
   final bool filled;
+  final bool iconOnly;
   final VoidCallback? onTap;
 
   @override
@@ -1386,23 +1435,27 @@ class _ActionBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        padding: iconOnly
+            ? const EdgeInsets.all(8)
+            : const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
           color: color.withValues(alpha: filled ? 0.16 : 0.0),
           border: Border.all(color: color.withValues(alpha: 0.50)),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 13, color: color),
-            const SizedBox(width: 5),
-            Text(
-              label,
-              style: GoogleFonts.dmMono(fontSize: 10, color: color),
-            ),
-          ],
-        ),
+        child: iconOnly
+            ? Icon(icon, size: 15, color: color)
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 13, color: color),
+                  const SizedBox(width: 5),
+                  Text(
+                    label,
+                    style: GoogleFonts.dmMono(fontSize: 10, color: color),
+                  ),
+                ],
+              ),
       ),
     );
   }

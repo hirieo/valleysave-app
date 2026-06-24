@@ -279,7 +279,7 @@ class _DetailSheetState extends State<_DetailSheet> {
     final maxH = MediaQuery.of(context).size.height * 0.90;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: maxH),
+      constraints: BoxConstraints(maxHeight: maxH, maxWidth: 420),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
         child: Container(

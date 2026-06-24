@@ -265,24 +265,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFC06050).withValues(alpha: 0.06),
+                                color: const Color(0xFFC06050).withValues(alpha: 0.07),
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: const Color(0xFFC06050).withValues(alpha: 0.20),
+                                  color: const Color(0xFFC06050).withValues(alpha: 0.55),
+                                  width: 1.5,
                                 ),
                               ),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
                                     Icons.logout_rounded,
                                     size: 16,
-                                    color: const Color(0xFFC06050).withValues(alpha: 0.80),
+                                    color: const Color(0xFFDC7864),
                                   ),
-                                  const SizedBox(width: 12),
+                                  const SizedBox(width: 8),
                                   Text(
                                     'Desconectar Drive',
                                     style: AppTypography.bodyStrong(
-                                      color: const Color(0xFFC06050).withValues(alpha: 0.90),
+                                      color: const Color(0xFFDC7864),
                                     ),
                                   ),
                                 ],

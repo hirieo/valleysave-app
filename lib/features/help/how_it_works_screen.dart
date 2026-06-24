@@ -7,12 +7,47 @@ import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 
-class HowItWorksScreen extends StatelessWidget {
-  const HowItWorksScreen({super.key});
+class HowItWorksScreen extends StatefulWidget {
+  const HowItWorksScreen({super.key, this.scrollToSection});
+  final String? scrollToSection;
 
+  @override
+  State<HowItWorksScreen> createState() => _HowItWorksScreenState();
+}
+
+class _HowItWorksScreenState extends State<HowItWorksScreen> {
   static const _gamePath =
       'Android/data/com.chucklefish.stardewvalley/files/Saves';
   static const _bridgePath = 'Android/data/com.hirieo.valleysave/files';
+
+  final _shizukuKey = GlobalKey();
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.scrollToSection == 'shizuku') {
+        _scrollToShizuku();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToShizuku() {
+    final context = _shizukuKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(context,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +80,7 @@ class HowItWorksScreen extends StatelessWidget {
                   _header(context),
                   Expanded(
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       padding: const EdgeInsets.fromLTRB(20, 8, 20, 48),
                       child: Center(
                         child: ConstrainedBox(
@@ -66,7 +102,10 @@ class HowItWorksScreen extends StatelessWidget {
                               const SizedBox(height: 28),
                               _androidDivider(),
                               const SizedBox(height: 16),
-                              _shizukuCard(season),
+                              KeyedSubtree(
+                                key: _shizukuKey,
+                                child: _shizukuCard(season),
+                              ),
                               const SizedBox(height: 16),
                               _bridgeCard(season),
                             ],

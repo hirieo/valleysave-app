@@ -111,7 +111,7 @@ class PrivacyScreen extends StatelessWidget {
                               ),
                               _section(
                                 'Responsabilidad',
-                                'Tus archivos de guardado son responsabilidad tuya.\n\nAunque ValleySave intenta sincronizar las partidas de forma segura, no puede garantizar que no haya pérdidas, corrupciones, sobrescrituras o eliminaciones accidentales. Por ejemplo, sincronizar desde dos dispositivos sin orden puede hacer que una partida sobrescriba a otra.\n\nTe recomendamos hacer siempre una copia de seguridad adicional antes de sincronizar o restaurar.',
+                                'Tus archivos de guardado son responsabilidad tuya.\n\nAunque ValleySave intenta sincronizar de forma segura, no puede garantizar que no haya pérdidas o corrupciones en situaciones imprevistas. Por ejemplo, sincronizar desde dos dispositivos sin orden puede hacer que una partida sobrescriba a otra.\n\nRevisa siempre qué versión estás descargando antes de sobrescribir una partida local.',
                                 highlight: true,
                               ),
                               _section(

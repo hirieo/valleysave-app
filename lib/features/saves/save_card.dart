@@ -1267,14 +1267,25 @@ class _Footer extends StatelessWidget {
     final isMobile = Platform.isAndroid || Platform.isIOS;
 
     if (isMobile) {
-      // Mobile: solo iconos, sin texto de estado
+      final statusLabel = _statusStyle(status).label;
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _Dot(color: statusColor),
-            const Spacer(),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                statusLabel,
+                style: GoogleFonts.dmMono(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: statusColor,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8),
             if (busy)
               const SizedBox(
                 width: 15,

@@ -1219,7 +1219,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+        MaterialPageRoute(
+            builder: (_) => const HowItWorksScreen(scrollToSection: 'shizuku')),
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

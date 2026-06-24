@@ -203,13 +203,11 @@ class PrivacyScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: highlight
-              ? const Color(0xFFE05252).withValues(alpha: 0.07)
-              : Colors.black.withValues(alpha: 0.38),
+          color: Colors.black.withValues(alpha: highlight ? 0.55 : 0.38),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: highlight
-                ? const Color(0xFFE05252).withValues(alpha: 0.25)
+                ? const Color(0xFFE05252).withValues(alpha: 0.50)
                 : Colors.white.withValues(alpha: 0.07),
           ),
         ),

@@ -640,7 +640,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       builder: (ctx) => AlertDialog(
         scrollable: true,
         backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.12), const Color(0xFF0A0A0B)),
+            _seasonAccent.withValues(alpha: 0.05), const Color(0xFF0A0A0B)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
@@ -720,7 +720,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       builder: (ctx) => AlertDialog(
         scrollable: true,
         backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.12), const Color(0xFF0A0A0B)),
+            _seasonAccent.withValues(alpha: 0.05), const Color(0xFF0A0A0B)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),

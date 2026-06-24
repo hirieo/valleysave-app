@@ -57,9 +57,9 @@ class HowItWorksScreen extends StatelessWidget {
                             children: [
                               _intro(),
                               const SizedBox(height: 24),
-                              _shizukuCard(),
+                              _shizukuCard(season),
                               const SizedBox(height: 16),
-                              _bridgeCard(),
+                              _bridgeCard(season),
                               const SizedBox(height: 24),
                               _footerNote(),
                             ],
@@ -136,8 +136,9 @@ class HowItWorksScreen extends StatelessWidget {
 
   // ── Vía 1: Shizuku ─────────────────────────────────────────────────────────
 
-  Widget _shizukuCard() {
+  Widget _shizukuCard(SeasonState season) {
     return _viaCard(
+      seasonColor: SeasonData.data[season]!.accentColor,
       icon: Icons.bolt_rounded,
       accent: AppColors.accent,
       badge: 'AUTOMÁTICO · RECOMENDADO',
@@ -159,8 +160,9 @@ class HowItWorksScreen extends StatelessWidget {
 
   // ── Vía 2: Puente manual ─────────────────────────────────────────────────────
 
-  Widget _bridgeCard() {
+  Widget _bridgeCard(SeasonState season) {
     return _viaCard(
+      seasonColor: SeasonData.data[season]!.accentColor,
       icon: Icons.swap_horiz_rounded,
       accent: AppColors.green,
       badge: 'ALTERNATIVA MANUAL · ANDROID 11-12',
@@ -186,6 +188,7 @@ class HowItWorksScreen extends StatelessWidget {
   // ── Card genérica de vía ─────────────────────────────────────────────────────
 
   Widget _viaCard({
+    required Color seasonColor,
     required IconData icon,
     required Color accent,
     required String badge,
@@ -202,7 +205,10 @@ class HowItWorksScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Color.alphaBlend(
+          seasonColor.withValues(alpha: 0.22),
+          const Color(0xFF040405),
+        ).withValues(alpha: 0.80),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: accent.withValues(alpha: 0.28)),
       ),

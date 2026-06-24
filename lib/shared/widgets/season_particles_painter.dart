@@ -189,13 +189,19 @@ void updateParticle(Particle p, double W, double H, double t) {
         p.x = _rand(0, W);
       }
     case ParticleType.leaf:
-      final gust = pow(max(0.0, sin(t * 0.6)), 3.0).toDouble() * 4.5;
+      final gust = pow(max(0.0, sin(t * 0.25)), 5.0).toDouble() * 5.5;
       p.angle += p.rotSpeed * (1.0 + gust * 0.4);
       p.x += p.vx + sin(t * .7 + p.phase) * p.drift + gust;
       p.y += p.vy + gust * 0.15;
-      if (p.y > H + 20 || p.x > W + 40 || p.x < -40) {
+      if (p.y > H + 20) {
         p.y = _rand(-60, -5);
         p.x = _rand(0, W);
+      } else if (p.x > W + 40) {
+        p.x = _rand(-40, -5);
+        p.y = _rand(0, H * .9);
+      } else if (p.x < -40) {
+        p.x = W + _rand(5, 40);
+        p.y = _rand(0, H * .9);
       }
     case ParticleType.snow:
       p.angle += p.rotSpeed;

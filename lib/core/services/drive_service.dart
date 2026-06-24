@@ -201,11 +201,11 @@ class DriveService {
       $fields: 'files(id,name)',
     );
 
-    final out = <DriveSaveSummary>[];
-    for (final folder in folders.files ?? <drive.File>[]) {
+    // Todas las carpetas en paralelo: antes era serial (1+2N requests encadenados).
+    Future<DriveSaveSummary?> fetchOne(drive.File folder) async {
       final folderId = folder.id;
       final folderName = folder.name;
-      if (folderId == null || folderName == null) continue;
+      if (folderId == null || folderName == null) return null;
 
       final files = await _api.files.list(
         q: "'$folderId' in parents and trashed=false",
@@ -219,7 +219,7 @@ class DriveService {
         if (f.name == 'SaveGameInfo') infoFile = f;
         if (f.name == folderName) mainFile = f;
       }
-      if (infoFile == null) continue;
+      if (infoFile == null) return null;
 
       final media = await _api.files.get(
         infoFile.id!,
@@ -237,15 +237,18 @@ class DriveService {
         folderName: folderName,
         lastModified: savedAt,
       );
-      if (save != null) {
-        out.add(DriveSaveSummary(
-          folderName: folderName,
-          folderId: folderId,
-          save: save,
-        ));
-      }
+      if (save == null) return null;
+      return DriveSaveSummary(
+        folderName: folderName,
+        folderId: folderId,
+        save: save,
+      );
     }
-    return out;
+
+    final results = await Future.wait(
+      (folders.files ?? <drive.File>[]).map(fetchOne),
+    );
+    return results.whereType<DriveSaveSummary>().toList();
   }
 
   /// Descarga todos los archivos de un save de Drive a [localFolderPath],

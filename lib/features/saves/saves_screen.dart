@@ -254,7 +254,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (widget.drive != null) {
       try {
         drive = await widget.drive!.listSaveSummaries();
-      } catch (_) {}
+      } catch (e, st) {
+        debugPrint('DRIVE_ERROR: $e\n$st');
+        if (!mounted) return;
+        final isAuthError = e.toString().contains('invalid_grant') ||
+            e.toString().contains('access credentials');
+        if (isAuthError) {
+          await AuthService.instance.signOut();
+          if (mounted) {
+            _snack('La sesión de Drive ha caducado. Vuelve a conectar.');
+            Navigator.pop(context, true);
+          }
+        } else {
+          _snack('Drive: $e');
+        }
+      }
     }
 
     final localByName = {for (final s in local) s.folderName: s};
@@ -304,6 +318,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (local == null || widget.drive == null) return;
     final name = local.folderName;
     if (_busy.contains(name)) return;
+
+    // Sobrescribe una versión ya existente en Drive → preview + confirmar.
+    if (entry.drive != null) {
+      final confirmed = await _confirmUpload(entry);
+      if (confirmed != true) return;
+    }
 
     setState(() => _busy.add(name));
     try {
@@ -453,7 +473,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF12180F),
+        scrollable: true,
+        backgroundColor: Color.alphaBlend(
+            _seasonAccent.withValues(alpha: 0.12), const Color(0xFF0A0A0B)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
@@ -463,17 +485,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
-        content: Text(
-          local == null
-              ? 'Se copiará "${drive.farmName}" (Día ${drive.dayOfMonth}, '
-                  '${drive.playtimeLabel}) a este equipo.'
-              : 'Esto SOBRESCRIBE tu save local de "${drive.farmName}".\n\n'
-                  'Local: Día ${local.dayOfMonth} · ${local.playtimeLabel}\n'
-                  'Drive: Día ${drive.dayOfMonth} · ${drive.playtimeLabel}\n\n'
-                  '¿Continuar?',
-          style: GoogleFonts.dmMono(
-              fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
-        ),
+        content: local == null
+            ? Text(
+                'Se copiará "${drive.farmName}" (Día ${drive.dayOfMonth}, '
+                '${drive.playtimeLabel}) a este equipo.',
+                style: GoogleFonts.dmMono(
+                    fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+              )
+            : _overwritePreview(
+                intro: 'Esto SOBRESCRIBE tu save local de "${drive.farmName}".',
+                current: local,
+                result: drive,
+                currentLabel: 'EN ESTE EQUIPO',
+                resultLabel: 'DESDE DRIVE',
+                resultColor: const Color(0xFF5AA8E0),
+              ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -486,6 +512,233 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 style: GoogleFonts.dmMono(
                     color: const Color(0xFF5AA8E0), fontWeight: FontWeight.w700)),
           ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool?> _confirmUpload(SaveEntry entry) {
+    final local = entry.local!;
+    final drive = entry.drive;
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        scrollable: true,
+        backgroundColor: Color.alphaBlend(
+            _seasonAccent.withValues(alpha: 0.12), const Color(0xFF0A0A0B)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        title: Text('Subir a Drive',
+            style: GoogleFonts.fraunces(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700)),
+        content: drive == null
+            ? Text(
+                'Se subirá "${local.farmName}" (Día ${local.dayOfMonth}, '
+                '${local.playtimeLabel}) a tu Drive.',
+                style: GoogleFonts.dmMono(
+                    fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+              )
+            : _overwritePreview(
+                intro: 'Esto SOBRESCRIBE la versión en Drive de "${local.farmName}".',
+                current: drive,
+                result: local,
+                currentLabel: 'EN DRIVE',
+                resultLabel: 'DESDE ESTE EQUIPO',
+                resultColor: const Color(0xFFE0B850),
+              ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text('Cancelar',
+                style: GoogleFonts.dmMono(
+                    color: Colors.white.withValues(alpha: 0.6))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text('Subir',
+                style: GoogleFonts.dmMono(
+                    color: const Color(0xFFE0B850),
+                    fontWeight: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Card "cómo quedará": estado actual del destino → estado tras la operación.
+  Widget _overwritePreview({
+    required String intro,
+    required SaveFile current,
+    required SaveFile result,
+    required String currentLabel,
+    required String resultLabel,
+    required Color resultColor,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          intro,
+          style: GoogleFonts.dmMono(
+              fontSize: 12,
+              height: 1.5,
+              color: Colors.white.withValues(alpha: 0.80)),
+        ),
+        const SizedBox(height: 14),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _previewCol(currentLabel, current,
+                    other: result, accent: Colors.white.withValues(alpha: 0.40)),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(Icons.arrow_forward_rounded,
+                    size: 18, color: Colors.white.withValues(alpha: 0.45)),
+              ),
+              Expanded(
+                child: _previewCol(resultLabel, result,
+                    other: current, accent: resultColor),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Color get _seasonAccent =>
+      SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+
+  Widget _previewCol(String header, SaveFile s,
+      {required SaveFile other, required Color accent}) {
+    final hl = _seasonAccent;
+    String mine(SaveFile x) =>
+        x.deepestMineLevel == 0 ? 'Sin explorar' : 'Nv. ${x.deepestMineLevel}';
+    // true = este valor es peor que el otro (lower is worse), false = mejor, null = igual
+    bool? w(num a, num b) => a == b ? null : a < b ? true : false;
+    // invertido: más = peor (desmayos)
+    bool? wi(num a, num b) => a == b ? null : a > b ? true : false;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: Color.alphaBlend(
+          accent.withValues(alpha: 0.12),
+          Colors.black,
+        ).withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: accent.withValues(alpha: 0.60), width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(header,
+              style: GoogleFonts.dmMono(
+                  fontSize: 8,
+                  letterSpacing: 0.8,
+                  fontWeight: FontWeight.w700,
+                  color: accent)),
+          const SizedBox(height: 6),
+          _previewRow('Día/Año', 'Día ${s.dayOfMonth} · Año ${s.year}',
+              changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,
+              hl: hl,
+              worse: w(s.year * 28 + s.dayOfMonth, other.year * 28 + other.dayOfMonth)),
+          _previewRow('Tiempo', s.playtimeLabel,
+              changed: s.millisecondsPlayed != other.millisecondsPlayed,
+              hl: hl,
+              worse: w(s.millisecondsPlayed, other.millisecondsPlayed)),
+          _previewRow('Monedas', s.currentMoneyLabel,
+              changed: s.currentMoney != other.currentMoney,
+              hl: hl,
+              worse: w(s.currentMoney, other.currentMoney)),
+          _previewRow('Total', s.totalMoneyLabel,
+              changed: s.totalMoneyEarned != other.totalMoneyEarned,
+              hl: hl,
+              worse: w(s.totalMoneyEarned, other.totalMoneyEarned)),
+          _previewRow('Cultivo', '${s.farmingLevel}',
+              changed: s.farmingLevel != other.farmingLevel,
+              hl: hl,
+              worse: w(s.farmingLevel, other.farmingLevel)),
+          _previewRow('Recolec.', '${s.foragingLevel}',
+              changed: s.foragingLevel != other.foragingLevel,
+              hl: hl,
+              worse: w(s.foragingLevel, other.foragingLevel)),
+          _previewRow('Minería', '${s.miningLevel}',
+              changed: s.miningLevel != other.miningLevel,
+              hl: hl,
+              worse: w(s.miningLevel, other.miningLevel)),
+          _previewRow('Pesca', '${s.fishingLevel}',
+              changed: s.fishingLevel != other.fishingLevel,
+              hl: hl,
+              worse: w(s.fishingLevel, other.fishingLevel)),
+          _previewRow('Combate', '${s.combatLevel}',
+              changed: s.combatLevel != other.combatLevel,
+              hl: hl,
+              worse: w(s.combatLevel, other.combatLevel)),
+          _previewRow('Amigos', '${s.goodFriends}',
+              changed: s.goodFriends != other.goodFriends,
+              hl: hl,
+              worse: w(s.goodFriends, other.goodFriends)),
+          _previewRow('Monstruos', SaveFile.formatCount(s.monstersKilled),
+              changed: s.monstersKilled != other.monstersKilled,
+              hl: hl,
+              worse: w(s.monstersKilled, other.monstersKilled)),
+          _previewRow('Desmayos', '${s.timesUnconscious}',
+              changed: s.timesUnconscious != other.timesUnconscious,
+              hl: hl,
+              worse: wi(s.timesUnconscious, other.timesUnconscious)),
+          _previewRow('Mina', mine(s),
+              changed: s.deepestMineLevel != other.deepestMineLevel,
+              hl: hl,
+              worse: w(s.deepestMineLevel, other.deepestMineLevel)),
+        ],
+      ),
+    );
+  }
+
+  Widget _previewRow(String label, String value,
+      {required bool changed, required Color hl, bool? worse}) {
+    const kRed = Color(0xFFE05C5C);
+    final pillColor = (changed && worse == true) ? kRed : hl;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label.toUpperCase(),
+              style: GoogleFonts.dmMono(
+                  fontSize: 7.5,
+                  letterSpacing: 0.6,
+                  color: AppColors.textFaint)),
+          const SizedBox(height: 1),
+          if (changed)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: pillColor.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: pillColor.withValues(alpha: 0.32)),
+              ),
+              child: Text(value,
+                  style: GoogleFonts.dmMono(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: pillColor)),
+            )
+          else
+            Text(value,
+                style: GoogleFonts.dmMono(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withValues(alpha: 0.75))),
         ],
       ),
     );
@@ -722,25 +975,22 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 22),
           _modeCard(
-            icon: Icons.bolt_rounded,
-            accent: AppColors.accent,
             badge: 'AUTOMÁTICO · RECOMENDADO',
             title: 'Con Shizuku',
             desc: 'Se configura 1 vez. Después ValleySave sincroniza sola, sin '
                 'que toques nada. Única vía fiable en Android 13+.',
             onTap: () => _chooseMode(AndroidMode.shizuku),
+            recommended: true,
           ),
           if (_sdkInt < 33) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 9),
             _modeCard(
-              icon: Icons.swap_horiz_rounded,
-              accent: AppColors.green,
               badge: 'SOLO ANDROID 11-12',
               title: 'Puente manual',
-              desc: 'Copias la partida con tu app de Archivos. Disponible en '
-                  'Android 11 y 12 porque el gestor del sistema sí puede entrar '
-                  'en la carpeta del juego.',
+              desc: 'Copias la partida con tu app de Archivos. Sin instalar '
+                  'nada. Solo en Android 11 y 12.',
               onTap: () => _chooseMode(AndroidMode.bridge),
+              recommended: false,
             ),
           ],
           const SizedBox(height: 18),
@@ -751,35 +1001,38 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Widget _modeCard({
-    required IconData icon,
-    required Color accent,
     required String badge,
     required String title,
     required String desc,
     required VoidCallback onTap,
+    required bool recommended,
   }) {
+    // Mismo lenguaje que _modeTile de Opciones: transparente sobre el canvas,
+    // tinte de estación; el recomendado destacado, el otro tenue pero acorde.
+    final season = _seasonAccent;
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 14, 14, 16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: accent.withValues(alpha: 0.30)),
+          color: recommended
+              ? Color.alphaBlend(
+                  season.withValues(alpha: 0.16),
+                  const Color(0xFF040405),
+                ).withValues(alpha: 0.68)
+              : Color.alphaBlend(
+                  season.withValues(alpha: 0.07),
+                  Colors.black,
+                ).withValues(alpha: 0.42),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: season.withValues(alpha: recommended ? 0.60 : 0.22),
+            width: recommended ? 1.5 : 1,
+          ),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.14),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 21, color: accent),
-            ),
-            const SizedBox(width: 13),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -789,28 +1042,45 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                         fontSize: 8.5,
                         letterSpacing: 1.1,
                         fontWeight: FontWeight.w700,
-                        color: accent.withValues(alpha: 0.85),
+                        color: recommended ? season : AppColors.textFaint,
                       )),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 4),
                   Text(title,
-                      style: GoogleFonts.fraunces(
-                        fontSize: 18,
-                        fontStyle: FontStyle.italic,
+                      style: GoogleFonts.dmMono(
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.text,
+                        color: recommended ? season : AppColors.text,
                       )),
                   const SizedBox(height: 5),
                   Text(desc,
                       style: GoogleFonts.dmMono(
-                        fontSize: 11,
+                        fontSize: 12,
                         height: 1.5,
-                        color: Colors.white.withValues(alpha: 0.72),
+                        color: recommended
+                            ? Colors.white.withValues(alpha: 0.82)
+                            : AppColors.textFaint,
                       )),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right_rounded,
-                color: accent.withValues(alpha: 0.6), size: 22),
+            const SizedBox(width: 14),
+            Container(
+              width: 22,
+              height: 22,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: recommended ? season : Colors.transparent,
+                border: recommended
+                    ? null
+                    : Border.all(
+                        color: season.withValues(alpha: 0.30), width: 2),
+              ),
+              child: recommended
+                  ? const Icon(Icons.check_rounded,
+                      size: 13, color: Colors.black)
+                  : null,
+            ),
           ],
         ),
       ),
@@ -857,18 +1127,35 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Widget _howItWorksLink() {
+    final accent =
+        SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
       ),
-      child: Text(
-        '¿Cómo funciona?',
-        style: GoogleFonts.dmMono(
-          fontSize: 12,
-          decoration: TextDecoration.underline,
-          decorationColor: AppColors.textFaint.withValues(alpha: 0.5),
-          color: AppColors.textFaint,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.32),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: accent.withValues(alpha: 0.70)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.help_outline_rounded,
+                size: 15, color: Colors.white.withValues(alpha: 0.90)),
+            const SizedBox(width: 7),
+            Text(
+              '¿Cómo funciona?',
+              style: GoogleFonts.dmMono(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withValues(alpha: 0.90),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -884,111 +1171,124 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 4),
-              const Center(child: Text('🔑', style: TextStyle(fontSize: 42))),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Center(
                 child: Text(
                   'Conecta Shizuku',
                   style: GoogleFonts.fraunces(
-                    fontSize: 22,
+                    fontSize: 26,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w700,
                     color: Colors.white.withValues(alpha: 0.92),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                'Android 13+ bloquea la carpeta de Stardew. Shizuku abre ese '
-                'acceso sin root: se configura una vez y ValleySave sincroniza '
-                'sola. Tus datos no salen del teléfono.',
-                style: GoogleFonts.dmMono(
-                  fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.78),
-                  height: 1.55,
+              const SizedBox(height: 5),
+              Center(
+                child: Text(
+                  'Se configura una vez · solo la primera vez',
+                  style: GoogleFonts.dmMono(
+                    fontSize: 11,
+                    color: AppColors.textMuted,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 18),
-              // Estado en vivo
+              // Estado como pasos-fila transparentes; el CTA "conceder" se
+              // integra en la fila de permiso cuando Shizuku ya está activo.
+              _statusRow(
+                'Shizuku activo',
+                running ? 'Conectado y a la espera.' : 'Aún no detectado.',
+                running,
+              ),
+              _statusRow(
+                'Permiso concedido',
+                _shizukuGranted
+                    ? 'ValleySave ya tiene acceso.'
+                    : 'Falta autorizar a ValleySave.',
+                _shizukuGranted,
+                action: (running && !_shizukuGranted)
+                    ? _miniGateButton(
+                        'conceder', _requestShizukuPermission, _seasonAccent)
+                    : null,
+              ),
+              const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border),
+                  color: Color.alphaBlend(
+                    _seasonAccent.withValues(alpha: 0.06),
+                    Colors.black,
+                  ).withValues(alpha: 0.45),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                      color: _seasonAccent.withValues(alpha: 0.16)),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _statusRow('Shizuku activo', running),
-                    Divider(
-                        height: 14,
-                        color: Colors.white.withValues(alpha: 0.06)),
-                    _statusRow('Permiso concedido', _shizukuGranted),
+                    Text(
+                      'GUÍA PASO A PASO',
+                      style: GoogleFonts.dmMono(
+                        fontSize: 9,
+                        letterSpacing: 1.4,
+                        fontWeight: FontWeight.w700,
+                        color: _seasonAccent.withValues(alpha: 0.60),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _guideStep('1', 'Instala Shizuku',
+                        'Gratis. Si Google Play te lo bloquea (móviles nuevos como el '
+                        'A16), usa el APK oficial de GitHub.',
+                        action: Wrap(spacing: 8, runSpacing: 8, children: [
+                          _smallButton('Play Store', _openShizukuPlayStore),
+                          _smallButton('APK GitHub', _openShizukuGithub),
+                        ])),
+                    _guideStep('2', 'Activa Opciones de desarrollador',
+                        'Ajustes → Información del teléfono → Información de software → '
+                        'toca "Número de compilación" 7 veces.'),
+                    _guideStep('3', 'Activa Depuración inalámbrica',
+                        'El botón te lleva ahí y la resalta. Actívala (ON). '
+                        'Después toca "Emparejar dispositivo con código de vinculación" '
+                        '— aparecerá un código de 6 dígitos en pantalla.',
+                        action: _smallButton('Abrir y resaltar', _openWirelessDebug,
+                            icon: Icons.open_in_new_rounded)),
+                    _guideStep('4', 'Empareja e INICIA Shizuku',
+                        'Abre Shizuku → "Iniciar mediante depuración inalámbrica" → '
+                        '"Emparejar con código de sincronización". '
+                        'Shizuku enviará una notificación indicando que está a la espera. '
+                        'Introduce el código de 6 dígitos que ves en la pantalla de '
+                        'Depuración inalámbrica. Tras emparejar, pulsa INICIAR — '
+                        'sin ese último toque Shizuku no queda activo.',
+                        action: _smallButton('Abrir Shizuku', _openShizukuApp,
+                            icon: Icons.open_in_new_rounded)),
+                    _guideStep('5', 'Pon la energía de Shizuku en No restringido',
+                        'Abre la info de la app → Batería → No restringido. '
+                        'Si no lo haces, el sistema cerrará Shizuku en segundo '
+                        'plano y tendrás que volver a darle a Iniciar.',
+                        action: _smallButton('Info de app Shizuku',
+                            _openShizukuAppInfo, icon: Icons.open_in_new_rounded)),
+                    _guideStep(
+                      '6',
+                      'Concede el permiso a ValleySave',
+                      running
+                          ? 'Shizuku está activo. Pulsa el botón para autorizar.'
+                          : 'Disponible en cuanto Shizuku esté activo (paso 4).',
+                      action: running
+                          ? _gateButton(
+                              'Conceder permiso', _requestShizukuPermission,
+                              filled: true)
+                          : null,
+                    ),
+                    const SizedBox(height: 16),
+                    if (!running)
+                      _gateButton('Ya lo he hecho · Comprobar', _checkShizuku,
+                          filled: true),
+                    const SizedBox(height: 10),
+                    _gateButton('Cambiar método', _resetMode, filled: false),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(
-                'GUÍA PASO A PASO',
-                style: GoogleFonts.dmMono(
-                  fontSize: 9,
-                  letterSpacing: 1.4,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textFaint,
-                ),
-              ),
-              const SizedBox(height: 8),
-              _guideStep('1', 'Instala Shizuku',
-                  'Gratis. Si Google Play te lo bloquea (móviles nuevos como el '
-                  'A16), usa el APK oficial de GitHub.',
-                  action: Wrap(spacing: 8, runSpacing: 8, children: [
-                    _smallButton('Play Store', _openShizukuPlayStore),
-                    _smallButton('APK GitHub', _openShizukuGithub),
-                  ])),
-              _guideStep('2', 'Activa Opciones de desarrollador',
-                  'Ajustes → Información del teléfono → Información de software → '
-                  'toca "Número de compilación" 7 veces.'),
-              _guideStep('3', 'Activa Depuración inalámbrica',
-                  'El botón te lleva ahí y la resalta. Actívala (ON). '
-                  'Después toca "Emparejar dispositivo con código de vinculación" '
-                  '— aparecerá un código de 6 dígitos en pantalla.',
-                  action: _smallButton('Abrir y resaltar', _openWirelessDebug,
-                      icon: Icons.open_in_new_rounded)),
-              _guideStep('4', 'Empareja e INICIA Shizuku',
-                  'Abre Shizuku → "Iniciar mediante depuración inalámbrica" → '
-                  '"Emparejar con código de sincronización". '
-                  'Shizuku enviará una notificación indicando que está a la espera. '
-                  'Introduce el código de 6 dígitos que ves en la pantalla de '
-                  'Depuración inalámbrica. Tras emparejar, pulsa INICIAR — '
-                  'sin ese último toque Shizuku no queda activo.',
-                  action: _smallButton('Abrir Shizuku', _openShizukuApp,
-                      icon: Icons.open_in_new_rounded)),
-              _guideStep('5', 'Pon la energía de Shizuku en No restringido',
-                  'Abre la info de la app → Batería → No restringido. '
-                  'Si no lo haces, el sistema cerrará Shizuku en segundo '
-                  'plano y tendrás que volver a darle a Iniciar.',
-                  action: _smallButton('Info de app Shizuku',
-                      _openShizukuAppInfo, icon: Icons.open_in_new_rounded)),
-              _guideStep(
-                '6',
-                'Concede el permiso a ValleySave',
-                running
-                    ? 'Shizuku está activo. Pulsa el botón para autorizar.'
-                    : 'Disponible en cuanto Shizuku esté activo (paso 4).',
-                action: running
-                    ? _gateButton(
-                        'Conceder permiso', _requestShizukuPermission,
-                        filled: true)
-                    : null,
-              ),
-              const SizedBox(height: 16),
-              if (!running)
-                _gateButton('Ya lo he hecho · Comprobar', _checkShizuku,
-                    filled: true),
-              const SizedBox(height: 10),
-              _gateButton('Cambiar método', _resetMode, filled: false),
               const SizedBox(height: 16),
               Center(child: _howItWorksLink()),
             ],
@@ -998,38 +1298,103 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  Widget _statusRow(String label, bool done) {
-    return Row(
-      children: [
-        Icon(
-          done
-              ? Icons.check_circle_rounded
-              : Icons.radio_button_unchecked_rounded,
-          size: 18,
-          color: done ? AppColors.statusOk : AppColors.textFaint,
+  Widget _statusRow(String label, String sublabel, bool done, {Widget? action}) {
+    // Hecho → verde de estado real. Pendiente → acento de la estación.
+    final tone = done ? AppColors.statusOk : _seasonAccent;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      decoration: BoxDecoration(
+        color: Color.alphaBlend(
+          tone.withValues(alpha: done ? 0.06 : 0.11),
+          Colors.black,
+        ).withValues(alpha: 0.44),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: tone.withValues(alpha: done ? 0.32 : 0.50),
+          width: done ? 1 : 1.5,
         ),
-        const SizedBox(width: 10),
-        Text(
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 22,
+            height: 22,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: done ? tone.withValues(alpha: 0.16) : Colors.transparent,
+              border: done
+                  ? null
+                  : Border.all(color: tone.withValues(alpha: 0.65), width: 2),
+            ),
+            child: done
+                ? Icon(Icons.check_rounded, size: 13, color: tone)
+                : null,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.dmMono(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white.withValues(alpha: 0.92),
+                  ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  sublabel,
+                  style: GoogleFonts.dmMono(
+                    fontSize: 10.5,
+                    height: 1.4,
+                    color: AppColors.textFaint,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          if (action != null)
+            action
+          else
+            Text(
+              done ? 'hecho' : 'pendiente',
+              style: GoogleFonts.dmMono(
+                fontSize: 9,
+                letterSpacing: 0.6,
+                fontWeight: FontWeight.w700,
+                color: tone.withValues(alpha: done ? 0.85 : 0.70),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Botón compacto (p. ej. "conceder") para integrar dentro de una fila.
+  Widget _miniGateButton(String label, VoidCallback onTap, Color tone) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: tone.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: tone.withValues(alpha: 0.45)),
+        ),
+        child: Text(
           label,
           style: GoogleFonts.dmMono(
-            fontSize: 12.5,
-            fontWeight: done ? FontWeight.w600 : FontWeight.w400,
-            color: done
-                ? Colors.white.withValues(alpha: 0.90)
-                : AppColors.textFaint,
-          ),
-        ),
-        const Spacer(),
-        Text(
-          done ? 'LISTO' : 'PENDIENTE',
-          style: GoogleFonts.dmMono(
-            fontSize: 8.5,
-            letterSpacing: 0.8,
+            fontSize: 10.5,
             fontWeight: FontWeight.w700,
-            color: done ? AppColors.statusOk : AppColors.textFaint,
+            color: tone,
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -1040,23 +1405,25 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 22,
-            height: 22,
+            width: 24,
+            height: 24,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.14),
+              color: _seasonAccent.withValues(alpha: 0.14),
               shape: BoxShape.circle,
+              border:
+                  Border.all(color: _seasonAccent.withValues(alpha: 0.35)),
             ),
             child: Text(
               n,
               style: GoogleFonts.dmMono(
-                fontSize: 10.5,
+                fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: AppColors.accent,
+                color: _seasonAccent,
               ),
             ),
           ),
-          const SizedBox(width: 11),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1066,19 +1433,19 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   child: Text(
                     title,
                     style: GoogleFonts.dmMono(
-                      fontSize: 12.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white.withValues(alpha: 0.90),
+                      color: Colors.white.withValues(alpha: 0.95),
                     ),
                   ),
                 ),
-                const SizedBox(height: 3),
+                const SizedBox(height: 4),
                 Text(
                   desc,
                   style: GoogleFonts.dmMono(
-                    fontSize: 11,
-                    height: 1.5,
-                    color: AppColors.textFaint,
+                    fontSize: 14,
+                    height: 1.55,
+                    color: Colors.white.withValues(alpha: 0.88),
                   ),
                 ),
                 if (action != null) ...[
@@ -1094,20 +1461,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Widget _smallButton(String label, VoidCallback onTap, {IconData? icon}) {
+    final tone = _seasonAccent;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.accent.withValues(alpha: 0.12),
+          color: tone.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.accent.withValues(alpha: 0.40)),
+          border: Border.all(color: tone.withValues(alpha: 0.40)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 13, color: AppColors.accent),
+              Icon(icon, size: 13, color: tone),
               const SizedBox(width: 5),
             ],
             Text(
@@ -1115,7 +1483,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               style: GoogleFonts.dmMono(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: AppColors.accent,
+                color: tone,
               ),
             ),
           ],
@@ -1125,6 +1493,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Widget _gateButton(String label, VoidCallback onTap, {required bool filled}) {
+    final tone = _seasonAccent;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -1132,9 +1501,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         padding: const EdgeInsets.symmetric(vertical: 14),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: filled ? AppColors.accent.withValues(alpha: 0.14) : Colors.transparent,
+          color: filled ? tone.withValues(alpha: 0.14) : Colors.transparent,
           border: Border.all(
-              color: AppColors.accent.withValues(alpha: filled ? 0.55 : 0.28)),
+              color: tone.withValues(alpha: filled ? 0.55 : 0.28)),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
@@ -1142,7 +1511,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           style: GoogleFonts.dmMono(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: filled ? AppColors.accent : AppColors.textFaint,
+            color: filled ? tone : AppColors.textFaint,
           ),
         ),
       ),

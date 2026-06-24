@@ -79,6 +79,7 @@ class SaveCard extends StatelessWidget {
     this.onUpload,
     this.onDownload,
     this.onDeleteFromDrive,
+    this.onDeleteLocal,
   });
 
   final SaveEntry entry;
@@ -86,6 +87,7 @@ class SaveCard extends StatelessWidget {
   final VoidCallback? onUpload;           // local → Drive
   final VoidCallback? onDownload;         // Drive → local
   final VoidCallback? onDeleteFromDrive;  // Drive → papelera
+  final VoidCallback? onDeleteLocal;      // local → delete
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +116,7 @@ class SaveCard extends StatelessWidget {
               onUpload: onUpload,
               onDownload: onDownload,
               onDeleteFromDrive: onDeleteFromDrive,
+              onDeleteLocal: onDeleteLocal,
             ),
             _kDivider,
             _Footer(
@@ -182,6 +185,7 @@ void _showSaveDetail(
   VoidCallback? onUpload,
   VoidCallback? onDownload,
   VoidCallback? onDeleteFromDrive,
+  VoidCallback? onDeleteLocal,
 }) {
   final isMobile = Platform.isAndroid || Platform.isIOS;
 
@@ -196,6 +200,7 @@ void _showSaveDetail(
         actionLabel: 'Subir a Drive',
         actionIcon: Icons.cloud_upload_outlined,
         onAction: onUpload,
+        onDelete: onDeleteLocal,
       ),
     if (entry.drive != null)
       _DetailSide(
@@ -1023,11 +1028,13 @@ class _PresenceRow extends StatelessWidget {
     this.onUpload,
     this.onDownload,
     this.onDeleteFromDrive,
+    this.onDeleteLocal,
   });
   final SaveEntry entry;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
   final VoidCallback? onDeleteFromDrive;
+  final VoidCallback? onDeleteLocal;
 
   @override
   Widget build(BuildContext context) {
@@ -1056,6 +1063,7 @@ class _PresenceRow extends StatelessWidget {
                 onUpload: onUpload,
                 onDownload: onDownload,
                 onDeleteFromDrive: onDeleteFromDrive,
+                onDeleteLocal: onDeleteLocal,
               ),
             ),
             const SizedBox(width: 7),
@@ -1092,6 +1100,7 @@ class _SideTile extends StatelessWidget {
     this.onUpload,
     this.onDownload,
     this.onDeleteFromDrive,
+    this.onDeleteLocal,
   });
 
   final Color color;
@@ -1104,6 +1113,7 @@ class _SideTile extends StatelessWidget {
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
   final VoidCallback? onDeleteFromDrive;
+  final VoidCallback? onDeleteLocal;
 
   @override
   Widget build(BuildContext context) {
@@ -1183,6 +1193,7 @@ class _SideTile extends StatelessWidget {
         onUpload: onUpload,
         onDownload: onDownload,
         onDeleteFromDrive: onDeleteFromDrive,
+        onDeleteLocal: onDeleteLocal,
       ),
       child: content,
     );

@@ -411,6 +411,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _handleDeleteLocal(SaveEntry entry) async {
+    final farmName = entry.primary.farmName;
+    final name = entry.folderName;
+    if (_busy.contains(name)) return;
+
+    final confirmed = await _confirmDeleteLocal(farmName);
+    if (confirmed != true) return;
+
+    setState(() => _busy.add(name));
+    try {
+      final localSave = entry.local;
+      if (localSave == null) return;
+      final dir = Directory(localSave.folderPath);
+      if (await dir.exists()) {
+        await dir.delete(recursive: true);
+      }
+      await _load(silent: true);
+      _snack('"$farmName" eliminada de este dispositivo.');
+    } catch (e) {
+      _snack('Error al eliminar: $e');
+    } finally {
+      if (mounted) setState(() => _busy.remove(name));
+    }
+  }
+
   Future<bool?> _confirmDelete(String farmName) {
     return showDialog<bool>(
       context: context,
@@ -460,6 +485,64 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text('Eliminar',
+                style: GoogleFonts.dmMono(
+                    color: const Color(0xFFE05252),
+                    fontWeight: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool?> _confirmDeleteLocal(String farmName) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Color.alphaBlend(
+            const Color(0xFFE05252).withValues(alpha: 0.08),
+            const Color(0xFF0A0A0B)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(
+              color: const Color(0xFFE05252).withValues(alpha: 0.35)),
+        ),
+        title: Text('Borrar de este dispositivo',
+            style: GoogleFonts.fraunces(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '"$farmName" se eliminará permanentemente de este dispositivo.',
+              style: GoogleFonts.dmMono(
+                  fontSize: 12,
+                  height: 1.5,
+                  color: Colors.white.withValues(alpha: 0.80)),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '⚠️ Si no la has subido a Drive, se perderá para siempre. No hay recuperación.',
+              style: GoogleFonts.dmMono(
+                  fontSize: 11,
+                  height: 1.5,
+                  color: const Color(0xFFE05252).withValues(alpha: 0.90),
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text('Cancelar',
+                style: GoogleFonts.dmMono(
+                    color: Colors.white.withValues(alpha: 0.6))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text('Borrar',
                 style: GoogleFonts.dmMono(
                     color: const Color(0xFFE05252),
                     fontWeight: FontWeight.w700)),
@@ -942,6 +1025,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   onDeleteFromDrive: _entries[i].driveFolderId != null &&
                           widget.drive != null
                       ? () => _handleDeleteFromDrive(_entries[i])
+                      : null,
+                  onDeleteLocal: _entries[i].local != null
+                      ? () => _handleDeleteLocal(_entries[i])
                       : null,
                 ),
               ],

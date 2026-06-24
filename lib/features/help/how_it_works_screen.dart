@@ -112,7 +112,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                               const SizedBox(height: 16),
                               _bridgeCard(season),
                               const SizedBox(height: 28),
-                              _privacyLink(context),
+                              _privacyLink(context, SeasonData.data[season]!.accentColor),
                             ],
                           ),
                         ),
@@ -986,7 +986,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
     );
   }
 
-  Widget _privacyLink(BuildContext context) {
+  Widget _privacyLink(BuildContext context, Color accent) {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -997,9 +997,9 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.07),
+          color: accent.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+          border: Border.all(color: accent.withValues(alpha: 0.40)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1007,21 +1007,21 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             Icon(
               Icons.shield_outlined,
               size: 15,
-              color: Colors.white.withValues(alpha: 0.70),
+              color: accent,
             ),
             const SizedBox(width: 8),
             Text(
               'Política de privacidad y uso',
               style: GoogleFonts.dmMono(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.70),
+                color: accent,
               ),
             ),
             const SizedBox(width: 6),
             Icon(
               Icons.chevron_right_rounded,
               size: 15,
-              color: Colors.white.withValues(alpha: 0.45),
+              color: accent.withValues(alpha: 0.55),
             ),
           ],
         ),

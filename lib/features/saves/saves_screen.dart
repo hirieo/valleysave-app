@@ -387,6 +387,88 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _handleDeleteFromDrive(SaveEntry entry) async {
+    final folderId = entry.driveFolderId;
+    if (folderId == null || widget.drive == null) return;
+
+    final farmName = entry.primary.farmName;
+    final name = entry.folderName;
+    if (_busy.contains(name)) return;
+
+    final confirmed = await _confirmDelete(farmName);
+    if (confirmed != true) return;
+
+    setState(() => _busy.add(name));
+    try {
+      await widget.drive!.trashSave(folderId);
+      await _load(silent: true);
+      _snack('"$farmName" movida a la Papelera de Drive. '
+          'Tienes 30 días para restaurarla.');
+    } catch (e) {
+      _snack('Error al eliminar: $e');
+    } finally {
+      if (mounted) setState(() => _busy.remove(name));
+    }
+  }
+
+  Future<bool?> _confirmDelete(String farmName) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Color.alphaBlend(
+            const Color(0xFFE05252).withValues(alpha: 0.08),
+            const Color(0xFF0A0A0B)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(
+              color: const Color(0xFFE05252).withValues(alpha: 0.35)),
+        ),
+        title: Text('Eliminar de Drive',
+            style: GoogleFonts.fraunces(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '"$farmName" se moverá a la Papelera de Google Drive.',
+              style: GoogleFonts.dmMono(
+                  fontSize: 12,
+                  height: 1.5,
+                  color: Colors.white.withValues(alpha: 0.80)),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Tienes 30 días para restaurarla desde Drive antes de que '
+              'se elimine definitivamente.',
+              style: GoogleFonts.dmMono(
+                  fontSize: 11,
+                  height: 1.5,
+                  color: Colors.white.withValues(alpha: 0.55)),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text('Cancelar',
+                style: GoogleFonts.dmMono(
+                    color: Colors.white.withValues(alpha: 0.6))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text('Eliminar',
+                style: GoogleFonts.dmMono(
+                    color: const Color(0xFFE05252),
+                    fontWeight: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// Diálogo tras descargar en modo puente: indica al usuario que copie la
   /// partida de `bridge_out` a la carpeta del juego con su app de Archivos.
   Future<void> _showBridgeCopyDialog(String name, String fromPath) {
@@ -448,9 +530,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.bgAlt,
+        color: _seasonAccent.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderSub),
+        border: Border.all(color: _seasonAccent.withValues(alpha: 0.25)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -857,6 +939,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   busy: _busy.contains(_entries[i].folderName),
                   onUpload: () => _handleUpload(_entries[i]),
                   onDownload: () => _handleDownload(_entries[i]),
+                  onDeleteFromDrive: _entries[i].driveFolderId != null &&
+                          widget.drive != null
+                      ? () => _handleDeleteFromDrive(_entries[i])
+                      : null,
                 ),
               ],
             ),
@@ -1092,9 +1178,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: AppColors.bgAlt,
+        color: _seasonAccent.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderSub),
+        border: Border.all(color: _seasonAccent.withValues(alpha: 0.25)),
       ),
       child: Row(
         children: [
@@ -1119,7 +1205,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               Clipboard.setData(ClipboardData(text: path));
               _snack('Ruta copiada.');
             },
-            child: Icon(Icons.copy_rounded, size: 15, color: AppColors.textFaint),
+            child: Icon(Icons.copy_rounded,
+                size: 15, color: _seasonAccent.withValues(alpha: 0.35)),
           ),
         ],
       ),
@@ -1351,7 +1438,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   style: GoogleFonts.dmMono(
                     fontSize: 10.5,
                     height: 1.4,
-                    color: AppColors.textFaint,
+                    color: _seasonAccent.withValues(alpha: 0.90),
                   ),
                 ),
               ],

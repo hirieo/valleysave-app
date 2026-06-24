@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
@@ -206,6 +207,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          'Opciones',
+                          style: GoogleFonts.fraunces(
+                            fontSize: 24,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white.withValues(alpha: 0.95),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
                         Text('MODO', style: AppTypography.eyebrow()),
                         const SizedBox(height: 12),
                         _modeTile(

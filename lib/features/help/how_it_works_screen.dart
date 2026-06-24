@@ -991,15 +991,15 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => PrivacyScreen(onAccepted: () => Navigator.pop(context)),
+          builder: (_) => const PrivacyScreen(viewOnly: true),
         ),
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.04),
+          color: Colors.white.withValues(alpha: 0.07),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1007,21 +1007,21 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             Icon(
               Icons.shield_outlined,
               size: 15,
-              color: Colors.white.withValues(alpha: 0.50),
+              color: Colors.white.withValues(alpha: 0.70),
             ),
             const SizedBox(width: 8),
             Text(
               'Política de privacidad y uso',
               style: GoogleFonts.dmMono(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.50),
+                color: Colors.white.withValues(alpha: 0.70),
               ),
             ),
             const SizedBox(width: 6),
             Icon(
               Icons.chevron_right_rounded,
               size: 15,
-              color: Colors.white.withValues(alpha: 0.30),
+              color: Colors.white.withValues(alpha: 0.45),
             ),
           ],
         ),

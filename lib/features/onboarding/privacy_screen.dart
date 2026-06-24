@@ -10,13 +10,14 @@ import '../../shared/widgets/valley_canvas_widget.dart';
 const _kAcceptedKey = 'privacy_accepted';
 
 class PrivacyScreen extends StatelessWidget {
-  const PrivacyScreen({super.key, required this.onAccepted});
-  final VoidCallback onAccepted;
+  const PrivacyScreen({super.key, this.onAccepted, this.viewOnly = false});
+  final VoidCallback? onAccepted;
+  final bool viewOnly;
 
   Future<void> _accept(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kAcceptedKey, true);
-    onAccepted();
+    onAccepted?.call();
   }
 
   @override
@@ -129,7 +130,7 @@ class PrivacyScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Accept button
+                  if (!viewOnly)
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
                     child: Center(

@@ -939,29 +939,48 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
+  OverlayEntry? _snackEntry;
+
   void _snack(String msg) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            msg,
-            style: GoogleFonts.dmMono(
-              fontSize: 12,
-              color: Colors.white,
-              height: 1.45,
+    _snackEntry?.remove();
+    final accent = _seasonAccent;
+    _snackEntry = OverlayEntry(
+      builder: (_) => Positioned(
+        bottom: 48,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 360),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.13),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: accent.withValues(alpha: 0.32)),
+              ),
+              child: Text(
+                msg,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.dmMono(
+                  fontSize: 12,
+                  color: Colors.white.withValues(alpha: 0.85),
+                  height: 1.45,
+                ),
+              ),
             ),
           ),
-          backgroundColor: const Color(0xFF241A0C),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.14)),
-          ),
         ),
-      );
+      ),
+    );
+    Overlay.of(context).insert(_snackEntry!);
+    Future.delayed(const Duration(seconds: 4), () {
+      _snackEntry?.remove();
+      _snackEntry = null;
+    });
   }
 
   @override

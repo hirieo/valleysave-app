@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/models/save_entry.dart';
@@ -245,6 +246,26 @@ class _DetailSheet extends StatefulWidget {
 
 class _DetailSheetState extends State<_DetailSheet> {
   late int _index = widget.initialPage;
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _navigate(int delta) {
+    final next = _index + delta;
+    if (next >= 0 && next < widget.sides.length) {
+      setState(() => _index = next);
+    }
+  }
 
   Widget _navArrow(IconData icon,
       {required bool enabled,
@@ -282,7 +303,21 @@ class _DetailSheetState extends State<_DetailSheet> {
     final active = sides[_index];
     final maxH = MediaQuery.of(context).size.height * 0.90;
 
-    return ConstrainedBox(
+    return Focus(
+      focusNode: _focusNode,
+      onKeyEvent: (_, event) {
+        if (event is! KeyDownEvent) return KeyEventResult.ignored;
+        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          _navigate(-1);
+          return KeyEventResult.handled;
+        }
+        if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          _navigate(1);
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxH, maxWidth: 420),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -372,6 +407,7 @@ class _DetailSheetState extends State<_DetailSheet> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

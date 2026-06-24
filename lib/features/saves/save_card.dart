@@ -165,6 +165,7 @@ class _DetailSide {
     required this.actionIcon,
     required this.onAction,
     this.onDelete,
+    this.deleteLabel = 'Eliminar',
   });
   final SaveFile save;
   final Color color;
@@ -174,6 +175,7 @@ class _DetailSide {
   final IconData actionIcon;
   final VoidCallback? onAction;
   final VoidCallback? onDelete;
+  final String deleteLabel;
 }
 
 /// Hoja inferior con los stats completos de una versión, con título de la cara,
@@ -201,6 +203,7 @@ void _showSaveDetail(
         actionIcon: Icons.cloud_upload_outlined,
         onAction: onUpload,
         onDelete: onDeleteLocal,
+        deleteLabel: isMobile ? 'Borrar de este móvil' : 'Borrar de este equipo',
       ),
     if (entry.drive != null)
       _DetailSide(
@@ -212,6 +215,7 @@ void _showSaveDetail(
         actionIcon: Icons.cloud_download_outlined,
         onAction: onDownload,
         onDelete: onDeleteFromDrive,
+        deleteLabel: 'Eliminar de Drive',
       ),
   ];
   if (sides.isEmpty) return;
@@ -500,7 +504,7 @@ class _DetailPage extends StatelessWidget {
                           size: 14, color: Color(0xFFE05252)),
                       const SizedBox(width: 6),
                       Text(
-                        'Eliminar de Drive',
+                        side.deleteLabel,
                         style: GoogleFonts.dmMono(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,

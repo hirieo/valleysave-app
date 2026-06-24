@@ -204,7 +204,7 @@ void _showSaveDetail(
         actionIcon: Icons.cloud_upload_outlined,
         onAction: onUpload,
         onDelete: onDeleteLocal,
-        deleteLabel: isMobile ? 'Borrar de este móvil' : 'Borrar de este equipo',
+        deleteLabel: isMobile ? 'Eliminar de este móvil' : 'Eliminar de este equipo',
       ),
     if (entry.drive != null)
       _DetailSide(

@@ -249,12 +249,6 @@ class _DetailSheetState extends State<_DetailSheet> {
   final _focusNode = FocusNode();
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
-  }
-
-  @override
   void dispose() {
     _focusNode.dispose();
     super.dispose();
@@ -305,6 +299,7 @@ class _DetailSheetState extends State<_DetailSheet> {
 
     return Focus(
       focusNode: _focusNode,
+      autofocus: true,
       onKeyEvent: (_, event) {
         if (event is! KeyDownEvent) return KeyEventResult.ignored;
         if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {

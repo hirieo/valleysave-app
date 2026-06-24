@@ -78,12 +78,14 @@ class SaveCard extends StatelessWidget {
     this.busy = false,
     this.onUpload,
     this.onDownload,
+    this.onDeleteFromDrive,
   });
 
   final SaveEntry entry;
   final bool busy;
-  final VoidCallback? onUpload;   // local → Drive
-  final VoidCallback? onDownload; // Drive → local
+  final VoidCallback? onUpload;           // local → Drive
+  final VoidCallback? onDownload;         // Drive → local
+  final VoidCallback? onDeleteFromDrive;  // Drive → papelera
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +113,7 @@ class SaveCard extends StatelessWidget {
               entry: entry,
               onUpload: onUpload,
               onDownload: onDownload,
+              onDeleteFromDrive: onDeleteFromDrive,
             ),
             _kDivider,
             _Footer(
@@ -158,6 +161,7 @@ class _DetailSide {
     required this.actionLabel,
     required this.actionIcon,
     required this.onAction,
+    this.onDelete,
   });
   final SaveFile save;
   final Color color;
@@ -166,6 +170,7 @@ class _DetailSide {
   final String actionLabel;
   final IconData actionIcon;
   final VoidCallback? onAction;
+  final VoidCallback? onDelete;
 }
 
 /// Hoja inferior con los stats completos de una versión, con título de la cara,
@@ -176,6 +181,7 @@ void _showSaveDetail(
   required bool startOnLocal,
   VoidCallback? onUpload,
   VoidCallback? onDownload,
+  VoidCallback? onDeleteFromDrive,
 }) {
   final isMobile = Platform.isAndroid || Platform.isIOS;
 
@@ -200,46 +206,36 @@ void _showSaveDetail(
         actionLabel: 'Descargar partida',
         actionIcon: Icons.cloud_download_outlined,
         onAction: onDownload,
+        onDelete: onDeleteFromDrive,
       ),
   ];
   if (sides.isEmpty) return;
 
   // startOnLocal → primera (local si existe); si no, la última (Drive).
-  final initialPage = startOnLocal ? 0 : sides.length - 1;
-  final controller =
-      PageController(initialPage: initialPage.clamp(0, sides.length - 1));
+  final initialPage = (startOnLocal ? 0 : sides.length - 1).clamp(0, sides.length - 1);
 
-  showModalBottomSheet<void>(
+  showDialog<void>(
     context: context,
-    backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.70),
-    isScrollControlled: true,
-    builder: (ctx) {
-      return Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(ctx).padding.top + 40),
-        child: _DetailSheet(sides: sides, controller: controller),
-      );
-    },
+    builder: (ctx) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 40),
+      child: _DetailSheet(sides: sides, initialPage: initialPage),
+    ),
   );
 }
 
 class _DetailSheet extends StatefulWidget {
-  const _DetailSheet({required this.sides, required this.controller});
+  const _DetailSheet({required this.sides, required this.initialPage});
   final List<_DetailSide> sides;
-  final PageController controller;
+  final int initialPage;
 
   @override
   State<_DetailSheet> createState() => _DetailSheetState();
 }
 
 class _DetailSheetState extends State<_DetailSheet> {
-  late int _index = widget.controller.initialPage;
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
+  late int _index = widget.initialPage;
 
   Widget _navArrow(IconData icon,
       {required bool enabled,
@@ -275,92 +271,96 @@ class _DetailSheetState extends State<_DetailSheet> {
   Widget build(BuildContext context) {
     final sides = widget.sides;
     final active = sides[_index];
-    final height = MediaQuery.of(context).size.height * 0.80;
+    final maxH = MediaQuery.of(context).size.height * 0.90;
 
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-      child: Container(
-        height: height,
-        decoration: BoxDecoration(
-          // Opaco (no se pierde contra el canvas) con un leve tinte de la cara.
-          color: Color.alphaBlend(
-            active.color.withValues(alpha: 0.06),
-            const Color(0xFF0B0B0D),
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxH),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color.alphaBlend(
+              active.color.withValues(alpha: 0.06),
+              const Color(0xFF0B0B0D),
+            ),
+            border: Border.all(
+              color: active.color.withValues(alpha: 0.55),
+              width: 1.5,
+            ),
           ),
-          border: Border(
-            top: BorderSide(
-                color: active.color.withValues(alpha: 0.70), width: 2),
-          ),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.20),
-                    borderRadius: BorderRadius.circular(2),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.20),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              if (sides.length > 1) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _navArrow(
-                      Icons.chevron_left_rounded,
-                      enabled: _index > 0,
-                      color: sides[0].color,
-                      onTap: () => widget.controller.animateToPage(
-                        _index - 1,
-                        duration: const Duration(milliseconds: 280),
-                        curve: Curves.easeInOut,
+                const SizedBox(height: 8),
+                if (sides.length > 1) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _navArrow(
+                        Icons.chevron_left_rounded,
+                        enabled: _index > 0,
+                        color: sides[0].color,
+                        onTap: () => setState(() => _index--),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    ...List.generate(sides.length, (i) {
-                      final on = i == _index;
-                      final c = sides[i].color;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        width: on ? 18 : 6,
-                        height: 6,
-                        decoration: BoxDecoration(
-                          color: on ? c : c.withValues(alpha: 0.35),
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                      );
-                    }),
-                    const SizedBox(width: 12),
-                    _navArrow(
-                      Icons.chevron_right_rounded,
-                      enabled: _index < sides.length - 1,
-                      color: sides[sides.length - 1].color,
-                      onTap: () => widget.controller.animateToPage(
-                        _index + 1,
-                        duration: const Duration(milliseconds: 280),
-                        curve: Curves.easeInOut,
+                      const SizedBox(width: 12),
+                      ...List.generate(sides.length, (i) {
+                        final on = i == _index;
+                        final c = sides[i].color;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          margin: const EdgeInsets.symmetric(horizontal: 3),
+                          width: on ? 18 : 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: on ? c : c.withValues(alpha: 0.35),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        );
+                      }),
+                      const SizedBox(width: 12),
+                      _navArrow(
+                        Icons.chevron_right_rounded,
+                        enabled: _index < sides.length - 1,
+                        color: sides[sides.length - 1].color,
+                        onTap: () => setState(() => _index++),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                ],
+                GestureDetector(
+                  onHorizontalDragEnd: (details) {
+                    if (details.primaryVelocity == null) return;
+                    if (details.primaryVelocity! < 0 &&
+                        _index < sides.length - 1) {
+                      setState(() => _index++);
+                    } else if (details.primaryVelocity! > 0 && _index > 0) {
+                      setState(() => _index--);
+                    }
+                  },
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 220),
+                    child: KeyedSubtree(
+                      key: ValueKey(_index),
+                      child: _DetailPage(side: active),
                     ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 4),
               ],
-              Expanded(
-                child: PageView.builder(
-                  controller: widget.controller,
-                  onPageChanged: (i) => setState(() => _index = i),
-                  itemCount: sides.length,
-                  itemBuilder: (_, i) => _DetailPage(side: sides[i]),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -376,15 +376,14 @@ class _DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = side.save;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Cabecera + stats scrollean; el botón de acción queda fijo al pie
-        // para que no quede un hueco vacío bajo él.
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+        SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
                   child: Column(
@@ -432,44 +431,82 @@ class _DetailPage extends StatelessWidget {
               ],
             ),
           ),
-        ),
-        if (side.onAction != null) ...[
+        if (side.onAction != null || side.onDelete != null) ...[
           _kDivider,
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                side.onAction!.call();
-              },
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 13),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: side.color.withValues(alpha: 0.16),
-                  border:
-                      Border.all(color: side.color.withValues(alpha: 0.55)),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(side.actionIcon, size: 16, color: side.color),
-                    const SizedBox(width: 7),
-                    Text(
-                      side.actionLabel,
-                      style: GoogleFonts.dmMono(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: side.color,
+          if (side.onAction != null)
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                  14, 12, 14, side.onDelete != null ? 6 : 14),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  side.onAction!.call();
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 13),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: side.color.withValues(alpha: 0.16),
+                    border:
+                        Border.all(color: side.color.withValues(alpha: 0.55)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(side.actionIcon, size: 16, color: side.color),
+                      const SizedBox(width: 7),
+                      Text(
+                        side.actionLabel,
+                        style: GoogleFonts.dmMono(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: side.color,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
+          if (side.onDelete != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  side.onDelete!.call();
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE05252).withValues(alpha: 0.08),
+                    border: Border.all(
+                        color: const Color(0xFFE05252).withValues(alpha: 0.30)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.delete_outline_rounded,
+                          size: 14, color: Color(0xFFE05252)),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Eliminar de Drive',
+                        style: GoogleFonts.dmMono(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFFE05252),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ],
     );
@@ -985,10 +1022,12 @@ class _PresenceRow extends StatelessWidget {
     required this.entry,
     this.onUpload,
     this.onDownload,
+    this.onDeleteFromDrive,
   });
   final SaveEntry entry;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
+  final VoidCallback? onDeleteFromDrive;
 
   @override
   Widget build(BuildContext context) {
@@ -1016,6 +1055,7 @@ class _PresenceRow extends StatelessWidget {
                 isLocalSide: true,
                 onUpload: onUpload,
                 onDownload: onDownload,
+                onDeleteFromDrive: onDeleteFromDrive,
               ),
             ),
             const SizedBox(width: 7),
@@ -1030,6 +1070,7 @@ class _PresenceRow extends StatelessWidget {
                 isLocalSide: false,
                 onUpload: onUpload,
                 onDownload: onDownload,
+                onDeleteFromDrive: onDeleteFromDrive,
               ),
             ),
           ],
@@ -1050,6 +1091,7 @@ class _SideTile extends StatelessWidget {
     required this.isLocalSide,
     this.onUpload,
     this.onDownload,
+    this.onDeleteFromDrive,
   });
 
   final Color color;
@@ -1061,6 +1103,7 @@ class _SideTile extends StatelessWidget {
   final bool isLocalSide;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
+  final VoidCallback? onDeleteFromDrive;
 
   @override
   Widget build(BuildContext context) {
@@ -1139,6 +1182,7 @@ class _SideTile extends StatelessWidget {
         startOnLocal: isLocalSide,
         onUpload: onUpload,
         onDownload: onDownload,
+        onDeleteFromDrive: onDeleteFromDrive,
       ),
       child: content,
     );

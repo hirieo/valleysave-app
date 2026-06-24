@@ -281,6 +281,35 @@ class DriveService {
     return bytes;
   }
 
+  /// Mueve la subcarpeta de un save a la Papelera de Google Drive.
+  Future<void> trashSave(String folderId) async {
+    await _api.files.update(
+      drive.File()..trashed = true,
+      folderId,
+      $fields: 'id',
+    );
+  }
+
+  /// Restaura una subcarpeta desde la Papelera de Drive.
+  Future<void> restoreSave(String folderId) async {
+    await _api.files.update(
+      drive.File()..trashed = false,
+      folderId,
+      $fields: 'id',
+    );
+  }
+
+  /// Lista subcarpetas de saves en la Papelera de Drive.
+  Future<List<drive.File>> listTrashedSaves() async {
+    final rootId = await ensureFolder();
+    final result = await _api.files.list(
+      q: "'$rootId' in parents and mimeType='$_folderMime' and trashed=true",
+      spaces: 'drive',
+      $fields: 'files(id,name,modifiedTime)',
+    );
+    return result.files ?? [];
+  }
+
   /// Descarga un archivo de Drive a [localPath].
   Future<void> downloadFile(String fileId, String localPath) async {
     final media = await _api.files.get(

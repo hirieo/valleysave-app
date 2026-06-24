@@ -6,6 +6,7 @@ import '../../core/models/season_state.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
+import '../onboarding/privacy_screen.dart';
 
 class HowItWorksScreen extends StatefulWidget {
   const HowItWorksScreen({super.key, this.scrollToSection});
@@ -110,6 +111,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                               ),
                               const SizedBox(height: 16),
                               _bridgeCard(season),
+                              const SizedBox(height: 28),
+                              _privacyLink(context),
                             ],
                           ),
                         ),
@@ -979,6 +982,49 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             child: Icon(Icons.copy_rounded, size: 15, color: AppColors.textFaint),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _privacyLink(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PrivacyScreen(onAccepted: () => Navigator.pop(context)),
+        ),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.shield_outlined,
+              size: 15,
+              color: Colors.white.withValues(alpha: 0.50),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Política de privacidad y uso',
+              style: GoogleFonts.dmMono(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.50),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 15,
+              color: Colors.white.withValues(alpha: 0.30),
+            ),
+          ],
+        ),
       ),
     );
   }

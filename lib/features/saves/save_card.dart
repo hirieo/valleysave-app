@@ -428,7 +428,7 @@ class _DetailPage extends StatelessWidget {
                           const SizedBox(width: 7),
                           Text(
                             side.title.toUpperCase(),
-                            style: GoogleFonts.dmMono(
+                            style: GoogleFonts.firaCode(
                               fontSize: 10,
                               letterSpacing: 1.0,
                               fontWeight: FontWeight.w700,
@@ -440,7 +440,7 @@ class _DetailPage extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         s.farmName,
-                        style: GoogleFonts.fraunces(
+                        style: GoogleFonts.bodoniModa(
                           fontSize: 24,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.w700,
@@ -451,7 +451,7 @@ class _DetailPage extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         'Día ${s.dayOfMonth} · Año ${s.year}',
-                        style: GoogleFonts.dmMono(
+                        style: GoogleFonts.firaCode(
                           fontSize: 11,
                           color: s.seasonColor.withValues(alpha: 0.90),
                         ),
@@ -492,7 +492,7 @@ class _DetailPage extends StatelessWidget {
                       const SizedBox(width: 7),
                       Text(
                         side.actionLabel,
-                        style: GoogleFonts.dmMono(
+                        style: GoogleFonts.firaCode(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: side.color,
@@ -529,7 +529,7 @@ class _DetailPage extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         side.deleteLabel,
-                        style: GoogleFonts.dmMono(
+                        style: GoogleFonts.firaCode(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: const Color(0xFFE05252),
@@ -565,7 +565,7 @@ class _Header extends StatelessWidget {
               children: [
                 Text(
                   save.farmName,
-                  style: GoogleFonts.fraunces(
+                  style: GoogleFonts.bodoniModa(
                     fontSize: 26,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w700,
@@ -627,7 +627,7 @@ class _DateBox extends StatelessWidget {
         children: [
           Text(
             save.dateLabel.toUpperCase(),
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 8,
               letterSpacing: 1.0,
               color: save.seasonColor.withValues(alpha: 0.80),
@@ -635,7 +635,7 @@ class _DateBox extends StatelessWidget {
           ),
           Text(
             'Día ${save.dayOfMonth}',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
               fontSize: 22,
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w700,
@@ -755,7 +755,7 @@ class _BigTile extends StatelessWidget {
         children: [
           Text(
             save.playtimeLabel,
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
               fontSize: 38,
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w700,
@@ -772,7 +772,7 @@ class _BigTile extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 'TIEMPO JUGADO',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                   fontSize: 7,
                   letterSpacing: 0.8,
                   color: save.seasonColor.withValues(alpha: 0.45),
@@ -827,7 +827,7 @@ class _MiniTile extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     value,
-                    style: GoogleFonts.dmMono(
+                    style: GoogleFonts.firaCode(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
                       color: valueColor,
@@ -840,7 +840,7 @@ class _MiniTile extends StatelessWidget {
           const SizedBox(height: 3),
           Text(
             label.toUpperCase(),
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 7,
               letterSpacing: 0.7,
               color: _kTileLbl,
@@ -868,7 +868,7 @@ class _CoinIcon extends StatelessWidget {
       child: Center(
         child: Text(
           'G',
-          style: GoogleFonts.fraunces(
+          style: GoogleFonts.bodoniModa(
             fontSize: 7.5,
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.w700,
@@ -941,7 +941,7 @@ class _SkillRow extends StatelessWidget {
           width: 42,
           child: Text(
             name.toUpperCase(),
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 8,
               letterSpacing: 0.4,
               color: _kSkillName,
@@ -984,7 +984,7 @@ class _SkillRow extends StatelessWidget {
           width: 16,
           child: Text(
             '$level',
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 10,
               fontWeight: FontWeight.w500,
               color: color,
@@ -1169,7 +1169,7 @@ class _SideTile extends StatelessWidget {
               const SizedBox(width: 5),
               Text(
                 title,
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                   fontSize: 7.5,
                   letterSpacing: 0.6,
                   color: base.withValues(alpha: 0.95),
@@ -1185,7 +1185,7 @@ class _SideTile extends StatelessWidget {
           if (present) ...[
             Text(
               'Día ${save!.dayOfMonth} · Año ${save!.year}',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
                 color: Colors.white.withValues(alpha: 0.88),
@@ -1194,7 +1194,7 @@ class _SideTile extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               '${save!.playtimeLabel} · ${_rel(save!.lastModified)}',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 8.5,
                 color: Colors.white.withValues(alpha: 0.42),
               ),
@@ -1203,7 +1203,7 @@ class _SideTile extends StatelessWidget {
               const SizedBox(height: 1),
               Text(
                 'v${save!.gameVersion}',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                   fontSize: 8,
                   color: Colors.white.withValues(alpha: 0.28),
                 ),
@@ -1212,7 +1212,7 @@ class _SideTile extends StatelessWidget {
           ] else
             Text(
               'No está aquí',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 10,
                 color: Colors.white.withValues(alpha: 0.35),
               ),
@@ -1277,7 +1277,7 @@ class _Footer extends StatelessWidget {
             Flexible(
               child: Text(
                 statusLabel,
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   color: statusColor,
@@ -1340,7 +1340,7 @@ class _Footer extends StatelessWidget {
           Flexible(
             child: Text(
               statusLabel,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: statusColor,
@@ -1463,7 +1463,7 @@ class _ActionBtn extends StatelessWidget {
                   const SizedBox(width: 5),
                   Text(
                     label,
-                    style: GoogleFonts.dmMono(fontSize: 10, color: color),
+                    style: GoogleFonts.firaCode(fontSize: 10, color: color),
                   ),
                 ],
               ),
@@ -1498,7 +1498,7 @@ class _Chip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmMono(
+        style: GoogleFonts.firaCode(
           fontSize: 10,
           fontWeight: FontWeight.w500,
           color: textColor,
@@ -1532,7 +1532,7 @@ class _Pill extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmMono(fontSize: 10, color: textColor),
+        style: GoogleFonts.firaCode(fontSize: 10, color: textColor),
       ),
     );
   }

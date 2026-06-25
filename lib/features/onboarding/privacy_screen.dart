@@ -82,7 +82,7 @@ class PrivacyScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     viewOnly ? 'Política de uso' : 'Antes de empezar',
-                                    style: GoogleFonts.fraunces(
+                                    style: GoogleFonts.bodoniModa(
                                       fontSize: 24,
                                       fontStyle: FontStyle.italic,
                                       fontWeight: FontWeight.w700,
@@ -92,7 +92,7 @@ class PrivacyScreen extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     'Última actualización: junio 2026',
-                                    style: GoogleFonts.dmMono(
+                                    style: GoogleFonts.firaCode(
                                       fontSize: 11,
                                       color: Colors.white.withValues(alpha: 0.45),
                                     ),
@@ -152,7 +152,7 @@ class PrivacyScreen extends StatelessWidget {
                             ),
                             child: Text(
                               'Entendido, continuar',
-                              style: GoogleFonts.dmMono(
+                              style: GoogleFonts.firaCode(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.accent,
@@ -193,7 +193,7 @@ class PrivacyScreen extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.fraunces(
+              style: GoogleFonts.bodoniModa(
                 fontSize: 13,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700,
@@ -205,7 +205,7 @@ class PrivacyScreen extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               body,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11,
                 height: 1.6,
                 color: Colors.white.withValues(alpha: 0.65),

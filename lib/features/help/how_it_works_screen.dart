@@ -160,7 +160,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           ),
           Text(
             'Cómo funciona',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
               fontSize: 24,
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w700,
@@ -228,7 +228,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: GoogleFonts.dmMono(
+          style: GoogleFonts.firaCode(
             fontSize: 9.5,
             height: 1.4,
             color: Colors.white.withValues(alpha: 0.60),
@@ -340,7 +340,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           Divider(height: 18, color: Colors.white.withValues(alpha: 0.07)),
           Text(
             'Antes de confirmar también verás, para que lo valores tú:',
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 10.5,
               height: 1.4,
               color: Colors.white.withValues(alpha: 0.40),
@@ -366,7 +366,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           Text(
             'Estos no se muestran — cambian en cualquier dirección y no '
             'indican cuál save va más adelante.',
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 10.5,
               height: 1.5,
               fontStyle: FontStyle.italic,
@@ -388,7 +388,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
         Expanded(
           child: Text(
             label,
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 11.5,
               color: shownColor.withValues(alpha: 0.80),
             ),
@@ -411,7 +411,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
         const SizedBox(width: 10),
         Text(
           label,
-          style: GoogleFonts.dmMono(
+          style: GoogleFonts.firaCode(
             fontSize: 11.5,
             color: ok ? AppColors.green : noColor.withValues(alpha: 0.85),
             fontWeight: ok ? FontWeight.w600 : FontWeight.w400,
@@ -483,7 +483,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                 const SizedBox(height: 4),
                 Text(
                   '≠',
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     color: orange.withValues(alpha: 0.55),
@@ -524,7 +524,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           const SizedBox(height: 5),
           Text(
             platform,
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: color,
@@ -532,7 +532,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           ),
           Text(
             version,
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 9.5,
               color: color.withValues(alpha: 0.65),
             ),
@@ -634,7 +634,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             'ACCESO EN ANDROID',
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 9,
               letterSpacing: 1.2,
               color: Colors.white.withValues(alpha: 0.35),
@@ -732,7 +732,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
               const SizedBox(width: 10),
               Text(
                 title,
-                style: GoogleFonts.fraunces(
+                style: GoogleFonts.bodoniModa(
                   fontSize: 17,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,
@@ -761,7 +761,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
         Expanded(
           child: Text(
             text,
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 11,
               height: 1.5,
               color: Colors.white.withValues(alpha: 0.72),
@@ -772,7 +772,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
     );
   }
 
-  TextStyle _body() => GoogleFonts.dmMono(
+  TextStyle _body() => GoogleFonts.firaCode(
         fontSize: 12,
         height: 1.55,
         color: Colors.white.withValues(alpha: 0.80),
@@ -827,7 +827,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                   children: [
                     Text(
                       badge,
-                      style: GoogleFonts.dmMono(
+                      style: GoogleFonts.firaCode(
                         fontSize: 8.5,
                         letterSpacing: 1.1,
                         fontWeight: FontWeight.w700,
@@ -837,7 +837,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                     const SizedBox(height: 3),
                     Text(
                       title,
-                      style: GoogleFonts.fraunces(
+                      style: GoogleFonts.bodoniModa(
                         fontSize: 19,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w700,
@@ -852,7 +852,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           const SizedBox(height: 14),
           Text(
             subtitle,
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 12,
               height: 1.55,
               color: Colors.white.withValues(alpha: 0.78),
@@ -879,7 +879,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
               ),
               child: Text(
                 closing,
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                   fontSize: 11.5,
                   height: 1.5,
                   fontWeight: FontWeight.w500,
@@ -892,7 +892,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             const SizedBox(height: 14),
             Text(
               footnote,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 10.5,
                 height: 1.5,
                 color: AppColors.textFaint,
@@ -918,7 +918,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           ),
           child: Text(
             '$n',
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 10.5,
               fontWeight: FontWeight.w700,
               color: accent,
@@ -931,7 +931,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             padding: const EdgeInsets.only(top: 2),
             child: Text(
               text,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11.5,
                 height: 1.5,
                 color: Colors.white.withValues(alpha: 0.85),
@@ -960,7 +960,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
               children: [
                 Text(
                   label.toUpperCase(),
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 8,
                     letterSpacing: 0.8,
                     color: AppColors.textFaint,
@@ -969,7 +969,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                 const SizedBox(height: 3),
                 Text(
                   path,
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 10,
                     color: AppColors.textMuted,
                   ),
@@ -1012,7 +1012,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
             const SizedBox(width: 8),
             Text(
               'Política de privacidad y uso',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 12,
                 color: accent,
               ),

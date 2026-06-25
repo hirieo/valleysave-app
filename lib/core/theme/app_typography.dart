@@ -9,9 +9,9 @@ import 'app_colors.dart';
 class AppTypography {
   AppTypography._();
 
-  // ----- Display (Fraunces italic) -----
+  // ----- Display (Bodoni Moda italic) -----
   static TextStyle hero({Color color = AppColors.text}) =>
-      GoogleFonts.fraunces(
+      GoogleFonts.bodoniModa(
         textStyle: TextStyle(
           color: color,
           fontSize: 84,
@@ -23,7 +23,7 @@ class AppTypography {
       );
 
   static TextStyle h2({Color color = AppColors.text}) =>
-      GoogleFonts.fraunces(
+      GoogleFonts.bodoniModa(
         textStyle: TextStyle(
           color: color,
           fontSize: 40,
@@ -35,7 +35,7 @@ class AppTypography {
       );
 
   static TextStyle stat({Color color = AppColors.accent}) =>
-      GoogleFonts.fraunces(
+      GoogleFonts.bodoniModa(
         textStyle: TextStyle(
           color: color,
           fontSize: 36,
@@ -44,9 +44,9 @@ class AppTypography {
         ),
       );
 
-  // ----- Body (DM Sans) -----
+  // ----- Body (Urbanist) -----
   static TextStyle body({Color color = AppColors.textMuted}) =>
-      GoogleFonts.dmSans(
+      GoogleFonts.urbanist(
         textStyle: TextStyle(
           color: color,
           fontSize: 17,
@@ -56,7 +56,7 @@ class AppTypography {
       );
 
   static TextStyle bodyStrong({Color color = AppColors.text}) =>
-      GoogleFonts.dmSans(
+      GoogleFonts.urbanist(
         textStyle: TextStyle(
           color: color,
           fontSize: 17,
@@ -65,9 +65,9 @@ class AppTypography {
         ),
       );
 
-  // ----- Mono (DM Mono) -----
+  // ----- Mono (Fira Code) -----
   static TextStyle mono({Color color = AppColors.textFaint, double size = 12}) =>
-      GoogleFonts.dmMono(
+      GoogleFonts.firaCode(
         textStyle: TextStyle(
           color: color,
           fontSize: size,
@@ -77,7 +77,7 @@ class AppTypography {
       );
 
   static TextStyle button({Color color = AppColors.text}) =>
-      GoogleFonts.dmSans(
+      GoogleFonts.urbanist(
         textStyle: TextStyle(
           color: color,
           fontSize: 17,
@@ -87,7 +87,7 @@ class AppTypography {
       );
 
   static TextStyle eyebrow({Color color = AppColors.green}) =>
-      GoogleFonts.dmSans(
+      GoogleFonts.urbanist(
         textStyle: TextStyle(
           color: color,
           fontSize: 12,

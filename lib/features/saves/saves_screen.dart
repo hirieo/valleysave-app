@@ -449,7 +449,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               color: const Color(0xFFE05252).withValues(alpha: 0.35)),
         ),
         title: Text('Eliminar de Drive',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
@@ -459,7 +459,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           children: [
             Text(
               '"$farmName" se moverá a la Papelera de Google Drive.',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 12,
                   height: 1.5,
                   color: Colors.white.withValues(alpha: 0.80)),
@@ -468,7 +468,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             Text(
               'Tienes 30 días para restaurarla desde Drive antes de que '
               'se elimine definitivamente.',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 11,
                   height: 1.5,
                   color: Colors.white.withValues(alpha: 0.55)),
@@ -479,13 +479,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text('Cancelar',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text('Eliminar',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: const Color(0xFFE05252),
                     fontWeight: FontWeight.w700)),
           ),
@@ -507,7 +507,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               color: const Color(0xFFE05252).withValues(alpha: 0.35)),
         ),
         title: Text('Borrar de este dispositivo',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
@@ -517,7 +517,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           children: [
             Text(
               '"$farmName" se eliminará permanentemente de este dispositivo.',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 12,
                   height: 1.5,
                   color: Colors.white.withValues(alpha: 0.80)),
@@ -525,7 +525,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             const SizedBox(height: 12),
             Text(
               '⚠️ Si no la has subido a Drive, se perderá para siempre. No hay recuperación.',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 11,
                   height: 1.5,
                   color: const Color(0xFFE05252).withValues(alpha: 0.90),
@@ -537,13 +537,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text('Cancelar',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text('Borrar',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: const Color(0xFFE05252),
                     fontWeight: FontWeight.w700)),
           ),
@@ -565,7 +565,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
         ),
         title: Text('Copia la partida al juego',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
@@ -576,7 +576,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             Text(
               'La partida está lista. Con tu app de Archivos, copia la carpeta '
               '"$name" y pégala en la carpeta de Stardew.',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 12,
                   height: 1.5,
                   color: Colors.white.withValues(alpha: 0.82)),
@@ -594,13 +594,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               _snack('Ruta de destino copiada.');
             },
             child: Text('Copiar destino',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: AppColors.accent, fontWeight: FontWeight.w700)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text('Entendido',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
         ],
@@ -621,12 +621,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label.toUpperCase(),
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 8, letterSpacing: 0.8, color: AppColors.textFaint)),
           const SizedBox(height: 2),
           Text(path,
               style:
-                  GoogleFonts.dmMono(fontSize: 9.5, color: AppColors.textMuted)),
+                  GoogleFonts.firaCode(fontSize: 9.5, color: AppColors.textMuted)),
         ],
       ),
     );
@@ -646,7 +646,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
         ),
         title: Text('Descargar de Drive',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
@@ -658,7 +658,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               Text(
                 'Se copiará "${drive.farmName}" (Día ${drive.dayOfMonth}, '
                 '${drive.playtimeLabel}) a este equipo.',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
               )
             else
@@ -686,7 +686,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 child: Text(
                   '⚠️ Versiones distintas: local ${local.gameVersion} · Drive ${drive.gameVersion}. '
                   'El juego podría no cargar el save correctamente.',
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                       fontSize: 10,
                       height: 1.5,
                       color: const Color(0xFFE09020).withValues(alpha: 0.90)),
@@ -699,12 +699,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text('Cancelar',
-                style: GoogleFonts.dmMono(color: Colors.white.withValues(alpha: 0.6))),
+                style: GoogleFonts.firaCode(color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text('Descargar',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: const Color(0xFF5AA8E0), fontWeight: FontWeight.w700)),
           ),
         ],
@@ -726,7 +726,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
         ),
         title: Text('Subir a Drive',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
@@ -734,7 +734,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ? Text(
                 'Se subirá "${local.farmName}" (Día ${local.dayOfMonth}, '
                 '${local.playtimeLabel}) a tu Drive.',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
               )
             : _overwritePreview(
@@ -749,13 +749,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text('Cancelar',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text('Subir',
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     color: const Color(0xFFE0B850),
                     fontWeight: FontWeight.w700)),
           ),
@@ -779,7 +779,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       children: [
         Text(
           intro,
-          style: GoogleFonts.dmMono(
+          style: GoogleFonts.firaCode(
               fontSize: 12,
               height: 1.5,
               color: Colors.white.withValues(alpha: 0.80)),
@@ -836,7 +836,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(header,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 8,
                   letterSpacing: 0.8,
                   fontWeight: FontWeight.w700,
@@ -909,7 +909,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label.toUpperCase(),
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                   fontSize: 7.5,
                   letterSpacing: 0.6,
                   color: AppColors.textFaint)),
@@ -923,14 +923,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 border: Border.all(color: pillColor.withValues(alpha: 0.32)),
               ),
               child: Text(value,
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: pillColor)),
             )
           else
             Text(value,
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: Colors.white.withValues(alpha: 0.75))),
@@ -965,7 +965,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               child: Text(
                 msg,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmMono(
+                style: GoogleFonts.firaCode(
                   fontSize: 12,
                   color: Colors.white.withValues(alpha: 0.85),
                   height: 1.45,
@@ -1105,7 +1105,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             const SizedBox(height: 14),
             Text(
               'Trae tus partidas',
-              style: GoogleFonts.fraunces(
+              style: GoogleFonts.bodoniModa(
                 fontSize: 20,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700,
@@ -1118,7 +1118,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               'Archivos desde la carpeta de Stardew a esta carpeta de ValleySave. '
               'Luego desliza para refrescar.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11.5,
                 height: 1.55,
                 color: Colors.white.withValues(alpha: 0.78),
@@ -1146,13 +1146,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           const SizedBox(height: 12),
           Text(
             'No se encontraron partidas',
-            style: GoogleFonts.dmMono(fontSize: 13, color: AppColors.textFaint),
+            style: GoogleFonts.firaCode(fontSize: 13, color: AppColors.textFaint),
           ),
           const SizedBox(height: 6),
           Text(
             SaveService.savesDirectory ??
                 'En este dispositivo no se leen saves locales',
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 9,
               color: AppColors.textFaint.withValues(alpha: 0.5),
             ),
@@ -1175,7 +1175,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           const SizedBox(height: 14),
           Text(
             'Elige cómo conectar',
-            style: GoogleFonts.fraunces(
+            style: GoogleFonts.bodoniModa(
               fontSize: 22,
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w700,
@@ -1188,7 +1188,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             'Android protege la carpeta del juego. Elige cómo darle acceso a '
             'ValleySave — puedes cambiarlo cuando quieras.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.dmMono(
+            style: GoogleFonts.firaCode(
               fontSize: 11.5,
               height: 1.55,
               color: Colors.white.withValues(alpha: 0.78),
@@ -1259,7 +1259,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(badge,
-                      style: GoogleFonts.dmMono(
+                      style: GoogleFonts.firaCode(
                         fontSize: 8.5,
                         letterSpacing: 1.1,
                         fontWeight: FontWeight.w700,
@@ -1267,14 +1267,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       )),
                   const SizedBox(height: 4),
                   Text(title,
-                      style: GoogleFonts.dmMono(
+                      style: GoogleFonts.firaCode(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: recommended ? season : AppColors.text,
                       )),
                   const SizedBox(height: 5),
                   Text(desc,
-                      style: GoogleFonts.dmMono(
+                      style: GoogleFonts.firaCode(
                         fontSize: 12,
                         height: 1.5,
                         color: recommended
@@ -1324,13 +1324,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label.toUpperCase(),
-                    style: GoogleFonts.dmMono(
+                    style: GoogleFonts.firaCode(
                         fontSize: 8,
                         letterSpacing: 0.8,
                         color: AppColors.textFaint)),
                 const SizedBox(height: 3),
                 Text(path,
-                    style: GoogleFonts.dmMono(
+                    style: GoogleFonts.firaCode(
                         fontSize: 9.5, color: AppColors.textMuted)),
               ],
             ),
@@ -1372,7 +1372,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             const SizedBox(width: 7),
             Text(
               '¿Cómo funciona?',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: Colors.white.withValues(alpha: 0.90),
@@ -1398,7 +1398,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               Center(
                 child: Text(
                   'Conecta Shizuku',
-                  style: GoogleFonts.fraunces(
+                  style: GoogleFonts.bodoniModa(
                     fontSize: 26,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w700,
@@ -1410,7 +1410,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               Center(
                 child: Text(
                   'Se configura una vez · solo la primera vez',
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 11,
                     color: AppColors.textMuted,
                   ),
@@ -1452,7 +1452,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   children: [
                     Text(
                       'GUÍA PASO A PASO',
-                      style: GoogleFonts.dmMono(
+                      style: GoogleFonts.firaCode(
                         fontSize: 9,
                         letterSpacing: 1.4,
                         fontWeight: FontWeight.w700,
@@ -1562,7 +1562,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Colors.white.withValues(alpha: 0.92),
@@ -1571,7 +1571,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 const SizedBox(height: 1),
                 Text(
                   sublabel,
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 10.5,
                     height: 1.4,
                     color: _seasonAccent.withValues(alpha: 0.90),
@@ -1586,7 +1586,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           else
             Text(
               done ? 'hecho' : 'pendiente',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 9,
                 letterSpacing: 0.6,
                 fontWeight: FontWeight.w700,
@@ -1611,7 +1611,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ),
         child: Text(
           label,
-          style: GoogleFonts.dmMono(
+          style: GoogleFonts.firaCode(
             fontSize: 10.5,
             fontWeight: FontWeight.w700,
             color: tone,
@@ -1639,7 +1639,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             child: Text(
               n,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 color: _seasonAccent,
@@ -1655,7 +1655,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   padding: const EdgeInsets.only(top: 1),
                   child: Text(
                     title,
-                    style: GoogleFonts.dmMono(
+                    style: GoogleFonts.firaCode(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: Colors.white.withValues(alpha: 0.95),
@@ -1665,7 +1665,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 const SizedBox(height: 4),
                 Text(
                   desc,
-                  style: GoogleFonts.dmMono(
+                  style: GoogleFonts.firaCode(
                     fontSize: 14,
                     height: 1.55,
                     color: Colors.white.withValues(alpha: 0.88),
@@ -1703,7 +1703,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ],
             Text(
               label,
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: tone,
@@ -1731,7 +1731,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ),
         child: Text(
           label,
-          style: GoogleFonts.dmMono(
+          style: GoogleFonts.firaCode(
             fontSize: 13,
             fontWeight: FontWeight.w600,
             color: filled ? tone : AppColors.textFaint,
@@ -1763,7 +1763,7 @@ class _LatestBadge extends StatelessWidget {
             ),
             child: Text(
               '· ÚLTIMA PARTIDA ·',
-              style: GoogleFonts.dmMono(
+              style: GoogleFonts.firaCode(
                 fontSize: 8,
                 letterSpacing: 1.2,
                 fontWeight: FontWeight.w500,
@@ -1804,7 +1804,7 @@ class _TopBar extends StatelessWidget {
               const Spacer(),
               Text(
                 'Mis partidas',
-                style: GoogleFonts.fraunces(
+                style: GoogleFonts.bodoniModa(
                   fontSize: 24,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,

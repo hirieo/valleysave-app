@@ -40,6 +40,7 @@ class SavesScreen extends StatefulWidget {
 
 class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   List<SaveEntry> _entries = [];
+  int _staggerVersion = 0;
   bool _loading = true;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
 
@@ -292,6 +293,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       setState(() {
         _entries = entries;
         _loading = false;
+        _staggerVersion++;
       });
       SeasonController.instance.setFromSaves(entries);
     }
@@ -1059,28 +1061,32 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         itemCount: _entries.length,
         separatorBuilder: (context, index) => const SizedBox(height: 14),
-        itemBuilder: (_, i) => Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 460),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (i == 0) _LatestBadge(color: _entries[0].primary.seasonColor),
-                SaveCard(
-                  entry: _entries[i],
-                  busy: _busy.contains(_entries[i].folderName),
-                  onUpload: () => _handleUpload(_entries[i]),
-                  onDownload: () => _handleDownload(_entries[i]),
-                  onDeleteFromDrive: _entries[i].driveFolderId != null &&
-                          widget.drive != null
-                      ? () => _handleDeleteFromDrive(_entries[i])
-                      : null,
-                  onDeleteLocal: _entries[i].local != null
-                      ? () => _handleDeleteLocal(_entries[i])
-                      : null,
-                ),
-              ],
+        itemBuilder: (_, i) => _StaggerItem(
+          key: ValueKey('${_staggerVersion}_$i'),
+          index: i,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 460),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (i == 0) _LatestBadge(color: _entries[0].primary.seasonColor),
+                  SaveCard(
+                    entry: _entries[i],
+                    busy: _busy.contains(_entries[i].folderName),
+                    onUpload: () => _handleUpload(_entries[i]),
+                    onDownload: () => _handleDownload(_entries[i]),
+                    onDeleteFromDrive: _entries[i].driveFolderId != null &&
+                            widget.drive != null
+                        ? () => _handleDeleteFromDrive(_entries[i])
+                        : null,
+                    onDeleteLocal: _entries[i].local != null
+                        ? () => _handleDeleteLocal(_entries[i])
+                        : null,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -1845,3 +1851,47 @@ class _IconCircle extends StatelessWidget {
   }
 }
 
+
+class _StaggerItem extends StatefulWidget {
+  const _StaggerItem({super.key, required this.index, required this.child});
+  final int index;
+  final Widget child;
+
+  @override
+  State<_StaggerItem> createState() => _StaggerItemState();
+}
+
+class _StaggerItemState extends State<_StaggerItem>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _opacity;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    const curve = Cubic(0.23, 1, 0.32, 1);
+    _opacity = CurvedAnimation(parent: _ctrl, curve: curve);
+    _slide = Tween<Offset>(begin: const Offset(0, 0.04), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _ctrl, curve: curve));
+    Future.delayed(Duration(milliseconds: widget.index * 60), () {
+      if (mounted) _ctrl.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(
+        opacity: _opacity,
+        child: SlideTransition(position: _slide, child: widget.child),
+      );
+}

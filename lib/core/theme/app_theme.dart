@@ -24,7 +24,7 @@ class AppTheme {
         onPrimary: AppColors.greenTen,
         onSurface: AppColors.text,
       ),
-      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).apply(
+      textTheme: GoogleFonts.urbanistTextTheme(base.textTheme).apply(
         bodyColor:    AppColors.text,
         displayColor: AppColors.text,
       ),

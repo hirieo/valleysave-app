@@ -14,7 +14,7 @@ class ValleyBasePainter extends CustomPainter {
   final SeasonState season;
   final double t;
   final List<ValleyStar> stars;
-  final List<ValleyCloud> clouds; // reservado para estaciones futuras
+  final List<ValleyCloud> clouds;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -37,11 +37,13 @@ class ValleyBasePainter extends CustomPainter {
 
     _drawMountains(canvas, W, H, d);
 
-    if (season != SeasonState.initial && season != SeasonState.spring) {
-      _drawClouds(canvas, W, H, t);
-    }
+    _drawClouds(canvas, W, H, t);
 
     _drawHills(canvas, W, H, d);
+
+    if (season == SeasonState.spring) {
+      _drawSpringGlow(canvas, W, H);
+    }
   }
 
   // ── Sky ───────────────────────────────────────────────────────────────────
@@ -84,6 +86,18 @@ class ValleyBasePainter extends CustomPainter {
       final r = s.radius * (0.65 + 0.35 * twinkle);
       final cx = s.xFrac * W;
       final cy = s.yFrac * H * 0.62;
+
+      // Glow halo — solo en inicial, estrellas brillantes
+      if (season == SeasonState.initial && alpha > 0.45 && r > 0.9) {
+        final glowPaint = Paint()
+          ..shader = RadialGradient(
+            colors: [
+              const Color(0xFFC8E6FF).withValues(alpha: alpha * 0.38),
+              Colors.transparent,
+            ],
+          ).createShader(Rect.fromCircle(center: Offset(cx, cy), radius: r * 5.5 * twinkle));
+        canvas.drawCircle(Offset(cx, cy), r * 5.5 * twinkle, glowPaint);
+      }
 
       // Core dot
       paint.color = Colors.white.withValues(alpha: alpha);
@@ -254,6 +268,23 @@ class ValleyBasePainter extends CustomPainter {
     canvas.drawPath(path, Paint()..color = color);
   }
 
+  // ── Spring glow ───────────────────────────────────────────────────────────
+
+  void _drawSpringGlow(Canvas canvas, double W, double H) {
+    final paint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Colors.transparent,
+          const Color(0xFFf0a0c0).withValues(alpha: 0.09),
+          const Color(0xFFe080b0).withValues(alpha: 0.06),
+        ],
+        stops: const [0.50, 0.78, 1.0],
+      ).createShader(Offset.zero & Size(W, H));
+    canvas.drawRect(Offset.zero & Size(W, H), paint);
+  }
+
   @override
   bool shouldRepaint(ValleyBasePainter old) =>
       old.t != t || old.season != season;
@@ -311,3 +342,4 @@ List<ValleyCloud> generateClouds(int n, Random rng) => List.generate(
         speed: 0.015 + rng.nextDouble() * 0.025,
       ),
     );
+

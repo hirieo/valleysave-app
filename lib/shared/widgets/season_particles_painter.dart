@@ -238,11 +238,12 @@ Color _pick(List<Color> list) => list[_rng.nextInt(list.length)];
 
 const _petalColors = [
   Color(0xFFffb7c5),
-  Color(0xFFffd0dc),
-  Color(0xFFffe4ec),
+  Color(0xFFf898b8),
+  Color(0xFFe878a8),
   Color(0xFFe888aa),
   Color(0xFFe8b0d8),
   Color(0xFFd8a0e0),
+  Color(0xFFc878c0),
 ];
 const _leafColors = [
   Color(0xFFc8602a),
@@ -263,7 +264,7 @@ List<Particle> createParticles(SeasonState season, double W, double H) {
   final ps = <Particle>[];
   switch (season) {
     case SeasonState.spring:
-      for (int i = 0; i < 55; i++) {
+      for (int i = 0; i < 90; i++) {
         ps.add(Particle(
           type: ParticleType.petal,
           color: _pick(_petalColors),
@@ -273,7 +274,7 @@ List<Particle> createParticles(SeasonState season, double W, double H) {
           vy: _rand(.15, .5),
           size: _rand(7, 15),
           rotSpeed: _rand(-.022, .022),
-          opacity: _rand(.35, .72),
+          opacity: _rand(.55, .85),
           drift: _rand(1.5, 3.5),
           phase: _rand(0, 2 * pi),
         ));

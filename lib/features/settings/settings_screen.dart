@@ -209,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Text(
                           'Opciones',
-                          style: GoogleFonts.fraunces(
+                          style: GoogleFonts.bodoniModa(
                             fontSize: 24,
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w700,

@@ -5,7 +5,7 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 
-class GhostButton extends StatelessWidget {
+class GhostButton extends StatefulWidget {
   const GhostButton({
     super.key,
     required this.label,
@@ -22,25 +22,44 @@ class GhostButton extends StatelessWidget {
   final Color? backgroundColor;
 
   @override
-  Widget build(BuildContext context) {
-    final fg = foregroundColor ?? AppColors.textMuted;
-    final border = borderColor ?? AppColors.border;
-    final bg = backgroundColor ?? Colors.transparent;
+  State<GhostButton> createState() => _GhostButtonState();
+}
 
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: fg,
-        backgroundColor: bg,
-        side: BorderSide(color: border, width: 1.5),
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sp6),
-        minimumSize: const Size(0, 52),
-        shape: const RoundedRectangleBorder(borderRadius: AppRadius.brPill),
-      ),
-      child: Text(
-        label,
-        style: AppTypography.button(color: fg)
-            .copyWith(fontWeight: FontWeight.w600),
+class _GhostButtonState extends State<GhostButton> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = widget.foregroundColor ?? AppColors.textMuted;
+    final border = widget.borderColor ?? AppColors.border;
+    final bg = widget.backgroundColor ?? Colors.transparent;
+
+    return GestureDetector(
+      onTapDown: widget.onPressed != null ? (_) => setState(() => _pressed = true) : null,
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.97 : 1.0,
+        duration: _pressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: OutlinedButton(
+          onPressed: widget.onPressed,
+          style: OutlinedButton.styleFrom(
+            foregroundColor: fg,
+            backgroundColor: bg,
+            side: BorderSide(color: border, width: 1.5),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sp6),
+            minimumSize: const Size(0, 52),
+            shape: const RoundedRectangleBorder(borderRadius: AppRadius.brPill),
+          ),
+          child: Text(
+            widget.label,
+            style: AppTypography.button(color: fg)
+                .copyWith(fontWeight: FontWeight.w600),
+          ),
+        ),
       ),
     );
   }

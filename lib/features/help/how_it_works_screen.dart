@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/models/season_state.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
+import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../onboarding/privacy_screen.dart';
 
@@ -990,7 +991,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => const PrivacyScreen(viewOnly: true),
         ),
       ),

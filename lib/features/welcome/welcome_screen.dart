@@ -10,7 +10,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../shared/widgets/ghost_button.dart';
 import '../../shared/widgets/primary_button.dart';
-import '../../shared/widgets/season_click_effect.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
 import '../saves/saves_screen.dart';
@@ -240,14 +239,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                         ),
                                         child: child,
                                       ),
-                                      child: SeasonClickEffect(
-                                        season: season,
-                                        child: PrimaryButton(
+                                      child: PrimaryButton(
                                           label: 'Mis partidas',
                                           onPressed: () => _goToSaves(_drive!),
                                           color: SeasonData.data[season]!.accentColor,
                                         ),
-                                      ),
                                     ),
                                     const SizedBox(height: 6),
                                     Row(
@@ -270,20 +266,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                     ),
                                   ],
                                 ),
-                                SeasonClickEffect(
-                                  season: season,
-                                  child: GhostButton(
-                                    label: 'Cómo funciona',
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
-                                    ),
-                                    foregroundColor: Colors.white,
-                                    borderColor: SeasonData.data[season]!.accentColor
-                                        .withValues(alpha: 0.80),
-                                    backgroundColor: Colors.black.withValues(
-                                      alpha: season == SeasonState.winter ? 0.45 : 0.32,
-                                    ),
+                                GhostButton(
+                                  label: 'Cómo funciona',
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+                                  ),
+                                  foregroundColor: Colors.white,
+                                  borderColor: SeasonData.data[season]!.accentColor
+                                      .withValues(alpha: 0.80),
+                                  backgroundColor: Colors.black.withValues(
+                                    alpha: season == SeasonState.winter ? 0.45 : 0.32,
                                   ),
                                 ),
                               ],
@@ -293,28 +286,22 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               spacing: AppSpacing.sp4,
                               runSpacing: AppSpacing.sp4,
                               children: [
-                                SeasonClickEffect(
-                                  season: season,
-                                  child: PrimaryButton(
-                                    label: _authLoading ? 'Conectando…' : 'Conectar Google Drive',
-                                    onPressed: _authLoading ? null : _connectDrive,
-                                    color: SeasonData.data[season]!.accentColor,
-                                  ),
+                                PrimaryButton(
+                                  label: _authLoading ? 'Conectando…' : 'Conectar Google Drive',
+                                  onPressed: _authLoading ? null : _connectDrive,
+                                  color: SeasonData.data[season]!.accentColor,
                                 ),
-                                SeasonClickEffect(
-                                  season: season,
-                                  child: GhostButton(
-                                    label: 'Cómo funciona',
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
-                                    ),
-                                    foregroundColor: Colors.white,
-                                    borderColor: SeasonData.data[season]!.accentColor
-                                        .withValues(alpha: 0.80),
-                                    backgroundColor: Colors.black.withValues(
-                                      alpha: season == SeasonState.winter ? 0.45 : 0.32,
-                                    ),
+                                GhostButton(
+                                  label: 'Cómo funciona',
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+                                  ),
+                                  foregroundColor: Colors.white,
+                                  borderColor: SeasonData.data[season]!.accentColor
+                                      .withValues(alpha: 0.80),
+                                  backgroundColor: Colors.black.withValues(
+                                    alpha: season == SeasonState.winter ? 0.45 : 0.32,
                                   ),
                                 ),
                               ],

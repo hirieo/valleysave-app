@@ -411,7 +411,8 @@ class _DetailSheetState extends State<_DetailSheet> {
                   ),
                   const SizedBox(height: 4),
                 ],
-                GestureDetector(
+                Flexible(
+                child: GestureDetector(
                   onHorizontalDragEnd: (details) {
                     final v = details.primaryVelocity ?? 0;
                     if (v < -100 && _index < sides.length - 1) { _navigate(1); }
@@ -444,6 +445,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                     ),
                   ),
                 ),
+                ),
               ],
             ),
           ),
@@ -465,11 +467,11 @@ class _DetailPage extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+        Flexible(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
                   child: Column(
@@ -517,6 +519,7 @@ class _DetailPage extends StatelessWidget {
               ],
             ),
           ),
+        ),
         if (side.onAction != null || side.onDelete != null) ...[
           _kDivider,
           if (side.onAction != null)

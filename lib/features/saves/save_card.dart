@@ -239,6 +239,7 @@ class _DetailSheet extends StatefulWidget {
 
 class _DetailSheetState extends State<_DetailSheet> {
   late int _index = widget.initialPage;
+  int _direction = 1;
   final _focusNode = FocusNode();
 
   @override
@@ -250,7 +251,10 @@ class _DetailSheetState extends State<_DetailSheet> {
   void _navigate(int delta) {
     final next = _index + delta;
     if (next >= 0 && next < widget.sides.length) {
-      setState(() => _index = next);
+      setState(() {
+        _direction = delta > 0 ? 1 : -1;
+        _index = next;
+      });
     }
   }
 
@@ -262,6 +266,7 @@ class _DetailSheetState extends State<_DetailSheet> {
       onTap: enabled ? onTap : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
         width: 28,
         height: 28,
         decoration: BoxDecoration(
@@ -345,7 +350,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                         Icons.chevron_left_rounded,
                         enabled: _index > 0,
                         color: sides[0].color,
-                        onTap: () => setState(() => _index--),
+                        onTap: () => _navigate(-1),
                       ),
                       const SizedBox(width: 12),
                       ...List.generate(sides.length, (i) {
@@ -353,6 +358,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                         final c = sides[i].color;
                         return AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOut,
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           width: on ? 18 : 6,
                           height: 6,
@@ -367,7 +373,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                         Icons.chevron_right_rounded,
                         enabled: _index < sides.length - 1,
                         color: sides[sides.length - 1].color,
-                        onTap: () => setState(() => _index++),
+                        onTap: () => _navigate(1),
                       ),
                     ],
                   ),
@@ -375,16 +381,31 @@ class _DetailSheetState extends State<_DetailSheet> {
                 ],
                 GestureDetector(
                   onHorizontalDragEnd: (details) {
-                    if (details.primaryVelocity == null) return;
-                    if (details.primaryVelocity! < 0 &&
-                        _index < sides.length - 1) {
-                      setState(() => _index++);
-                    } else if (details.primaryVelocity! > 0 && _index > 0) {
-                      setState(() => _index--);
-                    }
+                    final v = details.primaryVelocity ?? 0;
+                    if (v < -100 && _index < sides.length - 1) { _navigate(1); }
+                    else if (v > 100 && _index > 0) { _navigate(-1); }
                   },
                   child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 220),
+                    duration: const Duration(milliseconds: 260),
+                    transitionBuilder: (child, animation) {
+                      const curve = Cubic(0.23, 1, 0.32, 1);
+                      final isNew = child.key == ValueKey(_index);
+                      final dir = _direction.toDouble();
+                      return FadeTransition(
+                        opacity: CurvedAnimation(parent: animation, curve: curve),
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: isNew ? Offset(dir * 0.08, 0) : Offset(-dir * 0.08, 0),
+                            end: Offset.zero,
+                          ).animate(CurvedAnimation(parent: animation, curve: curve)),
+                          child: child,
+                        ),
+                      );
+                    },
+                    layoutBuilder: (current, previous) => Stack(
+                      alignment: Alignment.topCenter,
+                      children: [...previous, ?current],
+                    ),
                     child: KeyedSubtree(
                       key: ValueKey(_index),
                       child: _DetailPage(side: active),

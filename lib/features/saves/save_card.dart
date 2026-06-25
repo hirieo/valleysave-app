@@ -217,10 +217,24 @@ void _showSaveDetail(
   // startOnLocal → primera (local si existe); si no, la última (Drive).
   final initialPage = (startOnLocal ? 0 : sides.length - 1).clamp(0, sides.length - 1);
 
-  showDialog<void>(
+  showGeneralDialog<void>(
     context: context,
+    barrierDismissible: true,
+    barrierLabel: 'Cerrar',
     barrierColor: Colors.black.withValues(alpha: 0.70),
-    builder: (ctx) => Dialog(
+    transitionDuration: const Duration(milliseconds: 260),
+    transitionBuilder: (ctx, animation, _, child) {
+      const curve = Cubic(0.23, 1, 0.32, 1);
+      final curved = CurvedAnimation(parent: animation, curve: curve);
+      return FadeTransition(
+        opacity: curved,
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
+          child: child,
+        ),
+      );
+    },
+    pageBuilder: (ctx, anim, secAnim) => Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 40),
       child: _DetailSheet(sides: sides, initialPage: initialPage),
@@ -240,6 +254,8 @@ class _DetailSheet extends StatefulWidget {
 class _DetailSheetState extends State<_DetailSheet> {
   late int _index = widget.initialPage;
   int _direction = 1;
+  bool _leftPressed = false;
+  bool _rightPressed = false;
   final _focusNode = FocusNode();
 
   @override
@@ -261,29 +277,41 @@ class _DetailSheetState extends State<_DetailSheet> {
   Widget _navArrow(IconData icon,
       {required bool enabled,
       required Color color,
-      required VoidCallback onTap}) {
+      required bool pressed,
+      required VoidCallback onTap,
+      required ValueChanged<bool> onPressChange}) {
     return GestureDetector(
       onTap: enabled ? onTap : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        width: 28,
-        height: 28,
-        decoration: BoxDecoration(
-          color: enabled ? color.withValues(alpha: 0.14) : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: enabled
-                ? color.withValues(alpha: 0.40)
-                : Colors.white.withValues(alpha: 0.10),
+      onTapDown: enabled ? (_) => onPressChange(true) : null,
+      onTapUp: (_) => onPressChange(false),
+      onTapCancel: () => onPressChange(false),
+      child: AnimatedScale(
+        scale: (enabled && pressed) ? 0.88 : 1.0,
+        duration: (enabled && pressed)
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: enabled ? color.withValues(alpha: 0.14) : Colors.transparent,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: enabled
+                  ? color.withValues(alpha: 0.40)
+                  : Colors.white.withValues(alpha: 0.10),
+            ),
           ),
-        ),
-        child: Icon(
-          icon,
-          size: 16,
-          color: enabled
-              ? color.withValues(alpha: 0.90)
-              : Colors.white.withValues(alpha: 0.20),
+          child: Icon(
+            icon,
+            size: 16,
+            color: enabled
+                ? color.withValues(alpha: 0.90)
+                : Colors.white.withValues(alpha: 0.20),
+          ),
         ),
       ),
     );
@@ -350,7 +378,9 @@ class _DetailSheetState extends State<_DetailSheet> {
                         Icons.chevron_left_rounded,
                         enabled: _index > 0,
                         color: sides[0].color,
+                        pressed: _leftPressed,
                         onTap: () => _navigate(-1),
+                        onPressChange: (v) => setState(() => _leftPressed = v),
                       ),
                       const SizedBox(width: 12),
                       ...List.generate(sides.length, (i) {
@@ -373,7 +403,9 @@ class _DetailSheetState extends State<_DetailSheet> {
                         Icons.chevron_right_rounded,
                         enabled: _index < sides.length - 1,
                         color: sides[sides.length - 1].color,
+                        pressed: _rightPressed,
                         onTap: () => _navigate(1),
+                        onPressChange: (v) => setState(() => _rightPressed = v),
                       ),
                     ],
                   ),
@@ -1137,7 +1169,7 @@ class _PresenceRow extends StatelessWidget {
   }
 }
 
-class _SideTile extends StatelessWidget {
+class _SideTile extends StatefulWidget {
   const _SideTile({
     required this.color,
     required this.icon,
@@ -1165,19 +1197,26 @@ class _SideTile extends StatelessWidget {
   final VoidCallback? onDeleteLocal;
 
   @override
+  State<_SideTile> createState() => _SideTileState();
+}
+
+class _SideTileState extends State<_SideTile> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    final present = save != null;
-    final base = present ? color : Colors.white.withValues(alpha: 0.20);
+    final present = widget.save != null;
+    final base = present ? widget.color : Colors.white.withValues(alpha: 0.20);
 
     final content = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: present
-            ? color.withValues(alpha: 0.08)
+            ? widget.color.withValues(alpha: 0.08)
             : Colors.white.withValues(alpha: 0.02),
         border: Border.all(
-          color: base.withValues(alpha: highlight ? 0.9 : 0.36),
-          width: highlight ? 1.4 : 1,
+          color: base.withValues(alpha: widget.highlight ? 0.9 : 0.36),
+          width: widget.highlight ? 1.4 : 1,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -1186,26 +1225,26 @@ class _SideTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(icon, style: const TextStyle(fontSize: 11)),
+              Text(widget.icon, style: const TextStyle(fontSize: 11)),
               const SizedBox(width: 5),
               Text(
-                title,
+                widget.title,
                 style: GoogleFonts.firaCode(
                   fontSize: 7.5,
                   letterSpacing: 0.6,
                   color: base.withValues(alpha: 0.95),
                 ),
               ),
-              if (highlight) ...[
+              if (widget.highlight) ...[
                 const SizedBox(width: 4),
-                Text('▲', style: TextStyle(fontSize: 8, color: color)),
+                Text('▲', style: TextStyle(fontSize: 8, color: widget.color)),
               ],
             ],
           ),
           const SizedBox(height: 5),
           if (present) ...[
             Text(
-              'Día ${save!.dayOfMonth} · Año ${save!.year}',
+              'Día ${widget.save!.dayOfMonth} · Año ${widget.save!.year}',
               style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
@@ -1214,16 +1253,16 @@ class _SideTile extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             Text(
-              '${save!.playtimeLabel} · ${_rel(save!.lastModified)}',
+              '${widget.save!.playtimeLabel} · ${_rel(widget.save!.lastModified)}',
               style: GoogleFonts.firaCode(
                 fontSize: 8.5,
                 color: Colors.white.withValues(alpha: 0.42),
               ),
             ),
-            if (save!.gameVersion.isNotEmpty) ...[
+            if (widget.save!.gameVersion.isNotEmpty) ...[
               const SizedBox(height: 1),
               Text(
-                'v${save!.gameVersion}',
+                'v${widget.save!.gameVersion}',
                 style: GoogleFonts.firaCode(
                   fontSize: 8,
                   color: Colors.white.withValues(alpha: 0.28),
@@ -1247,14 +1286,24 @@ class _SideTile extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () => _showSaveDetail(
         context,
-        entry: entry,
-        startOnLocal: isLocalSide,
-        onUpload: onUpload,
-        onDownload: onDownload,
-        onDeleteFromDrive: onDeleteFromDrive,
-        onDeleteLocal: onDeleteLocal,
+        entry: widget.entry,
+        startOnLocal: widget.isLocalSide,
+        onUpload: widget.onUpload,
+        onDownload: widget.onDownload,
+        onDeleteFromDrive: widget.onDeleteFromDrive,
+        onDeleteLocal: widget.onDeleteLocal,
       ),
-      child: content,
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.97 : 1.0,
+        duration: _pressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: content,
+      ),
     );
   }
 }
@@ -1445,7 +1494,7 @@ class _Dot extends StatelessWidget {
   }
 }
 
-class _ActionBtn extends StatelessWidget {
+class _ActionBtn extends StatefulWidget {
   const _ActionBtn({
     required this.label,
     required this.color,
@@ -1463,31 +1512,48 @@ class _ActionBtn extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
+  State<_ActionBtn> createState() => _ActionBtnState();
+}
+
+class _ActionBtnState extends State<_ActionBtn> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: iconOnly
-            ? const EdgeInsets.all(8)
-            : const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: filled ? 0.16 : 0.0),
-          border: Border.all(color: color.withValues(alpha: 0.50)),
-          borderRadius: BorderRadius.circular(8),
+      onTap: widget.onTap,
+      onTapDown: widget.onTap != null ? (_) => setState(() => _pressed = true) : null,
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.93 : 1.0,
+        duration: _pressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: Container(
+          padding: widget.iconOnly
+              ? const EdgeInsets.all(8)
+              : const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            color: widget.color.withValues(alpha: widget.filled ? 0.16 : 0.0),
+            border: Border.all(color: widget.color.withValues(alpha: 0.50)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: widget.iconOnly
+              ? Icon(widget.icon, size: 15, color: widget.color)
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(widget.icon, size: 13, color: widget.color),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.label,
+                      style: GoogleFonts.firaCode(fontSize: 10, color: widget.color),
+                    ),
+                  ],
+                ),
         ),
-        child: iconOnly
-            ? Icon(icon, size: 15, color: color)
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon, size: 13, color: color),
-                  const SizedBox(width: 5),
-                  Text(
-                    label,
-                    style: GoogleFonts.firaCode(fontSize: 10, color: color),
-                  ),
-                ],
-              ),
       ),
     );
   }

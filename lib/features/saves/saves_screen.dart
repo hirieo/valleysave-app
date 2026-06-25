@@ -19,6 +19,7 @@ import '../../core/services/shizuku_service.dart';
 import '../../core/services/stardew_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
+import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
@@ -1828,28 +1829,7 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-class _IconCircle extends StatelessWidget {
-  const _IconCircle({required this.icon, required this.onTap});
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.30),
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-        ),
-        child: Icon(icon, size: 18, color: Colors.white.withValues(alpha: 0.70)),
-      ),
-    );
-  }
-}
+typedef _IconCircle = IconCircleButton;
 
 
 class _StaggerItem extends StatefulWidget {

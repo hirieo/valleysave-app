@@ -18,6 +18,7 @@ import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
 import '../../core/services/stardew_paths.dart';
 import '../../core/theme/app_colors.dart';
+import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
@@ -299,7 +300,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _openSettings() async {
     final result = await Navigator.push<String?>(
       context,
-      MaterialPageRoute(builder: (_) => const SettingsScreen(showDisconnect: true)),
+      AppPageRoute(builder: (_) => const SettingsScreen(showDisconnect: true)),
     );
     if (mounted && result == 'disconnect') {
       _disconnectDrive();
@@ -1354,7 +1355,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
             builder: (_) => const HowItWorksScreen(scrollToSection: 'shizuku')),
       ),
       child: Container(

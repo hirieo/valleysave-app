@@ -8,6 +8,7 @@ import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/ghost_button.dart';
 import '../../shared/widgets/primary_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
@@ -101,7 +102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     if (!mounted) return;
     final disconnected = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(builder: (_) => SavesScreen(drive: drive)),
+      AppPageRoute(builder: (_) => SavesScreen(drive: drive)),
     );
     if (mounted && disconnected == true) {
       setState(() {
@@ -114,7 +115,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Future<void> _openSettings() async {
     final result = await Navigator.push<String?>(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => SettingsScreen(showDisconnect: _authConnected),
       ),
     );
@@ -270,7 +271,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                   label: 'Cómo funciona',
                                   onPressed: () => Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+                                    AppPageRoute(builder: (_) => const HowItWorksScreen()),
                                   ),
                                   foregroundColor: Colors.white,
                                   borderColor: SeasonData.data[season]!.accentColor
@@ -295,7 +296,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                   label: 'Cómo funciona',
                                   onPressed: () => Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+                                    AppPageRoute(builder: (_) => const HowItWorksScreen()),
                                   ),
                                   foregroundColor: Colors.white,
                                   borderColor: SeasonData.data[season]!.accentColor

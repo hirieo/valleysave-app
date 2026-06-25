@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../shared/utils/app_page_route.dart';
+import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/ghost_button.dart';
 import '../../shared/widgets/primary_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
@@ -343,24 +344,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GestureDetector(
+                          IconCircleButton(
+                            icon: Icons.settings_rounded,
                             onTap: _openSettings,
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.30),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.15),
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.settings_rounded,
-                                size: 18,
-                                color: Colors.white.withValues(alpha: 0.70),
-                              ),
-                            ),
                           ),
                         ],
                       ),

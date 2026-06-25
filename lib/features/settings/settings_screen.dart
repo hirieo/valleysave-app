@@ -7,6 +7,7 @@ import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
+import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -173,24 +174,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       constraints: const BoxConstraints(maxWidth: 492),
                       child: Row(
                         children: [
-                          GestureDetector(
+                          IconCircleButton(
+                            icon: Icons.arrow_back_rounded,
                             onTap: () => Navigator.pop(context),
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.30),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.15),
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.arrow_back_rounded,
-                                size: 18,
-                                color: Colors.white.withValues(alpha: 0.70),
-                              ),
-                            ),
                           ),
                         ],
                       ),

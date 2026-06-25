@@ -323,6 +323,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: selected
@@ -366,6 +367,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _radio(bool selected) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
       width: 20,
       height: 20,
       decoration: BoxDecoration(
@@ -404,6 +406,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           )),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
               color: selected

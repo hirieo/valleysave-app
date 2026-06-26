@@ -34,10 +34,10 @@ class _GhostButtonState extends State<GhostButton> {
     final border = widget.borderColor ?? AppColors.border;
     final bg = widget.backgroundColor ?? Colors.transparent;
 
-    return GestureDetector(
-      onTapDown: widget.onPressed != null ? (_) => setState(() => _pressed = true) : null,
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
+    return Listener(
+      onPointerDown: widget.onPressed != null ? (_) => setState(() => _pressed = true) : null,
+      onPointerUp: (_) => setState(() => _pressed = false),
+      onPointerCancel: (_) => setState(() => _pressed = false),
       child: AnimatedScale(
         scale: _pressed ? 0.97 : 1.0,
         duration: _pressed

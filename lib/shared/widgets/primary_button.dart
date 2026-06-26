@@ -30,10 +30,10 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   Widget build(BuildContext context) {
     final bg = widget.color ?? AppColors.accent;
     final glowColor = bg.withValues(alpha: 0.35);
-    return GestureDetector(
-      onTapDown: widget.onPressed != null ? (_) => setState(() => _pressed = true) : null,
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
+    return Listener(
+      onPointerDown: widget.onPressed != null ? (_) => setState(() => _pressed = true) : null,
+      onPointerUp: (_) => setState(() => _pressed = false),
+      onPointerCancel: (_) => setState(() => _pressed = false),
       child: AnimatedScale(
         scale: _pressed ? 0.97 : 1.0,
         duration: _pressed

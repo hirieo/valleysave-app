@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
@@ -644,10 +645,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       builder: (ctx) => AlertDialog(
         scrollable: true,
         backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.05), const Color(0xFF0A0A0B)),
+            _seasonAccent.withValues(alpha: 0.15), const Color(0xFF080A08),
+        ).withValues(alpha: 0.90),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
+          side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
         ),
         title: Text('Descargar de Drive',
             style: GoogleFonts.bodoniModa(
@@ -724,10 +726,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       builder: (ctx) => AlertDialog(
         scrollable: true,
         backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.05), const Color(0xFF0A0A0B)),
+            _seasonAccent.withValues(alpha: 0.15), const Color(0xFF080A08),
+        ).withValues(alpha: 0.90),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
+          side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
         ),
         title: Text('Subir a Drive',
             style: GoogleFonts.bodoniModa(
@@ -829,10 +832,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: Color.alphaBlend(
-          accent.withValues(alpha: 0.12),
-          Colors.black,
-        ).withValues(alpha: 0.65),
+        color: accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: accent.withValues(alpha: 0.60), width: 1.5),
       ),
@@ -1044,14 +1044,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       }
       // Submodo Puente: nunca bloquea; cae al flujo normal de lista.
     }
-    if (_loading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.accent,
-          strokeWidth: 1.5,
-        ),
-      );
-    }
+    if (_loading) return _seasonalLoader();
     if (_entries.isEmpty) return _buildEmpty();
 
     return RefreshIndicator(
@@ -1095,9 +1088,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  Widget _spinner() => const Center(
-        child: CircularProgressIndicator(
-            color: AppColors.accent, strokeWidth: 1.5),
+  Widget _spinner() => _seasonalLoader();
+
+  Widget _seasonalLoader() => ValueListenableBuilder<SeasonState>(
+        valueListenable: SeasonController.instance.season,
+        builder: (_, season, _) => _SeasonalLoader(
+          key: ValueKey(season),
+          season: season,
+        ),
       );
 
   Widget _buildEmpty() {
@@ -1239,78 +1237,93 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     // Mismo lenguaje que _modeTile de Opciones: transparente sobre el canvas,
     // tinte de estación; el recomendado destacado, el otro tenue pero acorde.
     final season = _seasonAccent;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: recommended
-              ? Color.alphaBlend(
-                  season.withValues(alpha: 0.16),
-                  const Color(0xFF040405),
-                ).withValues(alpha: 0.68)
-              : Color.alphaBlend(
-                  season.withValues(alpha: 0.07),
-                  Colors.black,
-                ).withValues(alpha: 0.42),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: season.withValues(alpha: recommended ? 0.60 : 0.22),
-            width: recommended ? 1.5 : 1,
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
+    bool pressed = false;
+    return StatefulBuilder(
+      builder: (_, setState) => Listener(
+        onPointerDown: (_) => setState(() => pressed = true),
+        onPointerUp: (_) => setState(() => pressed = false),
+        onPointerCancel: (_) => setState(() => pressed = false),
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedScale(
+            scale: pressed ? 0.97 : 1.0,
+            duration: pressed
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: recommended
+                    ? Color.alphaBlend(
+                        season.withValues(alpha: 0.16),
+                        const Color(0xFF040405),
+                      ).withValues(alpha: 0.68)
+                    : Color.alphaBlend(
+                        season.withValues(alpha: 0.07),
+                        Colors.black,
+                      ).withValues(alpha: 0.42),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: season.withValues(alpha: recommended ? 0.60 : 0.22),
+                  width: recommended ? 1.5 : 1,
+                ),
+              ),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(badge,
-                      style: GoogleFonts.firaCode(
-                        fontSize: 8.5,
-                        letterSpacing: 1.1,
-                        fontWeight: FontWeight.w700,
-                        color: recommended ? season : AppColors.textFaint,
-                      )),
-                  const SizedBox(height: 4),
-                  Text(title,
-                      style: GoogleFonts.firaCode(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: recommended ? season : AppColors.text,
-                      )),
-                  const SizedBox(height: 5),
-                  Text(desc,
-                      style: GoogleFonts.firaCode(
-                        fontSize: 12,
-                        height: 1.5,
-                        color: recommended
-                            ? Colors.white.withValues(alpha: 0.82)
-                            : AppColors.textFaint,
-                      )),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(badge,
+                            style: GoogleFonts.firaCode(
+                              fontSize: 8.5,
+                              letterSpacing: 1.1,
+                              fontWeight: FontWeight.w700,
+                              color: recommended ? season : AppColors.textFaint,
+                            )),
+                        const SizedBox(height: 4),
+                        Text(title,
+                            style: GoogleFonts.firaCode(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: recommended ? season : AppColors.text,
+                            )),
+                        const SizedBox(height: 5),
+                        Text(desc,
+                            style: GoogleFonts.firaCode(
+                              fontSize: 12,
+                              height: 1.5,
+                              color: recommended
+                                  ? Colors.white.withValues(alpha: 0.82)
+                                  : AppColors.textFaint,
+                            )),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Container(
+                    width: 22,
+                    height: 22,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: recommended ? season : Colors.transparent,
+                      border: recommended
+                          ? null
+                          : Border.all(
+                              color: season.withValues(alpha: 0.30), width: 2),
+                    ),
+                    child: recommended
+                        ? const Icon(Icons.check_rounded,
+                            size: 13, color: Colors.black)
+                        : null,
+                  ),
                 ],
               ),
             ),
-            const SizedBox(width: 14),
-            Container(
-              width: 22,
-              height: 22,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: recommended ? season : Colors.transparent,
-                border: recommended
-                    ? null
-                    : Border.all(
-                        color: season.withValues(alpha: 0.30), width: 2),
-              ),
-              child: recommended
-                  ? const Icon(Icons.check_rounded,
-                      size: 13, color: Colors.black)
-                  : null,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -1359,34 +1372,50 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Widget _howItWorksLink() {
     final accent =
         SeasonData.data[SeasonController.instance.season.value]!.accentColor;
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        AppPageRoute(
-            builder: (_) => const HowItWorksScreen(scrollToSection: 'shizuku')),
-      ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.32),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: accent.withValues(alpha: 0.70)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.help_outline_rounded,
-                size: 15, color: Colors.white.withValues(alpha: 0.90)),
-            const SizedBox(width: 7),
-            Text(
-              '¿Cómo funciona?',
-              style: GoogleFonts.firaCode(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.90),
+    bool pressed = false;
+    return StatefulBuilder(
+      builder: (_, setState) => Listener(
+        onPointerDown: (_) => setState(() => pressed = true),
+        onPointerUp: (_) => setState(() => pressed = false),
+        onPointerCancel: (_) => setState(() => pressed = false),
+        child: GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            AppPageRoute(
+                builder: (_) =>
+                    const HowItWorksScreen(scrollToSection: 'shizuku')),
+          ),
+          child: AnimatedScale(
+            scale: pressed ? 0.97 : 1.0,
+            duration: pressed
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.32),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: accent.withValues(alpha: 0.70)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.help_outline_rounded,
+                      size: 15, color: Colors.white.withValues(alpha: 0.90)),
+                  const SizedBox(width: 7),
+                  Text(
+                    '¿Cómo funciona?',
+                    style: GoogleFonts.firaCode(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white.withValues(alpha: 0.90),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -1608,21 +1637,34 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// Botón compacto (p. ej. "conceder") para integrar dentro de una fila.
   Widget _miniGateButton(String label, VoidCallback onTap, Color tone) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        decoration: BoxDecoration(
-          color: tone.withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: tone.withValues(alpha: 0.45)),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.firaCode(
-            fontSize: 10.5,
-            fontWeight: FontWeight.w700,
-            color: tone,
+    bool pressed = false;
+    return StatefulBuilder(
+      builder: (_, setState) => GestureDetector(
+        onTap: onTap,
+        onTapDown: (_) => setState(() => pressed = true),
+        onTapUp: (_) => setState(() => pressed = false),
+        onTapCancel: () => setState(() => pressed = false),
+        child: AnimatedScale(
+          scale: pressed ? 0.94 : 1.0,
+          duration: pressed
+              ? const Duration(milliseconds: 100)
+              : const Duration(milliseconds: 200),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            decoration: BoxDecoration(
+              color: tone.withValues(alpha: 0.18),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: tone.withValues(alpha: 0.45)),
+            ),
+            child: Text(
+              label,
+              style: GoogleFonts.firaCode(
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700,
+                color: tone,
+              ),
+            ),
           ),
         ),
       ),
@@ -1693,31 +1735,46 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _smallButton(String label, VoidCallback onTap, {IconData? icon}) {
     final tone = _seasonAccent;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: tone.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: tone.withValues(alpha: 0.40)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 13, color: tone),
-              const SizedBox(width: 5),
-            ],
-            Text(
-              label,
-              style: GoogleFonts.firaCode(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: tone,
+    bool pressed = false;
+    return StatefulBuilder(
+      builder: (_, setState) => Listener(
+        onPointerDown: (_) => setState(() => pressed = true),
+        onPointerUp: (_) => setState(() => pressed = false),
+        onPointerCancel: (_) => setState(() => pressed = false),
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedScale(
+            scale: pressed ? 0.95 : 1.0,
+            duration: pressed
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: tone.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: tone.withValues(alpha: 0.40)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[
+                    Icon(icon, size: 13, color: tone),
+                    const SizedBox(width: 5),
+                  ],
+                  Text(
+                    label,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: tone,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -1725,24 +1782,39 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _gateButton(String label, VoidCallback onTap, {required bool filled}) {
     final tone = _seasonAccent;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: filled ? tone.withValues(alpha: 0.14) : Colors.transparent,
-          border: Border.all(
-              color: tone.withValues(alpha: filled ? 0.55 : 0.28)),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.firaCode(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: filled ? tone : AppColors.textFaint,
+    bool pressed = false;
+    return StatefulBuilder(
+      builder: (_, setState) => Listener(
+        onPointerDown: (_) => setState(() => pressed = true),
+        onPointerUp: (_) => setState(() => pressed = false),
+        onPointerCancel: (_) => setState(() => pressed = false),
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedScale(
+            scale: pressed ? 0.97 : 1.0,
+            duration: pressed
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: filled ? tone.withValues(alpha: 0.14) : Colors.transparent,
+                border: Border.all(
+                    color: tone.withValues(alpha: filled ? 0.55 : 0.28)),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                label,
+                style: GoogleFonts.firaCode(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: filled ? tone : AppColors.textFaint,
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -1874,4 +1946,268 @@ class _StaggerItemState extends State<_StaggerItem>
         opacity: _opacity,
         child: SlideTransition(position: _slide, child: widget.child),
       );
+}
+
+// ── Loader estacional ────────────────────────────────────────────────────────
+
+class _SeasonalLoader extends StatefulWidget {
+  const _SeasonalLoader({super.key, required this.season});
+  final SeasonState season;
+
+  @override
+  State<_SeasonalLoader> createState() => _SeasonalLoaderState();
+}
+
+class _SeasonalLoaderState extends State<_SeasonalLoader>
+    with TickerProviderStateMixin {
+  late final List<AnimationController> _ctrls;
+
+  int get _count {
+    switch (widget.season) {
+      case SeasonState.initial:
+        return 1;
+      case SeasonState.spring:
+      case SeasonState.fall:
+        return 3;
+      case SeasonState.summer:
+      case SeasonState.winter:
+        return 5;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrls = List.generate(_count, (i) {
+      final c = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 1400),
+      );
+      Future.delayed(Duration(milliseconds: i * 200), () {
+        if (mounted) c.repeat();
+      });
+      return c;
+    });
+  }
+
+  @override
+  void dispose() {
+    for (final c in _ctrls) { c.dispose(); }
+    super.dispose();
+  }
+
+  Color get _accent => SeasonData.data[widget.season]!.accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 60,
+            height: 52,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: _particles(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'CARGANDO',
+            style: GoogleFonts.firaCode(
+              fontSize: 8,
+              letterSpacing: .14,
+              color: _accent.withValues(alpha: .80),
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            'conectando con Drive…',
+            style: GoogleFonts.firaCode(
+              fontSize: 7,
+              letterSpacing: .05,
+              color: Colors.white.withValues(alpha: .28),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _particles() {
+    switch (widget.season) {
+      case SeasonState.initial:
+        return [_star()];
+      case SeasonState.spring:
+        return _petals();
+      case SeasonState.summer:
+        return _fireflies();
+      case SeasonState.fall:
+        return _leaves();
+      case SeasonState.winter:
+        return _snow();
+    }
+  }
+
+  // ── Inicial: estrella pulsante ──
+  Widget _star() => Center(
+        child: AnimatedBuilder(
+          animation: _ctrls[0],
+          builder: (_, _) {
+            final v = _ctrls[0].value;
+            final t = Curves.easeInOut
+                .transform(v <= 0.5 ? v * 2 : (1 - v) * 2);
+            return Opacity(
+              opacity: 0.3 + 0.7 * t,
+              child: Transform.scale(
+                scale: 0.7 + 0.45 * t,
+                child: Text(
+                  '✦',
+                  style: TextStyle(fontSize: 22, color: _accent),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+
+  // ── Primavera: pétalos cayendo ──
+  List<Widget> _petals() {
+    const xs = [8.0, 24.0, 42.0];
+    return List.generate(3, (i) => AnimatedBuilder(
+          animation: _ctrls[i],
+          builder: (_, _) {
+            final t = _ctrls[i].value;
+            final op = (t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 1.0)
+                .clamp(0.0, 1.0);
+            return Positioned(
+              left: xs[i],
+              top: t * 52,
+              child: Opacity(
+                opacity: op,
+                child: Transform.rotate(
+                  angle: t * math.pi,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: _accent.withValues(alpha: .85),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(7),
+                        bottomRight: Radius.circular(7),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
+  }
+
+  // ── Verano: luciérnagas parpadeando ──
+  List<Widget> _fireflies() {
+    const positions = [
+      Offset(6, 18), Offset(26, 6), Offset(44, 22),
+      Offset(16, 36), Offset(38, 32),
+    ];
+    return List.generate(5, (i) => AnimatedBuilder(
+          animation: _ctrls[i],
+          builder: (_, _) {
+            final v = _ctrls[i].value;
+            final t = Curves.easeInOut
+                .transform(v <= 0.5 ? v * 2 : (1 - v) * 2);
+            return Positioned(
+              left: positions[i].dx,
+              top: positions[i].dy,
+              child: Opacity(
+                opacity: 0.1 + 0.9 * t,
+                child: Transform.scale(
+                  scale: 0.5 + 0.5 * t,
+                  child: Container(
+                    width: 5,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _accent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: _accent.withValues(alpha: t * 0.6),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
+  }
+
+  // ── Otoño: hojas cayendo con rotación ──
+  List<Widget> _leaves() {
+    const xs = [8.0, 24.0, 40.0];
+    return List.generate(3, (i) => AnimatedBuilder(
+          animation: _ctrls[i],
+          builder: (_, _) {
+            final t = _ctrls[i].value;
+            final op = (t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 0.9)
+                .clamp(0.0, 1.0);
+            final drift = math.sin(t * math.pi * 2) * 5;
+            return Positioned(
+              left: xs[i] + drift,
+              top: t * 52,
+              child: Opacity(
+                opacity: op,
+                child: Transform.rotate(
+                  angle: t * math.pi * 1.5,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: _accent.withValues(alpha: .85),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
+  }
+
+  // ── Invierno: copos de nieve ──
+  List<Widget> _snow() {
+    const xs = [6.0, 18.0, 32.0, 46.0, 13.0];
+    return List.generate(5, (i) => AnimatedBuilder(
+          animation: _ctrls[i],
+          builder: (_, _) {
+            final t = _ctrls[i].value;
+            final op = (t < 0.1 ? t / 0.1 : t > 0.9 ? (1 - t) / 0.1 : 0.8)
+                .clamp(0.0, 1.0);
+            final drift = math.sin(t * math.pi * 2) * 3;
+            return Positioned(
+              left: xs[i] + drift,
+              top: t * 52,
+              child: Opacity(
+                opacity: op,
+                child: Container(
+                  width: 4,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _accent.withValues(alpha: .90),
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
+  }
 }

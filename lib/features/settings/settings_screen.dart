@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
+import '../../core/services/update_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
+
+enum _UpdateState { idle, checking, upToDate, available }
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, this.showDisconnect = false});
@@ -18,15 +22,61 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen>
+    with TickerProviderStateMixin {
   final _service  = SeasonService();
   SeasonSettings _settings = const SeasonSettings();
   bool _loading = true;
+  _UpdateState _updateState = _UpdateState.idle;
+  String _appVersion = '';
+  String? _availableVersion;
+  bool _updateTilePressed = false;
+
+  late final AnimationController _entranceCtrl;
+  late final Animation<double> _contentAnim;
+  bool _disconnectPressed = false;
+  SeasonMode? _pressedMode;
+  SeasonState? _pressedSeason;
 
   @override
   void initState() {
     super.initState();
     _load();
+    _loadVersion();
+    _entranceCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 480),
+    )..forward();
+    _contentAnim = CurvedAnimation(
+      parent: _entranceCtrl,
+      curve: const Cubic(0.23, 1, 0.32, 1),
+    );
+  }
+
+  @override
+  void dispose() {
+    _entranceCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (mounted) setState(() => _appVersion = info.version);
+  }
+
+  Future<void> _checkUpdateFromSettings() async {
+    if (_updateState == _UpdateState.checking) return;
+    setState(() => _updateState = _UpdateState.checking);
+    final version = await UpdateService.checkForUpdate();
+    if (!mounted) return;
+    if (version != null) {
+      setState(() {
+        _updateState    = _UpdateState.available;
+        _availableVersion = version;
+      });
+    } else {
+      setState(() => _updateState = _UpdateState.upToDate);
+    }
   }
 
   Future<void> _load() async {
@@ -163,129 +213,117 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           if (!_loading)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: top + 8),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 492),
-                      child: Row(
-                        children: [
-                          IconCircleButton(
-                            icon: Icons.arrow_back_rounded,
-                            onTap: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+            AnimatedBuilder(
+              animation: _contentAnim,
+              builder: (_, child) => Opacity(
+                opacity: _contentAnim.value,
+                child: Transform.translate(
+                  offset: Offset(0, 10 * (1 - _contentAnim.value)),
+                  child: child,
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: top + 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
                     child: Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 480),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Opciones',
-                          style: GoogleFonts.bodoniModa(
-                            fontSize: 24,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white.withValues(alpha: 0.95),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text('MODO', style: AppTypography.eyebrow()),
-                        const SizedBox(height: 12),
-                        _modeTile(
-                          SeasonMode.auto,
-                          'Automático',
-                          'Sigue tu partida activa y, sin partidas, tu ubicación real.',
-                        ),
-                        const SizedBox(height: 8),
-                        _modeTile(
-                          SeasonMode.savesOnly,
-                          'Según partida',
-                          'Usa siempre la estación de tu partida más reciente.',
-                        ),
-                        const SizedBox(height: 8),
-                        _modeTile(
-                          SeasonMode.geoOnly,
-                          'Según ubicación',
-                          'Usa siempre la estación real de tu ubicación.',
-                        ),
-                        const SizedBox(height: 8),
-                        _modeTile(
-                          SeasonMode.fixed,
-                          'Fijar estación',
-                          'Muestra siempre la misma estación.',
-                        ),
-                        const SizedBox(height: 8),
-                        _modeTile(
-                          SeasonMode.random,
-                          'Aleatoria',
-                          'Elige una estación diferente al abrir la app.',
-                        ),
-                        if (_settings.mode == SeasonMode.fixed) ...[
-                          const SizedBox(height: 32),
-                          Text('ESTACIÓN', style: AppTypography.eyebrow()),
-                          const SizedBox(height: 12),
-                          _seasonPicker(),
-                        ],
-                        if (_settings.mode == SeasonMode.auto) ...[
-                          const SizedBox(height: 32),
-                          _autoExplainer(),
-                        ],
-                        if (widget.showDisconnect) ...[
-                          const SizedBox(height: 32),
-                          GestureDetector(
-                            onTap: _showDisconnectDialog,
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFC06050).withValues(alpha: 0.07),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: const Color(0xFFC06050).withValues(alpha: 0.55),
-                                  width: 1.5,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.logout_rounded,
-                                    size: 16,
-                                    color: const Color(0xFFDC7864),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Desconectar Drive',
-                                    style: AppTypography.bodyStrong(
-                                      color: const Color(0xFFDC7864),
-                                    ),
-                                  ),
-                                ],
+                        constraints: const BoxConstraints(maxWidth: 492),
+                        child: Row(
+                          children: [
+                            IconCircleButton(
+                              icon: Icons.arrow_back_rounded,
+                              onTap: () => Navigator.pop(context),
+                            ),
+                            const Spacer(),
+                            Text(
+                              'Opciones',
+                              style: GoogleFonts.bodoniModa(
+                                fontSize: 24,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white.withValues(alpha: 0.92),
                               ),
                             ),
-                          ),
-                        ],
-                        const SizedBox(height: 48),
-                      ],
+                            const Spacer(),
+                            const SizedBox(width: 36),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 480),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('MODO', style: AppTypography.eyebrow()),
+                          const SizedBox(height: 12),
+                          _modeTile(
+                            SeasonMode.auto,
+                            'Automático',
+                            'Sigue tu partida activa y, sin partidas, tu ubicación real.',
+                          ),
+                          const SizedBox(height: 8),
+                          _modeTile(
+                            SeasonMode.savesOnly,
+                            'Según partida',
+                            'Usa siempre la estación de tu partida más reciente.',
+                          ),
+                          const SizedBox(height: 8),
+                          _modeTile(
+                            SeasonMode.geoOnly,
+                            'Según ubicación',
+                            'Usa siempre la estación real de tu ubicación.',
+                          ),
+                          const SizedBox(height: 8),
+                          _modeTile(
+                            SeasonMode.fixed,
+                            'Fijar estación',
+                            'Muestra siempre la misma estación.',
+                          ),
+                          const SizedBox(height: 8),
+                          _modeTile(
+                            SeasonMode.random,
+                            'Aleatoria',
+                            'Elige una estación diferente al abrir la app.',
+                          ),
+                          if (_settings.mode == SeasonMode.fixed) ...[
+                            const SizedBox(height: 32),
+                            Text('ESTACIÓN', style: AppTypography.eyebrow()),
+                            const SizedBox(height: 12),
+                            _seasonPicker(),
+                          ],
+                          if (_settings.mode == SeasonMode.auto) ...[
+                            const SizedBox(height: 32),
+                            _autoExplainer(),
+                          ],
+                          const SizedBox(height: 32),
+                          Text('APLICACIÓN', style: AppTypography.eyebrow()),
+                          const SizedBox(height: 12),
+                          _versionTile(),
+                          const SizedBox(height: 8),
+                          _updateTile(SeasonData.data[SeasonController.instance.season.value]!.accentColor),
+                          if (widget.showDisconnect) ...[
+                            const SizedBox(height: 32),
+                            _disconnectButton(),
+                          ],
+                          const SizedBox(height: 48),
+                        ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
         ],
       ),
@@ -307,7 +345,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }
         _save(next);
       },
-      child: AnimatedContainer(
+      onTapDown: (_) => setState(() => _pressedMode = mode),
+      onTapUp: (_) => setState(() => _pressedMode = null),
+      onTapCancel: () => setState(() => _pressedMode = null),
+      child: AnimatedScale(
+        scale: _pressedMode == mode ? 0.97 : 1.0,
+        duration: _pressedMode == mode
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         padding: const EdgeInsets.all(16),
@@ -346,6 +393,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _radio(selected),
           ],
         ),
+      ),
       ),
     );
   }
@@ -390,28 +438,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mode: SeasonMode.fixed,
             fixedSeason: s,
           )),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            curve: Curves.easeOut,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: selected
-                  ? Color.alphaBlend(
-                      accent.withValues(alpha: 0.20),
-                      const Color(0xFF040405),
-                    ).withValues(alpha: 0.70)
-                  : Colors.black.withValues(alpha: 0.45),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
+          onTapDown: (_) => setState(() => _pressedSeason = s),
+          onTapUp: (_) => setState(() => _pressedSeason = null),
+          onTapCancel: () => setState(() => _pressedSeason = null),
+          child: AnimatedScale(
+            scale: _pressedSeason == s ? 0.95 : 1.0,
+            duration: _pressedSeason == s
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
                 color: selected
-                    ? accent.withValues(alpha: 0.75)
-                    : Colors.white.withValues(alpha: 0.10),
+                    ? Color.alphaBlend(
+                        accent.withValues(alpha: 0.20),
+                        const Color(0xFF040405),
+                      ).withValues(alpha: 0.70)
+                    : Colors.black.withValues(alpha: 0.45),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: selected
+                      ? accent.withValues(alpha: 0.75)
+                      : Colors.white.withValues(alpha: 0.10),
+                ),
               ),
-            ),
-            child: Text(
-              label,
-              style: AppTypography.eyebrow(
-                color: selected ? accent : AppColors.textMuted,
+              child: Text(
+                label,
+                style: AppTypography.eyebrow(
+                  color: selected ? accent : AppColors.textMuted,
+                ),
               ),
             ),
           ),
@@ -478,6 +536,181 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _versionTile() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text('Versión instalada', style: AppTypography.bodyStrong()),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+            ),
+            child: Text(
+              _appVersion.isEmpty ? '—' : _appVersion,
+              style: AppTypography.mono(color: AppColors.textFaint, size: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _updateTile(Color accent) {
+    final Widget content;
+    switch (_updateState) {
+      case _UpdateState.idle:
+        content = Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Buscar actualizaciones', style: AppTypography.bodyStrong()),
+                  Text('Nunca comprobado', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Icon(Icons.refresh_rounded, size: 16, color: AppColors.textFaint),
+          ],
+        );
+      case _UpdateState.checking:
+        content = Row(
+          children: [
+            Expanded(child: Text('Comprobando...', style: AppTypography.bodyStrong())),
+            const SizedBox(
+              width: 16, height: 16,
+              child: CircularProgressIndicator(strokeWidth: 1.5, color: AppColors.textFaint),
+            ),
+          ],
+        );
+      case _UpdateState.upToDate:
+        content = Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Al día', style: AppTypography.bodyStrong(color: AppColors.statusOk)),
+                  Text('Comprobado ahora', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Icon(Icons.check_rounded, size: 16, color: AppColors.statusOk),
+          ],
+        );
+      case _UpdateState.available:
+        content = Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('v$_availableVersion disponible', style: AppTypography.bodyStrong(color: accent)),
+                  Text('No está al día · Descargar', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Icon(Icons.download_rounded, size: 16, color: accent),
+          ],
+        );
+    }
+
+    final isTappable = _updateState == _UpdateState.idle || _updateState == _UpdateState.available;
+
+    return GestureDetector(
+      onTap: _updateState == _UpdateState.available
+          ? () => UpdateService.openReleasePage()
+          : _updateState == _UpdateState.idle
+              ? _checkUpdateFromSettings
+              : null,
+      onTapDown: isTappable ? (_) => setState(() => _updateTilePressed = true) : null,
+      onTapUp:   isTappable ? (_) => setState(() => _updateTilePressed = false) : null,
+      onTapCancel: isTappable ? () => setState(() => _updateTilePressed = false) : null,
+      child: AnimatedScale(
+        scale: _updateTilePressed ? 0.97 : 1.0,
+        duration: _updateTilePressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: _updateState == _UpdateState.available
+                ? Color.alphaBlend(accent.withValues(alpha: 0.06), Colors.black.withValues(alpha: 0.45))
+                : Colors.black.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _updateState == _UpdateState.available
+                  ? accent.withValues(alpha: 0.38)
+                  : Colors.white.withValues(alpha: 0.10),
+            ),
+          ),
+          child: content,
+        ),
+      ),
+    );
+  }
+
+  Widget _disconnectButton() {
+    return GestureDetector(
+      onTap: _showDisconnectDialog,
+      onTapDown: (_) => setState(() => _disconnectPressed = true),
+      onTapUp: (_) => setState(() => _disconnectPressed = false),
+      onTapCancel: () => setState(() => _disconnectPressed = false),
+      child: AnimatedScale(
+        scale: _disconnectPressed ? 0.97 : 1.0,
+        duration: _disconnectPressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFC06050).withValues(alpha: 0.07),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: const Color(0xFFC06050).withValues(alpha: 0.55),
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.logout_rounded,
+                size: 16,
+                color: const Color(0xFFDC7864),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Desconectar Drive',
+                style: AppTypography.bodyStrong(
+                  color: const Color(0xFFDC7864),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

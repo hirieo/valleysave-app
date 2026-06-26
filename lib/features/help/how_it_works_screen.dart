@@ -6,6 +6,7 @@ import '../../core/models/season_state.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
+import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../onboarding/privacy_screen.dart';
 
@@ -17,18 +18,32 @@ class HowItWorksScreen extends StatefulWidget {
   State<HowItWorksScreen> createState() => _HowItWorksScreenState();
 }
 
-class _HowItWorksScreenState extends State<HowItWorksScreen> {
+class _HowItWorksScreenState extends State<HowItWorksScreen>
+    with SingleTickerProviderStateMixin {
   static const _gamePath =
       'Android/data/com.chucklefish.stardewvalley/files/Saves';
   static const _bridgePath = 'Android/data/com.hirieo.valleysave/files';
 
   final _shizukuKey = GlobalKey();
   late ScrollController _scrollController;
+  bool _privacyPressed = false;
+  bool _copyPressed = false;
+
+  late final AnimationController _entranceCtrl;
+  late final Animation<double> _contentAnim;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _entranceCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 480),
+    )..forward();
+    _contentAnim = CurvedAnimation(
+      parent: _entranceCtrl,
+      curve: const Cubic(0.23, 1, 0.32, 1),
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.scrollToSection == 'shizuku') {
         _scrollToShizuku();
@@ -38,6 +53,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
 
   @override
   void dispose() {
+    _entranceCtrl.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -77,8 +93,17 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
               ),
             ),
             SafeArea(
-              child: Column(
-                children: [
+              child: AnimatedBuilder(
+                animation: _contentAnim,
+                builder: (_, child) => Opacity(
+                  opacity: _contentAnim.value,
+                  child: Transform.translate(
+                    offset: Offset(0, 10 * (1 - _contentAnim.value)),
+                    child: child,
+                  ),
+                ),
+                child: Column(
+                  children: [
                   _header(context),
                   Expanded(
                     child: SingleChildScrollView(
@@ -123,6 +148,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
                 ],
               ),
             ),
+          ),
           ],
         ),
       ),
@@ -143,20 +169,9 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           const SizedBox(height: 36, width: double.infinity),
           Align(
             alignment: Alignment.centerLeft,
-            child: GestureDetector(
+            child: IconCircleButton(
+              icon: Icons.arrow_back_rounded,
               onTap: () => Navigator.pop(context),
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.30),
-                  shape: BoxShape.circle,
-                  border:
-                      Border.all(color: Colors.white.withValues(alpha: 0.15)),
-                ),
-                child: Icon(Icons.arrow_back_rounded,
-                    size: 18, color: Colors.white.withValues(alpha: 0.70)),
-              ),
             ),
           ),
           Text(
@@ -980,7 +995,17 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           ),
           GestureDetector(
             onTap: () => Clipboard.setData(ClipboardData(text: path)),
-            child: Icon(Icons.copy_rounded, size: 15, color: AppColors.textFaint),
+            onTapDown: (_) => setState(() => _copyPressed = true),
+            onTapUp: (_) => setState(() => _copyPressed = false),
+            onTapCancel: () => setState(() => _copyPressed = false),
+            child: AnimatedScale(
+              scale: _copyPressed ? 0.88 : 1.0,
+              duration: _copyPressed
+                  ? const Duration(milliseconds: 100)
+                  : const Duration(milliseconds: 200),
+              curve: const Cubic(0.23, 1, 0.32, 1),
+              child: Icon(Icons.copy_rounded, size: 15, color: AppColors.textFaint),
+            ),
           ),
         ],
       ),
@@ -995,36 +1020,46 @@ class _HowItWorksScreenState extends State<HowItWorksScreen> {
           builder: (_) => const PrivacyScreen(viewOnly: true),
         ),
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: accent.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: accent.withValues(alpha: 0.40)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.shield_outlined,
-              size: 15,
-              color: accent,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Política de privacidad y uso',
-              style: GoogleFonts.firaCode(
-                fontSize: 12,
+      onTapDown: (_) => setState(() => _privacyPressed = true),
+      onTapUp: (_) => setState(() => _privacyPressed = false),
+      onTapCancel: () => setState(() => _privacyPressed = false),
+      child: AnimatedScale(
+        scale: _privacyPressed ? 0.97 : 1.0,
+        duration: _privacyPressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: accent.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: accent.withValues(alpha: 0.40)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.shield_outlined,
+                size: 15,
                 color: accent,
               ),
-            ),
-            const SizedBox(width: 6),
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 15,
-              color: accent.withValues(alpha: 0.55),
-            ),
-          ],
+              const SizedBox(width: 8),
+              Text(
+                'Política de privacidad y uso',
+                style: GoogleFonts.firaCode(
+                  fontSize: 12,
+                  color: accent,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 15,
+                color: accent.withValues(alpha: 0.55),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -32,6 +32,7 @@ class ValleyBasePainter extends CustomPainter {
     }
 
     if (season == SeasonState.initial) {
+      _drawShootingStar(canvas, W, H, t);
       _drawTwilightGlow(canvas, W, H);
     }
 
@@ -166,6 +167,51 @@ class ValleyBasePainter extends CustomPainter {
         colors: [const Color(0xFFfff8d8), const Color(0xFFe8d870)],
       ).createShader(Rect.fromCircle(center: Offset(cx, cy), radius: mr));
     canvas.drawCircle(Offset(cx, cy), mr, moonPaint);
+  }
+
+  // ── Shooting star ─────────────────────────────────────────────────────────
+
+  void _drawShootingStar(Canvas canvas, double W, double H, double t) {
+    const period = 13.0;
+    const visible = 2.5;
+    final cycle = t % period;
+    if (cycle > visible) return;
+    final progress = cycle / visible;
+    final cycleIdx = (t / period).floor();
+    final startX = W * (0.08 + (cycleIdx * 0.4273 % 1.0) * 0.55);
+    final startY = H * (0.04 + (cycleIdx * 0.6719 % 1.0) * 0.18);
+    final endX = startX + W * 0.28;
+    final endY = startY + H * 0.13;
+    final cx = startX + (endX - startX) * progress;
+    final cy = startY + (endY - startY) * progress;
+    final alpha = (progress < 0.12
+            ? progress / 0.12
+            : progress > 0.75
+                ? (1.0 - progress) / 0.25
+                : 1.0)
+        .clamp(0.0, 1.0);
+    final tailProgress = (progress - 0.25).clamp(0.0, 1.0);
+    final tailX = startX + (endX - startX) * tailProgress;
+    final tailY = startY + (endY - startY) * tailProgress;
+    canvas.drawLine(
+      Offset(tailX, tailY),
+      Offset(cx, cy),
+      Paint()
+        ..shader = LinearGradient(
+          colors: [
+            Colors.white.withValues(alpha: 0.0),
+            Colors.white.withValues(alpha: alpha * 0.75),
+          ],
+        ).createShader(Rect.fromPoints(Offset(tailX, tailY), Offset(cx, cy)))
+        ..strokeWidth = 1.2
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke,
+    );
+    canvas.drawCircle(
+      Offset(cx, cy),
+      1.4,
+      Paint()..color = Colors.white.withValues(alpha: alpha * 0.95),
+    );
   }
 
   // ── Twilight horizon glow ─────────────────────────────────────────────────

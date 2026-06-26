@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 import 'app_radius.dart';
-import 'valley_theme_extension.dart';
 
 class AppTheme {
   AppTheme._();
@@ -24,7 +23,7 @@ class AppTheme {
         onPrimary: AppColors.greenTen,
         onSurface: AppColors.text,
       ),
-      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).apply(
+      textTheme: GoogleFonts.urbanistTextTheme(base.textTheme).apply(
         bodyColor:    AppColors.text,
         displayColor: AppColors.text,
       ),
@@ -34,9 +33,6 @@ class AppTheme {
         elevation: 0,
         shape: const RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       ),
-      extensions: <ThemeExtension<dynamic>>[
-        ValleyThemeExtension.dark,
-      ],
     );
   }
 }

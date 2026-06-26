@@ -1,0 +1,185 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Thai (`th`).
+class AppLocalizationsTh extends AppLocalizations {
+  AppLocalizationsTh([String locale = 'th']) : super(locale);
+
+  @override
+  String get appTitle => 'ValleySave';
+
+  @override
+  String get welcomeTitle => 'อย่าสูญเสียฟาร์มของคุณ พาไปด้วย';
+
+  @override
+  String get connectGoogleDrive => 'เชื่อมต่อ Google Drive';
+
+  @override
+  String get connecting => 'กำลังเชื่อมต่อ…';
+
+  @override
+  String get mySaves => 'บันทึกของฉัน';
+
+  @override
+  String get howItWorks => 'วิธีการทำงาน';
+
+  @override
+  String get settings => 'การตั้งค่า';
+
+  @override
+  String get aboutSection => 'เกี่ยวกับ';
+
+  @override
+  String get openSource => 'โค้ดที่มีจำหน่าย';
+
+  @override
+  String get nonCommercial => 'ไม่ใช่เชิงพาณิชย์';
+
+  @override
+  String get freeForever => 'ฟรีตลอดไป';
+
+  @override
+  String get privacyTitle => 'ความเป็นส่วนตัวและการใช้ข้อมูล';
+
+  @override
+  String get privacyDescription =>
+      'ValleySave เป็นแอปพลิเคชันสำหรับซิงโครไนซ์บันทึก Stardew Valley ของคุณกับบัญชี Google Drive ของคุณเอง';
+
+  @override
+  String get whatDataTitle => 'ใช้ข้อมูลใด';
+
+  @override
+  String get whatDataDesc =>
+      'ValleySave เข้าถึงเฉพาะไฟล์บันทึก Stardew Valley ที่จำเป็นในการสร้างสำเนา ซิงโครไนซ์ หรือคืนค่า';
+
+  @override
+  String get googleDriveTitle => 'Google Drive';
+
+  @override
+  String get googleDriveDesc =>
+      'บันทึกของคุณจะถูกอัปโหลดไปยังบัญชี Google Drive ของคุณเอง ValleySave ไม่ใช้เซิร์ฟเวอร์ของตัวเองในการเก็บเกมของคุณ';
+
+  @override
+  String get androidPermissionsTitle => 'สิทธิ์ใน Android';
+
+  @override
+  String get androidPermissionsDesc =>
+      'ValleySave อาจต้องมีสิทธิ์ด้านพื้นที่เก็บข้อมูลหรือเครื่องมือเช่น Shizuku เพื่อเข้าถึงไฟล์บันทึก';
+
+  @override
+  String get adsTitle => 'โฆษณา';
+
+  @override
+  String get adsDesc => 'ValleySave อาจแสดงโฆษณาผ่าน Google AdMob';
+
+  @override
+  String get responsibilityTitle => 'ความรับผิดชอบ';
+
+  @override
+  String get responsibilityDesc => 'ไฟล์บันทึกของคุณเป็นความรับผิดชอบของคุณ';
+
+  @override
+  String get deleteDataTitle => 'ลบข้อมูล';
+
+  @override
+  String get deleteDataDesc =>
+      'คุณสามารถลบสำเนาที่ซิงโครไนซ์ได้โดยการลบโฟลเดอร์ ValleySave จาก Google Drive ด้วยตนเอง';
+
+  @override
+  String get sourceCodeTitle => 'โค้ดแหล่งที่มาและการติดต่อ';
+
+  @override
+  String get sourceCodeDesc =>
+      'ValleySave เป็นโปรเจ็กต์ที่มีโค้ดที่มีจำหน่ายภายใต้ใบอนุญาต Polyform Noncommercial';
+
+  @override
+  String get upToDate => 'ปัจจุบัน';
+
+  @override
+  String get checkingUpdates => 'กำลังตรวจสอบ…';
+
+  @override
+  String get updateAvailable => 'มีการอัปเดตที่พร้อม';
+
+  @override
+  String get application => 'แอพลิเคชัน';
+
+  @override
+  String version(Object version) {
+    return 'เวอร์ชัน $version';
+  }
+
+  @override
+  String get checkForUpdates => 'ตรวจสอบการอัปเดต';
+
+  @override
+  String get shizukuRequired => 'ต้องมี Shizuku';
+
+  @override
+  String get shizukuGuide => 'คำแนะนำการตั้งค่า Shizuku';
+
+  @override
+  String get activateShizuku => 'เปิดใช้งาน Shizuku เพื่อเขียนการบันทึกในเกม';
+
+  @override
+  String deleteSaveTitle(Object saveName) {
+    return 'ลบ $saveName';
+  }
+
+  @override
+  String get deleteSaveMessage =>
+      'นี่จะลบบันทึกจากอุปกรณ์นี้ คุณต้องการดำเนินการต่อไปหรือไม่?';
+
+  @override
+  String get deleteFromDrive => 'ลบจาก Drive';
+
+  @override
+  String confirmDelete(Object saveName) {
+    return 'บันทึก $saveName จะถูกย้ายไปยังถังขยะของ Google Drive';
+  }
+
+  @override
+  String deleteFromDeviceMessage(Object saveName) {
+    return 'บันทึก $saveName จะถูกลบออกจากอุปกรณ์นี้อย่างถาวร';
+  }
+
+  @override
+  String restoreSaveTitle(Object saveName) {
+    return 'คืนค่า $saveName';
+  }
+
+  @override
+  String restoreSaveMessage(Object saveName) {
+    return 'ดาวน์โหลด $saveName ไปยังอุปกรณ์นี้?';
+  }
+
+  @override
+  String get restore => 'คืนค่า';
+
+  @override
+  String get cancel => 'ยกเลิก';
+
+  @override
+  String get error => 'ข้อผิดพลาด';
+
+  @override
+  String get success => 'สำเร็จ';
+
+  @override
+  String get loading => 'กำลังโหลด…';
+
+  @override
+  String get disconnect => 'หลีกเลี่ยง';
+
+  @override
+  String get ok => 'ตกลง';
+
+  @override
+  String get yes => 'ใช่';
+
+  @override
+  String get no => 'ไม่';
+}

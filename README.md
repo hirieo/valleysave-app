@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Logo](assets/icons/icon.png)
+<img src="assets/icons/icon.png" width="64" height="64" alt="ValleySave Logo">
 
 **Sincroniza tus partidas de Stardew Valley con tu propia cuenta de Google Drive.**
 

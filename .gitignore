@@ -80,3 +80,8 @@ mockup_v*.html
 season_options.html
 flutter_*.png
 run.ps1
+
+# Graphify y previews — artefactos locales, nunca al repo
+graphify-out/
+lib/graphify-out/
+.preview/

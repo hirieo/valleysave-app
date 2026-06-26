@@ -1,22 +1,35 @@
-# ValleySave — App
+# ValleySave
 
-Aplicación multiplataforma para sincronizar archivos de guardado de **Stardew Valley** vía Google Drive del usuario. Sin servidores propios. Sin suscripciones.
+Sincroniza tus partidas de **Stardew Valley** con tu propia cuenta de Google Drive. Sin servidores propios. Sin suscripciones obligatorias.
 
-## Stack
+## Plataformas
 
-- **Framework:** Flutter / Dart
-- **Targets:** Android · iOS · macOS · Windows · Linux
-- **Sync:** Google Drive API (OAuth con cuenta del usuario)
-- **Monetización:** AdMob + in_app_purchase (quitar publicidad) + Ko-fi
+Android · iOS · macOS · Windows · Linux
+
+## Cómo funciona
+
+1. Conecta tu cuenta de Google — la app solo accede a los archivos que ella misma crea (`drive.file`)
+2. ValleySave detecta tus partidas y las sube a una carpeta `ValleySave/` en tu Drive
+3. Desde cualquier otro dispositivo puedes descargar y restaurar
+
+## Compilar desde fuente
+
+```bash
+flutter pub get
+cp .env.example .env
+# Rellena GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET en .env
+# (solo necesario en macOS / Windows / Linux — ver .env.example)
+flutter run
+```
+
+> Android e iOS usan `google_sign_in` — las credenciales van en
+> `google-services.json` (Android) y `GoogleService-Info.plist` (iOS),
+> que debes obtener desde tu propio proyecto en Google Cloud Console.
 
 ## Estado
 
-🚧 En setup inicial. Repo recién creado. Sin código aún.
-
-## Repo hermano
-
-Landing y presencia web: [`valleysave-web`](../valleysave-web)
+En desarrollo activo. Funcional en Android y escritorio (macOS/Windows).
 
 ## Licencia
 
-MIT — ver [`LICENSE`](./LICENSE)
+[Polyform Noncommercial 1.0.0](./LICENSE) — puedes ver el código, estudiar cómo funciona y contribuir. No puedes usarlo con fines comerciales.

@@ -35,6 +35,7 @@ class SaveFile {
     required this.weather,
     required this.stamina,
     required this.health,
+    this.gameVersion = '',
   });
 
   final String folderPath;
@@ -65,6 +66,7 @@ class SaveFile {
   final WeatherType weather;
   final int stamina;         // estamina actual al guardar
   final int health;          // vida actual al guardar
+  final String gameVersion;  // e.g. "1.6.8"
 
   // ── Playtime ────────────────────────────────────────────────────────
   Duration get playtime => Duration(milliseconds: millisecondsPlayed);

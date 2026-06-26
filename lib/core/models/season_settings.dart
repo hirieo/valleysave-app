@@ -1,6 +1,6 @@
 import 'season_state.dart';
 
-enum SeasonMode { auto, fixed, random }
+enum SeasonMode { auto, savesOnly, geoOnly, fixed, random }
 
 class SeasonSettings {
   const SeasonSettings({

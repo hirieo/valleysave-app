@@ -149,6 +149,7 @@ class SaveService {
         weather:            weather,
         stamina:            (double.tryParse(tag('stamina')) ?? 0).round(),
         health:             int.tryParse(tag('health')) ?? 0,
+        gameVersion:        tag('gameVersion'),
       );
     } catch (_) {
       return null;

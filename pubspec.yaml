@@ -1,7 +1,7 @@
 name: valleysave
 description: "Sync Stardew Valley save files across devices via Google Drive."
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.1.0+9
 
 environment:
   sdk: ^3.12.0
@@ -13,14 +13,46 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_sign_in: ^6.2.1
   googleapis: ^13.2.0
+  googleapis_auth: ^2.0.0
+  extension_google_sign_in_as_googleapis_auth: ^2.0.3
   path_provider: ^2.1.4
   flutter_secure_storage: ^9.2.2
   google_fonts: ^6.2.1
+  geolocator: ^13.0.4
+  shared_preferences: ^2.3.3
+  flutter_dotenv: ^5.2.1
+  url_launcher: ^6.3.1
+  http: ^1.2.0
+  package_info_plus: ^8.0.0
+  flutter_svg: ^2.0.14
+  xml: ^6.5.0
+  shizuku_api: ^1.2.2
+  android_intent_plus: ^5.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#0a1a0a"
+  adaptive_icon_foreground: "assets/icons/icon.png"
+  remove_alpha_ios: true
+  windows:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: "assets/icons/icon.png"
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env
+    - assets/icons/

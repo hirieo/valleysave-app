@@ -63,11 +63,16 @@ logs/
 # Plans (work-in-progress, no van al repo público)
 plan/
 
+# Credenciales OAuth — nunca al repo
+.credenciales/
+
 # Claude Code — configuración interna
 .claude/
 .specify/
 specs/
 .metadata
+CLAUDE.md
+PROMPT.md
 
 # Mockups y capturas de dev
 mockup_*.html

@@ -1361,7 +1361,7 @@ class _Footer extends StatelessWidget {
           children: [
             _Dot(color: statusColor),
             const SizedBox(width: 6),
-            Flexible(
+            Expanded(
               child: Text(
                 statusLabel,
                 style: GoogleFonts.firaCode(
@@ -1382,19 +1382,20 @@ class _Footer extends StatelessWidget {
             else if (status == SaveSyncStatus.synced)
               Icon(Icons.check_rounded, size: 16, color: _kSynced)
             else ...[
-              if (hasLocal && hasDrive && recommendDownload) ...[
-                _ActionBtn(
-                  label: '', color: _kLocal,
-                  icon: Icons.cloud_upload_outlined,
-                  filled: false, iconOnly: true, onTap: onUpload,
-                ),
-                const SizedBox(width: 8),
-              ],
+              // Secundario siempre a la izquierda, principal a la derecha
               if (hasLocal && hasDrive && recommendUpload) ...[
                 _ActionBtn(
                   label: '', color: _kDrive,
                   icon: Icons.cloud_download_outlined,
                   filled: false, iconOnly: true, onTap: onDownload,
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (hasLocal && hasDrive && recommendDownload) ...[
+                _ActionBtn(
+                  label: '', color: _kLocal,
+                  icon: Icons.cloud_upload_outlined,
+                  filled: false, iconOnly: true, onTap: onUpload,
                 ),
                 const SizedBox(width: 8),
               ],

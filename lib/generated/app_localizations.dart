@@ -1318,6 +1318,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'connecting to Drive…'**
   String get loaderConnecting;
+
+  /// No description provided for @chooserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how to connect'**
+  String get chooserTitle;
+
+  /// No description provided for @chooserAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic · Recommended'**
+  String get chooserAutomatic;
+
+  /// No description provided for @chooserManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual alternative · Android 11-12'**
+  String get chooserManual;
+
+  /// No description provided for @shizukuStepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up Shizuku'**
+  String get shizukuStepTitle;
+
+  /// No description provided for @shizukuStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Install Shizuku'**
+  String get shizukuStep1Title;
+
+  /// No description provided for @shizukuStep1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Download from Play Store or GitHub'**
+  String get shizukuStep1Desc;
+
+  /// No description provided for @shizukuStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Shizuku'**
+  String get shizukuStep2Title;
+
+  /// No description provided for @shizukuStep2Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Run the app and grant permissions'**
+  String get shizukuStep2Desc;
+
+  /// No description provided for @shizukuStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant permission'**
+  String get shizukuStep3Title;
+
+  /// No description provided for @shizukuStep3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave will ask for access'**
+  String get shizukuStep3Desc;
+
+  /// No description provided for @shizukuDone.
+  ///
+  /// In en, this message translates to:
+  /// **'✓  Done. From then on, downloading and uploading saves works directly, like on a computer.'**
+  String get shizukuDone;
+
+  /// No description provided for @dlgDeleteDriveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from Drive'**
+  String get dlgDeleteDriveTitle;
+
+  /// No description provided for @dlgDeleteLocalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from this device'**
+  String get dlgDeleteLocalTitle;
+
+  /// No description provided for @dlgDownloadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Download save'**
+  String get dlgDownloadTitle;
+
+  /// No description provided for @dlgUploadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload save'**
+  String get dlgUploadTitle;
+
+  /// No description provided for @dlgUploadOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'This will overwrite your local save'**
+  String get dlgUploadOverwrite;
+
+  /// No description provided for @dlgGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get dlgGotIt;
+
+  /// No description provided for @dlgCopyDest.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy destination'**
+  String get dlgCopyDest;
+
+  /// No description provided for @previewColDayYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Day/Year'**
+  String get previewColDayYear;
+
+  /// No description provided for @previewColTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Playtime'**
+  String get previewColTime;
+
+  /// No description provided for @previewColMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Coins'**
+  String get previewColMoney;
+
+  /// No description provided for @previewColTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get previewColTotal;
+
+  /// No description provided for @previewColFarming.
+  ///
+  /// In en, this message translates to:
+  /// **'Farming'**
+  String get previewColFarming;
+
+  /// No description provided for @previewColForaging.
+  ///
+  /// In en, this message translates to:
+  /// **'Foraging'**
+  String get previewColForaging;
+
+  /// No description provided for @previewColMining.
+  ///
+  /// In en, this message translates to:
+  /// **'Mining'**
+  String get previewColMining;
+
+  /// No description provided for @previewColFishing.
+  ///
+  /// In en, this message translates to:
+  /// **'Fishing'**
+  String get previewColFishing;
+
+  /// No description provided for @previewColCombat.
+  ///
+  /// In en, this message translates to:
+  /// **'Combat'**
+  String get previewColCombat;
+
+  /// No description provided for @previewColFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends'**
+  String get previewColFriends;
+
+  /// No description provided for @previewColMonsters.
+  ///
+  /// In en, this message translates to:
+  /// **'Monsters'**
+  String get previewColMonsters;
+
+  /// No description provided for @previewColFaints.
+  ///
+  /// In en, this message translates to:
+  /// **'Faints'**
+  String get previewColFaints;
+
+  /// No description provided for @previewColMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine'**
+  String get previewColMine;
+
+  /// No description provided for @previewColUnexplored.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexplored'**
+  String get previewColUnexplored;
+
+  /// No description provided for @previewLocalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ON THIS DEVICE'**
+  String get previewLocalLabel;
+
+  /// No description provided for @previewDriveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ON DRIVE'**
+  String get previewDriveLabel;
+
+  /// No description provided for @previewFromDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM DRIVE'**
+  String get previewFromDrive;
+
+  /// No description provided for @previewFromDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM THIS DEVICE'**
+  String get previewFromDevice;
+
+  /// No description provided for @versionMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Different versions: local {local} · Drive {drive}…'**
+  String versionMismatch(String local, String drive);
+
+  /// No description provided for @snackPathCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Path copied'**
+  String get snackPathCopied;
+
+  /// No description provided for @snackDestCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination path copied'**
+  String get snackDestCopied;
+
+  /// No description provided for @snackDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Save downloaded to the game'**
+  String get snackDownloaded;
+
+  /// No description provided for @snackSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive session expired. Reconnect'**
+  String get snackSessionExpired;
+
+  /// No description provided for @snackUploadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload error: {error}'**
+  String snackUploadError(String error);
+
+  /// No description provided for @snackDownloadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Download error: {error}'**
+  String snackDownloadError(String error);
+
+  /// No description provided for @snackDeleteError.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete error: {error}'**
+  String snackDeleteError(String error);
+
+  /// No description provided for @snackTrashed.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{saveName}\" moved to Drive Trash. You have 30 days to restore it.'**
+  String snackTrashed(String saveName);
+
+  /// No description provided for @snackDeletedLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{saveName}\" deleted from this device'**
+  String snackDeletedLocal(String saveName);
+
+  /// No description provided for @snackShizukuRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Shizuku…'**
+  String get snackShizukuRequired;
+
+  /// No description provided for @snackWriteError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not write to the game…'**
+  String get snackWriteError;
+
+  /// No description provided for @snackPlatformNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This platform doesn\'t support…'**
+  String get snackPlatformNotSupported;
 }
 
 class _AppLocalizationsDelegate

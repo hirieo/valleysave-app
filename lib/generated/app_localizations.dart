@@ -170,7 +170,7 @@ abstract class AppLocalizations {
   /// No description provided for @openSource.
   ///
   /// In en, this message translates to:
-  /// **'Available code'**
+  /// **'Source available'**
   String get openSource;
 
   /// No description provided for @nonCommercial.
@@ -650,7 +650,7 @@ abstract class AppLocalizations {
   /// No description provided for @updateCheckedNow.
   ///
   /// In en, this message translates to:
-  /// **'Checked now'**
+  /// **'Just checked'**
   String get updateCheckedNow;
 
   /// No description provided for @updateOutdatedDownload.
@@ -698,7 +698,7 @@ abstract class AppLocalizations {
   /// No description provided for @languageAuto.
   ///
   /// In en, this message translates to:
-  /// **'Auto · system'**
+  /// **'System language'**
   String get languageAuto;
 
   /// No description provided for @languageAutoDesc.
@@ -746,7 +746,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardDriveAhead.
   ///
   /// In en, this message translates to:
-  /// **'Cloud ahead'**
+  /// **'Drive ahead'**
   String get cardDriveAhead;
 
   /// No description provided for @cardLocalOnly.
@@ -758,7 +758,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardDriveOnly.
   ///
   /// In en, this message translates to:
-  /// **'Cloud only'**
+  /// **'Drive only'**
   String get cardDriveOnly;
 
   /// No description provided for @cardTimeNow.
@@ -788,8 +788,8 @@ abstract class AppLocalizations {
   /// No description provided for @cardTimeMonthsAgo.
   ///
   /// In en, this message translates to:
-  /// **'{months} month{plural} ago'**
-  String cardTimeMonthsAgo(int months, String plural);
+  /// **'{months}mo ago'**
+  String cardTimeMonthsAgo(int months);
 
   /// No description provided for @cardDetailLocalTitle.
   ///
@@ -1232,37 +1232,37 @@ abstract class AppLocalizations {
   /// No description provided for @hiwTipAlwaysShow.
   ///
   /// In en, this message translates to:
-  /// **'You\'ll always see what\'s on Drive...'**
+  /// **'You\'ll always see what\'s on Drive before overwriting, so you can compare.'**
   String get hiwTipAlwaysShow;
 
   /// No description provided for @hiwTipWithoutUpload.
   ///
   /// In en, this message translates to:
-  /// **'Without uploading, no other device...'**
+  /// **'Without uploading, no other device will see your recent progress.'**
   String get hiwTipWithoutUpload;
 
   /// No description provided for @hiwTipComparison.
   ///
   /// In en, this message translates to:
-  /// **'You\'ll see the comparison between local and Drive...'**
+  /// **'You\'ll see the comparison between local and Drive before confirming.'**
   String get hiwTipComparison;
 
   /// No description provided for @hiwTipDownloadOverwrite.
   ///
   /// In en, this message translates to:
-  /// **'Downloading overwrites your local save...'**
+  /// **'Downloading overwrites your local save. Any unsynced progress will be lost.'**
   String get hiwTipDownloadOverwrite;
 
   /// No description provided for @hiwTipSync.
   ///
   /// In en, this message translates to:
-  /// **'Always upload before switching devices...'**
+  /// **'Always upload before switching devices, and download when you arrive.'**
   String get hiwTipSync;
 
   /// No description provided for @hiwTipDeletion.
   ///
   /// In en, this message translates to:
-  /// **'Deleted saves go to Drive Trash...'**
+  /// **'You have 30 days to restore it from Drive Trash before it\'s permanently deleted.'**
   String get hiwTipDeletion;
 
   /// No description provided for @hiwPrivacyLink.
@@ -1604,14 +1604,56 @@ abstract class AppLocalizations {
   /// No description provided for @snackWriteError.
   ///
   /// In en, this message translates to:
-  /// **'Could not write to the game…'**
+  /// **'Could not write to the game. Some phones block /Android/data even with Shizuku.'**
   String get snackWriteError;
 
   /// No description provided for @snackPlatformNotSupported.
   ///
   /// In en, this message translates to:
-  /// **'This platform doesn\'t support…'**
+  /// **'This platform doesn\'t support writing local saves yet.'**
   String get snackPlatformNotSupported;
+
+  /// No description provided for @snackWirelessDebugHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open manually: Settings → Developer options → Wireless debugging.'**
+  String get snackWirelessDebugHint;
+
+  /// No description provided for @snackOpenShizukuApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Shizuku from your app drawer.'**
+  String get snackOpenShizukuApp;
+
+  /// No description provided for @hiwTipDeletePermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave can\'t recover permanently deleted saves. Drive files are your responsibility.'**
+  String get hiwTipDeletePermanent;
+
+  /// No description provided for @hiwCompatAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Steam and Google Play achievements don\'t transfer. Each platform only tracks achievements that happen in real time — the save file doesn\'t trigger them retroactively.'**
+  String get hiwCompatAchievements;
+
+  /// No description provided for @hiwCompatOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'If you sync from two devices without a set order, one save can overwrite the other. Always upload before downloading.'**
+  String get hiwCompatOverwrite;
+
+  /// No description provided for @hiwCompatVersions.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves from different game versions may not load correctly. ValleySave warns you if it detects a version mismatch before downloading.'**
+  String get hiwCompatVersions;
+
+  /// No description provided for @hiwCompatMods.
+  ///
+  /// In en, this message translates to:
+  /// **'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.'**
+  String get hiwCompatMods;
 }
 
 class _AppLocalizationsDelegate

@@ -15,7 +15,7 @@ import '../../core/theme/app_typography.dart';
 import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 
-enum _UpdateState { idle, checking, upToDate, available }
+enum _UpdateState { idle, checking, upToDate, available, downloading, error }
 
 const _kLangs = [
   (null,            '🌐', 'Auto · sistema'),
@@ -48,7 +48,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   bool _loading = true;
   _UpdateState _updateState = _UpdateState.idle;
   String _appVersion = '';
-  String? _availableVersion;
+  UpdateInfo? _updateInfo;
+  double _downloadProgress = 0;
   bool _updateTilePressed = false;
 
   late final AnimationController _entranceCtrl;
@@ -87,16 +88,32 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> _checkUpdateFromSettings() async {
     if (_updateState == _UpdateState.checking) return;
     setState(() => _updateState = _UpdateState.checking);
-    final version = await UpdateService.checkForUpdate();
+    final info = await UpdateService.checkForUpdate();
     if (!mounted) return;
-    if (version != null) {
+    if (info != null) {
       setState(() {
-        _updateState    = _UpdateState.available;
-        _availableVersion = version;
+        _updateState = _UpdateState.available;
+        _updateInfo  = info;
       });
     } else {
       setState(() => _updateState = _UpdateState.upToDate);
     }
+  }
+
+  Future<void> _startInstall() async {
+    final info = _updateInfo;
+    if (info == null) return;
+    setState(() {
+      _updateState      = _UpdateState.downloading;
+      _downloadProgress = 0;
+    });
+    await UpdateService.installUpdate(
+      info,
+      onProgress: (p) { if (mounted) setState(() => _downloadProgress = p); },
+      onError: (e) {
+        if (mounted) setState(() => _updateState = _UpdateState.error);
+      },
+    );
   }
 
   Future<void> _load() async {
@@ -655,7 +672,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l10n.updateVersionAvailable(_availableVersion!), style: AppTypography.bodyStrong(color: accent)),
+                  Text(l10n.updateVersionAvailable(_updateInfo!.version), style: AppTypography.bodyStrong(color: accent)),
                   Text(l10n.updateOutdatedDownload, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
                 ],
               ),
@@ -664,13 +681,44 @@ class _SettingsScreenState extends State<SettingsScreen>
             Icon(Icons.download_rounded, size: 16, color: accent),
           ],
         );
+      case _UpdateState.downloading:
+        content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(child: Text(l10n.updateDownloading, style: AppTypography.bodyStrong(color: accent))),
+                Text('${(_downloadProgress * 100).round()}%',
+                    style: AppTypography.mono(color: accent, size: 11)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: LinearProgressIndicator(
+                value: _downloadProgress,
+                minHeight: 3,
+                backgroundColor: Colors.white.withValues(alpha: 0.08),
+                valueColor: AlwaysStoppedAnimation<Color>(accent),
+              ),
+            ),
+          ],
+        );
+      case _UpdateState.error:
+        content = Row(
+          children: [
+            Expanded(child: Text(l10n.updateError, style: AppTypography.bodyStrong(color: const Color(0xFFE05252)))),
+            const SizedBox(width: 12),
+            const Icon(Icons.error_outline_rounded, size: 16, color: Color(0xFFE05252)),
+          ],
+        );
     }
 
     final isTappable = _updateState == _UpdateState.idle || _updateState == _UpdateState.available;
 
     return GestureDetector(
       onTap: _updateState == _UpdateState.available
-          ? () => UpdateService.openReleasePage()
+          ? _startInstall
           : _updateState == _UpdateState.idle
               ? _checkUpdateFromSettings
               : null,

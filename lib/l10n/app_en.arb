@@ -97,6 +97,8 @@
   "updateNeverChecked": "Never checked",
   "updateCheckedNow": "Just checked",
   "updateOutdatedDownload": "Not up to date · Download",
+  "updateDownloading": "Downloading update…",
+  "updateError": "Error — tap to retry",
   "disconnectTitle": "Disconnect Drive?",
   "disconnectBody": "Your saves on Drive won't be deleted. You can reconnect anytime.",
   "disconnectButton": "Disconnect Drive",

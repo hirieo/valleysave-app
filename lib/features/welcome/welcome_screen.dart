@@ -31,8 +31,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   bool _restoring = true;
   bool _authLoading = false;
   bool _authConnected = false;
-  String? _updateVersion;
+  UpdateInfo? _updateInfo;
   bool _updateChipPressed = false;
+  bool _updateDownloading = false;
+  double _downloadProgress = 0;
   // ignore: unused_field — se pasará a la SyncScreen cuando esté implementada
   DriveService? _drive;
 
@@ -147,18 +149,83 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   Future<void> _checkUpdate() async {
-    final version = await UpdateService.checkForUpdate();
-    if (mounted && version != null) setState(() => _updateVersion = version);
+    final info = await UpdateService.checkForUpdate();
+    if (mounted && info != null) setState(() => _updateInfo = info);
+  }
+
+  Future<void> _startInstall() async {
+    final info = _updateInfo;
+    if (info == null || _updateDownloading) return;
+    setState(() { _updateDownloading = true; _downloadProgress = 0; });
+    await UpdateService.installUpdate(
+      info,
+      onProgress: (p) { if (mounted) setState(() => _downloadProgress = p); },
+      onError: (_) { if (mounted) setState(() => _updateDownloading = false); },
+    );
   }
 
   Widget _buildUpdateChip(SeasonState season, AppLocalizations l10n) {
     final accent = SeasonData.data[season]!.accentColor;
+    final canTap = !_updateDownloading;
+
+    Widget chipContent;
+    if (_updateDownloading) {
+      chipContent = Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 12, height: 12,
+                child: CircularProgressIndicator(strokeWidth: 1.5, color: accent),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                l10n.updateDownloading,
+                style: AppTypography.bodyStrong(color: Colors.white.withValues(alpha: 0.90))
+                    .copyWith(fontSize: 14),
+              ),
+              const Spacer(),
+              Text('${(_downloadProgress * 100).round()}%',
+                  style: AppTypography.mono(color: accent.withValues(alpha: 0.80), size: 11)),
+            ],
+          ),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: _downloadProgress,
+              minHeight: 3,
+              backgroundColor: Colors.white.withValues(alpha: 0.08),
+              valueColor: AlwaysStoppedAnimation<Color>(accent),
+            ),
+          ),
+        ],
+      );
+    } else {
+      chipContent = Row(
+        children: [
+          Icon(Icons.arrow_upward_rounded, size: 14, color: accent.withValues(alpha: 0.85)),
+          const SizedBox(width: 8),
+          Text(
+            l10n.updateVersionAvailable(_updateInfo!.version),
+            style: AppTypography.bodyStrong(
+              color: Colors.white.withValues(alpha: 0.90),
+            ).copyWith(fontSize: 14),
+          ),
+          const Spacer(),
+          Icon(Icons.download_rounded, size: 13, color: accent.withValues(alpha: 0.60)),
+        ],
+      );
+    }
+
     return Listener(
-      onPointerDown: (_) => setState(() => _updateChipPressed = true),
+      onPointerDown: canTap ? (_) => setState(() => _updateChipPressed = true) : null,
       onPointerUp: (_) => setState(() => _updateChipPressed = false),
       onPointerCancel: (_) => setState(() => _updateChipPressed = false),
       child: GestureDetector(
-        onTap: () => UpdateService.openReleasePage(),
+        onTap: canTap ? _startInstall : null,
         child: AnimatedScale(
           scale: _updateChipPressed ? 0.97 : 1.0,
           duration: _updateChipPressed
@@ -175,20 +242,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 width: 1.5,
               ),
             ),
-            child: Row(
-              children: [
-                Icon(Icons.arrow_upward_rounded, size: 14, color: accent.withValues(alpha: 0.85)),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.updateVersionAvailable(_updateVersion!),
-                  style: AppTypography.bodyStrong(
-                    color: Colors.white.withValues(alpha: 0.90),
-                  ).copyWith(fontSize: 14),
-                ),
-                const Spacer(),
-                Icon(Icons.open_in_new_rounded, size: 13, color: accent.withValues(alpha: 0.60)),
-              ],
-            ),
+            child: chipContent,
           ),
         ),
       ),
@@ -442,7 +496,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           AnimatedSize(
                             duration: const Duration(milliseconds: 250),
                             curve: const Cubic(0.23, 1, 0.32, 1),
-                            child: _updateVersion != null
+                            child: _updateInfo != null
                                 ? Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: _buildUpdateChip(season, l10n),

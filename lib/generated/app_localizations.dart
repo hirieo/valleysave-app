@@ -659,6 +659,18 @@ abstract class AppLocalizations {
   /// **'Not up to date · Download'**
   String get updateOutdatedDownload;
 
+  /// No description provided for @updateDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading update…'**
+  String get updateDownloading;
+
+  /// No description provided for @updateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error — tap to retry'**
+  String get updateError;
+
   /// No description provided for @disconnectTitle.
   ///
   /// In en, this message translates to:

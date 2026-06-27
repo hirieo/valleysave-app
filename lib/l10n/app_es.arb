@@ -90,6 +90,8 @@
   "updateNeverChecked": "Nunca comprobado",
   "updateCheckedNow": "Recién comprobado",
   "updateOutdatedDownload": "No está al día · Descargar",
+  "updateDownloading": "Descargando actualización…",
+  "updateError": "Error — toca para reintentar",
   "disconnectTitle": "¿Desconectar Drive?",
   "disconnectBody": "Tus saves en Drive no se borran. Podrás reconectarte cuando quieras.",
   "disconnectButton": "Desconectar Drive",

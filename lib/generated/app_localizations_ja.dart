@@ -304,6 +304,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get updateOutdatedDownload => 'Not up to date · Download';
 
   @override
+  String get updateDownloading => 'Downloading update…';
+
+  @override
+  String get updateError => 'Error — tap to retry';
+
+  @override
   String get disconnectTitle => 'Disconnect Drive?';
 
   @override

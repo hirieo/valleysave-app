@@ -1,0 +1,210 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Ukrainian (`uk`).
+class AppLocalizationsUk extends AppLocalizations {
+  AppLocalizationsUk([String locale = 'uk']) : super(locale);
+
+  @override
+  String get appTitle => 'ValleySave';
+
+  @override
+  String get welcomeTitle => 'Ніколи не втрачай свою ферму, бери її з собою.';
+
+  @override
+  String get connectGoogleDrive => 'Підключити Google Drive';
+
+  @override
+  String get connecting => 'Підключення…';
+
+  @override
+  String get mySaves => 'Мої збереження';
+
+  @override
+  String get howItWorks => 'Як це працює';
+
+  @override
+  String get settings => 'Налаштування';
+
+  @override
+  String get aboutSection => 'Про додаток';
+
+  @override
+  String get openSource => 'Доступний код';
+
+  @override
+  String get nonCommercial => 'Некомерційний';
+
+  @override
+  String get freeForever => 'Назавжди безкоштовно';
+
+  @override
+  String get privacyTitle => 'Конфіденційність та використання даних';
+
+  @override
+  String get privacyDescription =>
+      'ValleySave — додаток для синхронізації збережень Stardew Valley з вашим Google Drive.';
+
+  @override
+  String get whatDataTitle => 'Які дані використовуються';
+
+  @override
+  String get whatDataDesc =>
+      'ValleySave отримує доступ лише до файлів збережень Stardew Valley, необхідних для створення копій, синхронізації або відновлення.';
+
+  @override
+  String get googleDriveTitle => 'Google Drive';
+
+  @override
+  String get googleDriveDesc =>
+      'Ваші збереження завантажуються на ваш власний Google Drive. ValleySave не використовує власні сервери для зберігання ваших ігор.';
+
+  @override
+  String get androidPermissionsTitle => 'Дозволи Android';
+
+  @override
+  String get androidPermissionsDesc =>
+      'ValleySave може потребувати дозволу на зберігання або інструментів на кшталт Shizuku для доступу до файлів збережень.';
+
+  @override
+  String get adsTitle => 'Реклама';
+
+  @override
+  String get adsDesc =>
+      'ValleySave може показувати рекламу через Google AdMob.';
+
+  @override
+  String get responsibilityTitle => 'Відповідальність';
+
+  @override
+  String get responsibilityDesc => 'Файли збережень — ваша відповідальність.';
+
+  @override
+  String get deleteDataTitle => 'Видалення даних';
+
+  @override
+  String get deleteDataDesc =>
+      'Ви можете видалити синхронізовані копії, вручну видаливши папку ValleySave з Google Drive.';
+
+  @override
+  String get sourceCodeTitle => 'Вихідний код та контакти';
+
+  @override
+  String get sourceCodeDesc =>
+      'ValleySave — проєкт із доступним кодом за ліцензією Polyform Noncommercial.';
+
+  @override
+  String get upToDate => 'Актуально';
+
+  @override
+  String get checkingUpdates => 'Перевіряємо…';
+
+  @override
+  String get updateAvailable => 'Доступне оновлення';
+
+  @override
+  String get application => 'Додаток';
+
+  @override
+  String version(Object version) {
+    return 'Версія $version';
+  }
+
+  @override
+  String get checkForUpdates => 'Перевірити оновлення';
+
+  @override
+  String get shizukuRequired => 'Потрібен Shizuku';
+
+  @override
+  String get shizukuGuide => 'Посібник з налаштування Shizuku';
+
+  @override
+  String get activateShizuku => 'Активуйте Shizuku для запису збережень у грі.';
+
+  @override
+  String deleteSaveTitle(Object saveName) {
+    return 'Видалити $saveName';
+  }
+
+  @override
+  String get deleteSaveMessage =>
+      'Це видалить збереження з цього пристрою. Продовжити?';
+
+  @override
+  String get deleteFromDrive => 'Видалити з Drive';
+
+  @override
+  String confirmDelete(Object saveName) {
+    return 'Збереження $saveName буде переміщено до кошика Google Drive.';
+  }
+
+  @override
+  String deleteFromDeviceMessage(Object saveName) {
+    return 'Збереження $saveName буде назавжди видалено з цього пристрою.';
+  }
+
+  @override
+  String restoreSaveTitle(Object saveName) {
+    return 'Відновити $saveName';
+  }
+
+  @override
+  String restoreSaveMessage(Object saveName) {
+    return 'Завантажити $saveName на цей пристрій?';
+  }
+
+  @override
+  String get restore => 'Відновити';
+
+  @override
+  String get cancel => 'Скасувати';
+
+  @override
+  String get error => 'Помилка';
+
+  @override
+  String get success => 'Успішно';
+
+  @override
+  String get loading => 'Завантаження…';
+
+  @override
+  String get disconnect => 'Відключити';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get yes => 'Так';
+
+  @override
+  String get no => 'Ні';
+
+  @override
+  String get welcomeHeroPre => 'Never lose\nyour ';
+
+  @override
+  String get welcomeHeroAccent => 'farm,';
+
+  @override
+  String get welcomeHeroPost => '\ntake it with you.';
+
+  @override
+  String get welcomeSubtitle =>
+      'Sync your Stardew Valley saves across all your devices. Your data lives in your own Google Drive — no servers, no subscriptions, under your control.';
+
+  @override
+  String get welcomeDriveConnected => 'Drive connected';
+
+  @override
+  String get welcomeFooterTagline => '· Non-commercial · Free forever ·';
+
+  @override
+  String updateVersionAvailable(String version) {
+    return 'v$version available';
+  }
+}

@@ -185,4 +185,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get no => 'No';
+
+  @override
+  String get welcomeHeroPre => 'Nunca pierdas\ntu ';
+
+  @override
+  String get welcomeHeroAccent => 'granja,';
+
+  @override
+  String get welcomeHeroPost => '\nllévala contigo.';
+
+  @override
+  String get welcomeSubtitle =>
+      'Sincroniza tus saves de Stardew Valley entre todos tus dispositivos. Tus datos viven en tu Google Drive — sin servidores propios, sin suscripciones, bajo tu control.';
+
+  @override
+  String get welcomeDriveConnected => 'Drive conectado';
+
+  @override
+  String get welcomeFooterTagline => '· No comercial · Gratis para siempre ·';
+
+  @override
+  String updateVersionAvailable(String version) {
+    return 'v$version disponible';
+  }
 }

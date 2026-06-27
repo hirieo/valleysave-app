@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../generated/app_localizations.dart';
+
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
+import '../../core/services/locale_controller.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
 import '../../core/services/update_service.dart';
@@ -13,6 +16,22 @@ import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 
 enum _UpdateState { idle, checking, upToDate, available }
+
+const _kLangs = [
+  (null,            '🌐', 'Auto · sistema'),
+  (Locale('es'),    '🇪🇸', 'Español'),
+  (Locale('en'),    '🇬🇧', 'English'),
+  (Locale('fr'),    '🇫🇷', 'Français'),
+  (Locale('de'),    '🇩🇪', 'Deutsch'),
+  (Locale('it'),    '🇮🇹', 'Italiano'),
+  (Locale('pt'),    '🇵🇹', 'Português'),
+  (Locale('ru'),    '🇷🇺', 'Русский'),
+  (Locale('uk'),    '🇺🇦', 'Українська'),
+  (Locale('ja'),    '🇯🇵', '日本語'),
+  (Locale('zh'),    '🇨🇳', '中文'),
+  (Locale('th'),    '🇹🇭', 'ไทย'),
+  (Locale('ko'),    '🇰🇷', '한국어'),
+];
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, this.showDisconnect = false});
@@ -35,6 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
   bool _disconnectPressed = false;
+  bool _langTilePressed = false;
   SeasonMode? _pressedMode;
   SeasonState? _pressedSeason;
 
@@ -96,6 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _showDisconnectDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirm = await showDialog<bool>(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.60),
@@ -137,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           shape: const StadiumBorder(),
                         ),
                         child: Text(
-                          'Cancelar',
+                          l10n.cancel,
                           style: AppTypography.mono(
                             size: 12,
                             color: Colors.white.withValues(alpha: 0.60),
@@ -160,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           shape: const StadiumBorder(),
                         ),
                         child: Text(
-                          'Desconectar',
+                          l10n.disconnect,
                           style: AppTypography.mono(
                             size: 12,
                             color: const Color(0xFFC06050),
@@ -184,6 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: Stack(
@@ -306,11 +328,18 @@ class _SettingsScreenState extends State<SettingsScreen>
                             _autoExplainer(),
                           ],
                           const SizedBox(height: 32),
-                          Text('APLICACIÓN', style: AppTypography.eyebrow()),
+                          Text('IDIOMA', style: AppTypography.eyebrow()),
+                          const SizedBox(height: 12),
+                          ValueListenableBuilder<Locale?>(
+                            valueListenable: LocaleController.instance.locale,
+                            builder: (_, current, _) => _languageTile(current),
+                          ),
+                          const SizedBox(height: 32),
+                          Text(l10n.application.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
                           _versionTile(),
                           const SizedBox(height: 8),
-                          _updateTile(SeasonData.data[SeasonController.instance.season.value]!.accentColor),
+                          _updateTile(SeasonData.data[SeasonController.instance.season.value]!.accentColor, l10n),
                           if (widget.showDisconnect) ...[
                             const SizedBox(height: 32),
                             _disconnectButton(),
@@ -569,7 +598,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _updateTile(Color accent) {
+  Widget _updateTile(Color accent, AppLocalizations l10n) {
     final Widget content;
     switch (_updateState) {
       case _UpdateState.idle:
@@ -579,7 +608,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Buscar actualizaciones', style: AppTypography.bodyStrong()),
+                  Text(l10n.checkForUpdates, style: AppTypography.bodyStrong()),
                   Text('Nunca comprobado', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
                 ],
               ),
@@ -591,7 +620,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       case _UpdateState.checking:
         content = Row(
           children: [
-            Expanded(child: Text('Comprobando...', style: AppTypography.bodyStrong())),
+            Expanded(child: Text(l10n.checkingUpdates, style: AppTypography.bodyStrong())),
             const SizedBox(
               width: 16, height: 16,
               child: CircularProgressIndicator(strokeWidth: 1.5, color: AppColors.textFaint),
@@ -605,7 +634,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Al día', style: AppTypography.bodyStrong(color: AppColors.statusOk)),
+                  Text(l10n.upToDate, style: AppTypography.bodyStrong(color: AppColors.statusOk)),
                   Text('Comprobado ahora', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
                 ],
               ),
@@ -670,6 +699,105 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
+  bool _langMatch(Locale? a, Locale? b) {
+    if (a == null && b == null) return true;
+    if (a == null || b == null) return false;
+    return a.languageCode == b.languageCode;
+  }
+
+  (String, String) _langLabel(Locale? current) {
+    if (current == null) return ('🌐', 'Auto');
+    for (final (locale, flag, label) in _kLangs) {
+      if (locale != null && locale.languageCode == current.languageCode) {
+        return (flag, label);
+      }
+    }
+    return ('🌐', 'Auto');
+  }
+
+  Widget _languageTile(Locale? current) {
+    final (flag, label) = _langLabel(current);
+    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+    return GestureDetector(
+      onTap: () => _openLanguageDialog(context),
+      onTapDown: (_) => setState(() => _langTilePressed = true),
+      onTapUp: (_) => setState(() => _langTilePressed = false),
+      onTapCancel: () => setState(() => _langTilePressed = false),
+      child: AnimatedScale(
+        scale: _langTilePressed ? 0.97 : 1.0,
+        duration: _langTilePressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text('Idioma', style: AppTypography.bodyStrong()),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: accent.withValues(alpha: 0.35)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(flag, style: const TextStyle(fontSize: 13)),
+                    const SizedBox(width: 6),
+                    Text(label, style: AppTypography.mono(color: accent, size: 12)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.textFaint),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openLanguageDialog(BuildContext context) {
+    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+    showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black.withValues(alpha: 0.60),
+      transitionDuration: const Duration(milliseconds: 240),
+      transitionBuilder: (ctx, anim, _, child) {
+        final curved = CurvedAnimation(
+          parent: anim,
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          reverseCurve: const Cubic(0.23, 1, 0.32, 1),
+        );
+        return ScaleTransition(
+          scale: Tween<double>(begin: 0.95, end: 1.0).animate(curved),
+          child: FadeTransition(opacity: curved, child: child),
+        );
+      },
+      pageBuilder: (ctx, _, _) => _LanguageDialog(
+        current: LocaleController.instance.locale.value,
+        langs: _kLangs,
+        onSelect: (locale) {
+          LocaleController.instance.set(locale);
+          Navigator.pop(ctx);
+        },
+        langMatch: _langMatch,
+        accent: accent,
+      ),
+    );
+  }
+
   Widget _disconnectButton() {
     return GestureDetector(
       onTap: _showDisconnectDialog,
@@ -708,6 +836,283 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Language dialog ───────────────────────────────────────────────────────────
+
+class _LanguageDialog extends StatefulWidget {
+  const _LanguageDialog({
+    required this.current,
+    required this.langs,
+    required this.onSelect,
+    required this.langMatch,
+    required this.accent,
+  });
+
+  final Locale? current;
+  final List<(Locale?, String, String)> langs;
+  final void Function(Locale?) onSelect;
+  final bool Function(Locale?, Locale?) langMatch;
+  final Color accent;
+
+  @override
+  State<_LanguageDialog> createState() => _LanguageDialogState();
+}
+
+class _LanguageDialogState extends State<_LanguageDialog>
+    with SingleTickerProviderStateMixin {
+  final _search = TextEditingController();
+  String _query = '';
+  late final AnimationController _staggerCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _staggerCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _search.dispose();
+    _staggerCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final filtered = widget.langs.where((e) {
+      if (_query.isEmpty) return true;
+      return e.$3.toLowerCase().contains(_query);
+    }).toList();
+
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 340),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.55),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: widget.accent.withValues(alpha: 0.35)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 12, 10),
+                child: Row(
+                  children: [
+                    Text('IDIOMA', style: AppTypography.eyebrow()),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(
+                        Icons.close_rounded,
+                        size: 18,
+                        color: AppColors.textFaint,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.40),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 12),
+                      Icon(Icons.search_rounded, size: 16, color: AppColors.textFaint),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: _search,
+                          onChanged: (v) => setState(() => _query = v.toLowerCase()),
+                          style: AppTypography.body(color: AppColors.text),
+                          decoration: InputDecoration(
+                            hintText: 'Buscar idioma…',
+                            hintStyle: AppTypography.body(color: AppColors.textFaint),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ),
+                      ),
+                      if (_query.isNotEmpty)
+                        GestureDetector(
+                          onTap: () {
+                            _search.clear();
+                            setState(() => _query = '');
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Icon(
+                              Icons.close_rounded,
+                              size: 14,
+                              color: AppColors.textFaint,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.45,
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.fromLTRB(8, 2, 8, 12),
+                  itemCount: filtered.length,
+                  itemBuilder: (_, i) {
+                    final (locale, flag, label) = filtered[i];
+                    final selected = widget.langMatch(widget.current, locale);
+                    return _LangRow(
+                      flag: flag,
+                      label: label,
+                      isAuto: locale == null,
+                      selected: selected,
+                      accent: widget.accent,
+                      staggerIndex: i,
+                      staggerCtrl: _staggerCtrl,
+                      onTap: () => widget.onSelect(locale),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LangRow extends StatefulWidget {
+  const _LangRow({
+    required this.flag,
+    required this.label,
+    required this.isAuto,
+    required this.selected,
+    required this.accent,
+    required this.staggerIndex,
+    required this.staggerCtrl,
+    required this.onTap,
+  });
+
+  final String flag;
+  final String label;
+  final bool isAuto;
+  final bool selected;
+  final Color accent;
+  final int staggerIndex;
+  final AnimationController staggerCtrl;
+  final VoidCallback onTap;
+
+  @override
+  State<_LangRow> createState() => _LangRowState();
+}
+
+class _LangRowState extends State<_LangRow> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final start = (widget.staggerIndex * 0.06).clamp(0.0, 0.9);
+    final end = (start + 0.50).clamp(start + 0.1, 1.0);
+    final staggerAnim = CurvedAnimation(
+      parent: widget.staggerCtrl,
+      curve: Interval(start, end, curve: const Cubic(0.23, 1, 0.32, 1)),
+    );
+
+    return AnimatedBuilder(
+      animation: staggerAnim,
+      builder: (_, child) => Opacity(
+        opacity: staggerAnim.value,
+        child: Transform.translate(
+          offset: Offset(0, 5 * (1 - staggerAnim.value)),
+          child: child,
+        ),
+      ),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedScale(
+          scale: _pressed ? 0.985 : 1.0,
+          duration: _pressed
+              ? const Duration(milliseconds: 80)
+              : const Duration(milliseconds: 200),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            curve: Curves.easeOut,
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+            decoration: BoxDecoration(
+              color: widget.selected
+                  ? widget.accent.withValues(alpha: 0.10)
+                  : _pressed
+                      ? Colors.white.withValues(alpha: 0.04)
+                      : Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Text(widget.flag, style: const TextStyle(fontSize: 18)),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.label,
+                        style: AppTypography.bodyStrong(
+                          color: widget.selected ? widget.accent : AppColors.text,
+                        ),
+                      ),
+                      if (widget.isAuto)
+                        Text(
+                          'Usa el idioma del sistema',
+                          style: AppTypography.mono(
+                            color: AppColors.textFaint,
+                            size: 11,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                AnimatedOpacity(
+                  opacity: widget.selected ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 180),
+                  child: AnimatedScale(
+                    scale: widget.selected ? 1.0 : 0.5,
+                    duration: const Duration(milliseconds: 200),
+                    curve: const Cubic(0.23, 1, 0.32, 1),
+                    child: Icon(
+                      Icons.check_rounded,
+                      size: 18,
+                      color: widget.accent,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

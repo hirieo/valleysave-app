@@ -51,5 +51,19 @@
   "disconnect": "Disconnect",
   "ok": "OK",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "welcomeHeroPre": "Never lose\nyour ",
+  "welcomeHeroAccent": "farm,",
+  "welcomeHeroPost": "\ntake it with you.",
+  "welcomeSubtitle": "Sync your Stardew Valley saves across all your devices. Your data lives in your own Google Drive — no servers, no subscriptions, under your control.",
+  "welcomeDriveConnected": "Drive connected",
+  "welcomeFooterTagline": "· Non-commercial · Free forever ·",
+  "updateVersionAvailable": "v{version} available",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

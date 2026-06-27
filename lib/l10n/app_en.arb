@@ -246,5 +246,13 @@
   "hiwTipDownloadOverwrite": "Downloading overwrites your local save...",
   "hiwTipSync": "Always upload before switching devices...",
   "hiwTipDeletion": "Deleted saves go to Drive Trash...",
-  "hiwPrivacyLink": "Privacy policy and usage"
+  "hiwPrivacyLink": "Privacy policy and usage",
+  "emptyNoSaves": "No saves found",
+  "emptyNoSavesHint": "No local saves can be read on this device",
+  "bridgeTitle": "Bring your saves",
+  "bridgeDesc": "To see and upload your local saves, copy them with your Files app from the Stardew folder to this ValleySave folder. Then swipe to refresh.",
+  "bridgeRefresh": "Refresh",
+  "bridgeChangeMode": "Change method",
+  "loaderLoading": "LOADING",
+  "loaderConnecting": "connecting to Drive…"
 }

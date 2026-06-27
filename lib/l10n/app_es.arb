@@ -191,5 +191,13 @@
   "hiwTipDownloadOverwrite": "Descargar sobrescribe tu partida local...",
   "hiwTipSync": "Sube siempre antes de cambiar de dispositivo...",
   "hiwTipDeletion": "Las partidas eliminadas van a la Papelera de Drive...",
-  "hiwPrivacyLink": "Política de privacidad y uso"
+  "hiwPrivacyLink": "Política de privacidad y uso",
+  "emptyNoSaves": "No se encontraron partidas",
+  "emptyNoSavesHint": "En este dispositivo no se leen saves locales",
+  "bridgeTitle": "Trae tus partidas",
+  "bridgeDesc": "Para ver y subir tus partidas locales, cópialas con tu app de Archivos desde la carpeta de Stardew a esta carpeta de ValleySave. Luego desliza para refrescar.",
+  "bridgeRefresh": "Refrescar",
+  "bridgeChangeMode": "Cambiar método",
+  "loaderLoading": "CARGANDO",
+  "loaderConnecting": "conectando con Drive…"
 }

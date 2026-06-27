@@ -1174,6 +1174,7 @@ class _PresenceRow extends StatelessWidget {
                 onUpload: onUpload,
                 onDownload: onDownload,
                 onDeleteFromDrive: onDeleteFromDrive,
+                onDeleteLocal: onDeleteLocal,
               ),
             ),
           ],

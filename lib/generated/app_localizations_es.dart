@@ -209,4 +209,127 @@ class AppLocalizationsEs extends AppLocalizations {
   String updateVersionAvailable(String version) {
     return 'v$version disponible';
   }
+
+  @override
+  String get sectionMode => 'Modo';
+
+  @override
+  String get sectionSeason => 'Estación';
+
+  @override
+  String get sectionLanguage => 'Idioma';
+
+  @override
+  String get modeAutoTitle => 'Automático';
+
+  @override
+  String get modeAutoDesc =>
+      'Sigue tu partida activa y, sin partidas, tu ubicación real.';
+
+  @override
+  String get modeSavesTitle => 'Según partida';
+
+  @override
+  String get modeSavesDesc =>
+      'Usa siempre la estación de tu partida más reciente.';
+
+  @override
+  String get modeGeoTitle => 'Según ubicación';
+
+  @override
+  String get modeGeoDesc => 'Usa siempre la estación real de tu ubicación.';
+
+  @override
+  String get modeFixedTitle => 'Fijar estación';
+
+  @override
+  String get modeFixedDesc => 'Muestra siempre la misma estación.';
+
+  @override
+  String get modeRandomTitle => 'Aleatoria';
+
+  @override
+  String get modeRandomDesc => 'Elige una estación diferente al abrir la app.';
+
+  @override
+  String get seasonInitial => 'Inicial';
+
+  @override
+  String get seasonSpring => 'Primavera';
+
+  @override
+  String get seasonSummer => 'Verano';
+
+  @override
+  String get seasonFall => 'Otoño';
+
+  @override
+  String get seasonWinter => 'Invierno';
+
+  @override
+  String get autoPriorityTitle => 'Orden de prioridad';
+
+  @override
+  String get autoStep1Title => 'Primera apertura';
+
+  @override
+  String get autoStep1Desc => 'Muestra el estado inicial.';
+
+  @override
+  String get autoStep2Title => 'Partida activa';
+
+  @override
+  String get autoStep2Desc =>
+      'Usa la estación de tu última partida sincronizada.';
+
+  @override
+  String get autoStep3Title => 'Ubicación';
+
+  @override
+  String get autoStep3Desc =>
+      'Detecta tu hemisferio y la estación real de tu región.';
+
+  @override
+  String get autoStep4Title => 'Por defecto';
+
+  @override
+  String get autoStep4Desc =>
+      'Inicial (modo nocturno) si no hay ningún dato disponible.';
+
+  @override
+  String get versionInstalled => 'Versión instalada';
+
+  @override
+  String get updateNeverChecked => 'Nunca comprobado';
+
+  @override
+  String get updateCheckedNow => 'Comprobado ahora';
+
+  @override
+  String get updateOutdatedDownload => 'No está al día · Descargar';
+
+  @override
+  String get disconnectTitle => '¿Desconectar Drive?';
+
+  @override
+  String get disconnectBody =>
+      'Tus saves en Drive no se borran. Podrás reconectarte cuando quieras.';
+
+  @override
+  String get disconnectButton => 'Desconectar Drive';
+
+  @override
+  String get languageTileLabel => 'Idioma';
+
+  @override
+  String get languageDialogTitle => 'Idioma de la app';
+
+  @override
+  String get searchHint => 'Buscar…';
+
+  @override
+  String get languageAuto => 'Auto · sistema';
+
+  @override
+  String get languageAutoDesc => 'Usa el idioma del sistema';
 }

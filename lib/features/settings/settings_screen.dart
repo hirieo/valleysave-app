@@ -136,12 +136,12 @@ class _SettingsScreenState extends State<SettingsScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '¿Desconectar Drive?',
+                  l10n.disconnectTitle,
                   style: AppTypography.bodyStrong(color: AppColors.text),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Tus saves en Drive no se borran. Podrás reconectarte cuando quieras.',
+                  l10n.disconnectBody,
                   style: AppTypography.mono(color: AppColors.textMuted, size: 12),
                 ),
                 const SizedBox(height: 20),
@@ -261,7 +261,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                             ),
                             const Spacer(),
                             Text(
-                              'Opciones',
+                              l10n.settings.toUpperCase(),
                               style: GoogleFonts.bodoniModa(
                                 fontSize: 24,
                                 fontStyle: FontStyle.italic,
@@ -286,63 +286,68 @@ class _SettingsScreenState extends State<SettingsScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('MODO', style: AppTypography.eyebrow()),
+                          Text(l10n.sectionMode.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
                           _modeTile(
                             SeasonMode.auto,
-                            'Automático',
-                            'Sigue tu partida activa y, sin partidas, tu ubicación real.',
+                            l10n.modeAutoTitle,
+                            l10n.modeAutoDesc,
+                            l10n,
                           ),
                           const SizedBox(height: 8),
                           _modeTile(
                             SeasonMode.savesOnly,
-                            'Según partida',
-                            'Usa siempre la estación de tu partida más reciente.',
+                            l10n.modeSavesTitle,
+                            l10n.modeSavesDesc,
+                            l10n,
                           ),
                           const SizedBox(height: 8),
                           _modeTile(
                             SeasonMode.geoOnly,
-                            'Según ubicación',
-                            'Usa siempre la estación real de tu ubicación.',
+                            l10n.modeGeoTitle,
+                            l10n.modeGeoDesc,
+                            l10n,
                           ),
                           const SizedBox(height: 8),
                           _modeTile(
                             SeasonMode.fixed,
-                            'Fijar estación',
-                            'Muestra siempre la misma estación.',
+                            l10n.modeFixedTitle,
+                            l10n.modeFixedDesc,
+                            l10n,
                           ),
                           const SizedBox(height: 8),
                           _modeTile(
                             SeasonMode.random,
-                            'Aleatoria',
-                            'Elige una estación diferente al abrir la app.',
+                            l10n.modeRandomTitle,
+                            l10n.modeRandomDesc,
+                            l10n,
                           ),
                           if (_settings.mode == SeasonMode.fixed) ...[
                             const SizedBox(height: 32),
-                            Text('ESTACIÓN', style: AppTypography.eyebrow()),
+                            Text(l10n.sectionSeason.toUpperCase(), style: AppTypography.eyebrow()),
                             const SizedBox(height: 12),
-                            _seasonPicker(),
+                            _seasonPicker(l10n),
                           ],
                           if (_settings.mode == SeasonMode.auto) ...[
                             const SizedBox(height: 32),
-                            _autoExplainer(),
+                            _autoExplainer(l10n),
                           ],
                           const SizedBox(height: 32),
-                          Text('IDIOMA', style: AppTypography.eyebrow()),
+                          Text(l10n.sectionLanguage.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
                           ValueListenableBuilder<Locale?>(
                             valueListenable: LocaleController.instance.locale,
-                            builder: (_, current, _) => _languageTile(current),
+                            builder: (_, current, _) => _languageTile(current, l10n),
                           ),
                           const SizedBox(height: 32),
                           Text(l10n.application.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
-                          _versionTile(),
+                          _versionTile(l10n),
                           const SizedBox(height: 8),
                           _updateTile(SeasonData.data[SeasonController.instance.season.value]!.accentColor, l10n),
                           if (widget.showDisconnect) ...[
                             const SizedBox(height: 32),
-                            _disconnectButton(),
+                            _disconnectButton(l10n),
                           ],
                           const SizedBox(height: 48),
                         ],
@@ -359,7 +364,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _modeTile(SeasonMode mode, String label, String description) {
+  Widget _modeTile(SeasonMode mode, String label, String description, AppLocalizations l10n) {
     final selected = _settings.mode == mode;
     return GestureDetector(
       onTap: () {
@@ -447,19 +452,19 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _seasonPicker() {
-    const seasons = [
-      (SeasonState.initial, '✨ Inicial'),
-      (SeasonState.spring,  '🌸 Primavera'),
-      (SeasonState.summer,  '☀️ Verano'),
-      (SeasonState.fall,    '🍂 Otoño'),
-      (SeasonState.winter,  '❄️ Invierno'),
+  Widget _seasonPicker(AppLocalizations l10n) {
+    final seasons = [
+      (SeasonState.initial, '✨', l10n.seasonInitial),
+      (SeasonState.spring,  '🌸', l10n.seasonSpring),
+      (SeasonState.summer,  '☀️', l10n.seasonSummer),
+      (SeasonState.fall,    '🍂', l10n.seasonFall),
+      (SeasonState.winter,  '❄️', l10n.seasonWinter),
     ];
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: seasons.map((entry) {
-        final (s, label) = entry;
+        final (s, emoji, label) = entry;
         final selected = _settings.fixedSeason == s;
         final accent   = SeasonData.data[s]!.accentColor;
         return GestureDetector(
@@ -495,7 +500,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ),
               ),
               child: Text(
-                label,
+                '$emoji $label',
                 style: AppTypography.eyebrow(
                   color: selected ? accent : AppColors.textMuted,
                 ),
@@ -507,7 +512,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _autoExplainer() {
+  Widget _autoExplainer(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -518,15 +523,15 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Orden de prioridad', style: AppTypography.eyebrow()),
+          Text(l10n.autoPriorityTitle, style: AppTypography.eyebrow()),
           const SizedBox(height: 12),
-          _step('1', 'Primera apertura', 'Muestra el estado inicial.'),
+          _step('1', l10n.autoStep1Title, l10n.autoStep1Desc),
           const SizedBox(height: 10),
-          _step('2', 'Partida activa', 'Usa la estación de tu última partida sincronizada.'),
+          _step('2', l10n.autoStep2Title, l10n.autoStep2Desc),
           const SizedBox(height: 10),
-          _step('3', 'Ubicación', 'Detecta tu hemisferio y la estación real de tu región.'),
+          _step('3', l10n.autoStep3Title, l10n.autoStep3Desc),
           const SizedBox(height: 10),
-          _step('4', 'Por defecto', 'Inicial (modo nocturno) si no hay ningún dato disponible.'),
+          _step('4', l10n.autoStep4Title, l10n.autoStep4Desc),
         ],
       ),
     );
@@ -568,7 +573,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _versionTile() {
+  Widget _versionTile(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -579,7 +584,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Row(
         children: [
           Expanded(
-            child: Text('Versión instalada', style: AppTypography.bodyStrong()),
+            child: Text(l10n.versionInstalled, style: AppTypography.bodyStrong()),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -609,7 +614,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(l10n.checkForUpdates, style: AppTypography.bodyStrong()),
-                  Text('Nunca comprobado', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                  Text(l10n.updateNeverChecked, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
                 ],
               ),
             ),
@@ -635,7 +640,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(l10n.upToDate, style: AppTypography.bodyStrong(color: AppColors.statusOk)),
-                  Text('Comprobado ahora', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                  Text(l10n.updateCheckedNow, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
                 ],
               ),
             ),
@@ -650,8 +655,8 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('v$_availableVersion disponible', style: AppTypography.bodyStrong(color: accent)),
-                  Text('No está al día · Descargar', style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                  Text(l10n.updateVersionAvailable(_availableVersion!), style: AppTypography.bodyStrong(color: accent)),
+                  Text(l10n.updateOutdatedDownload, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
                 ],
               ),
             ),
@@ -705,21 +710,21 @@ class _SettingsScreenState extends State<SettingsScreen>
     return a.languageCode == b.languageCode;
   }
 
-  (String, String) _langLabel(Locale? current) {
-    if (current == null) return ('🌐', 'Auto');
+  (String, String) _langLabel(Locale? current, AppLocalizations l10n) {
+    if (current == null) return ('🌐', l10n.languageAuto);
     for (final (locale, flag, label) in _kLangs) {
       if (locale != null && locale.languageCode == current.languageCode) {
         return (flag, label);
       }
     }
-    return ('🌐', 'Auto');
+    return ('🌐', l10n.languageAuto);
   }
 
-  Widget _languageTile(Locale? current) {
-    final (flag, label) = _langLabel(current);
+  Widget _languageTile(Locale? current, AppLocalizations l10n) {
+    final (flag, label) = _langLabel(current, l10n);
     final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     return GestureDetector(
-      onTap: () => _openLanguageDialog(context),
+      onTap: () => _openLanguageDialog(context, l10n),
       onTapDown: (_) => setState(() => _langTilePressed = true),
       onTapUp: (_) => setState(() => _langTilePressed = false),
       onTapCancel: () => setState(() => _langTilePressed = false),
@@ -739,7 +744,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: Row(
             children: [
               Expanded(
-                child: Text('Idioma', style: AppTypography.bodyStrong()),
+                child: Text(l10n.languageTileLabel, style: AppTypography.bodyStrong()),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -766,7 +771,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  void _openLanguageDialog(BuildContext context) {
+  void _openLanguageDialog(BuildContext context, AppLocalizations l10n) {
     final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     showGeneralDialog<void>(
       context: context,
@@ -794,11 +799,12 @@ class _SettingsScreenState extends State<SettingsScreen>
         },
         langMatch: _langMatch,
         accent: accent,
+        l10n: l10n,
       ),
     );
   }
 
-  Widget _disconnectButton() {
+  Widget _disconnectButton(AppLocalizations l10n) {
     return GestureDetector(
       onTap: _showDisconnectDialog,
       onTapDown: (_) => setState(() => _disconnectPressed = true),
@@ -830,7 +836,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               const SizedBox(width: 8),
               Text(
-                'Desconectar Drive',
+                l10n.disconnectButton,
                 style: AppTypography.bodyStrong(
                   color: const Color(0xFFDC7864),
                 ),
@@ -852,6 +858,7 @@ class _LanguageDialog extends StatefulWidget {
     required this.onSelect,
     required this.langMatch,
     required this.accent,
+    required this.l10n,
   });
 
   final Locale? current;
@@ -859,6 +866,7 @@ class _LanguageDialog extends StatefulWidget {
   final void Function(Locale?) onSelect;
   final bool Function(Locale?, Locale?) langMatch;
   final Color accent;
+  final AppLocalizations l10n;
 
   @override
   State<_LanguageDialog> createState() => _LanguageDialogState();
@@ -911,7 +919,7 @@ class _LanguageDialogState extends State<_LanguageDialog>
                 padding: const EdgeInsets.fromLTRB(16, 14, 12, 10),
                 child: Row(
                   children: [
-                    Text('IDIOMA', style: AppTypography.eyebrow()),
+                    Text(widget.l10n.languageDialogTitle.toUpperCase(), style: AppTypography.eyebrow()),
                     const Spacer(),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
@@ -943,7 +951,7 @@ class _LanguageDialogState extends State<_LanguageDialog>
                           onChanged: (v) => setState(() => _query = v.toLowerCase()),
                           style: AppTypography.body(color: AppColors.text),
                           decoration: InputDecoration(
-                            hintText: 'Buscar idioma…',
+                            hintText: widget.l10n.searchHint,
                             hintStyle: AppTypography.body(color: AppColors.textFaint),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -990,6 +998,7 @@ class _LanguageDialogState extends State<_LanguageDialog>
                       staggerIndex: i,
                       staggerCtrl: _staggerCtrl,
                       onTap: () => widget.onSelect(locale),
+                      l10n: widget.l10n,
                     );
                   },
                 ),
@@ -1012,6 +1021,7 @@ class _LangRow extends StatefulWidget {
     required this.staggerIndex,
     required this.staggerCtrl,
     required this.onTap,
+    required this.l10n,
   });
 
   final String flag;
@@ -1022,6 +1032,7 @@ class _LangRow extends StatefulWidget {
   final int staggerIndex;
   final AnimationController staggerCtrl;
   final VoidCallback onTap;
+  final AppLocalizations l10n;
 
   @override
   State<_LangRow> createState() => _LangRowState();
@@ -1088,7 +1099,7 @@ class _LangRowState extends State<_LangRow> {
                       ),
                       if (widget.isAuto)
                         Text(
-                          'Usa el idioma del sistema',
+                          widget.l10n.languageAutoDesc,
                           style: AppTypography.mono(
                             color: AppColors.textFaint,
                             size: 11,

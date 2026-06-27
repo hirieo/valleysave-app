@@ -971,6 +971,12 @@ abstract class AppLocalizations {
   /// **'faints'**
   String get pillFaints;
 
+  /// No description provided for @pillSleeps.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleeps'**
+  String get pillSleeps;
+
   /// No description provided for @hiwTitle.
   ///
   /// In en, this message translates to:

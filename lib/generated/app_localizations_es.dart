@@ -451,7 +451,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get skillCombat => 'Combate';
 
   @override
-  String get cardLocalPresence => 'EN ESTE EQUIPO';
+  String get cardLocalPresence => 'EN ESTE DISPOSITIVO';
 
   @override
   String get cardRemotePresence => 'EN DRIVE';
@@ -476,6 +476,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pillFaints => 'desmayos';
+
+  @override
+  String get pillSleeps => 'Duerme';
 
   @override
   String get hiwTitle => 'Cómo funciona';

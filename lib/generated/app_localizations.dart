@@ -15,6 +15,7 @@ import 'app_localizations_ko.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_th.dart';
+import 'app_localizations_uk.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -113,6 +114,7 @@ abstract class AppLocalizations {
     Locale('pt'),
     Locale('ru'),
     Locale('th'),
+    Locale('uk'),
     Locale('zh'),
     Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   ];
@@ -428,6 +430,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No'**
   String get no;
+
+  /// No description provided for @welcomeHeroPre.
+  ///
+  /// In en, this message translates to:
+  /// **'Never lose\nyour '**
+  String get welcomeHeroPre;
+
+  /// No description provided for @welcomeHeroAccent.
+  ///
+  /// In en, this message translates to:
+  /// **'farm,'**
+  String get welcomeHeroAccent;
+
+  /// No description provided for @welcomeHeroPost.
+  ///
+  /// In en, this message translates to:
+  /// **'\ntake it with you.'**
+  String get welcomeHeroPost;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync your Stardew Valley saves across all your devices. Your data lives in your own Google Drive — no servers, no subscriptions, under your control.'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @welcomeDriveConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive connected'**
+  String get welcomeDriveConnected;
+
+  /// No description provided for @welcomeFooterTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'· Non-commercial · Free forever ·'**
+  String get welcomeFooterTagline;
+
+  /// No description provided for @updateVersionAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'v{version} available'**
+  String updateVersionAvailable(String version);
 }
 
 class _AppLocalizationsDelegate
@@ -451,6 +495,7 @@ class _AppLocalizationsDelegate
     'pt',
     'ru',
     'th',
+    'uk',
     'zh',
   ].contains(locale.languageCode);
 
@@ -493,6 +538,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsRu();
     case 'th':
       return AppLocalizationsTh();
+    case 'uk':
+      return AppLocalizationsUk();
     case 'zh':
       return AppLocalizationsZh();
   }

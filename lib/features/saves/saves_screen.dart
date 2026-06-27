@@ -19,6 +19,7 @@ import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
 import '../../core/services/stardew_paths.dart';
 import '../../core/theme/app_colors.dart';
+import '../../generated/app_localizations.dart';
 import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
@@ -1883,7 +1884,7 @@ class _TopBar extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Mis partidas',
+                AppLocalizations.of(context)!.mySaves,
                 style: GoogleFonts.bodoniModa(
                   fontSize: 24,
                   fontStyle: FontStyle.italic,

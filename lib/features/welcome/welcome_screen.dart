@@ -17,6 +17,7 @@ import '../help/how_it_works_screen.dart';
 import '../saves/saves_screen.dart';
 import '../settings/settings_screen.dart';
 import '../../core/services/update_service.dart';
+import '../../generated/app_localizations.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -149,7 +150,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     if (mounted && version != null) setState(() => _updateVersion = version);
   }
 
-  Widget _buildUpdateChip(SeasonState season) {
+  Widget _buildUpdateChip(SeasonState season, AppLocalizations l10n) {
     final accent = SeasonData.data[season]!.accentColor;
     return Listener(
       onPointerDown: (_) => setState(() => _updateChipPressed = true),
@@ -178,7 +179,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Icon(Icons.arrow_upward_rounded, size: 14, color: accent.withValues(alpha: 0.85)),
                 const SizedBox(width: 8),
                 Text(
-                  'v$_updateVersion disponible',
+                  l10n.updateVersionAvailable(_updateVersion!),
                   style: AppTypography.bodyStrong(
                     color: Colors.white.withValues(alpha: 0.90),
                   ).copyWith(fontSize: 14),
@@ -219,6 +220,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: ValueListenableBuilder<SeasonState>(
@@ -276,16 +278,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               text: TextSpan(
                                 style: AppTypography.hero().copyWith(fontSize: heroSize),
                                 children: [
-                                  const TextSpan(text: 'Nunca pierdas\ntu '),
+                                  TextSpan(text: l10n.welcomeHeroPre),
                                   TextSpan(
-                                    text: 'granja,',
+                                    text: l10n.welcomeHeroAccent,
                                     style: AppTypography.hero(color: AppColors.accent)
                                         .copyWith(
                                       fontStyle: FontStyle.normal,
                                       fontSize: heroSize,
                                     ),
                                   ),
-                                  const TextSpan(text: '\nllévala contigo.'),
+                                  TextSpan(text: l10n.welcomeHeroPost),
                                 ],
                               ),
                             ),
@@ -301,8 +303,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               ),
                             ),
                             child: Text(
-                              'Sincroniza tus saves de Stardew Valley entre todos tus dispositivos. '
-                              'Tus datos viven en tu Google Drive — sin servidores propios, sin suscripciones, bajo tu control.',
+                              l10n.welcomeSubtitle,
                               style: AppTypography.body(
                                 color: Colors.white.withValues(alpha: 0.90),
                               ).copyWith(
@@ -368,7 +369,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                                     child: child,
                                                   ),
                                                   child: PrimaryButton(
-                                                    label: 'Mis partidas',
+                                                    label: l10n.mySaves,
                                                     onPressed: () => _goToSaves(_drive!),
                                                     color: SeasonData.data[season]!.accentColor,
                                                   ),
@@ -384,7 +385,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                                     ),
                                                     const SizedBox(width: 5),
                                                     Text(
-                                                      'Drive conectado',
+                                                      l10n.welcomeDriveConnected,
                                                       style: AppTypography.mono(
                                                         color: Colors.white.withValues(alpha: 0.50),
                                                         size: 11,
@@ -395,7 +396,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                               ],
                                             ),
                                             GhostButton(
-                                              label: 'Cómo funciona',
+                                              label: l10n.howItWorks,
                                               onPressed: () => Navigator.push(
                                                 context,
                                                 AppPageRoute(builder: (_) => const HowItWorksScreen()),
@@ -415,12 +416,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                           runSpacing: AppSpacing.sp4,
                                           children: [
                                             PrimaryButton(
-                                              label: _authLoading ? 'Conectando…' : 'Conectar Google Drive',
+                                              label: _authLoading ? l10n.connecting : l10n.connectGoogleDrive,
                                               onPressed: _authLoading ? null : _connectDrive,
                                               color: SeasonData.data[season]!.accentColor,
                                             ),
                                             GhostButton(
-                                              label: 'Cómo funciona',
+                                              label: l10n.howItWorks,
                                               onPressed: () => Navigator.push(
                                                 context,
                                                 AppPageRoute(builder: (_) => const HowItWorksScreen()),
@@ -443,7 +444,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             child: _updateVersion != null
                                 ? Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
-                                    child: _buildUpdateChip(season),
+                                    child: _buildUpdateChip(season, l10n),
                                   )
                                 : const SizedBox.shrink(),
                           ),
@@ -463,7 +464,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
-                                '· No comercial · Gratis para siempre ·',
+                                l10n.welcomeFooterTagline,
                                 style: AppTypography.eyebrow(
                                   color: Colors.white.withValues(alpha: 0.80),
                                 ),

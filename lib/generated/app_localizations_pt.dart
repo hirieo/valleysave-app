@@ -666,4 +666,164 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get loaderConnecting => 'connecting to Drive…';
+
+  @override
+  String get chooserTitle => 'Choose how to connect';
+
+  @override
+  String get chooserAutomatic => 'Automatic · Recommended';
+
+  @override
+  String get chooserManual => 'Manual alternative · Android 11-12';
+
+  @override
+  String get shizukuStepTitle => 'Set up Shizuku';
+
+  @override
+  String get shizukuStep1Title => 'Install Shizuku';
+
+  @override
+  String get shizukuStep1Desc => 'Download from Play Store or GitHub';
+
+  @override
+  String get shizukuStep2Title => 'Activate Shizuku';
+
+  @override
+  String get shizukuStep2Desc => 'Run the app and grant permissions';
+
+  @override
+  String get shizukuStep3Title => 'Grant permission';
+
+  @override
+  String get shizukuStep3Desc => 'ValleySave will ask for access';
+
+  @override
+  String get shizukuDone =>
+      '✓  Done. From then on, downloading and uploading saves works directly, like on a computer.';
+
+  @override
+  String get dlgDeleteDriveTitle => 'Delete from Drive';
+
+  @override
+  String get dlgDeleteLocalTitle => 'Delete from this device';
+
+  @override
+  String get dlgDownloadTitle => 'Download save';
+
+  @override
+  String get dlgUploadTitle => 'Upload save';
+
+  @override
+  String get dlgUploadOverwrite => 'This will overwrite your local save';
+
+  @override
+  String get dlgGotIt => 'Got it';
+
+  @override
+  String get dlgCopyDest => 'Copy destination';
+
+  @override
+  String get previewColDayYear => 'Day/Year';
+
+  @override
+  String get previewColTime => 'Playtime';
+
+  @override
+  String get previewColMoney => 'Coins';
+
+  @override
+  String get previewColTotal => 'Total';
+
+  @override
+  String get previewColFarming => 'Farming';
+
+  @override
+  String get previewColForaging => 'Foraging';
+
+  @override
+  String get previewColMining => 'Mining';
+
+  @override
+  String get previewColFishing => 'Fishing';
+
+  @override
+  String get previewColCombat => 'Combat';
+
+  @override
+  String get previewColFriends => 'Friends';
+
+  @override
+  String get previewColMonsters => 'Monsters';
+
+  @override
+  String get previewColFaints => 'Faints';
+
+  @override
+  String get previewColMine => 'Mine';
+
+  @override
+  String get previewColUnexplored => 'Unexplored';
+
+  @override
+  String get previewLocalLabel => 'ON THIS DEVICE';
+
+  @override
+  String get previewDriveLabel => 'ON DRIVE';
+
+  @override
+  String get previewFromDrive => 'FROM DRIVE';
+
+  @override
+  String get previewFromDevice => 'FROM THIS DEVICE';
+
+  @override
+  String versionMismatch(String local, String drive) {
+    return 'Different versions: local $local · Drive $drive…';
+  }
+
+  @override
+  String get snackPathCopied => 'Path copied';
+
+  @override
+  String get snackDestCopied => 'Destination path copied';
+
+  @override
+  String get snackDownloaded => 'Save downloaded to the game';
+
+  @override
+  String get snackSessionExpired => 'Drive session expired. Reconnect';
+
+  @override
+  String snackUploadError(String error) {
+    return 'Upload error: $error';
+  }
+
+  @override
+  String snackDownloadError(String error) {
+    return 'Download error: $error';
+  }
+
+  @override
+  String snackDeleteError(String error) {
+    return 'Delete error: $error';
+  }
+
+  @override
+  String snackTrashed(String saveName) {
+    return '\"$saveName\" moved to Drive Trash. You have 30 days to restore it.';
+  }
+
+  @override
+  String snackDeletedLocal(String saveName) {
+    return '\"$saveName\" deleted from this device';
+  }
+
+  @override
+  String get snackShizukuRequired => 'Enable Shizuku…';
+
+  @override
+  String get snackWriteError => 'Could not write to the game…';
+
+  @override
+  String get snackPlatformNotSupported => 'This platform doesn\'t support…';
 }

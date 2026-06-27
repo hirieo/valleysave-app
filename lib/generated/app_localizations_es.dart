@@ -669,4 +669,165 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get loaderConnecting => 'conectando con Drive…';
+
+  @override
+  String get chooserTitle => 'Elige cómo conectar';
+
+  @override
+  String get chooserAutomatic => 'Automático · Recomendado';
+
+  @override
+  String get chooserManual => 'Alternativa manual · Android 11-12';
+
+  @override
+  String get shizukuStepTitle => 'Configura Shizuku';
+
+  @override
+  String get shizukuStep1Title => 'Instala Shizuku';
+
+  @override
+  String get shizukuStep1Desc => 'Descarga de Play Store o GitHub';
+
+  @override
+  String get shizukuStep2Title => 'Activa Shizuku';
+
+  @override
+  String get shizukuStep2Desc => 'Abre la app y concede permisos';
+
+  @override
+  String get shizukuStep3Title => 'Concede permiso';
+
+  @override
+  String get shizukuStep3Desc => 'ValleySave pedirá acceso';
+
+  @override
+  String get shizukuDone =>
+      '✓  Listo. A partir de ahí, descargar y subir partidas es directo, igual que en el ordenador.';
+
+  @override
+  String get dlgDeleteDriveTitle => 'Eliminar de Drive';
+
+  @override
+  String get dlgDeleteLocalTitle => 'Eliminar de este equipo';
+
+  @override
+  String get dlgDownloadTitle => 'Descargar partida';
+
+  @override
+  String get dlgUploadTitle => 'Subir partida';
+
+  @override
+  String get dlgUploadOverwrite => 'Esto sobrescribirá tu partida local';
+
+  @override
+  String get dlgGotIt => 'Entendido';
+
+  @override
+  String get dlgCopyDest => 'Copiar destino';
+
+  @override
+  String get previewColDayYear => 'Día/Año';
+
+  @override
+  String get previewColTime => 'Tiempo jugado';
+
+  @override
+  String get previewColMoney => 'Monedas';
+
+  @override
+  String get previewColTotal => 'Total';
+
+  @override
+  String get previewColFarming => 'Cultivo';
+
+  @override
+  String get previewColForaging => 'Recolec.';
+
+  @override
+  String get previewColMining => 'Minería';
+
+  @override
+  String get previewColFishing => 'Pesca';
+
+  @override
+  String get previewColCombat => 'Combate';
+
+  @override
+  String get previewColFriends => 'Amigos';
+
+  @override
+  String get previewColMonsters => 'Monstruos';
+
+  @override
+  String get previewColFaints => 'Desmayos';
+
+  @override
+  String get previewColMine => 'Mina';
+
+  @override
+  String get previewColUnexplored => 'Sin explorar';
+
+  @override
+  String get previewLocalLabel => 'EN ESTE EQUIPO';
+
+  @override
+  String get previewDriveLabel => 'EN DRIVE';
+
+  @override
+  String get previewFromDrive => 'DESDE DRIVE';
+
+  @override
+  String get previewFromDevice => 'DESDE ESTE EQUIPO';
+
+  @override
+  String versionMismatch(String local, String drive) {
+    return 'Versiones distintas: local $local · Drive $drive…';
+  }
+
+  @override
+  String get snackPathCopied => 'Ruta copiada';
+
+  @override
+  String get snackDestCopied => 'Ruta de destino copiada';
+
+  @override
+  String get snackDownloaded => 'Partida descargada en el juego';
+
+  @override
+  String get snackSessionExpired =>
+      'La sesión de Drive ha caducado. Vuelve a conectar';
+
+  @override
+  String snackUploadError(String error) {
+    return 'Error al subir: $error';
+  }
+
+  @override
+  String snackDownloadError(String error) {
+    return 'Error al descargar: $error';
+  }
+
+  @override
+  String snackDeleteError(String error) {
+    return 'Error al eliminar: $error';
+  }
+
+  @override
+  String snackTrashed(String saveName) {
+    return '\"$saveName\" movida a la Papelera de Drive. Tienes 30 días para restaurarla.';
+  }
+
+  @override
+  String snackDeletedLocal(String saveName) {
+    return '\"$saveName\" eliminada de este equipo';
+  }
+
+  @override
+  String get snackShizukuRequired => 'Activa Shizuku…';
+
+  @override
+  String get snackWriteError => 'No se pudo escribir en el juego…';
+
+  @override
+  String get snackPlatformNotSupported => 'Esta plataforma no permite…';
 }

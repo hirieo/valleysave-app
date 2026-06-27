@@ -63,7 +63,7 @@ String _rel(DateTime t, AppLocalizations l10n) {
   if (d.inHours < 24) return l10n.cardTimeHoursAgo(d.inHours);
   if (d.inDays < 30) return l10n.cardTimeDaysAgo(d.inDays);
   final m = (d.inDays / 30).floor();
-  return l10n.cardTimeMonthsAgo(m, m > 1 ? 'es' : '');
+  return l10n.cardTimeMonthsAgo(m);
 }
 
 class SaveCard extends StatelessWidget {

@@ -299,7 +299,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get updateNeverChecked => 'Never checked';
 
   @override
-  String get updateCheckedNow => 'Checked now';
+  String get updateCheckedNow => 'Just checked';
 
   @override
   String get updateOutdatedDownload => 'Not up to date · Download';
@@ -324,7 +324,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get searchHint => 'Search…';
 
   @override
-  String get languageAuto => 'Auto · system';
+  String get languageAuto => 'System language';
 
   @override
   String get languageAutoDesc => 'Uses your system language';
@@ -348,13 +348,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cardLocalAhead => 'Local ahead';
 
   @override
-  String get cardDriveAhead => 'Cloud ahead';
+  String get cardDriveAhead => 'Drive ahead';
 
   @override
   String get cardLocalOnly => 'Local only';
 
   @override
-  String get cardDriveOnly => 'Cloud only';
+  String get cardDriveOnly => 'Drive only';
 
   @override
   String get cardTimeNow => 'now';
@@ -375,8 +375,8 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String cardTimeMonthsAgo(int months, String plural) {
-    return '$months month$plural ago';
+  String cardTimeMonthsAgo(int months) {
+    return '${months}mo ago';
   }
 
   @override
@@ -619,24 +619,28 @@ class AppLocalizationsTh extends AppLocalizations {
       'It works because your system Files app can access those folders (ValleySave can\'t).';
 
   @override
-  String get hiwTipAlwaysShow => 'You\'ll always see what\'s on Drive...';
+  String get hiwTipAlwaysShow =>
+      'You\'ll always see what\'s on Drive before overwriting, so you can compare.';
 
   @override
-  String get hiwTipWithoutUpload => 'Without uploading, no other device...';
+  String get hiwTipWithoutUpload =>
+      'Without uploading, no other device will see your recent progress.';
 
   @override
   String get hiwTipComparison =>
-      'You\'ll see the comparison between local and Drive...';
+      'You\'ll see the comparison between local and Drive before confirming.';
 
   @override
   String get hiwTipDownloadOverwrite =>
-      'Downloading overwrites your local save...';
+      'Downloading overwrites your local save. Any unsynced progress will be lost.';
 
   @override
-  String get hiwTipSync => 'Always upload before switching devices...';
+  String get hiwTipSync =>
+      'Always upload before switching devices, and download when you arrive.';
 
   @override
-  String get hiwTipDeletion => 'Deleted saves go to Drive Trash...';
+  String get hiwTipDeletion =>
+      'You have 30 days to restore it from Drive Trash before it\'s permanently deleted.';
 
   @override
   String get hiwPrivacyLink => 'Privacy policy and usage';
@@ -821,8 +825,37 @@ class AppLocalizationsTh extends AppLocalizations {
   String get snackShizukuRequired => 'Enable Shizuku…';
 
   @override
-  String get snackWriteError => 'Could not write to the game…';
+  String get snackWriteError =>
+      'Could not write to the game. Some phones block /Android/data even with Shizuku.';
 
   @override
-  String get snackPlatformNotSupported => 'This platform doesn\'t support…';
+  String get snackPlatformNotSupported =>
+      'This platform doesn\'t support writing local saves yet.';
+
+  @override
+  String get snackWirelessDebugHint =>
+      'Open manually: Settings → Developer options → Wireless debugging.';
+
+  @override
+  String get snackOpenShizukuApp => 'Open Shizuku from your app drawer.';
+
+  @override
+  String get hiwTipDeletePermanent =>
+      'ValleySave can\'t recover permanently deleted saves. Drive files are your responsibility.';
+
+  @override
+  String get hiwCompatAchievements =>
+      'Steam and Google Play achievements don\'t transfer. Each platform only tracks achievements that happen in real time — the save file doesn\'t trigger them retroactively.';
+
+  @override
+  String get hiwCompatOverwrite =>
+      'If you sync from two devices without a set order, one save can overwrite the other. Always upload before downloading.';
+
+  @override
+  String get hiwCompatVersions =>
+      'Saves from different game versions may not load correctly. ValleySave warns you if it detects a version mismatch before downloading.';
+
+  @override
+  String get hiwCompatMods =>
+      'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.';
 }

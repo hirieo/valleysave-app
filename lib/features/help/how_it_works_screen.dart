@@ -125,22 +125,22 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                               const SizedBox(height: 12),
                               _sectionCompares(l10n),
                               const SizedBox(height: 12),
-                              _sectionConflicts(),
+                              _sectionConflicts(l10n),
                               const SizedBox(height: 12),
-                              _sectionDeletion(),
+                              _sectionDeletion(l10n),
                               const SizedBox(height: 12),
-                              _sectionCompatibility(),
+                              _sectionCompatibility(l10n),
                               const SizedBox(height: 28),
-                              _androidDivider(),
+                              _androidDivider(l10n),
                               const SizedBox(height: 16),
                               KeyedSubtree(
                                 key: _shizukuKey,
-                                child: _shizukuCard(season),
+                                child: _shizukuCard(season, l10n),
                               ),
                               const SizedBox(height: 16),
-                              _bridgeCard(season),
+                              _bridgeCard(season, l10n),
                               const SizedBox(height: 28),
-                              _privacyLink(context, SeasonData.data[season]!.accentColor),
+                              _privacyLink(context, SeasonData.data[season]!.accentColor, l10n),
                             ],
                           ),
                         ),
@@ -207,22 +207,22 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             style: _body(),
           ),
           const SizedBox(height: 18),
-          _flowDiagram(),
+          _flowDiagram(l10n),
         ],
       ),
     );
   }
 
-  Widget _flowDiagram() {
+  Widget _flowDiagram(AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _flowNode(Icons.smartphone_rounded, 'Tu\ndispositivo', AppColors.accent),
+        _flowNode(Icons.smartphone_rounded, l10n.hiwSyncDevice, AppColors.accent),
         _flowArrows(),
-        _flowNode(Icons.cloud_rounded, 'Google\nDrive', const Color(0xFF4A90D9)),
+        _flowNode(Icons.cloud_rounded, l10n.hiwSyncCloud, const Color(0xFF4A90D9)),
         _flowArrows(),
-        _flowNode(Icons.devices_rounded, 'Otro\ndispositivo', AppColors.green),
+        _flowNode(Icons.devices_rounded, l10n.hiwSyncOtherDevice, AppColors.green),
       ],
     );
   }
@@ -288,14 +288,13 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
           const SizedBox(height: 12),
           _tip(
             icon: Icons.visibility_outlined,
-            text: 'Siempre se te muestra qué hay en Drive antes de sobrescribir, '
-                'para que puedas comparar.',
+            text: l10n.hiwTipAlwaysShow,
           ),
           const SizedBox(height: 8),
           _tip(
             icon: Icons.warning_amber_rounded,
             color: AppColors.accent,
-            text: 'Sin subir, ningún otro dispositivo verá tus avances recientes.',
+            text: l10n.hiwTipWithoutUpload,
           ),
         ],
       ),
@@ -321,14 +320,13 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
           _tip(
             icon: Icons.compare_arrows_rounded,
             color: blue,
-            text: 'Verás la comparación entre local y Drive antes de confirmar.',
+            text: l10n.hiwTipComparison,
           ),
           const SizedBox(height: 8),
           _tip(
             icon: Icons.warning_amber_rounded,
             color: AppColors.accent,
-            text: 'Descargar sobrescribe tu partida local. Si tienes avances '
-                'que no has subido, los perderás.',
+            text: l10n.hiwTipDownloadOverwrite,
           ),
         ],
       ),
@@ -346,15 +344,14 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Para saber qué versión va más adelante, ValleySave usa el tiempo '
-            'total jugado — el único dato que solo puede crecer.',
+            l10n.hiwCompareIntro,
             style: _body(),
           ),
           const SizedBox(height: 14),
-          _compareRow(true, 'Tiempo total jugado'),
+          _compareRow(true, l10n.hiwComparePrimary),
           Divider(height: 18, color: Colors.white.withValues(alpha: 0.07)),
           Text(
-            'Antes de confirmar también verás, para que lo valores tú:',
+            l10n.hiwCompareNote,
             style: GoogleFonts.firaCode(
               fontSize: 10.5,
               height: 1.4,
@@ -362,25 +359,24 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             ),
           ),
           const SizedBox(height: 10),
-          _shownRow('Dinero actual y total ganado'),
+          _shownRow(l10n.hiwCompareMoney),
           const SizedBox(height: 6),
-          _shownRow('Nivel de la mina'),
+          _shownRow(l10n.hiwCompareMine),
           const SizedBox(height: 6),
-          _shownRow('Habilidades (cultivo, minería, combate...)'),
+          _shownRow(l10n.hiwCompareSkills),
           const SizedBox(height: 6),
-          _shownRow('Amigos, monstruos eliminados, desmayos'),
+          _shownRow(l10n.hiwCompareRelations),
           const SizedBox(height: 6),
-          _shownRow('Stamina y salud'),
+          _shownRow(l10n.hiwCompareStamina),
           Divider(height: 18, color: Colors.white.withValues(alpha: 0.07)),
-          _compareRow(false, 'Estado de cultivos y animales'),
+          _compareRow(false, l10n.hiwCompareNoShown1),
           const SizedBox(height: 6),
-          _compareRow(false, 'Inventario y objetos'),
+          _compareRow(false, l10n.hiwCompareNoShown2),
           const SizedBox(height: 6),
-          _compareRow(false, 'Relaciones individuales'),
+          _compareRow(false, l10n.hiwCompareNoShown3),
           const SizedBox(height: 12),
           Text(
-            'Estos no se muestran — cambian en cualquier dirección y no '
-            'indican cuál save va más adelante.',
+            l10n.hiwCompareNotShown,
             style: GoogleFonts.firaCode(
               fontSize: 10.5,
               height: 1.5,
@@ -438,40 +434,32 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: conflicts ────────────────────────────────────────────────────
 
-  Widget _sectionConflicts() {
+  Widget _sectionConflicts(AppLocalizations l10n) {
     const orange = Color(0xFFE8783A);
     return _infoCard(
       icon: Icons.call_split_rounded,
       color: orange,
-      title: 'Si juegas sin sincronizar',
+      title: l10n.hiwConflictTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Si avanzas en el móvil y en el PC sin sincronizar entre sesiones, '
-            'acabas con dos versiones distintas del mismo save.',
-            style: _body(),
-          ),
+          Text(l10n.hiwConflictDesc, style: _body()),
           const SizedBox(height: 14),
-          _conflictDiagram(orange),
+          _conflictDiagram(orange, l10n),
           const SizedBox(height: 12),
-          Text(
-            'No se pueden mezclar. ValleySave siempre te muestra ambas versiones '
-            'para que elijas cuál conservar.',
-            style: _body(),
-          ),
+          Text(l10n.hiwConflictNoMerge, style: _body()),
           const SizedBox(height: 10),
           _tip(
             icon: Icons.tips_and_updates_rounded,
             color: AppColors.accent,
-            text: 'Sube siempre antes de cambiar de dispositivo y descarga al llegar.',
+            text: l10n.hiwTipSync,
           ),
         ],
       ),
     );
   }
 
-  Widget _conflictDiagram(Color orange) {
+  Widget _conflictDiagram(Color orange, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -484,8 +472,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
           Expanded(
             child: _conflictBox(
               icon: Icons.smartphone_rounded,
-              platform: 'Móvil',
-              version: 'versión A',
+              platform: l10n.hiwConflictMobile,
+              version: l10n.hiwConflictVersionA,
               color: orange,
             ),
           ),
@@ -510,8 +498,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
           Expanded(
             child: _conflictBox(
               icon: Icons.computer_rounded,
-              platform: 'PC',
-              version: 'versión B',
+              platform: l10n.hiwConflictPC,
+              version: l10n.hiwConflictVersionB,
               color: orange,
             ),
           ),
@@ -559,33 +547,27 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: deletion ─────────────────────────────────────────────────────
 
-  Widget _sectionDeletion() {
+  Widget _sectionDeletion(AppLocalizations l10n) {
     const red = Color(0xFFE05252);
     return _infoCard(
       icon: Icons.delete_outline_rounded,
       color: red,
-      title: 'Si se borra una partida',
+      title: l10n.hiwDeleteTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Al eliminar una partida de Drive, no desaparece inmediatamente: '
-            'va a la Papelera de Google Drive.',
-            style: _body(),
-          ),
+          Text(l10n.hiwDeleteDesc, style: _body()),
           const SizedBox(height: 12),
           _tip(
             icon: Icons.restore_from_trash_rounded,
             color: AppColors.green,
-            text: 'Tienes 30 días para restaurarla desde la Papelera de Drive '
-                'antes de que se elimine definitivamente.',
+            text: l10n.hiwTipDeletion,
           ),
           const SizedBox(height: 8),
           _tip(
             icon: Icons.block_rounded,
             color: red,
-            text: 'ValleySave no puede recuperar partidas borradas definitivamente. '
-                'Los archivos en Drive son tu responsabilidad.',
+            text: l10n.hiwTipDeletePermanent,
           ),
         ],
       ),
@@ -594,46 +576,22 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: compatibility ────────────────────────────────────────────────
 
-  Widget _sectionCompatibility() {
+  Widget _sectionCompatibility(AppLocalizations l10n) {
     const amber = Color(0xFFE09020);
     return _infoCard(
       icon: Icons.warning_amber_rounded,
       color: amber,
-      title: 'Compatibilidad entre plataformas',
+      title: l10n.hiwCompatTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _tip(
-            icon: Icons.emoji_events_outlined,
-            color: amber,
-            text: 'Los logros de Steam y Google Play no se transfieren. '
-                'Cada plataforma solo registra los logros que ocurren en ella '
-                'en tiempo real — el save no los activa retroactivamente.',
-          ),
+          _tip(icon: Icons.emoji_events_outlined, color: amber, text: l10n.hiwCompatAchievements),
           const SizedBox(height: 8),
-          _tip(
-            icon: Icons.sync_problem_rounded,
-            color: amber,
-            text: 'Si sincronizas desde dos dispositivos sin orden, una partida '
-                'puede sobrescribir a otra. Sube siempre antes de descargar.',
-          ),
+          _tip(icon: Icons.sync_problem_rounded, color: amber, text: l10n.hiwCompatOverwrite),
           const SizedBox(height: 8),
-          _tip(
-            icon: Icons.system_update_alt_rounded,
-            color: amber,
-            text: 'Las partidas de versiones distintas del juego pueden no cargarse '
-                'correctamente. ValleySave avisa si detecta una diferencia de '
-                'versión antes de descargar.',
-          ),
+          _tip(icon: Icons.system_update_alt_rounded, color: amber, text: l10n.hiwCompatVersions),
           const SizedBox(height: 8),
-          _tip(
-            icon: Icons.extension_rounded,
-            color: amber,
-            text: 'Los mods de SMAPI añaden datos extra al save. Si cargas una '
-                'partida con mods en un dispositivo donde esos mods no están '
-                'instalados, el juego puede fallar o perder datos del mod.\n\n'
-                'En Android, SMAPI también puede instalarse para usar mods.',
-          ),
+          _tip(icon: Icons.extension_rounded, color: amber, text: l10n.hiwCompatMods),
         ],
       ),
     );
@@ -641,14 +599,14 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Android divider ───────────────────────────────────────────────────────
 
-  Widget _androidDivider() {
+  Widget _androidDivider(AppLocalizations l10n) {
     return Row(
       children: [
         Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.10))),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            'ACCESO EN ANDROID',
+            l10n.hiwCompatAndroidAccess,
             style: GoogleFonts.firaCode(
               fontSize: 9,
               letterSpacing: 1.2,
@@ -663,51 +621,36 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Shizuku card ─────────────────────────────────────────────────────────
 
-  Widget _shizukuCard(SeasonState season) {
+  Widget _shizukuCard(SeasonState season, AppLocalizations l10n) {
     return _viaCard(
       seasonColor: SeasonData.data[season]!.accentColor,
       icon: Icons.bolt_rounded,
       accent: AppColors.accent,
-      badge: 'AUTOMÁTICO · RECOMENDADO',
-      title: 'Con Shizuku',
-      subtitle: 'Se configura una sola vez. Después ValleySave sincroniza sola, '
-          'sin que toques nada nunca más.',
-      steps: const [
-        'Instala Shizuku (Play Store o APK desde GitHub).',
-        'Actívala con "Depuración inalámbrica" — ValleySave te guía paso a paso.',
-        'Concede permiso a ValleySave cuando te lo pida.',
-      ],
-      closing: '✓  Listo. A partir de ahí, descargar y subir partidas es '
-          'directo, igual que en el ordenador.',
-      footnote: 'El emparejamiento es solo la primera vez. Las versiones nuevas '
-          'de Shizuku se reactivan solas tras reiniciar el móvil.',
+      badge: l10n.hiwShizukuBadge,
+      title: l10n.hiwShizukuTitle,
+      subtitle: l10n.hiwShizukuSubtitle,
+      steps: [l10n.hiwShizuku1, l10n.hiwShizuku2, l10n.hiwShizuku3],
+      closing: l10n.hiwShizukuDone,
+      footnote: l10n.hiwShizukuNote,
     );
   }
 
   // ── Bridge card ───────────────────────────────────────────────────────────
 
-  Widget _bridgeCard(SeasonState season) {
+  Widget _bridgeCard(SeasonState season, AppLocalizations l10n) {
     return _viaCard(
       seasonColor: SeasonData.data[season]!.accentColor,
       icon: Icons.swap_horiz_rounded,
       accent: AppColors.green,
-      badge: 'ALTERNATIVA MANUAL · ANDROID 11-12',
-      title: 'Puente manual',
-      subtitle: 'Solo funciona en Android 11 y 12. No instalas nada extra; '
-          'a cambio, copias la partida a mano con tu app de Archivos cada vez '
-          'que sincronizas.',
-      steps: const [
-        'Descargar de Drive: ValleySave deja la partida en su carpeta. '
-            'Tú la copias con Archivos a la carpeta de Stardew.',
-        'Subir a Drive: copias la partida de Stardew a la carpeta de ValleySave. '
-            'ValleySave la detecta y la sube.',
-      ],
-      pathLabelA: 'Carpeta de Stardew',
+      badge: l10n.hiwBridgeBadge,
+      title: l10n.hiwBridgeTitle,
+      subtitle: l10n.hiwBridgeSubtitle,
+      steps: [l10n.hiwBridge1, l10n.hiwBridge2],
+      pathLabelA: l10n.hiwBridgeSaveFolder,
       pathA: _gamePath,
-      pathLabelB: 'Carpeta de ValleySave',
+      pathLabelB: l10n.hiwBridgeValleySaveFolder,
       pathB: _bridgePath,
-      footnote: 'Funciona porque tu app de Archivos del sistema sí puede entrar '
-          'en esas carpetas (ValleySave no).',
+      footnote: l10n.hiwBridgeNote,
     );
   }
 
@@ -1011,7 +954,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
     );
   }
 
-  Widget _privacyLink(BuildContext context, Color accent) {
+  Widget _privacyLink(BuildContext context, Color accent, AppLocalizations l10n) {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -1045,7 +988,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
               ),
               const SizedBox(width: 8),
               Text(
-                'Política de privacidad y uso',
+                l10n.hiwPrivacyLink,
                 style: GoogleFonts.firaCode(
                   fontSize: 12,
                   color: accent,

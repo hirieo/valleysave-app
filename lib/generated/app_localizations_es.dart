@@ -866,4 +866,34 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hiwCompatMods =>
       'Los mods de SMAPI añaden datos extra al save. Si cargas una partida con mods en un dispositivo donde esos mods no están instalados, el juego puede fallar o perder datos del mod.\n\nEn Android, SMAPI también puede instalarse para usar mods.';
+
+  @override
+  String get hiwComparePrimary => 'Tiempo total jugado';
+
+  @override
+  String get hiwCompareNoShown1 => 'Estado de cultivos y animales';
+
+  @override
+  String get hiwCompareNoShown2 => 'Inventario y objetos';
+
+  @override
+  String get hiwCompareNoShown3 => 'Relaciones individuales';
+
+  @override
+  String get hiwShizuku1 => 'Instala Shizuku (Play Store o APK desde GitHub).';
+
+  @override
+  String get hiwShizuku2 =>
+      'Actívala con «Depuración inalámbrica» — ValleySave te guía paso a paso.';
+
+  @override
+  String get hiwShizuku3 => 'Concede permiso a ValleySave cuando te lo pida.';
+
+  @override
+  String get hiwBridge1 =>
+      'Descargar de Drive: ValleySave deja la partida en su carpeta. Tú la copias con Archivos a la carpeta de Stardew.';
+
+  @override
+  String get hiwBridge2 =>
+      'Subir a Drive: copias la partida de Stardew a la carpeta de ValleySave. ValleySave la detecta y la sube.';
 }

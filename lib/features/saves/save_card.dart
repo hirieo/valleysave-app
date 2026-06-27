@@ -223,7 +223,7 @@ void _showSaveDetail(
   showGeneralDialog<void>(
     context: context,
     barrierDismissible: true,
-    barrierLabel: 'Cerrar',
+    barrierLabel: l10n.cardCloseBarrier,
     barrierColor: Colors.black.withValues(alpha: 0.70),
     transitionDuration: const Duration(milliseconds: 260),
     transitionBuilder: (ctx, animation, _, child) {
@@ -465,6 +465,7 @@ class _DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final s = side.save;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -508,7 +509,7 @@ class _DetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Día ${s.dayOfMonth} · Año ${s.year}',
+                        l10n.statDayYear(s.dayOfMonth, s.year),
                         style: GoogleFonts.firaCode(
                           fontSize: 11,
                           color: s.seasonColor.withValues(alpha: 0.90),
@@ -674,6 +675,7 @@ class _DateBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -693,7 +695,7 @@ class _DateBox extends StatelessWidget {
             ),
           ),
           Text(
-            'Día ${save.dayOfMonth}',
+            l10n.statDayOnly(save.dayOfMonth),
             style: GoogleFonts.bodoniModa(
               fontSize: 22,
               fontStyle: FontStyle.italic,
@@ -803,6 +805,7 @@ class _BigTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -831,7 +834,7 @@ class _BigTile extends StatelessWidget {
               const Text('⏱', style: TextStyle(fontSize: 11)),
               const SizedBox(width: 4),
               Text(
-                'TIEMPO JUGADO',
+                l10n.statPlaytime.toUpperCase(),
                 style: GoogleFonts.firaCode(
                   fontSize: 7,
                   letterSpacing: 0.8,
@@ -1066,6 +1069,7 @@ class _PillsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Wrap(
@@ -1073,26 +1077,26 @@ class _PillsRow extends StatelessWidget {
         runSpacing: 6,
         children: [
           _Pill(
-            '💀 ${SaveFile.formatCount(save.monstersKilled)} monstruos',
+            '💀 ${SaveFile.formatCount(save.monstersKilled)} ${l10n.pillMonsters}',
             textColor: _kMonstruos,
             borderColor: const Color(0xFF5A2010),
             bgColor: const Color(0xFF100806),
           ),
           _Pill(
-            '❤️ ${save.goodFriends} amigos',
+            '❤️ ${save.goodFriends} ${l10n.pillFriends}',
             textColor: _kAmigos,
             borderColor: const Color(0xFF5A1838),
             bgColor: const Color(0xFF100610),
           ),
           _Pill(
-            '😵‍💫 ${save.timesUnconscious} desmayos',
+            '😵‍💫 ${save.timesUnconscious} ${l10n.pillFaints}',
             textColor: _kDesmayos,
             borderColor: const Color(0xFF303858),
             bgColor: const Color(0xFF08090E),
           ),
           if (save.averageBedtime > 0)
             _Pill(
-              '🛏️ Duerme ${save.bedtimeLabel}',
+              '🛏️ ${l10n.pillSleeps} ${save.bedtimeLabel}',
               textColor: const Color(0xFF9888C8),
               borderColor: const Color(0xFF2C2848),
               bgColor: const Color(0xFF0A080E),
@@ -1127,6 +1131,7 @@ class _PresenceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final status = entry.status;
     final localAhead =
         status == SaveSyncStatus.localAhead || status == SaveSyncStatus.localOnly;
@@ -1144,7 +1149,7 @@ class _PresenceRow extends StatelessWidget {
               child: _SideTile(
                 color: _kLocal,
                 icon: isMobile ? '📱' : '💻',
-                title: isMobile ? 'EN ESTE MÓVIL' : 'EN ESTE EQUIPO',
+                title: l10n.cardLocalPresence,
                 save: entry.local,
                 highlight: localAhead && entry.drive != null,
                 entry: entry,
@@ -1160,7 +1165,7 @@ class _PresenceRow extends StatelessWidget {
               child: _SideTile(
                 color: _kDrive,
                 icon: '☁️',
-                title: 'EN DRIVE',
+                title: l10n.cardRemotePresence,
                 save: entry.drive,
                 highlight: driveAhead && entry.local != null,
                 entry: entry,
@@ -1280,7 +1285,7 @@ class _SideTileState extends State<_SideTile> {
             ],
           ] else
             Text(
-              'No está aquí',
+              l10n.cardNotPresent,
               style: GoogleFonts.firaCode(
                 fontSize: 10,
                 color: Colors.white.withValues(alpha: 0.35),
@@ -1436,8 +1441,8 @@ class _Footer extends StatelessWidget {
               child: CircularProgressIndicator(strokeWidth: 1.5),
             )
           else if (status == SaveSyncStatus.synced)
-            const _ActionBtn(
-              label: 'Sincronizado',
+            _ActionBtn(
+              label: l10n.cardActionSynced,
               color: _kSynced,
               icon: Icons.check_rounded,
               filled: false,
@@ -1445,7 +1450,7 @@ class _Footer extends StatelessWidget {
           else ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
               _ActionBtn(
-                label: 'Subir',
+                label: l10n.cardActionUpload,
                 color: _kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: false,
@@ -1455,7 +1460,7 @@ class _Footer extends StatelessWidget {
             ],
             if (hasLocal && hasDrive && recommendUpload) ...[
               _ActionBtn(
-                label: 'Descargar',
+                label: l10n.cardActionDownload,
                 color: _kDrive,
                 icon: Icons.cloud_download_outlined,
                 filled: false,
@@ -1465,7 +1470,7 @@ class _Footer extends StatelessWidget {
             ],
             if (recommendUpload)
               _ActionBtn(
-                label: 'Subir',
+                label: l10n.cardActionUpload,
                 color: _kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: true,
@@ -1473,7 +1478,7 @@ class _Footer extends StatelessWidget {
               ),
             if (recommendDownload)
               _ActionBtn(
-                label: 'Descargar',
+                label: l10n.cardActionDownload,
                 color: _kDrive,
                 icon: Icons.cloud_download_outlined,
                 filled: true,

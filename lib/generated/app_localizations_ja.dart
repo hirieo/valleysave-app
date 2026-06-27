@@ -473,6 +473,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pillFaints => 'faints';
 
   @override
+  String get pillSleeps => 'Sleeps';
+
+  @override
   String get hiwTitle => 'How it works';
 
   @override

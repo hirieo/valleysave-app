@@ -194,6 +194,7 @@
   "pillMonsters": "monsters",
   "pillFriends": "friends",
   "pillFaints": "faints",
+  "pillSleeps": "Sleeps",
   "hiwTitle": "How it works",
   "hiwSyncTitle": "How sync works",
   "hiwSyncIntro": "ValleySave uses your own Google Drive to move saves between devices. No intermediary servers: the files are yours.",

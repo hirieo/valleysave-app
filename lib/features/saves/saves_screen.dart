@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/models/season_state.dart';

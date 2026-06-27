@@ -896,4 +896,179 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hiwBridge2 =>
       'Subir a Drive: copias la partida de Stardew a la carpeta de ValleySave. ValleySave la detecta y la sube.';
+
+  @override
+  String get snackShizukuBattery =>
+      'Ajustes → Apps → Shizuku → Batería → No restringido.';
+
+  @override
+  String snackDriveError(String error) {
+    return 'Drive: $error';
+  }
+
+  @override
+  String get dlgDeleteLocalWarning =>
+      '⚠️ Si no la has subido a Drive, se perderá para siempre. No hay recuperación.';
+
+  @override
+  String get dlgDelete => 'Borrar';
+
+  @override
+  String get dlgDownloadButton => 'Descargar';
+
+  @override
+  String get dlgUploadButton => 'Subir';
+
+  @override
+  String get dlgBridgeCopyTitle => 'Copia la partida al juego';
+
+  @override
+  String dlgBridgeCopyDesc(String saveName) {
+    return 'La partida está lista. Con tu app de Archivos, copia la carpeta \"$saveName\" y pégala en la carpeta de Stardew.';
+  }
+
+  @override
+  String get labelFrom => 'Desde';
+
+  @override
+  String get labelTo => 'Hasta';
+
+  @override
+  String dlgDownloadNewDesc(String saveName, int day, String playtime) {
+    return 'Se copiará \"$saveName\" (Día $day, $playtime) a este equipo.';
+  }
+
+  @override
+  String dlgDownloadOverwrite(String saveName) {
+    return 'Esto SOBRESCRIBE tu save local de \"$saveName\".';
+  }
+
+  @override
+  String dlgUploadNewDesc(String saveName, int day, String playtime) {
+    return 'Se subirá \"$saveName\" (Día $day, $playtime) a tu Drive.';
+  }
+
+  @override
+  String dlgUploadOverwriteDrive(String saveName) {
+    return 'Esto SOBRESCRIBE la versión en Drive de \"$saveName\".';
+  }
+
+  @override
+  String get pathLabelFromStardew => 'Desde (Stardew)';
+
+  @override
+  String get pathLabelToValleySave => 'Hasta (ValleySave)';
+
+  @override
+  String get chooserDesc =>
+      'Android protege la carpeta del juego. Elige cómo darle acceso a ValleySave — puedes cambiarlo cuando quieras.';
+
+  @override
+  String get chooserShizukuDesc =>
+      'Se configura 1 vez. Después ValleySave sincroniza sola, sin que toques nada. Única vía fiable en Android 13+.';
+
+  @override
+  String get chooserManualBadge => 'SOLO ANDROID 11-12';
+
+  @override
+  String get chooserBridgeDesc =>
+      'Copias la partida con tu app de Archivos. Sin instalar nada. Solo en Android 11 y 12.';
+
+  @override
+  String get shizukuGateSubtitle =>
+      'Se configura una vez · solo la primera vez';
+
+  @override
+  String get shizukuStatusLabel => 'Shizuku activo';
+
+  @override
+  String get shizukuStatusRunning => 'Conectado y a la espera.';
+
+  @override
+  String get shizukuStatusNotDetected => 'Aún no detectado.';
+
+  @override
+  String get shizukuPermLabel => 'Permiso concedido';
+
+  @override
+  String get shizukuPermGranted => 'ValleySave ya tiene acceso.';
+
+  @override
+  String get shizukuPermNotGranted => 'Falta autorizar a ValleySave.';
+
+  @override
+  String get shizukuGrant => 'conceder';
+
+  @override
+  String get shizukuGuideHeader => 'GUÍA PASO A PASO';
+
+  @override
+  String get shizukuStep1DescFull =>
+      'Gratis. Si Google Play te lo bloquea en tu móvil, usa el APK oficial de GitHub.';
+
+  @override
+  String get btnPlayStore => 'Play Store';
+
+  @override
+  String get btnApkGithub => 'APK GitHub';
+
+  @override
+  String get shizukuStep2TitleFull => 'Activa Opciones de desarrollador';
+
+  @override
+  String get shizukuStep2DescFull =>
+      'Ajustes → Información del teléfono → Información de software → toca \"Número de compilación\" 7 veces.';
+
+  @override
+  String get shizukuStep3TitleFull => 'Activa Depuración inalámbrica';
+
+  @override
+  String get shizukuStep3DescFull =>
+      'El botón te lleva ahí y la resalta. Actívala (ON). Después toca \"Emparejar dispositivo con código de vinculación\" — aparecerá un código de 6 dígitos en pantalla.';
+
+  @override
+  String get btnOpenAndHighlight => 'Abrir y resaltar';
+
+  @override
+  String get shizukuStep4Title => 'Empareja e INICIA Shizuku';
+
+  @override
+  String get shizukuStep4Desc =>
+      'Abre Shizuku → \"Iniciar mediante depuración inalámbrica\" → \"Emparejar con código de sincronización\". Shizuku enviará una notificación indicando que está a la espera. Introduce el código de 6 dígitos que ves en la pantalla de Depuración inalámbrica. Tras emparejar, pulsa INICIAR — sin ese último toque Shizuku no queda activo.';
+
+  @override
+  String get btnOpenShizuku => 'Abrir Shizuku';
+
+  @override
+  String get shizukuStep5Title => 'Pon la energía de Shizuku en No restringido';
+
+  @override
+  String get shizukuStep5Desc =>
+      'Abre la info de la app → Batería → No restringido. Si no lo haces, el sistema cerrará Shizuku en segundo plano y tendrás que volver a darle a Iniciar.';
+
+  @override
+  String get btnShizukuAppInfo => 'Info de app Shizuku';
+
+  @override
+  String get shizukuStep6DescActive =>
+      'Shizuku está activo. Pulsa el botón para autorizar.';
+
+  @override
+  String get shizukuStep6DescWaiting =>
+      'Disponible en cuanto Shizuku esté activo (paso 4).';
+
+  @override
+  String get btnGrantPermission => 'Conceder permiso';
+
+  @override
+  String get btnCheckShizuku => 'Ya lo he hecho · Comprobar';
+
+  @override
+  String get statusDone => 'hecho';
+
+  @override
+  String get statusPending => 'pendiente';
+
+  @override
+  String get latestBadge => '· ÚLTIMA PARTIDA ·';
 }

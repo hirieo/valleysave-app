@@ -970,6 +970,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'faints'**
   String get pillFaints;
+
+  /// No description provided for @hiwTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get hiwTitle;
+
+  /// No description provided for @hiwSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How sync works'**
+  String get hiwSyncTitle;
+
+  /// No description provided for @hiwSyncIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave uses your own Google Drive to move saves between devices. No intermediary servers: the files are yours.'**
+  String get hiwSyncIntro;
+
+  /// No description provided for @hiwSyncDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your\ndevice'**
+  String get hiwSyncDevice;
+
+  /// No description provided for @hiwSyncCloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Google\nDrive'**
+  String get hiwSyncCloud;
+
+  /// No description provided for @hiwSyncOtherDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Other\ndevice'**
+  String get hiwSyncOtherDevice;
+
+  /// No description provided for @hiwUploadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a save'**
+  String get hiwUploadTitle;
+
+  /// No description provided for @hiwUploadDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you upload, ValleySave copies both save files (SaveGameInfo + farm file) to your ValleySave/ folder on Drive.'**
+  String get hiwUploadDesc;
+
+  /// No description provided for @hiwDownloadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a save'**
+  String get hiwDownloadTitle;
+
+  /// No description provided for @hiwDownloadDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you download, ValleySave brings the files from Drive and places them directly in the game folder.'**
+  String get hiwDownloadDesc;
+
+  /// No description provided for @hiwCompareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What does it compare?'**
+  String get hiwCompareTitle;
+
+  /// No description provided for @hiwCompareIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'To know which version is ahead, ValleySave uses total playtime — the only data that can only grow.'**
+  String get hiwCompareIntro;
+
+  /// No description provided for @hiwCompareNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Before confirming you\'ll also see, so you can decide:'**
+  String get hiwCompareNote;
+
+  /// No description provided for @hiwCompareMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Current money and total earned'**
+  String get hiwCompareMoney;
+
+  /// No description provided for @hiwCompareMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine level'**
+  String get hiwCompareMine;
+
+  /// No description provided for @hiwCompareSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills (farming, mining, combat…)'**
+  String get hiwCompareSkills;
+
+  /// No description provided for @hiwCompareRelations.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends, monsters killed, faints'**
+  String get hiwCompareRelations;
+
+  /// No description provided for @hiwCompareStamina.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamina and health'**
+  String get hiwCompareStamina;
+
+  /// No description provided for @hiwCompareNotShown.
+  ///
+  /// In en, this message translates to:
+  /// **'These are not shown — they change in any direction and don\'t indicate which save is ahead.'**
+  String get hiwCompareNotShown;
+
+  /// No description provided for @hiwCompareNotShownExamples.
+  ///
+  /// In en, this message translates to:
+  /// **'Crop and animal status, inventory and items, individual relationships'**
+  String get hiwCompareNotShownExamples;
+
+  /// No description provided for @hiwCompareWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'They\'re not shown — they change in any direction and don\'t indicate which save is ahead.'**
+  String get hiwCompareWarning;
+
+  /// No description provided for @hiwConflictTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If you play without syncing'**
+  String get hiwConflictTitle;
+
+  /// No description provided for @hiwConflictDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If you advance on mobile and PC without syncing between sessions, you end up with two versions of the same save.'**
+  String get hiwConflictDesc;
+
+  /// No description provided for @hiwConflictNoMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'They can\'t be merged. ValleySave always shows you both versions so you can choose which to keep.'**
+  String get hiwConflictNoMerge;
+
+  /// No description provided for @hiwConflictMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile'**
+  String get hiwConflictMobile;
+
+  /// No description provided for @hiwConflictVersionA.
+  ///
+  /// In en, this message translates to:
+  /// **'version A'**
+  String get hiwConflictVersionA;
+
+  /// No description provided for @hiwConflictPC.
+  ///
+  /// In en, this message translates to:
+  /// **'PC'**
+  String get hiwConflictPC;
+
+  /// No description provided for @hiwConflictVersionB.
+  ///
+  /// In en, this message translates to:
+  /// **'version B'**
+  String get hiwConflictVersionB;
+
+  /// No description provided for @hiwDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If a save is deleted'**
+  String get hiwDeleteTitle;
+
+  /// No description provided for @hiwDeleteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you delete a save from Drive, it doesn\'t disappear immediately: it goes to Google Drive Trash.'**
+  String get hiwDeleteDesc;
+
+  /// No description provided for @hiwCompatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform compatibility'**
+  String get hiwCompatTitle;
+
+  /// No description provided for @hiwCompatAndroidAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCESS ON ANDROID'**
+  String get hiwCompatAndroidAccess;
+
+  /// No description provided for @hiwShizukuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'With Shizuku'**
+  String get hiwShizukuTitle;
+
+  /// No description provided for @hiwShizukuSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up once. After that, ValleySave syncs by itself, without you ever touching it again.'**
+  String get hiwShizukuSubtitle;
+
+  /// No description provided for @hiwShizukuBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'AUTOMATIC · RECOMMENDED'**
+  String get hiwShizukuBadge;
+
+  /// No description provided for @hiwShizukuDone.
+  ///
+  /// In en, this message translates to:
+  /// **'✓  Done. From then on, downloading and uploading saves is direct, just like on a computer.'**
+  String get hiwShizukuDone;
+
+  /// No description provided for @hiwShizukuNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Pairing is only the first time. New Shizuku versions reactivate by themselves after restarting your phone.'**
+  String get hiwShizukuNote;
+
+  /// No description provided for @hiwBridgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual bridge'**
+  String get hiwBridgeTitle;
+
+  /// No description provided for @hiwBridgeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Only works on Android 11 and 12. You don\'t install anything extra; instead, you copy the save by hand with your Files app every time you sync.'**
+  String get hiwBridgeSubtitle;
+
+  /// No description provided for @hiwBridgeBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'MANUAL ALTERNATIVE · ANDROID 11-12'**
+  String get hiwBridgeBadge;
+
+  /// No description provided for @hiwBridgeSaveFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Stardew\'s folder'**
+  String get hiwBridgeSaveFolder;
+
+  /// No description provided for @hiwBridgeValleySaveFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave\'s folder'**
+  String get hiwBridgeValleySaveFolder;
+
+  /// No description provided for @hiwBridgeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'It works because your system Files app can access those folders (ValleySave can\'t).'**
+  String get hiwBridgeNote;
+
+  /// No description provided for @hiwTipAlwaysShow.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll always see what\'s on Drive...'**
+  String get hiwTipAlwaysShow;
+
+  /// No description provided for @hiwTipWithoutUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Without uploading, no other device...'**
+  String get hiwTipWithoutUpload;
+
+  /// No description provided for @hiwTipComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll see the comparison between local and Drive...'**
+  String get hiwTipComparison;
+
+  /// No description provided for @hiwTipDownloadOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading overwrites your local save...'**
+  String get hiwTipDownloadOverwrite;
+
+  /// No description provided for @hiwTipSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Always upload before switching devices...'**
+  String get hiwTipSync;
+
+  /// No description provided for @hiwTipDeletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted saves go to Drive Trash...'**
+  String get hiwTipDeletion;
+
+  /// No description provided for @hiwPrivacyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy and usage'**
+  String get hiwPrivacyLink;
 }
 
 class _AppLocalizationsDelegate

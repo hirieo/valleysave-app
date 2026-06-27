@@ -2014,6 +2014,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'· LATEST SAVE ·'**
   String get latestBadge;
+
+  /// No description provided for @saveDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{season} · Year {year}'**
+  String saveDateLabel(String season, int year);
+
+  /// No description provided for @petCat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get petCat;
+
+  /// No description provided for @petDog.
+  ///
+  /// In en, this message translates to:
+  /// **'Dog'**
+  String get petDog;
+
+  /// No description provided for @houseBasic.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic house'**
+  String get houseBasic;
+
+  /// No description provided for @houseKitchen.
+  ///
+  /// In en, this message translates to:
+  /// **'With kitchen'**
+  String get houseKitchen;
+
+  /// No description provided for @houseBedroom.
+  ///
+  /// In en, this message translates to:
+  /// **'With bedroom'**
+  String get houseBedroom;
+
+  /// No description provided for @houseCellar.
+  ///
+  /// In en, this message translates to:
+  /// **'With cellar'**
+  String get houseCellar;
+
+  /// No description provided for @houseLevelN.
+  ///
+  /// In en, this message translates to:
+  /// **'Lv. {level}'**
+  String houseLevelN(int level);
 }
 
 class _AppLocalizationsDelegate

@@ -614,6 +614,7 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
       child: Row(
@@ -645,13 +646,13 @@ class _Header extends StatelessWidget {
                       bgColor: const Color(0xFF140E04),
                     ),
                     _Chip(
-                      save.petLabel,
+                      save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
                       textColor: const Color(0xFF60A858),
                       borderColor: const Color(0xFF264A20),
                       bgColor: const Color(0xFF080E08),
                     ),
                     _Chip(
-                      '🏠 ${save.houseLabel}',
+                      '🏠 ${_houseLabel(save.houseUpgradeLevel, l10n)}',
                       textColor: const Color(0xFF8898A8),
                       borderColor: const Color(0xFF283848),
                       bgColor: const Color(0xFF08100E),
@@ -687,7 +688,7 @@ class _DateBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            save.dateLabel.toUpperCase(),
+            _saveDateLabel(save, l10n).toUpperCase(),
             style: GoogleFonts.firaCode(
               fontSize: 8,
               letterSpacing: 1.0,
@@ -1639,3 +1640,22 @@ class _Pill extends StatelessWidget {
     );
   }
 }
+
+String _saveDateLabel(SaveFile save, AppLocalizations l10n) {
+  final season = switch (save.currentSeason.toLowerCase()) {
+    'spring' => l10n.seasonSpring,
+    'summer' => l10n.seasonSummer,
+    'fall'   => l10n.seasonFall,
+    'winter' => l10n.seasonWinter,
+    _        => save.currentSeason,
+  };
+  return l10n.saveDateLabel(season, save.year);
+}
+
+String _houseLabel(int level, AppLocalizations l10n) => switch (level) {
+  0 => l10n.houseBasic,
+  1 => l10n.houseKitchen,
+  2 => l10n.houseBedroom,
+  3 => l10n.houseCellar,
+  _ => l10n.houseLevelN(level),
+};

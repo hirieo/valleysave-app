@@ -254,5 +254,99 @@
   "bridgeRefresh": "Refresh",
   "bridgeChangeMode": "Change method",
   "loaderLoading": "LOADING",
-  "loaderConnecting": "connecting to Drive…"
+  "loaderConnecting": "connecting to Drive…",
+  "chooserTitle": "Choose how to connect",
+  "chooserAutomatic": "Automatic · Recommended",
+  "chooserManual": "Manual alternative · Android 11-12",
+  "shizukuStepTitle": "Set up Shizuku",
+  "shizukuStep1Title": "Install Shizuku",
+  "shizukuStep1Desc": "Download from Play Store or GitHub",
+  "shizukuStep2Title": "Activate Shizuku",
+  "shizukuStep2Desc": "Run the app and grant permissions",
+  "shizukuStep3Title": "Grant permission",
+  "shizukuStep3Desc": "ValleySave will ask for access",
+  "shizukuDone": "✓  Done. From then on, downloading and uploading saves works directly, like on a computer.",
+  "dlgDeleteDriveTitle": "Delete from Drive",
+  "dlgDeleteLocalTitle": "Delete from this device",
+  "dlgDownloadTitle": "Download save",
+  "dlgUploadTitle": "Upload save",
+  "dlgUploadOverwrite": "This will overwrite your local save",
+  "dlgGotIt": "Got it",
+  "dlgCopyDest": "Copy destination",
+  "previewColDayYear": "Day/Year",
+  "previewColTime": "Playtime",
+  "previewColMoney": "Coins",
+  "previewColTotal": "Total",
+  "previewColFarming": "Farming",
+  "previewColForaging": "Foraging",
+  "previewColMining": "Mining",
+  "previewColFishing": "Fishing",
+  "previewColCombat": "Combat",
+  "previewColFriends": "Friends",
+  "previewColMonsters": "Monsters",
+  "previewColFaints": "Faints",
+  "previewColMine": "Mine",
+  "previewColUnexplored": "Unexplored",
+  "previewLocalLabel": "ON THIS DEVICE",
+  "previewDriveLabel": "ON DRIVE",
+  "previewFromDrive": "FROM DRIVE",
+  "previewFromDevice": "FROM THIS DEVICE",
+  "versionMismatch": "Different versions: local {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "Path copied",
+  "snackDestCopied": "Destination path copied",
+  "snackDownloaded": "Save downloaded to the game",
+  "snackSessionExpired": "Drive session expired. Reconnect",
+  "snackUploadError": "Upload error: {error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "Download error: {error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "Delete error: {error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" moved to Drive Trash. You have 30 days to restore it.",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" deleted from this device",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "Enable Shizuku…",
+  "snackWriteError": "Could not write to the game…",
+  "snackPlatformNotSupported": "This platform doesn't support…"
 }

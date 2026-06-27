@@ -470,6 +470,174 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pillFaints => 'faints';
+
+  @override
+  String get hiwTitle => 'How it works';
+
+  @override
+  String get hiwSyncTitle => 'How sync works';
+
+  @override
+  String get hiwSyncIntro =>
+      'ValleySave uses your own Google Drive to move saves between devices. No intermediary servers: the files are yours.';
+
+  @override
+  String get hiwSyncDevice => 'Your\ndevice';
+
+  @override
+  String get hiwSyncCloud => 'Google\nDrive';
+
+  @override
+  String get hiwSyncOtherDevice => 'Other\ndevice';
+
+  @override
+  String get hiwUploadTitle => 'Upload a save';
+
+  @override
+  String get hiwUploadDesc =>
+      'When you upload, ValleySave copies both save files (SaveGameInfo + farm file) to your ValleySave/ folder on Drive.';
+
+  @override
+  String get hiwDownloadTitle => 'Download a save';
+
+  @override
+  String get hiwDownloadDesc =>
+      'When you download, ValleySave brings the files from Drive and places them directly in the game folder.';
+
+  @override
+  String get hiwCompareTitle => 'What does it compare?';
+
+  @override
+  String get hiwCompareIntro =>
+      'To know which version is ahead, ValleySave uses total playtime — the only data that can only grow.';
+
+  @override
+  String get hiwCompareNote =>
+      'Before confirming you\'ll also see, so you can decide:';
+
+  @override
+  String get hiwCompareMoney => 'Current money and total earned';
+
+  @override
+  String get hiwCompareMine => 'Mine level';
+
+  @override
+  String get hiwCompareSkills => 'Skills (farming, mining, combat…)';
+
+  @override
+  String get hiwCompareRelations => 'Friends, monsters killed, faints';
+
+  @override
+  String get hiwCompareStamina => 'Stamina and health';
+
+  @override
+  String get hiwCompareNotShown =>
+      'These are not shown — they change in any direction and don\'t indicate which save is ahead.';
+
+  @override
+  String get hiwCompareNotShownExamples =>
+      'Crop and animal status, inventory and items, individual relationships';
+
+  @override
+  String get hiwCompareWarning =>
+      'They\'re not shown — they change in any direction and don\'t indicate which save is ahead.';
+
+  @override
+  String get hiwConflictTitle => 'If you play without syncing';
+
+  @override
+  String get hiwConflictDesc =>
+      'If you advance on mobile and PC without syncing between sessions, you end up with two versions of the same save.';
+
+  @override
+  String get hiwConflictNoMerge =>
+      'They can\'t be merged. ValleySave always shows you both versions so you can choose which to keep.';
+
+  @override
+  String get hiwConflictMobile => 'Mobile';
+
+  @override
+  String get hiwConflictVersionA => 'version A';
+
+  @override
+  String get hiwConflictPC => 'PC';
+
+  @override
+  String get hiwConflictVersionB => 'version B';
+
+  @override
+  String get hiwDeleteTitle => 'If a save is deleted';
+
+  @override
+  String get hiwDeleteDesc =>
+      'When you delete a save from Drive, it doesn\'t disappear immediately: it goes to Google Drive Trash.';
+
+  @override
+  String get hiwCompatTitle => 'Platform compatibility';
+
+  @override
+  String get hiwCompatAndroidAccess => 'ACCESS ON ANDROID';
+
+  @override
+  String get hiwShizukuTitle => 'With Shizuku';
+
+  @override
+  String get hiwShizukuSubtitle =>
+      'Set up once. After that, ValleySave syncs by itself, without you ever touching it again.';
+
+  @override
+  String get hiwShizukuBadge => 'AUTOMATIC · RECOMMENDED';
+
+  @override
+  String get hiwShizukuDone =>
+      '✓  Done. From then on, downloading and uploading saves is direct, just like on a computer.';
+
+  @override
+  String get hiwShizukuNote =>
+      'Pairing is only the first time. New Shizuku versions reactivate by themselves after restarting your phone.';
+
+  @override
+  String get hiwBridgeTitle => 'Manual bridge';
+
+  @override
+  String get hiwBridgeSubtitle =>
+      'Only works on Android 11 and 12. You don\'t install anything extra; instead, you copy the save by hand with your Files app every time you sync.';
+
+  @override
+  String get hiwBridgeBadge => 'MANUAL ALTERNATIVE · ANDROID 11-12';
+
+  @override
+  String get hiwBridgeSaveFolder => 'Stardew\'s folder';
+
+  @override
+  String get hiwBridgeValleySaveFolder => 'ValleySave\'s folder';
+
+  @override
+  String get hiwBridgeNote =>
+      'It works because your system Files app can access those folders (ValleySave can\'t).';
+
+  @override
+  String get hiwTipAlwaysShow => 'You\'ll always see what\'s on Drive...';
+
+  @override
+  String get hiwTipWithoutUpload => 'Without uploading, no other device...';
+
+  @override
+  String get hiwTipComparison =>
+      'You\'ll see the comparison between local and Drive...';
+
+  @override
+  String get hiwTipDownloadOverwrite =>
+      'Downloading overwrites your local save...';
+
+  @override
+  String get hiwTipSync => 'Always upload before switching devices...';
+
+  @override
+  String get hiwTipDeletion => 'Deleted saves go to Drive Trash...';
+
+  @override
+  String get hiwPrivacyLink => 'Privacy policy and usage';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

@@ -446,5 +446,24 @@
   "btnCheckShizuku": "Done · Check",
   "statusDone": "done",
   "statusPending": "pending",
-  "latestBadge": "· LATEST SAVE ·"
+  "latestBadge": "· LATEST SAVE ·",
+  "saveDateLabel": "{season} · Year {year}",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": { "type": "String" },
+      "year": { "type": "int" }
+    }
+  },
+  "petCat": "Cat",
+  "petDog": "Dog",
+  "houseBasic": "Basic house",
+  "houseKitchen": "With kitchen",
+  "houseBedroom": "With bedroom",
+  "houseCellar": "With cellar",
+  "houseLevelN": "Lv. {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  }
 }

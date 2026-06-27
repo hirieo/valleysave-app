@@ -1071,4 +1071,32 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get latestBadge => '· ÚLTIMA PARTIDA ·';
+
+  @override
+  String saveDateLabel(String season, int year) {
+    return '$season · Año $year';
+  }
+
+  @override
+  String get petCat => 'Gato';
+
+  @override
+  String get petDog => 'Perro';
+
+  @override
+  String get houseBasic => 'Casa básica';
+
+  @override
+  String get houseKitchen => 'Con cocina';
+
+  @override
+  String get houseBedroom => 'Con habitación';
+
+  @override
+  String get houseCellar => 'Con bodega';
+
+  @override
+  String houseLevelN(int level) {
+    return 'Nv. $level';
+  }
 }

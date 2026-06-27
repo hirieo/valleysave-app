@@ -349,5 +349,24 @@
   "btnCheckShizuku": "Ya lo he hecho · Comprobar",
   "statusDone": "hecho",
   "statusPending": "pendiente",
-  "latestBadge": "· ÚLTIMA PARTIDA ·"
+  "latestBadge": "· ÚLTIMA PARTIDA ·",
+  "saveDateLabel": "{season} · Año {year}",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": { "type": "String" },
+      "year": { "type": "int" }
+    }
+  },
+  "petCat": "Gato",
+  "petDog": "Perro",
+  "houseBasic": "Casa básica",
+  "houseKitchen": "Con cocina",
+  "houseBedroom": "Con habitación",
+  "houseCellar": "Con bodega",
+  "houseLevelN": "Nv. {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  }
 }

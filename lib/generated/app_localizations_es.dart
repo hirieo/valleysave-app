@@ -309,6 +309,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get updateOutdatedDownload => 'No está al día · Descargar';
 
   @override
+  String get updateDownloading => 'Descargando actualización…';
+
+  @override
+  String get updateError => 'Error — toca para reintentar';
+
+  @override
   String get disconnectTitle => '¿Desconectar Drive?';
 
   @override

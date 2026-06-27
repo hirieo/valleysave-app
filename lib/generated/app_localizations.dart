@@ -1714,6 +1714,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload to Drive: copy the save from Stardew to ValleySave\'s folder. ValleySave detects it and uploads it.'**
   String get hiwBridge2;
+
+  /// No description provided for @snackShizukuBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings → Apps → Shizuku → Battery → Unrestricted.'**
+  String get snackShizukuBattery;
+
+  /// No description provided for @snackDriveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive: {error}'**
+  String snackDriveError(String error);
+
+  /// No description provided for @dlgDeleteLocalWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ If you haven\'t uploaded to Drive, it will be lost forever. No recovery.'**
+  String get dlgDeleteLocalWarning;
+
+  /// No description provided for @dlgDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get dlgDelete;
+
+  /// No description provided for @dlgDownloadButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get dlgDownloadButton;
+
+  /// No description provided for @dlgUploadButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get dlgUploadButton;
+
+  /// No description provided for @dlgBridgeCopyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy save to game'**
+  String get dlgBridgeCopyTitle;
+
+  /// No description provided for @dlgBridgeCopyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Save is ready. With your Files app, copy the \"{saveName}\" folder and paste it into the Stardew folder.'**
+  String dlgBridgeCopyDesc(String saveName);
+
+  /// No description provided for @labelFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get labelFrom;
+
+  /// No description provided for @labelTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get labelTo;
+
+  /// No description provided for @dlgDownloadNewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{saveName}\" (Day {day}, {playtime}) will be copied to this device.'**
+  String dlgDownloadNewDesc(String saveName, int day, String playtime);
+
+  /// No description provided for @dlgDownloadOverwrite.
+  ///
+  /// In en, this message translates to:
+  /// **'This OVERWRITES your local save of \"{saveName}\".'**
+  String dlgDownloadOverwrite(String saveName);
+
+  /// No description provided for @dlgUploadNewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{saveName}\" (Day {day}, {playtime}) will be uploaded to your Drive.'**
+  String dlgUploadNewDesc(String saveName, int day, String playtime);
+
+  /// No description provided for @dlgUploadOverwriteDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'This OVERWRITES the Drive version of \"{saveName}\".'**
+  String dlgUploadOverwriteDrive(String saveName);
+
+  /// No description provided for @pathLabelFromStardew.
+  ///
+  /// In en, this message translates to:
+  /// **'From (Stardew)'**
+  String get pathLabelFromStardew;
+
+  /// No description provided for @pathLabelToValleySave.
+  ///
+  /// In en, this message translates to:
+  /// **'To (ValleySave)'**
+  String get pathLabelToValleySave;
+
+  /// No description provided for @chooserDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Android protects the game folder. Choose how to give ValleySave access — you can change it anytime.'**
+  String get chooserDesc;
+
+  /// No description provided for @chooserShizukuDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configured once. After that ValleySave syncs on its own, without you touching anything. Only reliable method on Android 13+.'**
+  String get chooserShizukuDesc;
+
+  /// No description provided for @chooserManualBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'ONLY ANDROID 11-12'**
+  String get chooserManualBadge;
+
+  /// No description provided for @chooserBridgeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy saves with your Files app. No extra install. Only on Android 11 and 12.'**
+  String get chooserBridgeDesc;
+
+  /// No description provided for @shizukuGateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configured once · first time only'**
+  String get shizukuGateSubtitle;
+
+  /// No description provided for @shizukuStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shizuku active'**
+  String get shizukuStatusLabel;
+
+  /// No description provided for @shizukuStatusRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected and waiting.'**
+  String get shizukuStatusRunning;
+
+  /// No description provided for @shizukuStatusNotDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not detected yet.'**
+  String get shizukuStatusNotDetected;
+
+  /// No description provided for @shizukuPermLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission granted'**
+  String get shizukuPermLabel;
+
+  /// No description provided for @shizukuPermGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave already has access.'**
+  String get shizukuPermGranted;
+
+  /// No description provided for @shizukuPermNotGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Need to authorize ValleySave.'**
+  String get shizukuPermNotGranted;
+
+  /// No description provided for @shizukuGrant.
+  ///
+  /// In en, this message translates to:
+  /// **'grant'**
+  String get shizukuGrant;
+
+  /// No description provided for @shizukuGuideHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'STEP-BY-STEP GUIDE'**
+  String get shizukuGuideHeader;
+
+  /// No description provided for @shizukuStep1DescFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Free. If Google Play blocks it on your phone, use the official GitHub APK.'**
+  String get shizukuStep1DescFull;
+
+  /// No description provided for @btnPlayStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Store'**
+  String get btnPlayStore;
+
+  /// No description provided for @btnApkGithub.
+  ///
+  /// In en, this message translates to:
+  /// **'APK GitHub'**
+  String get btnApkGithub;
+
+  /// No description provided for @shizukuStep2TitleFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Developer Options'**
+  String get shizukuStep2TitleFull;
+
+  /// No description provided for @shizukuStep2DescFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings → Phone info → Software info → tap \"Build number\" 7 times.'**
+  String get shizukuStep2DescFull;
+
+  /// No description provided for @shizukuStep3TitleFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Wireless Debugging'**
+  String get shizukuStep3TitleFull;
+
+  /// No description provided for @shizukuStep3DescFull.
+  ///
+  /// In en, this message translates to:
+  /// **'The button takes you there and highlights it. Enable it (ON). Then tap \"Pair device with pairing code\" — a 6-digit code will appear on screen.'**
+  String get shizukuStep3DescFull;
+
+  /// No description provided for @btnOpenAndHighlight.
+  ///
+  /// In en, this message translates to:
+  /// **'Open and highlight'**
+  String get btnOpenAndHighlight;
+
+  /// No description provided for @shizukuStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair and START Shizuku'**
+  String get shizukuStep4Title;
+
+  /// No description provided for @shizukuStep4Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Shizuku → \"Start via Wireless Debugging\" → \"Pair with pairing code\". Shizuku will send a notification saying it\'s waiting. Enter the 6-digit code from the Wireless Debugging screen. After pairing, press START — without that last tap Shizuku won\'t be active.'**
+  String get shizukuStep4Desc;
+
+  /// No description provided for @btnOpenShizuku.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Shizuku'**
+  String get btnOpenShizuku;
+
+  /// No description provided for @shizukuStep5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Shizuku battery to Unrestricted'**
+  String get shizukuStep5Title;
+
+  /// No description provided for @shizukuStep5Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Open app info → Battery → Unrestricted. If you don\'t, the system will close Shizuku in the background and you\'ll have to press Start again.'**
+  String get shizukuStep5Desc;
+
+  /// No description provided for @btnShizukuAppInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Shizuku app info'**
+  String get btnShizukuAppInfo;
+
+  /// No description provided for @shizukuStep6DescActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Shizuku is active. Tap the button to authorize.'**
+  String get shizukuStep6DescActive;
+
+  /// No description provided for @shizukuStep6DescWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Available once Shizuku is active (step 4).'**
+  String get shizukuStep6DescWaiting;
+
+  /// No description provided for @btnGrantPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant permission'**
+  String get btnGrantPermission;
+
+  /// No description provided for @btnCheckShizuku.
+  ///
+  /// In en, this message translates to:
+  /// **'Done · Check'**
+  String get btnCheckShizuku;
+
+  /// No description provided for @statusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'done'**
+  String get statusDone;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'pending'**
+  String get statusPending;
+
+  /// No description provided for @latestBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'· LATEST SAVE ·'**
+  String get latestBadge;
 }
 
 class _AppLocalizationsDelegate

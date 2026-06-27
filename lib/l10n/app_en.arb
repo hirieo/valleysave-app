@@ -362,5 +362,89 @@
   "hiwShizuku2": "Activate it with Wireless Debugging — ValleySave guides you step by step.",
   "hiwShizuku3": "Grant permission to ValleySave when prompted.",
   "hiwBridge1": "Download from Drive: ValleySave leaves the save in its folder. You copy it with Files to Stardew's folder.",
-  "hiwBridge2": "Upload to Drive: copy the save from Stardew to ValleySave's folder. ValleySave detects it and uploads it."
+  "hiwBridge2": "Upload to Drive: copy the save from Stardew to ValleySave's folder. ValleySave detects it and uploads it.",
+  "snackShizukuBattery": "Settings → Apps → Shizuku → Battery → Unrestricted.",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ If you haven't uploaded to Drive, it will be lost forever. No recovery.",
+  "dlgDelete": "Delete",
+  "dlgDownloadButton": "Download",
+  "dlgUploadButton": "Upload",
+  "dlgBridgeCopyTitle": "Copy save to game",
+  "dlgBridgeCopyDesc": "Save is ready. With your Files app, copy the \"{saveName}\" folder and paste it into the Stardew folder.",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "labelFrom": "From",
+  "labelTo": "To",
+  "dlgDownloadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) will be copied to this device.",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgDownloadOverwrite": "This OVERWRITES your local save of \"{saveName}\".",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) will be uploaded to your Drive.",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgUploadOverwriteDrive": "This OVERWRITES the Drive version of \"{saveName}\".",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "pathLabelFromStardew": "From (Stardew)",
+  "pathLabelToValleySave": "To (ValleySave)",
+  "chooserDesc": "Android protects the game folder. Choose how to give ValleySave access — you can change it anytime.",
+  "chooserShizukuDesc": "Configured once. After that ValleySave syncs on its own, without you touching anything. Only reliable method on Android 13+.",
+  "chooserManualBadge": "ONLY ANDROID 11-12",
+  "chooserBridgeDesc": "Copy saves with your Files app. No extra install. Only on Android 11 and 12.",
+  "shizukuGateSubtitle": "Configured once · first time only",
+  "shizukuStatusLabel": "Shizuku active",
+  "shizukuStatusRunning": "Connected and waiting.",
+  "shizukuStatusNotDetected": "Not detected yet.",
+  "shizukuPermLabel": "Permission granted",
+  "shizukuPermGranted": "ValleySave already has access.",
+  "shizukuPermNotGranted": "Need to authorize ValleySave.",
+  "shizukuGrant": "grant",
+  "shizukuGuideHeader": "STEP-BY-STEP GUIDE",
+  "shizukuStep1DescFull": "Free. If Google Play blocks it on your phone, use the official GitHub APK.",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "Enable Developer Options",
+  "shizukuStep2DescFull": "Settings → Phone info → Software info → tap \"Build number\" 7 times.",
+  "shizukuStep3TitleFull": "Enable Wireless Debugging",
+  "shizukuStep3DescFull": "The button takes you there and highlights it. Enable it (ON). Then tap \"Pair device with pairing code\" — a 6-digit code will appear on screen.",
+  "btnOpenAndHighlight": "Open and highlight",
+  "shizukuStep4Title": "Pair and START Shizuku",
+  "shizukuStep4Desc": "Open Shizuku → \"Start via Wireless Debugging\" → \"Pair with pairing code\". Shizuku will send a notification saying it's waiting. Enter the 6-digit code from the Wireless Debugging screen. After pairing, press START — without that last tap Shizuku won't be active.",
+  "btnOpenShizuku": "Open Shizuku",
+  "shizukuStep5Title": "Set Shizuku battery to Unrestricted",
+  "shizukuStep5Desc": "Open app info → Battery → Unrestricted. If you don't, the system will close Shizuku in the background and you'll have to press Start again.",
+  "btnShizukuAppInfo": "Shizuku app info",
+  "shizukuStep6DescActive": "Shizuku is active. Tap the button to authorize.",
+  "shizukuStep6DescWaiting": "Available once Shizuku is active (step 4).",
+  "btnGrantPermission": "Grant permission",
+  "btnCheckShizuku": "Done · Check",
+  "statusDone": "done",
+  "statusPending": "pending",
+  "latestBadge": "· LATEST SAVE ·"
 }

@@ -265,5 +265,89 @@
   "hiwShizuku2": "Actívala con «Depuración inalámbrica» — ValleySave te guía paso a paso.",
   "hiwShizuku3": "Concede permiso a ValleySave cuando te lo pida.",
   "hiwBridge1": "Descargar de Drive: ValleySave deja la partida en su carpeta. Tú la copias con Archivos a la carpeta de Stardew.",
-  "hiwBridge2": "Subir a Drive: copias la partida de Stardew a la carpeta de ValleySave. ValleySave la detecta y la sube."
+  "hiwBridge2": "Subir a Drive: copias la partida de Stardew a la carpeta de ValleySave. ValleySave la detecta y la sube.",
+  "snackShizukuBattery": "Ajustes → Apps → Shizuku → Batería → No restringido.",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ Si no la has subido a Drive, se perderá para siempre. No hay recuperación.",
+  "dlgDelete": "Borrar",
+  "dlgDownloadButton": "Descargar",
+  "dlgUploadButton": "Subir",
+  "dlgBridgeCopyTitle": "Copia la partida al juego",
+  "dlgBridgeCopyDesc": "La partida está lista. Con tu app de Archivos, copia la carpeta \"{saveName}\" y pégala en la carpeta de Stardew.",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "labelFrom": "Desde",
+  "labelTo": "Hasta",
+  "dlgDownloadNewDesc": "Se copiará \"{saveName}\" (Día {day}, {playtime}) a este equipo.",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgDownloadOverwrite": "Esto SOBRESCRIBE tu save local de \"{saveName}\".",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "dlgUploadNewDesc": "Se subirá \"{saveName}\" (Día {day}, {playtime}) a tu Drive.",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgUploadOverwriteDrive": "Esto SOBRESCRIBE la versión en Drive de \"{saveName}\".",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "pathLabelFromStardew": "Desde (Stardew)",
+  "pathLabelToValleySave": "Hasta (ValleySave)",
+  "chooserDesc": "Android protege la carpeta del juego. Elige cómo darle acceso a ValleySave — puedes cambiarlo cuando quieras.",
+  "chooserShizukuDesc": "Se configura 1 vez. Después ValleySave sincroniza sola, sin que toques nada. Única vía fiable en Android 13+.",
+  "chooserManualBadge": "SOLO ANDROID 11-12",
+  "chooserBridgeDesc": "Copias la partida con tu app de Archivos. Sin instalar nada. Solo en Android 11 y 12.",
+  "shizukuGateSubtitle": "Se configura una vez · solo la primera vez",
+  "shizukuStatusLabel": "Shizuku activo",
+  "shizukuStatusRunning": "Conectado y a la espera.",
+  "shizukuStatusNotDetected": "Aún no detectado.",
+  "shizukuPermLabel": "Permiso concedido",
+  "shizukuPermGranted": "ValleySave ya tiene acceso.",
+  "shizukuPermNotGranted": "Falta autorizar a ValleySave.",
+  "shizukuGrant": "conceder",
+  "shizukuGuideHeader": "GUÍA PASO A PASO",
+  "shizukuStep1DescFull": "Gratis. Si Google Play te lo bloquea en tu móvil, usa el APK oficial de GitHub.",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "Activa Opciones de desarrollador",
+  "shizukuStep2DescFull": "Ajustes → Información del teléfono → Información de software → toca \"Número de compilación\" 7 veces.",
+  "shizukuStep3TitleFull": "Activa Depuración inalámbrica",
+  "shizukuStep3DescFull": "El botón te lleva ahí y la resalta. Actívala (ON). Después toca \"Emparejar dispositivo con código de vinculación\" — aparecerá un código de 6 dígitos en pantalla.",
+  "btnOpenAndHighlight": "Abrir y resaltar",
+  "shizukuStep4Title": "Empareja e INICIA Shizuku",
+  "shizukuStep4Desc": "Abre Shizuku → \"Iniciar mediante depuración inalámbrica\" → \"Emparejar con código de sincronización\". Shizuku enviará una notificación indicando que está a la espera. Introduce el código de 6 dígitos que ves en la pantalla de Depuración inalámbrica. Tras emparejar, pulsa INICIAR — sin ese último toque Shizuku no queda activo.",
+  "btnOpenShizuku": "Abrir Shizuku",
+  "shizukuStep5Title": "Pon la energía de Shizuku en No restringido",
+  "shizukuStep5Desc": "Abre la info de la app → Batería → No restringido. Si no lo haces, el sistema cerrará Shizuku en segundo plano y tendrás que volver a darle a Iniciar.",
+  "btnShizukuAppInfo": "Info de app Shizuku",
+  "shizukuStep6DescActive": "Shizuku está activo. Pulsa el botón para autorizar.",
+  "shizukuStep6DescWaiting": "Disponible en cuanto Shizuku esté activo (paso 4).",
+  "btnGrantPermission": "Conceder permiso",
+  "btnCheckShizuku": "Ya lo he hecho · Comprobar",
+  "statusDone": "hecho",
+  "statusPending": "pendiente",
+  "latestBadge": "· ÚLTIMA PARTIDA ·"
 }

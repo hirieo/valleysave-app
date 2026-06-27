@@ -890,4 +890,178 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get hiwBridge2 =>
       'Upload to Drive: copy the save from Stardew to ValleySave\'s folder. ValleySave detects it and uploads it.';
+
+  @override
+  String get snackShizukuBattery =>
+      'Settings → Apps → Shizuku → Battery → Unrestricted.';
+
+  @override
+  String snackDriveError(String error) {
+    return 'Drive: $error';
+  }
+
+  @override
+  String get dlgDeleteLocalWarning =>
+      '⚠️ If you haven\'t uploaded to Drive, it will be lost forever. No recovery.';
+
+  @override
+  String get dlgDelete => 'Delete';
+
+  @override
+  String get dlgDownloadButton => 'Download';
+
+  @override
+  String get dlgUploadButton => 'Upload';
+
+  @override
+  String get dlgBridgeCopyTitle => 'Copy save to game';
+
+  @override
+  String dlgBridgeCopyDesc(String saveName) {
+    return 'Save is ready. With your Files app, copy the \"$saveName\" folder and paste it into the Stardew folder.';
+  }
+
+  @override
+  String get labelFrom => 'From';
+
+  @override
+  String get labelTo => 'To';
+
+  @override
+  String dlgDownloadNewDesc(String saveName, int day, String playtime) {
+    return '\"$saveName\" (Day $day, $playtime) will be copied to this device.';
+  }
+
+  @override
+  String dlgDownloadOverwrite(String saveName) {
+    return 'This OVERWRITES your local save of \"$saveName\".';
+  }
+
+  @override
+  String dlgUploadNewDesc(String saveName, int day, String playtime) {
+    return '\"$saveName\" (Day $day, $playtime) will be uploaded to your Drive.';
+  }
+
+  @override
+  String dlgUploadOverwriteDrive(String saveName) {
+    return 'This OVERWRITES the Drive version of \"$saveName\".';
+  }
+
+  @override
+  String get pathLabelFromStardew => 'From (Stardew)';
+
+  @override
+  String get pathLabelToValleySave => 'To (ValleySave)';
+
+  @override
+  String get chooserDesc =>
+      'Android protects the game folder. Choose how to give ValleySave access — you can change it anytime.';
+
+  @override
+  String get chooserShizukuDesc =>
+      'Configured once. After that ValleySave syncs on its own, without you touching anything. Only reliable method on Android 13+.';
+
+  @override
+  String get chooserManualBadge => 'ONLY ANDROID 11-12';
+
+  @override
+  String get chooserBridgeDesc =>
+      'Copy saves with your Files app. No extra install. Only on Android 11 and 12.';
+
+  @override
+  String get shizukuGateSubtitle => 'Configured once · first time only';
+
+  @override
+  String get shizukuStatusLabel => 'Shizuku active';
+
+  @override
+  String get shizukuStatusRunning => 'Connected and waiting.';
+
+  @override
+  String get shizukuStatusNotDetected => 'Not detected yet.';
+
+  @override
+  String get shizukuPermLabel => 'Permission granted';
+
+  @override
+  String get shizukuPermGranted => 'ValleySave already has access.';
+
+  @override
+  String get shizukuPermNotGranted => 'Need to authorize ValleySave.';
+
+  @override
+  String get shizukuGrant => 'grant';
+
+  @override
+  String get shizukuGuideHeader => 'STEP-BY-STEP GUIDE';
+
+  @override
+  String get shizukuStep1DescFull =>
+      'Free. If Google Play blocks it on your phone, use the official GitHub APK.';
+
+  @override
+  String get btnPlayStore => 'Play Store';
+
+  @override
+  String get btnApkGithub => 'APK GitHub';
+
+  @override
+  String get shizukuStep2TitleFull => 'Enable Developer Options';
+
+  @override
+  String get shizukuStep2DescFull =>
+      'Settings → Phone info → Software info → tap \"Build number\" 7 times.';
+
+  @override
+  String get shizukuStep3TitleFull => 'Enable Wireless Debugging';
+
+  @override
+  String get shizukuStep3DescFull =>
+      'The button takes you there and highlights it. Enable it (ON). Then tap \"Pair device with pairing code\" — a 6-digit code will appear on screen.';
+
+  @override
+  String get btnOpenAndHighlight => 'Open and highlight';
+
+  @override
+  String get shizukuStep4Title => 'Pair and START Shizuku';
+
+  @override
+  String get shizukuStep4Desc =>
+      'Open Shizuku → \"Start via Wireless Debugging\" → \"Pair with pairing code\". Shizuku will send a notification saying it\'s waiting. Enter the 6-digit code from the Wireless Debugging screen. After pairing, press START — without that last tap Shizuku won\'t be active.';
+
+  @override
+  String get btnOpenShizuku => 'Open Shizuku';
+
+  @override
+  String get shizukuStep5Title => 'Set Shizuku battery to Unrestricted';
+
+  @override
+  String get shizukuStep5Desc =>
+      'Open app info → Battery → Unrestricted. If you don\'t, the system will close Shizuku in the background and you\'ll have to press Start again.';
+
+  @override
+  String get btnShizukuAppInfo => 'Shizuku app info';
+
+  @override
+  String get shizukuStep6DescActive =>
+      'Shizuku is active. Tap the button to authorize.';
+
+  @override
+  String get shizukuStep6DescWaiting =>
+      'Available once Shizuku is active (step 4).';
+
+  @override
+  String get btnGrantPermission => 'Grant permission';
+
+  @override
+  String get btnCheckShizuku => 'Done · Check';
+
+  @override
+  String get statusDone => 'done';
+
+  @override
+  String get statusPending => 'pending';
+
+  @override
+  String get latestBadge => '· LATEST SAVE ·';
 }

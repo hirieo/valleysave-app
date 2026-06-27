@@ -110,9 +110,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text('${l10n.error}: $e'),
             backgroundColor: const Color(0xFFC06050),
             duration: const Duration(seconds: 10),
           ),

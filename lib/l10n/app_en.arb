@@ -104,5 +104,9 @@
   "languageDialogTitle": "App language",
   "searchHint": "Search…",
   "languageAuto": "Auto · system",
-  "languageAutoDesc": "Uses your system language"
+  "languageAutoDesc": "Uses your system language",
+  "privacyPolicyTitle": "Privacy policy",
+  "privacyBeforeStartTitle": "Before you start",
+  "privacyLastUpdated": "Last updated: June 2026",
+  "privacyAccept": "Got it, continue"
 }

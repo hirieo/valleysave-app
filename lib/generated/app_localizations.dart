@@ -706,6 +706,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Uses your system language'**
   String get languageAutoDesc;
+
+  /// No description provided for @privacyPolicyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get privacyPolicyTitle;
+
+  /// No description provided for @privacyBeforeStartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you start'**
+  String get privacyBeforeStartTitle;
+
+  /// No description provided for @privacyLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: June 2026'**
+  String get privacyLastUpdated;
+
+  /// No description provided for @privacyAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it, continue'**
+  String get privacyAccept;
 }
 
 class _AppLocalizationsDelegate

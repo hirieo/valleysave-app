@@ -472,6 +472,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'v{version} available'**
   String updateVersionAvailable(String version);
+
+  /// No description provided for @sectionMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
+  String get sectionMode;
+
+  /// No description provided for @sectionSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Season'**
+  String get sectionSeason;
+
+  /// No description provided for @sectionLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get sectionLanguage;
+
+  /// No description provided for @modeAutoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get modeAutoTitle;
+
+  /// No description provided for @modeAutoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Follows your active save and, if no saves, your real location.'**
+  String get modeAutoDesc;
+
+  /// No description provided for @modeSavesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'By save'**
+  String get modeSavesTitle;
+
+  /// No description provided for @modeSavesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Always uses the season from your most recent save.'**
+  String get modeSavesDesc;
+
+  /// No description provided for @modeGeoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'By location'**
+  String get modeGeoTitle;
+
+  /// No description provided for @modeGeoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Always uses the real season of your location.'**
+  String get modeGeoDesc;
+
+  /// No description provided for @modeFixedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed season'**
+  String get modeFixedTitle;
+
+  /// No description provided for @modeFixedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Always shows the same season.'**
+  String get modeFixedDesc;
+
+  /// No description provided for @modeRandomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Random'**
+  String get modeRandomTitle;
+
+  /// No description provided for @modeRandomDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Picks a different season each time you open the app.'**
+  String get modeRandomDesc;
+
+  /// No description provided for @seasonInitial.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial'**
+  String get seasonInitial;
+
+  /// No description provided for @seasonSpring.
+  ///
+  /// In en, this message translates to:
+  /// **'Spring'**
+  String get seasonSpring;
+
+  /// No description provided for @seasonSummer.
+  ///
+  /// In en, this message translates to:
+  /// **'Summer'**
+  String get seasonSummer;
+
+  /// No description provided for @seasonFall.
+  ///
+  /// In en, this message translates to:
+  /// **'Fall'**
+  String get seasonFall;
+
+  /// No description provided for @seasonWinter.
+  ///
+  /// In en, this message translates to:
+  /// **'Winter'**
+  String get seasonWinter;
+
+  /// No description provided for @autoPriorityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority order'**
+  String get autoPriorityTitle;
+
+  /// No description provided for @autoStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'First launch'**
+  String get autoStep1Title;
+
+  /// No description provided for @autoStep1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the initial state.'**
+  String get autoStep1Desc;
+
+  /// No description provided for @autoStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Active save'**
+  String get autoStep2Title;
+
+  /// No description provided for @autoStep2Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses the season from your last synced save.'**
+  String get autoStep2Desc;
+
+  /// No description provided for @autoStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get autoStep3Title;
+
+  /// No description provided for @autoStep3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Detects your hemisphere and the real season of your region.'**
+  String get autoStep3Desc;
+
+  /// No description provided for @autoStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get autoStep4Title;
+
+  /// No description provided for @autoStep4Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial (night mode) if no data is available.'**
+  String get autoStep4Desc;
+
+  /// No description provided for @versionInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed version'**
+  String get versionInstalled;
+
+  /// No description provided for @updateNeverChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Never checked'**
+  String get updateNeverChecked;
+
+  /// No description provided for @updateCheckedNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked now'**
+  String get updateCheckedNow;
+
+  /// No description provided for @updateOutdatedDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Not up to date · Download'**
+  String get updateOutdatedDownload;
+
+  /// No description provided for @disconnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect Drive?'**
+  String get disconnectTitle;
+
+  /// No description provided for @disconnectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your saves on Drive won\'t be deleted. You can reconnect anytime.'**
+  String get disconnectBody;
+
+  /// No description provided for @disconnectButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect Drive'**
+  String get disconnectButton;
+
+  /// No description provided for @languageTileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageTileLabel;
+
+  /// No description provided for @languageDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get languageDialogTitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search…'**
+  String get searchHint;
+
+  /// No description provided for @languageAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto · system'**
+  String get languageAuto;
+
+  /// No description provided for @languageAutoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your system language'**
+  String get languageAutoDesc;
 }
 
 class _AppLocalizationsDelegate

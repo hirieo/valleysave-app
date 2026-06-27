@@ -209,4 +209,126 @@ class AppLocalizationsDe extends AppLocalizations {
   String updateVersionAvailable(String version) {
     return 'v$version available';
   }
+
+  @override
+  String get sectionMode => 'Mode';
+
+  @override
+  String get sectionSeason => 'Season';
+
+  @override
+  String get sectionLanguage => 'Language';
+
+  @override
+  String get modeAutoTitle => 'Automatic';
+
+  @override
+  String get modeAutoDesc =>
+      'Follows your active save and, if no saves, your real location.';
+
+  @override
+  String get modeSavesTitle => 'By save';
+
+  @override
+  String get modeSavesDesc =>
+      'Always uses the season from your most recent save.';
+
+  @override
+  String get modeGeoTitle => 'By location';
+
+  @override
+  String get modeGeoDesc => 'Always uses the real season of your location.';
+
+  @override
+  String get modeFixedTitle => 'Fixed season';
+
+  @override
+  String get modeFixedDesc => 'Always shows the same season.';
+
+  @override
+  String get modeRandomTitle => 'Random';
+
+  @override
+  String get modeRandomDesc =>
+      'Picks a different season each time you open the app.';
+
+  @override
+  String get seasonInitial => 'Initial';
+
+  @override
+  String get seasonSpring => 'Spring';
+
+  @override
+  String get seasonSummer => 'Summer';
+
+  @override
+  String get seasonFall => 'Fall';
+
+  @override
+  String get seasonWinter => 'Winter';
+
+  @override
+  String get autoPriorityTitle => 'Priority order';
+
+  @override
+  String get autoStep1Title => 'First launch';
+
+  @override
+  String get autoStep1Desc => 'Shows the initial state.';
+
+  @override
+  String get autoStep2Title => 'Active save';
+
+  @override
+  String get autoStep2Desc => 'Uses the season from your last synced save.';
+
+  @override
+  String get autoStep3Title => 'Location';
+
+  @override
+  String get autoStep3Desc =>
+      'Detects your hemisphere and the real season of your region.';
+
+  @override
+  String get autoStep4Title => 'Default';
+
+  @override
+  String get autoStep4Desc => 'Initial (night mode) if no data is available.';
+
+  @override
+  String get versionInstalled => 'Installed version';
+
+  @override
+  String get updateNeverChecked => 'Never checked';
+
+  @override
+  String get updateCheckedNow => 'Checked now';
+
+  @override
+  String get updateOutdatedDownload => 'Not up to date · Download';
+
+  @override
+  String get disconnectTitle => 'Disconnect Drive?';
+
+  @override
+  String get disconnectBody =>
+      'Your saves on Drive won\'t be deleted. You can reconnect anytime.';
+
+  @override
+  String get disconnectButton => 'Disconnect Drive';
+
+  @override
+  String get languageTileLabel => 'Language';
+
+  @override
+  String get languageDialogTitle => 'App language';
+
+  @override
+  String get searchHint => 'Search…';
+
+  @override
+  String get languageAuto => 'Auto · system';
+
+  @override
+  String get languageAutoDesc => 'Uses your system language';
 }

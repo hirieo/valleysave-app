@@ -898,7 +898,8 @@ class _LanguageDialogState extends State<_LanguageDialog>
   Widget build(BuildContext context) {
     final filtered = widget.langs.where((e) {
       if (_query.isEmpty) return true;
-      return e.$3.toLowerCase().contains(_query);
+      final label = e.$1 == null ? widget.l10n.languageAuto : e.$3;
+      return label.toLowerCase().contains(_query);
     }).toList();
 
     return Dialog(
@@ -991,7 +992,7 @@ class _LanguageDialogState extends State<_LanguageDialog>
                     final selected = widget.langMatch(widget.current, locale);
                     return _LangRow(
                       flag: flag,
-                      label: label,
+                      label: locale == null ? widget.l10n.languageAuto : label,
                       isAuto: locale == null,
                       selected: selected,
                       accent: widget.accent,

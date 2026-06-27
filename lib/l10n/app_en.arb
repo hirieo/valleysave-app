@@ -108,5 +108,93 @@
   "privacyPolicyTitle": "Privacy policy",
   "privacyBeforeStartTitle": "Before you start",
   "privacyLastUpdated": "Last updated: June 2026",
-  "privacyAccept": "Got it, continue"
+  "privacyAccept": "Got it, continue",
+  "cardSynced": "Synced",
+  "cardLocalAhead": "Local ahead",
+  "cardDriveAhead": "Cloud ahead",
+  "cardLocalOnly": "Local only",
+  "cardDriveOnly": "Cloud only",
+  "cardTimeNow": "now",
+  "cardTimeMinutesAgo": "{minutes} min ago",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours}h ago",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days}d ago",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months} month{plural} ago",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      },
+      "plural": {
+        "type": "String"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "On this device",
+  "cardDetailRemoteTitle": "On Drive",
+  "cardDetailUpload": "Upload to Drive",
+  "cardDetailDownload": "Download save",
+  "cardDetailDeleteLabel": "Delete",
+  "cardDetailDeleteLocal": "Delete from this device",
+  "cardDetailDeleteRemote": "Delete from Drive",
+  "cardCloseBarrier": "Close",
+  "statDayYear": "Day {day} · Year {year}",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "Day {day}",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "Playtime",
+  "statMoney": "Coins",
+  "statTotal": "Total",
+  "statMineUnexplored": "Unexplored",
+  "statMine": "Mine",
+  "statMineLvl": "Mine · Lv",
+  "skillFarming": "Farming",
+  "skillForaging": "Foraging",
+  "skillMining": "Mining",
+  "skillFishing": "Fishing",
+  "skillCombat": "Combat",
+  "cardLocalPresence": "On this device",
+  "cardRemotePresence": "On Drive",
+  "cardNotPresent": "Not here",
+  "cardActionSynced": "Synced",
+  "cardActionUpload": "Upload",
+  "cardActionDownload": "Download",
+  "pillMonsters": "monsters",
+  "pillFriends": "friends",
+  "pillFaints": "faints"
 }

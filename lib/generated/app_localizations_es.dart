@@ -344,4 +344,136 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyAccept => 'Entendido, continuar';
+
+  @override
+  String get cardSynced => 'Sincronizado';
+
+  @override
+  String get cardLocalAhead => 'Local más avanzada';
+
+  @override
+  String get cardDriveAhead => 'Drive más avanzada';
+
+  @override
+  String get cardLocalOnly => 'Solo en este equipo';
+
+  @override
+  String get cardDriveOnly => 'Solo en Drive';
+
+  @override
+  String get cardTimeNow => 'ahora';
+
+  @override
+  String cardTimeMinutesAgo(int minutes) {
+    return 'hace $minutes min';
+  }
+
+  @override
+  String cardTimeHoursAgo(int hours) {
+    return 'hace $hours h';
+  }
+
+  @override
+  String cardTimeDaysAgo(int days) {
+    return 'hace $days d';
+  }
+
+  @override
+  String cardTimeMonthsAgo(int months, String plural) {
+    return 'hace $months mes$plural';
+  }
+
+  @override
+  String get cardDetailLocalTitle => 'En este equipo';
+
+  @override
+  String get cardDetailRemoteTitle => 'En Drive';
+
+  @override
+  String get cardDetailUpload => 'Subir a Drive';
+
+  @override
+  String get cardDetailDownload => 'Descargar partida';
+
+  @override
+  String get cardDetailDeleteLabel => 'Eliminar';
+
+  @override
+  String get cardDetailDeleteLocal => 'Eliminar de este equipo';
+
+  @override
+  String get cardDetailDeleteRemote => 'Eliminar de Drive';
+
+  @override
+  String get cardCloseBarrier => 'Cerrar';
+
+  @override
+  String statDayYear(int day, int year) {
+    return 'Día $day · Año $year';
+  }
+
+  @override
+  String statDayOnly(int day) {
+    return 'Día $day';
+  }
+
+  @override
+  String get statPlaytime => 'Tiempo jugado';
+
+  @override
+  String get statMoney => 'Monedas';
+
+  @override
+  String get statTotal => 'Total';
+
+  @override
+  String get statMineUnexplored => 'Sin explorar';
+
+  @override
+  String get statMine => 'Mina';
+
+  @override
+  String get statMineLvl => 'Mina · Nv';
+
+  @override
+  String get skillFarming => 'Cultivo';
+
+  @override
+  String get skillForaging => 'Recolec.';
+
+  @override
+  String get skillMining => 'Minería';
+
+  @override
+  String get skillFishing => 'Pesca';
+
+  @override
+  String get skillCombat => 'Combate';
+
+  @override
+  String get cardLocalPresence => 'EN ESTE EQUIPO';
+
+  @override
+  String get cardRemotePresence => 'EN DRIVE';
+
+  @override
+  String get cardNotPresent => 'No está aquí';
+
+  @override
+  String get cardActionSynced => 'Sincronizado';
+
+  @override
+  String get cardActionUpload => 'Subir';
+
+  @override
+  String get cardActionDownload => 'Descargar';
+
+  @override
+  String get pillMonsters => 'monstruos';
+
+  @override
+  String get pillFriends => 'amigos';
+
+  @override
+  String get pillFaints => 'desmayos';
 }

@@ -730,6 +730,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Got it, continue'**
   String get privacyAccept;
+
+  /// No description provided for @cardSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced'**
+  String get cardSynced;
+
+  /// No description provided for @cardLocalAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Local ahead'**
+  String get cardLocalAhead;
+
+  /// No description provided for @cardDriveAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud ahead'**
+  String get cardDriveAhead;
+
+  /// No description provided for @cardLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Local only'**
+  String get cardLocalOnly;
+
+  /// No description provided for @cardDriveOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud only'**
+  String get cardDriveOnly;
+
+  /// No description provided for @cardTimeNow.
+  ///
+  /// In en, this message translates to:
+  /// **'now'**
+  String get cardTimeNow;
+
+  /// No description provided for @cardTimeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min ago'**
+  String cardTimeMinutesAgo(int minutes);
+
+  /// No description provided for @cardTimeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h ago'**
+  String cardTimeHoursAgo(int hours);
+
+  /// No description provided for @cardTimeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d ago'**
+  String cardTimeDaysAgo(int days);
+
+  /// No description provided for @cardTimeMonthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{months} month{plural} ago'**
+  String cardTimeMonthsAgo(int months, String plural);
+
+  /// No description provided for @cardDetailLocalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On this device'**
+  String get cardDetailLocalTitle;
+
+  /// No description provided for @cardDetailRemoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On Drive'**
+  String get cardDetailRemoteTitle;
+
+  /// No description provided for @cardDetailUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to Drive'**
+  String get cardDetailUpload;
+
+  /// No description provided for @cardDetailDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download save'**
+  String get cardDetailDownload;
+
+  /// No description provided for @cardDetailDeleteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get cardDetailDeleteLabel;
+
+  /// No description provided for @cardDetailDeleteLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from this device'**
+  String get cardDetailDeleteLocal;
+
+  /// No description provided for @cardDetailDeleteRemote.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from Drive'**
+  String get cardDetailDeleteRemote;
+
+  /// No description provided for @cardCloseBarrier.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get cardCloseBarrier;
+
+  /// No description provided for @statDayYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day} · Year {year}'**
+  String statDayYear(int day, int year);
+
+  /// No description provided for @statDayOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String statDayOnly(int day);
+
+  /// No description provided for @statPlaytime.
+  ///
+  /// In en, this message translates to:
+  /// **'Playtime'**
+  String get statPlaytime;
+
+  /// No description provided for @statMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Coins'**
+  String get statMoney;
+
+  /// No description provided for @statTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get statTotal;
+
+  /// No description provided for @statMineUnexplored.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexplored'**
+  String get statMineUnexplored;
+
+  /// No description provided for @statMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine'**
+  String get statMine;
+
+  /// No description provided for @statMineLvl.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine · Lv'**
+  String get statMineLvl;
+
+  /// No description provided for @skillFarming.
+  ///
+  /// In en, this message translates to:
+  /// **'Farming'**
+  String get skillFarming;
+
+  /// No description provided for @skillForaging.
+  ///
+  /// In en, this message translates to:
+  /// **'Foraging'**
+  String get skillForaging;
+
+  /// No description provided for @skillMining.
+  ///
+  /// In en, this message translates to:
+  /// **'Mining'**
+  String get skillMining;
+
+  /// No description provided for @skillFishing.
+  ///
+  /// In en, this message translates to:
+  /// **'Fishing'**
+  String get skillFishing;
+
+  /// No description provided for @skillCombat.
+  ///
+  /// In en, this message translates to:
+  /// **'Combat'**
+  String get skillCombat;
+
+  /// No description provided for @cardLocalPresence.
+  ///
+  /// In en, this message translates to:
+  /// **'On this device'**
+  String get cardLocalPresence;
+
+  /// No description provided for @cardRemotePresence.
+  ///
+  /// In en, this message translates to:
+  /// **'On Drive'**
+  String get cardRemotePresence;
+
+  /// No description provided for @cardNotPresent.
+  ///
+  /// In en, this message translates to:
+  /// **'Not here'**
+  String get cardNotPresent;
+
+  /// No description provided for @cardActionSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced'**
+  String get cardActionSynced;
+
+  /// No description provided for @cardActionUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get cardActionUpload;
+
+  /// No description provided for @cardActionDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get cardActionDownload;
+
+  /// No description provided for @pillMonsters.
+  ///
+  /// In en, this message translates to:
+  /// **'monsters'**
+  String get pillMonsters;
+
+  /// No description provided for @pillFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'friends'**
+  String get pillFriends;
+
+  /// No description provided for @pillFaints.
+  ///
+  /// In en, this message translates to:
+  /// **'faints'**
+  String get pillFaints;
 }
 
 class _AppLocalizationsDelegate

@@ -860,4 +860,34 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get hiwCompatMods =>
       'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.';
+
+  @override
+  String get hiwComparePrimary => 'Total playtime';
+
+  @override
+  String get hiwCompareNoShown1 => 'Crop and animal status';
+
+  @override
+  String get hiwCompareNoShown2 => 'Inventory and items';
+
+  @override
+  String get hiwCompareNoShown3 => 'Individual relationships';
+
+  @override
+  String get hiwShizuku1 => 'Install Shizuku (Play Store or GitHub APK).';
+
+  @override
+  String get hiwShizuku2 =>
+      'Activate it with Wireless Debugging — ValleySave guides you step by step.';
+
+  @override
+  String get hiwShizuku3 => 'Grant permission to ValleySave when prompted.';
+
+  @override
+  String get hiwBridge1 =>
+      'Download from Drive: ValleySave leaves the save in its folder. You copy it with Files to Stardew\'s folder.';
+
+  @override
+  String get hiwBridge2 =>
+      'Upload to Drive: copy the save from Stardew to ValleySave\'s folder. ValleySave detects it and uploads it.';
 }

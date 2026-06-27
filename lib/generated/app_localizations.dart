@@ -1660,6 +1660,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.'**
   String get hiwCompatMods;
+
+  /// No description provided for @hiwComparePrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Total playtime'**
+  String get hiwComparePrimary;
+
+  /// No description provided for @hiwCompareNoShown1.
+  ///
+  /// In en, this message translates to:
+  /// **'Crop and animal status'**
+  String get hiwCompareNoShown1;
+
+  /// No description provided for @hiwCompareNoShown2.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory and items'**
+  String get hiwCompareNoShown2;
+
+  /// No description provided for @hiwCompareNoShown3.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual relationships'**
+  String get hiwCompareNoShown3;
+
+  /// No description provided for @hiwShizuku1.
+  ///
+  /// In en, this message translates to:
+  /// **'Install Shizuku (Play Store or GitHub APK).'**
+  String get hiwShizuku1;
+
+  /// No description provided for @hiwShizuku2.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate it with Wireless Debugging — ValleySave guides you step by step.'**
+  String get hiwShizuku2;
+
+  /// No description provided for @hiwShizuku3.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant permission to ValleySave when prompted.'**
+  String get hiwShizuku3;
+
+  /// No description provided for @hiwBridge1.
+  ///
+  /// In en, this message translates to:
+  /// **'Download from Drive: ValleySave leaves the save in its folder. You copy it with Files to Stardew\'s folder.'**
+  String get hiwBridge1;
+
+  /// No description provided for @hiwBridge2.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to Drive: copy the save from Stardew to ValleySave\'s folder. ValleySave detects it and uploads it.'**
+  String get hiwBridge2;
 }
 
 class _AppLocalizationsDelegate

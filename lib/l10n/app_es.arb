@@ -97,5 +97,9 @@
   "languageDialogTitle": "Idioma de la app",
   "searchHint": "Buscar…",
   "languageAuto": "Auto · sistema",
-  "languageAutoDesc": "Usa el idioma del sistema"
+  "languageAutoDesc": "Usa el idioma del sistema",
+  "privacyPolicyTitle": "Política de uso",
+  "privacyBeforeStartTitle": "Antes de empezar",
+  "privacyLastUpdated": "Última actualización: junio 2026",
+  "privacyAccept": "Entendido, continuar"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/models/season_state.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
@@ -57,6 +58,7 @@ class _PrivacyScreenState extends State<PrivacyScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: ValueListenableBuilder<SeasonState>(
@@ -110,7 +112,7 @@ class _PrivacyScreenState extends State<PrivacyScreen>
                                 child: Column(
                                   children: [
                                     Text(
-                                      widget.viewOnly ? 'Política de uso' : 'Antes de empezar',
+                                      widget.viewOnly ? l10n.privacyPolicyTitle : l10n.privacyBeforeStartTitle,
                                       style: GoogleFonts.bodoniModa(
                                         fontSize: 24,
                                         fontStyle: FontStyle.italic,
@@ -120,7 +122,7 @@ class _PrivacyScreenState extends State<PrivacyScreen>
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      'Última actualización: junio 2026',
+                                      l10n.privacyLastUpdated,
                                       style: GoogleFonts.firaCode(
                                         fontSize: 11,
                                         color: Colors.white.withValues(alpha: 0.45),
@@ -146,14 +148,14 @@ class _PrivacyScreenState extends State<PrivacyScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _section('Privacidad y uso de datos', 'ValleySave es una app para sincronizar tus partidas de Stardew Valley con tu propia cuenta de Google Drive.', accent: SeasonData.data[season]!.accentColor),
-                              _section('Qué datos usa', 'ValleySave accede únicamente a los archivos de guardado de Stardew Valley necesarios para hacer copias, sincronizarlas o restaurarlas.\n\nLa app no analiza tus partidas, no vende tus datos y no almacena información personal en servidores propios.', accent: SeasonData.data[season]!.accentColor),
-                              _section('Google Drive', 'Tus partidas se suben a tu propia cuenta de Google Drive. ValleySave no usa servidores propios para guardar tus partidas.\n\nLa app crea o utiliza la carpeta ValleySave/ en tu Drive. El acceso a Google Drive se usa solo para guardar, leer, actualizar o restaurar tus copias de seguridad.', accent: SeasonData.data[season]!.accentColor),
-                              _section('Permisos en Android', 'ValleySave puede necesitar permisos de almacenamiento o herramientas como Shizuku para acceder a los archivos de guardado. Estos permisos se usan solo para que la sincronización funcione.', accent: SeasonData.data[season]!.accentColor),
-                              _section('Anuncios', 'ValleySave puede mostrar anuncios mediante Google AdMob. AdMob puede usar el identificador de publicidad de tu dispositivo (GAID) para personalizar anuncios según la política de privacidad de Google (policies.google.com/privacy).\n\nPuedes desactivar la personalización de anuncios en Ajustes > Google > Anuncios.', accent: SeasonData.data[season]!.accentColor),
-                              _section('Responsabilidad', 'Tus archivos de guardado son responsabilidad tuya.\n\nAunque ValleySave intenta sincronizar de forma segura, no puede garantizar que no haya pérdidas o corrupciones en situaciones imprevistas. Por ejemplo, sincronizar desde dos dispositivos sin orden puede hacer que una partida sobrescriba a otra.\n\nRevisa siempre qué versión estás descargando antes de sobrescribir una partida local.', highlight: true, accent: SeasonData.data[season]!.accentColor),
-                              _section('Eliminar datos', 'Puedes borrar tus copias sincronizadas eliminando manualmente la carpeta ValleySave/ de Google Drive.\n\nTambién puedes borrar los datos locales desde los ajustes de Android o desinstalar la app.', accent: SeasonData.data[season]!.accentColor),
-                              _section('Código fuente y contacto', 'ValleySave es un proyecto de código disponible bajo licencia Polyform Noncommercial. Puedes ver el código, estudiar cómo funciona y contribuir — pero no usarlo con fines comerciales.\n\ngithub.com/hirieo/valleysave-app', accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.privacyTitle, l10n.privacyDescription, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.whatDataTitle, l10n.whatDataDesc, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.googleDriveTitle, l10n.googleDriveDesc, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.androidPermissionsTitle, l10n.androidPermissionsDesc, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.adsTitle, l10n.adsDesc, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.responsibilityTitle, l10n.responsibilityDesc, highlight: true, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.deleteDataTitle, l10n.deleteDataDesc, accent: SeasonData.data[season]!.accentColor),
+                              _section(l10n.sourceCodeTitle, l10n.sourceCodeDesc, accent: SeasonData.data[season]!.accentColor),
                               const SizedBox(height: 8),
                             ],
                           ),
@@ -199,7 +201,7 @@ class _PrivacyScreenState extends State<PrivacyScreen>
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
-                                    'Entendido, continuar',
+                                    l10n.privacyAccept,
                                     style: GoogleFonts.firaCode(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,

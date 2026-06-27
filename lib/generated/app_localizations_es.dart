@@ -332,4 +332,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageAutoDesc => 'Usa el idioma del sistema';
+
+  @override
+  String get privacyPolicyTitle => 'Política de uso';
+
+  @override
+  String get privacyBeforeStartTitle => 'Antes de empezar';
+
+  @override
+  String get privacyLastUpdated => 'Última actualización: junio 2026';
+
+  @override
+  String get privacyAccept => 'Entendido, continuar';
 }

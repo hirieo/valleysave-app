@@ -644,4 +644,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hiwPrivacyLink => 'Política de privacidad y uso';
+
+  @override
+  String get emptyNoSaves => 'No se encontraron partidas';
+
+  @override
+  String get emptyNoSavesHint => 'En este dispositivo no se leen saves locales';
+
+  @override
+  String get bridgeTitle => 'Trae tus partidas';
+
+  @override
+  String get bridgeDesc =>
+      'Para ver y subir tus partidas locales, cópialas con tu app de Archivos desde la carpeta de Stardew a esta carpeta de ValleySave. Luego desliza para refrescar.';
+
+  @override
+  String get bridgeRefresh => 'Refrescar';
+
+  @override
+  String get bridgeChangeMode => 'Cambiar método';
+
+  @override
+  String get loaderLoading => 'CARGANDO';
+
+  @override
+  String get loaderConnecting => 'conectando con Drive…';
 }

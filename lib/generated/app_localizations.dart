@@ -1270,6 +1270,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy policy and usage'**
   String get hiwPrivacyLink;
+
+  /// No description provided for @emptyNoSaves.
+  ///
+  /// In en, this message translates to:
+  /// **'No saves found'**
+  String get emptyNoSaves;
+
+  /// No description provided for @emptyNoSavesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No local saves can be read on this device'**
+  String get emptyNoSavesHint;
+
+  /// No description provided for @bridgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring your saves'**
+  String get bridgeTitle;
+
+  /// No description provided for @bridgeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'To see and upload your local saves, copy them with your Files app from the Stardew folder to this ValleySave folder. Then swipe to refresh.'**
+  String get bridgeDesc;
+
+  /// No description provided for @bridgeRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get bridgeRefresh;
+
+  /// No description provided for @bridgeChangeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Change method'**
+  String get bridgeChangeMode;
+
+  /// No description provided for @loaderLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'LOADING'**
+  String get loaderLoading;
+
+  /// No description provided for @loaderConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'connecting to Drive…'**
+  String get loaderConnecting;
 }
 
 class _AppLocalizationsDelegate

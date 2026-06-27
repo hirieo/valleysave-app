@@ -640,4 +640,29 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hiwPrivacyLink => 'Privacy policy and usage';
+
+  @override
+  String get emptyNoSaves => 'No saves found';
+
+  @override
+  String get emptyNoSavesHint => 'No local saves can be read on this device';
+
+  @override
+  String get bridgeTitle => 'Bring your saves';
+
+  @override
+  String get bridgeDesc =>
+      'To see and upload your local saves, copy them with your Files app from the Stardew folder to this ValleySave folder. Then swipe to refresh.';
+
+  @override
+  String get bridgeRefresh => 'Refresh';
+
+  @override
+  String get bridgeChangeMode => 'Change method';
+
+  @override
+  String get loaderLoading => 'LOADING';
+
+  @override
+  String get loaderConnecting => 'connecting to Drive…';
 }

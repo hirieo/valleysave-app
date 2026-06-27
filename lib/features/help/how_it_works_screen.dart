@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/models/season_state.dart';
@@ -69,6 +70,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: ValueListenableBuilder<SeasonState>(
@@ -104,7 +106,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                 ),
                 child: Column(
                   children: [
-                  _header(context),
+                  _header(context, l10n),
                   Expanded(
                     child: SingleChildScrollView(
                       controller: _scrollController,
@@ -115,13 +117,13 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              _sectionSync(),
+                              _sectionSync(l10n),
                               const SizedBox(height: 12),
-                              _sectionUpload(),
+                              _sectionUpload(l10n),
                               const SizedBox(height: 12),
-                              _sectionDownload(),
+                              _sectionDownload(l10n),
                               const SizedBox(height: 12),
-                              _sectionCompares(),
+                              _sectionCompares(l10n),
                               const SizedBox(height: 12),
                               _sectionConflicts(),
                               const SizedBox(height: 12),
@@ -157,7 +159,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Header ────────────────────────────────────────────────────────────────
 
-  Widget _header(BuildContext context) {
+  Widget _header(BuildContext context, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
       child: Center(
@@ -175,7 +177,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             ),
           ),
           Text(
-            'Cómo funciona',
+            l10n.hiwTitle,
             style: GoogleFonts.bodoniModa(
               fontSize: 24,
               fontStyle: FontStyle.italic,
@@ -192,17 +194,16 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: sync overview ────────────────────────────────────────────────
 
-  Widget _sectionSync() {
+  Widget _sectionSync(AppLocalizations l10n) {
     return _infoCard(
       icon: Icons.sync_rounded,
       color: AppColors.accent,
-      title: 'Cómo se sincroniza',
+      title: l10n.hiwSyncTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'ValleySave usa tu propio Google Drive para mover partidas entre '
-            'dispositivos. No hay servidores intermedios: los archivos son tuyos.',
+            l10n.hiwSyncIntro,
             style: _body(),
           ),
           const SizedBox(height: 18),
@@ -272,17 +273,16 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: upload ───────────────────────────────────────────────────────
 
-  Widget _sectionUpload() {
+  Widget _sectionUpload(AppLocalizations l10n) {
     return _infoCard(
       icon: Icons.cloud_upload_outlined,
       color: AppColors.accent,
-      title: 'Subir una partida',
+      title: l10n.hiwUploadTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Al subir, ValleySave copia los dos archivos del save (SaveGameInfo '
-            '+ archivo de granja) a tu carpeta ValleySave/ en Drive.',
+            l10n.hiwUploadDesc,
             style: _body(),
           ),
           const SizedBox(height: 12),
@@ -304,18 +304,17 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: download ─────────────────────────────────────────────────────
 
-  Widget _sectionDownload() {
+  Widget _sectionDownload(AppLocalizations l10n) {
     const blue = Color(0xFF4A90D9);
     return _infoCard(
       icon: Icons.cloud_download_outlined,
       color: blue,
-      title: 'Descargar una partida',
+      title: l10n.hiwDownloadTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Al descargar, ValleySave trae los archivos de Drive y los coloca '
-            'directamente en la carpeta del juego.',
+            l10n.hiwDownloadDesc,
             style: _body(),
           ),
           const SizedBox(height: 12),
@@ -338,11 +337,11 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
 
   // ── Section: what's compared ──────────────────────────────────────────────
 
-  Widget _sectionCompares() {
+  Widget _sectionCompares(AppLocalizations l10n) {
     return _infoCard(
       icon: Icons.timer_outlined,
       color: AppColors.green,
-      title: '¿Qué se compara?',
+      title: l10n.hiwCompareTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

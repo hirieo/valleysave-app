@@ -2001,6 +2001,7 @@ class _SeasonalLoaderState extends State<_SeasonalLoader>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -2015,7 +2016,7 @@ class _SeasonalLoaderState extends State<_SeasonalLoader>
           ),
           const SizedBox(height: 12),
           Text(
-            'CARGANDO',
+            l10n.loaderLoading,
             style: GoogleFonts.firaCode(
               fontSize: 8,
               letterSpacing: .14,
@@ -2024,7 +2025,7 @@ class _SeasonalLoaderState extends State<_SeasonalLoader>
           ),
           const SizedBox(height: 3),
           Text(
-            'conectando con Drive…',
+            l10n.loaderConnecting,
             style: GoogleFonts.firaCode(
               fontSize: 7,
               letterSpacing: .05,

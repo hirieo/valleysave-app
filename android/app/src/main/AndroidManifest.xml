@@ -36,6 +36,17 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- FileProvider: permite instalar APKs descargados sin pasar por Chrome -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+
         <!-- Shizuku: acceso a /Android/data del juego sin root (Android 11+) -->
         <provider
             android:name="rikka.shizuku.ShizukuProvider"

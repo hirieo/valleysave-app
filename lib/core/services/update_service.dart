@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UpdateInfo {
   const UpdateInfo({
@@ -60,7 +60,7 @@ class UpdateService {
     required void Function(String error) onError,
   }) async {
     if (Platform.isAndroid) {
-      await _installAndroid(info.androidUrl, onError: onError);
+      await _installAndroid(info.androidUrl, onProgress: onProgress, onError: onError);
     } else if (Platform.isWindows) {
       await _installWindows(info.windowsUrl, onProgress: onProgress, onError: onError);
     }
@@ -70,11 +70,33 @@ class UpdateService {
 
   static Future<void> _installAndroid(
     String? apkUrl, {
+    required void Function(double) onProgress,
     required void Function(String) onError,
   }) async {
     if (apkUrl == null) { onError('APK not found in release assets'); return; }
     try {
-      await launchUrl(Uri.parse(apkUrl), mode: LaunchMode.externalApplication);
+      final tmp     = await getTemporaryDirectory();
+      final apkPath = '${tmp.path}/valleysave_update.apk';
+
+      final client = http.Client();
+      try {
+        final res      = await client.send(http.Request('GET', Uri.parse(apkUrl)));
+        final total    = res.contentLength ?? 0;
+        final bytes    = <int>[];
+        var   received = 0;
+        await for (final chunk in res.stream) {
+          bytes.addAll(chunk);
+          received += chunk.length;
+          if (total > 0) onProgress(received / total);
+        }
+        onProgress(1.0);
+        await File(apkPath).writeAsBytes(bytes);
+      } finally {
+        client.close();
+      }
+
+      const channel = MethodChannel('valleysave/apk_installer');
+      await channel.invokeMethod<void>('install', {'path': apkPath});
     } catch (e) {
       onError(e.toString());
     }

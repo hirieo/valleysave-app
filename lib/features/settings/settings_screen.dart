@@ -56,7 +56,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   late final Animation<double> _contentAnim;
   bool _disconnectPressed = false;
   bool _langTilePressed = false;
-  SeasonMode? _pressedMode;
+  bool _modeDropdownOpen = false;
+  bool _ddTrigPressed = false;
   SeasonState? _pressedSeason;
 
   @override
@@ -223,6 +224,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
     final l10n = AppLocalizations.of(context)!;
+    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: Stack(
@@ -303,59 +305,23 @@ class _SettingsScreenState extends State<SettingsScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(l10n.sectionMode.toUpperCase(), style: AppTypography.eyebrow()),
-                          const SizedBox(height: 12),
-                          _modeTile(
-                            SeasonMode.auto,
-                            l10n.modeAutoTitle,
-                            l10n.modeAutoDesc,
-                            l10n,
-                          ),
-                          const SizedBox(height: 8),
-                          _modeTile(
-                            SeasonMode.savesOnly,
-                            l10n.modeSavesTitle,
-                            l10n.modeSavesDesc,
-                            l10n,
-                          ),
-                          const SizedBox(height: 8),
-                          _modeTile(
-                            SeasonMode.geoOnly,
-                            l10n.modeGeoTitle,
-                            l10n.modeGeoDesc,
-                            l10n,
-                          ),
-                          const SizedBox(height: 8),
-                          _modeTile(
-                            SeasonMode.fixed,
-                            l10n.modeFixedTitle,
-                            l10n.modeFixedDesc,
-                            l10n,
-                          ),
-                          const SizedBox(height: 8),
-                          _modeTile(
-                            SeasonMode.random,
-                            l10n.modeRandomTitle,
-                            l10n.modeRandomDesc,
-                            l10n,
-                          ),
-                          if (_settings.mode == SeasonMode.fixed) ...[
-                            const SizedBox(height: 32),
-                            Text(l10n.sectionSeason.toUpperCase(), style: AppTypography.eyebrow()),
-                            const SizedBox(height: 12),
-                            _seasonPicker(l10n),
-                          ],
-                          if (_settings.mode == SeasonMode.auto) ...[
-                            const SizedBox(height: 32),
-                            _autoExplainer(l10n),
-                          ],
-                          const SizedBox(height: 32),
                           Text(l10n.sectionLanguage.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
                           ValueListenableBuilder<Locale?>(
                             valueListenable: LocaleController.instance.locale,
                             builder: (_, current, _) => _languageTile(current, l10n),
                           ),
+                          const SizedBox(height: 32),
+                          Text(l10n.sectionMode.toUpperCase(), style: AppTypography.eyebrow()),
+                          const SizedBox(height: 12),
+                          _modeDropdown(accent, l10n),
+                          _modeExplainer(accent, l10n),
+                          if (_settings.mode == SeasonMode.fixed) ...[
+                            const SizedBox(height: 32),
+                            Text(l10n.sectionSeason.toUpperCase(), style: AppTypography.eyebrow()),
+                            const SizedBox(height: 12),
+                            _seasonPicker(l10n),
+                          ],
                           const SizedBox(height: 32),
                           Text(l10n.application.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
@@ -381,93 +347,246 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _modeTile(SeasonMode mode, String label, String description, AppLocalizations l10n) {
-    final selected = _settings.mode == mode;
-    return GestureDetector(
-      onTap: () {
-        SeasonSettings next;
-        if (mode == SeasonMode.fixed) {
-          next = SeasonSettings(
-            mode: mode,
-            fixedSeason: _settings.fixedSeason ?? SeasonState.initial,
-          );
-        } else {
-          next = _settings.copyWith(mode: mode);
-        }
-        _save(next);
-      },
-      onTapDown: (_) => setState(() => _pressedMode = mode),
-      onTapUp: (_) => setState(() => _pressedMode = null),
-      onTapCancel: () => setState(() => _pressedMode = null),
-      child: AnimatedScale(
-        scale: _pressedMode == mode ? 0.97 : 1.0,
-        duration: _pressedMode == mode
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: selected
-              ? Color.alphaBlend(
-                  AppColors.accent.withValues(alpha: 0.16),
-                  const Color(0xFF040405),
-                ).withValues(alpha: 0.68)
-              : Colors.black.withValues(alpha: 0.45),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected
-                ? AppColors.accent.withValues(alpha: 0.60)
-                : Colors.white.withValues(alpha: 0.10),
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _modeDropdown(Color accent, AppLocalizations l10n) {
+    final modes = [
+      (SeasonMode.auto,      'AUT', l10n.modeAutoTitle),
+      (SeasonMode.savesOnly, 'SAV', l10n.modeSavesTitle),
+      (SeasonMode.geoOnly,   'GEO', l10n.modeGeoTitle),
+      (SeasonMode.fixed,     'FIX', l10n.modeFixedTitle),
+      (SeasonMode.random,    'RND', l10n.modeRandomTitle),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GestureDetector(
+          onTap: () => setState(() => _modeDropdownOpen = !_modeDropdownOpen),
+          onTapDown: (_) => setState(() => _ddTrigPressed = true),
+          onTapUp: (_) => setState(() => _ddTrigPressed = false),
+          onTapCancel: () => setState(() => _ddTrigPressed = false),
+          child: AnimatedScale(
+            scale: _ddTrigPressed ? 0.97 : 1.0,
+            duration: _ddTrigPressed
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: _modeDropdownOpen
+                    ? Colors.black.withValues(alpha: 0.70)
+                    : Colors.black.withValues(alpha: 0.45),
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(12),
+                  topRight: const Radius.circular(12),
+                  bottomLeft: Radius.circular(_modeDropdownOpen ? 0 : 12),
+                  bottomRight: Radius.circular(_modeDropdownOpen ? 0 : 12),
+                ),
+                border: Border.all(
+                  color: _modeDropdownOpen
+                      ? accent.withValues(alpha: 0.45)
+                      : Colors.white.withValues(alpha: 0.10),
+                ),
+              ),
+              child: Row(
                 children: [
-                  Text(
-                    label,
-                    style: AppTypography.bodyStrong(
-                      color: selected ? AppColors.accent : AppColors.text,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.sectionMode.toUpperCase(),
+                          style: AppTypography.mono(color: AppColors.textFaint, size: 9),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          _currentModeLabel(l10n),
+                          style: AppTypography.bodyStrong(color: accent),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(description, style: AppTypography.body()),
+                  AnimatedRotation(
+                    turns: _modeDropdownOpen ? 0.5 : 0.0,
+                    duration: const Duration(milliseconds: 350),
+                    curve: const Cubic(0.23, 1, 0.32, 1),
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: _modeDropdownOpen
+                          ? accent
+                          : Colors.white.withValues(alpha: 0.28),
+                      size: 22,
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            _radio(selected),
+          ),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 420),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          alignment: Alignment.topCenter,
+          child: _modeDropdownOpen
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF03080A).withValues(alpha: 0.97),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(14),
+                      bottomRight: Radius.circular(14),
+                    ),
+                    border: Border(
+                      top: BorderSide(color: accent, width: 1.5),
+                      left: BorderSide(color: accent.withValues(alpha: 0.28)),
+                      right: BorderSide(color: accent.withValues(alpha: 0.28)),
+                      bottom: BorderSide(color: accent.withValues(alpha: 0.28)),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < modes.length; i++) ...[
+                        if (i > 0)
+                          Divider(
+                            height: 0,
+                            thickness: 0.5,
+                            color: Colors.white.withValues(alpha: 0.05),
+                          ),
+                        _modeListItem(
+                          modes[i].$1,
+                          modes[i].$2,
+                          modes[i].$3,
+                          _settings.mode == modes[i].$1,
+                          accent,
+                        ),
+                      ],
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  Widget _modeListItem(
+      SeasonMode mode, String badge, String label, bool selected, Color accent) {
+    return GestureDetector(
+      onTap: () {
+        final next = mode == SeasonMode.fixed
+            ? SeasonSettings(
+                mode: mode,
+                fixedSeason: _settings.fixedSeason ?? SeasonState.initial,
+              )
+            : _settings.copyWith(mode: mode);
+        setState(() => _modeDropdownOpen = false);
+        _save(next);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: selected ? Colors.white.withValues(alpha: 0.05) : Colors.transparent,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              width: 34,
+              height: 20,
+              decoration: BoxDecoration(
+                color: selected
+                    ? accent.withValues(alpha: 0.15)
+                    : Colors.white.withValues(alpha: 0.06),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: selected
+                      ? accent.withValues(alpha: 0.45)
+                      : Colors.white.withValues(alpha: 0.10),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  badge,
+                  style: AppTypography.mono(
+                    color: selected ? accent : AppColors.textFaint,
+                    size: 9,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                label,
+                style: selected
+                    ? AppTypography.bodyStrong(color: accent)
+                    : AppTypography.body(color: AppColors.text.withValues(alpha: 0.55)),
+              ),
+            ),
+            AnimatedOpacity(
+              opacity: selected ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: Icon(Icons.check_rounded, size: 16, color: accent),
+            ),
           ],
         ),
-      ),
       ),
     );
   }
 
-  Widget _radio(bool selected) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOut,
-      width: 20,
-      height: 20,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: selected ? AppColors.accent : Colors.transparent,
-        border: Border.all(
-          color: selected ? AppColors.accent : Colors.white.withValues(alpha: 0.20),
-          width: selected ? 0 : 2,
-        ),
+  Widget _modeExplainer(Color accent, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 280),
+        transitionBuilder: (child, anim) => FadeTransition(opacity: anim, child: child),
+        child: _settings.mode == SeasonMode.auto
+            ? KeyedSubtree(
+                key: const ValueKey('auto'),
+                child: _autoExplainer(accent, l10n),
+              )
+            : Container(
+                key: ValueKey(_settings.mode),
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: accent.withValues(alpha: 0.30)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _currentModeLabel(l10n).toUpperCase(),
+                      style: AppTypography.mono(color: accent, size: 9),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(_currentModeDesc(l10n), style: AppTypography.body()),
+                  ],
+                ),
+              ),
       ),
-      child: selected
-          ? const Icon(Icons.check_rounded, size: 13, color: Colors.black)
-          : null,
     );
   }
+
+  String _currentModeLabel(AppLocalizations l10n) => switch (_settings.mode) {
+    SeasonMode.auto      => l10n.modeAutoTitle,
+    SeasonMode.savesOnly => l10n.modeSavesTitle,
+    SeasonMode.geoOnly   => l10n.modeGeoTitle,
+    SeasonMode.fixed     => l10n.modeFixedTitle,
+    SeasonMode.random    => l10n.modeRandomTitle,
+  };
+
+  String _currentModeDesc(AppLocalizations l10n) => switch (_settings.mode) {
+    SeasonMode.auto      => l10n.modeAutoDesc,
+    SeasonMode.savesOnly => l10n.modeSavesDesc,
+    SeasonMode.geoOnly   => l10n.modeGeoDesc,
+    SeasonMode.fixed     => l10n.modeFixedDesc,
+    SeasonMode.random    => l10n.modeRandomDesc,
+  };
 
   Widget _seasonPicker(AppLocalizations l10n) {
     final seasons = [
@@ -529,18 +648,18 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _autoExplainer(AppLocalizations l10n) {
+  Widget _autoExplainer(Color accent, AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.45),
+        color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: accent.withValues(alpha: 0.30)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.autoPriorityTitle, style: AppTypography.eyebrow()),
+          Text(l10n.autoPriorityTitle, style: AppTypography.eyebrow(color: accent)),
           const SizedBox(height: 12),
           _step('1', l10n.autoStep1Title, l10n.autoStep1Desc),
           const SizedBox(height: 10),

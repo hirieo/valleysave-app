@@ -137,12 +137,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String confirmDelete(Object saveName) {
-    return '저장 $saveName이(가) Google Drive 휴지통으로 이동합니다.';
+    return '$saveName 저장이 Google Drive 휴지통으로 이동합니다.';
   }
 
   @override
   String deleteFromDeviceMessage(Object saveName) {
-    return '저장 $saveName이(가) 이 기기에서 영구적으로 삭제됩니다.';
+    return '$saveName 저장이 이 기기에서 영구적으로 삭제됩니다.';
   }
 
   @override
@@ -174,7 +174,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get disconnect => '연결 해제';
 
   @override
-  String get ok => '확인';
+  String get ok => 'OK';
 
   @override
   String get yes => '예';
@@ -183,723 +183,707 @@ class AppLocalizationsKo extends AppLocalizations {
   String get no => '아니오';
 
   @override
-  String get welcomeHeroPre => 'Never lose\nyour ';
+  String get welcomeHeroPre => '농장을\n잃지 마세요,';
 
   @override
-  String get welcomeHeroAccent => 'farm,';
+  String get welcomeHeroAccent => '어디든지';
 
   @override
-  String get welcomeHeroPost => '\ntake it with you.';
+  String get welcomeHeroPost => '\n가져가세요.';
 
   @override
   String get welcomeSubtitle =>
-      'Sync your Stardew Valley saves across all your devices. Your data lives in your own Google Drive — no servers, no subscriptions, under your control.';
+      '모든 기기에서 Stardew Valley 저장을 동기화하세요. 데이터는 자신의 Google Drive에 있습니다 — 서버 없음, 구독 없음, 완전한 제어.';
 
   @override
-  String get welcomeDriveConnected => 'Drive connected';
+  String get welcomeDriveConnected => 'Drive 연결됨';
 
   @override
-  String get welcomeFooterTagline => '· Non-commercial · Free forever ·';
+  String get welcomeFooterTagline => '· 비상업적 · 영구 무료 ·';
 
   @override
   String updateVersionAvailable(String version) {
-    return 'v$version available';
+    return 'v$version 사용 가능';
   }
 
   @override
-  String get sectionMode => 'Mode';
+  String get sectionMode => '모드';
 
   @override
-  String get sectionSeason => 'Season';
+  String get sectionSeason => '계절';
 
   @override
-  String get sectionLanguage => 'Language';
+  String get sectionLanguage => '언어';
 
   @override
-  String get modeAutoTitle => 'Automatic';
+  String get modeAutoTitle => '자동';
 
   @override
-  String get modeAutoDesc =>
-      'Follows your active save and, if no saves, your real location.';
+  String get modeAutoDesc => '활성 저장을 따르며, 저장이 없으면 실제 위치를 따릅니다.';
 
   @override
-  String get modeSavesTitle => 'By save';
+  String get modeSavesTitle => '저장별';
 
   @override
-  String get modeSavesDesc =>
-      'Always uses the season from your most recent save.';
+  String get modeSavesDesc => '항상 최근 저장의 계절을 사용합니다.';
 
   @override
-  String get modeGeoTitle => 'By location';
+  String get modeGeoTitle => '위치별';
 
   @override
-  String get modeGeoDesc => 'Always uses the real season of your location.';
+  String get modeGeoDesc => '항상 해당 위치의 실제 계절을 사용합니다.';
 
   @override
-  String get modeFixedTitle => 'Fixed season';
+  String get modeFixedTitle => '고정 계절';
 
   @override
-  String get modeFixedDesc => 'Always shows the same season.';
+  String get modeFixedDesc => '항상 동일한 계절을 표시합니다.';
 
   @override
-  String get modeRandomTitle => 'Random';
+  String get modeRandomTitle => '무작위';
 
   @override
-  String get modeRandomDesc =>
-      'Picks a different season each time you open the app.';
+  String get modeRandomDesc => '앱을 열 때마다 다른 계절을 선택합니다.';
 
   @override
-  String get seasonInitial => 'Initial';
+  String get seasonInitial => '초기';
 
   @override
-  String get seasonSpring => 'Spring';
+  String get seasonSpring => '봄';
 
   @override
-  String get seasonSummer => 'Summer';
+  String get seasonSummer => '여름';
 
   @override
-  String get seasonFall => 'Fall';
+  String get seasonFall => '가을';
 
   @override
-  String get seasonWinter => 'Winter';
+  String get seasonWinter => '겨울';
 
   @override
-  String get autoPriorityTitle => 'Priority order';
+  String get autoPriorityTitle => '우선 순위';
 
   @override
-  String get autoStep1Title => 'First launch';
+  String get autoStep1Title => '처음 실행';
 
   @override
-  String get autoStep1Desc => 'Shows the initial state.';
+  String get autoStep1Desc => '초기 상태를 표시합니다.';
 
   @override
-  String get autoStep2Title => 'Active save';
+  String get autoStep2Title => '활성 저장';
 
   @override
-  String get autoStep2Desc => 'Uses the season from your last synced save.';
+  String get autoStep2Desc => '마지막 동기화된 저장의 계절을 사용합니다.';
 
   @override
-  String get autoStep3Title => 'Location';
+  String get autoStep3Title => '위치';
 
   @override
-  String get autoStep3Desc =>
-      'Detects your hemisphere and the real season of your region.';
+  String get autoStep3Desc => '반구 및 지역의 실제 계절을 감지합니다.';
 
   @override
-  String get autoStep4Title => 'Default';
+  String get autoStep4Title => '기본값';
 
   @override
-  String get autoStep4Desc => 'Initial (night mode) if no data is available.';
+  String get autoStep4Desc => '사용 가능한 데이터가 없으면 초기 (야간 모드)입니다.';
 
   @override
-  String get versionInstalled => 'Installed version';
+  String get versionInstalled => '설치된 버전';
 
   @override
-  String get updateNeverChecked => 'Never checked';
+  String get updateNeverChecked => '확인하지 않음';
 
   @override
-  String get updateCheckedNow => 'Just checked';
+  String get updateCheckedNow => '방금 확인함';
 
   @override
-  String get updateOutdatedDownload => 'Not up to date · Download';
+  String get updateOutdatedDownload => '최신이 아님 · 다운로드';
 
   @override
-  String get updateDownloading => 'Downloading update…';
+  String get updateDownloading => '업데이트 다운로드 중…';
 
   @override
-  String get updateError => 'Error — tap to retry';
+  String get updateError => '오류 — 다시 시도하려면 탭하세요';
 
   @override
-  String get disconnectTitle => 'Disconnect Drive?';
+  String get disconnectTitle => 'Drive 연결을 끊으시겠습니까?';
 
   @override
-  String get disconnectBody =>
-      'Your saves on Drive won\'t be deleted. You can reconnect anytime.';
+  String get disconnectBody => 'Drive의 저장은 삭제되지 않습니다. 언제든지 다시 연결할 수 있습니다.';
 
   @override
-  String get disconnectButton => 'Disconnect Drive';
+  String get disconnectButton => 'Drive 연결 해제';
 
   @override
-  String get languageTileLabel => 'Language';
+  String get languageTileLabel => '언어';
 
   @override
-  String get languageDialogTitle => 'App language';
+  String get languageDialogTitle => '앱 언어';
 
   @override
-  String get searchHint => 'Search…';
+  String get searchHint => '검색…';
 
   @override
-  String get languageAuto => 'System language';
+  String get languageAuto => '시스템 언어';
 
   @override
-  String get languageAutoDesc => 'Uses your system language';
+  String get languageAutoDesc => '시스템 언어를 사용합니다';
 
   @override
-  String get privacyPolicyTitle => 'Privacy policy';
+  String get privacyPolicyTitle => '개인정보 보호정책';
 
   @override
-  String get privacyBeforeStartTitle => 'Before you start';
+  String get privacyBeforeStartTitle => '시작하기 전에';
 
   @override
-  String get privacyLastUpdated => 'Last updated: June 2026';
+  String get privacyLastUpdated => '마지막 업데이트: 2026년 6월';
 
   @override
-  String get privacyAccept => 'Got it, continue';
+  String get privacyAccept => '알겠습니다, 계속';
 
   @override
-  String get cardSynced => 'Synced';
+  String get cardSynced => '동기화됨';
 
   @override
-  String get cardLocalAhead => 'Local ahead';
+  String get cardLocalAhead => '로컬이 더 최신';
 
   @override
-  String get cardDriveAhead => 'Drive ahead';
+  String get cardDriveAhead => 'Drive가 더 최신';
 
   @override
-  String get cardLocalOnly => 'Local only';
+  String get cardLocalOnly => '로컬만';
 
   @override
-  String get cardDriveOnly => 'Drive only';
+  String get cardDriveOnly => 'Drive만';
 
   @override
-  String get cardTimeNow => 'now';
+  String get cardTimeNow => '지금';
 
   @override
   String cardTimeMinutesAgo(int minutes) {
-    return '$minutes min ago';
+    return '$minutes분 전';
   }
 
   @override
   String cardTimeHoursAgo(int hours) {
-    return '${hours}h ago';
+    return '$hours시간 전';
   }
 
   @override
   String cardTimeDaysAgo(int days) {
-    return '${days}d ago';
+    return '$days일 전';
   }
 
   @override
   String cardTimeMonthsAgo(int months) {
-    return '${months}mo ago';
+    return '$months개월 전';
   }
 
   @override
-  String get cardDetailLocalTitle => 'On this device';
+  String get cardDetailLocalTitle => '이 기기에서';
 
   @override
-  String get cardDetailRemoteTitle => 'On Drive';
+  String get cardDetailRemoteTitle => 'Drive에서';
 
   @override
-  String get cardDetailUpload => 'Upload to Drive';
+  String get cardDetailUpload => 'Drive에 업로드';
 
   @override
-  String get cardDetailDownload => 'Download save';
+  String get cardDetailDownload => '저장 다운로드';
 
   @override
-  String get cardDetailDeleteLabel => 'Delete';
+  String get cardDetailDeleteLabel => '삭제';
 
   @override
-  String get cardDetailDeleteLocal => 'Delete from this device';
+  String get cardDetailDeleteLocal => '이 기기에서 삭제';
 
   @override
-  String get cardDetailDeleteRemote => 'Delete from Drive';
+  String get cardDetailDeleteRemote => 'Drive에서 삭제';
 
   @override
-  String get cardCloseBarrier => 'Close';
+  String get cardCloseBarrier => '닫기';
 
   @override
   String statDayYear(int day, int year) {
-    return 'Day $day · Year $year';
+    return '$day일 · $year년';
   }
 
   @override
   String statDayOnly(int day) {
-    return 'Day $day';
+    return '$day일';
   }
 
   @override
-  String get statPlaytime => 'Playtime';
+  String get statPlaytime => '플레이 시간';
 
   @override
-  String get statMoney => 'Coins';
+  String get statMoney => '코인';
 
   @override
-  String get statTotal => 'Total';
+  String get statTotal => '합계';
 
   @override
-  String get statMineUnexplored => 'Unexplored';
+  String get statMineUnexplored => '미탐험';
 
   @override
-  String get statMine => 'Mine';
+  String get statMine => '광산';
 
   @override
-  String get statMineLvl => 'Mine · Lv';
+  String get statMineLvl => '광산 · Lv';
 
   @override
-  String get skillFarming => 'Farming';
+  String get skillFarming => '농업';
 
   @override
-  String get skillForaging => 'Foraging';
+  String get skillForaging => '채집';
 
   @override
-  String get skillMining => 'Mining';
+  String get skillMining => '채광';
 
   @override
-  String get skillFishing => 'Fishing';
+  String get skillFishing => '낚시';
 
   @override
-  String get skillCombat => 'Combat';
+  String get skillCombat => '전투';
 
   @override
-  String get cardLocalPresence => 'On this device';
+  String get cardLocalPresence => '이 기기에서';
 
   @override
-  String get cardRemotePresence => 'On Drive';
+  String get cardRemotePresence => 'Drive에서';
 
   @override
-  String get cardNotPresent => 'Not here';
+  String get cardNotPresent => '여기에 없음';
 
   @override
-  String get cardActionSynced => 'Synced';
+  String get cardActionSynced => '동기화됨';
 
   @override
-  String get cardActionUpload => 'Upload';
+  String get cardActionUpload => '업로드';
 
   @override
-  String get cardActionDownload => 'Download';
+  String get cardActionDownload => '다운로드';
 
   @override
-  String get pillMonsters => 'monsters';
+  String get pillMonsters => '몬스터';
 
   @override
-  String get pillFriends => 'friends';
+  String get pillFriends => '친구';
 
   @override
-  String get pillFaints => 'faints';
+  String get pillFaints => '기절';
 
   @override
-  String get pillSleeps => 'Sleeps';
+  String get pillSleeps => '수면';
 
   @override
-  String get hiwTitle => 'How it works';
+  String get hiwTitle => '작동 방식';
 
   @override
-  String get hiwSyncTitle => 'How sync works';
+  String get hiwSyncTitle => '동기화 방식';
 
   @override
   String get hiwSyncIntro =>
-      'ValleySave uses your own Google Drive to move saves between devices. No intermediary servers: the files are yours.';
+      'ValleySave는 기기 간에 저장을 이동하기 위해 자신의 Google Drive를 사용합니다. 중개 서버 없음: 파일은 귀하의 것입니다.';
 
   @override
-  String get hiwSyncDevice => 'Your\ndevice';
+  String get hiwSyncDevice => '귀하의\n기기';
 
   @override
   String get hiwSyncCloud => 'Google\nDrive';
 
   @override
-  String get hiwSyncOtherDevice => 'Other\ndevice';
+  String get hiwSyncOtherDevice => '다른\n기기';
 
   @override
-  String get hiwUploadTitle => 'Upload a save';
+  String get hiwUploadTitle => '저장 업로드';
 
   @override
   String get hiwUploadDesc =>
-      'When you upload, ValleySave copies both save files (SaveGameInfo + farm file) to your ValleySave/ folder on Drive.';
+      '업로드할 때 ValleySave는 두 저장 파일 (SaveGameInfo + 농장 파일)을 Drive의 ValleySave/ 폴더에 복사합니다.';
 
   @override
-  String get hiwDownloadTitle => 'Download a save';
+  String get hiwDownloadTitle => '저장 다운로드';
 
   @override
   String get hiwDownloadDesc =>
-      'When you download, ValleySave brings the files from Drive and places them directly in the game folder.';
+      '다운로드할 때 ValleySave는 Drive의 파일을 가져와 게임 폴더에 직접 배치합니다.';
 
   @override
-  String get hiwCompareTitle => 'What does it compare?';
+  String get hiwCompareTitle => '무엇을 비교합니까?';
 
   @override
   String get hiwCompareIntro =>
-      'To know which version is ahead, ValleySave uses total playtime — the only data that can only grow.';
+      '어느 버전이 더 최신인지 알기 위해 ValleySave는 총 플레이 시간을 사용합니다 — 유일하게 증가할 수 있는 데이터입니다.';
 
   @override
-  String get hiwCompareNote =>
-      'Before confirming you\'ll also see, so you can decide:';
+  String get hiwCompareNote => '확인하기 전에 다음도 표시되므로 결정할 수 있습니다:';
 
   @override
-  String get hiwCompareMoney => 'Current money and total earned';
+  String get hiwCompareMoney => '현재 금액 및 총 획득';
 
   @override
-  String get hiwCompareMine => 'Mine level';
+  String get hiwCompareMine => '광산 레벨';
 
   @override
-  String get hiwCompareSkills => 'Skills (farming, mining, combat…)';
+  String get hiwCompareSkills => '기술 (농업, 채광, 전투…)';
 
   @override
-  String get hiwCompareRelations => 'Friends, monsters killed, faints';
+  String get hiwCompareRelations => '친구, 처치한 몬스터, 기절';
 
   @override
-  String get hiwCompareStamina => 'Stamina and health';
+  String get hiwCompareStamina => '체력 및 건강';
 
   @override
   String get hiwCompareNotShown =>
-      'These are not shown — they change in any direction and don\'t indicate which save is ahead.';
+      '다음은 표시되지 않습니다 — 어느 방향으로든 변하며 어느 저장이 더 최신인지를 나타내지 않습니다.';
 
   @override
-  String get hiwCompareNotShownExamples =>
-      'Crop and animal status, inventory and items, individual relationships';
+  String get hiwCompareNotShownExamples => '작물 및 동물 상태, 인벤토리 및 아이템, 개별 관계';
 
   @override
   String get hiwCompareWarning =>
-      'They\'re not shown — they change in any direction and don\'t indicate which save is ahead.';
+      '다음은 표시되지 않습니다 — 어느 방향으로든 변하며 어느 저장이 더 최신인지를 나타내지 않습니다.';
 
   @override
-  String get hiwConflictTitle => 'If you play without syncing';
+  String get hiwConflictTitle => '동기화하지 않고 플레이하면';
 
   @override
   String get hiwConflictDesc =>
-      'If you advance on mobile and PC without syncing between sessions, you end up with two versions of the same save.';
+      '모바일과 PC에서 세션 간에 동기화하지 않고 진행하면 동일한 저장의 두 버전을 얻습니다.';
 
   @override
   String get hiwConflictNoMerge =>
-      'They can\'t be merged. ValleySave always shows you both versions so you can choose which to keep.';
+      '병합할 수 없습니다. ValleySave는 항상 두 버전을 모두 표시하므로 어느 버전을 유지할지 선택할 수 있습니다.';
 
   @override
-  String get hiwConflictMobile => 'Mobile';
+  String get hiwConflictMobile => '모바일';
 
   @override
-  String get hiwConflictVersionA => 'version A';
+  String get hiwConflictVersionA => '버전 A';
 
   @override
   String get hiwConflictPC => 'PC';
 
   @override
-  String get hiwConflictVersionB => 'version B';
+  String get hiwConflictVersionB => '버전 B';
 
   @override
-  String get hiwDeleteTitle => 'If a save is deleted';
+  String get hiwDeleteTitle => '저장이 삭제되면';
 
   @override
   String get hiwDeleteDesc =>
-      'When you delete a save from Drive, it doesn\'t disappear immediately: it goes to Google Drive Trash.';
+      'Drive에서 저장을 삭제하면 즉시 사라지지 않습니다: Google Drive 휴지통으로 이동합니다.';
 
   @override
-  String get hiwCompatTitle => 'Platform compatibility';
+  String get hiwCompatTitle => '플랫폼 호환성';
 
   @override
-  String get hiwCompatAndroidAccess => 'ACCESS ON ANDROID';
+  String get hiwCompatAndroidAccess => 'ANDROID에서 액세스';
 
   @override
-  String get hiwShizukuTitle => 'With Shizuku';
+  String get hiwShizukuTitle => 'Shizuku 사용';
 
   @override
   String get hiwShizukuSubtitle =>
-      'Set up once. After that, ValleySave syncs by itself, without you ever touching it again.';
+      '한 번 설정하세요. 그 후 ValleySave는 자동으로 동기화되며, 다시 건드릴 필요가 없습니다.';
 
   @override
-  String get hiwShizukuBadge => 'AUTOMATIC · RECOMMENDED';
+  String get hiwShizukuBadge => '자동 · 권장';
 
   @override
   String get hiwShizukuDone =>
-      '✓  Done. From then on, downloading and uploading saves is direct, just like on a computer.';
+      '✓  완료. 그 후부터는 다운로드 및 업로드 저장이 직접적이며, 컴퓨터처럼 작동합니다.';
 
   @override
   String get hiwShizukuNote =>
-      'Pairing is only the first time. New Shizuku versions reactivate by themselves after restarting your phone.';
+      '페어링은 처음만 필요합니다. 새 Shizuku 버전은 휴대폰을 다시 시작한 후 자동으로 다시 활성화됩니다.';
 
   @override
-  String get hiwBridgeTitle => 'Manual bridge';
+  String get hiwBridgeTitle => '수동 브리지';
 
   @override
   String get hiwBridgeSubtitle =>
-      'Only works on Android 11 and 12. You don\'t install anything extra; instead, you copy the save by hand with your Files app every time you sync.';
+      'Android 11 및 12에서만 작동합니다. 추가로 설치하지 않습니다. 대신 동기화할 때마다 파일 앱으로 수동으로 저장을 복사합니다.';
 
   @override
-  String get hiwBridgeBadge => 'MANUAL ALTERNATIVE · ANDROID 11-12';
+  String get hiwBridgeBadge => '수동 대안 · ANDROID 11-12';
 
   @override
-  String get hiwBridgeSaveFolder => 'Stardew\'s folder';
+  String get hiwBridgeSaveFolder => 'Stardew의 폴더';
 
   @override
-  String get hiwBridgeValleySaveFolder => 'ValleySave\'s folder';
+  String get hiwBridgeValleySaveFolder => 'ValleySave의 폴더';
 
   @override
   String get hiwBridgeNote =>
-      'It works because your system Files app can access those folders (ValleySave can\'t).';
+      '시스템 파일 앱이 이러한 폴더에 액세스할 수 있기 때문에 작동합니다 (ValleySave는 할 수 없음).';
 
   @override
-  String get hiwTipAlwaysShow =>
-      'You\'ll always see what\'s on Drive before overwriting, so you can compare.';
+  String get hiwTipAlwaysShow => '항상 덮어쓰기 전에 Drive에 있는 내용을 표시하므로 비교할 수 있습니다.';
 
   @override
-  String get hiwTipWithoutUpload =>
-      'Without uploading, no other device will see your recent progress.';
+  String get hiwTipWithoutUpload => '업로드하지 않으면 다른 기기에서 최근 진행률을 볼 수 없습니다.';
 
   @override
-  String get hiwTipComparison =>
-      'You\'ll see the comparison between local and Drive before confirming.';
+  String get hiwTipComparison => '확인하기 전에 로컬과 Drive 간의 비교를 표시합니다.';
 
   @override
   String get hiwTipDownloadOverwrite =>
-      'Downloading overwrites your local save. Any unsynced progress will be lost.';
+      '다운로드는 로컬 저장을 덮어씁니다. 동기화하지 않은 진행률은 손실됩니다.';
 
   @override
-  String get hiwTipSync =>
-      'Always upload before switching devices, and download when you arrive.';
+  String get hiwTipSync => '기기를 전환하기 전에 항상 업로드하고, 도착했을 때 다운로드하세요.';
 
   @override
-  String get hiwTipDeletion =>
-      'You have 30 days to restore it from Drive Trash before it\'s permanently deleted.';
+  String get hiwTipDeletion => '영구 삭제되기 전에 30일 동안 Drive 휴지통에서 복원할 수 있습니다.';
 
   @override
-  String get hiwPrivacyLink => 'Privacy policy and usage';
+  String get hiwPrivacyLink => '개인정보 보호정책 및 사용';
 
   @override
-  String get emptyNoSaves => 'No saves found';
+  String get emptyNoSaves => '저장을 찾을 수 없음';
 
   @override
-  String get emptyNoSavesHint => 'No local saves can be read on this device';
+  String get emptyNoSavesHint => '이 기기에서 읽을 수 있는 로컬 저장이 없습니다';
 
   @override
-  String get bridgeTitle => 'Bring your saves';
+  String get bridgeTitle => '저장 가져오기';
 
   @override
   String get bridgeDesc =>
-      'To see and upload your local saves, copy them with your Files app from the Stardew folder to this ValleySave folder. Then swipe to refresh.';
+      '로컬 저장을 보고 업로드하려면 파일 앱으로 Stardew 폴더에서 이 ValleySave 폴더로 복사하세요. 그 다음 새로고침합니다.';
 
   @override
-  String get bridgeRefresh => 'Refresh';
+  String get bridgeRefresh => '새로고침';
 
   @override
-  String get bridgeChangeMode => 'Change method';
+  String get bridgeChangeMode => '방법 변경';
 
   @override
-  String get loaderLoading => 'LOADING';
+  String get loaderLoading => '로드 중';
 
   @override
-  String get loaderConnecting => 'connecting to Drive…';
+  String get loaderConnecting => 'Drive에 연결 중…';
 
   @override
-  String get chooserTitle => 'Choose how to connect';
+  String get chooserTitle => '연결 방식 선택';
 
   @override
-  String get chooserAutomatic => 'Automatic · Recommended';
+  String get chooserAutomatic => '자동 · 권장';
 
   @override
-  String get chooserManual => 'Manual alternative · Android 11-12';
+  String get chooserManual => '수동 대안 · Android 11-12';
 
   @override
-  String get shizukuStepTitle => 'Set up Shizuku';
+  String get shizukuStepTitle => 'Shizuku 설정';
 
   @override
-  String get shizukuStep1Title => 'Install Shizuku';
+  String get shizukuStep1Title => 'Shizuku 설치';
 
   @override
-  String get shizukuStep1Desc => 'Download from Play Store or GitHub';
+  String get shizukuStep1Desc => 'Play Store 또는 GitHub에서 다운로드하세요';
 
   @override
-  String get shizukuStep2Title => 'Activate Shizuku';
+  String get shizukuStep2Title => 'Shizuku 활성화';
 
   @override
-  String get shizukuStep2Desc => 'Run the app and grant permissions';
+  String get shizukuStep2Desc => '앱을 실행하고 권한을 부여하세요';
 
   @override
-  String get shizukuStep3Title => 'Grant permission';
+  String get shizukuStep3Title => '권한 부여';
 
   @override
-  String get shizukuStep3Desc => 'ValleySave will ask for access';
+  String get shizukuStep3Desc => 'ValleySave가 액세스를 요청합니다';
 
   @override
   String get shizukuDone =>
-      '✓  Done. From then on, downloading and uploading saves works directly, like on a computer.';
+      '✓  완료. 그 후부터는 저장 다운로드 및 업로드가 직접적으로 작동하며, 컴퓨터처럼 입니다.';
 
   @override
-  String get dlgDeleteDriveTitle => 'Delete from Drive';
+  String get dlgDeleteDriveTitle => 'Drive에서 삭제';
 
   @override
-  String get dlgDeleteLocalTitle => 'Delete from this device';
+  String get dlgDeleteLocalTitle => '이 기기에서 삭제';
 
   @override
-  String get dlgDownloadTitle => 'Download save';
+  String get dlgDownloadTitle => '저장 다운로드';
 
   @override
-  String get dlgUploadTitle => 'Upload save';
+  String get dlgUploadTitle => '저장 업로드';
 
   @override
-  String get dlgUploadOverwrite => 'This will overwrite your local save';
+  String get dlgUploadOverwrite => '로컬 저장을 덮어씁니다';
 
   @override
-  String get dlgGotIt => 'Got it';
+  String get dlgGotIt => '알겠습니다';
 
   @override
-  String get dlgCopyDest => 'Copy destination';
+  String get dlgCopyDest => '복사 대상';
 
   @override
-  String get previewColDayYear => 'Day/Year';
+  String get previewColDayYear => '날짜/년';
 
   @override
-  String get previewColTime => 'Playtime';
+  String get previewColTime => '플레이 시간';
 
   @override
-  String get previewColMoney => 'Coins';
+  String get previewColMoney => '코인';
 
   @override
-  String get previewColTotal => 'Total';
+  String get previewColTotal => '합계';
 
   @override
-  String get previewColFarming => 'Farming';
+  String get previewColFarming => '농업';
 
   @override
-  String get previewColForaging => 'Foraging';
+  String get previewColForaging => '채집';
 
   @override
-  String get previewColMining => 'Mining';
+  String get previewColMining => '채광';
 
   @override
-  String get previewColFishing => 'Fishing';
+  String get previewColFishing => '낚시';
 
   @override
-  String get previewColCombat => 'Combat';
+  String get previewColCombat => '전투';
 
   @override
-  String get previewColFriends => 'Friends';
+  String get previewColFriends => '친구';
 
   @override
-  String get previewColMonsters => 'Monsters';
+  String get previewColMonsters => '몬스터';
 
   @override
-  String get previewColFaints => 'Faints';
+  String get previewColFaints => '기절';
 
   @override
-  String get previewColMine => 'Mine';
+  String get previewColMine => '광산';
 
   @override
-  String get previewColUnexplored => 'Unexplored';
+  String get previewColUnexplored => '미탐험';
 
   @override
-  String get previewLocalLabel => 'ON THIS DEVICE';
+  String get previewLocalLabel => '이 기기에서';
 
   @override
-  String get previewDriveLabel => 'ON DRIVE';
+  String get previewDriveLabel => 'Drive에서';
 
   @override
-  String get previewFromDrive => 'FROM DRIVE';
+  String get previewFromDrive => 'Drive에서';
 
   @override
-  String get previewFromDevice => 'FROM THIS DEVICE';
+  String get previewFromDevice => '이 기기에서';
 
   @override
   String versionMismatch(String local, String drive) {
-    return 'Different versions: local $local · Drive $drive…';
+    return '다른 버전: 로컬 $local · Drive $drive…';
   }
 
   @override
-  String get snackPathCopied => 'Path copied';
+  String get snackPathCopied => '경로 복사됨';
 
   @override
-  String get snackDestCopied => 'Destination path copied';
+  String get snackDestCopied => '대상 경로 복사됨';
 
   @override
-  String get snackDownloaded => 'Save downloaded to the game';
+  String get snackDownloaded => '저장이 게임으로 다운로드됨';
 
   @override
-  String get snackSessionExpired => 'Drive session expired. Reconnect';
+  String get snackSessionExpired => 'Drive 세션이 만료되었습니다. 다시 연결하세요';
 
   @override
   String snackUploadError(String error) {
-    return 'Upload error: $error';
+    return '업로드 오류: $error';
   }
 
   @override
   String snackDownloadError(String error) {
-    return 'Download error: $error';
+    return '다운로드 오류: $error';
   }
 
   @override
   String snackDeleteError(String error) {
-    return 'Delete error: $error';
+    return '삭제 오류: $error';
   }
 
   @override
   String snackTrashed(String saveName) {
-    return '\"$saveName\" moved to Drive Trash. You have 30 days to restore it.';
+    return '\"$saveName\" Drive 휴지통으로 이동됨. 복원할 수 있는 시간: 30일.';
   }
 
   @override
   String snackDeletedLocal(String saveName) {
-    return '\"$saveName\" deleted from this device';
+    return '\"$saveName\" 이 기기에서 삭제됨';
   }
 
   @override
-  String get snackShizukuRequired => 'Enable Shizuku…';
+  String get snackShizukuRequired => 'Shizuku 활성화…';
 
   @override
   String get snackWriteError =>
-      'Could not write to the game. Some phones block /Android/data even with Shizuku.';
+      '게임에 쓸 수 없습니다. 일부 휴대폰은 Shizuku를 사용해도 /Android/data를 차단합니다.';
 
   @override
-  String get snackPlatformNotSupported =>
-      'This platform doesn\'t support writing local saves yet.';
+  String get snackPlatformNotSupported => '이 플랫폼은 아직 로컬 저장 쓰기를 지원하지 않습니다.';
 
   @override
-  String get snackWirelessDebugHint =>
-      'Open manually: Settings → Developer options → Wireless debugging.';
+  String get snackWirelessDebugHint => '수동으로 열기: 설정 → 개발자 옵션 → 무선 디버깅.';
 
   @override
-  String get snackOpenShizukuApp => 'Open Shizuku from your app drawer.';
+  String get snackOpenShizukuApp => '앱 드로어에서 Shizuku를 여세요.';
 
   @override
   String get hiwTipDeletePermanent =>
-      'ValleySave can\'t recover permanently deleted saves. Drive files are your responsibility.';
+      'ValleySave는 영구 삭제된 저장을 복구할 수 없습니다. Drive 파일은 귀하의 책임입니다.';
 
   @override
   String get hiwCompatAchievements =>
-      'Steam and Google Play achievements don\'t transfer. Each platform only tracks achievements that happen in real time — the save file doesn\'t trigger them retroactively.';
+      'Steam 및 Google Play 성취는 전송되지 않습니다. 각 플랫폼은 실시간으로 발생하는 성취만 추적합니다 — 저장 파일이 이를 소급 적용하지 않습니다.';
 
   @override
   String get hiwCompatOverwrite =>
-      'If you sync from two devices without a set order, one save can overwrite the other. Always upload before downloading.';
+      '설정된 순서 없이 두 기기에서 동기화하면 한 저장이 다른 저장을 덮어쓸 수 있습니다. 항상 다운로드하기 전에 업로드하세요.';
 
   @override
   String get hiwCompatVersions =>
-      'Saves from different game versions may not load correctly. ValleySave warns you if it detects a version mismatch before downloading.';
+      '다른 게임 버전의 저장은 올바르게 로드되지 않을 수 있습니다. ValleySave는 다운로드 전에 버전 불일치를 감지하면 경고합니다.';
 
   @override
   String get hiwCompatMods =>
-      'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.';
+      'SMAPI 모드는 저장에 추가 데이터를 추가합니다. 해당 모드가 설치되지 않은 기기에서 모드된 저장을 로드하면 게임이 충돌하거나 모드 데이터가 손실될 수 있습니다.\n\nAndroid에서는 모드를 사용하기 위해 SMAPI를 설치할 수도 있습니다.';
 
   @override
-  String get hiwComparePrimary => 'Total playtime';
+  String get hiwComparePrimary => '총 플레이 시간';
 
   @override
-  String get hiwCompareNoShown1 => 'Crop and animal status';
+  String get hiwCompareNoShown1 => '작물 및 동물 상태';
 
   @override
-  String get hiwCompareNoShown2 => 'Inventory and items';
+  String get hiwCompareNoShown2 => '인벤토리 및 아이템';
 
   @override
-  String get hiwCompareNoShown3 => 'Individual relationships';
+  String get hiwCompareNoShown3 => '개별 관계';
 
   @override
-  String get hiwShizuku1 => 'Install Shizuku (Play Store or GitHub APK).';
+  String get hiwShizuku1 => 'Shizuku를 설치하세요 (Play Store 또는 GitHub APK).';
 
   @override
-  String get hiwShizuku2 =>
-      'Activate it with Wireless Debugging — ValleySave guides you step by step.';
+  String get hiwShizuku2 => '무선 디버깅으로 활성화하세요 — ValleySave가 단계별로 안내합니다.';
 
   @override
-  String get hiwShizuku3 => 'Grant permission to ValleySave when prompted.';
+  String get hiwShizuku3 => '메시지가 표시되면 ValleySave에 권한을 부여하세요.';
 
   @override
   String get hiwBridge1 =>
-      'Download from Drive: ValleySave leaves the save in its folder. You copy it with Files to Stardew\'s folder.';
+      'Drive에서 다운로드: ValleySave는 저장을 폴더에 남깁니다. 파일 앱으로 Stardew의 폴더에 복사합니다.';
 
   @override
   String get hiwBridge2 =>
-      'Upload to Drive: copy the save from Stardew to ValleySave\'s folder. ValleySave detects it and uploads it.';
+      'Drive에 업로드: Stardew에서 ValleySave의 폴더로 저장을 복사하세요. ValleySave가 감지하고 업로드합니다.';
 
   @override
-  String get snackShizukuBattery =>
-      'Settings → Apps → Shizuku → Battery → Unrestricted.';
+  String get snackShizukuBattery => '설정 → 앱 → Shizuku → 배터리 → 무제한.';
 
   @override
   String snackDriveError(String error) {
@@ -907,103 +891,102 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get dlgDeleteLocalWarning =>
-      '⚠️ If you haven\'t uploaded to Drive, it will be lost forever. No recovery.';
+  String get dlgDeleteLocalWarning => '⚠️ Drive에 업로드하지 않았으면 영구히 손실됩니다. 복구 없음.';
 
   @override
-  String get dlgDelete => 'Delete';
+  String get dlgDelete => '삭제';
 
   @override
-  String get dlgDownloadButton => 'Download';
+  String get dlgDownloadButton => '다운로드';
 
   @override
-  String get dlgUploadButton => 'Upload';
+  String get dlgUploadButton => '업로드';
 
   @override
-  String get dlgBridgeCopyTitle => 'Copy save to game';
+  String get dlgBridgeCopyTitle => '저장을 게임에 복사';
 
   @override
   String dlgBridgeCopyDesc(String saveName) {
-    return 'Save is ready. With your Files app, copy the \"$saveName\" folder and paste it into the Stardew folder.';
+    return '저장 준비 완료. 파일 앱으로 \"$saveName\" 폴더를 복사하여 Stardew 폴더에 붙여넣으세요.';
   }
 
   @override
-  String get labelFrom => 'From';
+  String get labelFrom => '출처';
 
   @override
-  String get labelTo => 'To';
+  String get labelTo => '대상';
 
   @override
   String dlgDownloadNewDesc(String saveName, int day, String playtime) {
-    return '\"$saveName\" (Day $day, $playtime) will be copied to this device.';
+    return '\"$saveName\" ($day일, $playtime)이(가) 이 기기로 복사됩니다.';
   }
 
   @override
   String dlgDownloadOverwrite(String saveName) {
-    return 'This OVERWRITES your local save of \"$saveName\".';
+    return '\"$saveName\"의 로컬 저장을 덮어씁니다.';
   }
 
   @override
   String dlgUploadNewDesc(String saveName, int day, String playtime) {
-    return '\"$saveName\" (Day $day, $playtime) will be uploaded to your Drive.';
+    return '\"$saveName\" ($day일, $playtime)이(가) Drive에 업로드됩니다.';
   }
 
   @override
   String dlgUploadOverwriteDrive(String saveName) {
-    return 'This OVERWRITES the Drive version of \"$saveName\".';
+    return '\"$saveName\"의 Drive 버전을 덮어씁니다.';
   }
 
   @override
-  String get pathLabelFromStardew => 'From (Stardew)';
+  String get pathLabelFromStardew => '출처 (Stardew)';
 
   @override
-  String get pathLabelToValleySave => 'To (ValleySave)';
+  String get pathLabelToValleySave => '대상 (ValleySave)';
 
   @override
   String get chooserDesc =>
-      'Android protects the game folder. Choose how to give ValleySave access — you can change it anytime.';
+      'Android는 게임 폴더를 보호합니다. ValleySave에 액세스를 제공하는 방법을 선택하세요 — 언제든지 변경할 수 있습니다.';
 
   @override
   String get chooserShizukuDesc =>
-      'Configured once. After that ValleySave syncs on its own, without you touching anything. Only reliable method on Android 13+.';
+      '한 번 설정됨. 그 후 ValleySave는 자동으로 동기화되며, 아무것도 건드릴 필요가 없습니다. Android 13 이상에서만 신뢰할 수 있는 방법입니다.';
 
   @override
-  String get chooserManualBadge => 'ONLY ANDROID 11-12';
+  String get chooserManualBadge => 'Android 11-12만';
 
   @override
   String get chooserBridgeDesc =>
-      'Copy saves with your Files app. No extra install. Only on Android 11 and 12.';
+      '파일 앱으로 저장을 복사하세요. 추가 설치 없음. Android 11 및 12에서만.';
 
   @override
-  String get shizukuGateSubtitle => 'Configured once · first time only';
+  String get shizukuGateSubtitle => '한 번 설정됨 · 처음만';
 
   @override
-  String get shizukuStatusLabel => 'Shizuku active';
+  String get shizukuStatusLabel => 'Shizuku 활성';
 
   @override
-  String get shizukuStatusRunning => 'Connected and waiting.';
+  String get shizukuStatusRunning => '연결됨 및 대기 중.';
 
   @override
-  String get shizukuStatusNotDetected => 'Not detected yet.';
+  String get shizukuStatusNotDetected => '아직 감지되지 않음.';
 
   @override
-  String get shizukuPermLabel => 'Permission granted';
+  String get shizukuPermLabel => '권한 부여됨';
 
   @override
-  String get shizukuPermGranted => 'ValleySave already has access.';
+  String get shizukuPermGranted => 'ValleySave는 이미 액세스 권한이 있습니다.';
 
   @override
-  String get shizukuPermNotGranted => 'Need to authorize ValleySave.';
+  String get shizukuPermNotGranted => 'ValleySave 승인 필요.';
 
   @override
-  String get shizukuGrant => 'grant';
+  String get shizukuGrant => '부여';
 
   @override
-  String get shizukuGuideHeader => 'STEP-BY-STEP GUIDE';
+  String get shizukuGuideHeader => '단계별 가이드';
 
   @override
   String get shizukuStep1DescFull =>
-      'Free. If Google Play blocks it on your phone, use the official GitHub APK.';
+      '무료. Google Play에서 차단되면 공식 GitHub APK를 사용하세요.';
 
   @override
   String get btnPlayStore => 'Play Store';
@@ -1012,87 +995,85 @@ class AppLocalizationsKo extends AppLocalizations {
   String get btnApkGithub => 'APK GitHub';
 
   @override
-  String get shizukuStep2TitleFull => 'Enable Developer Options';
+  String get shizukuStep2TitleFull => '개발자 옵션 활성화';
 
   @override
   String get shizukuStep2DescFull =>
-      'Settings → Phone info → Software info → tap \"Build number\" 7 times.';
+      '설정 → 휴대폰 정보 → 소프트웨어 정보 → \"빌드 번호\" 7번 탭하세요.';
 
   @override
-  String get shizukuStep3TitleFull => 'Enable Wireless Debugging';
+  String get shizukuStep3TitleFull => '무선 디버깅 활성화';
 
   @override
   String get shizukuStep3DescFull =>
-      'The button takes you there and highlights it. Enable it (ON). Then tap \"Pair device with pairing code\" — a 6-digit code will appear on screen.';
+      '버튼이 해당 위치로 이동합니다 (강조됨). 활성화하세요 (ON). \"페어링 코드로 기기 페어링\" 탭하세요 — 화면에 6자리 코드가 나타납니다.';
 
   @override
-  String get btnOpenAndHighlight => 'Open and highlight';
+  String get btnOpenAndHighlight => '열기 및 강조';
 
   @override
-  String get shizukuStep4Title => 'Pair and START Shizuku';
+  String get shizukuStep4Title => '페어링 및 Shizuku 시작';
 
   @override
   String get shizukuStep4Desc =>
-      'Open Shizuku → \"Start via Wireless Debugging\" → \"Pair with pairing code\". Shizuku will send a notification saying it\'s waiting. Enter the 6-digit code from the Wireless Debugging screen. After pairing, press START — without that last tap Shizuku won\'t be active.';
+      'Shizuku 열기 → \"무선 디버깅 시작\" → \"페어링 코드로 페어링\". Shizuku가 대기 중이라는 알림을 보냅니다. 무선 디버깅 화면에서 6자리 코드를 입력하세요. 페어링 후 시작을 누르세요 — 마지막 탭이 없으면 Shizuku가 활성화되지 않습니다.';
 
   @override
-  String get btnOpenShizuku => 'Open Shizuku';
+  String get btnOpenShizuku => 'Shizuku 열기';
 
   @override
-  String get shizukuStep5Title => 'Set Shizuku battery to Unrestricted';
+  String get shizukuStep5Title => 'Shizuku 배터리를 무제한으로 설정';
 
   @override
   String get shizukuStep5Desc =>
-      'Open app info → Battery → Unrestricted. If you don\'t, the system will close Shizuku in the background and you\'ll have to press Start again.';
+      '앱 정보 열기 → 배터리 → 무제한. 그렇지 않으면 시스템이 백그라운드에서 Shizuku를 닫고 다시 시작을 눌러야 합니다.';
 
   @override
-  String get btnShizukuAppInfo => 'Shizuku app info';
+  String get btnShizukuAppInfo => 'Shizuku 앱 정보';
 
   @override
-  String get shizukuStep6DescActive =>
-      'Shizuku is active. Tap the button to authorize.';
+  String get shizukuStep6DescActive => 'Shizuku가 활성 상태입니다. 버튼을 눌러 승인하세요.';
 
   @override
-  String get shizukuStep6DescWaiting =>
-      'Available once Shizuku is active (step 4).';
+  String get shizukuStep6DescWaiting => 'Shizuku가 활성화된 후 사용 가능 (단계 4).';
 
   @override
-  String get btnGrantPermission => 'Grant permission';
+  String get btnGrantPermission => '권한 부여';
 
   @override
-  String get btnCheckShizuku => 'Done · Check';
+  String get btnCheckShizuku => '완료 · 확인';
 
   @override
-  String get statusDone => 'done';
+  String get statusDone => '완료';
 
   @override
-  String get statusPending => 'pending';
+  String get statusPending => '보류 중';
 
   @override
-  String get latestBadge => '· LATEST SAVE ·';
+  String get latestBadge => '· 최신 저장 ·';
 
   @override
   String saveDateLabel(String season, int year) {
-    return '$season · Year $year';
+    return '$season · $year년';
   }
 
   @override
-  String get petCat => 'Cat';
+  String get petCat => '고양이';
 
   @override
-  String get petDog => 'Dog';
+  String get petDog => '개';
 
   @override
-  String get houseBasic => 'Basic house';
+  String get houseBasic => '기본 집';
 
   @override
-  String get houseKitchen => 'With kitchen';
+  String get houseKitchen => '부엌 포함';
 
   @override
-  String get houseBedroom => 'With bedroom';
+  String get houseBedroom => '침실 포함';
 
   @override
-  String get houseCellar => 'With cellar';
+  String get houseCellar => '지하실 포함';
 
   @override
   String houseLevelN(int level) {

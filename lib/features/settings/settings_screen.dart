@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -19,20 +20,29 @@ import '../../shared/widgets/valley_canvas_widget.dart';
 enum _UpdateState { idle, checking, upToDate, available, downloading, error }
 
 const _kLangs = [
-  (null,            '🌐', 'Auto · sistema'),
-  (Locale('es'),    '🇪🇸', 'Español'),
-  (Locale('en'),    '🇬🇧', 'English'),
-  (Locale('fr'),    '🇫🇷', 'Français'),
-  (Locale('de'),    '🇩🇪', 'Deutsch'),
-  (Locale('it'),    '🇮🇹', 'Italiano'),
-  (Locale('pt'),    '🇵🇹', 'Português'),
-  (Locale('ru'),    '🇷🇺', 'Русский'),
-  (Locale('uk'),    '🇺🇦', 'Українська'),
-  (Locale('ja'),    '🇯🇵', '日本語'),
-  (Locale('zh'),    '🇨🇳', '中文'),
-  (Locale('th'),    '🇹🇭', 'ไทย'),
-  (Locale('ko'),    '🇰🇷', '한국어'),
+  (null,                                                                  '🌐',                      'Auto · sistema'),
+  (Locale('es'),                                                          '🇪🇸',                     'Español'),
+  (Locale('en'),                                                          '🇬🇧',                     'English'),
+  (Locale('fr'),                                                          '🇫🇷',                     'Français'),
+  (Locale('de'),                                                          '🇩🇪',                     'Deutsch'),
+  (Locale('it'),                                                          '🇮🇹',                     'Italiano'),
+  (Locale('pt'),                                                          '🇵🇹',                     'Português'),
+  (Locale('ru'),                                                          '🇷🇺',                     'Русский'),
+  (Locale('uk'),                                                          '🇺🇦',                     'Українська'),
+  (Locale('eu'),                                                          'assets/flags/navarra.svg', 'Euskera'),
+  (Locale('ja'),                                                          '🇯🇵',                     '日本語'),
+  (Locale('zh'),                                                          '🇨🇳',                     '中文'),
+  (Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),           '🇹🇼',                     '中文 (繁體)'),
+  (Locale('th'),                                                          '🇹🇭',                     'ไทย'),
+  (Locale('ko'),                                                          '🇰🇷',                     '한국어'),
 ];
+
+Widget _flagView(String flag, double size) {
+  if (flag.startsWith('assets/')) {
+    return SvgPicture.asset(flag, width: size * 1.5, height: size);
+  }
+  return Text(flag, style: TextStyle(fontSize: size));
+}
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, this.showDisconnect = false});
@@ -881,13 +891,15 @@ class _SettingsScreenState extends State<SettingsScreen>
   bool _langMatch(Locale? a, Locale? b) {
     if (a == null && b == null) return true;
     if (a == null || b == null) return false;
-    return a.languageCode == b.languageCode;
+    return a.languageCode == b.languageCode && a.scriptCode == b.scriptCode;
   }
 
   (String, String) _langLabel(Locale? current, AppLocalizations l10n) {
     if (current == null) return ('🌐', l10n.languageAuto);
     for (final (locale, flag, label) in _kLangs) {
-      if (locale != null && locale.languageCode == current.languageCode) {
+      if (locale != null &&
+          locale.languageCode == current.languageCode &&
+          locale.scriptCode == current.scriptCode) {
         return (flag, label);
       }
     }
@@ -930,7 +942,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(flag, style: const TextStyle(fontSize: 13)),
+                    _flagView(flag, 13),
                     const SizedBox(width: 6),
                     Text(label, style: AppTypography.mono(color: accent, size: 12)),
                   ],
@@ -993,10 +1005,10 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFFC06050).withValues(alpha: 0.07),
+            color: const Color(0xFFC84632).withValues(alpha: 0.14),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: const Color(0xFFC06050).withValues(alpha: 0.55),
+              color: const Color(0xFFC84632),
               width: 1.5,
             ),
           ),
@@ -1006,13 +1018,13 @@ class _SettingsScreenState extends State<SettingsScreen>
               Icon(
                 Icons.logout_rounded,
                 size: 16,
-                color: const Color(0xFFDC7864),
+                color: const Color(0xFFE85840),
               ),
               const SizedBox(width: 8),
               Text(
                 l10n.disconnectButton,
                 style: AppTypography.bodyStrong(
-                  color: const Color(0xFFDC7864),
+                  color: const Color(0xFFE85840),
                 ),
               ),
             ],
@@ -1260,7 +1272,7 @@ class _LangRowState extends State<_LangRow> {
             ),
             child: Row(
               children: [
-                Text(widget.flag, style: const TextStyle(fontSize: 18)),
+                _flagView(widget.flag, 18),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(

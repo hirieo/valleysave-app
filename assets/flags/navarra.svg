@@ -1,0 +1,64 @@
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="600" fill="#C8102E"/>
+  <g stroke="#FFD700" stroke-width="9" stroke-linecap="round" fill="none">
+    <line x1="450" y1="300" x2="110" y2="85"/>
+    <line x1="450" y1="300" x2="450" y2="85"/>
+    <line x1="450" y1="300" x2="790" y2="85"/>
+    <line x1="450" y1="300" x2="790" y2="300"/>
+    <line x1="450" y1="300" x2="790" y2="515"/>
+    <line x1="450" y1="300" x2="450" y2="515"/>
+    <line x1="450" y1="300" x2="110" y2="515"/>
+    <line x1="450" y1="300" x2="110" y2="300"/>
+    <line x1="110" y1="85"  x2="450" y2="85"/>
+    <line x1="450" y1="85"  x2="790" y2="85"/>
+    <line x1="790" y1="85"  x2="790" y2="300"/>
+    <line x1="790" y1="300" x2="790" y2="515"/>
+    <line x1="790" y1="515" x2="450" y2="515"/>
+    <line x1="450" y1="515" x2="110" y2="515"/>
+    <line x1="110" y1="515" x2="110" y2="300"/>
+    <line x1="110" y1="300" x2="110" y2="85"/>
+  </g>
+  <g fill="#FFD700">
+    <circle cx="450" cy="300" r="20"/>
+    <circle cx="110" cy="85"  r="15"/>
+    <circle cx="450" cy="85"  r="15"/>
+    <circle cx="790" cy="85"  r="15"/>
+    <circle cx="790" cy="300" r="15"/>
+    <circle cx="790" cy="515" r="15"/>
+    <circle cx="450" cy="515" r="15"/>
+    <circle cx="110" cy="515" r="15"/>
+    <circle cx="110" cy="300" r="15"/>
+    <circle cx="337" cy="228" r="11"/>
+    <circle cx="223" cy="157" r="11"/>
+    <circle cx="450" cy="228" r="11"/>
+    <circle cx="450" cy="157" r="11"/>
+    <circle cx="563" cy="228" r="11"/>
+    <circle cx="677" cy="157" r="11"/>
+    <circle cx="563" cy="300" r="11"/>
+    <circle cx="677" cy="300" r="11"/>
+    <circle cx="563" cy="372" r="11"/>
+    <circle cx="677" cy="443" r="11"/>
+    <circle cx="450" cy="372" r="11"/>
+    <circle cx="450" cy="443" r="11"/>
+    <circle cx="337" cy="372" r="11"/>
+    <circle cx="223" cy="443" r="11"/>
+    <circle cx="337" cy="300" r="11"/>
+    <circle cx="223" cy="300" r="11"/>
+    <circle cx="223" cy="85"  r="11"/>
+    <circle cx="337" cy="85"  r="11"/>
+    <circle cx="563" cy="85"  r="11"/>
+    <circle cx="677" cy="85"  r="11"/>
+    <circle cx="790" cy="157" r="11"/>
+    <circle cx="790" cy="228" r="11"/>
+    <circle cx="790" cy="372" r="11"/>
+    <circle cx="790" cy="443" r="11"/>
+    <circle cx="677" cy="515" r="11"/>
+    <circle cx="563" cy="515" r="11"/>
+    <circle cx="337" cy="515" r="11"/>
+    <circle cx="223" cy="515" r="11"/>
+    <circle cx="110" cy="443" r="11"/>
+    <circle cx="110" cy="372" r="11"/>
+    <circle cx="110" cy="228" r="11"/>
+    <circle cx="110" cy="157" r="11"/>
+  </g>
+</svg>

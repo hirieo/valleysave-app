@@ -79,9 +79,9 @@ class _IconCircleButtonState extends State<IconCircleButton>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: acc.withValues(alpha: 0.28),
+                color: Colors.transparent,
                 shape: BoxShape.circle,
-                border: Border.all(color: acc.withValues(alpha: 0.70), width: 1.5),
+                border: Border.all(color: acc.withValues(alpha: 0.65), width: 1.0),
               ),
               child: AnimatedBuilder(
                 animation: _spin,

@@ -202,7 +202,6 @@ class _DAnimPainter extends CustomPainter {
 
     // partículas orbitando
     for (var i = 0; i < _kN; i++) {
-      if (i / _kN > p) continue;
       final a      = i * math.pi * 2 / _kN + t * (i.isEven ? 0.055 : -0.038);
       final orbit  = _kR + math.sin(t * 1.3 + i * 1.1) * 7;
       final px     = cx + math.cos(a) * orbit;
@@ -221,25 +220,10 @@ class _DAnimPainter extends CustomPainter {
         Offset(cx, cy + 13), 10, FontWeight.normal,
         acc.withValues(alpha: 0.75));
 
-    // barra fina
-    final barY = cy + _kR + 28;
-    const barW = 150.0;
-    final barX = cx - barW / 2;
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(barX, barY, barW, 4),
-            const Radius.circular(2)),
-        Paint()..color = Colors.white.withValues(alpha: 0.08));
-    if (p > 0) {
-      canvas.drawRRect(
-          RRect.fromRectAndRadius(Rect.fromLTWH(barX, barY, barW * p, 4),
-              const Radius.circular(2)),
-          Paint()..color = acc.withValues(alpha: 0.70));
-    }
-
     // versión
     if (version.isNotEmpty) {
       _txt(canvas, 'ValleySave $version',
-          Offset(cx, barY + 20), 10, FontWeight.normal,
+          Offset(cx, cy + _kR + 22), 10, FontWeight.normal,
           Colors.white.withValues(alpha: 0.30));
     }
   }

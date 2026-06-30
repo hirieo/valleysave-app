@@ -87,9 +87,8 @@ class UpdateService {
         await for (final chunk in res.stream) {
           bytes.addAll(chunk);
           received += chunk.length;
-          if (total > 0) onProgress(received / total);
+          if (total > 0) onProgress((received / total).clamp(0.0, 0.99));
         }
-        onProgress(1.0);
         await File(apkPath).writeAsBytes(bytes);
       } finally {
         client.close();
@@ -97,6 +96,7 @@ class UpdateService {
 
       const channel = MethodChannel('valleysave/apk_installer');
       await channel.invokeMethod<void>('install', {'path': apkPath});
+      onProgress(1.0); // cierra el diálogo justo cuando el instalador del sistema abre
     } catch (e) {
       onError(e.toString());
     }

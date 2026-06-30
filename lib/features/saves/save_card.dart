@@ -7,7 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../generated/app_localizations.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
+import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
+import '../../shared/widgets/save_busy_indicator.dart';
 
 // Card-local color tokens
 const _kSkillName  = Color(0xFF8AB890);
@@ -1374,11 +1376,7 @@ class _Footer extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             if (busy)
-              const SizedBox(
-                width: 15,
-                height: 15,
-                child: CircularProgressIndicator(strokeWidth: 1.5),
-              )
+              SaveBusyIndicator(season: SeasonController.instance.season.value)
             else if (status == SaveSyncStatus.synced)
               Icon(Icons.check_rounded, size: 16, color: _kSynced)
             else ...[
@@ -1438,19 +1436,8 @@ class _Footer extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           if (busy)
-            const SizedBox(
-              width: 15,
-              height: 15,
-              child: CircularProgressIndicator(strokeWidth: 1.5),
-            )
-          else if (status == SaveSyncStatus.synced)
-            _ActionBtn(
-              label: l10n.cardActionSynced,
-              color: _kSynced,
-              icon: Icons.check_rounded,
-              filled: false,
-            )
-          else ...[
+            SaveBusyIndicator(season: SeasonController.instance.season.value)
+          else if (status != SaveSyncStatus.synced) ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
               _ActionBtn(
                 label: l10n.cardActionUpload,

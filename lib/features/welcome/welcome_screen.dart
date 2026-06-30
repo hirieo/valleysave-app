@@ -17,6 +17,7 @@ import '../help/how_it_works_screen.dart';
 import '../saves/saves_screen.dart';
 import '../settings/settings_screen.dart';
 import '../../core/services/update_service.dart';
+import '../../shared/widgets/update_download_animation.dart';
 import '../../generated/app_localizations.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -35,6 +36,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   bool _updateChipPressed = false;
   bool _updateDownloading = false;
   double _downloadProgress = 0;
+  final _progressNotifier = ValueNotifier<double>(0);
   // ignore: unused_field — se pasará a la SyncScreen cuando esté implementada
   DriveService? _drive;
 
@@ -156,11 +158,26 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Future<void> _startInstall() async {
     final info = _updateInfo;
     if (info == null || _updateDownloading) return;
+    _progressNotifier.value = 0;
     setState(() { _updateDownloading = true; _downloadProgress = 0; });
+    showUpdateDownloadDialog(
+      context,
+      progressNotifier: _progressNotifier,
+      season: SeasonController.instance.season.value,
+      version: info.version,
+    );
     await UpdateService.installUpdate(
       info,
-      onProgress: (p) { if (mounted) setState(() => _downloadProgress = p); },
-      onError: (_) { if (mounted) setState(() => _updateDownloading = false); },
+      onProgress: (p) {
+        _progressNotifier.value = p;
+        if (mounted) setState(() => _downloadProgress = p);
+      },
+      onError: (_) {
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true).maybePop();
+          setState(() => _updateDownloading = false);
+        }
+      },
     );
   }
 
@@ -170,37 +187,22 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
     Widget chipContent;
     if (_updateDownloading) {
-      chipContent = Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      chipContent = Row(
         children: [
-          Row(
-            children: [
-              SizedBox(
-                width: 12, height: 12,
-                child: CircularProgressIndicator(strokeWidth: 1.5, color: accent),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                l10n.updateDownloading,
-                style: AppTypography.bodyStrong(color: Colors.white.withValues(alpha: 0.90))
-                    .copyWith(fontSize: 14),
-              ),
-              const Spacer(),
-              Text('${(_downloadProgress * 100).round()}%',
-                  style: AppTypography.mono(color: accent.withValues(alpha: 0.80), size: 11)),
-            ],
+          SizedBox(
+            width: 12, height: 12,
+            child: CircularProgressIndicator(strokeWidth: 1.5, color: accent),
           ),
-          const SizedBox(height: 6),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(2),
-            child: LinearProgressIndicator(
-              value: _downloadProgress,
-              minHeight: 3,
-              backgroundColor: Colors.white.withValues(alpha: 0.08),
-              valueColor: AlwaysStoppedAnimation<Color>(accent),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              l10n.updateDownloading,
+              style: AppTypography.bodyStrong(color: Colors.white.withValues(alpha: 0.90))
+                  .copyWith(fontSize: 14),
             ),
           ),
+          Text('${(_downloadProgress * 100).round()}%',
+              style: AppTypography.mono(color: accent.withValues(alpha: 0.80), size: 11)),
         ],
       );
     } else {
@@ -268,6 +270,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   void dispose() {
+    _progressNotifier.dispose();
     _pulseCtrl.dispose();
     _entranceCtrl.dispose();
     super.dispose();

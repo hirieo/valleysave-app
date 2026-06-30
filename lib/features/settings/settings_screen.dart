@@ -13,6 +13,7 @@ import '../../core/services/update_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../shared/widgets/icon_circle_button.dart';
+import '../../shared/widgets/update_download_animation.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 
 enum _UpdateState { idle, checking, upToDate, available, downloading, error }
@@ -50,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   String _appVersion = '';
   UpdateInfo? _updateInfo;
   double _downloadProgress = 0;
+  final _progressNotifier = ValueNotifier<double>(0);
   bool _updateTilePressed = false;
 
   late final AnimationController _entranceCtrl;
@@ -77,6 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   void dispose() {
+    _progressNotifier.dispose();
     _entranceCtrl.dispose();
     super.dispose();
   }
@@ -104,15 +107,28 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> _startInstall() async {
     final info = _updateInfo;
     if (info == null) return;
+    _progressNotifier.value = 0;
     setState(() {
       _updateState      = _UpdateState.downloading;
       _downloadProgress = 0;
     });
+    showUpdateDownloadDialog(
+      context,
+      progressNotifier: _progressNotifier,
+      season: SeasonController.instance.season.value,
+      version: info.version,
+    );
     await UpdateService.installUpdate(
       info,
-      onProgress: (p) { if (mounted) setState(() => _downloadProgress = p); },
+      onProgress: (p) {
+        _progressNotifier.value = p;
+        if (mounted) setState(() => _downloadProgress = p);
+      },
       onError: (e) {
-        if (mounted) setState(() => _updateState = _UpdateState.error);
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true).maybePop();
+          setState(() => _updateState = _UpdateState.error);
+        }
       },
     );
   }
@@ -801,26 +817,17 @@ class _SettingsScreenState extends State<SettingsScreen>
           ],
         );
       case _UpdateState.downloading:
-        content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        content = Row(
           children: [
-            Row(
-              children: [
-                Expanded(child: Text(l10n.updateDownloading, style: AppTypography.bodyStrong(color: accent))),
-                Text('${(_downloadProgress * 100).round()}%',
-                    style: AppTypography.mono(color: accent, size: 11)),
-              ],
+            SizedBox(
+              width: 13, height: 13,
+              child: CircularProgressIndicator(strokeWidth: 1.5, color: accent),
             ),
-            const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(2),
-              child: LinearProgressIndicator(
-                value: _downloadProgress,
-                minHeight: 3,
-                backgroundColor: Colors.white.withValues(alpha: 0.08),
-                valueColor: AlwaysStoppedAnimation<Color>(accent),
-              ),
-            ),
+            const SizedBox(width: 10),
+            Expanded(child: Text(l10n.updateDownloading,
+                style: AppTypography.bodyStrong(color: accent))),
+            Text('${(_downloadProgress * 100).round()}%',
+                style: AppTypography.mono(color: accent, size: 11)),
           ],
         );
       case _UpdateState.error:

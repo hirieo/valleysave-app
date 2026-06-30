@@ -79,9 +79,9 @@ class _IconCircleButtonState extends State<IconCircleButton>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: acc.withValues(alpha: 0.18),
+                color: acc.withValues(alpha: 0.28),
                 shape: BoxShape.circle,
-                border: Border.all(color: acc.withValues(alpha: 0.42)),
+                border: Border.all(color: acc.withValues(alpha: 0.70), width: 1.5),
               ),
               child: AnimatedBuilder(
                 animation: _spin,
@@ -89,7 +89,7 @@ class _IconCircleButtonState extends State<IconCircleButton>
                   angle: widget.spinning ? _spin.value * 2 * math.pi : 0,
                   child: child,
                 ),
-                child: Icon(widget.icon, size: 18, color: acc.withValues(alpha: 0.85)),
+                child: Icon(widget.icon, size: 18, color: acc),
               ),
             ),
           ),

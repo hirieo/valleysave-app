@@ -45,6 +45,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   List<SaveEntry> _entries = [];
   int _staggerVersion = 0;
   bool _loading = true;
+  bool _refreshing = false;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
 
   // ── Modo de acceso en Android ──
@@ -249,6 +250,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       default:
         return [];
     }
+  }
+
+  Future<void> _refresh() async {
+    if (_refreshing || _loading) return;
+    setState(() => _refreshing = true);
+    await _load(silent: true);
+    if (mounted) setState(() => _refreshing = false);
   }
 
   Future<void> _load({bool silent = false}) async {
@@ -1007,7 +1015,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Focus(
+      autofocus: true,
+      onKeyEvent: (_, event) {
+        if (event is KeyDownEvent &&
+            event.logicalKey == LogicalKeyboardKey.f5) {
+          _refresh();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: Scaffold(
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
@@ -1039,12 +1057,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 _TopBar(
                   onBack: () => Navigator.pop(context),
                   onSettings: _openSettings,
+                  onRefresh: _refresh,
+                  refreshing: _refreshing,
                 ),
                 Expanded(child: _buildBody()),
               ],
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -1869,10 +1890,14 @@ class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.onBack,
     required this.onSettings,
+    required this.onRefresh,
+    required this.refreshing,
   });
 
   final VoidCallback onBack;
   final VoidCallback onSettings;
+  final VoidCallback onRefresh;
+  final bool refreshing;
 
   @override
   Widget build(BuildContext context) {
@@ -1898,6 +1923,12 @@ class _TopBar extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              _IconCircle(
+                icon: Icons.refresh_rounded,
+                onTap: onRefresh,
+                spinning: refreshing,
+              ),
+              const SizedBox(width: 8),
               _IconCircle(icon: Icons.settings_rounded, onTap: onSettings),
             ],
           ),

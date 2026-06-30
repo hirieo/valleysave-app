@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +31,7 @@ const _kLangs = [
   (Locale('pt'),                                                          '🇵🇹',                     'Português'),
   (Locale('ru'),                                                          '🇷🇺',                     'Русский'),
   (Locale('uk'),                                                          '🇺🇦',                     'Українська'),
-  (Locale('eu'),                                                          'assets/flags/navarra.svg', 'Euskera'),
+  (Locale('eu'),                                                          'assets/flags/eu.svg',      'Euskera'),
   (Locale('ja'),                                                          '🇯🇵',                     '日本語'),
   (Locale('zh'),                                                          '🇨🇳',                     '中文'),
   (Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),           '🇹🇼',                     '中文 (繁體)'),
@@ -39,7 +41,11 @@ const _kLangs = [
 
 Widget _flagView(String flag, double size) {
   if (flag.startsWith('assets/')) {
-    return SvgPicture.asset(flag, width: size * 1.5, height: size);
+    if (Platform.isAndroid || Platform.isIOS) {
+      return SvgPicture.asset(flag, width: size * 1.5, height: size);
+    }
+    final code = flag.split('/').last.split('.').first.toUpperCase();
+    return Text(code, style: TextStyle(fontSize: size));
   }
   return Text(flag, style: TextStyle(fontSize: size));
 }

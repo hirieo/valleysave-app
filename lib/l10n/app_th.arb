@@ -1,1 +1,471 @@
-{"@@locale":"th","appTitle":"ValleySave","welcomeTitle":"อย่าสูญเสียฟาร์มของคุณ พาไปด้วย","connectGoogleDrive":"เชื่อมต่อ Google Drive","connecting":"กำลังเชื่อมต่อ…","mySaves":"บันทึกของฉัน","howItWorks":"วิธีการทำงาน","settings":"การตั้งค่า","aboutSection":"เกี่ยวกับ","openSource":"โค้ดที่มีจำหน่าย","nonCommercial":"ไม่ใช่เชิงพาณิชย์","freeForever":"ฟรีตลอดไป","privacyTitle":"ความเป็นส่วนตัวและการใช้ข้อมูล","privacyDescription":"ValleySave เป็นแอปพลิเคชันสำหรับซิงโครไนซ์บันทึก Stardew Valley ของคุณกับบัญชี Google Drive ของคุณเอง","whatDataTitle":"ใช้ข้อมูลใด","whatDataDesc":"ValleySave เข้าถึงเฉพาะไฟล์บันทึก Stardew Valley ที่จำเป็นในการสร้างสำเนา ซิงโครไนซ์ หรือคืนค่า","googleDriveTitle":"Google Drive","googleDriveDesc":"บันทึกของคุณจะถูกอัปโหลดไปยังบัญชี Google Drive ของคุณเอง ValleySave ไม่ใช้เซิร์ฟเวอร์ของตัวเองในการเก็บเกมของคุณ","androidPermissionsTitle":"สิทธิ์ใน Android","androidPermissionsDesc":"ValleySave อาจต้องมีสิทธิ์ด้านพื้นที่เก็บข้อมูลหรือเครื่องมือเช่น Shizuku เพื่อเข้าถึงไฟล์บันทึก","adsTitle":"โฆษณา","adsDesc":"ValleySave อาจแสดงโฆษณาผ่าน Google AdMob","responsibilityTitle":"ความรับผิดชอบ","responsibilityDesc":"ไฟล์บันทึกของคุณเป็นความรับผิดชอบของคุณ","deleteDataTitle":"ลบข้อมูล","deleteDataDesc":"คุณสามารถลบสำเนาที่ซิงโครไนซ์ได้โดยการลบโฟลเดอร์ ValleySave จาก Google Drive ด้วยตนเอง","sourceCodeTitle":"โค้ดแหล่งที่มาและการติดต่อ","sourceCodeDesc":"ValleySave เป็นโปรเจ็กต์ที่มีโค้ดที่มีจำหน่ายภายใต้ใบอนุญาต Polyform Noncommercial","upToDate":"ปัจจุบัน","checkingUpdates":"กำลังตรวจสอบ…","updateAvailable":"มีการอัปเดตที่พร้อม","application":"แอพลิเคชัน","version":"เวอร์ชัน {version}","checkForUpdates":"ตรวจสอบการอัปเดต","shizukuRequired":"ต้องมี Shizuku","shizukuGuide":"คำแนะนำการตั้งค่า Shizuku","activateShizuku":"เปิดใช้งาน Shizuku เพื่อเขียนการบันทึกในเกม","deleteSaveTitle":"ลบ {saveName}","deleteSaveMessage":"นี่จะลบบันทึกจากอุปกรณ์นี้ คุณต้องการดำเนินการต่อไปหรือไม่?","deleteFromDrive":"ลบจาก Drive","confirmDelete":"บันทึก {saveName} จะถูกย้ายไปยังถังขยะของ Google Drive","deleteFromDeviceMessage":"บันทึก {saveName} จะถูกลบออกจากอุปกรณ์นี้อย่างถาวร","restoreSaveTitle":"คืนค่า {saveName}","restoreSaveMessage":"ดาวน์โหลด {saveName} ไปยังอุปกรณ์นี้?","restore":"คืนค่า","cancel":"ยกเลิก","error":"ข้อผิดพลาด","success":"สำเร็จ","loading":"กำลังโหลด…","disconnect":"หลีกเลี่ยง","ok":"ตกลง","yes":"ใช่","no":"ไม่"}
+{
+  "@@locale": "th",
+  "appTitle": "ValleySave",
+  "welcomeTitle": "อย่าสูญเสียฟาร์มของคุณ พาไปด้วย",
+  "connectGoogleDrive": "เชื่อมต่อ Google Drive",
+  "connecting": "กำลังเชื่อมต่อ…",
+  "mySaves": "บันทึกของฉัน",
+  "howItWorks": "วิธีการทำงาน",
+  "settings": "การตั้งค่า",
+  "aboutSection": "เกี่ยวกับ",
+  "openSource": "โค้ดที่มีจำหน่าย",
+  "nonCommercial": "ไม่ใช่เชิงพาณิชย์",
+  "freeForever": "ฟรีตลอดไป",
+  "privacyTitle": "ความเป็นส่วนตัวและการใช้ข้อมูล",
+  "privacyDescription": "ValleySave เป็นแอปพลิเคชันสำหรับซิงโครไนซ์บันทึก Stardew Valley ของคุณกับบัญชี Google Drive ของคุณเอง",
+  "whatDataTitle": "ใช้ข้อมูลใด",
+  "whatDataDesc": "ValleySave เข้าถึงเฉพาะไฟล์บันทึก Stardew Valley ที่จำเป็นในการสร้างสำเนา ซิงโครไนซ์ หรือคืนค่า",
+  "googleDriveTitle": "Google Drive",
+  "googleDriveDesc": "บันทึกของคุณจะถูกอัปโหลดไปยังบัญชี Google Drive ของคุณเอง ValleySave ไม่ใช้เซิร์ฟเวอร์ของตัวเองในการเก็บเกมของคุณ",
+  "androidPermissionsTitle": "สิทธิ์ใน Android",
+  "androidPermissionsDesc": "ValleySave อาจต้องมีสิทธิ์ด้านพื้นที่เก็บข้อมูลหรือเครื่องมือเช่น Shizuku เพื่อเข้าถึงไฟล์บันทึก",
+  "adsTitle": "โฆษณา",
+  "adsDesc": "ValleySave อาจแสดงโฆษณาผ่าน Google AdMob",
+  "responsibilityTitle": "ความรับผิดชอบ",
+  "responsibilityDesc": "ไฟล์บันทึกของคุณเป็นความรับผิดชอบของคุณ",
+  "deleteDataTitle": "ลบข้อมูล",
+  "deleteDataDesc": "คุณสามารถลบสำเนาที่ซิงโครไนซ์ได้โดยการลบโฟลเดอร์ ValleySave จาก Google Drive ด้วยตนเอง",
+  "sourceCodeTitle": "โค้ดแหล่งที่มาและการติดต่อ",
+  "sourceCodeDesc": "ValleySave เป็นโปรเจ็กต์ที่มีโค้ดที่มีจำหน่ายภายใต้ใบอนุญาต Polyform Noncommercial",
+  "upToDate": "ปัจจุบัน",
+  "checkingUpdates": "กำลังตรวจสอบ…",
+  "updateAvailable": "มีการอัปเดตที่พร้อม",
+  "application": "แอพลิเคชัน",
+  "version": "เวอร์ชัน {version}",
+  "checkForUpdates": "ตรวจสอบการอัปเดต",
+  "shizukuRequired": "ต้องมี Shizuku",
+  "shizukuGuide": "คำแนะนำการตั้งค่า Shizuku",
+  "activateShizuku": "เปิดใช้งาน Shizuku เพื่อเขียนการบันทึกในเกม",
+  "deleteSaveTitle": "ลบ {saveName}",
+  "deleteSaveMessage": "นี่จะลบบันทึกจากอุปกรณ์นี้ คุณต้องการดำเนินการต่อไปหรือไม่?",
+  "deleteFromDrive": "ลบจาก Drive",
+  "confirmDelete": "บันทึก {saveName} จะถูกย้ายไปยังถังขยะของ Google Drive",
+  "deleteFromDeviceMessage": "บันทึก {saveName} จะถูกลบออกจากอุปกรณ์นี้อย่างถาวร",
+  "restoreSaveTitle": "คืนค่า {saveName}",
+  "restoreSaveMessage": "ดาวน์โหลด {saveName} ไปยังอุปกรณ์นี้?",
+  "restore": "คืนค่า",
+  "cancel": "ยกเลิก",
+  "error": "ข้อผิดพลาด",
+  "success": "สำเร็จ",
+  "loading": "กำลังโหลด…",
+  "disconnect": "หลีกเลี่ยง",
+  "ok": "ตกลง",
+  "yes": "ใช่",
+  "no": "ไม่",
+  "welcomeHeroPre": "อย่าสูญเสีย\n",
+  "welcomeHeroAccent": "ฟาร์มของคุณ,",
+  "welcomeHeroPost": "\nพาไปด้วย",
+  "welcomeSubtitle": "ซิงโครไนซ์บันทึก Stardew Valley ของคุณในอุปกรณ์ทั้งหมด ข้อมูลของคุณอยู่ใน Google Drive ของคุณเอง — ไม่มีเซิร์ฟเวอร์ ไม่มีสมัครสมาชิก อยู่ภายใต้การควบคุมของคุณ",
+  "welcomeDriveConnected": "Drive เชื่อมต่อแล้ว",
+  "welcomeFooterTagline": "· ไม่ใช่เชิงพาณิชย์ · ฟรีตลอดไป ·",
+  "updateVersionAvailable": "v{version} พร้อมใช้งาน",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionMode": "โหมด",
+  "sectionSeason": "ฤดูกาล",
+  "sectionLanguage": "ภาษา",
+  "modeAutoTitle": "อัตโนมัติ",
+  "modeAutoDesc": "ทำตามบันทึกที่ใช้งานอยู่ และหากไม่มีบันทึก ให้ทำตามตำแหน่งจริงของคุณ",
+  "modeSavesTitle": "โดยบันทึก",
+  "modeSavesDesc": "ใช้ฤดูกาลจากบันทึกล่าสุดของคุณเสมอ",
+  "modeGeoTitle": "โดยตำแหน่ง",
+  "modeGeoDesc": "ใช้ฤดูกาลจริงของตำแหน่งของคุณเสมอ",
+  "modeFixedTitle": "ฤดูกาลคงที่",
+  "modeFixedDesc": "แสดงฤดูกาลเดียวกันเสมอ",
+  "modeRandomTitle": "สุ่ม",
+  "modeRandomDesc": "เลือกฤดูกาลที่แตกต่างกันทุกครั้งที่คุณเปิดแอป",
+  "seasonInitial": "เริ่มต้น",
+  "seasonSpring": "ฤดูใบไม้ผลิ",
+  "seasonSummer": "ฤดูร้อน",
+  "seasonFall": "ฤดูใบไม้ร่วง",
+  "seasonWinter": "ฤดูหนาว",
+  "autoPriorityTitle": "ลำดับความสำคัญ",
+  "autoStep1Title": "การเปิดครั้งแรก",
+  "autoStep1Desc": "แสดงสถานะเริ่มต้น",
+  "autoStep2Title": "บันทึกที่ใช้งานอยู่",
+  "autoStep2Desc": "ใช้ฤดูกาลจากบันทึกล่าสุดที่ซิงโครไนซ์ของคุณ",
+  "autoStep3Title": "ตำแหน่ง",
+  "autoStep3Desc": "ตรวจหาซีกโลกและฤดูกาลจริงของภูมิภาคของคุณ",
+  "autoStep4Title": "ค่าเริ่มต้น",
+  "autoStep4Desc": "เริ่มต้น (โหมดกลางคืน) หากไม่มีข้อมูลพร้อมใช้",
+  "versionInstalled": "เวอร์ชันที่ติดตั้ง",
+  "updateNeverChecked": "ไม่เคยตรวจสอบ",
+  "updateCheckedNow": "เพิ่งตรวจสอบแล้ว",
+  "updateOutdatedDownload": "ไม่เป็นปัจจุบัน · ดาวน์โหลด",
+  "updateDownloading": "กำลังดาวน์โหลดการอัปเดต…",
+  "updateError": "ข้อผิดพลาด — แตะเพื่อลองใหม่",
+  "disconnectTitle": "ตัดการเชื่อมต่อ Drive?",
+  "disconnectBody": "บันทึกของคุณใน Drive จะไม่ถูกลบ คุณสามารถเชื่อมต่อใหม่ได้ทุกเมื่อ",
+  "disconnectButton": "ตัดการเชื่อมต่อ Drive",
+  "languageTileLabel": "ภาษา",
+  "languageDialogTitle": "ภาษาแอป",
+  "searchHint": "ค้นหา…",
+  "languageAuto": "ภาษาของระบบ",
+  "languageAutoDesc": "ใช้ภาษาของระบบของคุณ",
+  "privacyPolicyTitle": "นโยบายความเป็นส่วนตัว",
+  "privacyBeforeStartTitle": "ก่อนที่คุณเริ่ม",
+  "privacyLastUpdated": "อัปเดตครั้งล่าสุด: มิถุนายน 2026",
+  "privacyAccept": "รับทราบ ดำเนินการต่อ",
+  "cardSynced": "ซิงโครไนซ์แล้ว",
+  "cardLocalAhead": "ตัวเก็บไว้ข้างหน้า",
+  "cardDriveAhead": "Drive ข้างหน้า",
+  "cardLocalOnly": "ตัวเก็บไว้เท่านั้น",
+  "cardDriveOnly": "Drive เท่านั้น",
+  "cardTimeNow": "ตอนนี้",
+  "cardTimeMinutesAgo": "{minutes} นาทีที่แล้ว",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours}ช. ที่แล้ว",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days}ว. ที่แล้ว",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months}เดือน ที่แล้ว",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "บนอุปกรณ์นี้",
+  "cardDetailRemoteTitle": "บน Drive",
+  "cardDetailUpload": "อัปโหลดไปยัง Drive",
+  "cardDetailDownload": "ดาวน์โหลดการบันทึก",
+  "cardDetailDeleteLabel": "ลบ",
+  "cardDetailDeleteLocal": "ลบจากอุปกรณ์นี้",
+  "cardDetailDeleteRemote": "ลบจาก Drive",
+  "cardCloseBarrier": "ปิด",
+  "statDayYear": "วัน {day} · ปี {year}",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "วัน {day}",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "เวลาเล่น",
+  "statMoney": "เหรียญ",
+  "statTotal": "รวม",
+  "statMineUnexplored": "ยังไม่สำรวจ",
+  "statMine": "เหมืองแร่",
+  "statMineLvl": "เหมืองแร่ · ระดับ",
+  "skillFarming": "การเกษตร",
+  "skillForaging": "การเก็บของป่า",
+  "skillMining": "การสำรวจเหมือง",
+  "skillFishing": "การตกปลา",
+  "skillCombat": "การต่อสู้",
+  "cardLocalPresence": "บนอุปกรณ์นี้",
+  "cardRemotePresence": "บน Drive",
+  "cardNotPresent": "ไม่อยู่ที่นี่",
+  "cardActionSynced": "ซิงโครไนซ์แล้ว",
+  "cardActionUpload": "อัปโหลด",
+  "cardActionDownload": "ดาวน์โหลด",
+  "pillMonsters": "สัตว์ประหลาด",
+  "pillFriends": "เพื่อน",
+  "pillFaints": "หมดแรง",
+  "pillSleeps": "หลับ",
+  "hiwTitle": "วิธีการทำงาน",
+  "hiwSyncTitle": "วิธีการซิงโครไนซ์",
+  "hiwSyncIntro": "ValleySave ใช้ Google Drive ของคุณเองในการย้ายบันทึกระหว่างอุปกรณ์ ไม่มีเซิร์ฟเวอร์ระดับกลาง: ไฟล์เป็นของคุณ",
+  "hiwSyncDevice": "อุปกรณ์\nของคุณ",
+  "hiwSyncCloud": "Google\nDrive",
+  "hiwSyncOtherDevice": "อุปกรณ์\nอื่น",
+  "hiwUploadTitle": "อัปโหลดการบันทึก",
+  "hiwUploadDesc": "เมื่อคุณอัปโหลด ValleySave จะคัดลอกไฟล์บันทึกทั้งสอง (SaveGameInfo + ไฟล์ฟาร์ม) ไปยังโฟลเดอร์ ValleySave/ บน Drive",
+  "hiwDownloadTitle": "ดาวน์โหลดการบันทึก",
+  "hiwDownloadDesc": "เมื่อคุณดาวน์โหลด ValleySave จะนำไฟล์จาก Drive มาและวางไว้ในโฟลเดอร์เกมโดยตรง",
+  "hiwCompareTitle": "มันเปรียบเทียบอะไร?",
+  "hiwCompareIntro": "เพื่อให้ทราบว่าเวอร์ชันใดนำหน้า ValleySave ใช้เวลาเล่นทั้งหมด — ข้อมูลเพียงอย่างเดียวที่สามารถเพิ่มได้เท่านั้น",
+  "hiwCompareNote": "ก่อนการยืนยัน คุณจะเห็นข้อมูลด้วย เพื่อให้คุณสามารถตัดสินใจได้:",
+  "hiwCompareMoney": "เงินปัจจุบันและรวมที่ได้รับ",
+  "hiwCompareMine": "ระดับเหมืองแร่",
+  "hiwCompareSkills": "ทักษะ (เกษตร การสำรวจเหมือง ต่อสู้…)",
+  "hiwCompareRelations": "เพื่อน สัตว์ประหลาดที่ถูกฆ่า หมดแรง",
+  "hiwCompareStamina": "ความอดทน และสุขภาพ",
+  "hiwCompareNotShown": "ไม่แสดง — ทั้งนี้เปลี่ยนแปลงไปได้และไม่บ่งชี้ว่าบันทึกใดนำหน้า",
+  "hiwCompareNotShownExamples": "สถานะพืชและสัตว์เลี้ยง สินค้าคงคลังและไอเท็ม ความสัมพันธ์ส่วนบุคคล",
+  "hiwCompareWarning": "ไม่แสดง — ทั้งนี้เปลี่ยนแปลงไปได้และไม่บ่งชี้ว่าบันทึกใดนำหน้า",
+  "hiwConflictTitle": "ถ้าคุณเล่นโดยไม่ซิงโครไนซ์",
+  "hiwConflictDesc": "หากคุณเล่นต่อบนมือถือและคอมพิวเตอร์โดยไม่ซิงโครไนซ์ระหว่างเซสชัน คุณจะได้บันทึกเดียวกันสองเวอร์ชัน",
+  "hiwConflictNoMerge": "ไม่สามารถรวมกันได้ ValleySave จะแสดงเวอร์ชันทั้งสองให้คุณเห็นเพื่อให้คุณเลือกรักษาเวอร์ชันใด",
+  "hiwConflictMobile": "มือถือ",
+  "hiwConflictVersionA": "เวอร์ชัน A",
+  "hiwConflictPC": "คอมพิวเตอร์",
+  "hiwConflictVersionB": "เวอร์ชัน B",
+  "hiwDeleteTitle": "หากลบการบันทึก",
+  "hiwDeleteDesc": "เมื่อคุณลบบันทึกจาก Drive มันจะไม่หายไปทันที: มันจะไปยังถังขยะของ Google Drive",
+  "hiwCompatTitle": "ความเข้ากันได้ของแพลตฟอร์ม",
+  "hiwCompatAndroidAccess": "การเข้าถึงบน ANDROID",
+  "hiwShizukuTitle": "กับ Shizuku",
+  "hiwShizukuSubtitle": "ตั้งค่าครั้งเดียว หลังจากนั้น ValleySave จะซิงโครไนซ์เองโดยไม่ต้องให้คุณสัมผัสอีก",
+  "hiwShizukuBadge": "อัตโนมัติ · แนะนำ",
+  "hiwShizukuDone": "✓ เสร็จสิ้น หลังจากนั้นการดาวน์โหลดและอัปโหลดบันทึกจะเป็นการตรง เหมือนบนคอมพิวเตอร์",
+  "hiwShizukuNote": "การจับคู่จะเป็นครั้งแรกเท่านั้น เวอร์ชัน Shizuku ใหม่จะเปิดใช้งานเองหลังจากรีสตาร์ตโทรศัพท์ของคุณ",
+  "hiwBridgeTitle": "สะพานจับแบบแมนนวล",
+  "hiwBridgeSubtitle": "ใช้งานได้เฉพาะกับ Android 11 และ 12 เท่านั้น คุณไม่ต้องติดตั้งอะไรเพิ่มเติม แต่ให้คัดลอกบันทึกด้วยตนเองด้วยแอป Files ทุกครั้งที่คุณซิงโครไนซ์",
+  "hiwBridgeBadge": "ทางเลือกจับแบบแมนนวล · ANDROID 11-12",
+  "hiwBridgeSaveFolder": "โฟลเดอร์ Stardew",
+  "hiwBridgeValleySaveFolder": "โฟลเดอร์ ValleySave",
+  "hiwBridgeNote": "มันใช้งานได้เพราะแอป Files ของระบบสามารถเข้าถึงโฟลเดอร์เหล่านั้นได้ (ValleySave ไม่สามารถ)",
+  "hiwTipAlwaysShow": "คุณจะเห็นเสมอว่ามีอะไรบน Drive ก่อนที่จะเขียนทับ เพื่อให้คุณสามารถเปรียบเทียบ",
+  "hiwTipWithoutUpload": "หากไม่อัปโหลด อุปกรณ์อื่นจะไม่เห็นความก้าวหน้าล่าสุดของคุณ",
+  "hiwTipComparison": "คุณจะเห็นการเปรียบเทียบระหว่างตัวเก็บไว้ข้างหน้าและ Drive ก่อนการยืนยัน",
+  "hiwTipDownloadOverwrite": "การดาวน์โหลดจะเขียนทับบันทึกตัวเก็บไว้ข้างหน้าของคุณ ความก้าวหน้าที่ไม่ซิงโครไนซ์จะหายไป",
+  "hiwTipSync": "อัปโหลดเสมอก่อนเปลี่ยนอุปกรณ์ และดาวน์โหลดเมื่อคุณมาถึง",
+  "hiwTipDeletion": "คุณมีเวลา 30 วันในการคืนค่าจากถังขยะของ Drive ก่อนที่จะถูกลบอย่างถาวร",
+  "hiwPrivacyLink": "นโยบายความเป็นส่วนตัวและการใช้งาน",
+  "emptyNoSaves": "ไม่พบบันทึก",
+  "emptyNoSavesHint": "ไม่สามารถอ่านบันทึกตัวเก็บไว้ข้างหน้าได้บนอุปกรณ์นี้",
+  "bridgeTitle": "นำบันทึกของคุณมา",
+  "bridgeDesc": "เพื่อดูและอัปโหลดบันทึกตัวเก็บไว้ข้างหน้าของคุณ ให้คัดลอกจากโฟลเดอร์ Stardew ไปยังโฟลเดอร์ ValleySave นี้ด้วยแอป Files แล้วเลื่อนเพื่อรีเฟรช",
+  "bridgeRefresh": "รีเฟรช",
+  "bridgeChangeMode": "เปลี่ยนวิธีการ",
+  "loaderLoading": "กำลังโหลด",
+  "loaderConnecting": "กำลังเชื่อมต่อ Drive…",
+  "chooserTitle": "เลือกวิธีการเชื่อมต่อ",
+  "chooserAutomatic": "อัตโนมัติ · แนะนำ",
+  "chooserManual": "ทางเลือกจับแบบแมนนวล · Android 11-12",
+  "shizukuStepTitle": "ตั้งค่า Shizuku",
+  "shizukuStep1Title": "ติดตั้ง Shizuku",
+  "shizukuStep1Desc": "ดาวน์โหลดจาก Play Store หรือ GitHub",
+  "shizukuStep2Title": "เปิดใช้งาน Shizuku",
+  "shizukuStep2Desc": "เรียกใช้แอปและให้สิทธิ์",
+  "shizukuStep3Title": "ให้สิทธิ์",
+  "shizukuStep3Desc": "ValleySave จะขอการเข้าถึง",
+  "shizukuDone": "✓ เสร็จสิ้น หลังจากนั้นการดาวน์โหลดและอัปโหลดบันทึกจะใช้งานได้โดยตรง เหมือนบนคอมพิวเตอร์",
+  "dlgDeleteDriveTitle": "ลบจาก Drive",
+  "dlgDeleteLocalTitle": "ลบจากอุปกรณ์นี้",
+  "dlgDownloadTitle": "ดาวน์โหลดการบันทึก",
+  "dlgUploadTitle": "อัปโหลดการบันทึก",
+  "dlgUploadOverwrite": "นี่จะเขียนทับบันทึกตัวเก็บไว้ข้างหน้าของคุณ",
+  "dlgGotIt": "รับทราบ",
+  "dlgCopyDest": "คัดลอกปลายทาง",
+  "previewColDayYear": "วัน/ปี",
+  "previewColTime": "เวลาเล่น",
+  "previewColMoney": "เหรียญ",
+  "previewColTotal": "รวม",
+  "previewColFarming": "การเกษตร",
+  "previewColForaging": "การเก็บของป่า",
+  "previewColMining": "การสำรวจเหมือง",
+  "previewColFishing": "การตกปลา",
+  "previewColCombat": "การต่อสู้",
+  "previewColFriends": "เพื่อน",
+  "previewColMonsters": "สัตว์ประหลาด",
+  "previewColFaints": "หมดแรง",
+  "previewColMine": "เหมืองแร่",
+  "previewColUnexplored": "ยังไม่สำรวจ",
+  "previewLocalLabel": "บนอุปกรณ์นี้",
+  "previewDriveLabel": "บน DRIVE",
+  "previewFromDrive": "จาก DRIVE",
+  "previewFromDevice": "จากอุปกรณ์นี้",
+  "versionMismatch": "เวอร์ชันต่างกัน: ตัวเก็บไว้ข้างหน้า {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "คัดลอกเส้นทางแล้ว",
+  "snackDestCopied": "คัดลอกเส้นทางปลายทางแล้ว",
+  "snackDownloaded": "ดาวน์โหลดการบันทึกไปยังเกม",
+  "snackSessionExpired": "เซสชัน Drive หมดอายุแล้ว เชื่อมต่ออีกครั้ง",
+  "snackUploadError": "ข้อผิดพลาดในการอัปโหลด: {error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "ข้อผิดพลาดในการดาวน์โหลด: {error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "ข้อผิดพลาดในการลบ: {error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" ย้ายไปยังถังขยะของ Drive แล้ว คุณมีเวลา 30 วันในการคืนค่า",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" ลบจากอุปกรณ์นี้แล้ว",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "เปิดใช้งาน Shizuku…",
+  "snackWriteError": "ไม่สามารถเขียนลงในเกม บางโทรศัพท์บล็อก /Android/data แม้ว่าจะใช้ Shizuku",
+  "snackPlatformNotSupported": "แพลตฟอร์มนี้ยังไม่รองรับการเขียนบันทึกตัวเก็บไว้ข้างหน้า",
+  "snackWirelessDebugHint": "เปิดด้วยตนเอง: การตั้งค่า → ตัวเลือกของนักพัฒนา → การแก้จุดข้อมูลไร้สาย",
+  "snackOpenShizukuApp": "เปิด Shizuku จากลิ้นชักแอปของคุณ",
+  "hiwTipDeletePermanent": "ValleySave ไม่สามารถกู้คืนบันทึกที่ถูกลบอย่างถาวร ไฟล์ Drive เป็นความรับผิดชอบของคุณ",
+  "hiwCompatAchievements": "ความสำเร็จ Steam และ Google Play ไม่ส่งต่อ แต่ละแพลตฟอร์มจะติดตามเฉพาะความสำเร็จที่เกิดขึ้นในเวลาจริงเท่านั้น — ไฟล์บันทึกไม่ทำให้เกิดความสำเร็จย้อนหลัง",
+  "hiwCompatOverwrite": "หากคุณซิงโครไนซ์จากอุปกรณ์สองเครื่องโดยไม่มีลำดับที่กำหนด บันทึกหนึ่งอาจเขียนทับอีกบันทึกหนึ่ง อัปโหลดเสมอก่อนดาวน์โหลด",
+  "hiwCompatVersions": "บันทึกจากเวอร์ชันเกมต่างกันอาจไม่โหลดถูกต้อง ValleySave จะเตือนคุณหากตรวจหาความไม่ตรงกันของเวอร์ชันก่อนดาวน์โหลด",
+  "hiwCompatMods": "โมด SMAPI เพิ่มข้อมูลพิเศษให้กับบันทึก หากคุณโหลดบันทึกที่มีการแก้ไขบนอุปกรณ์ที่ไม่ติดตั้งโมดเหล่านั้น เกมอาจขัดข้องหรือสูญเสียข้อมูลโมด\n\nบน Android SMAPI สามารถติดตั้งได้เช่นกัน เพื่อใช้โมด",
+  "hiwComparePrimary": "เวลาเล่นทั้งหมด",
+  "hiwCompareNoShown1": "สถานะพืชและสัตว์เลี้ยง",
+  "hiwCompareNoShown2": "สินค้าคงคลังและไอเท็ม",
+  "hiwCompareNoShown3": "ความสัมพันธ์ส่วนบุคคล",
+  "hiwShizuku1": "ติดตั้ง Shizuku (Play Store หรือ APK GitHub)",
+  "hiwShizuku2": "เปิดใช้งานด้วยการแก้จุดข้อมูลไร้สาย — ValleySave จะแนะนำคุณทีละขั้นตอน",
+  "hiwShizuku3": "ให้สิทธิ์แก่ ValleySave เมื่อขอให้ทำ",
+  "hiwBridge1": "ดาวน์โหลดจาก Drive: ValleySave ปล่อยให้บันทึกอยู่ในโฟลเดอร์ของมัน คุณคัดลอกไปยังโฟลเดอร์ Stardew ด้วย Files",
+  "hiwBridge2": "อัปโหลดไปยัง Drive: คัดลอกบันทึกจาก Stardew ไปยังโฟลเดอร์ ValleySave ValleySave จะตรวจหามันและอัปโหลด",
+  "snackShizukuBattery": "การตั้งค่า → แอป → Shizuku → แบตเตอรี่ → ไม่จำกัด",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ หากคุณไม่ได้อัปโหลดไปยัง Drive มันจะหายไปตลอดไป ไม่มีการกู้คืน",
+  "dlgDelete": "ลบ",
+  "dlgDownloadButton": "ดาวน์โหลด",
+  "dlgUploadButton": "อัปโหลด",
+  "dlgBridgeCopyTitle": "คัดลอกบันทึกไปยังเกม",
+  "dlgBridgeCopyDesc": "บันทึกพร้อมแล้ว ด้วยแอป Files ของคุณ ให้คัดลอกโฟลเดอร์ \"{saveName}\" และวางลงในโฟลเดอร์ Stardew",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "labelFrom": "จาก",
+  "labelTo": "ถึง",
+  "dlgDownloadNewDesc": "\"{saveName}\" (วัน {day}, {playtime}) จะถูกคัดลอกไปยังอุปกรณ์นี้",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgDownloadOverwrite": "นี่จะเขียนทับบันทึกตัวเก็บไว้ข้างหน้าของ \"{saveName}\"",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\" (วัน {day}, {playtime}) จะถูกอัปโหลดไปยัง Drive ของคุณ",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgUploadOverwriteDrive": "นี่จะเขียนทับเวอร์ชัน Drive ของ \"{saveName}\"",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "pathLabelFromStardew": "จาก (Stardew)",
+  "pathLabelToValleySave": "ถึง (ValleySave)",
+  "chooserDesc": "Android ป้องกันโฟลเดอร์เกม เลือกวิธีให้ ValleySave เข้าถึง — คุณสามารถเปลี่ยนได้ทุกเมื่อ",
+  "chooserShizukuDesc": "ตั้งค่าครั้งเดียว หลังจากนั้น ValleySave จะซิงโครไนซ์ของตัวเอง โดยไม่ต้องให้คุณสัมผัสอะไรเลย วิธีเดียวที่เชื่อถือได้บน Android 13+",
+  "chooserManualBadge": "เฉพาะ ANDROID 11-12",
+  "chooserBridgeDesc": "คัดลอกบันทึกด้วยแอป Files ของคุณ ไม่ต้องติดตั้งเพิ่มเติม เฉพาะ Android 11 และ 12 เท่านั้น",
+  "shizukuGateSubtitle": "ตั้งค่าครั้งเดียว · ครั้งแรกเท่านั้น",
+  "shizukuStatusLabel": "Shizuku ใช้งานอยู่",
+  "shizukuStatusRunning": "เชื่อมต่อและรอคอย",
+  "shizukuStatusNotDetected": "ยังไม่พบ",
+  "shizukuPermLabel": "ให้สิทธิ์แล้ว",
+  "shizukuPermGranted": "ValleySave มีการเข้าถึงแล้ว",
+  "shizukuPermNotGranted": "ต้องให้สิทธิ์แก่ ValleySave",
+  "shizukuGrant": "ให้สิทธิ์",
+  "shizukuGuideHeader": "คำแนะนำทีละขั้นตอน",
+  "shizukuStep1DescFull": "ฟรี หากการตั้งค่า Google Play บล็อกบนโทรศัพท์ของคุณ ให้ใช้ APK ของ GitHub ที่เป็นทางการ",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "เปิดใช้งานตัวเลือกของนักพัฒนา",
+  "shizukuStep2DescFull": "การตั้งค่า → ข้อมูลโทรศัพท์ → ข้อมูลซอฟต์แวร์ → แตะ \"Build number\" 7 ครั้ง",
+  "shizukuStep3TitleFull": "เปิดใช้งานการแก้จุดข้อมูลไร้สาย",
+  "shizukuStep3DescFull": "ปุ่มจะพาคุณไปที่นั่นและเน้นมัน เปิดใช้งาน (เปิด) จากนั้นแตะ \"Pair device with pairing code\" — รหัส 6 หลักจะปรากฏบนหน้าจอ",
+  "btnOpenAndHighlight": "เปิดและเน้น",
+  "shizukuStep4Title": "จับคู่และ START Shizuku",
+  "shizukuStep4Desc": "เปิด Shizuku → \"Start via Wireless Debugging\" → \"Pair with pairing code\" Shizuku จะส่งการแจ้งเตือนที่บอกว่ากำลังรอ ป้อนรหัส 6 หลักจากหน้าจอ Wireless Debugging หลังจากจับคู่ ให้กดปุ่ม START — หากไม่มีแตะครั้งสุดท้ายนี้ Shizuku จะไม่เปิดใช้งาน",
+  "btnOpenShizuku": "เปิด Shizuku",
+  "shizukuStep5Title": "ตั้งค่าแบตเตอรี่ Shizuku เป็น Unrestricted",
+  "shizukuStep5Desc": "เปิด app info → Battery → Unrestricted หากคุณไม่ทำ ระบบจะปิด Shizuku ในพื้นหลังและคุณจะต้องกดปุ่ม Start อีกครั้ง",
+  "btnShizukuAppInfo": "ข้อมูลแอป Shizuku",
+  "shizukuStep6DescActive": "Shizuku ใช้งานอยู่ แตะปุ่มเพื่อให้สิทธิ์",
+  "shizukuStep6DescWaiting": "พร้อมใช้งานเมื่อ Shizuku เปิดใช้งาน (ขั้นตอนที่ 4)",
+  "btnGrantPermission": "ให้สิทธิ์",
+  "btnCheckShizuku": "เสร็จสิ้น · ตรวจสอบ",
+  "statusDone": "เสร็จสิ้น",
+  "statusPending": "ค้างอยู่",
+  "latestBadge": "· บันทึกล่าสุด ·",
+  "saveDateLabel": "{season} · ปี {year}",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": { "type": "String" },
+      "year": { "type": "int" }
+    }
+  },
+  "petCat": "แมว",
+  "petDog": "สุนัข",
+  "houseBasic": "บ้านพื้นฐาน",
+  "houseKitchen": "มีห้องครัว",
+  "houseBedroom": "มีห้องนอน",
+  "houseCellar": "มีห้องเก็บของ",
+  "houseLevelN": "ระดับ {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  }
+}

@@ -1,1 +1,497 @@
-{"@@locale":"ja","appTitle":"ValleySave","welcomeTitle":"あなたの農場を失わないで、持ち歩きましょう。","connectGoogleDrive":"Google Driveに接続","connecting":"接続中…","mySaves":"マイセーブ","howItWorks":"使い方","settings":"設定","aboutSection":"について","openSource":"利用可能なコード","nonCommercial":"非商用","freeForever":"永久無料","privacyTitle":"プライバシーとデータの使用","privacyDescription":"ValleySaveは、Stardew Valleyのセーブデータを自分のGoogle Driveアカウントと同期するアプリです。","whatDataTitle":"使用するデータ","whatDataDesc":"ValleySaveは、コピーの作成、同期、または復元に必要なStardew Valleyのセーブファイルのみにアクセスします。","googleDriveTitle":"Google Drive","googleDriveDesc":"セーブはあなた自身のGoogle Driveアカウントにアップロードされます。ValleySaveはゲームを保存するために独自のサーバーを使用しません。","androidPermissionsTitle":"Android上のアクセス許可","androidPermissionsDesc":"ValleySaveは、セーブファイルにアクセスするためにストレージの許可またはShizukuなどのツールが必要な場合があります。","adsTitle":"広告","adsDesc":"ValleySaveはGoogle AdMobを介して広告を表示する場合があります。","responsibilityTitle":"責任","responsibilityDesc":"セーブファイルはあなたの責任です。","deleteDataTitle":"データを削除","deleteDataDesc":"Google DriveからValleySaveフォルダを手動で削除することで、同期されたコピーを削除できます。","sourceCodeTitle":"ソースコードと連絡先","sourceCodeDesc":"ValleySaveはPolyform Noncommercialライセンスの下で利用可能なコードを持つプロジェクトです。","upToDate":"最新","checkingUpdates":"確認中…","updateAvailable":"アップデートが利用可能","application":"アプリケーション","version":"バージョン {version}","checkForUpdates":"アップデートを確認","shizukuRequired":"Shizukuが必要","shizukuGuide":"Shizukuセットアップガイド","activateShizuku":"Shizukuを有効にしてゲーム内のセーブを書き込みます。","deleteSaveTitle":"{saveName}を削除","deleteSaveMessage":"これによりこのデバイスからセーブが削除されます。続行しますか?","deleteFromDrive":"Driveから削除","confirmDelete":"セーブ{saveName}はGoogle Driveのゴミ箱に移動されます。","deleteFromDeviceMessage":"セーブ{saveName}はこのデバイスから完全に削除されます。","restoreSaveTitle":"{saveName}を復元","restoreSaveMessage":"{saveName}をこのデバイスにダウンロードしますか?","restore":"復元","cancel":"キャンセル","error":"エラー","success":"成功","loading":"読み込み中…","disconnect":"切断","ok":"OK","yes":"はい","no":"いいえ"}
+﻿{
+  "@@locale": "ja",
+  "appTitle": "ValleySave",
+  "welcomeTitle": "あなたの農場を失わないで、持ち歩きましょう。",
+  "connectGoogleDrive": "Google Driveに接続",
+  "connecting": "接続中…",
+  "mySaves": "マイセーブ",
+  "howItWorks": "使い方",
+  "settings": "設定",
+  "aboutSection": "について",
+  "openSource": "利用可能なコード",
+  "nonCommercial": "非商用",
+  "freeForever": "永久無料",
+  "privacyTitle": "プライバシーとデータの使用",
+  "privacyDescription": "ValleySaveは、Stardew Valleyのセーブデータを自分のGoogle Driveアカウントと同期するアプリです。",
+  "whatDataTitle": "使用するデータ",
+  "whatDataDesc": "ValleySaveは、コピーの作成、同期、または復元に必要なStardew Valleyのセーブファイルのみにアクセスします。",
+  "googleDriveTitle": "Google Drive",
+  "googleDriveDesc": "セーブはあなた自身のGoogle Driveアカウントにアップロードされます。ValleySaveはゲームを保存するために独自のサーバーを使用しません。",
+  "androidPermissionsTitle": "Android上のアクセス許可",
+  "androidPermissionsDesc": "ValleySaveは、セーブファイルにアクセスするためにストレージの許可またはShizukuなどのツールが必要な場合があります。",
+  "adsTitle": "広告",
+  "adsDesc": "ValleySaveはGoogle AdMobを介して広告を表示する場合があります。",
+  "responsibilityTitle": "責任",
+  "responsibilityDesc": "セーブファイルはあなたの責任です。",
+  "deleteDataTitle": "データを削除",
+  "deleteDataDesc": "Google DriveからValleySaveフォルダを手動で削除することで、同期されたコピーを削除できます。",
+  "sourceCodeTitle": "ソースコードと連絡先",
+  "sourceCodeDesc": "ValleySaveはPolyform Noncommercialライセンスの下で利用可能なコードを持つプロジェクトです。",
+  "upToDate": "最新",
+  "checkingUpdates": "確認中…",
+  "updateAvailable": "アップデートが利用可能",
+  "application": "アプリケーション",
+  "version": "バージョン {version}",
+  "checkForUpdates": "アップデートを確認",
+  "shizukuRequired": "Shizukuが必要",
+  "shizukuGuide": "Shizukuセットアップガイド",
+  "activateShizuku": "Shizukuを有効にしてゲーム内のセーブを書き込みます。",
+  "deleteSaveTitle": "{saveName}を削除",
+  "deleteSaveMessage": "これによりこのデバイスからセーブが削除されます。続行しますか?",
+  "deleteFromDrive": "Driveから削除",
+  "confirmDelete": "セーブ{saveName}はGoogle Driveのゴミ箱に移動されます。",
+  "deleteFromDeviceMessage": "セーブ{saveName}はこのデバイスから完全に削除されます。",
+  "restoreSaveTitle": "{saveName}を復元",
+  "restoreSaveMessage": "{saveName}をこのデバイスにダウンロードしますか?",
+  "restore": "復元",
+  "cancel": "キャンセル",
+  "error": "エラー",
+  "success": "成功",
+  "loading": "読み込み中…",
+  "disconnect": "切断",
+  "ok": "OK",
+  "yes": "はい",
+  "no": "いいえ",
+  "welcomeHeroPre": "あなたの農場を\n失わないで、",
+  "welcomeHeroAccent": "持ち歩きましょう。",
+  "welcomeHeroPost": "",
+  "welcomeSubtitle": "Stardew Valleyのセーブデータをすべてのデバイスで同期します。あなたのデータはあなた自身のGoogle Driveに存在します。サーバーなし、サブスクリプションなし、あなたが管理します。",
+  "welcomeDriveConnected": "Driveに接続",
+  "welcomeFooterTagline": "· 非商用 · 永久無料 ·",
+  "updateVersionAvailable": "v{version}が利用可能",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionMode": "モード",
+  "sectionSeason": "シーズン",
+  "sectionLanguage": "言語",
+  "modeAutoTitle": "自動",
+  "modeAutoDesc": "アクティブなセーブを追跡し、セーブがない場合は実際の場所を使用します。",
+  "modeSavesTitle": "セーブ別",
+  "modeSavesDesc": "常に最新のセーブからシーズンを使用します。",
+  "modeGeoTitle": "場所別",
+  "modeGeoDesc": "常にあなたの場所の実際のシーズンを使用します。",
+  "modeFixedTitle": "固定シーズン",
+  "modeFixedDesc": "常に同じシーズンを表示します。",
+  "modeRandomTitle": "ランダム",
+  "modeRandomDesc": "アプリを開くたびに異なるシーズンを選択します。",
+  "seasonInitial": "初期",
+  "seasonSpring": "春",
+  "seasonSummer": "夏",
+  "seasonFall": "秋",
+  "seasonWinter": "冬",
+  "autoPriorityTitle": "優先順位",
+  "autoStep1Title": "最初の起動",
+  "autoStep1Desc": "初期状態を表示します。",
+  "autoStep2Title": "アクティブなセーブ",
+  "autoStep2Desc": "最後に同期したセーブからシーズンを使用します。",
+  "autoStep3Title": "場所",
+  "autoStep3Desc": "あなたの半球と地域の実際のシーズンを検出します。",
+  "autoStep4Title": "デフォルト",
+  "autoStep4Desc": "データがない場合は初期（ナイトモード）。",
+  "versionInstalled": "インストール済みバージョン",
+  "updateNeverChecked": "確認なし",
+  "updateCheckedNow": "今確認しました",
+  "updateOutdatedDownload": "最新ではありません · ダウンロード",
+  "updateDownloading": "アップデートをダウンロード中…",
+  "updateError": "エラー — タップして再試行",
+  "disconnectTitle": "Driveを切断しますか?",
+  "disconnectBody": "Drive上のセーブは削除されません。いつでも再接続できます。",
+  "disconnectButton": "Driveを切断",
+  "languageTileLabel": "言語",
+  "languageDialogTitle": "アプリの言語",
+  "searchHint": "検索…",
+  "languageAuto": "システム言語",
+  "languageAutoDesc": "あなたのシステム言語を使用します",
+  "privacyPolicyTitle": "プライバシーポリシー",
+  "privacyBeforeStartTitle": "開始する前に",
+  "privacyLastUpdated": "最後に更新: 2026年6月",
+  "privacyAccept": "わかりました、続ける",
+  "cardSynced": "同期済み",
+  "cardLocalAhead": "ローカルが最新",
+  "cardDriveAhead": "Driveが最新",
+  "cardLocalOnly": "ローカルのみ",
+  "cardDriveOnly": "Driveのみ",
+  "cardTimeNow": "今",
+  "cardTimeMinutesAgo": "{minutes}分前",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours}時間前",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days}日前",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months}ヶ月前",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "このデバイス上",
+  "cardDetailRemoteTitle": "Drive上",
+  "cardDetailUpload": "Driveにアップロード",
+  "cardDetailDownload": "セーブをダウンロード",
+  "cardDetailDeleteLabel": "削除",
+  "cardDetailDeleteLocal": "このデバイスから削除",
+  "cardDetailDeleteRemote": "Driveから削除",
+  "cardCloseBarrier": "閉じる",
+  "statDayYear": "Day {day} · Year {year}",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "Day {day}",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "プレイ時間",
+  "statMoney": "コイン",
+  "statTotal": "合計",
+  "statMineUnexplored": "未探索",
+  "statMine": "鉱山",
+  "statMineLvl": "鉱山 · Lv",
+  "skillFarming": "農業",
+  "skillForaging": "採集",
+  "skillMining": "採掘",
+  "skillFishing": "釣り",
+  "skillCombat": "戦闘",
+  "cardLocalPresence": "このデバイス上",
+  "cardRemotePresence": "Drive上",
+  "cardNotPresent": "ここにはありません",
+  "cardActionSynced": "同期済み",
+  "cardActionUpload": "アップロード",
+  "cardActionDownload": "ダウンロード",
+  "pillMonsters": "モンスター",
+  "pillFriends": "友人",
+  "pillFaints": "気絶",
+  "pillSleeps": "睡眠",
+  "hiwTitle": "使い方",
+  "hiwSyncTitle": "同期の仕組み",
+  "hiwSyncIntro": "ValleySaveはあなた自身のGoogle Driveを使ってデバイス間でセーブを移動します。仲介サーバーなし: ファイルはあなたのものです。",
+  "hiwSyncDevice": "あなたの\nデバイス",
+  "hiwSyncCloud": "Google\nDrive",
+  "hiwSyncOtherDevice": "他の\nデバイス",
+  "hiwUploadTitle": "セーブをアップロード",
+  "hiwUploadDesc": "アップロードするときは、ValleySaveは両方のセーブファイル（SaveGameInfo + ファームファイル）をDrive上のValleySave/フォルダにコピーします。",
+  "hiwDownloadTitle": "セーブをダウンロード",
+  "hiwDownloadDesc": "ダウンロードするときは、ValleySaveはDriveからファイルを取得してゲームフォルダに直接配置します。",
+  "hiwCompareTitle": "何を比較しているのか?",
+  "hiwCompareIntro": "どのバージョンが新しいかを知るために、ValleySaveは総プレイ時間を使用します。唯一成長し続けるデータです。",
+  "hiwCompareNote": "確認する前に、次のことも表示されます。比較できます:",
+  "hiwCompareMoney": "現在のお金と獲得した総額",
+  "hiwCompareMine": "鉱山レベル",
+  "hiwCompareSkills": "スキル（農業、採掘、戦闘など）",
+  "hiwCompareRelations": "友人、倒したモンスター、気絶回数",
+  "hiwCompareStamina": "スタミナと健康",
+  "hiwCompareNotShown": "これらは表示されません。どちらの方向にも変わる可能性があり、どのセーブが新しいかを示さないです。",
+  "hiwCompareNotShownExamples": "作物と動物のステータス、インベントリとアイテム、個々の関係",
+  "hiwCompareWarning": "これらは表示されません。どちらの方向にも変わる可能性があり、どのセーブが新しいかを示さないです。",
+  "hiwConflictTitle": "同期しないでプレイする場合",
+  "hiwConflictDesc": "モバイルとPCでセッション間の同期なしで進める場合、同じセーブの2つのバージョンが生まれます。",
+  "hiwConflictNoMerge": "マージできません。ValleySaveは常に両方のバージョンを表示して、どちらを保持するかを選択できます。",
+  "hiwConflictMobile": "モバイル",
+  "hiwConflictVersionA": "バージョンA",
+  "hiwConflictPC": "PC",
+  "hiwConflictVersionB": "バージョンB",
+  "hiwDeleteTitle": "セーブが削除された場合",
+  "hiwDeleteDesc": "Driveからセーブを削除すると、すぐには消えません。Google Driveのゴミ箱にはいります。",
+  "hiwCompatTitle": "プラットフォーム互換性",
+  "hiwCompatAndroidAccess": "ANDROID上でのアクセス",
+  "hiwShizukuTitle": "Shizukuを使用",
+  "hiwShizukuSubtitle": "一度セットアップすれば。その後、ValleySaveは自動的に同期されます。二度と触れる必要はありません。",
+  "hiwShizukuBadge": "自動 · 推奨",
+  "hiwShizukuDone": "✓ 完了。その後、セーブのダウンロードとアップロードは直接実行されます。コンピューターのようにです。",
+  "hiwShizukuNote": "ペアリングは最初だけです。新しいShizukuバージョンは、電話を再起動した後に自動的に再アクティブ化されます。",
+  "hiwBridgeTitle": "手動ブリッジ",
+  "hiwBridgeSubtitle": "Android 11と12でのみ動作します。追加のインストールは不要です。代わりに、同期するたびに自分のファイルアプリでセーブを手動でコピーします。",
+  "hiwBridgeBadge": "手動の代替案 · Android 11-12",
+  "hiwBridgeSaveFolder": "Stardewのフォルダ",
+  "hiwBridgeValleySaveFolder": "ValleySaveのフォルダ",
+  "hiwBridgeNote": "システムのファイルアプリがそれらのフォルダにアクセスできるので動作します（ValleySaveはできません）。",
+  "hiwTipAlwaysShow": "常に上書きする前にDrive上の内容を確認し、比較できます。",
+  "hiwTipWithoutUpload": "アップロードなしでは、他のデバイスには最新の進行状況が表示されません。",
+  "hiwTipComparison": "確認する前に、ローカルとDrive間の比較を見ることができます。",
+  "hiwTipDownloadOverwrite": "ダウンロードはローカルセーブを上書きします。同期されていない進行状況は失われます。",
+  "hiwTipSync": "デバイスを切り替える前に常にアップロードし、到着時にダウンロードしてください。",
+  "hiwTipDeletion": "永久に削除される前に、Drive Trashから復元するまで30日あります。",
+  "hiwPrivacyLink": "プライバシーポリシーと使用方法",
+  "emptyNoSaves": "セーブが見つかりません",
+  "emptyNoSavesHint": "このデバイスで読み込むことができるローカルセーブがありません",
+  "bridgeTitle": "セーブを持ってきてください",
+  "bridgeDesc": "ローカルセーブを表示してアップロードするには、ファイルアプリでStardewフォルダからこのValleySaveフォルダにコピーしてください。次に、リフレッシュするためにスワイプします。",
+  "bridgeRefresh": "リフレッシュ",
+  "bridgeChangeMode": "方法を変更",
+  "loaderLoading": "読み込み中",
+  "loaderConnecting": "Driveに接続中…",
+  "chooserTitle": "接続方法を選択",
+  "chooserAutomatic": "自動 · 推奨",
+  "chooserManual": "手動の代替案 · Android 11-12",
+  "shizukuStepTitle": "Shizukuをセットアップ",
+  "shizukuStep1Title": "Shizukuをインストール",
+  "shizukuStep1Desc": "Play StoreまたはGitHubからダウンロード",
+  "shizukuStep2Title": "Shizukuを有効化",
+  "shizukuStep2Desc": "アプリを実行して許可を付与",
+  "shizukuStep3Title": "許可を付与",
+  "shizukuStep3Desc": "ValleySaveがアクセスをリクエストします",
+  "shizukuDone": "✓ 完了。その後、セーブのダウンロードとアップロードは直接機能します。コンピューターのようにです。",
+  "dlgDeleteDriveTitle": "Driveから削除",
+  "dlgDeleteLocalTitle": "このデバイスから削除",
+  "dlgDownloadTitle": "セーブをダウンロード",
+  "dlgUploadTitle": "セーブをアップロード",
+  "dlgUploadOverwrite": "これはローカルセーブを上書きします",
+  "dlgGotIt": "わかりました",
+  "dlgCopyDest": "コピー先",
+  "previewColDayYear": "日/年",
+  "previewColTime": "プレイ時間",
+  "previewColMoney": "コイン",
+  "previewColTotal": "合計",
+  "previewColFarming": "農業",
+  "previewColForaging": "採集",
+  "previewColMining": "採掘",
+  "previewColFishing": "釣り",
+  "previewColCombat": "戦闘",
+  "previewColFriends": "友人",
+  "previewColMonsters": "モンスター",
+  "previewColFaints": "気絶",
+  "previewColMine": "鉱山",
+  "previewColUnexplored": "未探索",
+  "previewLocalLabel": "このデバイス上",
+  "previewDriveLabel": "Drive上",
+  "previewFromDrive": "DRIVE から",
+  "previewFromDevice": "このデバイス から",
+  "versionMismatch": "異なるバージョン: ローカル {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "パスがコピーされました",
+  "snackDestCopied": "宛先パスがコピーされました",
+  "snackDownloaded": "セーブがゲームにダウンロードされました",
+  "snackSessionExpired": "Driveセッションが期限切れ。再接続してください",
+  "snackUploadError": "アップロードエラー: {error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "ダウンロードエラー: {error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "削除エラー: {error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" がDriveのゴミ箱に移動されました。復元するまで30日あります。",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" がこのデバイスから削除されました",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "Shizukuを有効にしてください…",
+  "snackWriteError": "ゲームに書き込めませんでした。一部の電話機は Shizuku でも /Android/data をブロックします。",
+  "snackPlatformNotSupported": "このプラットフォームはまだローカルセーブの書き込みをサポートしていません。",
+  "snackWirelessDebugHint": "手動で開く: 設定 → 開発者向けオプション → ワイヤレスデバッグ。",
+  "snackOpenShizukuApp": "アプリドロワーからShizukuを開きます。",
+  "hiwTipDeletePermanent": "ValleySaveは永久に削除されたセーブを回復できません。Driveファイルはあなたの責任です。",
+  "hiwCompatAchievements": "SteamとGoogle Playの実績は転送されません。各プラットフォームは、リアルタイムで発生した実績のみを追跡します。セーブファイルは遡及的に実績をトリガーしません。",
+  "hiwCompatOverwrite": "順序を設定せずに2つのデバイスから同期する場合、1つのセーブが他を上書きできます。常にダウンロード前にアップロードしてください。",
+  "hiwCompatVersions": "異なるゲームバージョンのセーブは正しく読み込まれない場合があります。ValleySaveはダウンロード前にバージョンの不一致を検出した場合に警告します。",
+  "hiwCompatMods": "SMAPI modはセーブに追加データを追加します。それらのmodがインストールされていないデバイスでmodded saveを読み込むと、ゲームがクラッシュするか、modデータが失われる可能性があります。\n\nAndroid上では、modを使用するためにSMAPIをインストールすることもできます。",
+  "hiwComparePrimary": "総プレイ時間",
+  "hiwCompareNoShown1": "作物と動物のステータス",
+  "hiwCompareNoShown2": "インベントリとアイテム",
+  "hiwCompareNoShown3": "個々の関係",
+  "hiwShizuku1": "Shizukuをインストール（Play StoreまたはGitHub APK）。",
+  "hiwShizuku2": "ワイヤレスデバッグで有効化します。ValleySaveがステップバイステップでガイドします。",
+  "hiwShizuku3": "プロンプトされたときにValleySaveに許可を付与します。",
+  "hiwBridge1": "Driveからダウンロード: ValleySaveはセーブをそのフォルダに残します。ファイルでStardewのフォルダにコピーします。",
+  "hiwBridge2": "Driveにアップロード: StardewのフォルダからセーブをValleySaveのフォルダにコピーします。ValleySaveはそれを検出してアップロードします。",
+  "snackShizukuBattery": "設定 → アプリ → Shizuku → バッテリー → 制限なし。",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ Driveにアップロードしていない場合は、永久に失われます。回復はできません。",
+  "dlgDelete": "削除",
+  "dlgDownloadButton": "ダウンロード",
+  "dlgUploadButton": "アップロード",
+  "dlgBridgeCopyTitle": "セーブをゲームにコピー",
+  "dlgBridgeCopyDesc": "セーブの準備ができました。ファイルアプリで、\"{saveName}\" フォルダをコピーしてStardewフォルダに貼り付けます。",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "labelFrom": "から",
+  "labelTo": "へ",
+  "dlgDownloadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) がこのデバイスにコピーされます。",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgDownloadOverwrite": "これはローカルの \"{saveName}\" を上書きします。",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) がDriveにアップロードされます。",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgUploadOverwriteDrive": "これはDriveの \"{saveName}\" を上書きします。",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "pathLabelFromStardew": "から（Stardew）",
+  "pathLabelToValleySave": "へ（ValleySave）",
+  "chooserDesc": "Androidはゲームフォルダを保護します。ValleySaveにアクセス権を付与する方法を選択してください。いつでも変更できます。",
+  "chooserShizukuDesc": "一度設定。その後、ValleySaveは自動的に同期されます。何も触れる必要がありません。Android 13以降の唯一の信頼できる方法。",
+  "chooserManualBadge": "Android 11-12のみ",
+  "chooserBridgeDesc": "ファイルアプリでセーブをコピーします。追加のインストールはありません。Android 11と12のみ。",
+  "shizukuGateSubtitle": "一度設定 · 最初だけ",
+  "shizukuStatusLabel": "Shizukuがアクティブ",
+  "shizukuStatusRunning": "接続済みで待機中。",
+  "shizukuStatusNotDetected": "まだ検出されていません。",
+  "shizukuPermLabel": "許可が付与されました",
+  "shizukuPermGranted": "ValleySaveは既にアクセスしています。",
+  "shizukuPermNotGranted": "ValleySaveを認可する必要があります。",
+  "shizukuGrant": "付与",
+  "shizukuGuideHeader": "ステップバイステップガイド",
+  "shizukuStep1DescFull": "無料。Google Playがあなたの電話にそれをブロックする場合は、公式のGitHub APKを使用してください。",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "開発者向けオプションを有効にする",
+  "shizukuStep2DescFull": "設定 → 電話について → ソフトウェア情報 → 「ビルド番号」を7回タップしてください。",
+  "shizukuStep3TitleFull": "ワイヤレスデバッグを有効にする",
+  "shizukuStep3DescFull": "ボタンはそこに移動してハイライトします。有効にします（ON）。次に、「ペアリングコードを使用してデバイスをペアリング」をタップします。画面に6桁のコードが表示されます。",
+  "btnOpenAndHighlight": "開く＆ハイライト",
+  "shizukuStep4Title": "ペアリングとShizukuをSTART",
+  "shizukuStep4Desc": "Shizukuを開く → 「ワイヤレスデバッグ経由で開始」 → 「ペアリングコードを使用してペアリング」。Shizukuは待機中という通知を送信します。ワイヤレスデバッグ画面から6桁のコードを入力してください。ペアリング後、STARTを押します。その最後のタップがないとShizukuはアクティブになりません。",
+  "btnOpenShizuku": "Shizukuを開く",
+  "shizukuStep5Title": "Shizukuのバッテリーを制限なしに設定",
+  "shizukuStep5Desc": "アプリ情報を開く → バッテリー → 制限なし。そうしないと、システムはShizukuをバックグラウンドで閉じて、再度Startを押す必要があります。",
+  "btnShizukuAppInfo": "Shizukuアプリ情報",
+  "shizukuStep6DescActive": "Shizukuがアクティブです。ボタンをタップして認可します。",
+  "shizukuStep6DescWaiting": "Shizukuがアクティブになった後（ステップ4）に利用可能になります。",
+  "btnGrantPermission": "許可を付与",
+  "btnCheckShizuku": "完了 · 確認",
+  "statusDone": "完了",
+  "statusPending": "保留中",
+  "latestBadge": "· 最新のセーブ ·",
+  "saveDateLabel": "{season} · Year {year}",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "petCat": "猫",
+  "petDog": "犬",
+  "houseBasic": "基本的な家",
+  "houseKitchen": "キッチン付き",
+  "houseBedroom": "寝室付き",
+  "houseCellar": "地下室付き",
+  "houseLevelN": "Lv. {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  }
+}

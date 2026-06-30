@@ -25,13 +25,13 @@ const _kLangs = [
   (null,                                                                  '🌐',                      'Auto · sistema'),
   (Locale('es'),                                                          '🇪🇸',                     'Español'),
   (Locale('en'),                                                          '🇬🇧',                     'English'),
+  (Locale('eu'),                                                          'assets/flags/eu.svg',      'Euskera'),
   (Locale('fr'),                                                          '🇫🇷',                     'Français'),
   (Locale('de'),                                                          '🇩🇪',                     'Deutsch'),
   (Locale('it'),                                                          '🇮🇹',                     'Italiano'),
   (Locale('pt'),                                                          '🇵🇹',                     'Português'),
   (Locale('ru'),                                                          '🇷🇺',                     'Русский'),
   (Locale('uk'),                                                          '🇺🇦',                     'Українська'),
-  (Locale('eu'),                                                          'assets/flags/eu.svg',      'Euskera'),
   (Locale('ja'),                                                          '🇯🇵',                     '日本語'),
   (Locale('zh'),                                                          '🇨🇳',                     '中文'),
   (Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),           '🇹🇼',                     '中文 (繁體)'),
@@ -147,6 +147,10 @@ class _SettingsScreenState extends State<SettingsScreen>
         }
       },
     );
+    // Android: invokeMethod retornó → instalador del sistema abierto o error ya manejado
+    if (mounted && _updateState == _UpdateState.downloading) {
+      setState(() => _updateState = _UpdateState.available);
+    }
   }
 
   Future<void> _load() async {

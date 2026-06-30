@@ -172,13 +172,23 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         _progressNotifier.value = p;
         if (mounted) setState(() => _downloadProgress = p);
       },
-      onError: (_) {
+      onError: (e) {
         if (mounted) {
           Navigator.of(context, rootNavigator: true).maybePop();
           setState(() => _updateDownloading = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${AppLocalizations.of(context)!.error}: $e'),
+              backgroundColor: const Color(0xFFC06050),
+              duration: const Duration(seconds: 8),
+            ),
+          );
         }
       },
     );
+    if (mounted && _updateDownloading) {
+      setState(() => _updateDownloading = false);
+    }
   }
 
   Widget _buildUpdateChip(SeasonState season, AppLocalizations l10n) {

@@ -130,6 +130,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                               _sectionDeletion(l10n),
                               const SizedBox(height: 12),
                               _sectionCompatibility(l10n),
+                              const SizedBox(height: 12),
+                              _sectionLaunchGame(l10n),
                               const SizedBox(height: 28),
                               _androidDivider(l10n),
                               const SizedBox(height: 16),
@@ -592,6 +594,35 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
           _tip(icon: Icons.system_update_alt_rounded, color: amber, text: l10n.hiwCompatVersions),
           const SizedBox(height: 8),
           _tip(icon: Icons.extension_rounded, color: amber, text: l10n.hiwCompatMods),
+        ],
+      ),
+    );
+  }
+
+  // ── Section: launch game ─────────────────────────────────────────────────
+
+  Widget _sectionLaunchGame(AppLocalizations l10n) {
+    const green = AppColors.green;
+    return _infoCard(
+      icon: Icons.play_circle_outline_rounded,
+      color: green,
+      title: l10n.hiwLaunchTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwLaunchDesc, style: _body()),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.desktop_windows_rounded,
+            color: green,
+            text: l10n.hiwLaunchTipWindows,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.phone_android_rounded,
+            color: green,
+            text: l10n.hiwLaunchTipAndroid,
+          ),
         ],
       ),
     );

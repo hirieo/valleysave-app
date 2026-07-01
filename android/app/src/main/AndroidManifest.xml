@@ -64,6 +64,8 @@
     <queries>
         <!-- Permite abrir/consultar la app Shizuku (visibilidad de paquetes A11+). -->
         <package android:name="moe.shizuku.privileged.api" />
+        <!-- Permite detectar y lanzar Stardew Valley desde la app. -->
+        <package android:name="com.chucklefish.stardewvalley" />
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

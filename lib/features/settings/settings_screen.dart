@@ -9,6 +9,7 @@ import '../../generated/app_localizations.dart';
 
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
+import '../../core/services/game_launch_service.dart';
 import '../../core/services/locale_controller.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
@@ -69,6 +70,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   double _downloadProgress = 0;
   final _progressNotifier = ValueNotifier<double>(0);
   bool _updateTilePressed = false;
+  String? _gameExePath;
+  bool _gameExeTilePressed = false;
 
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
@@ -155,10 +158,16 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Future<void> _load() async {
     final s = await _service.loadSettings();
+    if (Platform.isWindows) {
+      await GameLaunchService.instance.init();
+    }
     if (mounted) {
       setState(() {
         _settings = s;
         _loading  = false;
+        if (Platform.isWindows) {
+          _gameExePath = GameLaunchService.instance.resolvedExePath;
+        }
       });
     }
   }
@@ -357,6 +366,12 @@ class _SettingsScreenState extends State<SettingsScreen>
                             Text(l10n.sectionSeason.toUpperCase(), style: AppTypography.eyebrow()),
                             const SizedBox(height: 12),
                             _seasonPicker(l10n),
+                          ],
+                          if (Platform.isWindows) ...[
+                            const SizedBox(height: 32),
+                            Text(l10n.settingsGameSection.toUpperCase(), style: AppTypography.eyebrow()),
+                            const SizedBox(height: 12),
+                            _gameTile(accent, l10n),
                           ],
                           const SizedBox(height: 32),
                           Text(l10n.application.toUpperCase(), style: AppTypography.eyebrow()),
@@ -742,6 +757,72 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         ),
       ],
+    );
+  }
+
+  Widget _gameTile(Color accent, AppLocalizations l10n) {
+    final hasPath = _gameExePath != null;
+    return GestureDetector(
+      onTap: () async {
+        final picked = await GameLaunchService.instance.pickExePathWindows();
+        if (picked == null || !mounted) return;
+        await GameLaunchService.instance.setCustomExePath(picked);
+        await GameLaunchService.instance.init();
+        if (mounted) setState(() => _gameExePath = GameLaunchService.instance.resolvedExePath);
+      },
+      onTapDown: (_) => setState(() => _gameExeTilePressed = true),
+      onTapUp: (_) => setState(() => _gameExeTilePressed = false),
+      onTapCancel: () => setState(() => _gameExeTilePressed = false),
+      child: AnimatedScale(
+        scale: _gameExeTilePressed ? 0.97 : 1.0,
+        duration: _gameExeTilePressed
+            ? const Duration(milliseconds: 100)
+            : const Duration(milliseconds: 200),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.settingsGameExePath, style: AppTypography.bodyStrong()),
+                    const SizedBox(height: 2),
+                    Text(
+                      hasPath ? _gameExePath! : l10n.settingsGameExeNotFound,
+                      style: AppTypography.mono(
+                        color: hasPath ? AppColors.statusOk : AppColors.textFaint,
+                        size: 10,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: accent.withValues(alpha: 0.35)),
+                ),
+                child: Text(
+                  l10n.settingsGameExeBrowse,
+                  style: AppTypography.mono(color: accent, size: 11),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

@@ -1108,4 +1108,40 @@ class AppLocalizationsEu extends AppLocalizations {
   String houseLevelN(int level) {
     return 'Lv. $level';
   }
+
+  @override
+  String get tooltipLaunchGame => 'Jokatu';
+
+  @override
+  String get hiwLaunchTitle => 'Jokoa ireki';
+
+  @override
+  String get hiwLaunchDesc =>
+      'Nire gordetakoak pantailako goiko barrako ▶ botoiak Stardew Valley zuzenean aplikaziotik irekitzen du.';
+
+  @override
+  String get hiwLaunchTipWindows =>
+      'Windowsen jokoa automatikoki aurkitzen ez bada, Ezarpenak → Jokoa atalean exekutagarriaren bidea ezarri.';
+
+  @override
+  String get hiwLaunchTipAndroid =>
+      'Androiden instalatuta badago jokoa irekitzen du.';
+
+  @override
+  String get settingsGameSection => 'Jokoa';
+
+  @override
+  String get settingsGameExePath => 'Stardew Valley exekutagarria';
+
+  @override
+  String get settingsGameExeNotFound => 'Ez da automatikoki aurkitu';
+
+  @override
+  String get settingsGameExeBrowse => 'Bilatu…';
+
+  @override
+  String get settingsGameExeSaved => 'Bidea gordeta';
+
+  @override
+  String get snackLaunchError => 'Ezin izan da jokoa ireki';
 }

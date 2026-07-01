@@ -493,5 +493,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "tooltipLaunchGame": "Jokatu",
+  "hiwLaunchTitle": "Jokoa ireki",
+  "hiwLaunchDesc": "Nire gordetakoak pantailako goiko barrako ▶ botoiak Stardew Valley zuzenean aplikaziotik irekitzen du.",
+  "hiwLaunchTipWindows": "Windowsen jokoa automatikoki aurkitzen ez bada, Ezarpenak → Jokoa atalean exekutagarriaren bidea ezarri.",
+  "hiwLaunchTipAndroid": "Androiden instalatuta badago jokoa irekitzen du.",
+  "settingsGameSection": "Jokoa",
+  "settingsGameExePath": "Stardew Valley exekutagarria",
+  "settingsGameExeNotFound": "Ez da automatikoki aurkitu",
+  "settingsGameExeBrowse": "Bilatu…",
+  "settingsGameExeSaved": "Bidea gordeta",
+  "snackLaunchError": "Ezin izan da jokoa ireki"
 }

@@ -370,5 +370,16 @@
     "placeholders": {
       "level": { "type": "int" }
     }
-  }
+  },
+  "tooltipLaunchGame": "Jugar",
+  "hiwLaunchTitle": "Abrir el juego",
+  "hiwLaunchDesc": "El botón ▶ en la barra superior de Mis partidas abre Stardew Valley directamente desde la app.",
+  "hiwLaunchTipWindows": "En Windows, si el juego no se detecta automáticamente, configura la ruta del ejecutable en Ajustes → Juego.",
+  "hiwLaunchTipAndroid": "En Android abre el juego si está instalado.",
+  "settingsGameSection": "Juego",
+  "settingsGameExePath": "Ejecutable de Stardew Valley",
+  "settingsGameExeNotFound": "No encontrado automáticamente",
+  "settingsGameExeBrowse": "Buscar…",
+  "settingsGameExeSaved": "Ruta guardada",
+  "snackLaunchError": "No se pudo abrir el juego"
 }

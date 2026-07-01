@@ -346,5 +346,16 @@
   "houseBedroom": "Com quarto",
   "houseCellar": "Com adega",
   "houseLevelN": "Nv. {level}",
-  "@houseLevelN": { "placeholders": { "level": { "type": "int" } } }
+  "@houseLevelN": { "placeholders": { "level": { "type": "int" } } },
+  "tooltipLaunchGame": "Jogar",
+  "hiwLaunchTitle": "Abrir o jogo",
+  "hiwLaunchDesc": "O botão ▶ na barra superior de Minhas partidas abre o Stardew Valley diretamente pelo app.",
+  "hiwLaunchTipWindows": "No Windows, se o jogo não for detectado automaticamente, configure o caminho do executável em Configurações → Jogo.",
+  "hiwLaunchTipAndroid": "No Android, abre o jogo se estiver instalado.",
+  "settingsGameSection": "Jogo",
+  "settingsGameExePath": "Executável do Stardew Valley",
+  "settingsGameExeNotFound": "Não encontrado automaticamente",
+  "settingsGameExeBrowse": "Procurar…",
+  "settingsGameExeSaved": "Caminho salvo",
+  "snackLaunchError": "Não foi possível abrir o jogo"
 }

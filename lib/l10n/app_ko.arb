@@ -493,5 +493,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "tooltipLaunchGame": "플레이",
+  "hiwLaunchTitle": "게임 실행",
+  "hiwLaunchDesc": "내 세이브 화면 상단 바의 ▶ 버튼으로 앱에서 바로 Stardew Valley를 실행할 수 있습니다.",
+  "hiwLaunchTipWindows": "Windows에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.",
+  "hiwLaunchTipAndroid": "Android에서는 게임이 설치되어 있으면 실행됩니다.",
+  "settingsGameSection": "게임",
+  "settingsGameExePath": "Stardew Valley 실행 파일",
+  "settingsGameExeNotFound": "자동으로 찾을 수 없음",
+  "settingsGameExeBrowse": "찾아보기…",
+  "settingsGameExeSaved": "경로 저장됨",
+  "snackLaunchError": "게임을 열 수 없습니다"
 }

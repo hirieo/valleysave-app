@@ -1062,6 +1062,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String houseLevelN(int level) {
     return '等级 $level';
   }
+
+  @override
+  String get tooltipLaunchGame => '开始游戏';
+
+  @override
+  String get hiwLaunchTitle => '启动游戏';
+
+  @override
+  String get hiwLaunchDesc => '在“我的存档”上方栏点击 ▶ 按鈕，可直接从应用启动 Stardew Valley。';
+
+  @override
+  String get hiwLaunchTipWindows =>
+      '在 Windows 上，若未自动检测到游戏，请在设置 → 游戏中设置可执行文件路径。';
+
+  @override
+  String get hiwLaunchTipAndroid => '在 Android 上，若已安装游戏则直接启动。';
+
+  @override
+  String get settingsGameSection => '游戏';
+
+  @override
+  String get settingsGameExePath => 'Stardew Valley 可执行文件';
+
+  @override
+  String get settingsGameExeNotFound => '未自动找到';
+
+  @override
+  String get settingsGameExeBrowse => '浏览…';
+
+  @override
+  String get settingsGameExeSaved => '路径已保存';
+
+  @override
+  String get snackLaunchError => '无法打开游戏';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

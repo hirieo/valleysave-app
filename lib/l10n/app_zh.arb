@@ -467,5 +467,16 @@
     "placeholders": {
       "level": { "type": "int" }
     }
-  }
+  },
+  "tooltipLaunchGame": "开始游戏",
+  "hiwLaunchTitle": "启动游戏",
+  "hiwLaunchDesc": "在“我的存档”上方栏点击 ▶ 按鈕，可直接从应用启动 Stardew Valley。",
+  "hiwLaunchTipWindows": "在 Windows 上，若未自动检测到游戏，请在设置 → 游戏中设置可执行文件路径。",
+  "hiwLaunchTipAndroid": "在 Android 上，若已安装游戏则直接启动。",
+  "settingsGameSection": "游戏",
+  "settingsGameExePath": "Stardew Valley 可执行文件",
+  "settingsGameExeNotFound": "未自动找到",
+  "settingsGameExeBrowse": "浏览…",
+  "settingsGameExeSaved": "路径已保存",
+  "snackLaunchError": "无法打开游戏"
 }

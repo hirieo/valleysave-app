@@ -1079,4 +1079,39 @@ class AppLocalizationsKo extends AppLocalizations {
   String houseLevelN(int level) {
     return 'Lv. $level';
   }
+
+  @override
+  String get tooltipLaunchGame => '플레이';
+
+  @override
+  String get hiwLaunchTitle => '게임 실행';
+
+  @override
+  String get hiwLaunchDesc =>
+      '내 세이브 화면 상단 바의 ▶ 버튼으로 앱에서 바로 Stardew Valley를 실행할 수 있습니다.';
+
+  @override
+  String get hiwLaunchTipWindows =>
+      'Windows에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.';
+
+  @override
+  String get hiwLaunchTipAndroid => 'Android에서는 게임이 설치되어 있으면 실행됩니다.';
+
+  @override
+  String get settingsGameSection => '게임';
+
+  @override
+  String get settingsGameExePath => 'Stardew Valley 실행 파일';
+
+  @override
+  String get settingsGameExeNotFound => '자동으로 찾을 수 없음';
+
+  @override
+  String get settingsGameExeBrowse => '찾아보기…';
+
+  @override
+  String get settingsGameExeSaved => '경로 저장됨';
+
+  @override
+  String get snackLaunchError => '게임을 열 수 없습니다';
 }

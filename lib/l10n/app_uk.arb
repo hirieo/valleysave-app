@@ -493,5 +493,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "tooltipLaunchGame": "Грати",
+  "hiwLaunchTitle": "Запустити гру",
+  "hiwLaunchDesc": "Кнопка ▶ у верхній панелі розділу Мої збереження відкриває Stardew Valley прямо з додатку.",
+  "hiwLaunchTipWindows": "У Windows, якщо гру не знайдено автоматично, вкажіть шлях в Налаштування → Гра.",
+  "hiwLaunchTipAndroid": "На Android відкриває гру, якщо вона встановлена.",
+  "settingsGameSection": "Гра",
+  "settingsGameExePath": "Виконуваний файл Stardew Valley",
+  "settingsGameExeNotFound": "Не знайдено автоматично",
+  "settingsGameExeBrowse": "Огляд…",
+  "settingsGameExeSaved": "Шлях збережено",
+  "snackLaunchError": "Не вдалося відкрити гру"
 }

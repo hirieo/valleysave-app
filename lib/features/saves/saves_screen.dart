@@ -15,6 +15,7 @@ import '../../core/models/season_state.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/bridge_service.dart';
 import '../../core/services/drive_service.dart';
+import '../../core/services/game_launch_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
@@ -46,6 +47,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   int _staggerVersion = 0;
   bool _loading = true;
   bool _refreshing = false;
+  bool _gameCanLaunch = false;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
 
   // ── Modo de acceso en Android ──
@@ -98,6 +100,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _init() async {
+    await GameLaunchService.instance.init();
+    if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+
     if (!Platform.isAndroid) {
       _mode = AndroidMode.bridge; // no aplica; evita ramas de gate en desktop
       await _load();
@@ -316,8 +321,20 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       context,
       AppPageRoute(builder: (_) => const SettingsScreen(showDisconnect: true)),
     );
-    if (mounted && result == 'disconnect') {
+    if (!mounted) return;
+    if (result == 'disconnect') {
       _disconnectDrive();
+    } else {
+      await GameLaunchService.instance.init();
+      if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+    }
+  }
+
+  Future<void> _handleLaunchGame() async {
+    try {
+      await GameLaunchService.instance.launch();
+    } catch (_) {
+      if (mounted) _snack(AppLocalizations.of(context)!.snackLaunchError);
     }
   }
 
@@ -1059,6 +1076,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   onSettings: _openSettings,
                   onRefresh: _refresh,
                   refreshing: _refreshing,
+                  canLaunchGame: _gameCanLaunch,
+                  onLaunch: _handleLaunchGame,
                 ),
                 Expanded(child: _buildBody()),
               ],
@@ -1892,15 +1911,20 @@ class _TopBar extends StatelessWidget {
     required this.onSettings,
     required this.onRefresh,
     required this.refreshing,
+    required this.canLaunchGame,
+    required this.onLaunch,
   });
 
   final VoidCallback onBack;
   final VoidCallback onSettings;
   final VoidCallback onRefresh;
   final bool refreshing;
+  final bool canLaunchGame;
+  final VoidCallback onLaunch;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
       child: Center(
@@ -1914,7 +1938,7 @@ class _TopBar extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                AppLocalizations.of(context)!.mySaves,
+                l10n.mySaves,
                 style: GoogleFonts.bodoniModa(
                   fontSize: 24,
                   fontStyle: FontStyle.italic,
@@ -1923,6 +1947,21 @@ class _TopBar extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              if (canLaunchGame) ...[
+                ValueListenableBuilder<SeasonState>(
+                  valueListenable: SeasonController.instance.season,
+                  builder: (_, season, _) {
+                    final accent = SeasonData.data[season]!.accentColor;
+                    return _IconCircle(
+                      icon: Icons.play_arrow_rounded,
+                      onTap: onLaunch,
+                      color: accent,
+                      tooltip: l10n.tooltipLaunchGame,
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
               _IconCircle(
                 icon: Icons.refresh_rounded,
                 onTap: onRefresh,

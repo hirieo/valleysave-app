@@ -7,10 +7,14 @@ class IconCircleButton extends StatefulWidget {
     required this.icon,
     required this.onTap,
     this.spinning = false,
+    this.tooltip,
+    this.color,
   });
   final IconData icon;
   final VoidCallback onTap;
   final bool spinning;
+  final String? tooltip;
+  final Color? color;
 
   @override
   State<IconCircleButton> createState() => _IconCircleButtonState();
@@ -50,7 +54,14 @@ class _IconCircleButtonState extends State<IconCircleButton>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final borderColor = widget.color != null
+        ? widget.color!.withValues(alpha: 0.55)
+        : Colors.white.withValues(alpha: 0.45);
+    final iconColor = widget.color != null
+        ? widget.color!
+        : Colors.white.withValues(alpha: 0.88);
+
+    Widget button = GestureDetector(
       onTap: widget.onTap,
       onTapDown: (_) => setState(() => _pressed = true),
       onTapUp: (_) => setState(() => _pressed = false),
@@ -67,7 +78,7 @@ class _IconCircleButtonState extends State<IconCircleButton>
           decoration: BoxDecoration(
             color: Colors.transparent,
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withValues(alpha: 0.45), width: 1.0),
+            border: Border.all(color: borderColor, width: 1.0),
           ),
           child: AnimatedBuilder(
             animation: _spin,
@@ -75,10 +86,20 @@ class _IconCircleButtonState extends State<IconCircleButton>
               angle: widget.spinning ? _spin.value * 2 * math.pi : 0,
               child: child,
             ),
-            child: Icon(widget.icon, size: 18, color: Colors.white.withValues(alpha: 0.88)),
+            child: Icon(widget.icon, size: 18, color: iconColor),
           ),
         ),
       ),
     );
+
+    if (widget.tooltip != null) {
+      button = Tooltip(
+        message: widget.tooltip!,
+        preferBelow: false,
+        child: button,
+      );
+    }
+
+    return button;
   }
 }

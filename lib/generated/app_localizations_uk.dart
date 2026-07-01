@@ -1108,4 +1108,40 @@ class AppLocalizationsUk extends AppLocalizations {
   String houseLevelN(int level) {
     return 'Рівень $level';
   }
+
+  @override
+  String get tooltipLaunchGame => 'Грати';
+
+  @override
+  String get hiwLaunchTitle => 'Запустити гру';
+
+  @override
+  String get hiwLaunchDesc =>
+      'Кнопка ▶ у верхній панелі розділу Мої збереження відкриває Stardew Valley прямо з додатку.';
+
+  @override
+  String get hiwLaunchTipWindows =>
+      'У Windows, якщо гру не знайдено автоматично, вкажіть шлях в Налаштування → Гра.';
+
+  @override
+  String get hiwLaunchTipAndroid =>
+      'На Android відкриває гру, якщо вона встановлена.';
+
+  @override
+  String get settingsGameSection => 'Гра';
+
+  @override
+  String get settingsGameExePath => 'Виконуваний файл Stardew Valley';
+
+  @override
+  String get settingsGameExeNotFound => 'Не знайдено автоматично';
+
+  @override
+  String get settingsGameExeBrowse => 'Огляд…';
+
+  @override
+  String get settingsGameExeSaved => 'Шлях збережено';
+
+  @override
+  String get snackLaunchError => 'Не вдалося відкрити гру';
 }

@@ -437,5 +437,16 @@
     "placeholders": {
       "level": { "type": "int" }
     }
-  }
+  },
+  "tooltipLaunchGame": "Играть",
+  "hiwLaunchTitle": "Запустить игру",
+  "hiwLaunchDesc": "Кнопка ▶ в верхней панели раздела Мои сохранения открывает Stardew Valley прямо из приложения.",
+  "hiwLaunchTipWindows": "В Windows, если игра не найдена автоматически, укажите путь в Настройки → Игра.",
+  "hiwLaunchTipAndroid": "На Android открывает игру, если она установлена.",
+  "settingsGameSection": "Игра",
+  "settingsGameExePath": "Исполняемый файл Stardew Valley",
+  "settingsGameExeNotFound": "Не найдено автоматически",
+  "settingsGameExeBrowse": "Обзор…",
+  "settingsGameExeSaved": "Путь сохранён",
+  "snackLaunchError": "Не удалось открыть игру"
 }

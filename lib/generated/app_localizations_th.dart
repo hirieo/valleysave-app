@@ -1099,4 +1099,39 @@ class AppLocalizationsTh extends AppLocalizations {
   String houseLevelN(int level) {
     return 'ระดับ $level';
   }
+
+  @override
+  String get tooltipLaunchGame => 'เล่น';
+
+  @override
+  String get hiwLaunchTitle => 'เปิดเกม';
+
+  @override
+  String get hiwLaunchDesc =>
+      'ปุ่ม ▶ ในแถบด้านบนของหน้าเซฟจะเปิด Stardew Valley โดยตรงจากแอป';
+
+  @override
+  String get hiwLaunchTipWindows =>
+      'บน Windows หากไม่พบเกมอัตโนมัติ ให้ตั้งค่าพาธใน การตั้งค่า → เกม';
+
+  @override
+  String get hiwLaunchTipAndroid => 'บน Android จะเปิดเกมหากติดตั้งไว้แล้ว';
+
+  @override
+  String get settingsGameSection => 'เกม';
+
+  @override
+  String get settingsGameExePath => 'ไฟล์ปฏิบัติการ Stardew Valley';
+
+  @override
+  String get settingsGameExeNotFound => 'ไม่พบอัตโนมัติ';
+
+  @override
+  String get settingsGameExeBrowse => 'เรียกดู…';
+
+  @override
+  String get settingsGameExeSaved => 'บันทึกพาธแล้ว';
+
+  @override
+  String get snackLaunchError => 'ไม่สามารถเปิดเกมได้';
 }

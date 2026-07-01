@@ -467,5 +467,16 @@
     "placeholders": {
       "level": { "type": "int" }
     }
-  }
+  },
+  "tooltipLaunchGame": "เล่น",
+  "hiwLaunchTitle": "เปิดเกม",
+  "hiwLaunchDesc": "ปุ่ม ▶ ในแถบด้านบนของหน้าเซฟจะเปิด Stardew Valley โดยตรงจากแอป",
+  "hiwLaunchTipWindows": "บน Windows หากไม่พบเกมอัตโนมัติ ให้ตั้งค่าพาธใน การตั้งค่า → เกม",
+  "hiwLaunchTipAndroid": "บน Android จะเปิดเกมหากติดตั้งไว้แล้ว",
+  "settingsGameSection": "เกม",
+  "settingsGameExePath": "ไฟล์ปฏิบัติการ Stardew Valley",
+  "settingsGameExeNotFound": "ไม่พบอัตโนมัติ",
+  "settingsGameExeBrowse": "เรียกดู…",
+  "settingsGameExeSaved": "บันทึกพาธแล้ว",
+  "snackLaunchError": "ไม่สามารถเปิดเกมได้"
 }

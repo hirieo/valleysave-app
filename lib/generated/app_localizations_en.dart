@@ -1099,4 +1099,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String houseLevelN(int level) {
     return 'Lv. $level';
   }
+
+  @override
+  String get tooltipLaunchGame => 'Play';
+
+  @override
+  String get hiwLaunchTitle => 'Launch the game';
+
+  @override
+  String get hiwLaunchDesc =>
+      'The ▶ button in the top bar of Your saves opens Stardew Valley directly from the app.';
+
+  @override
+  String get hiwLaunchTipWindows =>
+      'On Windows, if the game isn’t detected automatically, set the executable path in Settings → Game.';
+
+  @override
+  String get hiwLaunchTipAndroid =>
+      'On Android, opens the game if it’s installed.';
+
+  @override
+  String get settingsGameSection => 'Game';
+
+  @override
+  String get settingsGameExePath => 'Stardew Valley executable';
+
+  @override
+  String get settingsGameExeNotFound => 'Not found automatically';
+
+  @override
+  String get settingsGameExeBrowse => 'Browse…';
+
+  @override
+  String get settingsGameExeSaved => 'Path saved';
+
+  @override
+  String get snackLaunchError => 'Couldn’t open the game';
 }

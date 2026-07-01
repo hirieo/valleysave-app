@@ -2076,6 +2076,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lv. {level}'**
   String houseLevelN(int level);
+
+  /// No description provided for @tooltipLaunchGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get tooltipLaunchGame;
+
+  /// No description provided for @hiwLaunchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch the game'**
+  String get hiwLaunchTitle;
+
+  /// No description provided for @hiwLaunchDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The ▶ button in the top bar of Your saves opens Stardew Valley directly from the app.'**
+  String get hiwLaunchDesc;
+
+  /// No description provided for @hiwLaunchTipWindows.
+  ///
+  /// In en, this message translates to:
+  /// **'On Windows, if the game isn’t detected automatically, set the executable path in Settings → Game.'**
+  String get hiwLaunchTipWindows;
+
+  /// No description provided for @hiwLaunchTipAndroid.
+  ///
+  /// In en, this message translates to:
+  /// **'On Android, opens the game if it’s installed.'**
+  String get hiwLaunchTipAndroid;
+
+  /// No description provided for @settingsGameSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Game'**
+  String get settingsGameSection;
+
+  /// No description provided for @settingsGameExePath.
+  ///
+  /// In en, this message translates to:
+  /// **'Stardew Valley executable'**
+  String get settingsGameExePath;
+
+  /// No description provided for @settingsGameExeNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found automatically'**
+  String get settingsGameExeNotFound;
+
+  /// No description provided for @settingsGameExeBrowse.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse…'**
+  String get settingsGameExeBrowse;
+
+  /// No description provided for @settingsGameExeSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Path saved'**
+  String get settingsGameExeSaved;
+
+  /// No description provided for @snackLaunchError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open the game'**
+  String get snackLaunchError;
 }
 
 class _AppLocalizationsDelegate

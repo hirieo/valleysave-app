@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/icons/icon.png" width="64" height="64" alt="ValleySave Logo">
+<img src="assets/icons/icon.png" width="250" height="250" alt="ValleySave Logo">
 
 **Sincroniza tus partidas de Stardew Valley con tu propia cuenta de Google Drive.**
 
@@ -14,7 +14,7 @@
 
 ---
 
-> ⚠️ **En desarrollo activo.** Funcional en Android y escritorio (macOS/Windows). iOS y Linux aún en testing.
+> **En desarrollo activo.** Funcional en Android y escritorio (macOS/Windows). iOS y Linux aún en testing.
 
 ## Introducción
 
@@ -22,10 +22,10 @@ ValleySave es una aplicación multiplataforma que sincroniza automáticamente tu
 
 **Sin servidores propios. Sin suscripciones. Sin seguimiento.**
 
-- 🔒 Solo accede a los archivos que ella misma crea (`drive.file`)
-- 📱 Disponible en Android, iOS, macOS, Windows y Linux
-- 🎯 Detecta y sincroniza partidas automáticamente
-- 📊 Interfaz estacional con temática de Stardew Valley
+- Solo accede a los archivos que ella misma crea (`drive.file`)
+- Disponible en Android, iOS, macOS, Windows y Linux
+- Detecta y sincroniza partidas automáticamente
+- Interfaz animada y fluida
 
 ## Características
 

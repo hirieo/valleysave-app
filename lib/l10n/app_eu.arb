@@ -1,0 +1,508 @@
+{
+  "@@locale": "eu",
+  "appTitle": "ValleySave",
+  "welcomeTitle": "Inoiz ez gal zure baserrira, jokoan hartu.",
+  "connectGoogleDrive": "Google Drive konektatu",
+  "connecting": "Konektatzen…",
+  "mySaves": "Nire gordetzeak",
+  "howItWorks": "Nola darabiltza",
+  "settings": "Ezarpenak",
+  "aboutSection": "Honi buruz",
+  "openSource": "Kodearen availability",
+  "nonCommercial": "Ez-komertzial",
+  "freeForever": "Aske betirako",
+  "privacyTitle": "Pribatutasun eta datuen erabilpena",
+  "privacyDescription": "ValleySave Stardew Valley gordetzeak sinkronizatzeko aplikazioa da zure Google Drive kontuarekin.",
+  "whatDataTitle": "Zer datu erabiltzen ditu",
+  "whatDataDesc": "ValleySave Stardew Valley gordetzeak bakarrik atzitzen ditu kopiak egiteko, sinkronizatzeko edo leheneratzeko.",
+  "googleDriveTitle": "Google Drive",
+  "googleDriveDesc": "Zure gordetzeek zure Google Drive kontuan igotzen dira. ValleySave ez du bere zerbitzaririk erabiltzen zure jokoak biltegiratzeko.",
+  "androidPermissionsTitle": "Android-eko baimenak",
+  "androidPermissionsDesc": "ValleySave gordetze fitxategiak atzitzeko biltegi-baimenak edo Shizuku bezalako tresneria beharko litezke.",
+  "adsTitle": "Iragarkiak",
+  "adsDesc": "ValleySave Google AdMob-en bidezko iragarkiak erakutsi ditzake.",
+  "responsibilityTitle": "Erantzukizuna",
+  "responsibilityDesc": "Zure gordetze fitxategiak zure erantzukizuna dira.",
+  "deleteDataTitle": "Datua ezabatu",
+  "deleteDataDesc": "Zure sinkronizaturiko kopiak ezabatu ditzakezu Google Drive-tik ValleySave karpeta eskuz ezabatuz.",
+  "sourceCodeTitle": "Kodea eta kontaktua",
+  "sourceCodeDesc": "ValleySave Polyform Noncommercial lizentzapean kode disponiblearekin dagoen proiektua da.",
+  "upToDate": "Eguneratuta",
+  "checkingUpdates": "Egiaztatzen…",
+  "updateAvailable": "Eguneratzea erabilgarri",
+  "application": "Aplikazioa",
+  "version": "{version} bertsioa",
+  "checkForUpdates": "Eguneraketaak egiaztatu",
+  "shizukuRequired": "Shizuku beharrezkoa",
+  "shizukuGuide": "Shizuku Konfigurazio Gidaburuak",
+  "activateShizuku": "Shizuku gaitu gordetze jokoen artikuluan idazteko.",
+  "deleteSaveTitle": "{saveName} ezabatu",
+  "deleteSaveMessage": "Honek gailutik gordetze hau kendu egingo du. Jarraitu nahi duzu?",
+  "deleteFromDrive": "Drive-tik ezabatu",
+  "confirmDelete": "ValleySave {saveName} Google Drive Zabor basurantz mugituko da.",
+  "deleteFromDeviceMessage": "{saveName} gailutik betirako ezabatuko da.",
+  "restoreSaveTitle": "{saveName} leheneratu",
+  "restoreSaveMessage": "{saveName} gailuetara deskargatu?",
+  "restore": "Leheneratu",
+  "cancel": "Utzi",
+  "error": "Akatsa",
+  "success": "Arrakasta",
+  "loading": "Kargatzen…",
+  "disconnect": "Deskonektatu",
+  "ok": "OK",
+  "yes": "Bai",
+  "no": "Ez",
+  "welcomeHeroPre": "Inoiz ez gal\nzure ",
+  "welcomeHeroAccent": "baserrira,",
+  "welcomeHeroPost": "\njokoan hartu.",
+  "welcomeSubtitle": "Sinkronizatu Stardew Valley gordetzeeak zure gailu guztietan. Zure datuak zure Google Drive-ean bizi dira — ez zerbitzariak, ez harpidetzak, zure kontrolpean.",
+  "welcomeDriveConnected": "Drive konektatuta",
+  "welcomeFooterTagline": "· Ez-komertzial · Aske betirako ·",
+  "updateVersionAvailable": "v{version} erabilgarri",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionMode": "Modua",
+  "sectionSeason": "Denboraldi",
+  "sectionLanguage": "Hizkuntza",
+  "modeAutoTitle": "Automatikoa",
+  "modeAutoDesc": "Zure aktiboen gordetzeari jarraikitzen zaio eta, gordetzerik ez badago, zure errealeko kokalekuari.",
+  "modeSavesTitle": "Gordetzearen arabera",
+  "modeSavesDesc": "Beti zure azkeneko gordetzearen denboraldia erabiltzen du.",
+  "modeGeoTitle": "Kokalekuaren arabera",
+  "modeGeoDesc": "Beti zure kokalekuaren errealeko denboraldia erabiltzen du.",
+  "modeFixedTitle": "Finkatutako denboraldi",
+  "modeFixedDesc": "Beti denboraldi berbera erakusten du.",
+  "modeRandomTitle": "Ausazkoa",
+  "modeRandomDesc": "Aplikazioa irekitzen duzunean denboraldi desberdina aukeratzen du.",
+  "seasonInitial": "Hasierakoa",
+  "seasonSpring": "Udaberria",
+  "seasonSummer": "Uda",
+  "seasonFall": "Urtaroa",
+  "seasonWinter": "Negua",
+  "autoPriorityTitle": "Lehentasunaren ordena",
+  "autoStep1Title": "Lehen itzulera",
+  "autoStep1Desc": "Hasierako egoera erakusten du.",
+  "autoStep2Title": "Gordetze aktiboa",
+  "autoStep2Desc": "Zure azkeneko sinkronizaturiko gordetzearen denboraldia erabiltzen du.",
+  "autoStep3Title": "Kokalekua",
+  "autoStep3Desc": "Zure hemisferioa eta zure eskualdeko errealeko denboraldia detektatzen du.",
+  "autoStep4Title": "Lehenetsitakoa",
+  "autoStep4Desc": "Hasierakoa (gabia moduan) daturik ez badago.",
+  "versionInstalled": "Instalaturiko bertsioa",
+  "updateNeverChecked": "Inoiz ez egiaztatuta",
+  "updateCheckedNow": "Besterik ez egiaztatuta",
+  "updateOutdatedDownload": "Ez dago eguneraturik · Deskargatu",
+  "updateDownloading": "Eguneratzearen deskarga egiten…",
+  "updateError": "Akatsa — sakatu berriz saiatzen",
+  "disconnectTitle": "Drive deskonektatu?",
+  "disconnectBody": "Drive-eko zure gordetzeek ez dira ezabatuko. Noiznahi berkonektatu zaitezke.",
+  "disconnectButton": "Drive deskonektatu",
+  "languageTileLabel": "Hizkuntza",
+  "languageDialogTitle": "Aplikazioen hizkuntza",
+  "searchHint": "Bilatu…",
+  "languageAuto": "Sistemaren hizkuntza",
+  "languageAutoDesc": "Zure sistemaren hizkuntza erabiltzen du",
+  "privacyPolicyTitle": "Pribatutasun politika",
+  "privacyBeforeStartTitle": "Hastea aurretik",
+  "privacyLastUpdated": "Azkena eguneratuta: 2026ko ekaina",
+  "privacyAccept": "Ulertu, jarraitu",
+  "cardSynced": "Sinkronizatuta",
+  "cardLocalAhead": "Lokal aurretik",
+  "cardDriveAhead": "Drive aurretik",
+  "cardLocalOnly": "Lokal bakarrik",
+  "cardDriveOnly": "Drive bakarrik",
+  "cardTimeNow": "orain",
+  "cardTimeMinutesAgo": "{minutes} min atzo",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours}h atzo",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days}e atzo",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months}hil atzo",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "Gailu honetan",
+  "cardDetailRemoteTitle": "Drive-ean",
+  "cardDetailUpload": "Drive-ra igo",
+  "cardDetailDownload": "Gordetze deskargatu",
+  "cardDetailDeleteLabel": "Ezabatu",
+  "cardDetailDeleteLocal": "Gailu honetatik ezabatu",
+  "cardDetailDeleteRemote": "Drive-tik ezabatu",
+  "cardCloseBarrier": "Itxi",
+  "statDayYear": "{day} eguna · {year} urtea",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "{day} eguna",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "Joko-denbora",
+  "statMoney": "Txanponak",
+  "statTotal": "Guztira",
+  "statMineUnexplored": "Arakatu gabea",
+  "statMine": "Meatzea",
+  "statMineLvl": "Meatzea · Lv",
+  "skillFarming": "Laborantzak",
+  "skillForaging": "Bilduma",
+  "skillMining": "Meatzea",
+  "skillFishing": "Arrantzak",
+  "skillCombat": "Borroka",
+  "cardLocalPresence": "Gailu honetan",
+  "cardRemotePresence": "Drive-ean",
+  "cardNotPresent": "Hemen ez",
+  "cardActionSynced": "Sinkronizatuta",
+  "cardActionUpload": "Igo",
+  "cardActionDownload": "Deskargatu",
+  "pillMonsters": "bestiak",
+  "pillFriends": "lagunak",
+  "pillFaints": "hautsi",
+  "pillSleeps": "Loari",
+  "hiwTitle": "Nola darabiltza",
+  "hiwSyncTitle": "Nola dabil sinkronizatzea",
+  "hiwSyncIntro": "ValleySave zure Google Drive erabiltzen du gordetzeeak gailuen artean mugitzeko. Zerbitzari bitartekaririk ez: fitxategiak zureak dira.",
+  "hiwSyncDevice": "Zure\ngailua",
+  "hiwSyncCloud": "Google\nDrive",
+  "hiwSyncOtherDevice": "Beste\ngailua",
+  "hiwUploadTitle": "Gordetze igo",
+  "hiwUploadDesc": "Igotzen duzunean, ValleySave gordetze fitxategi biak (SaveGameInfo + farmak fitxategia) zure ValleySave/ karpetan igo egiten du Drive-an.",
+  "hiwDownloadTitle": "Gordetze deskargatu",
+  "hiwDownloadDesc": "Deskargatzen duzunean, ValleySave fitxategiak Drive-etik ekartzen ditu eta zuzenean jokoen karpetan jartzen ditu.",
+  "hiwCompareTitle": "Zer ditu konparatu?",
+  "hiwCompareIntro": "Zein bertsioa aurretik dagoen jakin ahal izateko, ValleySave joko-denbora guztira erabiltzen du — bakarrik handitu daitekeen datua.",
+  "hiwCompareNote": "Aurretik egiaztatzen duzu ere ikus al duzu, eta erabaki dezakezu:",
+  "hiwCompareMoney": "Unean dauden dirua eta guztira irabazita",
+  "hiwCompareMine": "Meatzeen maila",
+  "hiwCompareSkills": "Trebetasunak (laborantzak, meatzea, borroka…)",
+  "hiwCompareRelations": "Lagunak, bestiak hil eta hautsi",
+  "hiwCompareStamina": "Energia eta osasuna",
+  "hiwCompareNotShown": "Hauek ez dira erakusten — nozko norutz aldatzen dira eta ez dute adierazten zein gordetze aurretik dagoen.",
+  "hiwCompareNotShownExamples": "Basoaren eta animalien egoera, inbentarioa eta objektuak, banakako harremanak",
+  "hiwCompareWarning": "Ez dira erakusten — nozko norutz aldatzen dira eta ez dute adierazten zein gordetze aurretik dagoen.",
+  "hiwConflictTitle": "Sinkronizatu gabe jokatzen baduzu",
+  "hiwConflictDesc": "Mugikorrean eta PCan sinkronizatu gabe aurrera daitezke saioek, bi gordetze bertsio lortzen dituzu.",
+  "hiwConflictNoMerge": "Ezin daitezke batu. ValleySave bertsioak erakusten ditu beti zuk zein aurten dezakezu.",
+  "hiwConflictMobile": "Mugikorra",
+  "hiwConflictVersionA": "A bertsioa",
+  "hiwConflictPC": "PC",
+  "hiwConflictVersionB": "B bertsioa",
+  "hiwDeleteTitle": "Gordetze ezabatzen bada",
+  "hiwDeleteDesc": "Drive-etik gordetze ezabatzen duzunean, ez da berehala desagertzen: Google Drive Zaborra basurantz doa.",
+  "hiwCompatTitle": "Plataformaren bateragarritasuna",
+  "hiwCompatAndroidAccess": "ANDROID-EN SARBIDEA",
+  "hiwShizukuTitle": "Shizuku-rekin",
+  "hiwShizukuSubtitle": "Konfiguratu behin. Ondoren, ValleySave berez sinkronizatzen du, inoiz ez hori apurtu gabe.",
+  "hiwShizukuBadge": "AUTOMATIKOA · GOMENDATUA",
+  "hiwShizukuDone": "✓ Egina. Ordutik aurrera, gordetzeeak deskargatzea eta igotzeya zuzenean egiten da, ordenagailuaren bezala.",
+  "hiwShizukuNote": "Parea lehen aldia bakarrik. Shizuku bertsio berriak berez berriro aktibatzen dira telefonoa berrabiartu ondoren.",
+  "hiwBridgeTitle": "Zubi eskuzkoa",
+  "hiwBridgeSubtitle": "Android 11 eta 12-an bakarrik darabila. Ezer extra instalatu ez behar; gordetze kopia eskuz biltegian egiten duzu denbora bakoitzean.",
+  "hiwBridgeBadge": "ESKUZKOA ALTERNATIBOA · ANDROID 11-12",
+  "hiwBridgeSaveFolder": "Stardew-en karpeta",
+  "hiwBridgeValleySaveFolder": "ValleySave-ren karpeta",
+  "hiwBridgeNote": "Darabila zure sistemaren fitxategien aplikazio hartan horien karpetak atzitu ditzakete (ValleySave ez dak).",
+  "hiwTipAlwaysShow": "Beti Drive-ean dagoena ikusiko duzu idatzia aurretik, konparatu ahal izateko.",
+  "hiwTipWithoutUpload": "Igotu gabe, beste gailuak ez ditu zure aurrerapen berria ikusiko.",
+  "hiwTipComparison": "Konparaketa ikusiko duzu lokalen eta Drive-en artean egiaztatzen aurretik.",
+  "hiwTipDownloadOverwrite": "Deskargatzea zure gordetze lokala idazten du. Sinkronizagabeko aurrerapenik galduko da.",
+  "hiwTipSync": "Beti igo Drive-ra gailua aldatu aurretik, eta deskargatu heltzean.",
+  "hiwTipDeletion": "30 egunean Drive Zabortik leheneratu dezakezu betirako ezabatu aurretik.",
+  "hiwPrivacyLink": "Pribatutasun politika eta erabilpena",
+  "emptyNoSaves": "Gordetzerik ez aurkitu",
+  "emptyNoSavesHint": "Gordetze lokalik ez da irakur daiteke gailu honetan",
+  "bridgeTitle": "Zure gordetzeeak ekartzen",
+  "bridgeDesc": "Zure gordetze lokalak ikusi eta igo ahal izateko, kopiak zure fitxategien aplikazioarekin Stardew karpetetik ValleySave karpetara. Ondoren, gorantz estali berritzeko.",
+  "bridgeRefresh": "Berritu",
+  "bridgeChangeMode": "Metodoa aldatu",
+  "loaderLoading": "KARGATZEN",
+  "loaderConnecting": "Drive-ra konektatzen…",
+  "chooserTitle": "Nola konektatu aukeratu",
+  "chooserAutomatic": "Automatikoa · Gomendatua",
+  "chooserManual": "Eskuzkoa alternatiboa · Android 11-12",
+  "shizukuStepTitle": "Shizuku konfiguratu",
+  "shizukuStep1Title": "Shizuku instalatu",
+  "shizukuStep1Desc": "Play Store-tik edo GitHub-etik deskargatu",
+  "shizukuStep2Title": "Shizuku aktibatu",
+  "shizukuStep2Desc": "Aplikazioa exekutatu eta baimenak emango",
+  "shizukuStep3Title": "Baimena emango",
+  "shizukuStep3Desc": "ValleySave sarbidea eskatuko du",
+  "shizukuDone": "✓ Egina. Ordutik aurrera, gordetzeeak deskargatzea eta igotzeya zuzenean egiten da, ordenagailuaren bezala.",
+  "dlgDeleteDriveTitle": "Drive-tik ezabatu",
+  "dlgDeleteLocalTitle": "Gailu honetatik ezabatu",
+  "dlgDownloadTitle": "Gordetze deskargatu",
+  "dlgUploadTitle": "Gordetze igo",
+  "dlgUploadOverwrite": "Honek zure gordetze lokala idatziko du",
+  "dlgGotIt": "Ulertu",
+  "dlgCopyDest": "Kopiaren helmuga",
+  "previewColDayYear": "Eguna/Urtea",
+  "previewColTime": "Joko-denbora",
+  "previewColMoney": "Txanponak",
+  "previewColTotal": "Guztira",
+  "previewColFarming": "Laborantzak",
+  "previewColForaging": "Bilduma",
+  "previewColMining": "Meatzea",
+  "previewColFishing": "Arrantzak",
+  "previewColCombat": "Borroka",
+  "previewColFriends": "Lagunak",
+  "previewColMonsters": "Bestiak",
+  "previewColFaints": "Hautsi",
+  "previewColMine": "Meatzea",
+  "previewColUnexplored": "Arakatu gabea",
+  "previewLocalLabel": "GAILU HONETAN",
+  "previewDriveLabel": "DRIVE-AN",
+  "previewFromDrive": "DRIVE-ETIK",
+  "previewFromDevice": "GAILU HONETATIK",
+  "versionMismatch": "Bertsioak desberdiak: lokal {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "Bidea kopiatuta",
+  "snackDestCopied": "Helmugan bidea kopiatuta",
+  "snackDownloaded": "Gordetze jokoen deskargatuta",
+  "snackSessionExpired": "Drive saioai amaitu. Berrkonektatu",
+  "snackUploadError": "Igo akatsa: {error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "Deskarga akatsa: {error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "Ezabatze akatsa: {error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" Drive Zaborra basurantz mugitu. 30 egunean leheneratu dezakezu.",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" gailu honetatik ezabatu",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "Shizuku gaitu…",
+  "snackWriteError": "Jokoen idaztera ezin. Telefo batzuk /Android/data ez dituzte oztat Shizuku-rekin ere.",
+  "snackPlatformNotSupported": "Plataforma honek ez dak oraindik gordetze lokalak idaztea",
+  "snackWirelessDebugHint": "Ireki eskuz: Ezarpenak → Garapeneraren aukerak → Hari gabea debugging.",
+  "snackOpenShizukuApp": "Irekiertz Shizuku zure aplikazioen bilatzean.",
+  "hiwTipDeletePermanent": "ValleySave inoiz ez al dezake berriz galdutako gordetzeeak. Drive fitxategiak zure erantzukizuna dira.",
+  "hiwCompatAchievements": "Steam eta Google Play lorpenak ez dira transferitzen. Plataforma bakoitzak berez lotzen ditu bakarrik gertatutako lorpenak — gordetze fitxategik ez ditu retroaktiboki sustatzen.",
+  "hiwCompatOverwrite": "Bi gailuetatik sinkronizatu gabe ordenari jarraiki, gordetze batak bestea bota ditzake. Beti igo Drive-ra deskargatu aurretik.",
+  "hiwCompatVersions": "Jokoen berbtsio desberdinetatik gordetzeeak ez agian ez direla kargatzen ondo. ValleySave abisezia ematen dizu bertsio desparekotasuna atzemarik aurretik deskargatzen baduzu.",
+  "hiwCompatMods": "SMAPI moldaketak datu osagarri gehitze dituzte gordetzeean. SMAPI moldaketak ez badaude gailuan non kargatzen baduzu, jokoa huts egite edo moldaketa datuak galdu ditzake.\n\nAndroid-ean, SMAPI moldaketak erabiltzeko instalatu ditzake.",
+  "hiwComparePrimary": "Joko-denbora guztira",
+  "hiwCompareNoShown1": "Basoaren eta animalien egoera",
+  "hiwCompareNoShown2": "Inbentarioa eta objektuak",
+  "hiwCompareNoShown3": "Banakako harremanak",
+  "hiwShizuku1": "Shizuku instalatu (Play Store edo GitHub APK).",
+  "hiwShizuku2": "Aktibatu hari gabeko debugging-ean — ValleySave pausoka gidalari egiten dizu.",
+  "hiwShizuku3": "Baimena emango ValleySave behartzean.",
+  "hiwBridge1": "Drive-tik deskargatu: ValleySave gordetzeea bere karpetan utzietan. Zuk kopian harekin fitxategian Stardew-ren karpetan.",
+  "hiwBridge2": "Drive-ra igo: kopiatu gordetzeea Stardew-tik ValleySave-ren karpetan. ValleySave atzemanzen du eta igotzea.",
+  "snackShizukuBattery": "Ezarpenak → Aplikazioak → Shizuku → Bateria → Mugarik gabe.",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ Drive-ra igo ez baduzu, betirako galduko da. Berreskurapenez gabe.",
+  "dlgDelete": "Ezabatu",
+  "dlgDownloadButton": "Deskargatu",
+  "dlgUploadButton": "Igo",
+  "dlgBridgeCopyTitle": "Kopiatu gordetzeea jokoan",
+  "dlgBridgeCopyDesc": "Gordetzeea dago. Zure fitxategien aplikazioarekin, kopiatu \"{saveName}\" karpeta eta azkoa Stardew karpetan.",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "labelFrom": "Jatorritik",
+  "labelTo": "Helmuganera",
+  "dlgDownloadNewDesc": "\"{saveName}\" ({day} eguna, {playtime}) gailu honetan kopiatuko da.",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgDownloadOverwrite": "Honek \"{saveName}\"-ren zure lokal gordetzeea idatziko du.",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\" ({day} eguna, {playtime}) zure Drive-an igoko da.",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgUploadOverwriteDrive": "Honek \"{saveName}\"-ren Drive bertsioa idatziko du.",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "pathLabelFromStardew": "Jatorritik (Stardew)",
+  "pathLabelToValleySave": "Helmuganera (ValleySave)",
+  "chooserDesc": "Android jokoen karpeta babestuetan. Nola emango diozu ValleySave-ri sarbidea — noiznahi aldatu dezakezu.",
+  "chooserShizukuDesc": "Konfiguraturik behin. Ondoren ValleySave berez sinkronizatzen du, inoiz ez hori apurtu gabe. Android 13 eta hurrengoan bakarrik fidagarri metodo.",
+  "chooserManualBadge": "ANDROID 11-12 BAKARRIK",
+  "chooserBridgeDesc": "Gordetzeeak zure fitxategien aplikazioarekin kopian. Ezer extra ez instalatu. Android 11 eta 12-an bakarrik.",
+  "shizukuGateSubtitle": "Konfiguraturik behin · lehen aldia bakarrik",
+  "shizukuStatusLabel": "Shizuku aktibo",
+  "shizukuStatusRunning": "Konektatuta eta itxaroten.",
+  "shizukuStatusNotDetected": "Oraindik ez atzemanzen.",
+  "shizukuPermLabel": "Baimena emanda",
+  "shizukuPermGranted": "ValleySave-k dagoenean sarbidea.",
+  "shizukuPermNotGranted": "ValleySave baimen egingo.",
+  "shizukuGrant": "baimen",
+  "shizukuGuideHeader": "PAUSOKA GIDABURUAK",
+  "shizukuStep1DescFull": "Aske. Google Play-k zure telefonoan blokeatu baldin badu, offizialaren GitHub APK erabili.",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "Garapeneraren aukerak gaitu",
+  "shizukuStep2DescFull": "Ezarpenak → Telefo info → Software info → sakatu \"Eraikuntza zenbakia\" 7 alditan.",
+  "shizukuStep3TitleFull": "Hari gabeko debugging gaitu",
+  "shizukuStep3DescFull": "Botoia nora joana hartzen dizu eta nabarmentzena. Gaitu (ON). Ondoren sakatu \"Gailu parean pairing kodearen bidez\" — 6 zifraren kodea pantailan agertuko zaio.",
+  "btnOpenAndHighlight": "Ireki eta nabarmen",
+  "shizukuStep4Title": "Parean eta SHIZUKU HASI",
+  "shizukuStep4Desc": "Ireki Shizuku → \"Hasi hari gabeko debugging bidez\" → \"Parean pairing kodearen bidez\". Shizuku jakinarazpen bat bidaliko du itxaroten zaio. Sartu 6 zifraren kodea hari gabeko debugging pantailatik. Parean ondoren, sakatu START — bota azkoa gabe Shizuku ez aktibatuta.",
+  "btnOpenShizuku": "Ireki Shizuku",
+  "shizukuStep5Title": "Shizuku bateria mugarik gabe konfiguratu",
+  "shizukuStep5Desc": "Ireki aplikazio info → Bateria → Mugarik gabe. Honek ez baduzu, sistemak Shizuku atzemakaian itxi agertuko eta START berriro sakatu beharko duzu.",
+  "btnShizukuAppInfo": "Shizuku aplikazio info",
+  "shizukuStep6DescActive": "Shizuku aktibo dago. Botoia sakatu baimen emango.",
+  "shizukuStep6DescWaiting": "Erabilgarri Shizuku aktiboan bada (4 pausoa).",
+  "btnGrantPermission": "Baimena emango",
+  "btnCheckShizuku": "Egina · Egiaztatu",
+  "statusDone": "egina",
+  "statusPending": "zain",
+  "latestBadge": "· AZKENEKO GORDETZEEA ·",
+  "saveDateLabel": "{season} · {year} urtea",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "petCat": "Katua",
+  "petDog": "Txakurra",
+  "houseBasic": "Baserritxo oinarrizko",
+  "houseKitchen": "Sukaldean duenak",
+  "houseBedroom": "Logelarekin",
+  "houseCellar": "Soteroan duenak",
+  "houseLevelN": "Lv. {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "tooltipLaunchGame": "Jokatu",
+  "hiwLaunchTitle": "Jokoa ireki",
+  "hiwLaunchDesc": "Nire gordetakoak pantailako goiko barrako ▶ botoiak Stardew Valley zuzenean aplikaziotik irekitzen du.",
+  "hiwLaunchTipWindows": "Windowsen jokoa automatikoki aurkitzen ez bada, Ezarpenak → Jokoa atalean exekutagarriaren bidea ezarri.",
+  "hiwLaunchTipAndroid": "Androiden instalatuta badago jokoa irekitzen du.",
+  "settingsGameSection": "Jokoa",
+  "settingsGameExePath": "Stardew Valley exekutagarria",
+  "settingsGameExeNotFound": "Ez da automatikoki aurkitu",
+  "settingsGameExeBrowse": "Bilatu…",
+  "settingsGameExeSaved": "Bidea gordeta",
+  "snackLaunchError": "Ezin izan da jokoa ireki"
+}

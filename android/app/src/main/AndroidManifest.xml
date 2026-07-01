@@ -2,6 +2,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <application
         android:label="valleysave"
         android:name="${applicationName}"
@@ -35,6 +36,17 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- FileProvider: permite instalar APKs descargados sin pasar por Chrome -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+
         <!-- Shizuku: acceso a /Android/data del juego sin root (Android 11+) -->
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
@@ -52,9 +64,16 @@
     <queries>
         <!-- Permite abrir/consultar la app Shizuku (visibilidad de paquetes A11+). -->
         <package android:name="moe.shizuku.privileged.api" />
+        <!-- Permite detectar y lanzar Stardew Valley desde la app. -->
+        <package android:name="com.chucklefish.stardewvalley" />
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- url_launcher: permite canLaunchUrl para URLs https en Android 11+. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 </manifest>

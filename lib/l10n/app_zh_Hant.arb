@@ -1,0 +1,471 @@
+{
+  "@@locale": "zh_Hant",
+  "appTitle": "ValleySave",
+  "welcomeTitle": "永遠不要失去你的農場，隨身攜帶。",
+  "connectGoogleDrive": "連接 Google Drive",
+  "connecting": "正在連接…",
+  "mySaves": "我的存檔",
+  "howItWorks": "運作原理",
+  "settings": "設定",
+  "aboutSection": "關於",
+  "openSource": "可用代碼",
+  "nonCommercial": "非商業",
+  "freeForever": "永久免費",
+  "privacyTitle": "隱私和數據使用",
+  "privacyDescription": "ValleySave 是一款應用，可將您的 Stardew Valley 存檔與您自己的 Google Drive 帳戶同步。",
+  "whatDataTitle": "使用哪些數據",
+  "whatDataDesc": "ValleySave 僅訪問製作副本、同步或恢復所需的 Stardew Valley 存檔文件。",
+  "googleDriveTitle": "Google Drive",
+  "googleDriveDesc": "您的存檔被上傳到您自己的 Google Drive 帳戶。ValleySave 不使用其自有伺服器來儲存您的遊戲。",
+  "androidPermissionsTitle": "Android 上的權限",
+  "androidPermissionsDesc": "ValleySave 可能需要儲存權限或 Shizuku 等工具來訪問存檔文件。",
+  "adsTitle": "廣告",
+  "adsDesc": "ValleySave 可能透過 Google AdMob 顯示廣告。",
+  "responsibilityTitle": "責任",
+  "responsibilityDesc": "您的存檔文件是您的責任。",
+  "deleteDataTitle": "刪除數據",
+  "deleteDataDesc": "您可以透過從 Google Drive 手動刪除 ValleySave 文件夾來刪除同步的副本。",
+  "sourceCodeTitle": "源代碼和聯繫",
+  "sourceCodeDesc": "ValleySave 是一個在 Polyform Noncommercial 許可證下提供可用代碼的項目。",
+  "upToDate": "最新",
+  "checkingUpdates": "正在檢查…",
+  "updateAvailable": "有可用更新",
+  "application": "應用",
+  "version": "版本 {version}",
+  "checkForUpdates": "檢查更新",
+  "shizukuRequired": "需要 Shizuku",
+  "shizukuGuide": "Shizuku 設定指南",
+  "activateShizuku": "啟用 Shizuku 以在遊戲中寫入存檔。",
+  "deleteSaveTitle": "刪除 {saveName}",
+  "deleteSaveMessage": "這將從此設備中刪除存檔。你想繼續嗎？",
+  "deleteFromDrive": "從 Drive 中刪除",
+  "confirmDelete": "存檔 {saveName} 將移至 Google Drive 回收站。",
+  "deleteFromDeviceMessage": "存檔 {saveName} 將從此設備中永久刪除。",
+  "restoreSaveTitle": "恢復 {saveName}",
+  "restoreSaveMessage": "將 {saveName} 下載到此設備？",
+  "restore": "恢復",
+  "cancel": "取消",
+  "error": "錯誤",
+  "success": "成功",
+  "loading": "正在加載…",
+  "disconnect": "斷開連接",
+  "ok": "確定",
+  "yes": "是",
+  "no": "否",
+  "welcomeHeroPre": "永遠不要失去\n你的 ",
+  "welcomeHeroAccent": "農場，",
+  "welcomeHeroPost": "\n隨身攜帶。",
+  "welcomeSubtitle": "在所有設備上同步您的 Stardew Valley 存檔。您的數據存儲在您自己的 Google Drive 中 — 無伺服器、無訂閱、完全由您控制。",
+  "welcomeDriveConnected": "Drive 已連接",
+  "welcomeFooterTagline": "· 非商業 · 永久免費 ·",
+  "updateVersionAvailable": "v{version} 可用",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionMode": "模式",
+  "sectionSeason": "季節",
+  "sectionLanguage": "語言",
+  "modeAutoTitle": "自動",
+  "modeAutoDesc": "跟隨您的活躍存檔，如無存檔則跟隨您的實際位置。",
+  "modeSavesTitle": "按存檔",
+  "modeSavesDesc": "始終使用您最新存檔的季節。",
+  "modeGeoTitle": "按位置",
+  "modeGeoDesc": "始終使用您位置的真實季節。",
+  "modeFixedTitle": "固定季節",
+  "modeFixedDesc": "始終顯示相同的季節。",
+  "modeRandomTitle": "隨機",
+  "modeRandomDesc": "每次打開應用時選擇不同的季節。",
+  "seasonInitial": "初始",
+  "seasonSpring": "春",
+  "seasonSummer": "夏",
+  "seasonFall": "秋",
+  "seasonWinter": "冬",
+  "autoPriorityTitle": "優先順序",
+  "autoStep1Title": "首次啟動",
+  "autoStep1Desc": "顯示初始狀態。",
+  "autoStep2Title": "活躍存檔",
+  "autoStep2Desc": "使用您最後同步的存檔的季節。",
+  "autoStep3Title": "位置",
+  "autoStep3Desc": "檢測您的半球和您所在地區的真實季節。",
+  "autoStep4Title": "預設",
+  "autoStep4Desc": "如無數據可用，則使用初始（夜間模式）。",
+  "versionInstalled": "已安裝版本",
+  "updateNeverChecked": "從未檢查",
+  "updateCheckedNow": "剛檢查過",
+  "updateOutdatedDownload": "不是最新 · 下載",
+  "updateDownloading": "正在下載更新…",
+  "updateError": "錯誤 — 點擊重試",
+  "disconnectTitle": "斷開 Drive 連接？",
+  "disconnectBody": "您在 Drive 上的存檔不會被刪除。您可以隨時重新連接。",
+  "disconnectButton": "斷開 Drive 連接",
+  "languageTileLabel": "語言",
+  "languageDialogTitle": "應用語言",
+  "searchHint": "搜索…",
+  "languageAuto": "系統語言",
+  "languageAutoDesc": "使用您的系統語言",
+  "privacyPolicyTitle": "隱私政策",
+  "privacyBeforeStartTitle": "開始前",
+  "privacyLastUpdated": "最後更新：2026年6月",
+  "privacyAccept": "已了解，繼續",
+  "cardSynced": "已同步",
+  "cardLocalAhead": "本地領先",
+  "cardDriveAhead": "Drive 領先",
+  "cardLocalOnly": "本地專用",
+  "cardDriveOnly": "Drive 專用",
+  "cardTimeNow": "現在",
+  "cardTimeMinutesAgo": "{minutes} 分鐘前",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours} 小時前",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days} 天前",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months} 月前",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "在此設備上",
+  "cardDetailRemoteTitle": "在 Drive 上",
+  "cardDetailUpload": "上傳到 Drive",
+  "cardDetailDownload": "下載存檔",
+  "cardDetailDeleteLabel": "刪除",
+  "cardDetailDeleteLocal": "從此設備刪除",
+  "cardDetailDeleteRemote": "從 Drive 刪除",
+  "cardCloseBarrier": "關閉",
+  "statDayYear": "第 {day} 天 · 第 {year} 年",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "第 {day} 天",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "遊戲時間",
+  "statMoney": "金幣",
+  "statTotal": "總計",
+  "statMineUnexplored": "未探索",
+  "statMine": "礦山",
+  "statMineLvl": "礦山 · 等級",
+  "skillFarming": "農業",
+  "skillForaging": "採集",
+  "skillMining": "採礦",
+  "skillFishing": "釣魚",
+  "skillCombat": "戰鬥",
+  "cardLocalPresence": "在此設備上",
+  "cardRemotePresence": "在 Drive 上",
+  "cardNotPresent": "不在此處",
+  "cardActionSynced": "已同步",
+  "cardActionUpload": "上傳",
+  "cardActionDownload": "下載",
+  "pillMonsters": "怪物",
+  "pillFriends": "朋友",
+  "pillFaints": "昏迷",
+  "pillSleeps": "睡眠",
+  "hiwTitle": "運作原理",
+  "hiwSyncTitle": "同步如何運作",
+  "hiwSyncIntro": "ValleySave 使用您自己的 Google Drive 在設備間移動存檔。沒有中間伺服器：文件是您的。",
+  "hiwSyncDevice": "您的\n設備",
+  "hiwSyncCloud": "Google\nDrive",
+  "hiwSyncOtherDevice": "其他\n設備",
+  "hiwUploadTitle": "上傳存檔",
+  "hiwUploadDesc": "上傳時，ValleySave 將兩個存檔文件（SaveGameInfo + 農場文件）複製到您在 Drive 上的 ValleySave/ 文件夾。",
+  "hiwDownloadTitle": "下載存檔",
+  "hiwDownloadDesc": "下載時，ValleySave 從 Drive 取出文件並直接放入遊戲文件夾。",
+  "hiwCompareTitle": "它比較什麼？",
+  "hiwCompareIntro": "為了知道哪個版本領先，ValleySave 使用總遊戲時間 — 唯一只能增加的數據。",
+  "hiwCompareNote": "確認前，您還將看到，以便您可以決定：",
+  "hiwCompareMoney": "當前金幣和總收入",
+  "hiwCompareMine": "礦山等級",
+  "hiwCompareSkills": "技能（農業、採礦、戰鬥…）",
+  "hiwCompareRelations": "朋友、殺死的怪物、昏迷次數",
+  "hiwCompareStamina": "體力和生命值",
+  "hiwCompareNotShown": "這些不顯示 — 它們可以在任何方向改變，不能表明哪個存檔領先。",
+  "hiwCompareNotShownExamples": "作物和動物狀態、物品欄和物品、個人關係",
+  "hiwCompareWarning": "它們不顯示 — 它們可以在任何方向改變，不能表明哪個存檔領先。",
+  "hiwConflictTitle": "如果您不同步就玩遊戲",
+  "hiwConflictDesc": "如果您在移動設備和電腦上不進行同步就繼續遊戲，最終會有兩個版本的相同存檔。",
+  "hiwConflictNoMerge": "它們無法合併。ValleySave 始終向您顯示兩個版本，以便您可以選擇保留哪一個。",
+  "hiwConflictMobile": "移動設備",
+  "hiwConflictVersionA": "版本 A",
+  "hiwConflictPC": "電腦",
+  "hiwConflictVersionB": "版本 B",
+  "hiwDeleteTitle": "如果刪除了存檔",
+  "hiwDeleteDesc": "從 Drive 刪除存檔時，它不會立即消失：它會進入 Google Drive 回收站。",
+  "hiwCompatTitle": "平台兼容性",
+  "hiwCompatAndroidAccess": "ANDROID 上的訪問",
+  "hiwShizukuTitle": "使用 Shizuku",
+  "hiwShizukuSubtitle": "設置一次。之後，ValleySave 可自動同步，您無需再次觸碰。",
+  "hiwShizukuBadge": "自動 · 推薦",
+  "hiwShizukuDone": "✓ 完成。之後，下載和上傳存檔就像在電腦上一樣直接。",
+  "hiwShizukuNote": "配對僅在第一次。新的 Shizuku 版本在重新啟動手機後會自動重新激活。",
+  "hiwBridgeTitle": "手動橋接",
+  "hiwBridgeSubtitle": "僅適用於 Android 11 和 12。您無需安裝任何額外內容；相反，您每次同步時都使用 Files 應用手動複製存檔。",
+  "hiwBridgeBadge": "手動替代方案 · ANDROID 11-12",
+  "hiwBridgeSaveFolder": "Stardew 文件夾",
+  "hiwBridgeValleySaveFolder": "ValleySave 文件夾",
+  "hiwBridgeNote": "之所以有效是因為您的系統 Files 應用可以訪問這些文件夾（ValleySave 不能）。",
+  "hiwTipAlwaysShow": "您將始終在覆蓋前看到 Drive 上的內容，以便您可以比較。",
+  "hiwTipWithoutUpload": "不上傳，其他設備將看不到您最近的進度。",
+  "hiwTipComparison": "確認前，您將看到本地和 Drive 之間的比較。",
+  "hiwTipDownloadOverwrite": "下載會覆蓋您的本地存檔。任何未同步的進度將丟失。",
+  "hiwTipSync": "始終在切換設備前上傳，到達時下載。",
+  "hiwTipDeletion": "您有 30 天時間從 Drive 回收站恢復它，之後將永久刪除。",
+  "hiwPrivacyLink": "隱私政策和使用",
+  "emptyNoSaves": "未找到存檔",
+  "emptyNoSavesHint": "無法讀取此設備上的本地存檔",
+  "bridgeTitle": "帶上您的存檔",
+  "bridgeDesc": "要查看和上傳您的本地存檔，請使用 Files 應用從 Stardew 文件夾將它們複製到此 ValleySave 文件夾。然後刷新。",
+  "bridgeRefresh": "刷新",
+  "bridgeChangeMode": "更改方法",
+  "loaderLoading": "正在加載",
+  "loaderConnecting": "正在連接 Drive…",
+  "chooserTitle": "選擇連接方式",
+  "chooserAutomatic": "自動 · 推薦",
+  "chooserManual": "手動替代方案 · Android 11-12",
+  "shizukuStepTitle": "設置 Shizuku",
+  "shizukuStep1Title": "安裝 Shizuku",
+  "shizukuStep1Desc": "從 Play Store 或 GitHub 下載",
+  "shizukuStep2Title": "啟用 Shizuku",
+  "shizukuStep2Desc": "運行應用並授予權限",
+  "shizukuStep3Title": "授予權限",
+  "shizukuStep3Desc": "ValleySave 將要求訪問權限",
+  "shizukuDone": "✓ 完成。之後，下載和上傳存檔就像在電腦上一樣直接工作。",
+  "dlgDeleteDriveTitle": "從 Drive 刪除",
+  "dlgDeleteLocalTitle": "從此設備刪除",
+  "dlgDownloadTitle": "下載存檔",
+  "dlgUploadTitle": "上傳存檔",
+  "dlgUploadOverwrite": "這將覆蓋您的本地存檔",
+  "dlgGotIt": "已了解",
+  "dlgCopyDest": "複製目的地",
+  "previewColDayYear": "天/年",
+  "previewColTime": "遊戲時間",
+  "previewColMoney": "金幣",
+  "previewColTotal": "總計",
+  "previewColFarming": "農業",
+  "previewColForaging": "採集",
+  "previewColMining": "採礦",
+  "previewColFishing": "釣魚",
+  "previewColCombat": "戰鬥",
+  "previewColFriends": "朋友",
+  "previewColMonsters": "怪物",
+  "previewColFaints": "昏迷",
+  "previewColMine": "礦山",
+  "previewColUnexplored": "未探索",
+  "previewLocalLabel": "在此設備上",
+  "previewDriveLabel": "在 DRIVE 上",
+  "previewFromDrive": "來自 DRIVE",
+  "previewFromDevice": "來自此設備",
+  "versionMismatch": "版本不同：本地 {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "路徑已複製",
+  "snackDestCopied": "目的地路徑已複製",
+  "snackDownloaded": "存檔已下載到遊戲",
+  "snackSessionExpired": "Drive 會話已過期。重新連接",
+  "snackUploadError": "上傳錯誤：{error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "下載錯誤：{error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "刪除錯誤：{error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" 已移至 Drive 回收站。您有 30 天時間恢復它。",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" 已從此設備刪除",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "啟用 Shizuku…",
+  "snackWriteError": "無法寫入遊戲。某些手機即使使用 Shizuku 也會阻止 /Android/data。",
+  "snackPlatformNotSupported": "此平台尚不支持寫入本地存檔。",
+  "snackWirelessDebugHint": "手動打開：設定 → 開發者選項 → 無線調試。",
+  "snackOpenShizukuApp": "從應用抽屜打開 Shizuku。",
+  "hiwTipDeletePermanent": "ValleySave 無法恢復永久刪除的存檔。Drive 文件是您的責任。",
+  "hiwCompatAchievements": "Steam 和 Google Play 成就不會轉移。每個平台僅跟踪實時發生的成就 — 存檔文件不會觸發它們回顧。",
+  "hiwCompatOverwrite": "如果您從兩個設備同步而沒有設置順序，一個存檔可能會覆蓋另一個。始終在下載前上傳。",
+  "hiwCompatVersions": "來自不同遊戲版本的存檔可能無法正確加載。ValleySave 將在檢測到版本不匹配時在下載前警告您。",
+  "hiwCompatMods": "SMAPI mod 會向存檔添加額外數據。如果您在未安裝這些 mod 的設備上加載已修改的存檔，遊戲可能會崩潰或丟失 mod 數據。\n\n在 Android 上，也可以安裝 SMAPI 來使用 mod。",
+  "hiwComparePrimary": "總遊戲時間",
+  "hiwCompareNoShown1": "作物和動物狀態",
+  "hiwCompareNoShown2": "物品欄和物品",
+  "hiwCompareNoShown3": "個人關係",
+  "hiwShizuku1": "安裝 Shizuku（Play Store 或 GitHub APK）。",
+  "hiwShizuku2": "使用無線調試激活它 — ValleySave 會一步步引導您。",
+  "hiwShizuku3": "當提示時，授予 ValleySave 權限。",
+  "hiwBridge1": "從 Drive 下載：ValleySave 將存檔留在其文件夾中。您使用 Files 將其複製到 Stardew 的文件夾。",
+  "hiwBridge2": "上傳到 Drive：從 Stardew 複製存檔到 ValleySave 的文件夾。ValleySave 檢測到它並上傳它。",
+  "snackShizukuBattery": "設定 → 應用 → Shizuku → 電池 → 不受限制。",
+  "snackDriveError": "Drive：{error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ 如果您未上傳到 Drive，它將永遠丟失。無法恢復。",
+  "dlgDelete": "刪除",
+  "dlgDownloadButton": "下載",
+  "dlgUploadButton": "上傳",
+  "dlgBridgeCopyTitle": "複製存檔到遊戲",
+  "dlgBridgeCopyDesc": "存檔已準備就緒。使用 Files 應用，複製 \"{saveName}\" 文件夾並將其粘貼到 Stardew 文件夾。",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "labelFrom": "來自",
+  "labelTo": "到",
+  "dlgDownloadNewDesc": "\"{saveName}\"（第 {day} 天，{playtime}）將被複製到此設備。",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgDownloadOverwrite": "這將覆蓋您的 \"{saveName}\" 本地存檔。",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\"（第 {day} 天，{playtime}）將上傳到您的 Drive。",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgUploadOverwriteDrive": "這將覆蓋 \"{saveName}\" 的 Drive 版本。",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "pathLabelFromStardew": "來自（Stardew）",
+  "pathLabelToValleySave": "到（ValleySave）",
+  "chooserDesc": "Android 保護遊戲文件夾。選擇如何給予 ValleySave 訪問權限 — 您可以隨時更改。",
+  "chooserShizukuDesc": "配置一次。之後 ValleySave 可自動同步，無需您觸碰任何東西。Android 13+ 上的唯一可靠方法。",
+  "chooserManualBadge": "僅 ANDROID 11-12",
+  "chooserBridgeDesc": "使用 Files 應用複製存檔。無需額外安裝。僅適用於 Android 11 和 12。",
+  "shizukuGateSubtitle": "已配置一次 · 僅第一次",
+  "shizukuStatusLabel": "Shizuku 活躍",
+  "shizukuStatusRunning": "已連接並等待中。",
+  "shizukuStatusNotDetected": "尚未檢測到。",
+  "shizukuPermLabel": "已授予權限",
+  "shizukuPermGranted": "ValleySave 已有訪問權限。",
+  "shizukuPermNotGranted": "需要授權 ValleySave。",
+  "shizukuGrant": "授予",
+  "shizukuGuideHeader": "逐步指南",
+  "shizukuStep1DescFull": "免費。如果 Google Play 在您的手機上阻止它，請使用官方 GitHub APK。",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "啟用開發者選項",
+  "shizukuStep2DescFull": "設定 → 關於手機 → 軟件信息 → 點擊「版本號」7 次。",
+  "shizukuStep3TitleFull": "啟用無線調試",
+  "shizukuStep3DescFull": "該按鈕將帶您到那裡並高亮它。啟用它（開啟）。然後點擊「使用配對代碼配對設備」— 屏幕上將出現 6 位數代碼。",
+  "btnOpenAndHighlight": "打開並高亮",
+  "shizukuStep4Title": "配對並啟動 SHIZUKU",
+  "shizukuStep4Desc": "打開 Shizuku → 「通過無線調試啟動」→ 「使用配對代碼配對」。Shizuku 將發送一條通知，表明它正在等待。從無線調試屏幕輸入 6 位數代碼。配對後，按啟動 — 沒有最後這一步，Shizuku 將不會活躍。",
+  "btnOpenShizuku": "打開 Shizuku",
+  "shizukuStep5Title": "將 Shizuku 電池設置為不受限制",
+  "shizukuStep5Desc": "打開應用信息 → 電池 → 不受限制。如果您不這樣做，系統將在後台關閉 Shizuku，您將必須再次按啟動。",
+  "btnShizukuAppInfo": "Shizuku 應用信息",
+  "shizukuStep6DescActive": "Shizuku 已活躍。點擊按鈕進行授權。",
+  "shizukuStep6DescWaiting": "Shizuku 活躍後可用（第 4 步）。",
+  "btnGrantPermission": "授予權限",
+  "btnCheckShizuku": "完成 · 檢查",
+  "statusDone": "完成",
+  "statusPending": "待定",
+  "latestBadge": "· 最新存檔 ·",
+  "saveDateLabel": "{season} · 第 {year} 年",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": { "type": "String" },
+      "year": { "type": "int" }
+    }
+  },
+  "petCat": "貓",
+  "petDog": "狗",
+  "houseBasic": "基本房子",
+  "houseKitchen": "帶廚房",
+  "houseBedroom": "帶臥室",
+  "houseCellar": "帶地下室",
+  "houseLevelN": "等級 {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  }
+}

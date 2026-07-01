@@ -1,0 +1,21 @@
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+output-dir: lib/generated
+
+# Idiomas soportados
+locales:
+  - es   # Español
+  - en   # English
+  - fr   # Français
+  - de   # Deutsch
+  - it   # Italiano
+  - pt   # Português
+  - ru   # Русский
+  - uk   # Українська
+  - ja   # 日本語
+  - zh   # 中文简体
+  - zh_Hant  # 中文繁體
+  - th   # ไทย
+  - ko   # 한국어

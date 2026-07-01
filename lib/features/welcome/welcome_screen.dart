@@ -17,6 +17,8 @@ import '../help/how_it_works_screen.dart';
 import '../saves/saves_screen.dart';
 import '../settings/settings_screen.dart';
 import '../../core/services/update_service.dart';
+import '../../shared/widgets/update_download_animation.dart';
+import '../../generated/app_localizations.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -30,8 +32,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   bool _restoring = true;
   bool _authLoading = false;
   bool _authConnected = false;
-  String? _updateVersion;
+  UpdateInfo? _updateInfo;
   bool _updateChipPressed = false;
+  bool _updateDownloading = false;
+  double _downloadProgress = 0;
+  final _progressNotifier = ValueNotifier<double>(0);
   // ignore: unused_field — se pasará a la SyncScreen cuando esté implementada
   DriveService? _drive;
 
@@ -109,9 +114,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text('${l10n.error}: $e'),
             backgroundColor: const Color(0xFFC06050),
             duration: const Duration(seconds: 10),
           ),
@@ -145,18 +151,93 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   Future<void> _checkUpdate() async {
-    final version = await UpdateService.checkForUpdate();
-    if (mounted && version != null) setState(() => _updateVersion = version);
+    final info = await UpdateService.checkForUpdate();
+    if (mounted && info != null) setState(() => _updateInfo = info);
   }
 
-  Widget _buildUpdateChip(SeasonState season) {
+  Future<void> _startInstall() async {
+    final info = _updateInfo;
+    if (info == null || _updateDownloading) return;
+    _progressNotifier.value = 0;
+    setState(() { _updateDownloading = true; _downloadProgress = 0; });
+    showUpdateDownloadDialog(
+      context,
+      progressNotifier: _progressNotifier,
+      season: SeasonController.instance.season.value,
+      version: info.version,
+    );
+    await UpdateService.installUpdate(
+      info,
+      onProgress: (p) {
+        _progressNotifier.value = p;
+        if (mounted) setState(() => _downloadProgress = p);
+      },
+      onError: (e) {
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true).maybePop();
+          setState(() => _updateDownloading = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${AppLocalizations.of(context)!.error}: $e'),
+              backgroundColor: const Color(0xFFC06050),
+              duration: const Duration(seconds: 8),
+            ),
+          );
+        }
+      },
+    );
+    if (mounted && _updateDownloading) {
+      setState(() => _updateDownloading = false);
+    }
+  }
+
+  Widget _buildUpdateChip(SeasonState season, AppLocalizations l10n) {
     final accent = SeasonData.data[season]!.accentColor;
+    final canTap = !_updateDownloading;
+
+    Widget chipContent;
+    if (_updateDownloading) {
+      chipContent = Row(
+        children: [
+          SizedBox(
+            width: 12, height: 12,
+            child: CircularProgressIndicator(strokeWidth: 1.5, color: accent),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              l10n.updateDownloading,
+              style: AppTypography.bodyStrong(color: Colors.white.withValues(alpha: 0.90))
+                  .copyWith(fontSize: 14),
+            ),
+          ),
+          Text('${(_downloadProgress * 100).round()}%',
+              style: AppTypography.mono(color: accent.withValues(alpha: 0.80), size: 11)),
+        ],
+      );
+    } else {
+      chipContent = Row(
+        children: [
+          Icon(Icons.arrow_upward_rounded, size: 14, color: accent.withValues(alpha: 0.85)),
+          const SizedBox(width: 8),
+          Text(
+            l10n.updateVersionAvailable(_updateInfo!.version),
+            style: AppTypography.bodyStrong(
+              color: Colors.white.withValues(alpha: 0.90),
+            ).copyWith(fontSize: 14),
+          ),
+          const Spacer(),
+          Icon(Icons.download_rounded, size: 13, color: accent.withValues(alpha: 0.60)),
+        ],
+      );
+    }
+
     return Listener(
-      onPointerDown: (_) => setState(() => _updateChipPressed = true),
+      onPointerDown: canTap ? (_) => setState(() => _updateChipPressed = true) : null,
       onPointerUp: (_) => setState(() => _updateChipPressed = false),
       onPointerCancel: (_) => setState(() => _updateChipPressed = false),
       child: GestureDetector(
-        onTap: () => UpdateService.openReleasePage(),
+        onTap: canTap ? _startInstall : null,
         child: AnimatedScale(
           scale: _updateChipPressed ? 0.97 : 1.0,
           duration: _updateChipPressed
@@ -173,20 +254,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 width: 1.5,
               ),
             ),
-            child: Row(
-              children: [
-                Icon(Icons.arrow_upward_rounded, size: 14, color: accent.withValues(alpha: 0.85)),
-                const SizedBox(width: 8),
-                Text(
-                  'v$_updateVersion disponible',
-                  style: AppTypography.bodyStrong(
-                    color: Colors.white.withValues(alpha: 0.90),
-                  ).copyWith(fontSize: 14),
-                ),
-                const Spacer(),
-                Icon(Icons.open_in_new_rounded, size: 13, color: accent.withValues(alpha: 0.60)),
-              ],
-            ),
+            child: chipContent,
           ),
         ),
       ),
@@ -212,6 +280,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   void dispose() {
+    _progressNotifier.dispose();
     _pulseCtrl.dispose();
     _entranceCtrl.dispose();
     super.dispose();
@@ -219,6 +288,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: ValueListenableBuilder<SeasonState>(
@@ -276,16 +346,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               text: TextSpan(
                                 style: AppTypography.hero().copyWith(fontSize: heroSize),
                                 children: [
-                                  const TextSpan(text: 'Nunca pierdas\ntu '),
+                                  TextSpan(text: l10n.welcomeHeroPre),
                                   TextSpan(
-                                    text: 'granja,',
+                                    text: l10n.welcomeHeroAccent,
                                     style: AppTypography.hero(color: AppColors.accent)
                                         .copyWith(
                                       fontStyle: FontStyle.normal,
                                       fontSize: heroSize,
                                     ),
                                   ),
-                                  const TextSpan(text: '\nllévala contigo.'),
+                                  TextSpan(text: l10n.welcomeHeroPost),
                                 ],
                               ),
                             ),
@@ -301,8 +371,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               ),
                             ),
                             child: Text(
-                              'Sincroniza tus saves de Stardew Valley entre todos tus dispositivos. '
-                              'Tus datos viven en tu Google Drive — sin servidores propios, sin suscripciones, bajo tu control.',
+                              l10n.welcomeSubtitle,
                               style: AppTypography.body(
                                 color: Colors.white.withValues(alpha: 0.90),
                               ).copyWith(
@@ -368,7 +437,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                                     child: child,
                                                   ),
                                                   child: PrimaryButton(
-                                                    label: 'Mis partidas',
+                                                    label: l10n.mySaves,
                                                     onPressed: () => _goToSaves(_drive!),
                                                     color: SeasonData.data[season]!.accentColor,
                                                   ),
@@ -384,7 +453,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                                     ),
                                                     const SizedBox(width: 5),
                                                     Text(
-                                                      'Drive conectado',
+                                                      l10n.welcomeDriveConnected,
                                                       style: AppTypography.mono(
                                                         color: Colors.white.withValues(alpha: 0.50),
                                                         size: 11,
@@ -395,7 +464,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                               ],
                                             ),
                                             GhostButton(
-                                              label: 'Cómo funciona',
+                                              label: l10n.howItWorks,
                                               onPressed: () => Navigator.push(
                                                 context,
                                                 AppPageRoute(builder: (_) => const HowItWorksScreen()),
@@ -415,12 +484,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                           runSpacing: AppSpacing.sp4,
                                           children: [
                                             PrimaryButton(
-                                              label: _authLoading ? 'Conectando…' : 'Conectar Google Drive',
+                                              label: _authLoading ? l10n.connecting : l10n.connectGoogleDrive,
                                               onPressed: _authLoading ? null : _connectDrive,
                                               color: SeasonData.data[season]!.accentColor,
                                             ),
                                             GhostButton(
-                                              label: 'Cómo funciona',
+                                              label: l10n.howItWorks,
                                               onPressed: () => Navigator.push(
                                                 context,
                                                 AppPageRoute(builder: (_) => const HowItWorksScreen()),
@@ -440,10 +509,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           AnimatedSize(
                             duration: const Duration(milliseconds: 250),
                             curve: const Cubic(0.23, 1, 0.32, 1),
-                            child: _updateVersion != null
+                            child: _updateInfo != null
                                 ? Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
-                                    child: _buildUpdateChip(season),
+                                    child: _buildUpdateChip(season, l10n),
                                   )
                                 : const SizedBox.shrink(),
                           ),
@@ -463,7 +532,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
-                                '· No comercial · Gratis para siempre ·',
+                                l10n.welcomeFooterTagline,
                                 style: AppTypography.eyebrow(
                                   color: Colors.white.withValues(alpha: 0.80),
                                 ),

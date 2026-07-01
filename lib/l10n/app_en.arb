@@ -1,0 +1,482 @@
+{
+  "@@locale": "en",
+  "appTitle": "ValleySave",
+  "welcomeTitle": "Never lose your farm, take it with you.",
+  "connectGoogleDrive": "Connect Google Drive",
+  "connecting": "Connecting…",
+  "mySaves": "My Saves",
+  "howItWorks": "How it works",
+  "settings": "Settings",
+  "aboutSection": "About",
+  "openSource": "Source available",
+  "nonCommercial": "Non-commercial",
+  "freeForever": "Free forever",
+  "privacyTitle": "Privacy and data usage",
+  "privacyDescription": "ValleySave is an app for syncing your Stardew Valley saves with your own Google Drive account.",
+  "whatDataTitle": "What data it uses",
+  "whatDataDesc": "ValleySave only accesses the Stardew Valley save files necessary to make copies, sync them, or restore them.",
+  "googleDriveTitle": "Google Drive",
+  "googleDriveDesc": "Your saves are uploaded to your own Google Drive account. ValleySave doesn't use its own servers to store your games.",
+  "androidPermissionsTitle": "Permissions on Android",
+  "androidPermissionsDesc": "ValleySave may need storage permissions or tools like Shizuku to access save files.",
+  "adsTitle": "Ads",
+  "adsDesc": "ValleySave may show ads through Google AdMob.",
+  "responsibilityTitle": "Responsibility",
+  "responsibilityDesc": "Your save files are your responsibility.",
+  "deleteDataTitle": "Delete data",
+  "deleteDataDesc": "You can delete your synchronized copies by manually deleting the ValleySave folder from Google Drive.",
+  "sourceCodeTitle": "Source code and contact",
+  "sourceCodeDesc": "ValleySave is a project with available code under Polyform Noncommercial license.",
+  "upToDate": "Up to date",
+  "checkingUpdates": "Checking…",
+  "updateAvailable": "Update available",
+  "application": "Application",
+  "version": "Version {version}",
+  "checkForUpdates": "Check for updates",
+  "shizukuRequired": "Shizuku required",
+  "shizukuGuide": "Shizuku Setup Guide",
+  "activateShizuku": "Enable Shizuku to write the save in the game.",
+  "deleteSaveTitle": "Delete {saveName}",
+  "deleteSaveMessage": "This will remove the save from this device. Do you want to continue?",
+  "deleteFromDrive": "Delete from Drive",
+  "confirmDelete": "The {saveName} will be moved to Google Drive Trash.",
+  "deleteFromDeviceMessage": "The {saveName} will be deleted permanently from this device.",
+  "restoreSaveTitle": "Restore {saveName}",
+  "restoreSaveMessage": "Download {saveName} to this device?",
+  "restore": "Restore",
+  "cancel": "Cancel",
+  "error": "Error",
+  "success": "Success",
+  "loading": "Loading…",
+  "disconnect": "Disconnect",
+  "ok": "OK",
+  "yes": "Yes",
+  "no": "No",
+  "welcomeHeroPre": "Never lose\nyour ",
+  "welcomeHeroAccent": "farm,",
+  "welcomeHeroPost": "\ntake it with you.",
+  "welcomeSubtitle": "Sync your Stardew Valley saves across all your devices. Your data lives in your own Google Drive — no servers, no subscriptions, under your control.",
+  "welcomeDriveConnected": "Drive connected",
+  "welcomeFooterTagline": "· Non-commercial · Free forever ·",
+  "updateVersionAvailable": "v{version} available",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionMode": "Mode",
+  "sectionSeason": "Season",
+  "sectionLanguage": "Language",
+  "modeAutoTitle": "Automatic",
+  "modeAutoDesc": "Follows your active save and, if no saves, your real location.",
+  "modeSavesTitle": "By save",
+  "modeSavesDesc": "Always uses the season from your most recent save.",
+  "modeGeoTitle": "By location",
+  "modeGeoDesc": "Always uses the real season of your location.",
+  "modeFixedTitle": "Fixed season",
+  "modeFixedDesc": "Always shows the same season.",
+  "modeRandomTitle": "Random",
+  "modeRandomDesc": "Picks a different season each time you open the app.",
+  "seasonInitial": "Initial",
+  "seasonSpring": "Spring",
+  "seasonSummer": "Summer",
+  "seasonFall": "Fall",
+  "seasonWinter": "Winter",
+  "autoPriorityTitle": "Priority order",
+  "autoStep1Title": "First launch",
+  "autoStep1Desc": "Shows the initial state.",
+  "autoStep2Title": "Active save",
+  "autoStep2Desc": "Uses the season from your last synced save.",
+  "autoStep3Title": "Location",
+  "autoStep3Desc": "Detects your hemisphere and the real season of your region.",
+  "autoStep4Title": "Default",
+  "autoStep4Desc": "Initial (night mode) if no data is available.",
+  "versionInstalled": "Installed version",
+  "updateNeverChecked": "Never checked",
+  "updateCheckedNow": "Just checked",
+  "updateOutdatedDownload": "Not up to date · Download",
+  "updateDownloading": "Downloading update…",
+  "updateError": "Error — tap to retry",
+  "disconnectTitle": "Disconnect Drive?",
+  "disconnectBody": "Your saves on Drive won't be deleted. You can reconnect anytime.",
+  "disconnectButton": "Disconnect Drive",
+  "languageTileLabel": "Language",
+  "languageDialogTitle": "App language",
+  "searchHint": "Search…",
+  "languageAuto": "System language",
+  "languageAutoDesc": "Uses your system language",
+  "privacyPolicyTitle": "Privacy policy",
+  "privacyBeforeStartTitle": "Before you start",
+  "privacyLastUpdated": "Last updated: June 2026",
+  "privacyAccept": "Got it, continue",
+  "cardSynced": "Synced",
+  "cardLocalAhead": "Local ahead",
+  "cardDriveAhead": "Drive ahead",
+  "cardLocalOnly": "Local only",
+  "cardDriveOnly": "Drive only",
+  "cardTimeNow": "now",
+  "cardTimeMinutesAgo": "{minutes} min ago",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours}h ago",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days}d ago",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months}mo ago",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "On this device",
+  "cardDetailRemoteTitle": "On Drive",
+  "cardDetailUpload": "Upload to Drive",
+  "cardDetailDownload": "Download save",
+  "cardDetailDeleteLabel": "Delete",
+  "cardDetailDeleteLocal": "Delete from this device",
+  "cardDetailDeleteRemote": "Delete from Drive",
+  "cardCloseBarrier": "Close",
+  "statDayYear": "Day {day} · Year {year}",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "Day {day}",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "Playtime",
+  "statMoney": "Coins",
+  "statTotal": "Total",
+  "statMineUnexplored": "Unexplored",
+  "statMine": "Mine",
+  "statMineLvl": "Mine · Lv",
+  "skillFarming": "Farming",
+  "skillForaging": "Foraging",
+  "skillMining": "Mining",
+  "skillFishing": "Fishing",
+  "skillCombat": "Combat",
+  "cardLocalPresence": "On this device",
+  "cardRemotePresence": "On Drive",
+  "cardNotPresent": "Not here",
+  "cardActionSynced": "Synced",
+  "cardActionUpload": "Upload",
+  "cardActionDownload": "Download",
+  "pillMonsters": "monsters",
+  "pillFriends": "friends",
+  "pillFaints": "faints",
+  "pillSleeps": "Sleeps",
+  "hiwTitle": "How it works",
+  "hiwSyncTitle": "How sync works",
+  "hiwSyncIntro": "ValleySave uses your own Google Drive to move saves between devices. No intermediary servers: the files are yours.",
+  "hiwSyncDevice": "Your\ndevice",
+  "hiwSyncCloud": "Google\nDrive",
+  "hiwSyncOtherDevice": "Other\ndevice",
+  "hiwUploadTitle": "Upload a save",
+  "hiwUploadDesc": "When you upload, ValleySave copies both save files (SaveGameInfo + farm file) to your ValleySave/ folder on Drive.",
+  "hiwDownloadTitle": "Download a save",
+  "hiwDownloadDesc": "When you download, ValleySave brings the files from Drive and places them directly in the game folder.",
+  "hiwCompareTitle": "What does it compare?",
+  "hiwCompareIntro": "To know which version is ahead, ValleySave uses total playtime — the only data that can only grow.",
+  "hiwCompareNote": "Before confirming you'll also see, so you can decide:",
+  "hiwCompareMoney": "Current money and total earned",
+  "hiwCompareMine": "Mine level",
+  "hiwCompareSkills": "Skills (farming, mining, combat…)",
+  "hiwCompareRelations": "Friends, monsters killed, faints",
+  "hiwCompareStamina": "Stamina and health",
+  "hiwCompareNotShown": "These are not shown — they change in any direction and don't indicate which save is ahead.",
+  "hiwCompareNotShownExamples": "Crop and animal status, inventory and items, individual relationships",
+  "hiwCompareWarning": "They're not shown — they change in any direction and don't indicate which save is ahead.",
+  "hiwConflictTitle": "If you play without syncing",
+  "hiwConflictDesc": "If you advance on mobile and PC without syncing between sessions, you end up with two versions of the same save.",
+  "hiwConflictNoMerge": "They can't be merged. ValleySave always shows you both versions so you can choose which to keep.",
+  "hiwConflictMobile": "Mobile",
+  "hiwConflictVersionA": "version A",
+  "hiwConflictPC": "PC",
+  "hiwConflictVersionB": "version B",
+  "hiwDeleteTitle": "If a save is deleted",
+  "hiwDeleteDesc": "When you delete a save from Drive, it doesn't disappear immediately: it goes to Google Drive Trash.",
+  "hiwCompatTitle": "Platform compatibility",
+  "hiwCompatAndroidAccess": "ACCESS ON ANDROID",
+  "hiwShizukuTitle": "With Shizuku",
+  "hiwShizukuSubtitle": "Set up once. After that, ValleySave syncs by itself, without you ever touching it again.",
+  "hiwShizukuBadge": "AUTOMATIC · RECOMMENDED",
+  "hiwShizukuDone": "✓  Done. From then on, downloading and uploading saves is direct, just like on a computer.",
+  "hiwShizukuNote": "Pairing is only the first time. New Shizuku versions reactivate by themselves after restarting your phone.",
+  "hiwBridgeTitle": "Manual bridge",
+  "hiwBridgeSubtitle": "Only works on Android 11 and 12. You don't install anything extra; instead, you copy the save by hand with your Files app every time you sync.",
+  "hiwBridgeBadge": "MANUAL ALTERNATIVE · ANDROID 11-12",
+  "hiwBridgeSaveFolder": "Stardew's folder",
+  "hiwBridgeValleySaveFolder": "ValleySave's folder",
+  "hiwBridgeNote": "It works because your system Files app can access those folders (ValleySave can't).",
+  "hiwTipAlwaysShow": "You'll always see what's on Drive before overwriting, so you can compare.",
+  "hiwTipWithoutUpload": "Without uploading, no other device will see your recent progress.",
+  "hiwTipComparison": "You'll see the comparison between local and Drive before confirming.",
+  "hiwTipDownloadOverwrite": "Downloading overwrites your local save. Any unsynced progress will be lost.",
+  "hiwTipSync": "Always upload before switching devices, and download when you arrive.",
+  "hiwTipDeletion": "You have 30 days to restore it from Drive Trash before it's permanently deleted.",
+  "hiwPrivacyLink": "Privacy policy and usage",
+  "emptyNoSaves": "No saves found",
+  "emptyNoSavesHint": "No local saves can be read on this device",
+  "bridgeTitle": "Bring your saves",
+  "bridgeDesc": "To see and upload your local saves, copy them with your Files app from the Stardew folder to this ValleySave folder. Then swipe to refresh.",
+  "bridgeRefresh": "Refresh",
+  "bridgeChangeMode": "Change method",
+  "loaderLoading": "LOADING",
+  "loaderConnecting": "connecting to Drive…",
+  "chooserTitle": "Choose how to connect",
+  "chooserAutomatic": "Automatic · Recommended",
+  "chooserManual": "Manual alternative · Android 11-12",
+  "shizukuStepTitle": "Set up Shizuku",
+  "shizukuStep1Title": "Install Shizuku",
+  "shizukuStep1Desc": "Download from Play Store or GitHub",
+  "shizukuStep2Title": "Activate Shizuku",
+  "shizukuStep2Desc": "Run the app and grant permissions",
+  "shizukuStep3Title": "Grant permission",
+  "shizukuStep3Desc": "ValleySave will ask for access",
+  "shizukuDone": "✓  Done. From then on, downloading and uploading saves works directly, like on a computer.",
+  "dlgDeleteDriveTitle": "Delete from Drive",
+  "dlgDeleteLocalTitle": "Delete from this device",
+  "dlgDownloadTitle": "Download save",
+  "dlgUploadTitle": "Upload save",
+  "dlgUploadOverwrite": "This will overwrite your local save",
+  "dlgGotIt": "Got it",
+  "dlgCopyDest": "Copy destination",
+  "previewColDayYear": "Day/Year",
+  "previewColTime": "Playtime",
+  "previewColMoney": "Coins",
+  "previewColTotal": "Total",
+  "previewColFarming": "Farming",
+  "previewColForaging": "Foraging",
+  "previewColMining": "Mining",
+  "previewColFishing": "Fishing",
+  "previewColCombat": "Combat",
+  "previewColFriends": "Friends",
+  "previewColMonsters": "Monsters",
+  "previewColFaints": "Faints",
+  "previewColMine": "Mine",
+  "previewColUnexplored": "Unexplored",
+  "previewLocalLabel": "ON THIS DEVICE",
+  "previewDriveLabel": "ON DRIVE",
+  "previewFromDrive": "FROM DRIVE",
+  "previewFromDevice": "FROM THIS DEVICE",
+  "versionMismatch": "Different versions: local {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "Path copied",
+  "snackDestCopied": "Destination path copied",
+  "snackDownloaded": "Save downloaded to the game",
+  "snackSessionExpired": "Drive session expired. Reconnect",
+  "snackUploadError": "Upload error: {error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "Download error: {error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "Delete error: {error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" moved to Drive Trash. You have 30 days to restore it.",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" deleted from this device",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "Enable Shizuku…",
+  "snackWriteError": "Could not write to the game. Some phones block /Android/data even with Shizuku.",
+  "snackPlatformNotSupported": "This platform doesn't support writing local saves yet.",
+  "snackWirelessDebugHint": "Open manually: Settings → Developer options → Wireless debugging.",
+  "snackOpenShizukuApp": "Open Shizuku from your app drawer.",
+  "hiwTipDeletePermanent": "ValleySave can't recover permanently deleted saves. Drive files are your responsibility.",
+  "hiwCompatAchievements": "Steam and Google Play achievements don't transfer. Each platform only tracks achievements that happen in real time — the save file doesn't trigger them retroactively.",
+  "hiwCompatOverwrite": "If you sync from two devices without a set order, one save can overwrite the other. Always upload before downloading.",
+  "hiwCompatVersions": "Saves from different game versions may not load correctly. ValleySave warns you if it detects a version mismatch before downloading.",
+  "hiwCompatMods": "SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren't installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.",
+  "hiwComparePrimary": "Total playtime",
+  "hiwCompareNoShown1": "Crop and animal status",
+  "hiwCompareNoShown2": "Inventory and items",
+  "hiwCompareNoShown3": "Individual relationships",
+  "hiwShizuku1": "Install Shizuku (Play Store or GitHub APK).",
+  "hiwShizuku2": "Activate it with Wireless Debugging — ValleySave guides you step by step.",
+  "hiwShizuku3": "Grant permission to ValleySave when prompted.",
+  "hiwBridge1": "Download from Drive: ValleySave leaves the save in its folder. You copy it with Files to Stardew's folder.",
+  "hiwBridge2": "Upload to Drive: copy the save from Stardew to ValleySave's folder. ValleySave detects it and uploads it.",
+  "snackShizukuBattery": "Settings → Apps → Shizuku → Battery → Unrestricted.",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ If you haven't uploaded to Drive, it will be lost forever. No recovery.",
+  "dlgDelete": "Delete",
+  "dlgDownloadButton": "Download",
+  "dlgUploadButton": "Upload",
+  "dlgBridgeCopyTitle": "Copy save to game",
+  "dlgBridgeCopyDesc": "Save is ready. With your Files app, copy the \"{saveName}\" folder and paste it into the Stardew folder.",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "labelFrom": "From",
+  "labelTo": "To",
+  "dlgDownloadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) will be copied to this device.",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgDownloadOverwrite": "This OVERWRITES your local save of \"{saveName}\".",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) will be uploaded to your Drive.",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": { "type": "String" },
+      "day": { "type": "int" },
+      "playtime": { "type": "String" }
+    }
+  },
+  "dlgUploadOverwriteDrive": "This OVERWRITES the Drive version of \"{saveName}\".",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  },
+  "pathLabelFromStardew": "From (Stardew)",
+  "pathLabelToValleySave": "To (ValleySave)",
+  "chooserDesc": "Android protects the game folder. Choose how to give ValleySave access — you can change it anytime.",
+  "chooserShizukuDesc": "Configured once. After that ValleySave syncs on its own, without you touching anything. Only reliable method on Android 13+.",
+  "chooserManualBadge": "ONLY ANDROID 11-12",
+  "chooserBridgeDesc": "Copy saves with your Files app. No extra install. Only on Android 11 and 12.",
+  "shizukuGateSubtitle": "Configured once · first time only",
+  "shizukuStatusLabel": "Shizuku active",
+  "shizukuStatusRunning": "Connected and waiting.",
+  "shizukuStatusNotDetected": "Not detected yet.",
+  "shizukuPermLabel": "Permission granted",
+  "shizukuPermGranted": "ValleySave already has access.",
+  "shizukuPermNotGranted": "Need to authorize ValleySave.",
+  "shizukuGrant": "grant",
+  "shizukuGuideHeader": "STEP-BY-STEP GUIDE",
+  "shizukuStep1DescFull": "Free. If Google Play blocks it on your phone, use the official GitHub APK.",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "Enable Developer Options",
+  "shizukuStep2DescFull": "Settings → Phone info → Software info → tap \"Build number\" 7 times.",
+  "shizukuStep3TitleFull": "Enable Wireless Debugging",
+  "shizukuStep3DescFull": "The button takes you there and highlights it. Enable it (ON). Then tap \"Pair device with pairing code\" — a 6-digit code will appear on screen.",
+  "btnOpenAndHighlight": "Open and highlight",
+  "shizukuStep4Title": "Pair and START Shizuku",
+  "shizukuStep4Desc": "Open Shizuku → \"Start via Wireless Debugging\" → \"Pair with pairing code\". Shizuku will send a notification saying it's waiting. Enter the 6-digit code from the Wireless Debugging screen. After pairing, press START — without that last tap Shizuku won't be active.",
+  "btnOpenShizuku": "Open Shizuku",
+  "shizukuStep5Title": "Set Shizuku battery to Unrestricted",
+  "shizukuStep5Desc": "Open app info → Battery → Unrestricted. If you don't, the system will close Shizuku in the background and you'll have to press Start again.",
+  "btnShizukuAppInfo": "Shizuku app info",
+  "shizukuStep6DescActive": "Shizuku is active. Tap the button to authorize.",
+  "shizukuStep6DescWaiting": "Available once Shizuku is active (step 4).",
+  "btnGrantPermission": "Grant permission",
+  "btnCheckShizuku": "Done · Check",
+  "statusDone": "done",
+  "statusPending": "pending",
+  "latestBadge": "· LATEST SAVE ·",
+  "saveDateLabel": "{season} · Year {year}",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": { "type": "String" },
+      "year": { "type": "int" }
+    }
+  },
+  "petCat": "Cat",
+  "petDog": "Dog",
+  "houseBasic": "Basic house",
+  "houseKitchen": "With kitchen",
+  "houseBedroom": "With bedroom",
+  "houseCellar": "With cellar",
+  "houseLevelN": "Lv. {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  },
+  "tooltipLaunchGame": "Play",
+  "hiwLaunchTitle": "Launch the game",
+  "hiwLaunchDesc": "The ▶ button in the top bar of Your saves opens Stardew Valley directly from the app.",
+  "hiwLaunchTipWindows": "On Windows, if the game isn’t detected automatically, set the executable path in Settings → Game.",
+  "hiwLaunchTipAndroid": "On Android, opens the game if it’s installed.",
+  "settingsGameSection": "Game",
+  "settingsGameExePath": "Stardew Valley executable",
+  "settingsGameExeNotFound": "Not found automatically",
+  "settingsGameExeBrowse": "Browse…",
+  "settingsGameExeSaved": "Path saved",
+  "snackLaunchError": "Couldn’t open the game"
+}

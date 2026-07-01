@@ -1,0 +1,508 @@
+﻿{
+  "@@locale": "uk",
+  "appTitle": "ValleySave",
+  "welcomeTitle": "Ніколи не втрачай свою ферму, бери її з собою.",
+  "connectGoogleDrive": "Підключити Google Drive",
+  "connecting": "Підключення…",
+  "mySaves": "Мої збереження",
+  "howItWorks": "Як це працює",
+  "settings": "Налаштування",
+  "aboutSection": "Про додаток",
+  "openSource": "Доступний код",
+  "nonCommercial": "Некомерційний",
+  "freeForever": "Назавжди безкоштовно",
+  "privacyTitle": "Конфіденційність та використання даних",
+  "privacyDescription": "ValleySave — додаток для синхронізації збережень Stardew Valley з вашим Google Drive.",
+  "whatDataTitle": "Які дані використовуються",
+  "whatDataDesc": "ValleySave отримує доступ лише до файлів збережень Stardew Valley, необхідних для створення копій, синхронізації або відновлення.",
+  "googleDriveTitle": "Google Drive",
+  "googleDriveDesc": "Ваші збереження завантажуються на ваш власний Google Drive. ValleySave не використовує власні сервери для зберігання ваших ігор.",
+  "androidPermissionsTitle": "Дозволи Android",
+  "androidPermissionsDesc": "ValleySave може потребувати дозволу на зберігання або інструментів на кшталт Shizuku для доступу до файлів збережень.",
+  "adsTitle": "Реклама",
+  "adsDesc": "ValleySave може показувати рекламу через Google AdMob.",
+  "responsibilityTitle": "Відповідальність",
+  "responsibilityDesc": "Файли збережень — ваша відповідальність.",
+  "deleteDataTitle": "Видалення даних",
+  "deleteDataDesc": "Ви можете видалити синхронізовані копії, вручну видаливши папку ValleySave з Google Drive.",
+  "sourceCodeTitle": "Вихідний код та контакти",
+  "sourceCodeDesc": "ValleySave — проєкт із доступним кодом за ліцензією Polyform Noncommercial.",
+  "upToDate": "Актуально",
+  "checkingUpdates": "Перевіряємо…",
+  "updateAvailable": "Доступне оновлення",
+  "application": "Додаток",
+  "version": "Версія {version}",
+  "checkForUpdates": "Перевірити оновлення",
+  "shizukuRequired": "Потрібен Shizuku",
+  "shizukuGuide": "Посібник з налаштування Shizuku",
+  "activateShizuku": "Активуйте Shizuku для запису збережень у грі.",
+  "deleteSaveTitle": "Видалити {saveName}",
+  "deleteSaveMessage": "Це видалить збереження з цього пристрою. Продовжити?",
+  "deleteFromDrive": "Видалити з Drive",
+  "confirmDelete": "Збереження {saveName} буде переміщено до кошика Google Drive.",
+  "deleteFromDeviceMessage": "Збереження {saveName} буде назавжди видалено з цього пристрою.",
+  "restoreSaveTitle": "Відновити {saveName}",
+  "restoreSaveMessage": "Завантажити {saveName} на цей пристрій?",
+  "restore": "Відновити",
+  "cancel": "Скасувати",
+  "error": "Помилка",
+  "success": "Успішно",
+  "loading": "Завантаження…",
+  "disconnect": "Відключити",
+  "ok": "OK",
+  "yes": "Так",
+  "no": "Ні",
+  "welcomeHeroPre": "Ніколи не втрачай\nсвою ",
+  "welcomeHeroAccent": "ферму,",
+  "welcomeHeroPost": "\nбери її з собою.",
+  "welcomeSubtitle": "Синхронізуйте своїх збереження Stardew Valley на всіх пристроях. Ваші дані знаходяться у вашому Google Drive — жодних серверів, жодних підписок, під вашим контролем.",
+  "welcomeDriveConnected": "Drive підключено",
+  "welcomeFooterTagline": "· Некомерційний · Назавжди безкоштовно ·",
+  "updateVersionAvailable": "v{version} доступна",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionMode": "Режим",
+  "sectionSeason": "Сезон",
+  "sectionLanguage": "Мова",
+  "modeAutoTitle": "Автоматично",
+  "modeAutoDesc": "Слідує за вашим активним збереженням і, якщо збережень немає, за вашим реальним місцем розташування.",
+  "modeSavesTitle": "За збереженням",
+  "modeSavesDesc": "Завжди використовує сезон вашого останнього збереження.",
+  "modeGeoTitle": "За місцем розташування",
+  "modeGeoDesc": "Завжди використовує реальний сезон вашого регіону.",
+  "modeFixedTitle": "Фіксований сезон",
+  "modeFixedDesc": "Завжди показує один і той же сезон.",
+  "modeRandomTitle": "Випадковий",
+  "modeRandomDesc": "Вибирає інший сезон кожного разу, коли ви відкриваєте додаток.",
+  "seasonInitial": "Початковий",
+  "seasonSpring": "Весна",
+  "seasonSummer": "Літо",
+  "seasonFall": "Осінь",
+  "seasonWinter": "Зима",
+  "autoPriorityTitle": "Порядок пріоритетів",
+  "autoStep1Title": "Перший запуск",
+  "autoStep1Desc": "Показує початковий стан.",
+  "autoStep2Title": "Активне збереження",
+  "autoStep2Desc": "Використовує сезон вашого останнього синхронізованого збереження.",
+  "autoStep3Title": "Місцезнаходження",
+  "autoStep3Desc": "Визначає вашу півкулю та реальний сезон вашого регіону.",
+  "autoStep4Title": "За замовчуванням",
+  "autoStep4Desc": "Початковий (нічний режим), якщо дані недоступні.",
+  "versionInstalled": "Встановлена версія",
+  "updateNeverChecked": "Ніколи не перевірялася",
+  "updateCheckedNow": "Щойно перевірена",
+  "updateOutdatedDownload": "Не актуальна · Завантажити",
+  "updateDownloading": "Завантаження оновлення…",
+  "updateError": "Помилка — натисніть для повтору",
+  "disconnectTitle": "Відключити Drive?",
+  "disconnectBody": "Ваші збереження на Drive не будуть видалені. Ви можете переконнектитися в будь-який час.",
+  "disconnectButton": "Відключити Drive",
+  "languageTileLabel": "Мова",
+  "languageDialogTitle": "Мова додатка",
+  "searchHint": "Пошук…",
+  "languageAuto": "Мова системи",
+  "languageAutoDesc": "Використовує вашу мову системи",
+  "privacyPolicyTitle": "Політика конфіденційності",
+  "privacyBeforeStartTitle": "Перед початком",
+  "privacyLastUpdated": "Останнє оновлення: червень 2026",
+  "privacyAccept": "Зрозуміло, продовжити",
+  "cardSynced": "Синхронізовано",
+  "cardLocalAhead": "Локально попереду",
+  "cardDriveAhead": "Drive попереду",
+  "cardLocalOnly": "Тільки локально",
+  "cardDriveOnly": "Тільки на Drive",
+  "cardTimeNow": "зараз",
+  "cardTimeMinutesAgo": "{minutes} хв тому",
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeHoursAgo": "{hours}г тому",
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeDaysAgo": "{days}д тому",
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "cardTimeMonthsAgo": "{months}міс тому",
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "cardDetailLocalTitle": "На цьому пристрої",
+  "cardDetailRemoteTitle": "На Drive",
+  "cardDetailUpload": "Завантажити на Drive",
+  "cardDetailDownload": "Завантажити збереження",
+  "cardDetailDeleteLabel": "Видалити",
+  "cardDetailDeleteLocal": "Видалити з цього пристрою",
+  "cardDetailDeleteRemote": "Видалити з Drive",
+  "cardCloseBarrier": "Закрити",
+  "statDayYear": "День {day} · Рік {year}",
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "statDayOnly": "День {day}",
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "statPlaytime": "Час гри",
+  "statMoney": "Монети",
+  "statTotal": "Всього",
+  "statMineUnexplored": "Невідпрацьовано",
+  "statMine": "Шахта",
+  "statMineLvl": "Шахта · Рівень",
+  "skillFarming": "Хліборобство",
+  "skillForaging": "Збирання",
+  "skillMining": "Видобування",
+  "skillFishing": "Рибалка",
+  "skillCombat": "Бій",
+  "cardLocalPresence": "На цьому пристрої",
+  "cardRemotePresence": "На Drive",
+  "cardNotPresent": "Не тут",
+  "cardActionSynced": "Синхронізовано",
+  "cardActionUpload": "Завантажити",
+  "cardActionDownload": "Завантажити",
+  "pillMonsters": "монстрів",
+  "pillFriends": "друзів",
+  "pillFaints": "падінь",
+  "pillSleeps": "сну",
+  "hiwTitle": "Як це працює",
+  "hiwSyncTitle": "Як працює синхронізація",
+  "hiwSyncIntro": "ValleySave використовує ваш власний Google Drive для переміщення збережень між пристроями. Жодних проміжних серверів: файли — ваші.",
+  "hiwSyncDevice": "Ваш\nпристрій",
+  "hiwSyncCloud": "Google\nDrive",
+  "hiwSyncOtherDevice": "Інший\nпристрій",
+  "hiwUploadTitle": "Завантажити збереження",
+  "hiwUploadDesc": "При завантаженні ValleySave копіює обидва файли збереження (SaveGameInfo + файл ферми) у папку ValleySave/ на Drive.",
+  "hiwDownloadTitle": "Завантажити збереження",
+  "hiwDownloadDesc": "При завантаженні ValleySave приносить файли з Drive і розміщує їх прямо в папці гри.",
+  "hiwCompareTitle": "Що він порівнює?",
+  "hiwCompareIntro": "Щоб дізнатися, яка версія попереду, ValleySave використовує загальний час гри — єдині дані, які можуть тільки зростати.",
+  "hiwCompareNote": "Перед підтвердженням ви також побачите, щоб могли вирішити:",
+  "hiwCompareMoney": "Поточні гроші та всього заробленого",
+  "hiwCompareMine": "Рівень шахти",
+  "hiwCompareSkills": "Навички (хліборобство, видобування, бій…)",
+  "hiwCompareRelations": "Друзі, вбитих монстрів, падінь",
+  "hiwCompareStamina": "Витривалість та здоров'я",
+  "hiwCompareNotShown": "Це не показується — вони змінюються в будь-якому напрямку і не вказують на те, яке збереження попереду.",
+  "hiwCompareNotShownExamples": "Стан культур та тварин, інвентар та речі, окремі взаємовідносини",
+  "hiwCompareWarning": "Це не показується — вони змінюються в будь-якому напрямку і не вказують на те, яке збереження попереду.",
+  "hiwConflictTitle": "Якщо ви граєте без синхронізації",
+  "hiwConflictDesc": "Якщо ви просуватися на мобілі та комп'ютері без синхронізації між сеансами, ви закінчите з двома версіями одного збереження.",
+  "hiwConflictNoMerge": "Їх неможливо об'єднати. ValleySave завжди показує вам обидві версії, щоб ви могли вибрати, яку зберегти.",
+  "hiwConflictMobile": "Мобіль",
+  "hiwConflictVersionA": "версія A",
+  "hiwConflictPC": "ПК",
+  "hiwConflictVersionB": "версія B",
+  "hiwDeleteTitle": "Якщо збереження видалено",
+  "hiwDeleteDesc": "Коли ви видаляєте збереження з Drive, воно не зникає одразу: воно переходить у смітник Google Drive.",
+  "hiwCompatTitle": "Сумісність платформ",
+  "hiwCompatAndroidAccess": "ДОСТУП НА ANDROID",
+  "hiwShizukuTitle": "З Shizuku",
+  "hiwShizukuSubtitle": "Налаштуйте один раз. Потім ValleySave синхронізується сам, не дотикаючись ні до чого.",
+  "hiwShizukuBadge": "АВТОМАТИЧНО · РЕКОМЕНДУЄТЬСЯ",
+  "hiwShizukuDone": "✓ Виконано. З того часу завантаження та вивантаження збережень відбувається прямо, як на комп'ютері.",
+  "hiwShizukuNote": "Сполучення тільки вперше. Нові версії Shizuku активуються самі після перезавантаження телефону.",
+  "hiwBridgeTitle": "Ручний міст",
+  "hiwBridgeSubtitle": "Працює тільки на Android 11 та 12. Ви не встановлюєте нічого додатково; натомість ви копіюєте збереження вручну через файловий менеджер кожного разу, коли синхронізуєтеся.",
+  "hiwBridgeBadge": "РУЧНА АЛЬТЕРНАТИВА · ANDROID 11-12",
+  "hiwBridgeSaveFolder": "Папка Stardew",
+  "hiwBridgeValleySaveFolder": "Папка ValleySave",
+  "hiwBridgeNote": "Це працює, тому що ваш файловий менеджер системи може отримати доступ до цих папок (ValleySave не може).",
+  "hiwTipAlwaysShow": "Ви завжди побачите, що на Drive, перед перезаписом, щоб могли порівняти.",
+  "hiwTipWithoutUpload": "Без завантаження жоден інший пристрій не побачить ваш недавній прогрес.",
+  "hiwTipComparison": "Перед підтвердженням ви побачите порівняння між локальним і Drive.",
+  "hiwTipDownloadOverwrite": "Завантаження перезаписує ваше локальне збереження. Будь-який не синхронізований прогрес буде втрачено.",
+  "hiwTipSync": "Завжди завантажуйте перед перемиканням пристроїв і завантажуйте по прибутті.",
+  "hiwTipDeletion": "У вас є 30 днів для відновлення його зі смітника Drive перед остаточним видаленням.",
+  "hiwPrivacyLink": "Політика конфіденційності та використання",
+  "emptyNoSaves": "Збережень не знайдено",
+  "emptyNoSavesHint": "На цьому пристрої не можна прочитати жодного локального збереження",
+  "bridgeTitle": "Принесіть свої збереження",
+  "bridgeDesc": "Щоб побачити та завантажити ваші локальні збереження, скопіюйте їх через файловий менеджер з папки Stardew до цієї папки ValleySave. Потім проведіть для оновлення.",
+  "bridgeRefresh": "Оновити",
+  "bridgeChangeMode": "Змінити метод",
+  "loaderLoading": "ЗАВАНТАЖЕННЯ",
+  "loaderConnecting": "підключення до Drive…",
+  "chooserTitle": "Виберіть спосіб підключення",
+  "chooserAutomatic": "Автоматично · Рекомендується",
+  "chooserManual": "Ручна альтернатива · Android 11-12",
+  "shizukuStepTitle": "Налаштуйте Shizuku",
+  "shizukuStep1Title": "Встановіть Shizuku",
+  "shizukuStep1Desc": "Завантажте з Play Store або GitHub",
+  "shizukuStep2Title": "Активуйте Shizuku",
+  "shizukuStep2Desc": "Запустіть програму та надайте дозволи",
+  "shizukuStep3Title": "Надати дозвіл",
+  "shizukuStep3Desc": "ValleySave попросить доступ",
+  "shizukuDone": "✓ Виконано. З того часу завантаження та вивантаження збережень працює прямо, як на комп'ютері.",
+  "dlgDeleteDriveTitle": "Видалити з Drive",
+  "dlgDeleteLocalTitle": "Видалити з цього пристрою",
+  "dlgDownloadTitle": "Завантажити збереження",
+  "dlgUploadTitle": "Завантажити збереження",
+  "dlgUploadOverwrite": "Це перезапише ваше локальне збереження",
+  "dlgGotIt": "Зрозуміло",
+  "dlgCopyDest": "Скопіювати призначення",
+  "previewColDayYear": "День/Рік",
+  "previewColTime": "Час гри",
+  "previewColMoney": "Монети",
+  "previewColTotal": "Всього",
+  "previewColFarming": "Хліборобство",
+  "previewColForaging": "Збирання",
+  "previewColMining": "Видобування",
+  "previewColFishing": "Рибалка",
+  "previewColCombat": "Бій",
+  "previewColFriends": "Друзі",
+  "previewColMonsters": "Монстри",
+  "previewColFaints": "Падіння",
+  "previewColMine": "Шахта",
+  "previewColUnexplored": "Невідпрацьовано",
+  "previewLocalLabel": "НА ЦЬОМУ ПРИСТРОЇ",
+  "previewDriveLabel": "НА DRIVE",
+  "previewFromDrive": "З DRIVE",
+  "previewFromDevice": "З ЦЬОГО ПРИСТРОЮ",
+  "versionMismatch": "Різні версії: локально {local} · Drive {drive}…",
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
+  "snackPathCopied": "Шлях скопійовано",
+  "snackDestCopied": "Шлях призначення скопійовано",
+  "snackDownloaded": "Збереження завантажено до гри",
+  "snackSessionExpired": "Сеанс Drive закінчився. Переконнектитися",
+  "snackUploadError": "Помилка завантаження: {error}",
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDownloadError": "Помилка завантаження: {error}",
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeleteError": "Помилка видалення: {error}",
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "snackTrashed": "\"{saveName}\" переміщено до смітника Drive. У вас є 30 днів для відновлення.",
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackDeletedLocal": "\"{saveName}\" видалено з цього пристрою",
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "snackShizukuRequired": "Активуйте Shizuku…",
+  "snackWriteError": "Не вдалося записати до гри. Деякі телефони блокують /Android/data навіть з Shizuku.",
+  "snackPlatformNotSupported": "Ця платформа поки не підтримує запис локальних збережень.",
+  "snackWirelessDebugHint": "Відкрийте вручну: Налаштування → Параметри розробника → Бездротове налагодження.",
+  "snackOpenShizukuApp": "Відкрийте Shizuku зі своєї шухляди застосунків.",
+  "hiwTipDeletePermanent": "ValleySave не може відновити постійно видалені збереження. Файли Drive — ваша відповідальність.",
+  "hiwCompatAchievements": "Досягнення Steam та Google Play не переносяться. Кожна платформа відстежує тільки досягнення, які відбуваються в реальному часі — файл збереження не запускає їх зворотно.",
+  "hiwCompatOverwrite": "Якщо синхронізуватися з двох пристроїв без встановленого порядку, одне збереження може перезаписати інше. Завжди завантажуйте перед завантаженням.",
+  "hiwCompatVersions": "Збереження з різних версій гри можуть неправильно завантажитися. ValleySave попередить вас, якщо виявить невідповідність версії перед завантаженням.",
+  "hiwCompatMods": "Моди SMAPI додають додаткові дані до збереження. Якщо завантажити модифіковане збереження на пристрій, де ці моди не встановлені, гра може аварійно завершитися або втратити дані модів.\n\nНа Android можна також встановити SMAPI для використання модів.",
+  "hiwComparePrimary": "Загальний час гри",
+  "hiwCompareNoShown1": "Стан культур та тварин",
+  "hiwCompareNoShown2": "Інвентар та речі",
+  "hiwCompareNoShown3": "Окремі взаємовідносини",
+  "hiwShizuku1": "Встановіть Shizuku (Play Store або APK GitHub).",
+  "hiwShizuku2": "Активуйте за допомогою бездротового налагодження — ValleySave проведе вас крок за кроком.",
+  "hiwShizuku3": "Надайте дозвіл валлеїсейву коли буде запропоновано.",
+  "hiwBridge1": "Завантажити з Drive: ValleySave залишає збереження у своїй папці. Ви копіюєте його через Files до папки Stardew.",
+  "hiwBridge2": "Завантажити на Drive: скопіюйте збереження з Stardew у папку ValleySave. ValleySave виявляє його та завантажує.",
+  "snackShizukuBattery": "Налаштування → Програми → Shizuku → Батарея → Без обмежень.",
+  "snackDriveError": "Drive: {error}",
+  "@snackDriveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgDeleteLocalWarning": "⚠️ Якщо ви не завантажили на Drive, воно буде втрачено назавжди. Немає способу восстановлення.",
+  "dlgDelete": "Видалити",
+  "dlgDownloadButton": "Завантажити",
+  "dlgUploadButton": "Завантажити",
+  "dlgBridgeCopyTitle": "Скопіювати збереження до гри",
+  "dlgBridgeCopyDesc": "Збереження готове. За допомогою файлового менеджера скопіюйте папку \"{saveName}\" та вставте її в папку Stardew.",
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "labelFrom": "З",
+  "labelTo": "До",
+  "dlgDownloadNewDesc": "\"{saveName}\" (День {day}, {playtime}) буде скопійовано на цей пристрій.",
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgDownloadOverwrite": "Це ПЕРЕЗАПИШЕ ваше локальне збереження \"{saveName}\".",
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgUploadNewDesc": "\"{saveName}\" (День {day}, {playtime}) буде завантажено на ваш Drive.",
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
+  "dlgUploadOverwriteDrive": "Це ПЕРЕЗАПИШЕ версію Drive \"{saveName}\".",
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "pathLabelFromStardew": "З (Stardew)",
+  "pathLabelToValleySave": "До (ValleySave)",
+  "chooserDesc": "Android захищає папку гри. Виберіть, як дати ValleySave доступ — ви можете змінити це в будь-який час.",
+  "chooserShizukuDesc": "Налаштовується один раз. Потім ValleySave синхронізується самостійно, не дотикаючись нічого. Єдиний надійний метод на Android 13+.",
+  "chooserManualBadge": "ТІЛЬКИ ANDROID 11-12",
+  "chooserBridgeDesc": "Копіюйте збереження через файловий менеджер. Без додаткового встановлення. Тільки на Android 11 та 12.",
+  "shizukuGateSubtitle": "Налаштовується один раз · тільки в перший раз",
+  "shizukuStatusLabel": "Shizuku активна",
+  "shizukuStatusRunning": "Підключено та чекає.",
+  "shizukuStatusNotDetected": "Ще не виявлено.",
+  "shizukuPermLabel": "Дозвіл надано",
+  "shizukuPermGranted": "ValleySave вже має доступ.",
+  "shizukuPermNotGranted": "Потрібна авторизація ValleySave.",
+  "shizukuGrant": "надати",
+  "shizukuGuideHeader": "ПОКРОКОВИЙ ПОСІБНИК",
+  "shizukuStep1DescFull": "Безкоштовно. Якщо Google Play блокує його на вашому телефоні, використовуйте офіційний APK GitHub.",
+  "btnPlayStore": "Play Store",
+  "btnApkGithub": "APK GitHub",
+  "shizukuStep2TitleFull": "Активуйте параметри розробника",
+  "shizukuStep2DescFull": "Налаштування → Інформація про телефон → Інформація про програмне забезпечення → натисніть \"Номер збірки\" 7 разів.",
+  "shizukuStep3TitleFull": "Активуйте бездротове налагодження",
+  "shizukuStep3DescFull": "Кнопка приносить вас туди та висвітлює це. Активуйте його (ВКЛ). Потім натисніть \"Сполучитися з кодом парування\" — на екрані з'явиться 6-значний код.",
+  "btnOpenAndHighlight": "Відкрити та виділити",
+  "shizukuStep4Title": "Сполучити та ЗАПУСТИТИ Shizuku",
+  "shizukuStep4Desc": "Відкрийте Shizuku → \"Запустити через бездротове налагодження\" → \"Сполучити з кодом парування\". Shizuku надішле сповіщення про те, що чекає. Введіть 6-значний код з екрана бездротового налагодження. Після сполучення натисніть ЗАПУСТИТИ — без цього останнього натиску Shizuku не буде активна.",
+  "btnOpenShizuku": "Відкрити Shizuku",
+  "shizukuStep5Title": "Встановіть батарею Shizuku на \"Без обмежень\"",
+  "shizukuStep5Desc": "Відкрийте інформацію про програму → Батарея → Без обмежень. Якщо ви цього не зробите, система закриє Shizuku у фоновому режимі, і вам доведеться знову натиснути Запустити.",
+  "btnShizukuAppInfo": "Інформація про програму Shizuku",
+  "shizukuStep6DescActive": "Shizuku активна. Натисніть кнопку для авторизації.",
+  "shizukuStep6DescWaiting": "Доступно після активації Shizuku (крок 4).",
+  "btnGrantPermission": "Надати дозвіл",
+  "btnCheckShizuku": "Виконано · Перевірити",
+  "statusDone": "виконано",
+  "statusPending": "очікування",
+  "latestBadge": "· ОСТАННЄ ЗБЕРЕЖЕННЯ ·",
+  "saveDateLabel": "{season} · Рік {year}",
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "petCat": "Кіт",
+  "petDog": "Собака",
+  "houseBasic": "Базовий будинок",
+  "houseKitchen": "З кухнею",
+  "houseBedroom": "З спальнею",
+  "houseCellar": "З підвалом",
+  "houseLevelN": "Рівень {level}",
+  "@houseLevelN": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "tooltipLaunchGame": "Грати",
+  "hiwLaunchTitle": "Запустити гру",
+  "hiwLaunchDesc": "Кнопка ▶ у верхній панелі розділу Мої збереження відкриває Stardew Valley прямо з додатку.",
+  "hiwLaunchTipWindows": "У Windows, якщо гру не знайдено автоматично, вкажіть шлях в Налаштування → Гра.",
+  "hiwLaunchTipAndroid": "На Android відкриває гру, якщо вона встановлена.",
+  "settingsGameSection": "Гра",
+  "settingsGameExePath": "Виконуваний файл Stardew Valley",
+  "settingsGameExeNotFound": "Не знайдено автоматично",
+  "settingsGameExeBrowse": "Огляд…",
+  "settingsGameExeSaved": "Шлях збережено",
+  "snackLaunchError": "Не вдалося відкрити гру"
+}

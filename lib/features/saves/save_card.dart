@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
+import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
+import '../../shared/widgets/save_busy_indicator.dart';
 
 // Card-local color tokens
 const _kSkillName  = Color(0xFF8AB890);
@@ -45,24 +48,24 @@ const _kPipCombat   = Color(0xFFE07040);
 const _kPipForaging = Color(0xFF60A858);
 const _kPipFishing  = Color(0xFF4888C8);
 
-({Color color, String label}) _statusStyle(SaveSyncStatus s) => switch (s) {
-      SaveSyncStatus.synced     => (color: _kSynced, label: 'Sincronizado'),
-      SaveSyncStatus.localAhead => (color: _kLocal,  label: 'Local más avanzada'),
-      SaveSyncStatus.driveAhead => (color: _kDrive,  label: 'Drive más avanzada'),
-      SaveSyncStatus.localOnly  => (color: _kLocal,  label: 'Solo en este equipo'),
-      SaveSyncStatus.driveOnly  => (color: _kDrive,  label: 'Solo en Drive'),
+({Color color, String label}) _statusStyle(SaveSyncStatus s, AppLocalizations l10n) => switch (s) {
+      SaveSyncStatus.synced     => (color: _kSynced, label: l10n.cardSynced),
+      SaveSyncStatus.localAhead => (color: _kLocal,  label: l10n.cardLocalAhead),
+      SaveSyncStatus.driveAhead => (color: _kDrive,  label: l10n.cardDriveAhead),
+      SaveSyncStatus.localOnly  => (color: _kLocal,  label: l10n.cardLocalOnly),
+      SaveSyncStatus.driveOnly  => (color: _kDrive,  label: l10n.cardDriveOnly),
     };
 
 // Etiqueta de estado corta para la fila de acción (evita truncado en móvil).
 
-String _rel(DateTime t) {
+String _rel(DateTime t, AppLocalizations l10n) {
   final d = DateTime.now().difference(t);
-  if (d.inMinutes < 1) return 'ahora';
-  if (d.inMinutes < 60) return 'hace ${d.inMinutes} min';
-  if (d.inHours < 24) return 'hace ${d.inHours} h';
-  if (d.inDays < 30) return 'hace ${d.inDays} d';
+  if (d.inMinutes < 1) return l10n.cardTimeNow;
+  if (d.inMinutes < 60) return l10n.cardTimeMinutesAgo(d.inMinutes);
+  if (d.inHours < 24) return l10n.cardTimeHoursAgo(d.inHours);
+  if (d.inDays < 30) return l10n.cardTimeDaysAgo(d.inDays);
   final m = (d.inDays / 30).floor();
-  return 'hace $m mes${m > 1 ? 'es' : ''}';
+  return l10n.cardTimeMonthsAgo(m);
 }
 
 class SaveCard extends StatelessWidget {
@@ -85,9 +88,10 @@ class SaveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final save = entry.primary;
     final status = entry.status;
-    final st = _statusStyle(status);
+    final st = _statusStyle(status, l10n);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
@@ -159,7 +163,7 @@ class _DetailSide {
     required this.actionIcon,
     required this.onAction,
     this.onDelete,
-    this.deleteLabel = 'Eliminar',
+    this.deleteLabel = '',  // will be set by caller
   });
   final SaveFile save;
   final Color color;
@@ -183,6 +187,7 @@ void _showSaveDetail(
   VoidCallback? onDeleteFromDrive,
   VoidCallback? onDeleteLocal,
 }) {
+  final l10n = AppLocalizations.of(context)!;
   final isMobile = Platform.isAndroid || Platform.isIOS;
 
   // Caras presentes — local primero, Drive después.
@@ -192,24 +197,24 @@ void _showSaveDetail(
         save: entry.local!,
         color: _kLocal,
         icon: isMobile ? '📱' : '💻',
-        title: isMobile ? 'En este móvil' : 'En este equipo',
-        actionLabel: 'Subir a Drive',
+        title: l10n.cardDetailLocalTitle,
+        actionLabel: l10n.cardDetailUpload,
         actionIcon: Icons.cloud_upload_outlined,
         onAction: onUpload,
         onDelete: onDeleteLocal,
-        deleteLabel: isMobile ? 'Eliminar de este móvil' : 'Eliminar de este equipo',
+        deleteLabel: l10n.cardDetailDeleteLocal,
       ),
     if (entry.drive != null)
       _DetailSide(
         save: entry.drive!,
         color: _kDrive,
         icon: '☁️',
-        title: 'En Drive',
-        actionLabel: 'Descargar partida',
+        title: l10n.cardDetailRemoteTitle,
+        actionLabel: l10n.cardDetailDownload,
         actionIcon: Icons.cloud_download_outlined,
         onAction: onDownload,
         onDelete: onDeleteFromDrive,
-        deleteLabel: 'Eliminar de Drive',
+        deleteLabel: l10n.cardDetailDeleteRemote,
       ),
   ];
   if (sides.isEmpty) return;
@@ -220,7 +225,7 @@ void _showSaveDetail(
   showGeneralDialog<void>(
     context: context,
     barrierDismissible: true,
-    barrierLabel: 'Cerrar',
+    barrierLabel: l10n.cardCloseBarrier,
     barrierColor: Colors.black.withValues(alpha: 0.70),
     transitionDuration: const Duration(milliseconds: 260),
     transitionBuilder: (ctx, animation, _, child) {
@@ -462,6 +467,7 @@ class _DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final s = side.save;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -505,7 +511,7 @@ class _DetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Día ${s.dayOfMonth} · Año ${s.year}',
+                        l10n.statDayYear(s.dayOfMonth, s.year),
                         style: GoogleFonts.firaCode(
                           fontSize: 11,
                           color: s.seasonColor.withValues(alpha: 0.90),
@@ -610,6 +616,7 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
       child: Row(
@@ -641,13 +648,13 @@ class _Header extends StatelessWidget {
                       bgColor: const Color(0xFF140E04),
                     ),
                     _Chip(
-                      save.petLabel,
+                      save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
                       textColor: const Color(0xFF60A858),
                       borderColor: const Color(0xFF264A20),
                       bgColor: const Color(0xFF080E08),
                     ),
                     _Chip(
-                      '🏠 ${save.houseLabel}',
+                      '🏠 ${_houseLabel(save.houseUpgradeLevel, l10n)}',
                       textColor: const Color(0xFF8898A8),
                       borderColor: const Color(0xFF283848),
                       bgColor: const Color(0xFF08100E),
@@ -671,6 +678,7 @@ class _DateBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -682,7 +690,7 @@ class _DateBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            save.dateLabel.toUpperCase(),
+            _saveDateLabel(save, l10n).toUpperCase(),
             style: GoogleFonts.firaCode(
               fontSize: 8,
               letterSpacing: 1.0,
@@ -690,7 +698,7 @@ class _DateBox extends StatelessWidget {
             ),
           ),
           Text(
-            'Día ${save.dayOfMonth}',
+            l10n.statDayOnly(save.dayOfMonth),
             style: GoogleFonts.bodoniModa(
               fontSize: 22,
               fontStyle: FontStyle.italic,
@@ -713,10 +721,11 @@ class _TilesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final mineValue = save.deepestMineLevel == 0
-        ? 'Sin explorar'
+        ? l10n.statMineUnexplored
         : '${save.deepestMineLevel}';
-    final mineLabel = save.deepestMineLevel == 0 ? 'Mina' : 'Mina · Nv';
+    final mineLabel = save.deepestMineLevel == 0 ? l10n.statMine : l10n.statMineLvl;
 
     final bg  = _tileBg(save.seasonColor);
     final bdr = _tileBdr(save.seasonColor);
@@ -724,7 +733,7 @@ class _TilesRow extends StatelessWidget {
     final coins = _MiniTile(
       icon: _CoinIcon(),
       value: save.currentMoneyLabel,
-      label: 'Monedas',
+      label: l10n.statMoney,
       valueColor: _kMoneyNow,
       bgColor: bg,
       borderColor: bdr,
@@ -732,7 +741,7 @@ class _TilesRow extends StatelessWidget {
     final total = _MiniTile(
       icon: const Text('💰', style: TextStyle(fontSize: 12)),
       value: save.totalMoneyLabel,
-      label: 'Total',
+      label: l10n.statTotal,
       valueColor: _kMoneyTotal,
       bgColor: bg,
       borderColor: bdr,
@@ -799,6 +808,7 @@ class _BigTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -827,7 +837,7 @@ class _BigTile extends StatelessWidget {
               const Text('⏱', style: TextStyle(fontSize: 11)),
               const SizedBox(width: 4),
               Text(
-                'TIEMPO JUGADO',
+                l10n.statPlaytime.toUpperCase(),
                 style: GoogleFonts.firaCode(
                   fontSize: 7,
                   letterSpacing: 0.8,
@@ -945,12 +955,13 @@ class _SkillsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final skills = [
-      ('Cultivo',  save.farmingLevel,  _kPipFarming),
-      ('Recolec.', save.foragingLevel, _kPipForaging),
-      ('Minería',  save.miningLevel,   _kPipMining),
-      ('Pesca',    save.fishingLevel,  _kPipFishing),
-      ('Combate',  save.combatLevel,   _kPipCombat),
+      (l10n.skillFarming,  save.farmingLevel,  _kPipFarming),
+      (l10n.skillForaging, save.foragingLevel, _kPipForaging),
+      (l10n.skillMining,   save.miningLevel,   _kPipMining),
+      (l10n.skillFishing,  save.fishingLevel,  _kPipFishing),
+      (l10n.skillCombat,   save.combatLevel,   _kPipCombat),
     ];
 
     final rows = <Widget>[];
@@ -1061,6 +1072,7 @@ class _PillsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Wrap(
@@ -1068,26 +1080,26 @@ class _PillsRow extends StatelessWidget {
         runSpacing: 6,
         children: [
           _Pill(
-            '💀 ${SaveFile.formatCount(save.monstersKilled)} monstruos',
+            '💀 ${SaveFile.formatCount(save.monstersKilled)} ${l10n.pillMonsters}',
             textColor: _kMonstruos,
             borderColor: const Color(0xFF5A2010),
             bgColor: const Color(0xFF100806),
           ),
           _Pill(
-            '❤️ ${save.goodFriends} amigos',
+            '❤️ ${save.goodFriends} ${l10n.pillFriends}',
             textColor: _kAmigos,
             borderColor: const Color(0xFF5A1838),
             bgColor: const Color(0xFF100610),
           ),
           _Pill(
-            '😵‍💫 ${save.timesUnconscious} desmayos',
+            '😵‍💫 ${save.timesUnconscious} ${l10n.pillFaints}',
             textColor: _kDesmayos,
             borderColor: const Color(0xFF303858),
             bgColor: const Color(0xFF08090E),
           ),
           if (save.averageBedtime > 0)
             _Pill(
-              '🛏️ Duerme ${save.bedtimeLabel}',
+              '🛏️ ${l10n.pillSleeps} ${save.bedtimeLabel}',
               textColor: const Color(0xFF9888C8),
               borderColor: const Color(0xFF2C2848),
               bgColor: const Color(0xFF0A080E),
@@ -1122,6 +1134,7 @@ class _PresenceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final status = entry.status;
     final localAhead =
         status == SaveSyncStatus.localAhead || status == SaveSyncStatus.localOnly;
@@ -1139,7 +1152,7 @@ class _PresenceRow extends StatelessWidget {
               child: _SideTile(
                 color: _kLocal,
                 icon: isMobile ? '📱' : '💻',
-                title: isMobile ? 'EN ESTE MÓVIL' : 'EN ESTE EQUIPO',
+                title: l10n.cardLocalPresence,
                 save: entry.local,
                 highlight: localAhead && entry.drive != null,
                 entry: entry,
@@ -1155,7 +1168,7 @@ class _PresenceRow extends StatelessWidget {
               child: _SideTile(
                 color: _kDrive,
                 icon: '☁️',
-                title: 'EN DRIVE',
+                title: l10n.cardRemotePresence,
                 save: entry.drive,
                 highlight: driveAhead && entry.local != null,
                 entry: entry,
@@ -1163,6 +1176,7 @@ class _PresenceRow extends StatelessWidget {
                 onUpload: onUpload,
                 onDownload: onDownload,
                 onDeleteFromDrive: onDeleteFromDrive,
+                onDeleteLocal: onDeleteLocal,
               ),
             ),
           ],
@@ -1208,6 +1222,7 @@ class _SideTileState extends State<_SideTile> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final present = widget.save != null;
     final base = present ? widget.color : Colors.white.withValues(alpha: 0.20);
 
@@ -1247,7 +1262,7 @@ class _SideTileState extends State<_SideTile> {
           const SizedBox(height: 5),
           if (present) ...[
             Text(
-              'Día ${widget.save!.dayOfMonth} · Año ${widget.save!.year}',
+              l10n.statDayYear(widget.save!.dayOfMonth, widget.save!.year),
               style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
@@ -1256,7 +1271,7 @@ class _SideTileState extends State<_SideTile> {
             ),
             const SizedBox(height: 2),
             Text(
-              '${widget.save!.playtimeLabel} · ${_rel(widget.save!.lastModified)}',
+              '${widget.save!.playtimeLabel} · ${_rel(widget.save!.lastModified, l10n)}',
               style: GoogleFonts.firaCode(
                 fontSize: 8.5,
                 color: Colors.white.withValues(alpha: 0.42),
@@ -1274,7 +1289,7 @@ class _SideTileState extends State<_SideTile> {
             ],
           ] else
             Text(
-              'No está aquí',
+              l10n.cardNotPresent,
               style: GoogleFonts.firaCode(
                 fontSize: 10,
                 color: Colors.white.withValues(alpha: 0.35),
@@ -1330,6 +1345,7 @@ class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final status = entry.status;
     final hasLocal = entry.local != null;
     final hasDrive = entry.drive != null;
@@ -1340,14 +1356,14 @@ class _Footer extends StatelessWidget {
     final isMobile = Platform.isAndroid || Platform.isIOS;
 
     if (isMobile) {
-      final statusLabel = _statusStyle(status).label;
+      final statusLabel = _statusStyle(status, l10n).label;
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
         child: Row(
           children: [
             _Dot(color: statusColor),
             const SizedBox(width: 6),
-            Flexible(
+            Expanded(
               child: Text(
                 statusLabel,
                 style: GoogleFonts.firaCode(
@@ -1360,27 +1376,24 @@ class _Footer extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             if (busy)
-              const SizedBox(
-                width: 15,
-                height: 15,
-                child: CircularProgressIndicator(strokeWidth: 1.5),
-              )
+              SaveBusyIndicator(season: SeasonController.instance.season.value)
             else if (status == SaveSyncStatus.synced)
               Icon(Icons.check_rounded, size: 16, color: _kSynced)
             else ...[
-              if (hasLocal && hasDrive && recommendDownload) ...[
-                _ActionBtn(
-                  label: '', color: _kLocal,
-                  icon: Icons.cloud_upload_outlined,
-                  filled: false, iconOnly: true, onTap: onUpload,
-                ),
-                const SizedBox(width: 8),
-              ],
+              // Secundario siempre a la izquierda, principal a la derecha
               if (hasLocal && hasDrive && recommendUpload) ...[
                 _ActionBtn(
                   label: '', color: _kDrive,
                   icon: Icons.cloud_download_outlined,
                   filled: false, iconOnly: true, onTap: onDownload,
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (hasLocal && hasDrive && recommendDownload) ...[
+                _ActionBtn(
+                  label: '', color: _kLocal,
+                  icon: Icons.cloud_upload_outlined,
+                  filled: false, iconOnly: true, onTap: onUpload,
                 ),
                 const SizedBox(width: 8),
               ],
@@ -1403,7 +1416,7 @@ class _Footer extends StatelessWidget {
     }
 
     // Desktop: dot + etiqueta descriptiva + botones con label
-    final statusLabel = _statusStyle(status).label;
+    final statusLabel = _statusStyle(status, l10n).label;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
       child: Row(
@@ -1423,22 +1436,11 @@ class _Footer extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           if (busy)
-            const SizedBox(
-              width: 15,
-              height: 15,
-              child: CircularProgressIndicator(strokeWidth: 1.5),
-            )
-          else if (status == SaveSyncStatus.synced)
-            const _ActionBtn(
-              label: 'Sincronizado',
-              color: _kSynced,
-              icon: Icons.check_rounded,
-              filled: false,
-            )
-          else ...[
+            SaveBusyIndicator(season: SeasonController.instance.season.value)
+          else if (status != SaveSyncStatus.synced) ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
               _ActionBtn(
-                label: 'Subir',
+                label: l10n.cardActionUpload,
                 color: _kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: false,
@@ -1448,7 +1450,7 @@ class _Footer extends StatelessWidget {
             ],
             if (hasLocal && hasDrive && recommendUpload) ...[
               _ActionBtn(
-                label: 'Descargar',
+                label: l10n.cardActionDownload,
                 color: _kDrive,
                 icon: Icons.cloud_download_outlined,
                 filled: false,
@@ -1458,7 +1460,7 @@ class _Footer extends StatelessWidget {
             ],
             if (recommendUpload)
               _ActionBtn(
-                label: 'Subir',
+                label: l10n.cardActionUpload,
                 color: _kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: true,
@@ -1466,7 +1468,7 @@ class _Footer extends StatelessWidget {
               ),
             if (recommendDownload)
               _ActionBtn(
-                label: 'Descargar',
+                label: l10n.cardActionDownload,
                 color: _kDrive,
                 icon: Icons.cloud_download_outlined,
                 filled: true,
@@ -1627,3 +1629,22 @@ class _Pill extends StatelessWidget {
     );
   }
 }
+
+String _saveDateLabel(SaveFile save, AppLocalizations l10n) {
+  final season = switch (save.currentSeason.toLowerCase()) {
+    'spring' => l10n.seasonSpring,
+    'summer' => l10n.seasonSummer,
+    'fall'   => l10n.seasonFall,
+    'winter' => l10n.seasonWinter,
+    _        => save.currentSeason,
+  };
+  return l10n.saveDateLabel(season, save.year);
+}
+
+String _houseLabel(int level, AppLocalizations l10n) => switch (level) {
+  0 => l10n.houseBasic,
+  1 => l10n.houseKitchen,
+  2 => l10n.houseBedroom,
+  3 => l10n.houseCellar,
+  _ => l10n.houseLevelN(level),
+};

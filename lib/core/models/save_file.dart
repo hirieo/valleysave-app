@@ -87,13 +87,6 @@ class SaveFile {
     _        => SeasonState.initial,
   };
 
-  String get seasonLabel => switch (currentSeason.toLowerCase()) {
-    'spring' => 'Primavera',
-    'summer' => 'Verano',
-    'fall'   => 'Otoño',
-    'winter' => 'Invierno',
-    _        => currentSeason,
-  };
 
   Color get seasonColor => switch (currentSeason.toLowerCase()) {
     'spring' => const Color(0xFFF0B8C8),
@@ -102,8 +95,6 @@ class SaveFile {
     'winter' => const Color(0xFF90C8F0),
     _        => AppColors.accent,
   };
-
-  String get dateLabel => '$seasonLabel · Año $year';
 
   // ── Game time & weather ──────────────────────────────────────────────
   String get gameTimeLabel {
@@ -133,17 +124,7 @@ class SaveFile {
   }
 
   // ── Farm info ────────────────────────────────────────────────────────
-  String get petLabel => petType == 'cat' ? '🐱 Gato' : '🐶 Perro';
-
   String get genderLabel => gender == 0 ? '♂' : '♀';
-
-  String get houseLabel => switch (houseUpgradeLevel) {
-    0 => 'Casa básica',
-    1 => 'Con cocina',
-    2 => 'Con habitación',
-    3 => 'Con bodega',
-    _ => 'Nv. $houseUpgradeLevel',
-  };
 
   // ── Money ────────────────────────────────────────────────────────────
   String get currentMoneyLabel => _formatMoney(currentMoney);

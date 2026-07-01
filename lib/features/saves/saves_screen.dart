@@ -8,12 +8,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/models/season_state.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/bridge_service.dart';
 import '../../core/services/drive_service.dart';
+import '../../core/services/game_launch_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
@@ -44,6 +46,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   List<SaveEntry> _entries = [];
   int _staggerVersion = 0;
   bool _loading = true;
+  bool _refreshing = false;
+  bool _gameCanLaunch = false;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
 
   // ── Modo de acceso en Android ──
@@ -96,6 +100,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _init() async {
+    await GameLaunchService.instance.init();
+    if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+
     if (!Platform.isAndroid) {
       _mode = AndroidMode.bridge; // no aplica; evita ramas de gate en desktop
       await _load();
@@ -202,21 +209,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// Abre Opciones de desarrollador resaltando "Depuración inalámbrica".
   Future<void> _openWirelessDebug() async {
+    final l10n = AppLocalizations.of(context)!;
     final ok = await ShizukuService.instance.openWirelessDebug();
-    if (!ok) {
-      _snack('Ábrelo a mano: Ajustes → Opciones de desarrollador → '
-          'Depuración inalámbrica.');
-    }
+    if (!ok) _snack(l10n.snackWirelessDebugHint);
   }
 
   /// Abre la app Shizuku directamente (sin diálogo de selección).
   Future<void> _openShizukuApp() async {
+    final l10n = AppLocalizations.of(context)!;
     final ok = await ShizukuService.instance.openShizukuApp();
-    if (!ok) _snack('Abre Shizuku desde tu cajón de apps.');
+    if (!ok) _snack(l10n.snackOpenShizukuApp);
   }
 
   /// Abre la info de la app Shizuku para que el usuario ponga energía → No restringido.
   Future<void> _openShizukuAppInfo() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       const intent = AndroidIntent(
         action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
@@ -224,7 +231,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
       await intent.launch();
     } catch (_) {
-      _snack('Ajustes → Apps → Shizuku → Batería → No restringido.');
+      _snack(l10n.snackShizukuBattery);
     }
   }
 
@@ -250,6 +257,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _refresh() async {
+    if (_refreshing || _loading) return;
+    setState(() => _refreshing = true);
+    await _load(silent: true);
+    if (mounted) setState(() => _refreshing = false);
+  }
+
   Future<void> _load({bool silent = false}) async {
     if (!silent) setState(() => _loading = true);
 
@@ -266,11 +280,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         if (isAuthError) {
           await AuthService.instance.signOut();
           if (mounted) {
-            _snack('La sesión de Drive ha caducado. Vuelve a conectar.');
+            final l10n = AppLocalizations.of(context)!;
+            _snack(l10n.snackSessionExpired);
             Navigator.pop(context, true);
           }
         } else {
-          _snack('Drive: $e');
+          if (mounted) _snack(AppLocalizations.of(context)!.snackDriveError(e.toString()));
         }
       }
     }
@@ -306,8 +321,20 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       context,
       AppPageRoute(builder: (_) => const SettingsScreen(showDisconnect: true)),
     );
-    if (mounted && result == 'disconnect') {
+    if (!mounted) return;
+    if (result == 'disconnect') {
       _disconnectDrive();
+    } else {
+      await GameLaunchService.instance.init();
+      if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+    }
+  }
+
+  Future<void> _handleLaunchGame() async {
+    try {
+      await GameLaunchService.instance.launch();
+    } catch (_) {
+      if (mounted) _snack(AppLocalizations.of(context)!.snackLaunchError);
     }
   }
 
@@ -319,6 +346,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // ── Acciones ────────────────────────────────────────────────────────────
 
   Future<void> _handleUpload(SaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
     final local = entry.local;
     if (local == null || widget.drive == null) return;
     final name = local.folderName;
@@ -335,13 +363,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       await widget.drive!.uploadSave(local.folderPath, name);
       await _load(silent: true);
     } catch (e) {
-      _snack('Error al subir: $e');
+      if (mounted) _snack(l10n.snackUploadError(e.toString()));
     } finally {
       if (mounted) setState(() => _busy.remove(name));
     }
   }
 
   Future<void> _handleDownload(SaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
     final drive = entry.drive;
     final folderId = entry.driveFolderId;
     if (drive == null || folderId == null || widget.drive == null) return;
@@ -355,19 +384,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       if (Platform.isAndroid && _mode == AndroidMode.shizuku) {
         // Shizuku: descargar a carpeta propia → empujar al juego vía cp.
         if (!_shizukuReady) {
-          _snack('Activa Shizuku para escribir el save en el juego.');
+          if (mounted) _snack(l10n.activateShizuku);
           return;
         }
         final out = await ShizukuService.instance.prepareOut(name);
         await widget.drive!.downloadSave(folderId, out);
         final ok = await ShizukuService.instance.pushSave(name);
         if (!ok) {
-          _snack('No se pudo escribir en el juego. Algunos móviles bloquean '
-              '/Android/data aun con Shizuku.');
+          if (mounted) _snack(l10n.snackWriteError);
           return;
         }
         await _load(silent: true);
-        _snack('Partida descargada en el juego.');
+        if (mounted) _snack(l10n.snackDownloaded);
       } else if (Platform.isAndroid && _mode == AndroidMode.bridge) {
         // Puente: descargar a bridge_out → el usuario la copia con Archivos.
         final out = await BridgeService.instance.prepareOut(name);
@@ -376,23 +404,24 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       } else {
         final savesDir = SaveService.savesDirectory;
         if (savesDir == null) {
-          _snack('Esta plataforma no permite escribir el save local todavía.');
+          if (mounted) _snack(l10n.snackPlatformNotSupported);
           return;
         }
         await Directory(savesDir).create(recursive: true);
         final target = '$savesDir${Platform.pathSeparator}$name';
         await widget.drive!.downloadSave(folderId, target);
         await _load(silent: true);
-        _snack('Partida descargada en el juego.');
+        if (mounted) _snack(l10n.snackDownloaded);
       }
     } catch (e) {
-      _snack('Error al descargar: $e');
+      if (mounted) _snack(l10n.snackDownloadError(e.toString()));
     } finally {
       if (mounted) setState(() => _busy.remove(name));
     }
   }
 
   Future<void> _handleDeleteFromDrive(SaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
     final folderId = entry.driveFolderId;
     if (folderId == null || widget.drive == null) return;
 
@@ -407,16 +436,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     try {
       await widget.drive!.trashSave(folderId);
       await _load(silent: true);
-      _snack('"$farmName" movida a la Papelera de Drive. '
-          'Tienes 30 días para restaurarla.');
+      if (mounted) _snack(l10n.snackTrashed(farmName));
     } catch (e) {
-      _snack('Error al eliminar: $e');
+      if (mounted) _snack(l10n.snackDeleteError(e.toString()));
     } finally {
       if (mounted) setState(() => _busy.remove(name));
     }
   }
 
   Future<void> _handleDeleteLocal(SaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
     final farmName = entry.primary.farmName;
     final name = entry.folderName;
     if (_busy.contains(name)) return;
@@ -433,15 +462,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         await dir.delete(recursive: true);
       }
       await _load(silent: true);
-      _snack('"$farmName" eliminada de este dispositivo.');
+      if (mounted) _snack(l10n.snackDeletedLocal(farmName));
     } catch (e) {
-      _snack('Error al eliminar: $e');
+      if (mounted) _snack(l10n.snackDeleteError(e.toString()));
     } finally {
       if (mounted) setState(() => _busy.remove(name));
     }
   }
 
   Future<bool?> _confirmDelete(String farmName) {
+    final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -453,7 +483,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           side: BorderSide(
               color: const Color(0xFFE05252).withValues(alpha: 0.35)),
         ),
-        title: Text('Eliminar de Drive',
+        title: Text(l10n.dlgDeleteDriveTitle,
             style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
@@ -463,7 +493,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '"$farmName" se moverá a la Papelera de Google Drive.',
+              l10n.confirmDelete(farmName),
               style: GoogleFonts.firaCode(
                   fontSize: 12,
                   height: 1.5,
@@ -471,8 +501,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 10),
             Text(
-              'Tienes 30 días para restaurarla desde Drive antes de que '
-              'se elimine definitivamente.',
+              l10n.hiwTipDeletion,
               style: GoogleFonts.firaCode(
                   fontSize: 11,
                   height: 1.5,
@@ -483,13 +512,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar',
+            child: Text(l10n.cancel,
                 style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Eliminar',
+            child: Text(l10n.cardDetailDeleteLabel,
                 style: GoogleFonts.firaCode(
                     color: const Color(0xFFE05252),
                     fontWeight: FontWeight.w700)),
@@ -500,6 +529,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<bool?> _confirmDeleteLocal(String farmName) {
+    final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -511,7 +541,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           side: BorderSide(
               color: const Color(0xFFE05252).withValues(alpha: 0.35)),
         ),
-        title: Text('Borrar de este dispositivo',
+        title: Text(l10n.dlgDeleteLocalTitle,
             style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
@@ -521,7 +551,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '"$farmName" se eliminará permanentemente de este dispositivo.',
+              l10n.deleteFromDeviceMessage(farmName),
               style: GoogleFonts.firaCode(
                   fontSize: 12,
                   height: 1.5,
@@ -529,7 +559,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 12),
             Text(
-              '⚠️ Si no la has subido a Drive, se perderá para siempre. No hay recuperación.',
+              l10n.dlgDeleteLocalWarning,
               style: GoogleFonts.firaCode(
                   fontSize: 11,
                   height: 1.5,
@@ -541,13 +571,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar',
+            child: Text(l10n.cancel,
                 style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Borrar',
+            child: Text(l10n.dlgDelete,
                 style: GoogleFonts.firaCode(
                     color: const Color(0xFFE05252),
                     fontWeight: FontWeight.w700)),
@@ -560,6 +590,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// Diálogo tras descargar en modo puente: indica al usuario que copie la
   /// partida de `bridge_out` a la carpeta del juego con su app de Archivos.
   Future<void> _showBridgeCopyDialog(String name, String fromPath) {
+    final l10n = AppLocalizations.of(context)!;
     const dest = gameSavesPath;
     return showDialog<void>(
       context: context,
@@ -569,7 +600,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
         ),
-        title: Text('Copia la partida al juego',
+        title: Text(l10n.dlgBridgeCopyTitle,
             style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
@@ -579,32 +610,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'La partida está lista. Con tu app de Archivos, copia la carpeta '
-              '"$name" y pégala en la carpeta de Stardew.',
+              l10n.dlgBridgeCopyDesc(name),
               style: GoogleFonts.firaCode(
                   fontSize: 12,
                   height: 1.5,
                   color: Colors.white.withValues(alpha: 0.82)),
             ),
             const SizedBox(height: 14),
-            _dialogPath('Desde', fromPath),
+            _dialogPath(l10n.labelFrom, fromPath),
             const SizedBox(height: 8),
-            _dialogPath('Hasta', dest),
+            _dialogPath(l10n.labelTo, dest),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () {
               Clipboard.setData(const ClipboardData(text: dest));
-              _snack('Ruta de destino copiada.');
+              _snack(l10n.snackDestCopied);
             },
-            child: Text('Copiar destino',
+            child: Text(l10n.dlgCopyDest,
                 style: GoogleFonts.firaCode(
                     color: AppColors.accent, fontWeight: FontWeight.w700)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Entendido',
+            child: Text(l10n.dlgGotIt,
                 style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
@@ -638,6 +668,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<bool?> _confirmDownload(SaveEntry entry) {
+    final l10n = AppLocalizations.of(context)!;
     final drive = entry.drive!;
     final local = entry.local;
     return showDialog<bool>(
@@ -651,7 +682,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
         ),
-        title: Text('Descargar de Drive',
+        title: Text(l10n.dlgDownloadTitle,
             style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
@@ -662,18 +693,22 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           children: [
             if (local == null)
               Text(
-                'Se copiará "${drive.farmName}" (Día ${drive.dayOfMonth}, '
-                '${drive.playtimeLabel}) a este equipo.',
+                l10n.dlgDownloadNewDesc(
+                  drive.farmName,
+                  drive.dayOfMonth,
+                  drive.playtimeLabel,
+                ),
                 style: GoogleFonts.firaCode(
                     fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
               )
             else
               _overwritePreview(
-                intro: 'Esto SOBRESCRIBE tu save local de "${drive.farmName}".',
+                l10n: l10n,
+                intro: l10n.dlgDownloadOverwrite(drive.farmName),
                 current: local,
                 result: drive,
-                currentLabel: 'EN ESTE EQUIPO',
-                resultLabel: 'DESDE DRIVE',
+                currentLabel: l10n.previewLocalLabel,
+                resultLabel: l10n.previewFromDrive,
                 resultColor: const Color(0xFF5AA8E0),
               ),
             if (local != null &&
@@ -690,8 +725,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       color: const Color(0xFFE09020).withValues(alpha: 0.40)),
                 ),
                 child: Text(
-                  '⚠️ Versiones distintas: local ${local.gameVersion} · Drive ${drive.gameVersion}. '
-                  'El juego podría no cargar el save correctamente.',
+                  l10n.versionMismatch(
+                    local.gameVersion,
+                    drive.gameVersion,
+                  ),
                   style: GoogleFonts.firaCode(
                       fontSize: 10,
                       height: 1.5,
@@ -704,12 +741,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar',
+            child: Text(l10n.cancel,
                 style: GoogleFonts.firaCode(color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Descargar',
+            child: Text(l10n.dlgDownloadButton,
                 style: GoogleFonts.firaCode(
                     color: const Color(0xFF5AA8E0), fontWeight: FontWeight.w700)),
           ),
@@ -719,6 +756,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<bool?> _confirmUpload(SaveEntry entry) {
+    final l10n = AppLocalizations.of(context)!;
     final local = entry.local!;
     final drive = entry.drive;
     return showDialog<bool>(
@@ -732,36 +770,40 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
         ),
-        title: Text('Subir a Drive',
+        title: Text(l10n.dlgUploadTitle,
             style: GoogleFonts.bodoniModa(
                 color: AppColors.text,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w700)),
         content: drive == null
             ? Text(
-                'Se subirá "${local.farmName}" (Día ${local.dayOfMonth}, '
-                '${local.playtimeLabel}) a tu Drive.',
+                l10n.dlgUploadNewDesc(
+                  local.farmName,
+                  local.dayOfMonth,
+                  local.playtimeLabel,
+                ),
                 style: GoogleFonts.firaCode(
                     fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
               )
             : _overwritePreview(
-                intro: 'Esto SOBRESCRIBE la versión en Drive de "${local.farmName}".',
+                l10n: l10n,
+                intro: l10n.dlgUploadOverwriteDrive(local.farmName),
                 current: drive,
                 result: local,
-                currentLabel: 'EN DRIVE',
-                resultLabel: 'DESDE ESTE EQUIPO',
+                currentLabel: l10n.previewDriveLabel,
+                resultLabel: l10n.previewFromDevice,
                 resultColor: const Color(0xFFE0B850),
               ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancelar',
+            child: Text(l10n.cancel,
                 style: GoogleFonts.firaCode(
                     color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Subir',
+            child: Text(l10n.dlgUploadButton,
                 style: GoogleFonts.firaCode(
                     color: const Color(0xFFE0B850),
                     fontWeight: FontWeight.w700)),
@@ -773,6 +815,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// Card "cómo quedará": estado actual del destino → estado tras la operación.
   Widget _overwritePreview({
+    required AppLocalizations l10n,
     required String intro,
     required SaveFile current,
     required SaveFile result,
@@ -797,7 +840,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: _previewCol(currentLabel, current,
+                child: _previewCol(l10n, currentLabel, current,
                     other: result, accent: Colors.white.withValues(alpha: 0.40)),
               ),
               Padding(
@@ -806,7 +849,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     size: 18, color: Colors.white.withValues(alpha: 0.45)),
               ),
               Expanded(
-                child: _previewCol(resultLabel, result,
+                child: _previewCol(l10n, resultLabel, result,
                     other: current, accent: resultColor),
               ),
             ],
@@ -819,11 +862,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Color get _seasonAccent =>
       SeasonData.data[SeasonController.instance.season.value]!.accentColor;
 
-  Widget _previewCol(String header, SaveFile s,
+  Widget _previewCol(AppLocalizations l10n, String header, SaveFile s,
       {required SaveFile other, required Color accent}) {
     final hl = _seasonAccent;
     String mine(SaveFile x) =>
-        x.deepestMineLevel == 0 ? 'Sin explorar' : 'Nv. ${x.deepestMineLevel}';
+        x.deepestMineLevel == 0 ? l10n.previewColUnexplored : 'Nv. ${x.deepestMineLevel}';
     // true = este valor es peor que el otro (lower is worse), false = mejor, null = igual
     bool? w(num a, num b) => a == b ? null : a < b ? true : false;
     // invertido: más = peor (desmayos)
@@ -846,55 +889,55 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   fontWeight: FontWeight.w700,
                   color: accent)),
           const SizedBox(height: 6),
-          _previewRow('Día/Año', 'Día ${s.dayOfMonth} · Año ${s.year}',
+          _previewRow(l10n.previewColDayYear, l10n.statDayYear(s.dayOfMonth, s.year),
               changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,
               hl: hl,
               worse: w(s.year * 28 + s.dayOfMonth, other.year * 28 + other.dayOfMonth)),
-          _previewRow('Tiempo', s.playtimeLabel,
+          _previewRow(l10n.previewColTime, s.playtimeLabel,
               changed: s.millisecondsPlayed != other.millisecondsPlayed,
               hl: hl,
               worse: w(s.millisecondsPlayed, other.millisecondsPlayed)),
-          _previewRow('Monedas', s.currentMoneyLabel,
+          _previewRow(l10n.previewColMoney, s.currentMoneyLabel,
               changed: s.currentMoney != other.currentMoney,
               hl: hl,
               worse: w(s.currentMoney, other.currentMoney)),
-          _previewRow('Total', s.totalMoneyLabel,
+          _previewRow(l10n.previewColTotal, s.totalMoneyLabel,
               changed: s.totalMoneyEarned != other.totalMoneyEarned,
               hl: hl,
               worse: w(s.totalMoneyEarned, other.totalMoneyEarned)),
-          _previewRow('Cultivo', '${s.farmingLevel}',
+          _previewRow(l10n.previewColFarming, '${s.farmingLevel}',
               changed: s.farmingLevel != other.farmingLevel,
               hl: hl,
               worse: w(s.farmingLevel, other.farmingLevel)),
-          _previewRow('Recolec.', '${s.foragingLevel}',
+          _previewRow(l10n.previewColForaging, '${s.foragingLevel}',
               changed: s.foragingLevel != other.foragingLevel,
               hl: hl,
               worse: w(s.foragingLevel, other.foragingLevel)),
-          _previewRow('Minería', '${s.miningLevel}',
+          _previewRow(l10n.previewColMining, '${s.miningLevel}',
               changed: s.miningLevel != other.miningLevel,
               hl: hl,
               worse: w(s.miningLevel, other.miningLevel)),
-          _previewRow('Pesca', '${s.fishingLevel}',
+          _previewRow(l10n.previewColFishing, '${s.fishingLevel}',
               changed: s.fishingLevel != other.fishingLevel,
               hl: hl,
               worse: w(s.fishingLevel, other.fishingLevel)),
-          _previewRow('Combate', '${s.combatLevel}',
+          _previewRow(l10n.previewColCombat, '${s.combatLevel}',
               changed: s.combatLevel != other.combatLevel,
               hl: hl,
               worse: w(s.combatLevel, other.combatLevel)),
-          _previewRow('Amigos', '${s.goodFriends}',
+          _previewRow(l10n.previewColFriends, '${s.goodFriends}',
               changed: s.goodFriends != other.goodFriends,
               hl: hl,
               worse: w(s.goodFriends, other.goodFriends)),
-          _previewRow('Monstruos', SaveFile.formatCount(s.monstersKilled),
+          _previewRow(l10n.previewColMonsters, SaveFile.formatCount(s.monstersKilled),
               changed: s.monstersKilled != other.monstersKilled,
               hl: hl,
               worse: w(s.monstersKilled, other.monstersKilled)),
-          _previewRow('Desmayos', '${s.timesUnconscious}',
+          _previewRow(l10n.previewColFaints, '${s.timesUnconscious}',
               changed: s.timesUnconscious != other.timesUnconscious,
               hl: hl,
               worse: wi(s.timesUnconscious, other.timesUnconscious)),
-          _previewRow('Mina', mine(s),
+          _previewRow(l10n.previewColMine, mine(s),
               changed: s.deepestMineLevel != other.deepestMineLevel,
               hl: hl,
               worse: w(s.deepestMineLevel, other.deepestMineLevel)),
@@ -989,7 +1032,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Focus(
+      autofocus: true,
+      onKeyEvent: (_, event) {
+        if (event is KeyDownEvent &&
+            event.logicalKey == LogicalKeyboardKey.f5) {
+          _refresh();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: Scaffold(
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
@@ -1021,12 +1074,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 _TopBar(
                   onBack: () => Navigator.pop(context),
                   onSettings: _openSettings,
+                  onRefresh: _refresh,
+                  refreshing: _refreshing,
+                  canLaunchGame: _gameCanLaunch,
+                  onLaunch: _handleLaunchGame,
                 ),
                 Expanded(child: _buildBody()),
               ],
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -1099,6 +1157,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
 
   Widget _buildEmpty() {
+    final l10n = AppLocalizations.of(context)!;
     // Modo puente: explicar cómo traer partidas a bridge_in con Archivos.
     if (Platform.isAndroid && _mode == AndroidMode.bridge) {
       return SingleChildScrollView(
@@ -1110,7 +1169,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             const Text('📂', style: TextStyle(fontSize: 40)),
             const SizedBox(height: 14),
             Text(
-              'Trae tus partidas',
+              l10n.bridgeTitle,
               style: GoogleFonts.bodoniModa(
                 fontSize: 20,
                 fontStyle: FontStyle.italic,
@@ -1120,9 +1179,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 10),
             Text(
-              'Para ver y subir tus partidas locales, cópialas con tu app de '
-              'Archivos desde la carpeta de Stardew a esta carpeta de ValleySave. '
-              'Luego desliza para refrescar.',
+              l10n.bridgeDesc,
               textAlign: TextAlign.center,
               style: GoogleFonts.firaCode(
                 fontSize: 11.5,
@@ -1131,13 +1188,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
             ),
             const SizedBox(height: 18),
-            _pathBox('Desde (Stardew)', gameSavesPath),
+            _pathBox(l10n.pathLabelFromStardew, gameSavesPath),
             const SizedBox(height: 8),
-            _pathBox('Hasta (ValleySave)', _bridgeInPath ?? '…'),
+            _pathBox(l10n.pathLabelToValleySave, _bridgeInPath ?? '…'),
             const SizedBox(height: 22),
-            _gateButton('Refrescar', () => _load(), filled: true),
+            _gateButton(l10n.bridgeRefresh, () => _load(), filled: true),
             const SizedBox(height: 10),
-            _gateButton('Cambiar método', _resetMode, filled: false),
+            _gateButton(l10n.bridgeChangeMode, _resetMode, filled: false),
             const SizedBox(height: 16),
             _howItWorksLink(),
           ],
@@ -1151,13 +1208,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           const Text('🌾', style: TextStyle(fontSize: 40)),
           const SizedBox(height: 12),
           Text(
-            'No se encontraron partidas',
+            l10n.emptyNoSaves,
             style: GoogleFonts.firaCode(fontSize: 13, color: AppColors.textFaint),
           ),
           const SizedBox(height: 6),
           Text(
-            SaveService.savesDirectory ??
-                'En este dispositivo no se leen saves locales',
+            SaveService.savesDirectory ?? l10n.emptyNoSavesHint,
             style: GoogleFonts.firaCode(
               fontSize: 9,
               color: AppColors.textFaint.withValues(alpha: 0.5),
@@ -1171,6 +1227,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// Selector de vía: Shizuku (recomendado) / Puente manual.
   Widget _buildModeChooser() {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(24, 18, 24, 40),
       child: Column(
@@ -1180,7 +1237,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           const Text('🔌', style: TextStyle(fontSize: 40)),
           const SizedBox(height: 14),
           Text(
-            'Elige cómo conectar',
+            l10n.chooserTitle,
             style: GoogleFonts.bodoniModa(
               fontSize: 22,
               fontStyle: FontStyle.italic,
@@ -1191,8 +1248,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 10),
           Text(
-            'Android protege la carpeta del juego. Elige cómo darle acceso a '
-            'ValleySave — puedes cambiarlo cuando quieras.',
+            l10n.chooserDesc,
             textAlign: TextAlign.center,
             style: GoogleFonts.firaCode(
               fontSize: 11.5,
@@ -1202,20 +1258,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 22),
           _modeCard(
-            badge: 'AUTOMÁTICO · RECOMENDADO',
-            title: 'Con Shizuku',
-            desc: 'Se configura 1 vez. Después ValleySave sincroniza sola, sin '
-                'que toques nada. Única vía fiable en Android 13+.',
+            badge: l10n.hiwShizukuBadge,
+            title: l10n.hiwShizukuTitle,
+            desc: l10n.chooserShizukuDesc,
             onTap: () => _chooseMode(AndroidMode.shizuku),
             recommended: true,
           ),
           if (_sdkInt < 33) ...[
             const SizedBox(height: 9),
             _modeCard(
-              badge: 'SOLO ANDROID 11-12',
-              title: 'Puente manual',
-              desc: 'Copias la partida con tu app de Archivos. Sin instalar '
-                  'nada. Solo en Android 11 y 12.',
+              badge: l10n.chooserManualBadge,
+              title: l10n.hiwBridgeTitle,
+              desc: l10n.chooserBridgeDesc,
               onTap: () => _chooseMode(AndroidMode.bridge),
               recommended: false,
             ),
@@ -1359,7 +1413,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           GestureDetector(
             onTap: () {
               Clipboard.setData(ClipboardData(text: path));
-              _snack('Ruta copiada.');
+              _snack(AppLocalizations.of(context)!.snackPathCopied);
             },
             child: Icon(Icons.copy_rounded,
                 size: 15, color: _seasonAccent.withValues(alpha: 0.35)),
@@ -1405,7 +1459,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       size: 15, color: Colors.white.withValues(alpha: 0.90)),
                   const SizedBox(width: 7),
                   Text(
-                    '¿Cómo funciona?',
+                    AppLocalizations.of(context)!.howItWorks,
                     style: GoogleFonts.firaCode(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -1421,6 +1475,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
   Widget _buildShizukuGate() {
+    final l10n = AppLocalizations.of(context)!;
     final running = _shizukuRunning == true;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(24, 18, 24, 40),
@@ -1434,7 +1489,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               const SizedBox(height: 8),
               Center(
                 child: Text(
-                  'Conecta Shizuku',
+                  l10n.shizukuStepTitle,
                   style: GoogleFonts.bodoniModa(
                     fontSize: 26,
                     fontStyle: FontStyle.italic,
@@ -1446,7 +1501,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               const SizedBox(height: 5),
               Center(
                 child: Text(
-                  'Se configura una vez · solo la primera vez',
+                  l10n.shizukuGateSubtitle,
                   style: GoogleFonts.firaCode(
                     fontSize: 11,
                     color: AppColors.textMuted,
@@ -1457,19 +1512,19 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               // Estado como pasos-fila transparentes; el CTA "conceder" se
               // integra en la fila de permiso cuando Shizuku ya está activo.
               _statusRow(
-                'Shizuku activo',
-                running ? 'Conectado y a la espera.' : 'Aún no detectado.',
+                l10n.shizukuStatusLabel,
+                running ? l10n.shizukuStatusRunning : l10n.shizukuStatusNotDetected,
                 running,
               ),
               _statusRow(
-                'Permiso concedido',
+                l10n.shizukuPermLabel,
                 _shizukuGranted
-                    ? 'ValleySave ya tiene acceso.'
-                    : 'Falta autorizar a ValleySave.',
+                    ? l10n.shizukuPermGranted
+                    : l10n.shizukuPermNotGranted,
                 _shizukuGranted,
                 action: (running && !_shizukuGranted)
                     ? _miniGateButton(
-                        'conceder', _requestShizukuPermission, _seasonAccent)
+                        l10n.shizukuGrant, _requestShizukuPermission, _seasonAccent)
                     : null,
               ),
               const SizedBox(height: 12),
@@ -1488,7 +1543,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'GUÍA PASO A PASO',
+                      l10n.shizukuGuideHeader,
                       style: GoogleFonts.firaCode(
                         fontSize: 9,
                         letterSpacing: 1.4,
@@ -1497,55 +1552,44 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _guideStep('1', 'Instala Shizuku',
-                        'Gratis. Si Google Play te lo bloquea en tu móvil, '
-                        'usa el APK oficial de GitHub.',
+                    _guideStep('1', l10n.shizukuStep1Title,
+                        l10n.shizukuStep1DescFull,
                         action: Wrap(spacing: 8, runSpacing: 8, children: [
-                          _smallButton('Play Store', _openShizukuPlayStore),
-                          _smallButton('APK GitHub', _openShizukuGithub),
+                          _smallButton(l10n.btnPlayStore, _openShizukuPlayStore),
+                          _smallButton(l10n.btnApkGithub, _openShizukuGithub),
                         ])),
-                    _guideStep('2', 'Activa Opciones de desarrollador',
-                        'Ajustes → Información del teléfono → Información de software → '
-                        'toca "Número de compilación" 7 veces.'),
-                    _guideStep('3', 'Activa Depuración inalámbrica',
-                        'El botón te lleva ahí y la resalta. Actívala (ON). '
-                        'Después toca "Emparejar dispositivo con código de vinculación" '
-                        '— aparecerá un código de 6 dígitos en pantalla.',
-                        action: _smallButton('Abrir y resaltar', _openWirelessDebug,
+                    _guideStep('2', l10n.shizukuStep2TitleFull,
+                        l10n.shizukuStep2DescFull),
+                    _guideStep('3', l10n.shizukuStep3TitleFull,
+                        l10n.shizukuStep3DescFull,
+                        action: _smallButton(l10n.btnOpenAndHighlight, _openWirelessDebug,
                             icon: Icons.open_in_new_rounded)),
-                    _guideStep('4', 'Empareja e INICIA Shizuku',
-                        'Abre Shizuku → "Iniciar mediante depuración inalámbrica" → '
-                        '"Emparejar con código de sincronización". '
-                        'Shizuku enviará una notificación indicando que está a la espera. '
-                        'Introduce el código de 6 dígitos que ves en la pantalla de '
-                        'Depuración inalámbrica. Tras emparejar, pulsa INICIAR — '
-                        'sin ese último toque Shizuku no queda activo.',
-                        action: _smallButton('Abrir Shizuku', _openShizukuApp,
+                    _guideStep('4', l10n.shizukuStep4Title,
+                        l10n.shizukuStep4Desc,
+                        action: _smallButton(l10n.btnOpenShizuku, _openShizukuApp,
                             icon: Icons.open_in_new_rounded)),
-                    _guideStep('5', 'Pon la energía de Shizuku en No restringido',
-                        'Abre la info de la app → Batería → No restringido. '
-                        'Si no lo haces, el sistema cerrará Shizuku en segundo '
-                        'plano y tendrás que volver a darle a Iniciar.',
-                        action: _smallButton('Info de app Shizuku',
+                    _guideStep('5', l10n.shizukuStep5Title,
+                        l10n.shizukuStep5Desc,
+                        action: _smallButton(l10n.btnShizukuAppInfo,
                             _openShizukuAppInfo, icon: Icons.open_in_new_rounded)),
                     _guideStep(
                       '6',
-                      'Concede el permiso a ValleySave',
+                      l10n.shizukuStep3Title,
                       running
-                          ? 'Shizuku está activo. Pulsa el botón para autorizar.'
-                          : 'Disponible en cuanto Shizuku esté activo (paso 4).',
+                          ? l10n.shizukuStep6DescActive
+                          : l10n.shizukuStep6DescWaiting,
                       action: running
                           ? _gateButton(
-                              'Conceder permiso', _requestShizukuPermission,
+                              l10n.btnGrantPermission, _requestShizukuPermission,
                               filled: true)
                           : null,
                     ),
                     const SizedBox(height: 16),
                     if (!running)
-                      _gateButton('Ya lo he hecho · Comprobar', _checkShizuku,
+                      _gateButton(l10n.btnCheckShizuku, _checkShizuku,
                           filled: true),
                     const SizedBox(height: 10),
-                    _gateButton('Cambiar método', _resetMode, filled: false),
+                    _gateButton(l10n.bridgeChangeMode, _resetMode, filled: false),
                   ],
                 ),
               ),
@@ -1622,7 +1666,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             action
           else
             Text(
-              done ? 'hecho' : 'pendiente',
+              done
+                  ? AppLocalizations.of(context)!.statusDone
+                  : AppLocalizations.of(context)!.statusPending,
               style: GoogleFonts.firaCode(
                 fontSize: 9,
                 letterSpacing: 0.6,
@@ -1842,7 +1888,7 @@ class _LatestBadge extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              '· ÚLTIMA PARTIDA ·',
+              AppLocalizations.of(context)!.latestBadge,
               style: GoogleFonts.firaCode(
                 fontSize: 8,
                 letterSpacing: 1.2,
@@ -1863,13 +1909,22 @@ class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.onBack,
     required this.onSettings,
+    required this.onRefresh,
+    required this.refreshing,
+    required this.canLaunchGame,
+    required this.onLaunch,
   });
 
   final VoidCallback onBack;
   final VoidCallback onSettings;
+  final VoidCallback onRefresh;
+  final bool refreshing;
+  final bool canLaunchGame;
+  final VoidCallback onLaunch;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
       child: Center(
@@ -1883,7 +1938,7 @@ class _TopBar extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Mis partidas',
+                l10n.mySaves,
                 style: GoogleFonts.bodoniModa(
                   fontSize: 24,
                   fontStyle: FontStyle.italic,
@@ -1892,6 +1947,27 @@ class _TopBar extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              if (canLaunchGame) ...[
+                ValueListenableBuilder<SeasonState>(
+                  valueListenable: SeasonController.instance.season,
+                  builder: (_, season, _) {
+                    final accent = SeasonData.data[season]!.accentColor;
+                    return _IconCircle(
+                      icon: Icons.play_arrow_rounded,
+                      onTap: onLaunch,
+                      color: accent,
+                      tooltip: l10n.tooltipLaunchGame,
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+              _IconCircle(
+                icon: Icons.refresh_rounded,
+                onTap: onRefresh,
+                spinning: refreshing,
+              ),
+              const SizedBox(width: 8),
               _IconCircle(icon: Icons.settings_rounded, onTap: onSettings),
             ],
           ),
@@ -2000,6 +2076,7 @@ class _SeasonalLoaderState extends State<_SeasonalLoader>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -2014,7 +2091,7 @@ class _SeasonalLoaderState extends State<_SeasonalLoader>
           ),
           const SizedBox(height: 12),
           Text(
-            'CARGANDO',
+            l10n.loaderLoading,
             style: GoogleFonts.firaCode(
               fontSize: 8,
               letterSpacing: .14,
@@ -2023,7 +2100,7 @@ class _SeasonalLoaderState extends State<_SeasonalLoader>
           ),
           const SizedBox(height: 3),
           Text(
-            'conectando con Drive…',
+            l10n.loaderConnecting,
             style: GoogleFonts.firaCode(
               fontSize: 7,
               letterSpacing: .05,

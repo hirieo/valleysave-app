@@ -959,6 +959,19 @@ class AppLocalizationsJa extends AppLocalizations {
       'ファイルアプリでセーブをコピーします。追加のインストールはありません。Android 11と12のみ。';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'ルートアクセス';
+
+  @override
+  String get chooserRootDesc =>
+      'ルート化されたデバイス用（Magisk / SuperSU）。root権限を一度承認するだけで、以降は自動的に動作します。';
+
+  @override
+  String get snackRootDenied => 'rootアクセスが拒否されました。代わりにShizukuを試してください。';
+
+  @override
   String get shizukuGateSubtitle => '一度設定 · 最初だけ';
 
   @override

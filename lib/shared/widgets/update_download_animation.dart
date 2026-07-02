@@ -153,46 +153,82 @@ class _DAnimPainter extends CustomPainter {
   final SeasonState season;
   final String version;
 
-  static const double _kR = 60.0;
-  static const int    _kN = 12;
+  static const double _kR    = 60.0;
+  static const int    _kN    = 12;
+  static const double _kWRAP = 16.0; // amplitud helix
+  static const double _kTube =  9.0; // semiancho del tubo
 
   @override
   void paint(Canvas canvas, Size size) {
     final cx  = size.width / 2;
     final cy  = size.height * 0.43;
     final acc = _ringColor(season);
-    final p   = progress.clamp(0.0, 1.0);
+    final pct = progress.clamp(0.0, 1.0);
 
-    // bg glow sutil
+    // fondo glow
     canvas.drawCircle(Offset(cx, cy), _kR + 24,
         Paint()..color = acc.withValues(alpha: 0.07));
 
+    // posiciones helix: cada partícula orbita alrededor del grosor del tubo
+    final parts = List.generate(_kN, (i) {
+      final a     = i * math.pi * 2 / _kN + t * 0.10;
+      final phi   = i * (math.pi / 2) + t * 0.6;
+      final rr    = _kR + _kWRAP * math.cos(phi);
+      final depth = math.sin(phi);              // >0 delante, <0 detrás
+      final sc    = 0.62 + 0.38 * (0.5 + 0.5 * depth); // perspectiva
+      final al    = season == SeasonState.summer
+          ? 0.70 + 0.30 * math.sin(t * 1.8 + i * 0.9)
+          : 0.92;
+      return (
+        px: cx + math.cos(a) * rr,
+        py: cy + math.sin(a) * rr,
+        a: a, al: al, sc: sc, depth: depth,
+      );
+    });
+    parts.sort((x, y) => x.depth.compareTo(y.depth));
+
+    // pasada 1: partículas detrás del tubo
+    for (final p in parts) {
+      if (p.depth < 0) _drawParticle(canvas, Offset(p.px, p.py), p.a, p.al, p.sc);
+    }
+
+    // máscara opaca — tapa físicamente las partículas de atrás
+    canvas.drawCircle(
+      Offset(cx, cy), _kR,
+      Paint()
+        ..color       = const Color(0xFF0A0A0B)
+        ..style       = PaintingStyle.stroke
+        ..strokeWidth = _kTube * 2 + 2,
+    );
+
     // track
-    canvas.drawCircle(Offset(cx, cy), _kR,
-        Paint()
-          ..color     = Colors.white.withValues(alpha: 0.10)
-          ..style     = PaintingStyle.stroke
-          ..strokeWidth = 7
-          ..strokeCap   = StrokeCap.round);
+    canvas.drawCircle(
+      Offset(cx, cy), _kR,
+      Paint()
+        ..color       = Colors.white.withValues(alpha: 0.10)
+        ..style       = PaintingStyle.stroke
+        ..strokeWidth = _kTube * 2
+        ..strokeCap   = StrokeCap.round,
+    );
 
     // arco de progreso
-    if (p > 0) {
+    if (pct > 0) {
       canvas.drawArc(
         Rect.fromCircle(center: Offset(cx, cy), radius: _kR),
         -math.pi / 2,
-        math.pi * 2 * p,
+        math.pi * 2 * pct,
         false,
         Paint()
-          ..color     = acc
-          ..style     = PaintingStyle.stroke
-          ..strokeWidth = 7
+          ..color       = acc
+          ..style       = PaintingStyle.stroke
+          ..strokeWidth = _kTube * 2
           ..strokeCap   = StrokeCap.round,
       );
     }
 
-    // punto líder en el extremo del arco
-    if (p > 0.015 && p < 0.985) {
-      final la = -math.pi / 2 + math.pi * 2 * p;
+    // punto líder
+    if (pct > 0.015 && pct < 0.985) {
+      final la = -math.pi / 2 + math.pi * 2 * pct;
       canvas.drawCircle(
         Offset(cx + math.cos(la) * _kR, cy + math.sin(la) * _kR),
         5,
@@ -200,109 +236,182 @@ class _DAnimPainter extends CustomPainter {
       );
     }
 
-    // partículas orbitando
-    for (var i = 0; i < _kN; i++) {
-      final a      = i * math.pi * 2 / _kN + t * (i.isEven ? 0.055 : -0.038);
-      final orbit  = _kR + math.sin(t * 1.3 + i * 1.1) * 7;
-      final px     = cx + math.cos(a) * orbit;
-      final py     = cy + math.sin(a) * orbit;
-      final pulse  = 0.45 + 0.55 * math.sin(t * 3.5 + i * 1.4);
-      _drawParticle(canvas, Offset(px, py), a, pulse);
+    // pasada 2: partículas delante del tubo
+    for (final p in parts) {
+      if (p.depth >= 0) _drawParticle(canvas, Offset(p.px, p.py), p.a, p.al, p.sc);
     }
 
-    // porcentaje
-    _txt(canvas, '${(p * 100).round()}%',
+    // textos
+    _txt(canvas, '${(pct * 100).round()}%',
         Offset(cx, cy - 9), 20, FontWeight.bold, Colors.white);
-
-    // MB descargados
     _txt(canvas,
-        '${(p * totalMB).toStringAsFixed(1)} / ${totalMB.toStringAsFixed(1)} MB',
+        '${(pct * totalMB).toStringAsFixed(1)} / ${totalMB.toStringAsFixed(1)} MB',
         Offset(cx, cy + 13), 10, FontWeight.normal,
         acc.withValues(alpha: 0.75));
-
-    // versión
     if (version.isNotEmpty) {
       _txt(canvas, 'ValleySave $version',
-          Offset(cx, cy + _kR + 22), 10, FontWeight.normal,
+          Offset(cx, cy + _kR + 28), 10, FontWeight.normal,
           Colors.white.withValues(alpha: 0.30));
     }
   }
 
-  void _drawParticle(Canvas canvas, Offset pos, double angle, double alpha) {
+  void _drawParticle(Canvas canvas, Offset pos, double angle, double alpha, double scale) {
     canvas.save();
+    canvas.translate(pos.dx, pos.dy);
+    canvas.scale(scale, scale);
     switch (season) {
-      case SeasonState.winter:  _snowflake(canvas, pos, alpha);
-      case SeasonState.spring:  _petal(canvas, pos, angle, alpha);
-      case SeasonState.summer:  _firefly(canvas, pos, alpha);
-      case SeasonState.fall:    _leaf(canvas, pos, angle, alpha);
-      case SeasonState.initial: _star(canvas, pos, alpha);
+      case SeasonState.winter:  _snowflake(canvas, alpha);
+      case SeasonState.spring:  _petal(canvas, angle, alpha);
+      case SeasonState.summer:  _firefly(canvas, angle, alpha);
+      case SeasonState.fall:    _leaf(canvas, angle, alpha);
+      case SeasonState.initial: _star(canvas, alpha);
     }
     canvas.restore();
   }
 
-  void _snowflake(Canvas canvas, Offset pos, double alpha) {
-    final paint = Paint()
-      ..color       = const Color(0xFFC8E8FF).withValues(alpha: alpha * 0.85)
-      ..strokeWidth = 1.4
+  // ── INVIERNO: copo con ramas laterales ─────────────────
+  void _snowflake(Canvas canvas, double alpha) {
+    final spin = t * 0.12;
+    canvas.drawCircle(Offset.zero, 11,
+        Paint()..shader = RadialGradient(colors: [
+          const Color(0xFF80C8FF).withValues(alpha: alpha * 0.22),
+          const Color(0xFF80C8FF).withValues(alpha: 0),
+        ]).createShader(Rect.fromCircle(center: Offset.zero, radius: 11)));
+    final p = Paint()
+      ..color       = const Color(0xFFE4F6FF).withValues(alpha: alpha * 0.95)
+      ..strokeWidth = 1.8
       ..strokeCap   = StrokeCap.round;
     for (var k = 0; k < 3; k++) {
-      final ka = k * math.pi / 3 + t * 0.5;
+      final ka = k * math.pi / 3 + spin;
       canvas.drawLine(
-        Offset(pos.dx - math.cos(ka) * 4.5, pos.dy - math.sin(ka) * 4.5),
-        Offset(pos.dx + math.cos(ka) * 4.5, pos.dy + math.sin(ka) * 4.5),
-        paint,
-      );
+        Offset(-math.cos(ka) * 7, -math.sin(ka) * 7),
+        Offset( math.cos(ka) * 7,  math.sin(ka) * 7),
+        p);
+      for (final d in [-1.0, 1.0]) {
+        final bf = ka + math.pi / 2;
+        canvas.drawLine(
+          Offset(math.cos(ka) * 3.5 * d,                         math.sin(ka) * 3.5 * d),
+          Offset(math.cos(ka) * 3.5 * d + math.cos(bf) * 3,     math.sin(ka) * 3.5 * d + math.sin(bf) * 3),
+          p);
+      }
     }
-    canvas.drawCircle(pos, 1.8,
-        Paint()..color = const Color(0xFFE0F4FF).withValues(alpha: alpha));
+    canvas.drawCircle(Offset.zero, 2.5,
+        Paint()..color = Colors.white.withValues(alpha: alpha * 0.90));
   }
 
-  void _petal(Canvas canvas, Offset pos, double angle, double alpha) {
-    canvas.translate(pos.dx, pos.dy);
-    canvas.rotate(angle + t * 0.4);
+  // ── PRIMAVERA: pétalo teardrop con vena ────────────────
+  void _petal(Canvas canvas, double angle, double alpha) {
+    canvas.drawCircle(Offset.zero, 12,
+        Paint()..shader = RadialGradient(colors: [
+          const Color(0xFFFF80A8).withValues(alpha: alpha * 0.20),
+          const Color(0xFFFF80A8).withValues(alpha: 0),
+        ]).createShader(Rect.fromCircle(center: Offset.zero, radius: 12)));
+    canvas.rotate(angle + t * 0.10);
     final path = Path()
-      ..moveTo(0, -5)
-      ..cubicTo(3, -3, 3, 3, 0, 5)
-      ..cubicTo(-3, 3, -3, -3, 0, -5);
+      ..moveTo(0, 9)
+      ..cubicTo(6, 4, 6, -5, 1.6, -8.5)
+      ..quadraticBezierTo(0, -10, -1.6, -8.5)
+      ..cubicTo(-6, -5, -6, 4, 0, 9);
     canvas.drawPath(path,
-        Paint()..color = const Color(0xFFFFB7D0).withValues(alpha: alpha * 0.90));
-    canvas.drawCircle(Offset.zero, 1.2,
-        Paint()..color = const Color(0xFFFF8AB0).withValues(alpha: alpha * 0.55));
+        Paint()..color = const Color(0xFFFFC2D6).withValues(alpha: alpha * 0.97));
+    canvas.drawLine(const Offset(0, 7), const Offset(0, -6),
+        Paint()
+          ..color       = const Color(0xFFFF6B96).withValues(alpha: alpha * 0.40)
+          ..strokeWidth = 0.8
+          ..strokeCap   = StrokeCap.round);
   }
 
-  void _firefly(Canvas canvas, Offset pos, double alpha) {
-    canvas.drawCircle(pos, 3.5,
-        Paint()..color = const Color(0xFFFFE566).withValues(alpha: alpha * 0.90));
-    final ray = Paint()
-      ..color       = const Color(0xFFFFD700).withValues(alpha: alpha * 0.50)
+  // ── VERANO: luciérnaga cabeza delante, luz atrás ───────
+  void _firefly(Canvas canvas, double angle, double alpha) {
+    canvas.drawCircle(Offset.zero, 15,
+        Paint()..shader = RadialGradient(colors: [
+          const Color(0xFFCCFF66).withValues(alpha: alpha * 0.45),
+          const Color(0xFFCCFF66).withValues(alpha: 0),
+        ]).createShader(Rect.fromCircle(center: Offset.zero, radius: 15)));
+    canvas.rotate(angle + math.pi); // cabeza hacia el sentido de avance
+    // luz abdomen (atrás)
+    canvas.drawCircle(const Offset(0, 4), 3.4,
+        Paint()..color = const Color(0xFFCCFF00).withValues(alpha: alpha));
+    canvas.drawCircle(const Offset(0, 4), 5.2,
+        Paint()..color = const Color(0xFFAAEE00).withValues(alpha: alpha * 0.35));
+    // tórax
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(0, -1), width: 4.6, height: 8.4),
+      Paint()..color = const Color(0xFF2A3A00).withValues(alpha: 0.92));
+    // cabeza
+    canvas.drawCircle(const Offset(0, -6.5), 2.0,
+        Paint()..color = const Color(0xFF141F00).withValues(alpha: 0.92));
+    // antenas
+    final ant = Paint()
+      ..color       = const Color(0xFF141F00).withValues(alpha: alpha * 0.70)
+      ..strokeWidth = 0.9
+      ..strokeCap   = StrokeCap.round;
+    canvas.drawLine(const Offset(0, -7.5), const Offset(-2, -10), ant);
+    canvas.drawLine(const Offset(0, -7.5), const Offset( 2, -10), ant);
+  }
+
+  // ── OTOÑO: hoja teardrop con venas ─────────────────────
+  void _leaf(Canvas canvas, double angle, double alpha) {
+    canvas.drawCircle(Offset.zero, 13,
+        Paint()..shader = RadialGradient(colors: [
+          const Color(0xFFE07030).withValues(alpha: alpha * 0.20),
+          const Color(0xFFE07030).withValues(alpha: 0),
+        ]).createShader(Rect.fromCircle(center: Offset.zero, radius: 13)));
+    canvas.rotate(angle + t * 0.12 + math.pi / 2);
+    final path = Path()
+      ..moveTo(0, -10)
+      ..cubicTo(7, -6, 7, 4, 0, 10)
+      ..cubicTo(-7, 4, -7, -6, 0, -10);
+    canvas.drawPath(path,
+        Paint()..color = const Color(0xFFC85A18).withValues(alpha: alpha * 0.92));
+    final vein = Paint()
+      ..color       = const Color(0xFF8B2E00).withValues(alpha: alpha * 0.60)
       ..strokeWidth = 1.2
       ..strokeCap   = StrokeCap.round;
-    for (var k = 0; k < 4; k++) {
-      final ka = k * math.pi / 2 + t * 2;
-      canvas.drawLine(
-        Offset(pos.dx + math.cos(ka) * 3.5, pos.dy + math.sin(ka) * 3.5),
-        Offset(pos.dx + math.cos(ka) * 6.5, pos.dy + math.sin(ka) * 6.5),
-        ray,
-      );
+    canvas.drawLine(const Offset(0, -9), const Offset(0, 9), vein);
+    for (final s in [-1.0, 1.0]) {
+      canvas.drawLine(const Offset(0, -3), Offset(s * 5, 1), vein);
     }
   }
 
-  void _leaf(Canvas canvas, Offset pos, double angle, double alpha) {
-    canvas.translate(pos.dx, pos.dy);
-    canvas.rotate(angle + t * 0.6);
-    canvas.drawOval(Rect.fromCenter(center: Offset.zero, width: 11, height: 6),
-        Paint()..color = const Color(0xFFD4722A).withValues(alpha: alpha * 0.90));
-    canvas.drawOval(Rect.fromCenter(center: const Offset(1, 0), width: 7, height: 4),
-        Paint()..color = const Color(0xFFC84B0A).withValues(alpha: alpha * 0.70));
-  }
-
-  void _star(Canvas canvas, Offset pos, double alpha) {
-    canvas.drawCircle(pos, 2.5,
-        Paint()..color = const Color(0xFFC0CFE8).withValues(alpha: alpha * 0.90));
-    if (alpha > 0.7) {
-      canvas.drawCircle(pos, 4.5,
-          Paint()..color = Colors.white.withValues(alpha: (alpha - 0.7) * 0.30));
-    }
+  // ── INICIAL: destello 4 puntas con gradiente ───────────
+  void _star(Canvas canvas, double alpha) {
+    canvas.drawCircle(Offset.zero, 12,
+        Paint()..shader = RadialGradient(colors: [
+          const Color(0xFFA8C8FF).withValues(alpha: alpha * 0.30),
+          const Color(0xFFA8C8FF).withValues(alpha: 0),
+        ]).createShader(Rect.fromCircle(center: Offset.zero, radius: 12)));
+    canvas.rotate(t * 0.04);
+    // rayo vertical (largo)
+    canvas.drawPath(
+      Path()..moveTo(0, -11)..lineTo(1.6, 0)..lineTo(0, 11)..lineTo(-1.6, 0)..close(),
+      Paint()..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end:   Alignment.bottomCenter,
+        colors: [
+          const Color(0xFFEAF4FF).withValues(alpha: 0),
+          const Color(0xFFEAF4FF).withValues(alpha: alpha * 0.95),
+          const Color(0xFFEAF4FF).withValues(alpha: 0),
+        ],
+        stops: const [0.0, 0.5, 1.0],
+      ).createShader(const Rect.fromLTWH(-1.6, -11, 3.2, 22)),
+    );
+    // rayo horizontal (corto)
+    canvas.drawPath(
+      Path()..moveTo(-7, 0)..lineTo(0, 1.2)..lineTo(7, 0)..lineTo(0, -1.2)..close(),
+      Paint()..shader = LinearGradient(
+        begin: Alignment.centerLeft,
+        end:   Alignment.centerRight,
+        colors: [
+          const Color(0xFFEAF4FF).withValues(alpha: 0),
+          const Color(0xFFEAF4FF).withValues(alpha: alpha * 0.95),
+          const Color(0xFFEAF4FF).withValues(alpha: 0),
+        ],
+        stops: const [0.0, 0.5, 1.0],
+      ).createShader(const Rect.fromLTWH(-7, -1.2, 14, 2.4)),
+    );
+    canvas.drawCircle(Offset.zero, 1.8,
+        Paint()..color = Colors.white.withValues(alpha: alpha));
   }
 
   void _txt(Canvas canvas, String s, Offset center, double size,

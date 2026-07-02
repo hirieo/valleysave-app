@@ -980,6 +980,19 @@ class AppLocalizationsPt extends AppLocalizations {
       'Copie saves com o app Arquivos. Sem instalação extra. Apenas no Android 11 e 12.';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'Acesso Root';
+
+  @override
+  String get chooserRootDesc =>
+      'Para dispositivos com root (Magisk / SuperSU). Aprove o permiso root uma vez — automático depois disso.';
+
+  @override
+  String get snackRootDenied => 'Acesso root negado. Tente o Shizuku.';
+
+  @override
   String get shizukuGateSubtitle =>
       'Configurado uma vez · somente na primeira vez';
 

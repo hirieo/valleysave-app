@@ -988,6 +988,20 @@ class AppLocalizationsDe extends AppLocalizations {
       'Speicherstände mit Ihrer Datei-App kopieren. Keine zusätzliche Installation. Nur auf Android 11 und 12.';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'Root-Zugriff';
+
+  @override
+  String get chooserRootDesc =>
+      'Für gerootete Geräte (Magisk / SuperSU). Root-Berechtigung einmal bestätigen — danach automatisch.';
+
+  @override
+  String get snackRootDenied =>
+      'Root-Zugriff verweigert. Versuche stattdessen Shizuku.';
+
+  @override
   String get shizukuGateSubtitle => 'Einmal konfiguriert · nur beim ersten Mal';
 
   @override

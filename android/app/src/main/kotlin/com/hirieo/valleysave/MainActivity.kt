@@ -3,6 +3,8 @@ package com.hirieo.valleysave
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.core.content.FileProvider
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -13,10 +15,16 @@ import java.io.File
 class MainActivity : FlutterActivity() {
     private var binderAlive = false
 
-    // El binder de Shizuku llega de forma asíncrona; con este listener nos
-    // enteramos aunque Shizuku se active con la app ya abierta.
     private val onBinderReceived = Shizuku.OnBinderReceivedListener { binderAlive = true }
     private val onBinderDead = Shizuku.OnBinderDeadListener { binderAlive = false }
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    companion object {
+        private const val SAVES_PATH =
+            "/storage/emulated/0/Android/data/com.chucklefish.stardewvalley/files/Saves"
+        private const val ROOT_TIMEOUT_MS = 15_000L
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -53,14 +61,45 @@ class MainActivity : FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "valleysave/shizuku")
             .setMethodCallHandler { call, result ->
                 when (call.method) {
-                    "isAlive" -> result.success(isShizukuAlive())
+                    "isAlive"  -> result.success(isShizukuAlive())
                     "openShizuku" -> result.success(openShizuku())
                     "openWirelessDebug" -> result.success(openWirelessDebug())
-                    "sdkInt" -> result.success(Build.VERSION.SDK_INT)
+                    "sdkInt"   -> result.success(Build.VERSION.SDK_INT)
+                    "checkRoot" -> Thread {
+                        val ok = runSu("id")
+                        mainHandler.post { result.success(ok) }
+                    }.start()
+                    "pullSavesAsRoot" -> {
+                        val dst = call.argument<String>("dst")
+                        if (dst == null) { result.error("NO_DST", null, null); return@setMethodCallHandler }
+                        Thread {
+                            val ok = runSu("cp -rfp \"$SAVES_PATH/.\" \"$dst/\"")
+                            mainHandler.post { result.success(ok) }
+                        }.start()
+                    }
+                    "pushSaveAsRoot" -> {
+                        val src  = call.argument<String>("src")
+                        val name = call.argument<String>("name")
+                        if (src == null || name == null) { result.error("BAD_ARGS", null, null); return@setMethodCallHandler }
+                        Thread {
+                            val ok = runSu("cp -rfp \"$src\" \"$SAVES_PATH/$name\"")
+                            mainHandler.post { result.success(ok) }
+                        }.start()
+                    }
                     else -> result.notImplemented()
                 }
             }
     }
+
+    /** Ejecuta un comando como root con timeout. Compatible con API 24+. */
+    private fun runSu(cmd: String): Boolean = try {
+        val proc = Runtime.getRuntime().exec(arrayOf("su", "-c", cmd))
+        val waiter = Thread { try { proc.waitFor() } catch (_: InterruptedException) {} }
+        waiter.start()
+        waiter.join(ROOT_TIMEOUT_MS)
+        if (waiter.isAlive) { proc.destroyForcibly(); false }
+        else proc.exitValue() == 0
+    } catch (_: Exception) { false }
 
     private fun isShizukuAlive(): Boolean = try {
         binderAlive || Shizuku.pingBinder()

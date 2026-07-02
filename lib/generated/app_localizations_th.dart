@@ -976,6 +976,19 @@ class AppLocalizationsTh extends AppLocalizations {
       'คัดลอกบันทึกด้วยแอป Files ของคุณ ไม่ต้องติดตั้งเพิ่มเติม เฉพาะ Android 11 และ 12 เท่านั้น';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'เข้าถึง Root';
+
+  @override
+  String get chooserRootDesc =>
+      'สำหรับอุปกรณ์ที่รูทแล้ว (Magisk / SuperSU). อนุมัติสิทธิ์ root หนึ่งครั้ง — ทำงานอัตโนมัติหลังจากนั้น';
+
+  @override
+  String get snackRootDenied => 'ถูกปฏิเสธการเข้าถึง Root ลองใช้ Shizuku แทน';
+
+  @override
   String get shizukuGateSubtitle => 'ตั้งค่าครั้งเดียว · ครั้งแรกเท่านั้น';
 
   @override

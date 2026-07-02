@@ -941,6 +941,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chooserBridgeDesc => '使用您的文件应用复制存档。无需额外安装。仅在 Android 11 和 12 上。';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'Root 访问';
+
+  @override
+  String get chooserRootDesc =>
+      '适用于已 Root 的设备（Magisk / SuperSU）。批准一次 Root 权限请求，之后自动生效。';
+
+  @override
+  String get snackRootDenied => 'Root 访问被拒绝。请尝试 Shizuku。';
+
+  @override
   String get shizukuGateSubtitle => '已配置一次 · 仅首次';
 
   @override
@@ -2032,6 +2045,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get chooserBridgeDesc =>
       '使用 Files 應用複製存檔。無需額外安裝。僅適用於 Android 11 和 12。';
+
+  @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'Root 存取';
+
+  @override
+  String get chooserRootDesc =>
+      '適用於已 Root 的裝置（Magisk / SuperSU）。批准一次 Root 權限請求，之後自動生效。';
+
+  @override
+  String get snackRootDenied => 'Root 存取遭拒。請嘗試 Shizuku。';
 
   @override
   String get shizukuGateSubtitle => '已配置一次 · 僅第一次';

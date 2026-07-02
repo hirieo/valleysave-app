@@ -1849,6 +1849,30 @@ abstract class AppLocalizations {
   /// **'Copy saves with your Files app. No extra install. Only on Android 11 and 12.'**
   String get chooserBridgeDesc;
 
+  /// No description provided for @chooserRootBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'ROOT'**
+  String get chooserRootBadge;
+
+  /// No description provided for @chooserRootTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Root Access'**
+  String get chooserRootTitle;
+
+  /// No description provided for @chooserRootDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For rooted devices (Magisk / SuperSU). Approve the root prompt once — automatic from then on.'**
+  String get chooserRootDesc;
+
+  /// No description provided for @snackRootDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Root access denied. Try Shizuku instead.'**
+  String get snackRootDenied;
+
   /// No description provided for @shizukuGateSubtitle.
   ///
   /// In en, this message translates to:

@@ -54,6 +54,44 @@ class ShizukuService {
     }
   }
 
+  /// ¿El dispositivo tiene root y lo concede a ValleySave?
+  /// Lanza el diálogo de Magisk/SuperSU la primera vez. Timeout 15 s.
+  Future<bool> checkRoot() async {
+    try {
+      return (await _native.invokeMethod<bool>('checkRoot')) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Copia los saves del juego a una carpeta nuestra legible usando su.
+  /// Devuelve la ruta de la copia, o null si falló.
+  Future<String?> pullSavesAsRoot() async {
+    try {
+      final dst = await _freshDir('game_in');
+      final ok =
+          (await _native.invokeMethod<bool>('pullSavesAsRoot', {'dst': dst.path})) ?? false;
+      if (!ok) return null;
+      final empty = await dst.list().isEmpty;
+      return empty ? null : dst.path;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Empuja un save (en [src]) a la carpeta del juego usando su.
+  Future<bool> pushSaveAsRoot(String src, String name) async {
+    try {
+      return (await _native.invokeMethod<bool>(
+            'pushSaveAsRoot',
+            {'src': src, 'name': name},
+          )) ??
+          false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// ¿El usuario ya concedió permiso a ValleySave dentro de Shizuku?
   Future<bool> hasPermission() async => (await _api.checkPermission()) ?? false;
 

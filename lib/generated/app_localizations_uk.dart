@@ -983,6 +983,19 @@ class AppLocalizationsUk extends AppLocalizations {
       'Копіюйте збереження через файловий менеджер. Без додаткового встановлення. Тільки на Android 11 та 12.';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'Root-доступ';
+
+  @override
+  String get chooserRootDesc =>
+      'Для пристроїв з root (Magisk / SuperSU). Підтвердіть запит root один раз — далі автоматично.';
+
+  @override
+  String get snackRootDenied => 'Root-доступ відхилено. Спробуйте Shizuku.';
+
+  @override
   String get shizukuGateSubtitle =>
       'Налаштовується один раз · тільки в перший раз';
 

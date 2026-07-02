@@ -958,6 +958,19 @@ class AppLocalizationsKo extends AppLocalizations {
       '파일 앱으로 저장을 복사하세요. 추가 설치 없음. Android 11 및 12에서만.';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => '루트 접근';
+
+  @override
+  String get chooserRootDesc =>
+      '루팅된 기기용 (Magisk / SuperSU). 루트 권한을 한 번 승인하면 이후 자동으로 작동합니다.';
+
+  @override
+  String get snackRootDenied => '루트 접근이 거부되었습니다. Shizuku를 사용해 보세요.';
+
+  @override
   String get shizukuGateSubtitle => '한 번 설정됨 · 처음만';
 
   @override

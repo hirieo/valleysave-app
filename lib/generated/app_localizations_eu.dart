@@ -984,6 +984,19 @@ class AppLocalizationsEu extends AppLocalizations {
       'Gordetzeeak zure fitxategien aplikazioarekin kopian. Ezer extra ez instalatu. Android 11 eta 12-an bakarrik.';
 
   @override
+  String get chooserRootBadge => 'ROOT';
+
+  @override
+  String get chooserRootTitle => 'Root Sarbidea';
+
+  @override
+  String get chooserRootDesc =>
+      'Errotu diren gailuetarako (Magisk / SuperSU). Root baimena behin onartu — geroztik automatikoki.';
+
+  @override
+  String get snackRootDenied => 'Root sarbidea ukatua. Saiatu Shizuku.';
+
+  @override
   String get shizukuGateSubtitle =>
       'Konfiguraturik behin · lehen aldia bakarrik';
 

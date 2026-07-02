@@ -54,7 +54,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   static const _modePrefKey = 'android_access_mode';
   AndroidMode? _mode; // null = aún leyendo la preferencia
   String? _bridgeInPath; // ruta de bridge_in (modo puente), para mostrar
-  int _sdkInt = 33; // assume 13+ until native replies; hides bridge by default
   // Estado de Shizuku (solo submodo shizuku). null = comprobando.
   bool? _shizukuRunning;
   bool _shizukuGranted = false;
@@ -87,18 +86,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Comprueba si el dispositivo puede leer gameSavesPath directamente (root).
-  Future<bool> _canAccessDirect() async {
-    try {
-      final dir = Directory(gameSavesPath);
-      if (!await dir.exists()) return false;
-      await dir.list().first;
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
   Future<void> _init() async {
     await GameLaunchService.instance.init();
     if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
@@ -108,22 +95,26 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       await _load();
       return;
     }
-    // Detectar versión de Android para condicionar el chooser.
-    _sdkInt = await ShizukuService.instance.sdkInt();
-    // Root / acceso directo: si funciona, carga sin mostrar ningún selector.
-    if (await _canAccessDirect()) {
-      if (!mounted) return;
-      setState(() => _mode = AndroidMode.root);
-      await _load();
-      return;
-    }
-    // Recupera la vía elegida en sesiones anteriores.
+
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_modePrefKey);
+
+    // Root: solo verificar si el usuario lo eligió antes (sin popup inesperado).
+    if (saved == 'root') {
+      if (await ShizukuService.instance.checkRoot()) {
+        if (!mounted) return;
+        setState(() => _mode = AndroidMode.root);
+        await _load();
+        return;
+      }
+      // Root revocado → limpiar y caer al chooser.
+      await prefs.remove(_modePrefKey);
+    }
+
     final mode = switch (saved) {
       'shizuku' => AndroidMode.shizuku,
-      'bridge' => AndroidMode.bridge,
-      _ => AndroidMode.chooser,
+      'bridge'  => AndroidMode.bridge,
+      _         => AndroidMode.shizuku,
     };
     if (!mounted) return;
     setState(() => _mode = mode);
@@ -131,6 +122,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _chooseMode(AndroidMode mode) async {
+    if (mode == AndroidMode.root) {
+      final hasRoot = await ShizukuService.instance.checkRoot();
+      if (!mounted) return;
+      if (!hasRoot) {
+        _snack(AppLocalizations.of(context)!.snackRootDenied);
+        return;
+      }
+      // Guardar root en prefs igual que los demás modos.
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_modePrefKey, 'root');
+      if (!mounted) return;
+      setState(() => _mode = AndroidMode.root);
+      await _enterMode(AndroidMode.root);
+      return;
+    }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_modePrefKey, mode.name);
     if (!mounted) return;
@@ -243,7 +249,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (!Platform.isAndroid) return SaveService().scan();
     switch (_mode) {
       case AndroidMode.root:
-        return SaveService().scanDir(gameSavesPath);
+        final bridge = await ShizukuService.instance.pullSavesAsRoot();
+        if (bridge == null) return [];
+        return SaveService().scanDir(bridge);
       case AndroidMode.shizuku:
         if (!_shizukuReady) return [];
         final bridge = await ShizukuService.instance.pullSaves();
@@ -381,7 +389,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(name));
     try {
-      if (Platform.isAndroid && _mode == AndroidMode.shizuku) {
+      if (Platform.isAndroid && _mode == AndroidMode.root) {
+        final out = await ShizukuService.instance.prepareOut(name);
+        await widget.drive!.downloadSave(folderId, out);
+        final ok = await ShizukuService.instance.pushSaveAsRoot(out, name);
+        if (!ok) {
+          if (mounted) _snack(l10n.snackWriteError);
+          return;
+        }
+        await _load(silent: true);
+        if (mounted) _snack(l10n.snackDownloaded);
+      } else if (Platform.isAndroid && _mode == AndroidMode.shizuku) {
         // Shizuku: descargar a carpeta propia → empujar al juego vía cp.
         if (!_shizukuReady) {
           if (mounted) _snack(l10n.activateShizuku);
@@ -1133,7 +1151,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                             widget.drive != null
                         ? () => _handleDeleteFromDrive(_entries[i])
                         : null,
-                    onDeleteLocal: _entries[i].local != null
+                    onDeleteLocal: _entries[i].local != null &&
+                            _mode != AndroidMode.root
                         ? () => _handleDeleteLocal(_entries[i])
                         : null,
                   ),
@@ -1258,22 +1277,28 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 22),
           _modeCard(
+            badge: l10n.chooserRootBadge,
+            title: l10n.chooserRootTitle,
+            desc: l10n.chooserRootDesc,
+            onTap: () => _chooseMode(AndroidMode.root),
+            recommended: false,
+          ),
+          const SizedBox(height: 9),
+          _modeCard(
             badge: l10n.hiwShizukuBadge,
             title: l10n.hiwShizukuTitle,
             desc: l10n.chooserShizukuDesc,
             onTap: () => _chooseMode(AndroidMode.shizuku),
-            recommended: true,
+            recommended: false,
           ),
-          if (_sdkInt < 33) ...[
-            const SizedBox(height: 9),
-            _modeCard(
-              badge: l10n.chooserManualBadge,
-              title: l10n.hiwBridgeTitle,
-              desc: l10n.chooserBridgeDesc,
-              onTap: () => _chooseMode(AndroidMode.bridge),
-              recommended: false,
-            ),
-          ],
+          const SizedBox(height: 9),
+          _modeCard(
+            badge: l10n.chooserManualBadge,
+            title: l10n.hiwBridgeTitle,
+            desc: l10n.chooserBridgeDesc,
+            onTap: () => _chooseMode(AndroidMode.bridge),
+            recommended: false,
+          ),
           const SizedBox(height: 18),
           _howItWorksLink(),
         ],

@@ -373,6 +373,12 @@ class _SettingsScreenState extends State<SettingsScreen>
                             const SizedBox(height: 12),
                             _gameTile(accent, l10n),
                           ],
+                          if (Platform.isAndroid) ...[
+                            const SizedBox(height: 32),
+                            Text(l10n.bridgeChangeMode.toUpperCase(), style: AppTypography.eyebrow()),
+                            const SizedBox(height: 12),
+                            _changeAccessTile(accent, l10n),
+                          ],
                           const SizedBox(height: 32),
                           Text(l10n.application.toUpperCase(), style: AppTypography.eyebrow()),
                           const SizedBox(height: 12),
@@ -394,6 +400,55 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _changeAccessTile(Color accent, AppLocalizations l10n) {
+    bool pressed = false;
+    return StatefulBuilder(
+      builder: (_, ss) => GestureDetector(
+        onTap: () => Navigator.pop(context, 'change_mode'),
+        onTapDown: (_) => ss(() => pressed = true),
+        onTapUp: (_) => ss(() => pressed = false),
+        onTapCancel: () => ss(() => pressed = false),
+        child: AnimatedScale(
+          scale: pressed ? 0.97 : 1.0,
+          duration: pressed
+              ? const Duration(milliseconds: 100)
+              : const Duration(milliseconds: 200),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'ROOT / SHIZUKU / MANUAL',
+                        style: AppTypography.mono(color: AppColors.textFaint, size: 9),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        l10n.bridgeChangeMode,
+                        style: AppTypography.bodyStrong(color: AppColors.text),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right_rounded,
+                    color: Colors.white.withValues(alpha: 0.40)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

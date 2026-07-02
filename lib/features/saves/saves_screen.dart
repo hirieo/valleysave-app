@@ -99,7 +99,23 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_modePrefKey);
 
-    // Root: solo verificar si el usuario lo eligió antes (sin popup inesperado).
+    // Primera vez (sin pref): intentar root directamente.
+    // En móviles sin root, su falla al instante sin popup.
+    if (saved == null) {
+      if (await ShizukuService.instance.checkRoot()) {
+        await prefs.setString(_modePrefKey, 'root');
+        if (!mounted) return;
+        setState(() => _mode = AndroidMode.root);
+        await _load();
+        return;
+      }
+      // Sin root → chooser para que el usuario elija.
+      if (!mounted) return;
+      setState(() { _mode = AndroidMode.chooser; _loading = false; });
+      return;
+    }
+
+    // Root elegido antes: re-verificar rápido (sin popup, grant ya permanente).
     if (saved == 'root') {
       if (await ShizukuService.instance.checkRoot()) {
         if (!mounted) return;
@@ -107,8 +123,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         await _load();
         return;
       }
-      // Root revocado → limpiar y caer al chooser.
+      // Root revocado → limpiar y mostrar chooser.
       await prefs.remove(_modePrefKey);
+      if (!mounted) return;
+      setState(() { _mode = AndroidMode.chooser; _loading = false; });
+      return;
     }
 
     final mode = switch (saved) {
@@ -332,6 +351,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (!mounted) return;
     if (result == 'disconnect') {
       _disconnectDrive();
+    } else if (result == 'change_mode') {
+      await _resetMode();
     } else {
       await GameLaunchService.instance.init();
       if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);

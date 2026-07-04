@@ -13,7 +13,6 @@ import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/models/season_state.dart';
 import '../../core/services/auth_service.dart';
-import '../../core/services/bridge_service.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/save_service.dart';
@@ -29,9 +28,8 @@ import '../settings/settings_screen.dart';
 import 'save_card.dart';
 
 /// Vía de acceso a los saves locales en Android.
-/// `chooser` = aún sin elegir · `shizuku` = automático (ADB, única vía fiable en
-/// Android 13+) · `bridge` = puente manual (solo útil en Android 11-12).
-enum AndroidMode { chooser, shizuku, bridge, root }
+/// `chooser` = aún sin elegir · `shizuku` = ADB (Shizuku) · `root` = su directo.
+enum AndroidMode { chooser, shizuku, root }
 
 class SavesScreen extends StatefulWidget {
   const SavesScreen({super.key, this.drive});
@@ -53,7 +51,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // ── Modo de acceso en Android ──
   static const _modePrefKey = 'android_access_mode';
   AndroidMode? _mode; // null = aún leyendo la preferencia
-  String? _bridgeInPath; // ruta de bridge_in (modo puente), para mostrar
   // Estado de Shizuku (solo submodo shizuku). null = comprobando.
   bool? _shizukuRunning;
   bool _shizukuGranted = false;
@@ -80,10 +77,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (_mode == AndroidMode.shizuku && !_shizukuReady) {
       _checkShizuku();
     }
-    // Puente: el usuario pudo copiar partidas con Archivos mientras tanto.
-    if (_mode == AndroidMode.bridge) {
-      _load(silent: true);
-    }
   }
 
   Future<void> _init() async {
@@ -91,7 +84,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
 
     if (!Platform.isAndroid) {
-      _mode = AndroidMode.bridge; // no aplica; evita ramas de gate en desktop
       await _load();
       return;
     }
@@ -99,40 +91,27 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_modePrefKey);
 
-    // Primera vez (sin pref): intentar root directamente.
-    // En móviles sin root, su falla al instante sin popup.
+    // Primera vez sin pref → chooser. El usuario elige Root/Shizuku/Manual.
+    // Evita un popup de Magisk inesperado antes de que el usuario haya elegido nada.
     if (saved == null) {
-      if (await ShizukuService.instance.checkRoot()) {
-        await prefs.setString(_modePrefKey, 'root');
-        if (!mounted) return;
-        setState(() => _mode = AndroidMode.root);
-        await _load();
-        return;
-      }
-      // Sin root → chooser para que el usuario elija.
       if (!mounted) return;
       setState(() { _mode = AndroidMode.chooser; _loading = false; });
       return;
     }
 
-    // Root elegido antes: re-verificar rápido (sin popup, grant ya permanente).
+    // Root: confiar en el pref guardado, ir directo a cargar.
+    // pullSavesAsRoot() es la ÚNICA llamada a su — Magisk la aprueba silenciosamente
+    // si el grant es permanente. Si root fue revocado, la lista sale vacía y el
+    // usuario puede cambiar modo desde Ajustes.
     if (saved == 'root') {
-      if (await ShizukuService.instance.checkRoot()) {
-        if (!mounted) return;
-        setState(() => _mode = AndroidMode.root);
-        await _load();
-        return;
-      }
-      // Root revocado → limpiar y mostrar chooser.
-      await prefs.remove(_modePrefKey);
       if (!mounted) return;
-      setState(() { _mode = AndroidMode.chooser; _loading = false; });
+      setState(() => _mode = AndroidMode.root);
+      await _load();
       return;
     }
 
     final mode = switch (saved) {
       'shizuku' => AndroidMode.shizuku,
-      'bridge'  => AndroidMode.bridge,
       _         => AndroidMode.shizuku,
     };
     if (!mounted) return;
@@ -168,21 +147,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     switch (mode) {
       case AndroidMode.shizuku:
         await _checkShizuku();
-      case AndroidMode.bridge:
-        await _prepareBridge();
-        await _load();
       case AndroidMode.chooser:
         if (mounted) setState(() => _loading = false);
       case AndroidMode.root:
-        await _load(); // acceso directo ya verificado en _init
+        await _load();
     }
-  }
-
-  /// Crea las carpetas del puente y cachea la ruta de `bridge_in` para mostrarla.
-  Future<void> _prepareBridge() async {
-    final inPath = await BridgeService.instance.inPath();
-    await BridgeService.instance.outDir(); // asegura que existe
-    if (mounted) setState(() => _bridgeInPath = inPath);
   }
 
   /// Vuelve al selector de vía (botón "cambiar método").
@@ -260,10 +229,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Escanea los saves locales según plataforma y modo.
-  /// - Desktop: carpeta nativa de Stardew.
-  /// - Android · Shizuku: copia-puente del shell ADB.
-  /// - Android · Puente: carpeta `bridge_in` que el usuario rellena con Archivos.
   Future<List<SaveFile>> _scanLocal() async {
     if (!Platform.isAndroid) return SaveService().scan();
     switch (_mode) {
@@ -276,9 +241,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         final bridge = await ShizukuService.instance.pullSaves();
         if (bridge == null) return [];
         return SaveService().scanDir(bridge);
-      case AndroidMode.bridge:
-        final dir = await BridgeService.instance.inDir();
-        return SaveService().scanDir(dir.path);
       default:
         return [];
     }
@@ -352,7 +314,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (result == 'disconnect') {
       _disconnectDrive();
     } else if (result == 'change_mode') {
-      await _resetMode();
+      _showChangeModeDialog();
     } else {
       await GameLaunchService.instance.init();
       if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
@@ -365,6 +327,96 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     } catch (_) {
       if (mounted) _snack(AppLocalizations.of(context)!.snackLaunchError);
     }
+  }
+
+  void _showChangeModeDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    final accent = _seasonAccent;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Color.alphaBlend(
+            accent.withValues(alpha: 0.06), const Color(0xFF0A0A0B)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: accent.withValues(alpha: 0.22)),
+        ),
+        title: Text(l10n.bridgeChangeMode,
+            style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _changeModeOption(ctx, l10n.chooserRootBadge, l10n.chooserRootTitle,
+                AndroidMode.root, accent),
+            const SizedBox(height: 8),
+            _changeModeOption(ctx, l10n.hiwShizukuBadge, l10n.hiwShizukuTitle,
+                AndroidMode.shizuku, accent),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel,
+                style: GoogleFonts.firaCode(
+                    color: Colors.white.withValues(alpha: 0.6))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _changeModeOption(
+      BuildContext ctx, String badge, String title, AndroidMode mode, Color accent) {
+    final isActive = _mode == mode;
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(ctx);
+        if (!isActive) _chooseMode(mode);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isActive
+              ? accent.withValues(alpha: 0.16)
+              : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isActive
+                ? accent.withValues(alpha: 0.55)
+                : Colors.white.withValues(alpha: 0.10),
+            width: isActive ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(badge,
+                      style: GoogleFonts.firaCode(
+                          fontSize: 8.5,
+                          letterSpacing: 1.1,
+                          fontWeight: FontWeight.w700,
+                          color: isActive ? accent : AppColors.textFaint)),
+                  const SizedBox(height: 2),
+                  Text(title,
+                      style: GoogleFonts.firaCode(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: isActive ? accent : AppColors.text)),
+                ],
+              ),
+            ),
+            if (isActive)
+              Icon(Icons.check_circle_rounded, size: 18, color: accent),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _disconnectDrive() async {
@@ -435,11 +487,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
-      } else if (Platform.isAndroid && _mode == AndroidMode.bridge) {
-        // Puente: descargar a bridge_out → el usuario la copia con Archivos.
-        final out = await BridgeService.instance.prepareOut(name);
-        await widget.drive!.downloadSave(folderId, out);
-        if (mounted) await _showBridgeCopyDialog(name, out);
       } else {
         final savesDir = SaveService.savesDirectory;
         if (savesDir == null) {
@@ -494,11 +541,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(name));
     try {
-      final localSave = entry.local;
-      if (localSave == null) return;
-      final dir = Directory(localSave.folderPath);
-      if (await dir.exists()) {
-        await dir.delete(recursive: true);
+      if (Platform.isAndroid && _mode == AndroidMode.root) {
+        final ok = await ShizukuService.instance.deleteLocalAsRoot(name);
+        if (!ok && mounted) _snack(l10n.snackDeleteError('su rm failed'));
+      } else {
+        final localSave = entry.local;
+        if (localSave == null) return;
+        final dir = Directory(localSave.folderPath);
+        if (await dir.exists()) await dir.delete(recursive: true);
       }
       await _load(silent: true);
       if (mounted) _snack(l10n.snackDeletedLocal(farmName));
@@ -621,86 +671,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     color: const Color(0xFFE05252),
                     fontWeight: FontWeight.w700)),
           ),
-        ],
-      ),
-    );
-  }
-
-  /// Diálogo tras descargar en modo puente: indica al usuario que copie la
-  /// partida de `bridge_out` a la carpeta del juego con su app de Archivos.
-  Future<void> _showBridgeCopyDialog(String name, String fromPath) {
-    final l10n = AppLocalizations.of(context)!;
-    const dest = gameSavesPath;
-    return showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF12180F),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
-        ),
-        title: Text(l10n.dlgBridgeCopyTitle,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.dlgBridgeCopyDesc(name),
-              style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.82)),
-            ),
-            const SizedBox(height: 14),
-            _dialogPath(l10n.labelFrom, fromPath),
-            const SizedBox(height: 8),
-            _dialogPath(l10n.labelTo, dest),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Clipboard.setData(const ClipboardData(text: dest));
-              _snack(l10n.snackDestCopied);
-            },
-            child: Text(l10n.dlgCopyDest,
-                style: GoogleFonts.firaCode(
-                    color: AppColors.accent, fontWeight: FontWeight.w700)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(l10n.dlgGotIt,
-                style: GoogleFonts.firaCode(
-                    color: Colors.white.withValues(alpha: 0.6))),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _dialogPath(String label, String path) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: _seasonAccent.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _seasonAccent.withValues(alpha: 0.25)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label.toUpperCase(),
-              style: GoogleFonts.firaCode(
-                  fontSize: 8, letterSpacing: 0.8, color: AppColors.textFaint)),
-          const SizedBox(height: 2),
-          Text(path,
-              style:
-                  GoogleFonts.firaCode(fontSize: 9.5, color: AppColors.textMuted)),
         ],
       ),
     );
@@ -1172,8 +1142,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                             widget.drive != null
                         ? () => _handleDeleteFromDrive(_entries[i])
                         : null,
-                    onDeleteLocal: _entries[i].local != null &&
-                            _mode != AndroidMode.root
+                    onDeleteLocal: _entries[i].local != null
                         ? () => _handleDeleteLocal(_entries[i])
                         : null,
                   ),
@@ -1198,49 +1167,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _buildEmpty() {
     final l10n = AppLocalizations.of(context)!;
-    // Modo puente: explicar cómo traer partidas a bridge_in con Archivos.
-    if (Platform.isAndroid && _mode == AndroidMode.bridge) {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(28, 20, 28, 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
-            const Text('📂', style: TextStyle(fontSize: 40)),
-            const SizedBox(height: 14),
-            Text(
-              l10n.bridgeTitle,
-              style: GoogleFonts.bodoniModa(
-                fontSize: 20,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700,
-                color: Colors.white.withValues(alpha: 0.92),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              l10n.bridgeDesc,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.firaCode(
-                fontSize: 11.5,
-                height: 1.55,
-                color: Colors.white.withValues(alpha: 0.78),
-              ),
-            ),
-            const SizedBox(height: 18),
-            _pathBox(l10n.pathLabelFromStardew, gameSavesPath),
-            const SizedBox(height: 8),
-            _pathBox(l10n.pathLabelToValleySave, _bridgeInPath ?? '…'),
-            const SizedBox(height: 22),
-            _gateButton(l10n.bridgeRefresh, () => _load(), filled: true),
-            const SizedBox(height: 10),
-            _gateButton(l10n.bridgeChangeMode, _resetMode, filled: false),
-            const SizedBox(height: 16),
-            _howItWorksLink(),
-          ],
-        ),
-      );
-    }
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1265,7 +1191,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// Selector de vía: Shizuku (recomendado) / Puente manual.
+  /// Selector de vía: Root / Shizuku.
   Widget _buildModeChooser() {
     final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
@@ -1310,14 +1236,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             title: l10n.hiwShizukuTitle,
             desc: l10n.chooserShizukuDesc,
             onTap: () => _chooseMode(AndroidMode.shizuku),
-            recommended: false,
-          ),
-          const SizedBox(height: 9),
-          _modeCard(
-            badge: l10n.chooserManualBadge,
-            title: l10n.hiwBridgeTitle,
-            desc: l10n.chooserBridgeDesc,
-            onTap: () => _chooseMode(AndroidMode.bridge),
             recommended: false,
           ),
           const SizedBox(height: 18),
@@ -1425,46 +1343,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _pathBox(String label, String path) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-      decoration: BoxDecoration(
-        color: _seasonAccent.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _seasonAccent.withValues(alpha: 0.25)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label.toUpperCase(),
-                    style: GoogleFonts.firaCode(
-                        fontSize: 8,
-                        letterSpacing: 0.8,
-                        color: AppColors.textFaint)),
-                const SizedBox(height: 3),
-                Text(path,
-                    style: GoogleFonts.firaCode(
-                        fontSize: 9.5, color: AppColors.textMuted)),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: path));
-              _snack(AppLocalizations.of(context)!.snackPathCopied);
-            },
-            child: Icon(Icons.copy_rounded,
-                size: 15, color: _seasonAccent.withValues(alpha: 0.35)),
-          ),
-        ],
       ),
     );
   }

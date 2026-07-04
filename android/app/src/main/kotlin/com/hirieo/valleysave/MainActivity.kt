@@ -86,6 +86,14 @@ class MainActivity : FlutterActivity() {
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
+                    "deleteLocalAsRoot" -> {
+                        val name = call.argument<String>("name")
+                        if (name == null) { result.error("BAD_ARGS", null, null); return@setMethodCallHandler }
+                        Thread {
+                            val ok = runSu("rm -rf \"$SAVES_PATH/$name\"")
+                            mainHandler.post { result.success(ok) }
+                        }.start()
+                    }
                     else -> result.notImplemented()
                 }
             }

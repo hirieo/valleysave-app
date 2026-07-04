@@ -23,7 +23,6 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
     with SingleTickerProviderStateMixin {
   static const _gamePath =
       'Android/data/com.chucklefish.stardewvalley/files/Saves';
-  static const _bridgePath = 'Android/data/com.hirieo.valleysave/files';
 
   final _shizukuKey = GlobalKey();
   late ScrollController _scrollController;
@@ -39,8 +38,13 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
     _scrollController = ScrollController();
     _entranceCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 480),
-    )..forward();
+      duration: const Duration(milliseconds: 350),
+    );
+    if (WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+      _entranceCtrl.value = 1.0;
+    } else {
+      _entranceCtrl.forward();
+    }
     _contentAnim = CurvedAnimation(
       parent: _entranceCtrl,
       curve: const Cubic(0.23, 1, 0.32, 1),
@@ -139,8 +143,6 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                                 key: _shizukuKey,
                                 child: _shizukuCard(season, l10n),
                               ),
-                              const SizedBox(height: 16),
-                              _bridgeCard(season, l10n),
                               const SizedBox(height: 28),
                               _privacyLink(context, SeasonData.data[season]!.accentColor, l10n),
                             ],
@@ -663,25 +665,6 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
       steps: [l10n.hiwShizuku1, l10n.hiwShizuku2, l10n.hiwShizuku3],
       closing: l10n.hiwShizukuDone,
       footnote: l10n.hiwShizukuNote,
-    );
-  }
-
-  // ── Bridge card ───────────────────────────────────────────────────────────
-
-  Widget _bridgeCard(SeasonState season, AppLocalizations l10n) {
-    return _viaCard(
-      seasonColor: SeasonData.data[season]!.accentColor,
-      icon: Icons.swap_horiz_rounded,
-      accent: AppColors.green,
-      badge: l10n.hiwBridgeBadge,
-      title: l10n.hiwBridgeTitle,
-      subtitle: l10n.hiwBridgeSubtitle,
-      steps: [l10n.hiwBridge1, l10n.hiwBridge2],
-      pathLabelA: l10n.hiwBridgeSaveFolder,
-      pathA: _gamePath,
-      pathLabelB: l10n.hiwBridgeValleySaveFolder,
-      pathB: _bridgePath,
-      footnote: l10n.hiwBridgeNote,
     );
   }
 

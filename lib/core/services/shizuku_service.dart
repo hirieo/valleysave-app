@@ -92,6 +92,15 @@ class ShizukuService {
     }
   }
 
+  /// Elimina un save de la carpeta del juego usando su.
+  Future<bool> deleteLocalAsRoot(String name) async {
+    try {
+      return (await _native.invokeMethod<bool>('deleteLocalAsRoot', {'name': name})) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// ¿El usuario ya concedió permiso a ValleySave dentro de Shizuku?
   Future<bool> hasPermission() async => (await _api.checkPermission()) ?? false;
 

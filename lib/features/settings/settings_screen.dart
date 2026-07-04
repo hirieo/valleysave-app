@@ -88,8 +88,13 @@ class _SettingsScreenState extends State<SettingsScreen>
     _loadVersion();
     _entranceCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 480),
-    )..forward();
+      duration: const Duration(milliseconds: 350),
+    );
+    if (WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+      _entranceCtrl.value = 1.0;
+    } else {
+      _entranceCtrl.forward();
+    }
     _contentAnim = CurvedAnimation(
       parent: _entranceCtrl,
       curve: const Cubic(0.23, 1, 0.32, 1),
@@ -432,7 +437,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'ROOT / SHIZUKU / MANUAL',
+                        'ROOT / SHIZUKU',
                         style: AppTypography.mono(color: AppColors.textFaint, size: 9),
                       ),
                       const SizedBox(height: 3),

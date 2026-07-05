@@ -17,6 +17,8 @@ android/captures/
 android/gradlew
 android/gradlew.bat
 android/local.properties
+android/key.properties
+android/keystore_password.txt
 android/**/GeneratedPluginRegistrant.java
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/Flutter/.last_build_id
@@ -59,6 +61,9 @@ oauth-token.json
 # Logs
 *.log
 logs/
+
+# Binarios de release (se suben a GitHub Releases, no al repo)
+dist/
 
 # Plans (work-in-progress, no van al repo público)
 plan/

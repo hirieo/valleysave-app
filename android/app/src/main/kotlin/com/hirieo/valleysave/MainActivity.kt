@@ -58,6 +58,14 @@ class MainActivity : FlutterActivity() {
                 }
             }
 
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "valleysave/game")
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "isInstalled" -> result.success(isGameInstalled())
+                    else -> result.notImplemented()
+                }
+            }
+
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "valleysave/shizuku")
             .setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -98,6 +106,13 @@ class MainActivity : FlutterActivity() {
                 }
             }
     }
+
+    /** ¿Stardew Valley está instalado? getLaunchIntentForPackage es más fiable
+     *  que canResolveActivity del plugin en Android 11+ (requiere el paquete en
+     *  <queries>, ya declarado). */
+    private fun isGameInstalled(): Boolean = try {
+        packageManager.getLaunchIntentForPackage("com.chucklefish.stardewvalley") != null
+    } catch (_: Throwable) { false }
 
     /** Ejecuta un comando como root con timeout. Compatible con API 24+. */
     private fun runSu(cmd: String): Boolean = try {

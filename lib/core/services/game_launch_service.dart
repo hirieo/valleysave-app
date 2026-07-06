@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameLaunchService {
   GameLaunchService._();
   static final instance = GameLaunchService._();
 
+  static const _native = MethodChannel('valleysave/game');
   static const _androidPackage = 'com.chucklefish.stardewvalley';
   static const _prefKey = 'stardew_exe_path';
 
@@ -27,12 +29,11 @@ class GameLaunchService {
 
   Future<void> init() async {
     if (Platform.isAndroid) {
-      const intent = AndroidIntent(
-        action: 'android.intent.action.MAIN',
-        category: 'android.intent.category.LAUNCHER',
-        package: _androidPackage,
-      );
-      _androidInstalled = await intent.canResolveActivity() ?? false;
+      try {
+        _androidInstalled = (await _native.invokeMethod<bool>('isInstalled')) ?? false;
+      } catch (_) {
+        _androidInstalled = false;
+      }
     } else if (Platform.isWindows) {
       final prefs = await SharedPreferences.getInstance();
       final saved = prefs.getString(_prefKey);

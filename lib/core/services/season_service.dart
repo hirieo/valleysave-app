@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/season_settings.dart';
@@ -111,7 +112,7 @@ class SeasonService {
         locationSettings: const LocationSettings(accuracy: LocationAccuracy.low),
       ).timeout(const Duration(seconds: 8));
 
-      return _seasonFromMonth(DateTime.now().month, isNorthern: pos.latitude >= 0);
+      return seasonFromMonth(DateTime.now().month, isNorthern: pos.latitude >= 0);
     } catch (_) {
       return null;
     }
@@ -119,7 +120,8 @@ class SeasonService {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  SeasonState _seasonFromMonth(int month, {required bool isNorthern}) {
+  @visibleForTesting
+  SeasonState seasonFromMonth(int month, {required bool isNorthern}) {
     final northern = switch (month) {
       3 || 4 || 5   => SeasonState.spring,
       6 || 7 || 8   => SeasonState.summer,

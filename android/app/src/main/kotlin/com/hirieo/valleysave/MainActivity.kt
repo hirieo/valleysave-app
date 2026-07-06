@@ -62,6 +62,7 @@ class MainActivity : FlutterActivity() {
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "isInstalled" -> result.success(isGameInstalled())
+                    "launch"      -> result.success(launchGame())
                     else -> result.notImplemented()
                 }
             }
@@ -112,6 +113,18 @@ class MainActivity : FlutterActivity() {
      *  <queries>, ya declarado). */
     private fun isGameInstalled(): Boolean = try {
         packageManager.getLaunchIntentForPackage("com.chucklefish.stardewvalley") != null
+    } catch (_: Throwable) { false }
+
+    /** Lanza Stardew directamente por su launch intent (sin selector de apps). */
+    private fun launchGame(): Boolean = try {
+        val intent = packageManager.getLaunchIntentForPackage("com.chucklefish.stardewvalley")
+        if (intent == null) {
+            false
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            true
+        }
     } catch (_: Throwable) { false }
 
     /** Ejecuta un comando como root con timeout. Compatible con API 24+. */

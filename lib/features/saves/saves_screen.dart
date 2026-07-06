@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +17,16 @@ import '../../core/services/game_launch_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
-import '../../core/services/stardew_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
-import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
 import 'save_card.dart';
+import 'widgets/latest_badge.dart';
+import 'widgets/saves_top_bar.dart';
+import 'widgets/seasonal_loader.dart';
+import 'widgets/stagger_item.dart';
 
 /// Vía de acceso a los saves locales en Android.
 /// `chooser` = aún sin elegir · `shizuku` = ADB (Shizuku) · `root` = su directo.
@@ -1080,7 +1081,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           SafeArea(
             child: Column(
               children: [
-                _TopBar(
+                SavesTopBar(
                   onBack: () => Navigator.pop(context),
                   onSettings: _openSettings,
                   onRefresh: _refresh,
@@ -1122,7 +1123,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         itemCount: _entries.length,
         separatorBuilder: (context, index) => const SizedBox(height: 14),
-        itemBuilder: (_, i) => _StaggerItem(
+        itemBuilder: (_, i) => StaggerItem(
           key: ValueKey('${_staggerVersion}_$i'),
           index: i,
           child: Align(
@@ -1132,7 +1133,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (i == 0) _LatestBadge(color: _entries[0].primary.seasonColor),
+                  if (i == 0) LatestBadge(color: _entries[0].primary.seasonColor),
                   SaveCard(
                     entry: _entries[i],
                     busy: _busy.contains(_entries[i].folderName),
@@ -1159,7 +1160,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _seasonalLoader() => ValueListenableBuilder<SeasonState>(
         valueListenable: SeasonController.instance.season,
-        builder: (_, season, _) => _SeasonalLoader(
+        builder: (_, season, _) => SeasonalLoader(
           key: ValueKey(season),
           season: season,
         ),
@@ -1789,426 +1790,5 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ),
       ),
     );
-  }
-}
-
-// ── Badge última partida ────────────────────────────────────────────────────────
-
-class _LatestBadge extends StatelessWidget {
-  const _LatestBadge({required this.color});
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
-              border: Border.all(color: color.withValues(alpha: 0.35)),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.latestBadge,
-              style: GoogleFonts.firaCode(
-                fontSize: 8,
-                letterSpacing: 1.2,
-                fontWeight: FontWeight.w500,
-                color: color.withValues(alpha: 0.85),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Barra superior ─────────────────────────────────────────────────────────────
-
-class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.onBack,
-    required this.onSettings,
-    required this.onRefresh,
-    required this.refreshing,
-    required this.canLaunchGame,
-    required this.onLaunch,
-  });
-
-  final VoidCallback onBack;
-  final VoidCallback onSettings;
-  final VoidCallback onRefresh;
-  final bool refreshing;
-  final bool canLaunchGame;
-  final VoidCallback onLaunch;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 492),
-          child: Row(
-            children: [
-              _IconCircle(
-                icon: Icons.arrow_back_rounded,
-                onTap: onBack,
-              ),
-              const Spacer(),
-              Text(
-                l10n.mySaves,
-                style: GoogleFonts.bodoniModa(
-                  fontSize: 24,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.92),
-                ),
-              ),
-              const Spacer(),
-              if (canLaunchGame) ...[
-                ValueListenableBuilder<SeasonState>(
-                  valueListenable: SeasonController.instance.season,
-                  builder: (_, season, _) {
-                    final accent = SeasonData.data[season]!.accentColor;
-                    return _IconCircle(
-                      icon: Icons.play_arrow_rounded,
-                      onTap: onLaunch,
-                      color: accent,
-                      tooltip: l10n.tooltipLaunchGame,
-                    );
-                  },
-                ),
-                const SizedBox(width: 8),
-              ],
-              _IconCircle(
-                icon: Icons.refresh_rounded,
-                onTap: onRefresh,
-                spinning: refreshing,
-              ),
-              const SizedBox(width: 8),
-              _IconCircle(icon: Icons.settings_rounded, onTap: onSettings),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-typedef _IconCircle = IconCircleButton;
-
-
-class _StaggerItem extends StatefulWidget {
-  const _StaggerItem({super.key, required this.index, required this.child});
-  final int index;
-  final Widget child;
-
-  @override
-  State<_StaggerItem> createState() => _StaggerItemState();
-}
-
-class _StaggerItemState extends State<_StaggerItem>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<double> _opacity;
-  late final Animation<Offset> _slide;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    const curve = Cubic(0.23, 1, 0.32, 1);
-    _opacity = CurvedAnimation(parent: _ctrl, curve: curve);
-    _slide = Tween<Offset>(begin: const Offset(0, 0.04), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _ctrl, curve: curve));
-    Future.delayed(Duration(milliseconds: widget.index * 60), () {
-      if (mounted) _ctrl.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => FadeTransition(
-        opacity: _opacity,
-        child: SlideTransition(position: _slide, child: widget.child),
-      );
-}
-
-// ── Loader estacional ────────────────────────────────────────────────────────
-
-class _SeasonalLoader extends StatefulWidget {
-  const _SeasonalLoader({super.key, required this.season});
-  final SeasonState season;
-
-  @override
-  State<_SeasonalLoader> createState() => _SeasonalLoaderState();
-}
-
-class _SeasonalLoaderState extends State<_SeasonalLoader>
-    with TickerProviderStateMixin {
-  late final List<AnimationController> _ctrls;
-
-  int get _count {
-    switch (widget.season) {
-      case SeasonState.initial:
-        return 1;
-      case SeasonState.spring:
-      case SeasonState.fall:
-        return 3;
-      case SeasonState.summer:
-      case SeasonState.winter:
-        return 5;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrls = List.generate(_count, (i) {
-      final c = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1400),
-      );
-      Future.delayed(Duration(milliseconds: i * 200), () {
-        if (mounted) c.repeat();
-      });
-      return c;
-    });
-  }
-
-  @override
-  void dispose() {
-    for (final c in _ctrls) { c.dispose(); }
-    super.dispose();
-  }
-
-  Color get _accent => SeasonData.data[widget.season]!.accentColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 60,
-            height: 52,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: _particles(),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.loaderLoading,
-            style: GoogleFonts.firaCode(
-              fontSize: 8,
-              letterSpacing: .14,
-              color: _accent.withValues(alpha: .80),
-            ),
-          ),
-          const SizedBox(height: 3),
-          Text(
-            l10n.loaderConnecting,
-            style: GoogleFonts.firaCode(
-              fontSize: 7,
-              letterSpacing: .05,
-              color: Colors.white.withValues(alpha: .28),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _particles() {
-    switch (widget.season) {
-      case SeasonState.initial:
-        return [_star()];
-      case SeasonState.spring:
-        return _petals();
-      case SeasonState.summer:
-        return _fireflies();
-      case SeasonState.fall:
-        return _leaves();
-      case SeasonState.winter:
-        return _snow();
-    }
-  }
-
-  // ── Inicial: estrella pulsante ──
-  Widget _star() => Center(
-        child: AnimatedBuilder(
-          animation: _ctrls[0],
-          builder: (_, _) {
-            final v = _ctrls[0].value;
-            final t = Curves.easeInOut
-                .transform(v <= 0.5 ? v * 2 : (1 - v) * 2);
-            return Opacity(
-              opacity: 0.3 + 0.7 * t,
-              child: Transform.scale(
-                scale: 0.7 + 0.45 * t,
-                child: Text(
-                  '✦',
-                  style: TextStyle(fontSize: 22, color: _accent),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-
-  // ── Primavera: pétalos cayendo ──
-  List<Widget> _petals() {
-    const xs = [8.0, 24.0, 42.0];
-    return List.generate(3, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final t = _ctrls[i].value;
-            final op = (t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 1.0)
-                .clamp(0.0, 1.0);
-            return Positioned(
-              left: xs[i],
-              top: t * 52,
-              child: Opacity(
-                opacity: op,
-                child: Transform.rotate(
-                  angle: t * math.pi,
-                  child: Container(
-                    width: 7,
-                    height: 7,
-                    decoration: BoxDecoration(
-                      color: _accent.withValues(alpha: .85),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(7),
-                        bottomRight: Radius.circular(7),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
-  }
-
-  // ── Verano: luciérnagas parpadeando ──
-  List<Widget> _fireflies() {
-    const positions = [
-      Offset(6, 18), Offset(26, 6), Offset(44, 22),
-      Offset(16, 36), Offset(38, 32),
-    ];
-    return List.generate(5, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final v = _ctrls[i].value;
-            final t = Curves.easeInOut
-                .transform(v <= 0.5 ? v * 2 : (1 - v) * 2);
-            return Positioned(
-              left: positions[i].dx,
-              top: positions[i].dy,
-              child: Opacity(
-                opacity: 0.1 + 0.9 * t,
-                child: Transform.scale(
-                  scale: 0.5 + 0.5 * t,
-                  child: Container(
-                    width: 5,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _accent,
-                      boxShadow: [
-                        BoxShadow(
-                          color: _accent.withValues(alpha: t * 0.6),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
-  }
-
-  // ── Otoño: hojas cayendo con rotación ──
-  List<Widget> _leaves() {
-    const xs = [8.0, 24.0, 40.0];
-    return List.generate(3, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final t = _ctrls[i].value;
-            final op = (t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 0.9)
-                .clamp(0.0, 1.0);
-            final drift = math.sin(t * math.pi * 2) * 5;
-            return Positioned(
-              left: xs[i] + drift,
-              top: t * 52,
-              child: Opacity(
-                opacity: op,
-                child: Transform.rotate(
-                  angle: t * math.pi * 1.5,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: _accent.withValues(alpha: .85),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
-  }
-
-  // ── Invierno: copos de nieve ──
-  List<Widget> _snow() {
-    const xs = [6.0, 18.0, 32.0, 46.0, 13.0];
-    return List.generate(5, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final t = _ctrls[i].value;
-            final op = (t < 0.1 ? t / 0.1 : t > 0.9 ? (1 - t) / 0.1 : 0.8)
-                .clamp(0.0, 1.0);
-            final drift = math.sin(t * math.pi * 2) * 3;
-            return Positioned(
-              left: xs[i] + drift,
-              top: t * 52,
-              child: Opacity(
-                opacity: op,
-                child: Container(
-                  width: 4,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _accent.withValues(alpha: .90),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
   }
 }

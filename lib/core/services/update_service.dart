@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,7 +36,7 @@ class UpdateService {
 
       final data = json.decode(res.body) as Map<String, dynamic>;
       final tag  = (data['tag_name'] as String? ?? '').replaceFirst('v', '');
-      if (tag.isEmpty || !_isNewer(tag, info.version)) return null;
+      if (tag.isEmpty || !isNewer(tag, info.version)) return null;
 
       String? windowsUrl;
       String? androidUrl;
@@ -157,7 +158,8 @@ class UpdateService {
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
-  static bool _isNewer(String latest, String current) {
+  @visibleForTesting
+  static bool isNewer(String latest, String current) {
     int part(String v, int i) {
       final parts = v.split('.');
       return i < parts.length ? (int.tryParse(parts[i]) ?? 0) : 0;

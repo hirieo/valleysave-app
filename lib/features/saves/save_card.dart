@@ -234,7 +234,7 @@ class _Header extends StatelessWidget {
                     ),
                     if (_coop) ...[
                       const SizedBox(width: 8),
-                      const _CoopBadge(),
+                      const CoopBadge(),
                     ],
                   ],
                 ),
@@ -245,10 +245,10 @@ class _Header extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (_coop && hostSelected) ...[
-                    const _HostCrown(),
+                    const HostCrown(),
                     const SizedBox(width: 8),
                   ],
-                  _DateBox(save: save),
+                  DateBox(save: save),
                 ],
               ),
             ],
@@ -284,7 +284,7 @@ class _Header extends StatelessWidget {
           ),
           if (_coop) ...[
             const SizedBox(height: 10),
-            _PlayerSwitcher(
+            PlayerSwitcher(
               count: players.length,
               index: playerIndex,
               hostIndex: players.indexWhere((p) => p.isHost),
@@ -298,8 +298,8 @@ class _Header extends StatelessWidget {
 }
 
 /// Insignia COOP junto al nombre de la granja.
-class _CoopBadge extends StatelessWidget {
-  const _CoopBadge();
+class CoopBadge extends StatelessWidget {
+  const CoopBadge({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -330,8 +330,8 @@ class _CoopBadge extends StatelessWidget {
 
 /// Corona del anfitrión, junto a la fecha. Solo visible cuando el jugador
 /// seleccionado es el anfitrión. Caja ajustada al emoji (padding mínimo).
-class _HostCrown extends StatelessWidget {
-  const _HostCrown();
+class HostCrown extends StatelessWidget {
+  const HostCrown({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -355,9 +355,38 @@ class _HostCrown extends StatelessWidget {
   }
 }
 
+/// Nombre + género del jugador seleccionado. Para usar junto a [PlayerSwitcher]
+/// en superficies que no tienen ya un chip de granjero (hoja de detalle, diálogo
+/// de comparación). Mismo criterio de color que el punto activo del switcher.
+class PlayerNameLabel extends StatelessWidget {
+  const PlayerNameLabel({
+    super.key,
+    required this.name,
+    required this.gender,
+    required this.isHost,
+  });
+
+  final String name;
+  final String gender;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$name $gender',
+      style: GoogleFonts.firaCode(
+        fontSize: 11,
+        fontWeight: FontWeight.w700,
+        color: isHost ? const Color(0xFFE0B850) : const Color(0xFFF0D060),
+      ),
+    );
+  }
+}
+
 /// Selector en línea: insignia COOP + puntos de recorrido + flechas ‹ ›.
-class _PlayerSwitcher extends StatelessWidget {
-  const _PlayerSwitcher({
+class PlayerSwitcher extends StatelessWidget {
+  const PlayerSwitcher({
+    super.key,
     required this.count,
     required this.index,
     required this.hostIndex,
@@ -437,8 +466,8 @@ class _SwitchArrow extends StatelessWidget {
   }
 }
 
-class _DateBox extends StatelessWidget {
-  const _DateBox({required this.save});
+class DateBox extends StatelessWidget {
+  const DateBox({super.key, required this.save});
   final SaveFile save;
 
   @override
@@ -1147,7 +1176,7 @@ class _Footer extends StatelessWidget {
             else ...[
               // Secundario siempre a la izquierda, principal a la derecha
               if (hasLocal && hasDrive && recommendUpload) ...[
-                _ActionBtn(
+                ActionBtn(
                   label: '', color: kDrive,
                   icon: Icons.cloud_download_outlined,
                   filled: false, iconOnly: true, onTap: onDownload,
@@ -1155,7 +1184,7 @@ class _Footer extends StatelessWidget {
                 const SizedBox(width: 8),
               ],
               if (hasLocal && hasDrive && recommendDownload) ...[
-                _ActionBtn(
+                ActionBtn(
                   label: '', color: kLocal,
                   icon: Icons.cloud_upload_outlined,
                   filled: false, iconOnly: true, onTap: onUpload,
@@ -1163,13 +1192,13 @@ class _Footer extends StatelessWidget {
                 const SizedBox(width: 8),
               ],
               if (recommendUpload)
-                _ActionBtn(
+                ActionBtn(
                   label: '', color: kLocal,
                   icon: Icons.cloud_upload_outlined,
                   filled: true, iconOnly: true, onTap: onUpload,
                 ),
               if (recommendDownload)
-                _ActionBtn(
+                ActionBtn(
                   label: '', color: kDrive,
                   icon: Icons.cloud_download_outlined,
                   filled: true, iconOnly: true, onTap: onDownload,
@@ -1204,7 +1233,7 @@ class _Footer extends StatelessWidget {
             SaveBusyIndicator(season: SeasonController.instance.season.value)
           else if (status != SaveSyncStatus.synced) ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionUpload,
                 color: kLocal,
                 icon: Icons.cloud_upload_outlined,
@@ -1214,7 +1243,7 @@ class _Footer extends StatelessWidget {
               const SizedBox(width: 8),
             ],
             if (hasLocal && hasDrive && recommendUpload) ...[
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionDownload,
                 color: kDrive,
                 icon: Icons.cloud_download_outlined,
@@ -1224,7 +1253,7 @@ class _Footer extends StatelessWidget {
               const SizedBox(width: 8),
             ],
             if (recommendUpload)
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionUpload,
                 color: kLocal,
                 icon: Icons.cloud_upload_outlined,
@@ -1232,7 +1261,7 @@ class _Footer extends StatelessWidget {
                 onTap: onUpload,
               ),
             if (recommendDownload)
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionDownload,
                 color: kDrive,
                 icon: Icons.cloud_download_outlined,
@@ -1264,11 +1293,12 @@ class _Dot extends StatelessWidget {
   }
 }
 
-class _ActionBtn extends StatefulWidget {
-  const _ActionBtn({
+class ActionBtn extends StatefulWidget {
+  const ActionBtn({
+    super.key,
     required this.label,
     required this.color,
-    required this.icon,
+    this.icon,
     required this.filled,
     this.iconOnly = false,
     this.onTap,
@@ -1276,16 +1306,16 @@ class _ActionBtn extends StatefulWidget {
 
   final String label;
   final Color color;
-  final IconData icon;
+  final IconData? icon;
   final bool filled;
   final bool iconOnly;
   final VoidCallback? onTap;
 
   @override
-  State<_ActionBtn> createState() => _ActionBtnState();
+  State<ActionBtn> createState() => _ActionBtnState();
 }
 
-class _ActionBtnState extends State<_ActionBtn> {
+class _ActionBtnState extends State<ActionBtn> {
   bool _pressed = false;
 
   @override
@@ -1315,8 +1345,10 @@ class _ActionBtnState extends State<_ActionBtn> {
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(widget.icon, size: 13, color: widget.color),
-                    const SizedBox(width: 5),
+                    if (widget.icon != null) ...[
+                      Icon(widget.icon, size: 13, color: widget.color),
+                      const SizedBox(width: 5),
+                    ],
                     Text(
                       widget.label,
                       style: GoogleFonts.firaCode(fontSize: 10, color: widget.color),

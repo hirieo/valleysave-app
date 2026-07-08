@@ -4,8 +4,11 @@ import 'dart:io';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/auth_io.dart';
 
+import '../models/player_stats.dart';
 import '../models/save_file.dart';
 import 'save_service.dart';
+
+const _playersJsonName = 'players.json';
 
 const _folderName = 'ValleySave';
 const _folderMime = 'application/vnd.google-apps.folder';
@@ -148,7 +151,14 @@ class DriveService {
 
   /// Sube los dos archivos de un save (SaveGameInfo + archivo principal)
   /// a ValleySave/[folderName]/. Actualiza si ya existen en Drive.
-  Future<void> uploadSave(String folderPath, String folderName) async {
+  /// Si [players] trae más de un jugador real (partida coop), sube además
+  /// un resumen ligero (`players.json`) para que Drive pueda mostrar a todos
+  /// los jugadores sin tener que descargar el archivo grande del save.
+  Future<void> uploadSave(
+    String folderPath,
+    String folderName, {
+    List<PlayerStats> players = const [],
+  }) async {
     final saveFolderId = await _ensureSaveFolder(folderName);
     final sep = Platform.pathSeparator;
     final filePaths = [
@@ -188,6 +198,39 @@ class DriveService {
         await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
       }
     }
+
+    if (players.length > 1) {
+      await _uploadPlayersJson(saveFolderId, players);
+    }
+  }
+
+  Future<void> _uploadPlayersJson(
+    String saveFolderId,
+    List<PlayerStats> players,
+  ) async {
+    final json = jsonEncode({'players': players.map((p) => p.toJson()).toList()});
+    final bytes = utf8.encode(json);
+    final media = drive.Media(Stream.fromIterable([bytes]), bytes.length);
+
+    final existing = await _api.files.list(
+      q: "name='$_playersJsonName' and '$saveFolderId' in parents and trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id)',
+    );
+
+    if (existing.files != null && existing.files!.isNotEmpty) {
+      await _api.files.update(
+        drive.File(),
+        existing.files!.first.id!,
+        uploadMedia: media,
+        $fields: 'id',
+      );
+    } else {
+      final metadata = drive.File()
+        ..name = _playersJsonName
+        ..parents = [saveFolderId];
+      await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
+    }
   }
 
   /// Lista cada save en Drive con sus stats ya parseados (descarga el
@@ -215,9 +258,11 @@ class DriveService {
 
       drive.File? infoFile;
       drive.File? mainFile;
+      drive.File? playersFile;
       for (final f in files.files ?? <drive.File>[]) {
         if (f.name == 'SaveGameInfo') infoFile = f;
         if (f.name == folderName) mainFile = f;
+        if (f.name == _playersJsonName) playersFile = f;
       }
       if (infoFile == null) return null;
 
@@ -232,10 +277,13 @@ class DriveService {
           (mainFile?.modifiedTime ?? infoFile.modifiedTime ?? DateTime.now())
               .toLocal();
 
+      final players = await _fetchPlayersJson(playersFile);
+
       final save = SaveService.parseSaveGameInfo(
         xml,
         folderName: folderName,
         lastModified: savedAt,
+        players: players,
       );
       if (save == null) return null;
       return DriveSaveSummary(
@@ -249,6 +297,27 @@ class DriveService {
       (folders.files ?? <drive.File>[]).map(fetchOne),
     );
     return results.whereType<DriveSaveSummary>().toList();
+  }
+
+  /// Descarga y parsea `players.json` si existe. Partidas coop subidas antes
+  /// de esta función no lo tienen — devuelve vacío (solo se verá al anfitrión,
+  /// como hasta ahora, hasta que se vuelva a subir esa partida).
+  Future<List<PlayerStats>> _fetchPlayersJson(drive.File? playersFile) async {
+    if (playersFile?.id == null) return const [];
+    try {
+      final media = await _api.files.get(
+        playersFile!.id!,
+        downloadOptions: drive.DownloadOptions.fullMedia,
+      ) as drive.Media;
+      final bytes = await _readAll(media.stream);
+      final json = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      final list = json['players'] as List<dynamic>? ?? [];
+      return list
+          .map((e) => PlayerStats.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return const [];
+    }
   }
 
   /// Descarga todos los archivos de un save de Drive a [localFolderPath],

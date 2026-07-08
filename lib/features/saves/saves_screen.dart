@@ -442,7 +442,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(name));
     try {
-      await widget.drive!.uploadSave(local.folderPath, name);
+      await widget.drive!.uploadSave(local.folderPath, name, players: local.players);
       await _load(silent: true);
     } catch (e) {
       if (mounted) _snack(l10n.snackUploadError(e.toString()));

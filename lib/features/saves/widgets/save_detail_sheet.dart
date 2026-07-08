@@ -119,6 +119,9 @@ class _DetailSheetState extends State<_DetailSheet> {
   int _direction = 1;
   bool _leftPressed = false;
   bool _rightPressed = false;
+  // Compartido entre local y Drive: cambiar de jugador mueve las dos caras
+  // aunque solo una esté visible en cada momento.
+  int _playerIndex = 0;
   final _focusNode = FocusNode();
 
   @override
@@ -135,6 +138,11 @@ class _DetailSheetState extends State<_DetailSheet> {
         _index = next;
       });
     }
+  }
+
+  void _selectPlayer(int i) {
+    if (i < 0) return;
+    setState(() => _playerIndex = i);
   }
 
   Widget _navArrow(IconData icon,
@@ -304,7 +312,11 @@ class _DetailSheetState extends State<_DetailSheet> {
                     ),
                     child: KeyedSubtree(
                       key: ValueKey(_index),
-                      child: _DetailPage(side: active),
+                      child: _DetailPage(
+                        side: active,
+                        playerIndex: _playerIndex,
+                        onSelectPlayer: _selectPlayer,
+                      ),
                     ),
                   ),
                 ),
@@ -320,13 +332,23 @@ class _DetailSheetState extends State<_DetailSheet> {
 }
 
 class _DetailPage extends StatelessWidget {
-  const _DetailPage({required this.side});
+  const _DetailPage({
+    required this.side,
+    required this.playerIndex,
+    required this.onSelectPlayer,
+  });
   final _DetailSide side;
+  final int playerIndex;
+  final ValueChanged<int> onSelectPlayer;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final s = side.save;
+    final base = side.save;
+    final coop = base.hasMultiplePlayers;
+    final idx = coop ? playerIndex.clamp(0, base.players.length - 1) : 0;
+    final s = coop ? base.forPlayer(base.players[idx]) : base;
+    final hostSelected = coop && base.players[idx].isHost;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -357,24 +379,62 @@ class _DetailPage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        s.farmName,
-                        style: GoogleFonts.bodoniModa(
-                          fontSize: 24,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.text,
-                          height: 1,
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    s.farmName,
+                                    style: GoogleFonts.bodoniModa(
+                                      fontSize: 24,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.text,
+                                      height: 1,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (coop) ...[
+                                  const SizedBox(width: 8),
+                                  const CoopBadge(),
+                                ],
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (hostSelected) ...[
+                                const HostCrown(),
+                                const SizedBox(width: 8),
+                              ],
+                              DateBox(save: s),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.statDayYear(s.dayOfMonth, s.year),
-                        style: GoogleFonts.firaCode(
-                          fontSize: 11,
-                          color: s.seasonColor.withValues(alpha: 0.90),
+                      if (coop) ...[
+                        const SizedBox(height: 10),
+                        PlayerNameLabel(
+                          name: s.playerName,
+                          gender: s.genderLabel,
+                          isHost: hostSelected,
                         ),
-                      ),
+                        const SizedBox(height: 6),
+                        PlayerSwitcher(
+                          count: base.players.length,
+                          index: idx,
+                          hostIndex: base.players.indexWhere((p) => p.isHost),
+                          onSelect: onSelectPlayer,
+                        ),
+                      ],
                     ],
                   ),
                 ),

@@ -679,146 +679,231 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<bool?> _confirmDownload(SaveEntry entry) {
     final l10n = AppLocalizations.of(context)!;
-    final drive = entry.drive!;
-    final local = entry.local;
+    final driveBase = entry.drive!;
+    final localBase = entry.local;
+    final playerBase = localBase ?? driveBase;
+    final coop = playerBase.hasMultiplePlayers;
+    var playerIndex = 0;
     return showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        scrollable: true,
-        backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.15), const Color(0xFF080A08),
-        ).withValues(alpha: 0.90),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
-        ),
-        title: Text(l10n.dlgDownloadTitle,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (local == null)
-              Text(
-                l10n.dlgDownloadNewDesc(
-                  drive.farmName,
-                  drive.dayOfMonth,
-                  drive.playtimeLabel,
-                ),
-                style: GoogleFonts.firaCode(
-                    fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
-              )
-            else
-              _overwritePreview(
-                l10n: l10n,
-                intro: l10n.dlgDownloadOverwrite(drive.farmName),
-                current: local,
-                result: drive,
-                currentLabel: l10n.previewLocalLabel,
-                resultLabel: l10n.previewFromDrive,
-                resultColor: const Color(0xFF5AA8E0),
-              ),
-            if (local != null &&
-                drive.gameVersion.isNotEmpty &&
-                local.gameVersion.isNotEmpty &&
-                drive.gameVersion != local.gameVersion) ...[
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE09020).withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                      color: const Color(0xFFE09020).withValues(alpha: 0.40)),
-                ),
-                child: Text(
-                  l10n.versionMismatch(
-                    local.gameVersion,
-                    drive.gameVersion,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) {
+          final idx = coop ? playerIndex.clamp(0, playerBase.players.length - 1) : 0;
+          final drive = coop ? driveBase.forPlayer(playerBase.players[idx]) : driveBase;
+          final local = localBase == null
+              ? null
+              : (coop ? localBase.forPlayer(playerBase.players[idx]) : localBase);
+          final hostIndex = playerBase.players.indexWhere((p) => p.isHost);
+          final switcher = coop
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PlayerNameLabel(
+                      name: drive.playerName,
+                      gender: drive.genderLabel,
+                      isHost: idx == hostIndex,
+                    ),
+                    const SizedBox(height: 6),
+                    PlayerSwitcher(
+                      count: playerBase.players.length,
+                      index: idx,
+                      hostIndex: hostIndex,
+                      onSelect: (i) => setDialogState(() => playerIndex = i),
+                    ),
+                  ],
+                )
+              : null;
+          return AlertDialog(
+            scrollable: true,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
+            ),
+            title: Text(l10n.dlgDownloadTitle,
+                style: GoogleFonts.bodoniModa(
+                    color: AppColors.text,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w700)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (local == null) ...[
+                  Text(
+                    l10n.dlgDownloadNewDesc(
+                      drive.farmName,
+                      drive.dayOfMonth,
+                      drive.playtimeLabel,
+                    ),
+                    style: GoogleFonts.firaCode(
+                        fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
                   ),
-                  style: GoogleFonts.firaCode(
-                      fontSize: 10,
-                      height: 1.5,
-                      color: const Color(0xFFE09020).withValues(alpha: 0.90)),
-                ),
+                  if (switcher != null) ...[
+                    const SizedBox(height: 12),
+                    Center(child: switcher),
+                  ],
+                ] else
+                  _overwritePreview(
+                    l10n: l10n,
+                    intro: l10n.dlgDownloadOverwrite(drive.farmName),
+                    current: local,
+                    result: drive,
+                    currentLabel: l10n.previewLocalLabel,
+                    resultLabel: l10n.previewFromDrive,
+                    currentIcon: _localIcon,
+                    resultIcon: '☁️',
+                    resultColor: const Color(0xFF5AA8E0),
+                    afterIntro: switcher,
+                  ),
+                if (local != null &&
+                    drive.gameVersion.isNotEmpty &&
+                    local.gameVersion.isNotEmpty &&
+                    drive.gameVersion != local.gameVersion) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE09020).withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                          color: const Color(0xFFE09020).withValues(alpha: 0.40)),
+                    ),
+                    child: Text(
+                      l10n.versionMismatch(
+                        local.gameVersion,
+                        drive.gameVersion,
+                      ),
+                      style: GoogleFonts.firaCode(
+                          fontSize: 10,
+                          height: 1.5,
+                          color: const Color(0xFFE09020).withValues(alpha: 0.90)),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              const SizedBox(width: 8),
+              ActionBtn(
+                label: l10n.dlgDownloadButton,
+                color: const Color(0xFF5AA8E0),
+                icon: Icons.cloud_download_outlined,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
               ),
             ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel,
-                style: GoogleFonts.firaCode(color: Colors.white.withValues(alpha: 0.6))),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.dlgDownloadButton,
-                style: GoogleFonts.firaCode(
-                    color: const Color(0xFF5AA8E0), fontWeight: FontWeight.w700)),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
   Future<bool?> _confirmUpload(SaveEntry entry) {
     final l10n = AppLocalizations.of(context)!;
-    final local = entry.local!;
-    final drive = entry.drive;
+    final localBase = entry.local!;
+    final driveBase = entry.drive;
+    final coop = localBase.hasMultiplePlayers;
+    var playerIndex = 0;
     return showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        scrollable: true,
-        backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.15), const Color(0xFF080A08),
-        ).withValues(alpha: 0.90),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
-        ),
-        title: Text(l10n.dlgUploadTitle,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
-        content: drive == null
-            ? Text(
-                l10n.dlgUploadNewDesc(
-                  local.farmName,
-                  local.dayOfMonth,
-                  local.playtimeLabel,
-                ),
-                style: GoogleFonts.firaCode(
-                    fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
-              )
-            : _overwritePreview(
-                l10n: l10n,
-                intro: l10n.dlgUploadOverwriteDrive(local.farmName),
-                current: drive,
-                result: local,
-                currentLabel: l10n.previewDriveLabel,
-                resultLabel: l10n.previewFromDevice,
-                resultColor: const Color(0xFFE0B850),
-              ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel,
-                style: GoogleFonts.firaCode(
-                    color: Colors.white.withValues(alpha: 0.6))),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.dlgUploadButton,
-                style: GoogleFonts.firaCode(
-                    color: const Color(0xFFE0B850),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) {
+          final idx = coop ? playerIndex.clamp(0, localBase.players.length - 1) : 0;
+          final local = coop ? localBase.forPlayer(localBase.players[idx]) : localBase;
+          final drive = driveBase == null
+              ? null
+              : (coop ? driveBase.forPlayer(localBase.players[idx]) : driveBase);
+          final hostIndex = localBase.players.indexWhere((p) => p.isHost);
+          final switcher = coop
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PlayerNameLabel(
+                      name: local.playerName,
+                      gender: local.genderLabel,
+                      isHost: idx == hostIndex,
+                    ),
+                    const SizedBox(height: 6),
+                    PlayerSwitcher(
+                      count: localBase.players.length,
+                      index: idx,
+                      hostIndex: hostIndex,
+                      onSelect: (i) => setDialogState(() => playerIndex = i),
+                    ),
+                  ],
+                )
+              : null;
+          return AlertDialog(
+            scrollable: true,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
+            ),
+            title: Text(l10n.dlgUploadTitle,
+                style: GoogleFonts.bodoniModa(
+                    color: AppColors.text,
+                    fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w700)),
-          ),
-        ],
+            content: drive == null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.dlgUploadNewDesc(
+                          local.farmName,
+                          local.dayOfMonth,
+                          local.playtimeLabel,
+                        ),
+                        style: GoogleFonts.firaCode(
+                            fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+                      ),
+                      if (switcher != null) ...[
+                        const SizedBox(height: 12),
+                        Center(child: switcher),
+                      ],
+                    ],
+                  )
+                : _overwritePreview(
+                    l10n: l10n,
+                    intro: l10n.dlgUploadOverwriteDrive(local.farmName),
+                    current: drive,
+                    result: local,
+                    currentLabel: l10n.previewDriveLabel,
+                    resultLabel: l10n.previewFromDevice,
+                    currentIcon: '☁️',
+                    resultIcon: _localIcon,
+                    resultColor: const Color(0xFFE0B850),
+                    afterIntro: switcher,
+                  ),
+            actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              const SizedBox(width: 8),
+              ActionBtn(
+                label: l10n.dlgUploadButton,
+                color: const Color(0xFFE0B850),
+                icon: Icons.cloud_upload_outlined,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -831,7 +916,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     required SaveFile result,
     required String currentLabel,
     required String resultLabel,
+    required String currentIcon,
+    required String resultIcon,
     required Color resultColor,
+    Widget? afterIntro,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -844,6 +932,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               height: 1.5,
               color: Colors.white.withValues(alpha: 0.80)),
         ),
+        if (afterIntro != null) ...[
+          const SizedBox(height: 12),
+          Center(child: afterIntro),
+        ],
         const SizedBox(height: 14),
         IntrinsicHeight(
           child: Row(
@@ -851,7 +943,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             children: [
               Expanded(
                 child: _previewCol(l10n, currentLabel, current,
-                    other: result, accent: Colors.white.withValues(alpha: 0.40)),
+                    other: result,
+                    accent: Colors.white.withValues(alpha: 0.40),
+                    icon: currentIcon),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -860,7 +954,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               Expanded(
                 child: _previewCol(l10n, resultLabel, result,
-                    other: current, accent: resultColor),
+                    other: current, accent: resultColor, icon: resultIcon),
               ),
             ],
           ),
@@ -872,8 +966,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Color get _seasonAccent =>
       SeasonData.data[SeasonController.instance.season.value]!.accentColor;
 
+  String get _localIcon => (Platform.isAndroid || Platform.isIOS) ? '📱' : '💻';
+
   Widget _previewCol(AppLocalizations l10n, String header, SaveFile s,
-      {required SaveFile other, required Color accent}) {
+      {required SaveFile other, required Color accent, required String icon}) {
     final hl = _seasonAccent;
     String mine(SaveFile x) =>
         x.deepestMineLevel == 0 ? l10n.previewColUnexplored : 'Nv. ${x.deepestMineLevel}';
@@ -885,19 +981,25 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFF151512),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: accent.withValues(alpha: 0.60), width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(header,
-              style: GoogleFonts.firaCode(
-                  fontSize: 8,
-                  letterSpacing: 0.8,
-                  fontWeight: FontWeight.w700,
-                  color: accent)),
+          Row(
+            children: [
+              Text(icon, style: const TextStyle(fontSize: 11)),
+              const SizedBox(width: 5),
+              Text(header,
+                  style: GoogleFonts.firaCode(
+                      fontSize: 8,
+                      letterSpacing: 0.8,
+                      fontWeight: FontWeight.w700,
+                      color: accent)),
+            ],
+          ),
           const SizedBox(height: 6),
           _previewRow(l10n.previewColDayYear, l10n.statDayYear(s.dayOfMonth, s.year),
               changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,

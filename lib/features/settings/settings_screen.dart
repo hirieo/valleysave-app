@@ -529,38 +529,43 @@ class _SettingsScreenState extends State<SettingsScreen>
           curve: const Cubic(0.23, 1, 0.32, 1),
           alignment: Alignment.topCenter,
           child: _modeDropdownOpen
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF03080A).withValues(alpha: 0.97),
+              ? RepaintBoundary(
+                  child: ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(14),
                       bottomRight: Radius.circular(14),
                     ),
-                    border: Border(
-                      top: BorderSide(color: accent, width: 1.5),
-                      left: BorderSide(color: accent.withValues(alpha: 0.28)),
-                      right: BorderSide(color: accent.withValues(alpha: 0.28)),
-                      bottom: BorderSide(color: accent.withValues(alpha: 0.28)),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < modes.length; i++) ...[
-                        if (i > 0)
-                          Divider(
-                            height: 0,
-                            thickness: 0.5,
-                            color: Colors.white.withValues(alpha: 0.05),
-                          ),
-                        _modeListItem(
-                          modes[i].$1,
-                          modes[i].$2,
-                          modes[i].$3,
-                          _settings.mode == modes[i].$1,
-                          accent,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF03080A).withValues(alpha: 0.97),
+                        border: Border(
+                          top: BorderSide(color: accent, width: 1.5),
+                          left: BorderSide(color: accent.withValues(alpha: 0.28)),
+                          right: BorderSide(color: accent.withValues(alpha: 0.28)),
+                          bottom: BorderSide(color: accent.withValues(alpha: 0.28)),
                         ),
-                      ],
-                    ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (int i = 0; i < modes.length; i++) ...[
+                            if (i > 0)
+                              Divider(
+                                height: 0,
+                                thickness: 0.5,
+                                color: Colors.white.withValues(alpha: 0.05),
+                              ),
+                            _modeListItem(
+                              modes[i].$1,
+                              modes[i].$2,
+                              modes[i].$3,
+                              _settings.mode == modes[i].$1,
+                              accent,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
                   ),
                 )
               : const SizedBox.shrink(),

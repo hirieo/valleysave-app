@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../generated/app_localizations.dart';
+import '../../core/models/player_stats.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/services/season_controller.dart';
@@ -68,7 +69,7 @@ String _rel(DateTime t, AppLocalizations l10n) {
   return l10n.cardTimeMonthsAgo(m);
 }
 
-class SaveCard extends StatelessWidget {
+class SaveCard extends StatefulWidget {
   const SaveCard({
     super.key,
     required this.entry,
@@ -87,10 +88,27 @@ class SaveCard extends StatelessWidget {
   final VoidCallback? onDeleteLocal;      // local → delete
 
   @override
+  State<SaveCard> createState() => _SaveCardState();
+}
+
+class _SaveCardState extends State<SaveCard> {
+  int _playerIndex = 0;
+
+  void _selectPlayer(int i) {
+    final n = widget.entry.primary.players.length;
+    if (i < 0 || i >= n || i == _playerIndex) return;
+    setState(() => _playerIndex = i);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final save = entry.primary;
-    final status = entry.status;
+    final base = widget.entry.primary;
+    final coop = base.hasMultiplePlayers;
+    final idx = coop ? _playerIndex.clamp(0, base.players.length - 1) : 0;
+    // La tarjeta muestra el jugador seleccionado (o el anfitrión en solitario).
+    final save = coop ? base.forPlayer(base.players[idx]) : base;
+    final status = widget.entry.status;
     final st = _statusStyle(status, l10n);
 
     return ClipRRect(
@@ -105,24 +123,38 @@ class SaveCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(height: 3, color: st.color),
-            _Header(save: save),
+            _Header(
+              save: save,
+              players: coop ? base.players : const [],
+              playerIndex: idx,
+              hostSelected: coop && base.players[idx].isHost,
+              onSelectPlayer: _selectPlayer,
+            ),
             kDivider,
-            SaveStatsView(save: save),
+            // Los stats por-jugador se cruzan con un fundido al cambiar.
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 190),
+              switchInCurve: const Cubic(0.23, 1, 0.32, 1),
+              switchOutCurve: const Cubic(0.23, 1, 0.32, 1),
+              transitionBuilder: (child, anim) =>
+                  FadeTransition(opacity: anim, child: child),
+              child: SaveStatsView(key: ValueKey(idx), save: save),
+            ),
             kDivider,
             _PresenceRow(
-              entry: entry,
-              onUpload: onUpload,
-              onDownload: onDownload,
-              onDeleteFromDrive: onDeleteFromDrive,
-              onDeleteLocal: onDeleteLocal,
+              entry: widget.entry,
+              onUpload: widget.onUpload,
+              onDownload: widget.onDownload,
+              onDeleteFromDrive: widget.onDeleteFromDrive,
+              onDeleteLocal: widget.onDeleteLocal,
             ),
             kDivider,
             _Footer(
-              entry: entry,
+              entry: widget.entry,
               statusColor: st.color,
-              busy: busy,
-              onUpload: onUpload,
-              onDownload: onDownload,
+              busy: widget.busy,
+              onUpload: widget.onUpload,
+              onDownload: widget.onDownload,
             ),
           ],
         ),
@@ -155,62 +187,251 @@ class SaveStatsView extends StatelessWidget {
 // ── Header ───────────────────────────────────────────────────────────────────
 
 class _Header extends StatelessWidget {
-  const _Header({required this.save});
+  const _Header({
+    required this.save,
+    this.players = const [],
+    this.playerIndex = 0,
+    this.hostSelected = false,
+    this.onSelectPlayer,
+  });
+
   final SaveFile save;
+  final List<PlayerStats> players;   // vacío = solitario (sin selector)
+  final int playerIndex;
+  final bool hostSelected;
+  final ValueChanged<int>? onSelectPlayer;
+
+  bool get _coop => players.length > 1;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  save.farmName,
-                  style: GoogleFonts.bodoniModa(
-                    fontSize: 26,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.text,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 4,
+          // Nombre de granja (+ COOP al lado) · corona centrada + fecha a la derecha
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _Chip(
-                      '🧑 ${save.playerName} ${save.genderLabel}',
-                      textColor: const Color(0xFFF0D060),
-                      borderColor: const Color(0xFF5A3E08),
-                      bgColor: const Color(0xFF140E04),
+                    Flexible(
+                      child: Text(
+                        save.farmName,
+                        style: GoogleFonts.bodoniModa(
+                          fontSize: 26,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.text,
+                          height: 1,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    _Chip(
-                      save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
-                      textColor: const Color(0xFF60A858),
-                      borderColor: const Color(0xFF264A20),
-                      bgColor: const Color(0xFF080E08),
-                    ),
-                    _Chip(
-                      '🏠 ${_houseLabel(save.houseUpgradeLevel, l10n)}',
-                      textColor: const Color(0xFF8898A8),
-                      borderColor: const Color(0xFF283848),
-                      bgColor: const Color(0xFF08100E),
-                    ),
+                    if (_coop) ...[
+                      const SizedBox(width: 8),
+                      const _CoopBadge(),
+                    ],
                   ],
                 ),
-              ],
+              ),
+              const SizedBox(width: 8),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (_coop && hostSelected) ...[
+                    const _HostCrown(),
+                    const SizedBox(width: 8),
+                  ],
+                  _DateBox(save: save),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Chips a todo el ancho (ya no compiten con la fecha)
+          Wrap(
+            spacing: 6,
+            runSpacing: 4,
+            children: [
+              _Chip(
+                '🧑 ${save.playerName} ${save.genderLabel}',
+                textColor: const Color(0xFFF0D060),
+                borderColor: const Color(0xFF5A3E08),
+                bgColor: const Color(0xFF140E04),
+                onTap: _coop
+                    ? () => onSelectPlayer?.call((playerIndex + 1) % players.length)
+                    : null,
+              ),
+              _Chip(
+                save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
+                textColor: const Color(0xFF60A858),
+                borderColor: const Color(0xFF264A20),
+                bgColor: const Color(0xFF080E08),
+              ),
+              _Chip(
+                '🏠 ${_houseLabel(save.houseUpgradeLevel, l10n)}',
+                textColor: const Color(0xFF8898A8),
+                borderColor: const Color(0xFF283848),
+                bgColor: const Color(0xFF08100E),
+              ),
+            ],
+          ),
+          if (_coop) ...[
+            const SizedBox(height: 10),
+            _PlayerSwitcher(
+              count: players.length,
+              index: playerIndex,
+              hostIndex: players.indexWhere((p) => p.isHost),
+              onSelect: (i) => onSelectPlayer?.call(i),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Insignia COOP junto al nombre de la granja.
+class _CoopBadge extends StatelessWidget {
+  const _CoopBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: const Color(0xFF97C459).withValues(alpha: 0.14),
+        border: Border.all(color: const Color(0xFF97C459).withValues(alpha: 0.40)),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.groups_rounded, size: 11, color: Color(0xFF97C459)),
+          const SizedBox(width: 4),
+          Text('COOP',
+              style: GoogleFonts.firaCode(
+                fontSize: 8.5,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+                color: const Color(0xFF97C459),
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+/// Corona del anfitrión, junto a la fecha. Solo visible cuando el jugador
+/// seleccionado es el anfitrión. Caja ajustada al emoji (padding mínimo).
+class _HostCrown extends StatelessWidget {
+  const _HostCrown();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0C040).withValues(alpha: 0.14),
+        border: Border.all(color: const Color(0xFFF0C040).withValues(alpha: 0.45)),
+        borderRadius: BorderRadius.circular(7),
+      ),
+      // Ajustado a ojo: la fuente de emoji del sistema no centra el glifo en
+      // su línea de texto (queda pegado abajo). -2.5px lo sube al centro real.
+      child: Transform.translate(
+        offset: const Offset(0, -2.5),
+        child: const Text(
+          '👑',
+          style: TextStyle(fontSize: 21, height: 1),
+        ),
+      ),
+    );
+  }
+}
+
+/// Selector en línea: insignia COOP + puntos de recorrido + flechas ‹ ›.
+class _PlayerSwitcher extends StatelessWidget {
+  const _PlayerSwitcher({
+    required this.count,
+    required this.index,
+    required this.hostIndex,
+    required this.onSelect,
+  });
+
+  final int count;
+  final int index;
+  final int hostIndex;
+  final ValueChanged<int> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    // Grupo compacto: ‹ · ▬ · ›  (flechas junto a los puntos)
+    return Row(
+      children: [
+        _SwitchArrow(
+          icon: Icons.chevron_left_rounded,
+          enabled: index > 0,
+          onTap: () => onSelect(index - 1),
+        ),
+        const SizedBox(width: 8),
+        for (var i = 0; i < count; i++)
+          GestureDetector(
+            onTap: () => onSelect(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 240),
+              curve: const Cubic(0.23, 1, 0.32, 1),
+              margin: const EdgeInsets.symmetric(horizontal: 2.5),
+              width: i == index ? 18 : 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: i == index
+                    ? (i == hostIndex ? const Color(0xFFE0B850) : const Color(0xFFF0D060))
+                    : Colors.white.withValues(alpha: 0.30),
+                borderRadius: BorderRadius.circular(3),
+              ),
             ),
           ),
-          const SizedBox(width: 8),
-          _DateBox(save: save),
-        ],
+        const SizedBox(width: 8),
+        _SwitchArrow(
+          icon: Icons.chevron_right_rounded,
+          enabled: index < count - 1,
+          onTap: () => onSelect(index + 1),
+        ),
+      ],
+    );
+  }
+}
+
+class _SwitchArrow extends StatelessWidget {
+  const _SwitchArrow({required this.icon, required this.enabled, required this.onTap});
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: const Color(0xFFF0B8C8)
+                .withValues(alpha: enabled ? 0.30 : 0.10),
+          ),
+        ),
+        child: Icon(icon,
+            size: 15,
+            color: const Color(0xFFF0B8C8)
+                .withValues(alpha: enabled ? 0.75 : 0.20)),
       ),
     );
   }
@@ -1116,16 +1337,18 @@ class _Chip extends StatelessWidget {
     required this.textColor,
     required this.borderColor,
     required this.bgColor,
+    this.onTap,
   });
 
   final String label;
   final Color textColor;
   final Color borderColor;
   final Color bgColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: bgColor,
@@ -1141,6 +1364,8 @@ class _Chip extends StatelessWidget {
         ),
       ),
     );
+    if (onTap == null) return chip;
+    return GestureDetector(onTap: onTap, behavior: HitTestBehavior.opaque, child: chip);
   }
 }
 

@@ -65,7 +65,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _entranceCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 660),
-    )..forward();
+    );
+    if (WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+      _entranceCtrl.value = 1.0;
+    } else {
+      _entranceCtrl.forward();
+    }
     _settingsAnim = _makeInterval(0, 320);
     _heroAnim = _makeInterval(80, 500);
     _subAnim = _makeInterval(160, 540);

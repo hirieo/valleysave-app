@@ -58,6 +58,15 @@ class MainActivity : FlutterActivity() {
                 }
             }
 
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "valleysave/game")
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "isInstalled" -> result.success(isGameInstalled())
+                    "launch"      -> result.success(launchGame())
+                    else -> result.notImplemented()
+                }
+            }
+
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "valleysave/shizuku")
             .setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -86,10 +95,37 @@ class MainActivity : FlutterActivity() {
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
+                    "deleteLocalAsRoot" -> {
+                        val name = call.argument<String>("name")
+                        if (name == null) { result.error("BAD_ARGS", null, null); return@setMethodCallHandler }
+                        Thread {
+                            val ok = runSu("rm -rf \"$SAVES_PATH/$name\"")
+                            mainHandler.post { result.success(ok) }
+                        }.start()
+                    }
                     else -> result.notImplemented()
                 }
             }
     }
+
+    /** ¿Stardew Valley está instalado? getLaunchIntentForPackage es más fiable
+     *  que canResolveActivity del plugin en Android 11+ (requiere el paquete en
+     *  <queries>, ya declarado). */
+    private fun isGameInstalled(): Boolean = try {
+        packageManager.getLaunchIntentForPackage("com.chucklefish.stardewvalley") != null
+    } catch (_: Throwable) { false }
+
+    /** Lanza Stardew directamente por su launch intent (sin selector de apps). */
+    private fun launchGame(): Boolean = try {
+        val intent = packageManager.getLaunchIntentForPackage("com.chucklefish.stardewvalley")
+        if (intent == null) {
+            false
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            true
+        }
+    } catch (_: Throwable) { false }
 
     /** Ejecuta un comando como root con timeout. Compatible con API 24+. */
     private fun runSu(cmd: String): Boolean = try {

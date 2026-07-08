@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,7 +36,7 @@ class UpdateService {
 
       final data = json.decode(res.body) as Map<String, dynamic>;
       final tag  = (data['tag_name'] as String? ?? '').replaceFirst('v', '');
-      if (tag.isEmpty || !_isNewer(tag, info.version)) return null;
+      if (tag.isEmpty || !isNewer(tag, info.version)) return null;
 
       String? windowsUrl;
       String? androidUrl;
@@ -133,14 +134,33 @@ class UpdateService {
         client.close();
       }
 
-      // Write PS1 updater: waits 2s, extracts over install dir, relaunches exe
+      // Write PS1 updater. Clave: esperar a que ESTE proceso muera (por PID, no
+      // un sleep a ciegas) para que los archivos se desbloqueen; reintentar la
+      // extracción por si el lock tarda en soltarse; loguear fallos; relanzar.
       final exe     = Platform.resolvedExecutable;
       final appDir  = File(exe).parent.path;
       final ps1Path = '${tmp.path}\\vs_update.ps1';
+      final logPath = '${tmp.path}\\vs_update.log';
       await File(ps1Path).writeAsString([
-        'Start-Sleep -Seconds 2',
-        'Expand-Archive -Force -Path "$zipPath" -DestinationPath "$appDir"',
-        'Start-Process "$exe"',
+        r"$ErrorActionPreference = 'Stop'",
+        '\$log = "$logPath"',
+        'try {',
+        '  Wait-Process -Id $pid -Timeout 30 -ErrorAction SilentlyContinue',
+        '  \$done = \$false',
+        '  for (\$i = 0; \$i -lt 15; \$i++) {',
+        '    try {',
+        '      Expand-Archive -Force -Path "$zipPath" -DestinationPath "$appDir"',
+        '      \$done = \$true; break',
+        '    } catch { Start-Sleep -Milliseconds 700 }',
+        '  }',
+        '  if (-not \$done) {',
+        '    "No se pudo extraer la actualizacion: archivos aun bloqueados." | Out-File -FilePath \$log -Encoding utf8',
+        '    exit 1',
+        '  }',
+        '  Start-Process "$exe"',
+        '} catch {',
+        '  \$_ | Out-File -FilePath \$log -Encoding utf8',
+        '}',
       ].join('\r\n'));
 
       await Process.start(
@@ -157,7 +177,8 @@ class UpdateService {
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
-  static bool _isNewer(String latest, String current) {
+  @visibleForTesting
+  static bool isNewer(String latest, String current) {
     int part(String v, int i) {
       final parts = v.split('.');
       return i < parts.length ? (int.tryParse(parts[i]) ?? 0) : 0;

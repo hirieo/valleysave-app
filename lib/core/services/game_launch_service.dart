@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:android_intent_plus/android_intent.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameLaunchService {
   GameLaunchService._();
   static final instance = GameLaunchService._();
 
-  static const _androidPackage = 'com.chucklefish.stardewvalley';
+  static const _native = MethodChannel('valleysave/game');
   static const _prefKey = 'stardew_exe_path';
 
   static const _knownPaths = [
@@ -27,12 +27,11 @@ class GameLaunchService {
 
   Future<void> init() async {
     if (Platform.isAndroid) {
-      const intent = AndroidIntent(
-        action: 'android.intent.action.MAIN',
-        category: 'android.intent.category.LAUNCHER',
-        package: _androidPackage,
-      );
-      _androidInstalled = await intent.canResolveActivity() ?? false;
+      try {
+        _androidInstalled = (await _native.invokeMethod<bool>('isInstalled')) ?? false;
+      } catch (_) {
+        _androidInstalled = false;
+      }
     } else if (Platform.isWindows) {
       final prefs = await SharedPreferences.getInstance();
       final saved = prefs.getString(_prefKey);
@@ -52,11 +51,8 @@ class GameLaunchService {
 
   Future<void> launch() async {
     if (Platform.isAndroid) {
-      await const AndroidIntent(
-        action: 'android.intent.action.MAIN',
-        category: 'android.intent.category.LAUNCHER',
-        package: _androidPackage,
-      ).launch();
+      final ok = (await _native.invokeMethod<bool>('launch')) ?? false;
+      if (!ok) throw StateError('No se pudo lanzar Stardew Valley');
     } else if (Platform.isWindows) {
       final path = _windowsExePath;
       if (path == null) throw StateError('No exe path configured');

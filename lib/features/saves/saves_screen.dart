@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
@@ -13,25 +12,25 @@ import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/models/season_state.dart';
 import '../../core/services/auth_service.dart';
-import '../../core/services/bridge_service.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
-import '../../core/services/stardew_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
-import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
 import 'save_card.dart';
+import 'widgets/latest_badge.dart';
+import 'widgets/saves_top_bar.dart';
+import 'widgets/seasonal_loader.dart';
+import 'widgets/stagger_item.dart';
 
 /// Vía de acceso a los saves locales en Android.
-/// `chooser` = aún sin elegir · `shizuku` = automático (ADB, única vía fiable en
-/// Android 13+) · `bridge` = puente manual (solo útil en Android 11-12).
-enum AndroidMode { chooser, shizuku, bridge, root }
+/// `chooser` = aún sin elegir · `shizuku` = ADB (Shizuku) · `root` = su directo.
+enum AndroidMode { chooser, shizuku, root }
 
 class SavesScreen extends StatefulWidget {
   const SavesScreen({super.key, this.drive});
@@ -53,7 +52,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // ── Modo de acceso en Android ──
   static const _modePrefKey = 'android_access_mode';
   AndroidMode? _mode; // null = aún leyendo la preferencia
-  String? _bridgeInPath; // ruta de bridge_in (modo puente), para mostrar
   // Estado de Shizuku (solo submodo shizuku). null = comprobando.
   bool? _shizukuRunning;
   bool _shizukuGranted = false;
@@ -80,10 +78,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (_mode == AndroidMode.shizuku && !_shizukuReady) {
       _checkShizuku();
     }
-    // Puente: el usuario pudo copiar partidas con Archivos mientras tanto.
-    if (_mode == AndroidMode.bridge) {
-      _load(silent: true);
-    }
   }
 
   Future<void> _init() async {
@@ -91,7 +85,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
 
     if (!Platform.isAndroid) {
-      _mode = AndroidMode.bridge; // no aplica; evita ramas de gate en desktop
       await _load();
       return;
     }
@@ -99,21 +92,27 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_modePrefKey);
 
-    // Root: solo verificar si el usuario lo eligió antes (sin popup inesperado).
+    // Primera vez sin pref → chooser. El usuario elige Root/Shizuku/Manual.
+    // Evita un popup de Magisk inesperado antes de que el usuario haya elegido nada.
+    if (saved == null) {
+      if (!mounted) return;
+      setState(() { _mode = AndroidMode.chooser; _loading = false; });
+      return;
+    }
+
+    // Root: confiar en el pref guardado, ir directo a cargar.
+    // pullSavesAsRoot() es la ÚNICA llamada a su — Magisk la aprueba silenciosamente
+    // si el grant es permanente. Si root fue revocado, la lista sale vacía y el
+    // usuario puede cambiar modo desde Ajustes.
     if (saved == 'root') {
-      if (await ShizukuService.instance.checkRoot()) {
-        if (!mounted) return;
-        setState(() => _mode = AndroidMode.root);
-        await _load();
-        return;
-      }
-      // Root revocado → limpiar y caer al chooser.
-      await prefs.remove(_modePrefKey);
+      if (!mounted) return;
+      setState(() => _mode = AndroidMode.root);
+      await _load();
+      return;
     }
 
     final mode = switch (saved) {
       'shizuku' => AndroidMode.shizuku,
-      'bridge'  => AndroidMode.bridge,
       _         => AndroidMode.shizuku,
     };
     if (!mounted) return;
@@ -149,21 +148,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     switch (mode) {
       case AndroidMode.shizuku:
         await _checkShizuku();
-      case AndroidMode.bridge:
-        await _prepareBridge();
-        await _load();
       case AndroidMode.chooser:
         if (mounted) setState(() => _loading = false);
       case AndroidMode.root:
-        await _load(); // acceso directo ya verificado en _init
+        await _load();
     }
-  }
-
-  /// Crea las carpetas del puente y cachea la ruta de `bridge_in` para mostrarla.
-  Future<void> _prepareBridge() async {
-    final inPath = await BridgeService.instance.inPath();
-    await BridgeService.instance.outDir(); // asegura que existe
-    if (mounted) setState(() => _bridgeInPath = inPath);
   }
 
   /// Vuelve al selector de vía (botón "cambiar método").
@@ -241,10 +230,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Escanea los saves locales según plataforma y modo.
-  /// - Desktop: carpeta nativa de Stardew.
-  /// - Android · Shizuku: copia-puente del shell ADB.
-  /// - Android · Puente: carpeta `bridge_in` que el usuario rellena con Archivos.
   Future<List<SaveFile>> _scanLocal() async {
     if (!Platform.isAndroid) return SaveService().scan();
     switch (_mode) {
@@ -257,9 +242,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         final bridge = await ShizukuService.instance.pullSaves();
         if (bridge == null) return [];
         return SaveService().scanDir(bridge);
-      case AndroidMode.bridge:
-        final dir = await BridgeService.instance.inDir();
-        return SaveService().scanDir(dir.path);
       default:
         return [];
     }
@@ -332,6 +314,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (!mounted) return;
     if (result == 'disconnect') {
       _disconnectDrive();
+    } else if (result == 'change_mode') {
+      _showChangeModeDialog();
     } else {
       await GameLaunchService.instance.init();
       if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
@@ -344,6 +328,96 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     } catch (_) {
       if (mounted) _snack(AppLocalizations.of(context)!.snackLaunchError);
     }
+  }
+
+  void _showChangeModeDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    final accent = _seasonAccent;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Color.alphaBlend(
+            accent.withValues(alpha: 0.06), const Color(0xFF0A0A0B)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: accent.withValues(alpha: 0.22)),
+        ),
+        title: Text(l10n.bridgeChangeMode,
+            style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _changeModeOption(ctx, l10n.chooserRootBadge, l10n.chooserRootTitle,
+                AndroidMode.root, accent),
+            const SizedBox(height: 8),
+            _changeModeOption(ctx, l10n.hiwShizukuBadge, l10n.hiwShizukuTitle,
+                AndroidMode.shizuku, accent),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel,
+                style: GoogleFonts.firaCode(
+                    color: Colors.white.withValues(alpha: 0.6))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _changeModeOption(
+      BuildContext ctx, String badge, String title, AndroidMode mode, Color accent) {
+    final isActive = _mode == mode;
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(ctx);
+        if (!isActive) _chooseMode(mode);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isActive
+              ? accent.withValues(alpha: 0.16)
+              : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isActive
+                ? accent.withValues(alpha: 0.55)
+                : Colors.white.withValues(alpha: 0.10),
+            width: isActive ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(badge,
+                      style: GoogleFonts.firaCode(
+                          fontSize: 8.5,
+                          letterSpacing: 1.1,
+                          fontWeight: FontWeight.w700,
+                          color: isActive ? accent : AppColors.textFaint)),
+                  const SizedBox(height: 2),
+                  Text(title,
+                      style: GoogleFonts.firaCode(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: isActive ? accent : AppColors.text)),
+                ],
+              ),
+            ),
+            if (isActive)
+              Icon(Icons.check_circle_rounded, size: 18, color: accent),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _disconnectDrive() async {
@@ -368,7 +442,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(name));
     try {
-      await widget.drive!.uploadSave(local.folderPath, name);
+      await widget.drive!.uploadSave(local.folderPath, name, players: local.players);
       await _load(silent: true);
     } catch (e) {
       if (mounted) _snack(l10n.snackUploadError(e.toString()));
@@ -414,11 +488,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
-      } else if (Platform.isAndroid && _mode == AndroidMode.bridge) {
-        // Puente: descargar a bridge_out → el usuario la copia con Archivos.
-        final out = await BridgeService.instance.prepareOut(name);
-        await widget.drive!.downloadSave(folderId, out);
-        if (mounted) await _showBridgeCopyDialog(name, out);
       } else {
         final savesDir = SaveService.savesDirectory;
         if (savesDir == null) {
@@ -473,11 +542,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(name));
     try {
-      final localSave = entry.local;
-      if (localSave == null) return;
-      final dir = Directory(localSave.folderPath);
-      if (await dir.exists()) {
-        await dir.delete(recursive: true);
+      if (Platform.isAndroid && _mode == AndroidMode.root) {
+        final ok = await ShizukuService.instance.deleteLocalAsRoot(name);
+        if (!ok && mounted) _snack(l10n.snackDeleteError('su rm failed'));
+      } else {
+        final localSave = entry.local;
+        if (localSave == null) return;
+        final dir = Directory(localSave.folderPath);
+        if (await dir.exists()) await dir.delete(recursive: true);
       }
       await _load(silent: true);
       if (mounted) _snack(l10n.snackDeletedLocal(farmName));
@@ -605,228 +677,233 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// Diálogo tras descargar en modo puente: indica al usuario que copie la
-  /// partida de `bridge_out` a la carpeta del juego con su app de Archivos.
-  Future<void> _showBridgeCopyDialog(String name, String fromPath) {
-    final l10n = AppLocalizations.of(context)!;
-    const dest = gameSavesPath;
-    return showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF12180F),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
-        ),
-        title: Text(l10n.dlgBridgeCopyTitle,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.dlgBridgeCopyDesc(name),
-              style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.82)),
-            ),
-            const SizedBox(height: 14),
-            _dialogPath(l10n.labelFrom, fromPath),
-            const SizedBox(height: 8),
-            _dialogPath(l10n.labelTo, dest),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Clipboard.setData(const ClipboardData(text: dest));
-              _snack(l10n.snackDestCopied);
-            },
-            child: Text(l10n.dlgCopyDest,
-                style: GoogleFonts.firaCode(
-                    color: AppColors.accent, fontWeight: FontWeight.w700)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(l10n.dlgGotIt,
-                style: GoogleFonts.firaCode(
-                    color: Colors.white.withValues(alpha: 0.6))),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _dialogPath(String label, String path) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: _seasonAccent.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _seasonAccent.withValues(alpha: 0.25)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label.toUpperCase(),
-              style: GoogleFonts.firaCode(
-                  fontSize: 8, letterSpacing: 0.8, color: AppColors.textFaint)),
-          const SizedBox(height: 2),
-          Text(path,
-              style:
-                  GoogleFonts.firaCode(fontSize: 9.5, color: AppColors.textMuted)),
-        ],
-      ),
-    );
-  }
-
   Future<bool?> _confirmDownload(SaveEntry entry) {
     final l10n = AppLocalizations.of(context)!;
-    final drive = entry.drive!;
-    final local = entry.local;
+    final driveBase = entry.drive!;
+    final localBase = entry.local;
+    final playerBase = localBase ?? driveBase;
+    final coop = playerBase.hasMultiplePlayers;
+    var playerIndex = 0;
     return showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        scrollable: true,
-        backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.15), const Color(0xFF080A08),
-        ).withValues(alpha: 0.90),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
-        ),
-        title: Text(l10n.dlgDownloadTitle,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (local == null)
-              Text(
-                l10n.dlgDownloadNewDesc(
-                  drive.farmName,
-                  drive.dayOfMonth,
-                  drive.playtimeLabel,
-                ),
-                style: GoogleFonts.firaCode(
-                    fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
-              )
-            else
-              _overwritePreview(
-                l10n: l10n,
-                intro: l10n.dlgDownloadOverwrite(drive.farmName),
-                current: local,
-                result: drive,
-                currentLabel: l10n.previewLocalLabel,
-                resultLabel: l10n.previewFromDrive,
-                resultColor: const Color(0xFF5AA8E0),
-              ),
-            if (local != null &&
-                drive.gameVersion.isNotEmpty &&
-                local.gameVersion.isNotEmpty &&
-                drive.gameVersion != local.gameVersion) ...[
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE09020).withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                      color: const Color(0xFFE09020).withValues(alpha: 0.40)),
-                ),
-                child: Text(
-                  l10n.versionMismatch(
-                    local.gameVersion,
-                    drive.gameVersion,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) {
+          final idx = coop ? playerIndex.clamp(0, playerBase.players.length - 1) : 0;
+          final drive = coop ? driveBase.forPlayer(playerBase.players[idx]) : driveBase;
+          final local = localBase == null
+              ? null
+              : (coop ? localBase.forPlayer(playerBase.players[idx]) : localBase);
+          final hostIndex = playerBase.players.indexWhere((p) => p.isHost);
+          final switcher = coop
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PlayerNameLabel(
+                      name: drive.playerName,
+                      gender: drive.genderLabel,
+                      isHost: idx == hostIndex,
+                    ),
+                    const SizedBox(height: 6),
+                    PlayerSwitcher(
+                      count: playerBase.players.length,
+                      index: idx,
+                      hostIndex: hostIndex,
+                      onSelect: (i) => setDialogState(() => playerIndex = i),
+                    ),
+                  ],
+                )
+              : null;
+          return AlertDialog(
+            scrollable: true,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
+            ),
+            title: Text(l10n.dlgDownloadTitle,
+                style: GoogleFonts.bodoniModa(
+                    color: AppColors.text,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w700)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (local == null) ...[
+                  Text(
+                    l10n.dlgDownloadNewDesc(
+                      drive.farmName,
+                      drive.dayOfMonth,
+                      drive.playtimeLabel,
+                    ),
+                    style: GoogleFonts.firaCode(
+                        fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
                   ),
-                  style: GoogleFonts.firaCode(
-                      fontSize: 10,
-                      height: 1.5,
-                      color: const Color(0xFFE09020).withValues(alpha: 0.90)),
-                ),
+                  if (switcher != null) ...[
+                    const SizedBox(height: 12),
+                    Center(child: switcher),
+                  ],
+                ] else
+                  _overwritePreview(
+                    l10n: l10n,
+                    intro: l10n.dlgDownloadOverwrite(drive.farmName),
+                    current: local,
+                    result: drive,
+                    currentLabel: l10n.previewLocalLabel,
+                    resultLabel: l10n.previewFromDrive,
+                    currentIcon: _localIcon,
+                    resultIcon: '☁️',
+                    resultColor: const Color(0xFF5AA8E0),
+                    afterIntro: switcher,
+                  ),
+                if (local != null &&
+                    drive.gameVersion.isNotEmpty &&
+                    local.gameVersion.isNotEmpty &&
+                    drive.gameVersion != local.gameVersion) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE09020).withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                          color: const Color(0xFFE09020).withValues(alpha: 0.40)),
+                    ),
+                    child: Text(
+                      l10n.versionMismatch(
+                        local.gameVersion,
+                        drive.gameVersion,
+                      ),
+                      style: GoogleFonts.firaCode(
+                          fontSize: 10,
+                          height: 1.5,
+                          color: const Color(0xFFE09020).withValues(alpha: 0.90)),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              const SizedBox(width: 8),
+              ActionBtn(
+                label: l10n.dlgDownloadButton,
+                color: const Color(0xFF5AA8E0),
+                icon: Icons.cloud_download_outlined,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
               ),
             ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel,
-                style: GoogleFonts.firaCode(color: Colors.white.withValues(alpha: 0.6))),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.dlgDownloadButton,
-                style: GoogleFonts.firaCode(
-                    color: const Color(0xFF5AA8E0), fontWeight: FontWeight.w700)),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
   Future<bool?> _confirmUpload(SaveEntry entry) {
     final l10n = AppLocalizations.of(context)!;
-    final local = entry.local!;
-    final drive = entry.drive;
+    final localBase = entry.local!;
+    final driveBase = entry.drive;
+    final coop = localBase.hasMultiplePlayers;
+    var playerIndex = 0;
     return showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        scrollable: true,
-        backgroundColor: Color.alphaBlend(
-            _seasonAccent.withValues(alpha: 0.15), const Color(0xFF080A08),
-        ).withValues(alpha: 0.90),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
-        ),
-        title: Text(l10n.dlgUploadTitle,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
-        content: drive == null
-            ? Text(
-                l10n.dlgUploadNewDesc(
-                  local.farmName,
-                  local.dayOfMonth,
-                  local.playtimeLabel,
-                ),
-                style: GoogleFonts.firaCode(
-                    fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
-              )
-            : _overwritePreview(
-                l10n: l10n,
-                intro: l10n.dlgUploadOverwriteDrive(local.farmName),
-                current: drive,
-                result: local,
-                currentLabel: l10n.previewDriveLabel,
-                resultLabel: l10n.previewFromDevice,
-                resultColor: const Color(0xFFE0B850),
-              ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel,
-                style: GoogleFonts.firaCode(
-                    color: Colors.white.withValues(alpha: 0.6))),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.dlgUploadButton,
-                style: GoogleFonts.firaCode(
-                    color: const Color(0xFFE0B850),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) {
+          final idx = coop ? playerIndex.clamp(0, localBase.players.length - 1) : 0;
+          final local = coop ? localBase.forPlayer(localBase.players[idx]) : localBase;
+          final drive = driveBase == null
+              ? null
+              : (coop ? driveBase.forPlayer(localBase.players[idx]) : driveBase);
+          final hostIndex = localBase.players.indexWhere((p) => p.isHost);
+          final switcher = coop
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PlayerNameLabel(
+                      name: local.playerName,
+                      gender: local.genderLabel,
+                      isHost: idx == hostIndex,
+                    ),
+                    const SizedBox(height: 6),
+                    PlayerSwitcher(
+                      count: localBase.players.length,
+                      index: idx,
+                      hostIndex: hostIndex,
+                      onSelect: (i) => setDialogState(() => playerIndex = i),
+                    ),
+                  ],
+                )
+              : null;
+          return AlertDialog(
+            scrollable: true,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide(color: _seasonAccent.withValues(alpha: 0.25)),
+            ),
+            title: Text(l10n.dlgUploadTitle,
+                style: GoogleFonts.bodoniModa(
+                    color: AppColors.text,
+                    fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w700)),
-          ),
-        ],
+            content: drive == null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.dlgUploadNewDesc(
+                          local.farmName,
+                          local.dayOfMonth,
+                          local.playtimeLabel,
+                        ),
+                        style: GoogleFonts.firaCode(
+                            fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+                      ),
+                      if (switcher != null) ...[
+                        const SizedBox(height: 12),
+                        Center(child: switcher),
+                      ],
+                    ],
+                  )
+                : _overwritePreview(
+                    l10n: l10n,
+                    intro: l10n.dlgUploadOverwriteDrive(local.farmName),
+                    current: drive,
+                    result: local,
+                    currentLabel: l10n.previewDriveLabel,
+                    resultLabel: l10n.previewFromDevice,
+                    currentIcon: '☁️',
+                    resultIcon: _localIcon,
+                    resultColor: const Color(0xFFE0B850),
+                    afterIntro: switcher,
+                  ),
+            actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              const SizedBox(width: 8),
+              ActionBtn(
+                label: l10n.dlgUploadButton,
+                color: const Color(0xFFE0B850),
+                icon: Icons.cloud_upload_outlined,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -839,7 +916,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     required SaveFile result,
     required String currentLabel,
     required String resultLabel,
+    required String currentIcon,
+    required String resultIcon,
     required Color resultColor,
+    Widget? afterIntro,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -852,6 +932,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               height: 1.5,
               color: Colors.white.withValues(alpha: 0.80)),
         ),
+        if (afterIntro != null) ...[
+          const SizedBox(height: 12),
+          Center(child: afterIntro),
+        ],
         const SizedBox(height: 14),
         IntrinsicHeight(
           child: Row(
@@ -859,7 +943,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             children: [
               Expanded(
                 child: _previewCol(l10n, currentLabel, current,
-                    other: result, accent: Colors.white.withValues(alpha: 0.40)),
+                    other: result,
+                    accent: Colors.white.withValues(alpha: 0.40),
+                    icon: currentIcon),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -868,7 +954,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               Expanded(
                 child: _previewCol(l10n, resultLabel, result,
-                    other: current, accent: resultColor),
+                    other: current, accent: resultColor, icon: resultIcon),
               ),
             ],
           ),
@@ -880,8 +966,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Color get _seasonAccent =>
       SeasonData.data[SeasonController.instance.season.value]!.accentColor;
 
+  String get _localIcon => (Platform.isAndroid || Platform.isIOS) ? '📱' : '💻';
+
   Widget _previewCol(AppLocalizations l10n, String header, SaveFile s,
-      {required SaveFile other, required Color accent}) {
+      {required SaveFile other, required Color accent, required String icon}) {
     final hl = _seasonAccent;
     String mine(SaveFile x) =>
         x.deepestMineLevel == 0 ? l10n.previewColUnexplored : 'Nv. ${x.deepestMineLevel}';
@@ -893,19 +981,25 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFF151512),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: accent.withValues(alpha: 0.60), width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(header,
-              style: GoogleFonts.firaCode(
-                  fontSize: 8,
-                  letterSpacing: 0.8,
-                  fontWeight: FontWeight.w700,
-                  color: accent)),
+          Row(
+            children: [
+              Text(icon, style: const TextStyle(fontSize: 11)),
+              const SizedBox(width: 5),
+              Text(header,
+                  style: GoogleFonts.firaCode(
+                      fontSize: 8,
+                      letterSpacing: 0.8,
+                      fontWeight: FontWeight.w700,
+                      color: accent)),
+            ],
+          ),
           const SizedBox(height: 6),
           _previewRow(l10n.previewColDayYear, l10n.statDayYear(s.dayOfMonth, s.year),
               changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,
@@ -1089,7 +1183,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           SafeArea(
             child: Column(
               children: [
-                _TopBar(
+                SavesTopBar(
                   onBack: () => Navigator.pop(context),
                   onSettings: _openSettings,
                   onRefresh: _refresh,
@@ -1131,7 +1225,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         itemCount: _entries.length,
         separatorBuilder: (context, index) => const SizedBox(height: 14),
-        itemBuilder: (_, i) => _StaggerItem(
+        itemBuilder: (_, i) => StaggerItem(
           key: ValueKey('${_staggerVersion}_$i'),
           index: i,
           child: Align(
@@ -1141,7 +1235,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (i == 0) _LatestBadge(color: _entries[0].primary.seasonColor),
+                  if (i == 0) LatestBadge(color: _entries[0].primary.seasonColor),
                   SaveCard(
                     entry: _entries[i],
                     busy: _busy.contains(_entries[i].folderName),
@@ -1169,7 +1263,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _seasonalLoader() => ValueListenableBuilder<SeasonState>(
         valueListenable: SeasonController.instance.season,
-        builder: (_, season, _) => _SeasonalLoader(
+        builder: (_, season, _) => SeasonalLoader(
           key: ValueKey(season),
           season: season,
         ),
@@ -1177,49 +1271,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _buildEmpty() {
     final l10n = AppLocalizations.of(context)!;
-    // Modo puente: explicar cómo traer partidas a bridge_in con Archivos.
-    if (Platform.isAndroid && _mode == AndroidMode.bridge) {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(28, 20, 28, 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
-            const Text('📂', style: TextStyle(fontSize: 40)),
-            const SizedBox(height: 14),
-            Text(
-              l10n.bridgeTitle,
-              style: GoogleFonts.bodoniModa(
-                fontSize: 20,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700,
-                color: Colors.white.withValues(alpha: 0.92),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              l10n.bridgeDesc,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.firaCode(
-                fontSize: 11.5,
-                height: 1.55,
-                color: Colors.white.withValues(alpha: 0.78),
-              ),
-            ),
-            const SizedBox(height: 18),
-            _pathBox(l10n.pathLabelFromStardew, gameSavesPath),
-            const SizedBox(height: 8),
-            _pathBox(l10n.pathLabelToValleySave, _bridgeInPath ?? '…'),
-            const SizedBox(height: 22),
-            _gateButton(l10n.bridgeRefresh, () => _load(), filled: true),
-            const SizedBox(height: 10),
-            _gateButton(l10n.bridgeChangeMode, _resetMode, filled: false),
-            const SizedBox(height: 16),
-            _howItWorksLink(),
-          ],
-        ),
-      );
-    }
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1244,7 +1295,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// Selector de vía: Shizuku (recomendado) / Puente manual.
+  /// Selector de vía: Root / Shizuku.
   Widget _buildModeChooser() {
     final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
@@ -1289,14 +1340,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             title: l10n.hiwShizukuTitle,
             desc: l10n.chooserShizukuDesc,
             onTap: () => _chooseMode(AndroidMode.shizuku),
-            recommended: false,
-          ),
-          const SizedBox(height: 9),
-          _modeCard(
-            badge: l10n.chooserManualBadge,
-            title: l10n.hiwBridgeTitle,
-            desc: l10n.chooserBridgeDesc,
-            onTap: () => _chooseMode(AndroidMode.bridge),
             recommended: false,
           ),
           const SizedBox(height: 18),
@@ -1404,46 +1447,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _pathBox(String label, String path) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-      decoration: BoxDecoration(
-        color: _seasonAccent.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _seasonAccent.withValues(alpha: 0.25)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label.toUpperCase(),
-                    style: GoogleFonts.firaCode(
-                        fontSize: 8,
-                        letterSpacing: 0.8,
-                        color: AppColors.textFaint)),
-                const SizedBox(height: 3),
-                Text(path,
-                    style: GoogleFonts.firaCode(
-                        fontSize: 9.5, color: AppColors.textMuted)),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: path));
-              _snack(AppLocalizations.of(context)!.snackPathCopied);
-            },
-            child: Icon(Icons.copy_rounded,
-                size: 15, color: _seasonAccent.withValues(alpha: 0.35)),
-          ),
-        ],
       ),
     );
   }
@@ -1890,426 +1893,5 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ),
       ),
     );
-  }
-}
-
-// ── Badge última partida ────────────────────────────────────────────────────────
-
-class _LatestBadge extends StatelessWidget {
-  const _LatestBadge({required this.color});
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
-              border: Border.all(color: color.withValues(alpha: 0.35)),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.latestBadge,
-              style: GoogleFonts.firaCode(
-                fontSize: 8,
-                letterSpacing: 1.2,
-                fontWeight: FontWeight.w500,
-                color: color.withValues(alpha: 0.85),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Barra superior ─────────────────────────────────────────────────────────────
-
-class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.onBack,
-    required this.onSettings,
-    required this.onRefresh,
-    required this.refreshing,
-    required this.canLaunchGame,
-    required this.onLaunch,
-  });
-
-  final VoidCallback onBack;
-  final VoidCallback onSettings;
-  final VoidCallback onRefresh;
-  final bool refreshing;
-  final bool canLaunchGame;
-  final VoidCallback onLaunch;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 492),
-          child: Row(
-            children: [
-              _IconCircle(
-                icon: Icons.arrow_back_rounded,
-                onTap: onBack,
-              ),
-              const Spacer(),
-              Text(
-                l10n.mySaves,
-                style: GoogleFonts.bodoniModa(
-                  fontSize: 24,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.92),
-                ),
-              ),
-              const Spacer(),
-              if (canLaunchGame) ...[
-                ValueListenableBuilder<SeasonState>(
-                  valueListenable: SeasonController.instance.season,
-                  builder: (_, season, _) {
-                    final accent = SeasonData.data[season]!.accentColor;
-                    return _IconCircle(
-                      icon: Icons.play_arrow_rounded,
-                      onTap: onLaunch,
-                      color: accent,
-                      tooltip: l10n.tooltipLaunchGame,
-                    );
-                  },
-                ),
-                const SizedBox(width: 8),
-              ],
-              _IconCircle(
-                icon: Icons.refresh_rounded,
-                onTap: onRefresh,
-                spinning: refreshing,
-              ),
-              const SizedBox(width: 8),
-              _IconCircle(icon: Icons.settings_rounded, onTap: onSettings),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-typedef _IconCircle = IconCircleButton;
-
-
-class _StaggerItem extends StatefulWidget {
-  const _StaggerItem({super.key, required this.index, required this.child});
-  final int index;
-  final Widget child;
-
-  @override
-  State<_StaggerItem> createState() => _StaggerItemState();
-}
-
-class _StaggerItemState extends State<_StaggerItem>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<double> _opacity;
-  late final Animation<Offset> _slide;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    const curve = Cubic(0.23, 1, 0.32, 1);
-    _opacity = CurvedAnimation(parent: _ctrl, curve: curve);
-    _slide = Tween<Offset>(begin: const Offset(0, 0.04), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _ctrl, curve: curve));
-    Future.delayed(Duration(milliseconds: widget.index * 60), () {
-      if (mounted) _ctrl.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => FadeTransition(
-        opacity: _opacity,
-        child: SlideTransition(position: _slide, child: widget.child),
-      );
-}
-
-// ── Loader estacional ────────────────────────────────────────────────────────
-
-class _SeasonalLoader extends StatefulWidget {
-  const _SeasonalLoader({super.key, required this.season});
-  final SeasonState season;
-
-  @override
-  State<_SeasonalLoader> createState() => _SeasonalLoaderState();
-}
-
-class _SeasonalLoaderState extends State<_SeasonalLoader>
-    with TickerProviderStateMixin {
-  late final List<AnimationController> _ctrls;
-
-  int get _count {
-    switch (widget.season) {
-      case SeasonState.initial:
-        return 1;
-      case SeasonState.spring:
-      case SeasonState.fall:
-        return 3;
-      case SeasonState.summer:
-      case SeasonState.winter:
-        return 5;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrls = List.generate(_count, (i) {
-      final c = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1400),
-      );
-      Future.delayed(Duration(milliseconds: i * 200), () {
-        if (mounted) c.repeat();
-      });
-      return c;
-    });
-  }
-
-  @override
-  void dispose() {
-    for (final c in _ctrls) { c.dispose(); }
-    super.dispose();
-  }
-
-  Color get _accent => SeasonData.data[widget.season]!.accentColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 60,
-            height: 52,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: _particles(),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.loaderLoading,
-            style: GoogleFonts.firaCode(
-              fontSize: 8,
-              letterSpacing: .14,
-              color: _accent.withValues(alpha: .80),
-            ),
-          ),
-          const SizedBox(height: 3),
-          Text(
-            l10n.loaderConnecting,
-            style: GoogleFonts.firaCode(
-              fontSize: 7,
-              letterSpacing: .05,
-              color: Colors.white.withValues(alpha: .28),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _particles() {
-    switch (widget.season) {
-      case SeasonState.initial:
-        return [_star()];
-      case SeasonState.spring:
-        return _petals();
-      case SeasonState.summer:
-        return _fireflies();
-      case SeasonState.fall:
-        return _leaves();
-      case SeasonState.winter:
-        return _snow();
-    }
-  }
-
-  // ── Inicial: estrella pulsante ──
-  Widget _star() => Center(
-        child: AnimatedBuilder(
-          animation: _ctrls[0],
-          builder: (_, _) {
-            final v = _ctrls[0].value;
-            final t = Curves.easeInOut
-                .transform(v <= 0.5 ? v * 2 : (1 - v) * 2);
-            return Opacity(
-              opacity: 0.3 + 0.7 * t,
-              child: Transform.scale(
-                scale: 0.7 + 0.45 * t,
-                child: Text(
-                  '✦',
-                  style: TextStyle(fontSize: 22, color: _accent),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-
-  // ── Primavera: pétalos cayendo ──
-  List<Widget> _petals() {
-    const xs = [8.0, 24.0, 42.0];
-    return List.generate(3, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final t = _ctrls[i].value;
-            final op = (t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 1.0)
-                .clamp(0.0, 1.0);
-            return Positioned(
-              left: xs[i],
-              top: t * 52,
-              child: Opacity(
-                opacity: op,
-                child: Transform.rotate(
-                  angle: t * math.pi,
-                  child: Container(
-                    width: 7,
-                    height: 7,
-                    decoration: BoxDecoration(
-                      color: _accent.withValues(alpha: .85),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(7),
-                        bottomRight: Radius.circular(7),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
-  }
-
-  // ── Verano: luciérnagas parpadeando ──
-  List<Widget> _fireflies() {
-    const positions = [
-      Offset(6, 18), Offset(26, 6), Offset(44, 22),
-      Offset(16, 36), Offset(38, 32),
-    ];
-    return List.generate(5, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final v = _ctrls[i].value;
-            final t = Curves.easeInOut
-                .transform(v <= 0.5 ? v * 2 : (1 - v) * 2);
-            return Positioned(
-              left: positions[i].dx,
-              top: positions[i].dy,
-              child: Opacity(
-                opacity: 0.1 + 0.9 * t,
-                child: Transform.scale(
-                  scale: 0.5 + 0.5 * t,
-                  child: Container(
-                    width: 5,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _accent,
-                      boxShadow: [
-                        BoxShadow(
-                          color: _accent.withValues(alpha: t * 0.6),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
-  }
-
-  // ── Otoño: hojas cayendo con rotación ──
-  List<Widget> _leaves() {
-    const xs = [8.0, 24.0, 40.0];
-    return List.generate(3, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final t = _ctrls[i].value;
-            final op = (t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 0.9)
-                .clamp(0.0, 1.0);
-            final drift = math.sin(t * math.pi * 2) * 5;
-            return Positioned(
-              left: xs[i] + drift,
-              top: t * 52,
-              child: Opacity(
-                opacity: op,
-                child: Transform.rotate(
-                  angle: t * math.pi * 1.5,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: _accent.withValues(alpha: .85),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
-  }
-
-  // ── Invierno: copos de nieve ──
-  List<Widget> _snow() {
-    const xs = [6.0, 18.0, 32.0, 46.0, 13.0];
-    return List.generate(5, (i) => AnimatedBuilder(
-          animation: _ctrls[i],
-          builder: (_, _) {
-            final t = _ctrls[i].value;
-            final op = (t < 0.1 ? t / 0.1 : t > 0.9 ? (1 - t) / 0.1 : 0.8)
-                .clamp(0.0, 1.0);
-            final drift = math.sin(t * math.pi * 2) * 3;
-            return Positioned(
-              left: xs[i] + drift,
-              top: t * 52,
-              child: Opacity(
-                opacity: op,
-                child: Container(
-                  width: 4,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _accent.withValues(alpha: .90),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
   }
 }

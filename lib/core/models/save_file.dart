@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'player_stats.dart';
 import 'season_state.dart';
 
 enum WeatherType { sunny, rainy, stormy, snowy, windy }
@@ -36,6 +37,9 @@ class SaveFile {
     required this.stamina,
     required this.health,
     this.gameVersion = '',
+    this.isCoop = false,
+    this.separateWallets = false,
+    this.players = const [],
   });
 
   final String folderPath;
@@ -67,6 +71,55 @@ class SaveFile {
   final int stamina;         // estamina actual al guardar
   final int health;          // vida actual al guardar
   final String gameVersion;  // e.g. "1.6.8"
+
+  // ── Multijugador ─────────────────────────────────────────────────────
+  final bool isCoop;           // farm con capacidad coop (slotCanHost=true)
+  final bool separateWallets;  // cada jugador su dinero (useSeparateWallets)
+  /// Todos los jugadores reales (anfitrión primero). Vacío si solo tenemos el
+  /// SaveGameInfo (no se ha parseado el archivo grande ni hay resumen Drive).
+  final List<PlayerStats> players;
+
+  /// ¿Tenemos datos de más de un jugador para mostrar?
+  bool get hasMultiplePlayers => players.length > 1;
+
+  /// Devuelve una copia con los campos POR-JUGADOR reemplazados por los de [p],
+  /// manteniendo los de la granja (nombre, estación, día, clima, mascota).
+  /// Permite reutilizar las sub-widgets existentes sin reescribirlas: se les
+  /// pasa `save.forPlayer(jugadorSeleccionado)`.
+  SaveFile forPlayer(PlayerStats p) => SaveFile(
+        folderPath: folderPath,
+        folderName: folderName,
+        playerName: p.name,
+        farmName: farmName,
+        dayOfMonth: dayOfMonth,
+        currentSeason: currentSeason,
+        year: year,
+        currentMoney: p.currentMoney,
+        totalMoneyEarned: p.totalMoneyEarned,
+        millisecondsPlayed: p.millisecondsPlayed,
+        lastModified: lastModified,
+        farmingLevel: p.farmingLevel,
+        miningLevel: p.miningLevel,
+        combatLevel: p.combatLevel,
+        foragingLevel: p.foragingLevel,
+        fishingLevel: p.fishingLevel,
+        houseUpgradeLevel: p.houseUpgradeLevel,
+        petType: petType,
+        gender: p.gender,
+        deepestMineLevel: p.deepestMineLevel,
+        monstersKilled: p.monstersKilled,
+        timesUnconscious: p.timesUnconscious,
+        goodFriends: p.goodFriends,
+        timeOfDay: timeOfDay,
+        averageBedtime: p.averageBedtime,
+        weather: weather,
+        stamina: p.stamina,
+        health: p.health,
+        gameVersion: gameVersion,
+        isCoop: isCoop,
+        separateWallets: separateWallets,
+        players: players,
+      );
 
   // ── Playtime ────────────────────────────────────────────────────────
   Duration get playtime => Duration(milliseconds: millisecondsPlayed);

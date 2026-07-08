@@ -1,15 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../generated/app_localizations.dart';
+import '../../core/models/player_stats.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/save_busy_indicator.dart';
+import 'widgets/save_detail_sheet.dart';
 
 // Card-local color tokens
 const _kSkillName  = Color(0xFF8AB890);
@@ -23,8 +24,8 @@ const _kAmigos    = Color(0xFFE878A0);
 const _kDesmayos  = Color(0xFFA8B0D8);
 
 // Estado de sincronización
-const _kLocal  = Color(0xFFE0B850); // dorado = en tu equipo
-const _kDrive  = Color(0xFF5AA8E0); // azul = nube
+const kLocal  = Color(0xFFE0B850); // dorado = en tu equipo
+const kDrive  = Color(0xFF5AA8E0); // azul = nube
 const _kSynced = Color(0xFF62B074); // verde = coinciden
 
 // Card surface: negro semitransparente + tinte estacional
@@ -39,7 +40,7 @@ Color _tileBg(Color s) =>
 Color _tileBdr(Color s) => s.withValues(alpha: 0.32);
 
 // Divisor horizontal sutil (compartido por la card y por SaveStatsView).
-final _kDivider =
+final kDivider =
     Container(height: 1, color: Colors.white.withValues(alpha: 0.08));
 
 const _kPipFarming  = Color(0xFFC8960A);
@@ -50,10 +51,10 @@ const _kPipFishing  = Color(0xFF4888C8);
 
 ({Color color, String label}) _statusStyle(SaveSyncStatus s, AppLocalizations l10n) => switch (s) {
       SaveSyncStatus.synced     => (color: _kSynced, label: l10n.cardSynced),
-      SaveSyncStatus.localAhead => (color: _kLocal,  label: l10n.cardLocalAhead),
-      SaveSyncStatus.driveAhead => (color: _kDrive,  label: l10n.cardDriveAhead),
-      SaveSyncStatus.localOnly  => (color: _kLocal,  label: l10n.cardLocalOnly),
-      SaveSyncStatus.driveOnly  => (color: _kDrive,  label: l10n.cardDriveOnly),
+      SaveSyncStatus.localAhead => (color: kLocal,  label: l10n.cardLocalAhead),
+      SaveSyncStatus.driveAhead => (color: kDrive,  label: l10n.cardDriveAhead),
+      SaveSyncStatus.localOnly  => (color: kLocal,  label: l10n.cardLocalOnly),
+      SaveSyncStatus.driveOnly  => (color: kDrive,  label: l10n.cardDriveOnly),
     };
 
 // Etiqueta de estado corta para la fila de acción (evita truncado en móvil).
@@ -68,7 +69,7 @@ String _rel(DateTime t, AppLocalizations l10n) {
   return l10n.cardTimeMonthsAgo(m);
 }
 
-class SaveCard extends StatelessWidget {
+class SaveCard extends StatefulWidget {
   const SaveCard({
     super.key,
     required this.entry,
@@ -87,10 +88,27 @@ class SaveCard extends StatelessWidget {
   final VoidCallback? onDeleteLocal;      // local → delete
 
   @override
+  State<SaveCard> createState() => _SaveCardState();
+}
+
+class _SaveCardState extends State<SaveCard> {
+  int _playerIndex = 0;
+
+  void _selectPlayer(int i) {
+    final n = widget.entry.primary.players.length;
+    if (i < 0 || i >= n || i == _playerIndex) return;
+    setState(() => _playerIndex = i);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final save = entry.primary;
-    final status = entry.status;
+    final base = widget.entry.primary;
+    final coop = base.hasMultiplePlayers;
+    final idx = coop ? _playerIndex.clamp(0, base.players.length - 1) : 0;
+    // La tarjeta muestra el jugador seleccionado (o el anfitrión en solitario).
+    final save = coop ? base.forPlayer(base.players[idx]) : base;
+    final status = widget.entry.status;
     final st = _statusStyle(status, l10n);
 
     return ClipRRect(
@@ -105,24 +123,38 @@ class SaveCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(height: 3, color: st.color),
-            _Header(save: save),
-            _kDivider,
-            SaveStatsView(save: save),
-            _kDivider,
-            _PresenceRow(
-              entry: entry,
-              onUpload: onUpload,
-              onDownload: onDownload,
-              onDeleteFromDrive: onDeleteFromDrive,
-              onDeleteLocal: onDeleteLocal,
+            _Header(
+              save: save,
+              players: coop ? base.players : const [],
+              playerIndex: idx,
+              hostSelected: coop && base.players[idx].isHost,
+              onSelectPlayer: _selectPlayer,
             ),
-            _kDivider,
+            kDivider,
+            // Los stats por-jugador se cruzan con un fundido al cambiar.
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 190),
+              switchInCurve: const Cubic(0.23, 1, 0.32, 1),
+              switchOutCurve: const Cubic(0.23, 1, 0.32, 1),
+              transitionBuilder: (child, anim) =>
+                  FadeTransition(opacity: anim, child: child),
+              child: SaveStatsView(key: ValueKey(idx), save: save),
+            ),
+            kDivider,
+            _PresenceRow(
+              entry: widget.entry,
+              onUpload: widget.onUpload,
+              onDownload: widget.onDownload,
+              onDeleteFromDrive: widget.onDeleteFromDrive,
+              onDeleteLocal: widget.onDeleteLocal,
+            ),
+            kDivider,
             _Footer(
-              entry: entry,
+              entry: widget.entry,
               statusColor: st.color,
-              busy: busy,
-              onUpload: onUpload,
-              onDownload: onDownload,
+              busy: widget.busy,
+              onUpload: widget.onUpload,
+              onDownload: widget.onDownload,
             ),
           ],
         ),
@@ -143,466 +175,10 @@ class SaveStatsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _TilesRow(save: save),
-        _kDivider,
+        kDivider,
         _SkillsGrid(save: save),
-        _kDivider,
+        kDivider,
         _PillsRow(save: save),
-      ],
-    );
-  }
-}
-
-/// Una cara del detalle (local o Drive) con su identidad y acción.
-class _DetailSide {
-  const _DetailSide({
-    required this.save,
-    required this.color,
-    required this.icon,
-    required this.title,
-    required this.actionLabel,
-    required this.actionIcon,
-    required this.onAction,
-    this.onDelete,
-    this.deleteLabel = '',  // will be set by caller
-  });
-  final SaveFile save;
-  final Color color;
-  final String icon;
-  final String title;
-  final String actionLabel;
-  final IconData actionIcon;
-  final VoidCallback? onAction;
-  final VoidCallback? onDelete;
-  final String deleteLabel;
-}
-
-/// Hoja inferior con los stats completos de una versión, con título de la cara,
-/// swipe entre local↔Drive (si existen ambas) y la acción propia de cada una.
-void _showSaveDetail(
-  BuildContext context, {
-  required SaveEntry entry,
-  required bool startOnLocal,
-  VoidCallback? onUpload,
-  VoidCallback? onDownload,
-  VoidCallback? onDeleteFromDrive,
-  VoidCallback? onDeleteLocal,
-}) {
-  final l10n = AppLocalizations.of(context)!;
-  final isMobile = Platform.isAndroid || Platform.isIOS;
-
-  // Caras presentes — local primero, Drive después.
-  final sides = <_DetailSide>[
-    if (entry.local != null)
-      _DetailSide(
-        save: entry.local!,
-        color: _kLocal,
-        icon: isMobile ? '📱' : '💻',
-        title: l10n.cardDetailLocalTitle,
-        actionLabel: l10n.cardDetailUpload,
-        actionIcon: Icons.cloud_upload_outlined,
-        onAction: onUpload,
-        onDelete: onDeleteLocal,
-        deleteLabel: l10n.cardDetailDeleteLocal,
-      ),
-    if (entry.drive != null)
-      _DetailSide(
-        save: entry.drive!,
-        color: _kDrive,
-        icon: '☁️',
-        title: l10n.cardDetailRemoteTitle,
-        actionLabel: l10n.cardDetailDownload,
-        actionIcon: Icons.cloud_download_outlined,
-        onAction: onDownload,
-        onDelete: onDeleteFromDrive,
-        deleteLabel: l10n.cardDetailDeleteRemote,
-      ),
-  ];
-  if (sides.isEmpty) return;
-
-  // startOnLocal → primera (local si existe); si no, la última (Drive).
-  final initialPage = (startOnLocal ? 0 : sides.length - 1).clamp(0, sides.length - 1);
-
-  showGeneralDialog<void>(
-    context: context,
-    barrierDismissible: true,
-    barrierLabel: l10n.cardCloseBarrier,
-    barrierColor: Colors.black.withValues(alpha: 0.70),
-    transitionDuration: const Duration(milliseconds: 260),
-    transitionBuilder: (ctx, animation, _, child) {
-      const curve = Cubic(0.23, 1, 0.32, 1);
-      final curved = CurvedAnimation(parent: animation, curve: curve);
-      return FadeTransition(
-        opacity: curved,
-        child: ScaleTransition(
-          scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
-          child: child,
-        ),
-      );
-    },
-    pageBuilder: (ctx, anim, secAnim) => Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 40),
-      child: _DetailSheet(sides: sides, initialPage: initialPage),
-    ),
-  );
-}
-
-class _DetailSheet extends StatefulWidget {
-  const _DetailSheet({required this.sides, required this.initialPage});
-  final List<_DetailSide> sides;
-  final int initialPage;
-
-  @override
-  State<_DetailSheet> createState() => _DetailSheetState();
-}
-
-class _DetailSheetState extends State<_DetailSheet> {
-  late int _index = widget.initialPage;
-  int _direction = 1;
-  bool _leftPressed = false;
-  bool _rightPressed = false;
-  final _focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void _navigate(int delta) {
-    final next = _index + delta;
-    if (next >= 0 && next < widget.sides.length) {
-      setState(() {
-        _direction = delta > 0 ? 1 : -1;
-        _index = next;
-      });
-    }
-  }
-
-  Widget _navArrow(IconData icon,
-      {required bool enabled,
-      required Color color,
-      required bool pressed,
-      required VoidCallback onTap,
-      required ValueChanged<bool> onPressChange}) {
-    return GestureDetector(
-      onTap: enabled ? onTap : null,
-      onTapDown: enabled ? (_) => onPressChange(true) : null,
-      onTapUp: (_) => onPressChange(false),
-      onTapCancel: () => onPressChange(false),
-      child: AnimatedScale(
-        scale: (enabled && pressed) ? 0.88 : 1.0,
-        duration: (enabled && pressed)
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            color: enabled ? color.withValues(alpha: 0.14) : Colors.transparent,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: enabled
-                  ? color.withValues(alpha: 0.40)
-                  : Colors.white.withValues(alpha: 0.10),
-            ),
-          ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: enabled
-                ? color.withValues(alpha: 0.90)
-                : Colors.white.withValues(alpha: 0.20),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final sides = widget.sides;
-    final active = sides[_index];
-    final maxH = MediaQuery.of(context).size.height * 0.90;
-
-    return Focus(
-      focusNode: _focusNode,
-      autofocus: true,
-      onKeyEvent: (_, event) {
-        if (event is! KeyDownEvent) return KeyEventResult.ignored;
-        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          _navigate(-1);
-          return KeyEventResult.handled;
-        }
-        if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          _navigate(1);
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      },
-      child: ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: maxH, maxWidth: 420),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color.alphaBlend(
-              active.color.withValues(alpha: 0.06),
-              const Color(0xFF0B0B0D),
-            ),
-            border: Border.all(
-              color: active.color.withValues(alpha: 0.55),
-              width: 1.5,
-            ),
-          ),
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.20),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                if (sides.length > 1) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _navArrow(
-                        Icons.chevron_left_rounded,
-                        enabled: _index > 0,
-                        color: sides[0].color,
-                        pressed: _leftPressed,
-                        onTap: () => _navigate(-1),
-                        onPressChange: (v) => setState(() => _leftPressed = v),
-                      ),
-                      const SizedBox(width: 12),
-                      ...List.generate(sides.length, (i) {
-                        final on = i == _index;
-                        final c = sides[i].color;
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeOut,
-                          margin: const EdgeInsets.symmetric(horizontal: 3),
-                          width: on ? 18 : 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: on ? c : c.withValues(alpha: 0.35),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                        );
-                      }),
-                      const SizedBox(width: 12),
-                      _navArrow(
-                        Icons.chevron_right_rounded,
-                        enabled: _index < sides.length - 1,
-                        color: sides[sides.length - 1].color,
-                        pressed: _rightPressed,
-                        onTap: () => _navigate(1),
-                        onPressChange: (v) => setState(() => _rightPressed = v),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                ],
-                Flexible(
-                child: GestureDetector(
-                  onHorizontalDragEnd: (details) {
-                    final v = details.primaryVelocity ?? 0;
-                    if (v < -100 && _index < sides.length - 1) { _navigate(1); }
-                    else if (v > 100 && _index > 0) { _navigate(-1); }
-                  },
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 260),
-                    transitionBuilder: (child, animation) {
-                      const curve = Cubic(0.23, 1, 0.32, 1);
-                      final isNew = child.key == ValueKey(_index);
-                      final dir = _direction.toDouble();
-                      return FadeTransition(
-                        opacity: CurvedAnimation(parent: animation, curve: curve),
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: isNew ? Offset(dir * 0.08, 0) : Offset(-dir * 0.08, 0),
-                            end: Offset.zero,
-                          ).animate(CurvedAnimation(parent: animation, curve: curve)),
-                          child: child,
-                        ),
-                      );
-                    },
-                    layoutBuilder: (current, previous) => Stack(
-                      alignment: Alignment.topCenter,
-                      children: [...previous, ?current],
-                    ),
-                    child: KeyedSubtree(
-                      key: ValueKey(_index),
-                      child: _DetailPage(side: active),
-                    ),
-                  ),
-                ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      ),
-    );
-  }
-}
-
-class _DetailPage extends StatelessWidget {
-  const _DetailPage({required this.side});
-  final _DetailSide side;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final s = side.save;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Flexible(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(side.icon, style: const TextStyle(fontSize: 14)),
-                          const SizedBox(width: 7),
-                          Text(
-                            side.title.toUpperCase(),
-                            style: GoogleFonts.firaCode(
-                              fontSize: 10,
-                              letterSpacing: 1.0,
-                              fontWeight: FontWeight.w700,
-                              color: side.color,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        s.farmName,
-                        style: GoogleFonts.bodoniModa(
-                          fontSize: 24,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.text,
-                          height: 1,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.statDayYear(s.dayOfMonth, s.year),
-                        style: GoogleFonts.firaCode(
-                          fontSize: 11,
-                          color: s.seasonColor.withValues(alpha: 0.90),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                _kDivider,
-                SaveStatsView(save: s),
-              ],
-            ),
-          ),
-        ),
-        if (side.onAction != null || side.onDelete != null) ...[
-          _kDivider,
-          if (side.onAction != null)
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  14, 12, 14, side.onDelete != null ? 6 : 14),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  side.onAction!.call();
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: side.color.withValues(alpha: 0.16),
-                    border:
-                        Border.all(color: side.color.withValues(alpha: 0.55)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(side.actionIcon, size: 16, color: side.color),
-                      const SizedBox(width: 7),
-                      Text(
-                        side.actionLabel,
-                        style: GoogleFonts.firaCode(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: side.color,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          if (side.onDelete != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  side.onDelete!.call();
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE05252).withValues(alpha: 0.08),
-                    border: Border.all(
-                        color: const Color(0xFFE05252).withValues(alpha: 0.30)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.delete_outline_rounded,
-                          size: 14, color: Color(0xFFE05252)),
-                      const SizedBox(width: 6),
-                      Text(
-                        side.deleteLabel,
-                        style: GoogleFonts.firaCode(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFFE05252),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-        ],
       ],
     );
   }
@@ -611,69 +187,287 @@ class _DetailPage extends StatelessWidget {
 // ── Header ───────────────────────────────────────────────────────────────────
 
 class _Header extends StatelessWidget {
-  const _Header({required this.save});
+  const _Header({
+    required this.save,
+    this.players = const [],
+    this.playerIndex = 0,
+    this.hostSelected = false,
+    this.onSelectPlayer,
+  });
+
   final SaveFile save;
+  final List<PlayerStats> players;   // vacío = solitario (sin selector)
+  final int playerIndex;
+  final bool hostSelected;
+  final ValueChanged<int>? onSelectPlayer;
+
+  bool get _coop => players.length > 1;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  save.farmName,
-                  style: GoogleFonts.bodoniModa(
-                    fontSize: 26,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.text,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 4,
+          // Nombre de granja (+ COOP al lado) · corona centrada + fecha a la derecha
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _Chip(
-                      '🧑 ${save.playerName} ${save.genderLabel}',
-                      textColor: const Color(0xFFF0D060),
-                      borderColor: const Color(0xFF5A3E08),
-                      bgColor: const Color(0xFF140E04),
+                    Flexible(
+                      child: Text(
+                        save.farmName,
+                        style: GoogleFonts.bodoniModa(
+                          fontSize: 26,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.text,
+                          height: 1,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    _Chip(
-                      save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
-                      textColor: const Color(0xFF60A858),
-                      borderColor: const Color(0xFF264A20),
-                      bgColor: const Color(0xFF080E08),
-                    ),
-                    _Chip(
-                      '🏠 ${_houseLabel(save.houseUpgradeLevel, l10n)}',
-                      textColor: const Color(0xFF8898A8),
-                      borderColor: const Color(0xFF283848),
-                      bgColor: const Color(0xFF08100E),
-                    ),
+                    if (_coop) ...[
+                      const SizedBox(width: 8),
+                      const CoopBadge(),
+                    ],
                   ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 8),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (_coop && hostSelected) ...[
+                    const HostCrown(),
+                    const SizedBox(width: 8),
+                  ],
+                  DateBox(save: save),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          _DateBox(save: save),
+          const SizedBox(height: 8),
+          // Chips a todo el ancho (ya no compiten con la fecha)
+          Wrap(
+            spacing: 6,
+            runSpacing: 4,
+            children: [
+              _Chip(
+                '🧑 ${save.playerName} ${save.genderLabel}',
+                textColor: const Color(0xFFF0D060),
+                borderColor: const Color(0xFF5A3E08),
+                bgColor: const Color(0xFF140E04),
+                onTap: _coop
+                    ? () => onSelectPlayer?.call((playerIndex + 1) % players.length)
+                    : null,
+              ),
+              _Chip(
+                save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
+                textColor: const Color(0xFF60A858),
+                borderColor: const Color(0xFF264A20),
+                bgColor: const Color(0xFF080E08),
+              ),
+              _Chip(
+                '🏠 ${_houseLabel(save.houseUpgradeLevel, l10n)}',
+                textColor: const Color(0xFF8898A8),
+                borderColor: const Color(0xFF283848),
+                bgColor: const Color(0xFF08100E),
+              ),
+            ],
+          ),
+          if (_coop) ...[
+            const SizedBox(height: 10),
+            PlayerSwitcher(
+              count: players.length,
+              index: playerIndex,
+              hostIndex: players.indexWhere((p) => p.isHost),
+              onSelect: (i) => onSelectPlayer?.call(i),
+            ),
+          ],
         ],
       ),
     );
   }
 }
 
-class _DateBox extends StatelessWidget {
-  const _DateBox({required this.save});
+/// Insignia COOP junto al nombre de la granja.
+class CoopBadge extends StatelessWidget {
+  const CoopBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: const Color(0xFF97C459).withValues(alpha: 0.14),
+        border: Border.all(color: const Color(0xFF97C459).withValues(alpha: 0.40)),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.groups_rounded, size: 11, color: Color(0xFF97C459)),
+          const SizedBox(width: 4),
+          Text('COOP',
+              style: GoogleFonts.firaCode(
+                fontSize: 8.5,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+                color: const Color(0xFF97C459),
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+/// Corona del anfitrión, junto a la fecha. Solo visible cuando el jugador
+/// seleccionado es el anfitrión. Caja ajustada al emoji (padding mínimo).
+class HostCrown extends StatelessWidget {
+  const HostCrown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0C040).withValues(alpha: 0.14),
+        border: Border.all(color: const Color(0xFFF0C040).withValues(alpha: 0.45)),
+        borderRadius: BorderRadius.circular(7),
+      ),
+      // Ajustado a ojo: la fuente de emoji del sistema no centra el glifo en
+      // su línea de texto (queda pegado abajo). -2.5px lo sube al centro real.
+      child: Transform.translate(
+        offset: const Offset(0, -2.5),
+        child: const Text(
+          '👑',
+          style: TextStyle(fontSize: 21, height: 1),
+        ),
+      ),
+    );
+  }
+}
+
+/// Nombre + género del jugador seleccionado. Para usar junto a [PlayerSwitcher]
+/// en superficies que no tienen ya un chip de granjero (hoja de detalle, diálogo
+/// de comparación). Mismo criterio de color que el punto activo del switcher.
+class PlayerNameLabel extends StatelessWidget {
+  const PlayerNameLabel({
+    super.key,
+    required this.name,
+    required this.gender,
+    required this.isHost,
+  });
+
+  final String name;
+  final String gender;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$name $gender',
+      style: GoogleFonts.firaCode(
+        fontSize: 11,
+        fontWeight: FontWeight.w700,
+        color: isHost ? const Color(0xFFE0B850) : const Color(0xFFF0D060),
+      ),
+    );
+  }
+}
+
+/// Selector en línea: insignia COOP + puntos de recorrido + flechas ‹ ›.
+class PlayerSwitcher extends StatelessWidget {
+  const PlayerSwitcher({
+    super.key,
+    required this.count,
+    required this.index,
+    required this.hostIndex,
+    required this.onSelect,
+  });
+
+  final int count;
+  final int index;
+  final int hostIndex;
+  final ValueChanged<int> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    // Grupo compacto: ‹ · ▬ · ›  (flechas junto a los puntos)
+    return Row(
+      children: [
+        _SwitchArrow(
+          icon: Icons.chevron_left_rounded,
+          enabled: index > 0,
+          onTap: () => onSelect(index - 1),
+        ),
+        const SizedBox(width: 8),
+        for (var i = 0; i < count; i++)
+          GestureDetector(
+            onTap: () => onSelect(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 240),
+              curve: const Cubic(0.23, 1, 0.32, 1),
+              margin: const EdgeInsets.symmetric(horizontal: 2.5),
+              width: i == index ? 18 : 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: i == index
+                    ? (i == hostIndex ? const Color(0xFFE0B850) : const Color(0xFFF0D060))
+                    : Colors.white.withValues(alpha: 0.30),
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+          ),
+        const SizedBox(width: 8),
+        _SwitchArrow(
+          icon: Icons.chevron_right_rounded,
+          enabled: index < count - 1,
+          onTap: () => onSelect(index + 1),
+        ),
+      ],
+    );
+  }
+}
+
+class _SwitchArrow extends StatelessWidget {
+  const _SwitchArrow({required this.icon, required this.enabled, required this.onTap});
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: const Color(0xFFF0B8C8)
+                .withValues(alpha: enabled ? 0.30 : 0.10),
+          ),
+        ),
+        child: Icon(icon,
+            size: 15,
+            color: const Color(0xFFF0B8C8)
+                .withValues(alpha: enabled ? 0.75 : 0.20)),
+      ),
+    );
+  }
+}
+
+class DateBox extends StatelessWidget {
+  const DateBox({super.key, required this.save});
   final SaveFile save;
 
   @override
@@ -1150,7 +944,7 @@ class _PresenceRow extends StatelessWidget {
           children: [
             Expanded(
               child: _SideTile(
-                color: _kLocal,
+                color: kLocal,
                 icon: isMobile ? '📱' : '💻',
                 title: l10n.cardLocalPresence,
                 save: entry.local,
@@ -1166,7 +960,7 @@ class _PresenceRow extends StatelessWidget {
             const SizedBox(width: 7),
             Expanded(
               child: _SideTile(
-                color: _kDrive,
+                color: kDrive,
                 icon: '☁️',
                 title: l10n.cardRemotePresence,
                 save: entry.drive,
@@ -1302,7 +1096,7 @@ class _SideTileState extends State<_SideTile> {
     if (!present) return content;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => _showSaveDetail(
+      onTap: () => showSaveDetail(
         context,
         entry: widget.entry,
         startOnLocal: widget.isLocalSide,
@@ -1382,30 +1176,30 @@ class _Footer extends StatelessWidget {
             else ...[
               // Secundario siempre a la izquierda, principal a la derecha
               if (hasLocal && hasDrive && recommendUpload) ...[
-                _ActionBtn(
-                  label: '', color: _kDrive,
+                ActionBtn(
+                  label: '', color: kDrive,
                   icon: Icons.cloud_download_outlined,
                   filled: false, iconOnly: true, onTap: onDownload,
                 ),
                 const SizedBox(width: 8),
               ],
               if (hasLocal && hasDrive && recommendDownload) ...[
-                _ActionBtn(
-                  label: '', color: _kLocal,
+                ActionBtn(
+                  label: '', color: kLocal,
                   icon: Icons.cloud_upload_outlined,
                   filled: false, iconOnly: true, onTap: onUpload,
                 ),
                 const SizedBox(width: 8),
               ],
               if (recommendUpload)
-                _ActionBtn(
-                  label: '', color: _kLocal,
+                ActionBtn(
+                  label: '', color: kLocal,
                   icon: Icons.cloud_upload_outlined,
                   filled: true, iconOnly: true, onTap: onUpload,
                 ),
               if (recommendDownload)
-                _ActionBtn(
-                  label: '', color: _kDrive,
+                ActionBtn(
+                  label: '', color: kDrive,
                   icon: Icons.cloud_download_outlined,
                   filled: true, iconOnly: true, onTap: onDownload,
                 ),
@@ -1423,7 +1217,7 @@ class _Footer extends StatelessWidget {
         children: [
           _Dot(color: statusColor),
           const SizedBox(width: 6),
-          Flexible(
+          Expanded(
             child: Text(
               statusLabel,
               style: GoogleFonts.firaCode(
@@ -1439,9 +1233,9 @@ class _Footer extends StatelessWidget {
             SaveBusyIndicator(season: SeasonController.instance.season.value)
           else if (status != SaveSyncStatus.synced) ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionUpload,
-                color: _kLocal,
+                color: kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: false,
                 onTap: onUpload,
@@ -1449,9 +1243,9 @@ class _Footer extends StatelessWidget {
               const SizedBox(width: 8),
             ],
             if (hasLocal && hasDrive && recommendUpload) ...[
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionDownload,
-                color: _kDrive,
+                color: kDrive,
                 icon: Icons.cloud_download_outlined,
                 filled: false,
                 onTap: onDownload,
@@ -1459,17 +1253,17 @@ class _Footer extends StatelessWidget {
               const SizedBox(width: 8),
             ],
             if (recommendUpload)
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionUpload,
-                color: _kLocal,
+                color: kLocal,
                 icon: Icons.cloud_upload_outlined,
                 filled: true,
                 onTap: onUpload,
               ),
             if (recommendDownload)
-              _ActionBtn(
+              ActionBtn(
                 label: l10n.cardActionDownload,
-                color: _kDrive,
+                color: kDrive,
                 icon: Icons.cloud_download_outlined,
                 filled: true,
                 onTap: onDownload,
@@ -1499,11 +1293,12 @@ class _Dot extends StatelessWidget {
   }
 }
 
-class _ActionBtn extends StatefulWidget {
-  const _ActionBtn({
+class ActionBtn extends StatefulWidget {
+  const ActionBtn({
+    super.key,
     required this.label,
     required this.color,
-    required this.icon,
+    this.icon,
     required this.filled,
     this.iconOnly = false,
     this.onTap,
@@ -1511,16 +1306,16 @@ class _ActionBtn extends StatefulWidget {
 
   final String label;
   final Color color;
-  final IconData icon;
+  final IconData? icon;
   final bool filled;
   final bool iconOnly;
   final VoidCallback? onTap;
 
   @override
-  State<_ActionBtn> createState() => _ActionBtnState();
+  State<ActionBtn> createState() => _ActionBtnState();
 }
 
-class _ActionBtnState extends State<_ActionBtn> {
+class _ActionBtnState extends State<ActionBtn> {
   bool _pressed = false;
 
   @override
@@ -1550,8 +1345,10 @@ class _ActionBtnState extends State<_ActionBtn> {
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(widget.icon, size: 13, color: widget.color),
-                    const SizedBox(width: 5),
+                    if (widget.icon != null) ...[
+                      Icon(widget.icon, size: 13, color: widget.color),
+                      const SizedBox(width: 5),
+                    ],
                     Text(
                       widget.label,
                       style: GoogleFonts.firaCode(fontSize: 10, color: widget.color),
@@ -1572,16 +1369,18 @@ class _Chip extends StatelessWidget {
     required this.textColor,
     required this.borderColor,
     required this.bgColor,
+    this.onTap,
   });
 
   final String label;
   final Color textColor;
   final Color borderColor;
   final Color bgColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: bgColor,
@@ -1597,6 +1396,8 @@ class _Chip extends StatelessWidget {
         ),
       ),
     );
+    if (onTap == null) return chip;
+    return GestureDetector(onTap: onTap, behavior: HitTestBehavior.opaque, child: chip);
   }
 }
 

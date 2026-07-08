@@ -32,8 +32,13 @@ class _PrivacyScreenState extends State<PrivacyScreen>
     super.initState();
     _entranceCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
-    )..forward();
+      duration: const Duration(milliseconds: 380),
+    );
+    if (WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+      _entranceCtrl.value = 1.0;
+    } else {
+      _entranceCtrl.forward();
+    }
     _headerAnim = CurvedAnimation(
       parent: _entranceCtrl,
       curve: const Interval(0.0, 0.64, curve: Cubic(0.23, 1, 0.32, 1)),

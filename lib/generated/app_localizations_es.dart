@@ -414,6 +414,311 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardCloseBarrier => 'Cerrar';
 
   @override
+  String get exportAction => 'Exportar';
+
+  @override
+  String get exportSuccess => 'Partida exportada.';
+
+  @override
+  String exportError(String error) {
+    return 'No se pudo exportar la partida: $error';
+  }
+
+  @override
+  String get importAction => 'Importar partida';
+
+  @override
+  String importSuccess(String playerName) {
+    return 'Partida de $playerName importada.';
+  }
+
+  @override
+  String get importErrInvalidZip => 'Este archivo no es un zip válido.';
+
+  @override
+  String get importErrUnsafePath =>
+      'Este archivo tiene una estructura insegura y se ha rechazado.';
+
+  @override
+  String get importErrTooLarge =>
+      'Este archivo es demasiado grande para importarlo.';
+
+  @override
+  String get importErrNotASave =>
+      'Este archivo no contiene una partida reconocible.';
+
+  @override
+  String get importErrWrite =>
+      'No se pudo escribir la partida importada (disco/permisos).';
+
+  @override
+  String get importConflictTitle => 'Ya existe una partida con este nombre';
+
+  @override
+  String get importConflictBody =>
+      'Importar reemplazará la copia local existente. No se puede deshacer.';
+
+  @override
+  String get importConflictConfirm => 'Sobrescribir';
+
+  @override
+  String get shareAction => 'Compartir';
+
+  @override
+  String get shareUploadFirstCta => 'Subir primero';
+
+  @override
+  String get shareDialogTitle => 'Compartir partida';
+
+  @override
+  String get shareEmailPlaceholder => 'nombre@ejemplo.com';
+
+  @override
+  String get shareInfoNote =>
+      'Compartir da acceso de ver y descargar. Solo tú puedes editar o borrar tu copia en Drive.';
+
+  @override
+  String get shareRoleReader => 'Solo lectura';
+
+  @override
+  String get shareRoleWriter => 'Permitir sincronizar';
+
+  @override
+  String get shareInfoNoteCoop =>
+      'Solo lectura permite ver y descargar. Permitir sincronizar permite sobrescribir tu copia en Drive — nunca podrán borrarla.';
+
+  @override
+  String get shareConfirmButton => 'Compartir';
+
+  @override
+  String shareSuccess(String email) {
+    return 'Compartido con $email.';
+  }
+
+  @override
+  String get manageAccessTitle => 'Personas con acceso';
+
+  @override
+  String get manageAccessEmpty => 'Nadie más tiene acceso todavía.';
+
+  @override
+  String get manageAccessRoleLabel => 'Acceso';
+
+  @override
+  String get manageAccessRevoke => 'Revocar';
+
+  @override
+  String manageAccessRevokeConfirm(String email) {
+    return '¿Quitar el acceso a $email? Cualquier copia local que ya se haya descargado sigue siendo suya.';
+  }
+
+  @override
+  String get driveOnlyControlsYourCopy =>
+      'Compartir controla tu copia en Drive. Si alguien la descarga, esa copia es suya.';
+
+  @override
+  String get driveOnlyControlsYourCopyCoop =>
+      'Sincronizar controla tu copia en Drive — se puede sobrescribir, pero nunca borrar, por quien autorices.';
+
+  @override
+  String get sharedWithMeTitle => 'Compartidas conmigo';
+
+  @override
+  String get sharedWithMeEmpty => 'Nada compartido contigo todavía.';
+
+  @override
+  String get sharedWithMeAdd => 'Añadir save compartido';
+
+  @override
+  String sharedWithMeOwnedBy(String email) {
+    return 'Compartida por $email';
+  }
+
+  @override
+  String get sharedWithMeRoleSync => 'Sincroniza';
+
+  @override
+  String get sharedWithMeRoleRead => 'Solo lectura';
+
+  @override
+  String get sharedWithMeSync => 'Sincronizar';
+
+  @override
+  String get sharedWithMeDownload => 'Descargar';
+
+  @override
+  String get sharedWithMeRemove => 'Quitar de la lista';
+
+  @override
+  String sharedWithMeRemoveConfirm(String email) {
+    return '¿Quitar de tu lista? Esto solo afecta a tu dispositivo — la partida sigue en el Drive de $email.';
+  }
+
+  @override
+  String sharedWithMeSyncConfirm(String email) {
+    return '¿Sobrescribir la copia de $email en Drive con tu partida local?';
+  }
+
+  @override
+  String get sharedWithMeRevoked => 'Ya no tienes acceso';
+
+  @override
+  String get sharedWithMeUploadOwn => 'Subir a mi Drive';
+
+  @override
+  String get sharedSyncBoth => 'Sincronizar ambos';
+
+  @override
+  String get sharedSideMyDrive => 'MI DRIVE';
+
+  @override
+  String sharedSideOwnerDrive(String email) {
+    return 'DRIVE DE $email';
+  }
+
+  @override
+  String sharedSideDate(int day, int year) {
+    return 'Día $day · Año $year';
+  }
+
+  @override
+  String get sharedStatusSyncedNoOwnDrive =>
+      'Sincronizado con el dueño · sin copia en tu Drive';
+
+  @override
+  String get sharedStatusAheadNoOwnDrive =>
+      'Vas por delante · sin copia en tu Drive';
+
+  @override
+  String sharedStatusOwnerAheadNoOwnDrive(String email) {
+    return '$email va por delante · sin copia en tu Drive';
+  }
+
+  @override
+  String get sharedStatusAllSynced => 'Sincronizado (local + los dos Drive)';
+
+  @override
+  String get sharedStatusAheadBoth => 'Vas por delante en los dos Drive';
+
+  @override
+  String get sharedStatusMixed => 'Desincronizado — revisa cada Drive';
+
+  @override
+  String get sharedWithMePickerTitle => 'Añadir save compartido';
+
+  @override
+  String get sharedPickerEmptyHint =>
+      'Aquí aparece lo que otro jugador te comparta desde Drive.';
+
+  @override
+  String get sharedPickerAddButton => 'Añadir';
+
+  @override
+  String get sharedOriginBadge => 'Compartida';
+
+  @override
+  String sharedOriginFrom(String email) {
+    return 'de $email';
+  }
+
+  @override
+  String get swapBackupDialogTitle => 'Respaldo creado';
+
+  @override
+  String get swapBackupDialogBody =>
+      'La versión anterior se guardó como zip. ¿Qué quieres hacer con ella?';
+
+  @override
+  String get swapBackupUpload => 'Subir a Drive';
+
+  @override
+  String get swapBackupLocalOnly => 'Mantener en este equipo';
+
+  @override
+  String get swapBackupDeleteNow => 'Borrar ahora';
+
+  @override
+  String get swapBackupUploadOk => 'Respaldo subido a Drive.';
+
+  @override
+  String swapBackupUploadErr(String error) {
+    return 'No se pudo subir el respaldo: $error';
+  }
+
+  @override
+  String get swapBackupLocalOnlySnack => 'Respaldo guardado en este equipo.';
+
+  @override
+  String get backupsAction => 'Backups';
+
+  @override
+  String backupsScreenTitle(String farmName) {
+    return 'Respaldos de $farmName';
+  }
+
+  @override
+  String get backupsEmpty => 'Sin respaldos todavía.';
+
+  @override
+  String get backupsRestore => 'Restaurar';
+
+  @override
+  String get backupsRestoreConfirmTitle => '¿Restaurar este respaldo?';
+
+  @override
+  String get backupsRestoreConfirmBody =>
+      'Esto sobrescribe tu partida actual con esta versión anterior. No se puede deshacer.';
+
+  @override
+  String get backupsDelete => 'Eliminar';
+
+  @override
+  String get backupsDeleteConfirmTitle => '¿Eliminar este respaldo?';
+
+  @override
+  String get backupsDeleteConfirmBody =>
+      'Se borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió). No se puede deshacer.';
+
+  @override
+  String get backupsRestoreOk => 'Respaldo restaurado.';
+
+  @override
+  String backupsRestoreErr(String error) {
+    return 'No se pudo restaurar el respaldo: $error';
+  }
+
+  @override
+  String backupsDeleteErr(String error) {
+    return 'No se pudo eliminar el respaldo: $error';
+  }
+
+  @override
+  String deleteUnifiedTitle(String farmName) {
+    return '¿Eliminar $farmName?';
+  }
+
+  @override
+  String get deleteChooseLocationBody =>
+      'Elige de dónde. La copia de este equipo se borra para siempre; la de Drive va a la papelera (30 días).';
+
+  @override
+  String get deleteOptionLocalOnly => 'Solo de este equipo';
+
+  @override
+  String get deleteOptionDriveOnly => 'Solo de Drive';
+
+  @override
+  String get deleteOptionBoth => 'De ambas (equipo + Drive)';
+
+  @override
+  String get viewPlayersHint => 'Ver jugadores';
+
+  @override
+  String snackDeletedBoth(String saveName) {
+    return '\"$saveName\" eliminada de este equipo y movida a la papelera de Drive.';
+  }
+
+  @override
   String statDayYear(int day, int year) {
     return 'Día $day · Año $year';
   }
@@ -1154,4 +1459,63 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get snackLaunchError => 'No se pudo abrir el juego';
+
+  @override
+  String get makeHostAction => 'HACER ANFITRIÓN';
+
+  @override
+  String get makeHostExperimental => 'EXPERIMENTAL';
+
+  @override
+  String get makeHostDialogTitle => 'Cambiar anfitrión';
+
+  @override
+  String makeHostDialogIntro(String playerName, String farmName) {
+    return '$playerName pasará a ser el anfitrión de $farmName.';
+  }
+
+  @override
+  String get makeHostNewCopyNote =>
+      'Se crea una partida nueva. Después decides qué hacer con la original.';
+
+  @override
+  String makeHostMoveCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Se moverán $count objetos de la granja para hacer sitio a la casa. Nada se borra.',
+      one:
+          'Se moverá 1 objeto de la granja para hacer sitio a la casa. Nada se borra.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get makeHostHouseWarning =>
+      'La casa del nuevo anfitrión se verá como la casa grande del juego. La estética de cabaña no está soportada sin mods.';
+
+  @override
+  String get makeHostConfirmButton => 'Hacer anfitrión';
+
+  @override
+  String makeHostSuccess(String playerName) {
+    return 'Nueva partida creada: $playerName es ahora el anfitrión.';
+  }
+
+  @override
+  String get hostSwapErrInvalid =>
+      'Esta partida tiene una estructura inesperada. No se cambió nada.';
+
+  @override
+  String get hostSwapErrNoSpace =>
+      'No hay espacio libre en la granja para reubicar objetos. No se cambió nada.';
+
+  @override
+  String get hostSwapErrWrite =>
+      'No se pudo escribir la partida nueva (disco/permisos). No se cambió nada.';
+
+  @override
+  String get hostSwapErrValidation =>
+      'La verificación de la partida nueva falló, así que se descartó. La original está intacta.';
 }

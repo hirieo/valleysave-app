@@ -452,5 +452,40 @@
   "settingsGameExeNotFound": "Не найдено автоматически",
   "settingsGameExeBrowse": "Обзор…",
   "settingsGameExeSaved": "Путь сохранён",
-  "snackLaunchError": "Не удалось открыть игру"
+  "snackLaunchError": "Не удалось открыть игру",
+  "makeHostAction": "СДЕЛАТЬ ХОЗЯИНОМ",
+  "makeHostExperimental": "ЭКСПЕРИМЕНТАЛЬНО",
+  "makeHostDialogTitle": "Сменить хозяина",
+  "makeHostDialogIntro": "{playerName} станет хозяином фермы {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Создаётся новое сохранение. Затем вы решите, что делать с оригиналом.",
+  "makeHostMoveCount": "{count, plural, one{На ферме будет перемещён {count} объект, чтобы освободить место для дома. Ничего не удаляется.} few{На ферме будут перемещены {count} объекта, чтобы освободить место для дома. Ничего не удаляется.} many{На ферме будет перемещено {count} объектов, чтобы освободить место для дома. Ничего не удаляется.} other{На ферме будет перемещено {count} объекта, чтобы освободить место для дома. Ничего не удаляется.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "Дом нового хозяина будет выглядеть как главный фермерский дом игры. Внешний вид хижины не поддерживается без модов.",
+  "makeHostConfirmButton": "Сделать хозяином",
+  "makeHostSuccess": "Новое сохранение создано: {playerName} теперь хозяин.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Удалить оригинальное сохранение с этого устройства?",
+  "makeHostDeleteOriginalBody": "Новое сохранение готово. Сначала сделайте резервную копию оригинала в Drive (позже сможете скачать его снова) или просто удалите локальную копию.",
+  "makeHostDeleteWithoutUpload": "Удалить без загрузки",
+  "makeHostDeleteOriginalUploadBody": "Оригинальное сохранение сначала будет загружено в ваш Drive как резервная копия, затем локальная копия на этом устройстве будет удалена.",
+  "makeHostDeleteOriginalNoBackupBody": "Нет подключения к Drive: резервной копии не останется. Будет удалена только локальная копия на этом устройстве.",
+  "makeHostUploadAndDelete": "Загрузить и удалить",
+  "hostSwapErrInvalid": "У этого сохранения неожиданная структура. Ничего не изменено.",
+  "hostSwapErrNoSpace": "На ферме нет свободного места для перемещения объектов. Ничего не изменено.",
+  "hostSwapErrWrite": "Не удалось записать новое сохранение (диск/права доступа). Ничего не изменено.",
+  "hostSwapErrValidation": "Проверка нового сохранения не удалась, оно было отменено. Оригинал не повреждён."
 }

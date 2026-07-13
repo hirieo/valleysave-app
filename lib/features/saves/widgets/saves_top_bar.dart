@@ -13,6 +13,7 @@ class SavesTopBar extends StatelessWidget {
     required this.refreshing,
     required this.canLaunchGame,
     required this.onLaunch,
+    required this.onImport,
   });
 
   final VoidCallback onBack;
@@ -21,6 +22,7 @@ class SavesTopBar extends StatelessWidget {
   final bool refreshing;
   final bool canLaunchGame;
   final VoidCallback onLaunch;
+  final VoidCallback onImport;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,12 @@ class SavesTopBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
               ],
+              IconCircleButton(
+                icon: Icons.upload_file_rounded,
+                onTap: onImport,
+                tooltip: l10n.importAction,
+              ),
+              const SizedBox(width: 8),
               IconCircleButton(
                 icon: Icons.refresh_rounded,
                 onTap: onRefresh,

@@ -853,6 +853,516 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get cardCloseBarrier;
 
+  /// No description provided for @exportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportAction;
+
+  /// No description provided for @exportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Save exported.'**
+  String get exportSuccess;
+
+  /// No description provided for @exportError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t export the save: {error}'**
+  String exportError(String error);
+
+  /// No description provided for @importAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import save'**
+  String get importAction;
+
+  /// No description provided for @importSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'{playerName}\'s save imported.'**
+  String importSuccess(String playerName);
+
+  /// No description provided for @importErrInvalidZip.
+  ///
+  /// In en, this message translates to:
+  /// **'This isn\'t a valid zip file.'**
+  String get importErrInvalidZip;
+
+  /// No description provided for @importErrUnsafePath.
+  ///
+  /// In en, this message translates to:
+  /// **'This file has an unsafe structure and was rejected.'**
+  String get importErrUnsafePath;
+
+  /// No description provided for @importErrTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is too large to import.'**
+  String get importErrTooLarge;
+
+  /// No description provided for @importErrNotASave.
+  ///
+  /// In en, this message translates to:
+  /// **'This file doesn\'t contain a recognizable save.'**
+  String get importErrNotASave;
+
+  /// No description provided for @importErrWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t write the imported save (disk/permissions).'**
+  String get importErrWrite;
+
+  /// No description provided for @importConflictTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A save with this name already exists'**
+  String get importConflictTitle;
+
+  /// No description provided for @importConflictBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing will replace the existing local copy. This can\'t be undone.'**
+  String get importConflictBody;
+
+  /// No description provided for @importConflictConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite'**
+  String get importConflictConfirm;
+
+  /// No description provided for @shareAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareAction;
+
+  /// No description provided for @shareUploadFirstCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload first'**
+  String get shareUploadFirstCta;
+
+  /// No description provided for @shareDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share save'**
+  String get shareDialogTitle;
+
+  /// No description provided for @shareEmailPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'name@example.com'**
+  String get shareEmailPlaceholder;
+
+  /// No description provided for @shareInfoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing gives view-and-download access only. Only you can edit or delete your copy in Drive.'**
+  String get shareInfoNote;
+
+  /// No description provided for @shareRoleReader.
+  ///
+  /// In en, this message translates to:
+  /// **'Read only'**
+  String get shareRoleReader;
+
+  /// No description provided for @shareRoleWriter.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow sync'**
+  String get shareRoleWriter;
+
+  /// No description provided for @shareInfoNoteCoop.
+  ///
+  /// In en, this message translates to:
+  /// **'Read only lets them view and download. Allow sync lets them overwrite your copy in Drive — they can never delete it.'**
+  String get shareInfoNoteCoop;
+
+  /// No description provided for @shareConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareConfirmButton;
+
+  /// No description provided for @shareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared with {email}.'**
+  String shareSuccess(String email);
+
+  /// No description provided for @manageAccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People with access'**
+  String get manageAccessTitle;
+
+  /// No description provided for @manageAccessEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody else has access yet.'**
+  String get manageAccessEmpty;
+
+  /// No description provided for @manageAccessRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Access'**
+  String get manageAccessRoleLabel;
+
+  /// No description provided for @manageAccessRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke'**
+  String get manageAccessRevoke;
+
+  /// No description provided for @manageAccessRevokeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {email}\'s access? Any local copy they already downloaded is theirs to keep.'**
+  String manageAccessRevokeConfirm(String email);
+
+  /// No description provided for @driveOnlyControlsYourCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.'**
+  String get driveOnlyControlsYourCopy;
+
+  /// No description provided for @driveOnlyControlsYourCopyCoop.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync controls your copy in Drive — it can be overwritten, but never deleted, by people you allow to sync.'**
+  String get driveOnlyControlsYourCopyCoop;
+
+  /// No description provided for @sharedWithMeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared with me'**
+  String get sharedWithMeTitle;
+
+  /// No description provided for @sharedWithMeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing shared with you yet.'**
+  String get sharedWithMeEmpty;
+
+  /// No description provided for @sharedWithMeAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add shared save'**
+  String get sharedWithMeAdd;
+
+  /// No description provided for @sharedWithMeOwnedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared by {email}'**
+  String sharedWithMeOwnedBy(String email);
+
+  /// No description provided for @sharedWithMeRoleSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get sharedWithMeRoleSync;
+
+  /// No description provided for @sharedWithMeRoleRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read only'**
+  String get sharedWithMeRoleRead;
+
+  /// No description provided for @sharedWithMeSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get sharedWithMeSync;
+
+  /// No description provided for @sharedWithMeDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get sharedWithMeDownload;
+
+  /// No description provided for @sharedWithMeRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from list'**
+  String get sharedWithMeRemove;
+
+  /// No description provided for @sharedWithMeRemoveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from your list? This only affects your device — the save stays in {email}\'s Drive.'**
+  String sharedWithMeRemoveConfirm(String email);
+
+  /// No description provided for @sharedWithMeSyncConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite {email}\'s copy in Drive with your local save?'**
+  String sharedWithMeSyncConfirm(String email);
+
+  /// No description provided for @sharedWithMeRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'You no longer have access'**
+  String get sharedWithMeRevoked;
+
+  /// No description provided for @sharedWithMeUploadOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to my Drive'**
+  String get sharedWithMeUploadOwn;
+
+  /// No description provided for @sharedSyncBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync both'**
+  String get sharedSyncBoth;
+
+  /// No description provided for @sharedSideMyDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'MY DRIVE'**
+  String get sharedSideMyDrive;
+
+  /// No description provided for @sharedSideOwnerDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'{email}\'s DRIVE'**
+  String sharedSideOwnerDrive(String email);
+
+  /// No description provided for @sharedSideDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day} · Year {year}'**
+  String sharedSideDate(int day, int year);
+
+  /// No description provided for @sharedStatusSyncedNoOwnDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced with the owner · no copy in your Drive'**
+  String get sharedStatusSyncedNoOwnDrive;
+
+  /// No description provided for @sharedStatusAheadNoOwnDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re ahead · no copy in your Drive'**
+  String get sharedStatusAheadNoOwnDrive;
+
+  /// No description provided for @sharedStatusOwnerAheadNoOwnDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'{email} is ahead · no copy in your Drive'**
+  String sharedStatusOwnerAheadNoOwnDrive(String email);
+
+  /// No description provided for @sharedStatusAllSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced (local + both Drives)'**
+  String get sharedStatusAllSynced;
+
+  /// No description provided for @sharedStatusAheadBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re ahead on both Drives'**
+  String get sharedStatusAheadBoth;
+
+  /// No description provided for @sharedStatusMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of sync — check each Drive'**
+  String get sharedStatusMixed;
+
+  /// No description provided for @sharedWithMePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add shared save'**
+  String get sharedWithMePickerTitle;
+
+  /// No description provided for @sharedPickerEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Folders another player shares with you from Drive show up here.'**
+  String get sharedPickerEmptyHint;
+
+  /// No description provided for @sharedPickerAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get sharedPickerAddButton;
+
+  /// No description provided for @sharedOriginBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared'**
+  String get sharedOriginBadge;
+
+  /// No description provided for @sharedOriginFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'from {email}'**
+  String sharedOriginFrom(String email);
+
+  /// No description provided for @swapBackupDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup created'**
+  String get swapBackupDialogTitle;
+
+  /// No description provided for @swapBackupDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The previous version was saved as a zip. What do you want to do with it?'**
+  String get swapBackupDialogBody;
+
+  /// No description provided for @swapBackupUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to Drive'**
+  String get swapBackupUpload;
+
+  /// No description provided for @swapBackupLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep on this device'**
+  String get swapBackupLocalOnly;
+
+  /// No description provided for @swapBackupDeleteNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete now'**
+  String get swapBackupDeleteNow;
+
+  /// No description provided for @swapBackupUploadOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup uploaded to Drive.'**
+  String get swapBackupUploadOk;
+
+  /// No description provided for @swapBackupUploadErr.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t upload the backup: {error}'**
+  String swapBackupUploadErr(String error);
+
+  /// No description provided for @swapBackupLocalOnlySnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved on this device.'**
+  String get swapBackupLocalOnlySnack;
+
+  /// No description provided for @backupsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups'**
+  String get backupsAction;
+
+  /// No description provided for @backupsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups of {farmName}'**
+  String backupsScreenTitle(String farmName);
+
+  /// No description provided for @backupsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No backups yet.'**
+  String get backupsEmpty;
+
+  /// No description provided for @backupsRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get backupsRestore;
+
+  /// No description provided for @backupsRestoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore this backup?'**
+  String get backupsRestoreConfirmTitle;
+
+  /// No description provided for @backupsRestoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This overwrites your current save with this earlier version. This can\'t be undone.'**
+  String get backupsRestoreConfirmBody;
+
+  /// No description provided for @backupsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get backupsDelete;
+
+  /// No description provided for @backupsDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this backup?'**
+  String get backupsDeleteConfirmTitle;
+
+  /// No description provided for @backupsDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletes it everywhere it exists (this device and Drive, if uploaded). This can\'t be undone.'**
+  String get backupsDeleteConfirmBody;
+
+  /// No description provided for @backupsRestoreOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored.'**
+  String get backupsRestoreOk;
+
+  /// No description provided for @backupsRestoreErr.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t restore the backup: {error}'**
+  String backupsRestoreErr(String error);
+
+  /// No description provided for @backupsDeleteErr.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the backup: {error}'**
+  String backupsDeleteErr(String error);
+
+  /// No description provided for @deleteUnifiedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {farmName}?'**
+  String deleteUnifiedTitle(String farmName);
+
+  /// No description provided for @deleteChooseLocationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).'**
+  String get deleteChooseLocationBody;
+
+  /// No description provided for @deleteOptionLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only from this device'**
+  String get deleteOptionLocalOnly;
+
+  /// No description provided for @deleteOptionDriveOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only from Drive'**
+  String get deleteOptionDriveOnly;
+
+  /// No description provided for @deleteOptionBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'From both (device + Drive)'**
+  String get deleteOptionBoth;
+
+  /// No description provided for @viewPlayersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'View players'**
+  String get viewPlayersHint;
+
+  /// No description provided for @snackDeletedBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{saveName}\" deleted from this device and moved to Drive Trash.'**
+  String snackDeletedBoth(String saveName);
+
   /// No description provided for @statDayYear.
   ///
   /// In en, this message translates to:
@@ -2166,6 +2676,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn’t open the game'**
   String get snackLaunchError;
+
+  /// No description provided for @makeHostAction.
+  ///
+  /// In en, this message translates to:
+  /// **'MAKE HOST'**
+  String get makeHostAction;
+
+  /// No description provided for @makeHostExperimental.
+  ///
+  /// In en, this message translates to:
+  /// **'EXPERIMENTAL'**
+  String get makeHostExperimental;
+
+  /// No description provided for @makeHostDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change host'**
+  String get makeHostDialogTitle;
+
+  /// No description provided for @makeHostDialogIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'{playerName} will become the host of {farmName}.'**
+  String makeHostDialogIntro(String playerName, String farmName);
+
+  /// No description provided for @makeHostNewCopyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A new save is created. You\'ll decide what to do with the original next.'**
+  String get makeHostNewCopyNote;
+
+  /// No description provided for @makeHostMoveCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 farm object will be moved to make room for the house. Nothing is deleted.} other{{count} farm objects will be moved to make room for the house. Nothing is deleted.}}'**
+  String makeHostMoveCount(int count);
+
+  /// No description provided for @makeHostHouseWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'The new host\'s home will look like the game\'s main farmhouse. Cabin looks aren\'t supported without mods.'**
+  String get makeHostHouseWarning;
+
+  /// No description provided for @makeHostConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Make host'**
+  String get makeHostConfirmButton;
+
+  /// No description provided for @makeHostSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'New save created: {playerName} is now the host.'**
+  String makeHostSuccess(String playerName);
+
+  /// No description provided for @hostSwapErrInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This save has an unexpected structure. Nothing was changed.'**
+  String get hostSwapErrInvalid;
+
+  /// No description provided for @hostSwapErrNoSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'No free space on the farm to relocate objects. Nothing was changed.'**
+  String get hostSwapErrNoSpace;
+
+  /// No description provided for @hostSwapErrWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not write the new save (disk/permissions). Nothing was changed.'**
+  String get hostSwapErrWrite;
+
+  /// No description provided for @hostSwapErrValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification of the new save failed, so it was discarded. The original is intact.'**
+  String get hostSwapErrValidation;
 }
 
 class _AppLocalizationsDelegate

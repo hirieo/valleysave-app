@@ -482,5 +482,40 @@
   "settingsGameExeNotFound": "未自动找到",
   "settingsGameExeBrowse": "浏览…",
   "settingsGameExeSaved": "路径已保存",
-  "snackLaunchError": "无法打开游戏"
+  "snackLaunchError": "无法打开游戏",
+  "makeHostAction": "设为房主",
+  "makeHostExperimental": "实验性功能",
+  "makeHostDialogTitle": "更换房主",
+  "makeHostDialogIntro": "{playerName}将成为{farmName}的房主。",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "将创建一个新存档。之后由你决定如何处理原始存档。",
+  "makeHostMoveCount": "{count, plural, other{农场中的{count}个物体将被移动以为房屋腾出空间。不会删除任何东西。}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "新房主的房子看起来会像游戏中的主农舍。没有模组的情况下不支持小屋外观。",
+  "makeHostConfirmButton": "设为房主",
+  "makeHostSuccess": "已创建新存档：{playerName}现在是房主。",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "要从此设备删除原始存档吗？",
+  "makeHostDeleteOriginalBody": "新存档已就绪。可以先把原始存档备份到你的 Drive（之后可重新下载），或者只删除本地副本。",
+  "makeHostDeleteWithoutUpload": "不上传直接删除",
+  "makeHostDeleteOriginalUploadBody": "原始存档会先上传到你的 Drive 作为备份，然后再删除本设备上的本地副本。",
+  "makeHostDeleteOriginalNoBackupBody": "未连接 Drive：不会保留任何备份。仅会删除本设备上的本地副本。",
+  "makeHostUploadAndDelete": "上传并删除",
+  "hostSwapErrInvalid": "此存档的结构异常，未做任何更改。",
+  "hostSwapErrNoSpace": "农场没有可用空间来重新放置物体，未做任何更改。",
+  "hostSwapErrWrite": "无法写入新存档（磁盘/权限问题），未做任何更改。",
+  "hostSwapErrValidation": "新存档的验证失败，已被丢弃。原始存档完好无损。"
 }

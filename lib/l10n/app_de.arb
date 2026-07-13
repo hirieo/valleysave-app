@@ -361,5 +361,40 @@
   "settingsGameExeNotFound": "Nicht automatisch gefunden",
   "settingsGameExeBrowse": "Suchen…",
   "settingsGameExeSaved": "Pfad gespeichert",
-  "snackLaunchError": "Spiel konnte nicht geöffnet werden"
+  "snackLaunchError": "Spiel konnte nicht geöffnet werden",
+  "makeHostAction": "ZUM GASTGEBER MACHEN",
+  "makeHostExperimental": "EXPERIMENTELL",
+  "makeHostDialogTitle": "Gastgeber wechseln",
+  "makeHostDialogIntro": "{playerName} wird der neue Gastgeber von {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Ein neuer Spielstand wird erstellt. Danach entscheidest du, was mit dem Original passiert.",
+  "makeHostMoveCount": "{count, plural, one{1 Objekt auf dem Hof wird verschoben, um Platz für das Haus zu schaffen. Nichts wird gelöscht.} other{{count} Objekte auf dem Hof werden verschoben, um Platz für das Haus zu schaffen. Nichts wird gelöscht.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "Das Haus des neuen Gastgebers sieht aus wie das große Bauernhaus des Spiels. Die Optik der Hütte wird ohne Mods nicht unterstützt.",
+  "makeHostConfirmButton": "Gastgeber machen",
+  "makeHostSuccess": "Neuer Spielstand erstellt: {playerName} ist jetzt der Gastgeber.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Original-Spielstand von diesem Gerät löschen?",
+  "makeHostDeleteOriginalBody": "Der neue Spielstand ist bereit. Sichere das Original zuerst in deinem Drive (du kannst es später erneut herunterladen) oder lösche einfach die lokale Kopie.",
+  "makeHostDeleteWithoutUpload": "Ohne Hochladen löschen",
+  "makeHostDeleteOriginalUploadBody": "Der Original-Spielstand wird zuerst als Sicherung in dein Drive hochgeladen, dann wird die lokale Kopie auf diesem Gerät gelöscht.",
+  "makeHostDeleteOriginalNoBackupBody": "Keine Drive-Verbindung: Es bleibt keine Sicherung übrig. Nur die lokale Kopie auf diesem Gerät wird gelöscht.",
+  "makeHostUploadAndDelete": "Hochladen und löschen",
+  "hostSwapErrInvalid": "Dieser Spielstand hat eine unerwartete Struktur. Es wurde nichts geändert.",
+  "hostSwapErrNoSpace": "Kein freier Platz auf dem Hof, um Objekte zu verschieben. Es wurde nichts geändert.",
+  "hostSwapErrWrite": "Der neue Spielstand konnte nicht geschrieben werden (Speicher/Berechtigungen). Es wurde nichts geändert.",
+  "hostSwapErrValidation": "Die Überprüfung des neuen Spielstands ist fehlgeschlagen, er wurde verworfen. Das Original ist unversehrt."
 }

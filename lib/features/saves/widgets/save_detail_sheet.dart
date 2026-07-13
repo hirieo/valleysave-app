@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../generated/app_localizations.dart';
+import '../../../core/models/player_stats.dart';
 import '../../../core/models/save_entry.dart';
 import '../../../core/models/save_file.dart';
 import '../../../core/theme/app_colors.dart';
@@ -22,6 +23,11 @@ class _DetailSide {
     required this.onAction,
     this.onDelete,
     this.deleteLabel = '',  // will be set by caller
+    this.onMakeHost,
+    this.onExport,
+    this.onShare,
+    this.onBackups,
+    this.backupCount = 0,
   });
   final SaveFile save;
   final Color color;
@@ -32,6 +38,21 @@ class _DetailSide {
   final VoidCallback? onAction;
   final VoidCallback? onDelete;
   final String deleteLabel;
+
+  /// Cambio de anfitrión (F3) — solo la cara LOCAL lo recibe (nunca Drive).
+  final void Function(PlayerStats target)? onMakeHost;
+
+  /// Exportar a archivo (F1) — solo la cara LOCAL lo recibe (nunca Drive).
+  final VoidCallback? onExport;
+
+  /// Compartir por email (F2) — visible en AMBAS caras, solo si el save ya
+  /// está en Drive (`entry.drive != null`, decidido por el caller).
+  final VoidCallback? onShare;
+
+  /// Respaldos pre-swap (spec 007) — solo la cara LOCAL, solo si hay al
+  /// menos uno (el caller decide, ver `backupCount`).
+  final VoidCallback? onBackups;
+  final int backupCount;
 }
 
 /// Hoja inferior con los stats completos de una versión, con título de la cara,
@@ -44,6 +65,13 @@ void showSaveDetail(
   VoidCallback? onDownload,
   VoidCallback? onDeleteFromDrive,
   VoidCallback? onDeleteLocal,
+  void Function(PlayerStats target)? onMakeHost,
+  VoidCallback? onExport,
+  VoidCallback? onShare,
+  VoidCallback? onBackups,
+  int backupCount = 0,
+  int initialPlayerIndex = 0,
+  ValueChanged<int>? onPlayerIndexChanged,
 }) {
   final l10n = AppLocalizations.of(context)!;
   final isMobile = Platform.isAndroid || Platform.isIOS;
@@ -61,6 +89,11 @@ void showSaveDetail(
         onAction: onUpload,
         onDelete: onDeleteLocal,
         deleteLabel: l10n.cardDetailDeleteLocal,
+        onMakeHost: onMakeHost, // solo la cara local — nunca Drive
+        onExport: onExport, // solo la cara local — nunca Drive
+        onShare: entry.drive != null ? onShare : null,
+        onBackups: onBackups, // solo la cara local — nunca Drive
+        backupCount: backupCount,
       ),
     if (entry.drive != null)
       _DetailSide(
@@ -73,6 +106,7 @@ void showSaveDetail(
         onAction: onDownload,
         onDelete: onDeleteFromDrive,
         deleteLabel: l10n.cardDetailDeleteRemote,
+        onShare: onShare,
       ),
   ];
   if (sides.isEmpty) return;
@@ -100,32 +134,56 @@ void showSaveDetail(
     pageBuilder: (ctx, anim, secAnim) => Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 40),
-      child: _DetailSheet(sides: sides, initialPage: initialPage),
+      child: _DetailSheet(
+        sides: sides,
+        initialPage: initialPage,
+        initialPlayerIndex: initialPlayerIndex,
+        onPlayerIndexChanged: onPlayerIndexChanged,
+      ),
     ),
   );
 }
 
 class _DetailSheet extends StatefulWidget {
-  const _DetailSheet({required this.sides, required this.initialPage});
+  const _DetailSheet({
+    required this.sides,
+    required this.initialPage,
+    this.initialPlayerIndex = 0,
+    this.onPlayerIndexChanged,
+  });
   final List<_DetailSide> sides;
   final int initialPage;
+  final int initialPlayerIndex;
+  final ValueChanged<int>? onPlayerIndexChanged;
 
   @override
   State<_DetailSheet> createState() => _DetailSheetState();
 }
 
-class _DetailSheetState extends State<_DetailSheet> {
+class _DetailSheetState extends State<_DetailSheet>
+    with SingleTickerProviderStateMixin {
   late int _index = widget.initialPage;
   int _direction = 1;
   bool _leftPressed = false;
   bool _rightPressed = false;
   // Compartido entre local y Drive: cambiar de jugador mueve las dos caras
-  // aunque solo una esté visible en cada momento.
-  int _playerIndex = 0;
+  // aunque solo una esté visible en cada momento. Se siembra con lo que ya
+  // estaba seleccionado en la tarjeta (y se propaga de vuelta al cambiar
+  // aquí) para que abrir la OTRA cara no lo resetee (feedback 2026-07-12).
+  late int _playerIndex = widget.initialPlayerIndex;
   final _focusNode = FocusNode();
+
+  // Entrada escalonada de los botones de acción: corre UNA vez al abrir la
+  // hoja. Al completarse queda en 1.0, así los rebuilds por cambio de jugador
+  // no la repiten (los botones quedan visibles sin re-animar).
+  late final AnimationController _entrance = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 420),
+  )..forward();
 
   @override
   void dispose() {
+    _entrance.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -143,6 +201,7 @@ class _DetailSheetState extends State<_DetailSheet> {
   void _selectPlayer(int i) {
     if (i < 0) return;
     setState(() => _playerIndex = i);
+    widget.onPlayerIndexChanged?.call(i);
   }
 
   Widget _navArrow(IconData icon,
@@ -229,7 +288,7 @@ class _DetailSheetState extends State<_DetailSheet> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: 7),
                 Center(
                   child: Container(
                     width: 40,
@@ -316,6 +375,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                         side: active,
                         playerIndex: _playerIndex,
                         onSelectPlayer: _selectPlayer,
+                        entrance: _entrance,
                       ),
                     ),
                   ),
@@ -336,10 +396,12 @@ class _DetailPage extends StatelessWidget {
     required this.side,
     required this.playerIndex,
     required this.onSelectPlayer,
+    required this.entrance,
   });
   final _DetailSide side;
   final int playerIndex;
   final ValueChanged<int> onSelectPlayer;
+  final Animation<double> entrance;
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +421,7 @@ class _DetailPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+                  padding: const EdgeInsets.fromLTRB(14, 6, 14, 7),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -444,84 +506,328 @@ class _DetailPage extends StatelessWidget {
             ),
           ),
         ),
-        if (side.onAction != null || side.onDelete != null) ...[
-          kDivider,
-          if (side.onAction != null)
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  14, 12, 14, side.onDelete != null ? 6 : 14),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  side.onAction!.call();
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: side.color.withValues(alpha: 0.16),
-                    border:
-                        Border.all(color: side.color.withValues(alpha: 0.55)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(side.actionIcon, size: 16, color: side.color),
-                      const SizedBox(width: 7),
-                      Text(
-                        side.actionLabel,
-                        style: GoogleFonts.firaCode(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: side.color,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          if (side.onDelete != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  side.onDelete!.call();
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE05252).withValues(alpha: 0.08),
-                    border: Border.all(
-                        color: const Color(0xFFE05252).withValues(alpha: 0.30)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.delete_outline_rounded,
-                          size: 14, color: Color(0xFFE05252)),
-                      const SizedBox(width: 6),
-                      Text(
-                        side.deleteLabel,
-                        style: GoogleFonts.firaCode(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFFE05252),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-        ],
+        _buildActions(
+          context,
+          coop: coop,
+          hostSelected: hostSelected,
+          base: base,
+          idx: idx,
+        ),
       ],
+    );
+  }
+
+  /// Región de acciones — Option A (aprobada 2026-07-11): 1 botón principal
+  /// (la dirección de sync de esta cara), fila de acciones secundarias con
+  /// icono, y borrar como enlace discreto. Entrada escalonada + press a través
+  /// de [_Pressable]. Sustituye la pila de 5 botones full-width anterior.
+  Widget _buildActions(
+    BuildContext context, {
+    required bool coop,
+    required bool hostSelected,
+    required SaveFile base,
+    required int idx,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    final makeHostVisible = coop &&
+        !hostSelected &&
+        side.onMakeHost != null &&
+        base.players[idx].name.isNotEmpty;
+
+    final secondary = <Widget>[
+      if (side.onShare != null)
+        _SecondaryAction(
+          icon: Icons.person_add_alt_1_rounded,
+          label: l10n.shareAction,
+          onTap: () {
+            Navigator.pop(context);
+            side.onShare!.call();
+          },
+        ),
+      if (side.onExport != null)
+        _SecondaryAction(
+          icon: Icons.ios_share_rounded,
+          label: l10n.exportAction,
+          onTap: () {
+            Navigator.pop(context);
+            side.onExport!.call();
+          },
+        ),
+      if (makeHostVisible)
+        _SecondaryAction(
+          icon: Icons.workspace_premium_rounded,
+          label: l10n.makeHostAction,
+          experimental: true,
+          onTap: () {
+            final target = base.players[idx];
+            Navigator.pop(context);
+            side.onMakeHost!(target);
+          },
+        ),
+      if (side.onBackups != null)
+        _SecondaryAction(
+          icon: Icons.inventory_2_outlined,
+          label: l10n.backupsAction,
+          badgeCount: side.backupCount,
+          accentColor: const Color(0xFF97C459),
+          onTap: () {
+            Navigator.pop(context);
+            side.onBackups!.call();
+          },
+        ),
+    ];
+
+    // Índices de stagger: primario = 0, cada secundario y borrar siguen.
+    var staggerIndex = 0;
+    final children = <Widget>[];
+
+    if (side.onAction != null) {
+      children.add(_stagger(
+        staggerIndex++,
+        _Pressable(
+          onTap: () {
+            Navigator.pop(context);
+            side.onAction!.call();
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 13),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: side.color.withValues(alpha: 0.16),
+              border: Border.all(color: side.color.withValues(alpha: 0.55)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(side.actionIcon, size: 16, color: side.color),
+                const SizedBox(width: 7),
+                Text(
+                  side.actionLabel,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: side.color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ));
+    }
+
+    if (secondary.isNotEmpty) {
+      children.add(const SizedBox(height: 8));
+      children.add(_stagger(
+        staggerIndex++,
+        Row(
+          children: [
+            for (var i = 0; i < secondary.length; i++) ...[
+              if (i > 0) const SizedBox(width: 7),
+              Expanded(child: secondary[i]),
+            ],
+          ],
+        ),
+      ));
+    }
+
+    if (side.onDelete != null) {
+      children.add(const SizedBox(height: 10));
+      children.add(_stagger(
+        staggerIndex++,
+        _Pressable(
+          onTap: () {
+            Navigator.pop(context);
+            side.onDelete!.call();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.delete_outline_rounded,
+                    size: 13, color: Color(0xFFE05252)),
+                const SizedBox(width: 5),
+                Text(
+                  side.deleteLabel,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFFE05252).withValues(alpha: 0.85),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ));
+    }
+
+    if (children.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        kDivider,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Aparición en cascada: opacidad + leve subida, con retraso creciente por
+  /// índice. [entrance] corre una sola vez (ver `_DetailSheetState`); tras
+  /// completarse, `value == 1` y no se re-anima al cambiar de jugador.
+  Widget _stagger(int i, Widget child) {
+    final start = (i * 0.12).clamp(0.0, 0.5);
+    final anim = CurvedAnimation(
+      parent: entrance,
+      curve: Interval(start, (start + 0.5).clamp(0.0, 1.0),
+          curve: const Cubic(0.23, 1, 0.32, 1)),
+    );
+    return AnimatedBuilder(
+      animation: anim,
+      builder: (_, c) => Opacity(
+        opacity: anim.value.clamp(0.0, 1.0),
+        child: Transform.translate(
+          offset: Offset(0, 8 * (1 - anim.value)),
+          child: c,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+/// Botón secundario compacto (icono + etiqueta apilados) para la fila de
+/// acciones de la hoja de detalle. Dorado como el resto de acciones; marca
+/// `experimental` para un punto de aviso discreto (host-swap).
+class _SecondaryAction extends StatelessWidget {
+  const _SecondaryAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.experimental = false,
+    this.badgeCount = 0,
+    this.accentColor = const Color(0xFFE0B850),
+  });
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool experimental;
+
+  /// Contador numérico (p.ej. nº de backups) — se pinta en vez del punto de
+  /// `experimental` cuando > 0. Los dos badges no se combinan.
+  final int badgeCount;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = accentColor;
+    return _Pressable(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 4),
+        decoration: BoxDecoration(
+          border: Border.all(color: accent.withValues(alpha: 0.40)),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(icon, size: 17, color: accent),
+                if (experimental)
+                  Positioned(
+                    top: -3,
+                    right: -6,
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFE09020),
+                      ),
+                    ),
+                  ),
+                if (badgeCount > 0)
+                  Positioned(
+                    top: -6,
+                    right: -8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      constraints: const BoxConstraints(minWidth: 14),
+                      decoration: BoxDecoration(
+                        color: accent,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        '$badgeCount',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.firaCode(
+                          fontSize: 8,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF14110A),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.firaCode(
+                fontSize: 9.5,
+                fontWeight: FontWeight.w500,
+                color: accent,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Envoltorio de feedback al pulsar: `scale(0.97)` en 140ms con la curva de
+/// la app (Emil — botones deben "sentirse" al presionar).
+class _Pressable extends StatefulWidget {
+  const _Pressable({required this.onTap, required this.child});
+  final VoidCallback onTap;
+  final Widget child;
+
+  @override
+  State<_Pressable> createState() => _PressableState();
+}
+
+class _PressableState extends State<_Pressable> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.97 : 1.0,
+        duration: const Duration(milliseconds: 140),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: widget.child,
+      ),
     );
   }
 }

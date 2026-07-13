@@ -482,5 +482,40 @@
   "settingsGameExeNotFound": "ไม่พบอัตโนมัติ",
   "settingsGameExeBrowse": "เรียกดู…",
   "settingsGameExeSaved": "บันทึกพาธแล้ว",
-  "snackLaunchError": "ไม่สามารถเปิดเกมได้"
+  "snackLaunchError": "ไม่สามารถเปิดเกมได้",
+  "makeHostAction": "ตั้งเป็นเจ้าของบ้าน",
+  "makeHostExperimental": "ทดลอง",
+  "makeHostDialogTitle": "เปลี่ยนเจ้าของบ้าน",
+  "makeHostDialogIntro": "{playerName} จะกลายเป็นเจ้าของบ้านของ {farmName}",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "จะสร้างเซฟใหม่ขึ้นมา จากนั้นคุณจะเลือกเองว่าจะทำอย่างไรกับต้นฉบับ",
+  "makeHostMoveCount": "{count, plural, other{วัตถุในฟาร์ม {count} ชิ้นจะถูกย้ายเพื่อเปิดพื้นที่ให้บ้าน จะไม่มีการลบสิ่งใดออก}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "บ้านของเจ้าของบ้านคนใหม่จะมีลักษณะเหมือนบ้านฟาร์มหลักของเกม รูปลักษณ์กระท่อมไม่รองรับหากไม่มีม็อด",
+  "makeHostConfirmButton": "ตั้งเป็นเจ้าของบ้าน",
+  "makeHostSuccess": "สร้างเซฟใหม่แล้ว: {playerName} เป็นเจ้าของบ้านคนใหม่แล้ว",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "ลบเซฟต้นฉบับออกจากเครื่องนี้หรือไม่?",
+  "makeHostDeleteOriginalBody": "เซฟใหม่พร้อมแล้ว สำรองต้นฉบับไปยัง Drive ของคุณก่อน (คุณดาวน์โหลดใหม่ได้ภายหลัง) หรือจะลบเฉพาะสำเนาในเครื่องก็ได้",
+  "makeHostDeleteWithoutUpload": "ลบโดยไม่อัปโหลด",
+  "makeHostDeleteOriginalUploadBody": "เซฟต้นฉบับจะถูกอัปโหลดไปยัง Drive ของคุณเป็นข้อมูลสำรองก่อน จากนั้นจะลบสำเนาในเครื่องนี้",
+  "makeHostDeleteOriginalNoBackupBody": "ไม่มีการเชื่อมต่อ Drive: จะไม่มีข้อมูลสำรองเหลืออยู่ จะลบเฉพาะสำเนาในเครื่องนี้เท่านั้น",
+  "makeHostUploadAndDelete": "อัปโหลดและลบ",
+  "hostSwapErrInvalid": "เซฟนี้มีโครงสร้างที่ไม่คาดคิด ไม่มีการเปลี่ยนแปลงใดๆ",
+  "hostSwapErrNoSpace": "ไม่มีพื้นที่ว่างในฟาร์มสำหรับย้ายวัตถุ ไม่มีการเปลี่ยนแปลงใดๆ",
+  "hostSwapErrWrite": "ไม่สามารถเขียนเซฟใหม่ได้ (ดิสก์/สิทธิ์การเข้าถึง) ไม่มีการเปลี่ยนแปลงใดๆ",
+  "hostSwapErrValidation": "การตรวจสอบเซฟใหม่ล้มเหลว จึงถูกยกเลิก ต้นฉบับยังคงสมบูรณ์"
 }

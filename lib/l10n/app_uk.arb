@@ -508,5 +508,40 @@
   "settingsGameExeNotFound": "Не знайдено автоматично",
   "settingsGameExeBrowse": "Огляд…",
   "settingsGameExeSaved": "Шлях збережено",
-  "snackLaunchError": "Не вдалося відкрити гру"
+  "snackLaunchError": "Не вдалося відкрити гру",
+  "makeHostAction": "ЗРОБИТИ ГОСПОДАРЕМ",
+  "makeHostExperimental": "ЕКСПЕРИМЕНТАЛЬНО",
+  "makeHostDialogTitle": "Змінити господаря",
+  "makeHostDialogIntro": "{playerName} стане господарем ферми {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Створюється нове збереження. Далі ви вирішите, що робити з оригіналом.",
+  "makeHostMoveCount": "{count, plural, one{На фермі буде переміщено {count} об'єкт, щоб звільнити місце для будинку. Нічого не видаляється.} few{На фермі буде переміщено {count} об'єкти, щоб звільнити місце для будинку. Нічого не видаляється.} many{На фермі буде переміщено {count} об'єктів, щоб звільнити місце для будинку. Нічого не видаляється.} other{На фермі буде переміщено {count} об'єкта, щоб звільнити місце для будинку. Нічого не видаляється.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "Будинок нового господаря виглядатиме як великий фермерський будинок гри. Вигляд хатини не підтримується без модів.",
+  "makeHostConfirmButton": "Зробити господарем",
+  "makeHostSuccess": "Нове збереження створено: {playerName} тепер господар.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Видалити оригінальне збереження з цього пристрою?",
+  "makeHostDeleteOriginalBody": "Нове збереження готове. Спершу зробіть резервну копію оригіналу у Drive (пізніше зможете завантажити його знову) або просто видаліть локальну копію.",
+  "makeHostDeleteWithoutUpload": "Видалити без завантаження",
+  "makeHostDeleteOriginalUploadBody": "Оригінальне збереження спершу буде завантажено у ваш Drive як резервну копію, потім локальну копію на цьому пристрої буде видалено.",
+  "makeHostDeleteOriginalNoBackupBody": "Немає з'єднання з Drive: резервної копії не залишиться. Буде видалено лише локальну копію на цьому пристрої.",
+  "makeHostUploadAndDelete": "Завантажити та видалити",
+  "hostSwapErrInvalid": "Це збереження має неочікувану структуру. Нічого не змінено.",
+  "hostSwapErrNoSpace": "На фермі немає вільного місця для переміщення об'єктів. Нічого не змінено.",
+  "hostSwapErrWrite": "Не вдалося записати нове збереження (диск/дозволи). Нічого не змінено.",
+  "hostSwapErrValidation": "Перевірка нового збереження не вдалася, тому його скасовано. Оригінал неушкоджений."
 }

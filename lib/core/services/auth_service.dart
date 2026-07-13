@@ -11,7 +11,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 export 'package:googleapis_auth/auth_io.dart' show AuthClient;
 
-const _scopes = ['https://www.googleapis.com/auth/drive.file'];
+// Scope completo (no drive.file): "Compartidas conmigo" necesita leer
+// contenido de carpetas ajenas compartidas, y el modo coop necesita
+// escribir en ellas — drive.file no da acceso recursivo a hijos de una
+// carpeta que no es tuya, ni aunque el dueño te la comparta (ver research
+// 2026-07-12, picker de Google mostraba "No items in this folder" incluso
+// dentro del propio selector oficial).
+const _scopes = ['https://www.googleapis.com/auth/drive'];
 const _storageKey = 'google_auth_credentials';
 
 class AuthService {

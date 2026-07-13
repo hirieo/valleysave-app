@@ -416,6 +416,310 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cardCloseBarrier => 'Chiudi';
 
   @override
+  String get exportAction => 'Export';
+
+  @override
+  String get exportSuccess => 'Save exported.';
+
+  @override
+  String exportError(String error) {
+    return 'Couldn\'t export the save: $error';
+  }
+
+  @override
+  String get importAction => 'Import save';
+
+  @override
+  String importSuccess(String playerName) {
+    return '$playerName\'s save imported.';
+  }
+
+  @override
+  String get importErrInvalidZip => 'This isn\'t a valid zip file.';
+
+  @override
+  String get importErrUnsafePath =>
+      'This file has an unsafe structure and was rejected.';
+
+  @override
+  String get importErrTooLarge => 'This file is too large to import.';
+
+  @override
+  String get importErrNotASave =>
+      'This file doesn\'t contain a recognizable save.';
+
+  @override
+  String get importErrWrite =>
+      'Couldn\'t write the imported save (disk/permissions).';
+
+  @override
+  String get importConflictTitle => 'A save with this name already exists';
+
+  @override
+  String get importConflictBody =>
+      'Importing will replace the existing local copy. This can\'t be undone.';
+
+  @override
+  String get importConflictConfirm => 'Overwrite';
+
+  @override
+  String get shareAction => 'Share';
+
+  @override
+  String get shareUploadFirstCta => 'Upload first';
+
+  @override
+  String get shareDialogTitle => 'Share save';
+
+  @override
+  String get shareEmailPlaceholder => 'name@example.com';
+
+  @override
+  String get shareInfoNote =>
+      'Sharing gives view-and-download access only. Only you can edit or delete your copy in Drive.';
+
+  @override
+  String get shareRoleReader => 'Read only';
+
+  @override
+  String get shareRoleWriter => 'Allow sync';
+
+  @override
+  String get shareInfoNoteCoop =>
+      'Read only lets them view and download. Allow sync lets them overwrite your copy in Drive — they can never delete it.';
+
+  @override
+  String get shareConfirmButton => 'Share';
+
+  @override
+  String shareSuccess(String email) {
+    return 'Shared with $email.';
+  }
+
+  @override
+  String get manageAccessTitle => 'People with access';
+
+  @override
+  String get manageAccessEmpty => 'Nobody else has access yet.';
+
+  @override
+  String get manageAccessRoleLabel => 'Access';
+
+  @override
+  String get manageAccessRevoke => 'Revoke';
+
+  @override
+  String manageAccessRevokeConfirm(String email) {
+    return 'Remove $email\'s access? Any local copy they already downloaded is theirs to keep.';
+  }
+
+  @override
+  String get driveOnlyControlsYourCopy =>
+      'Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.';
+
+  @override
+  String get driveOnlyControlsYourCopyCoop =>
+      'Sync controls your copy in Drive — it can be overwritten, but never deleted, by people you allow to sync.';
+
+  @override
+  String get sharedWithMeTitle => 'Shared with me';
+
+  @override
+  String get sharedWithMeEmpty => 'Nothing shared with you yet.';
+
+  @override
+  String get sharedWithMeAdd => 'Add shared save';
+
+  @override
+  String sharedWithMeOwnedBy(String email) {
+    return 'Shared by $email';
+  }
+
+  @override
+  String get sharedWithMeRoleSync => 'Sync';
+
+  @override
+  String get sharedWithMeRoleRead => 'Read only';
+
+  @override
+  String get sharedWithMeSync => 'Sync';
+
+  @override
+  String get sharedWithMeDownload => 'Download';
+
+  @override
+  String get sharedWithMeRemove => 'Remove from list';
+
+  @override
+  String sharedWithMeRemoveConfirm(String email) {
+    return 'Remove from your list? This only affects your device — the save stays in $email\'s Drive.';
+  }
+
+  @override
+  String sharedWithMeSyncConfirm(String email) {
+    return 'Overwrite $email\'s copy in Drive with your local save?';
+  }
+
+  @override
+  String get sharedWithMeRevoked => 'You no longer have access';
+
+  @override
+  String get sharedWithMeUploadOwn => 'Upload to my Drive';
+
+  @override
+  String get sharedSyncBoth => 'Sync both';
+
+  @override
+  String get sharedSideMyDrive => 'MY DRIVE';
+
+  @override
+  String sharedSideOwnerDrive(String email) {
+    return '$email\'s DRIVE';
+  }
+
+  @override
+  String sharedSideDate(int day, int year) {
+    return 'Day $day · Year $year';
+  }
+
+  @override
+  String get sharedStatusSyncedNoOwnDrive =>
+      'Synced with the owner · no copy in your Drive';
+
+  @override
+  String get sharedStatusAheadNoOwnDrive =>
+      'You\'re ahead · no copy in your Drive';
+
+  @override
+  String sharedStatusOwnerAheadNoOwnDrive(String email) {
+    return '$email is ahead · no copy in your Drive';
+  }
+
+  @override
+  String get sharedStatusAllSynced => 'Synced (local + both Drives)';
+
+  @override
+  String get sharedStatusAheadBoth => 'You\'re ahead on both Drives';
+
+  @override
+  String get sharedStatusMixed => 'Out of sync — check each Drive';
+
+  @override
+  String get sharedWithMePickerTitle => 'Add shared save';
+
+  @override
+  String get sharedPickerEmptyHint =>
+      'Folders another player shares with you from Drive show up here.';
+
+  @override
+  String get sharedPickerAddButton => 'Add';
+
+  @override
+  String get sharedOriginBadge => 'Shared';
+
+  @override
+  String sharedOriginFrom(String email) {
+    return 'from $email';
+  }
+
+  @override
+  String get swapBackupDialogTitle => 'Backup created';
+
+  @override
+  String get swapBackupDialogBody =>
+      'The previous version was saved as a zip. What do you want to do with it?';
+
+  @override
+  String get swapBackupUpload => 'Upload to Drive';
+
+  @override
+  String get swapBackupLocalOnly => 'Keep on this device';
+
+  @override
+  String get swapBackupDeleteNow => 'Delete now';
+
+  @override
+  String get swapBackupUploadOk => 'Backup uploaded to Drive.';
+
+  @override
+  String swapBackupUploadErr(String error) {
+    return 'Couldn\'t upload the backup: $error';
+  }
+
+  @override
+  String get swapBackupLocalOnlySnack => 'Backup saved on this device.';
+
+  @override
+  String get backupsAction => 'Backups';
+
+  @override
+  String backupsScreenTitle(String farmName) {
+    return 'Backups of $farmName';
+  }
+
+  @override
+  String get backupsEmpty => 'No backups yet.';
+
+  @override
+  String get backupsRestore => 'Restore';
+
+  @override
+  String get backupsRestoreConfirmTitle => 'Restore this backup?';
+
+  @override
+  String get backupsRestoreConfirmBody =>
+      'This overwrites your current save with this earlier version. This can\'t be undone.';
+
+  @override
+  String get backupsDelete => 'Delete';
+
+  @override
+  String get backupsDeleteConfirmTitle => 'Delete this backup?';
+
+  @override
+  String get backupsDeleteConfirmBody =>
+      'Deletes it everywhere it exists (this device and Drive, if uploaded). This can\'t be undone.';
+
+  @override
+  String get backupsRestoreOk => 'Backup restored.';
+
+  @override
+  String backupsRestoreErr(String error) {
+    return 'Couldn\'t restore the backup: $error';
+  }
+
+  @override
+  String backupsDeleteErr(String error) {
+    return 'Couldn\'t delete the backup: $error';
+  }
+
+  @override
+  String deleteUnifiedTitle(String farmName) {
+    return 'Delete $farmName?';
+  }
+
+  @override
+  String get deleteChooseLocationBody =>
+      'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).';
+
+  @override
+  String get deleteOptionLocalOnly => 'Only from this device';
+
+  @override
+  String get deleteOptionDriveOnly => 'Only from Drive';
+
+  @override
+  String get deleteOptionBoth => 'From both (device + Drive)';
+
+  @override
+  String get viewPlayersHint => 'View players';
+
+  @override
+  String snackDeletedBoth(String saveName) {
+    return '\"$saveName\" deleted from this device and moved to Drive Trash.';
+  }
+
+  @override
   String statDayYear(int day, int year) {
     return 'Giorno $day · Anno $year';
   }
@@ -1160,4 +1464,63 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get snackLaunchError => 'Impossibile aprire il gioco';
+
+  @override
+  String get makeHostAction => 'DIVENTA OSPITANTE';
+
+  @override
+  String get makeHostExperimental => 'SPERIMENTALE';
+
+  @override
+  String get makeHostDialogTitle => 'Cambia ospitante';
+
+  @override
+  String makeHostDialogIntro(String playerName, String farmName) {
+    return '$playerName diventerà l\'ospitante di $farmName.';
+  }
+
+  @override
+  String get makeHostNewCopyNote =>
+      'Viene creato un nuovo salvataggio. Deciderai poi cosa fare con l\'originale.';
+
+  @override
+  String makeHostMoveCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count oggetti della fattoria verranno spostati per fare spazio alla casa. Nulla viene eliminato.',
+      one:
+          '1 oggetto della fattoria verrà spostato per fare spazio alla casa. Nulla viene eliminato.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get makeHostHouseWarning =>
+      'La casa del nuovo ospitante avrà l\'aspetto della fattoria principale del gioco. L\'aspetto della baita non è supportato senza mod.';
+
+  @override
+  String get makeHostConfirmButton => 'Diventa ospitante';
+
+  @override
+  String makeHostSuccess(String playerName) {
+    return 'Nuovo salvataggio creato: $playerName è ora l\'ospitante.';
+  }
+
+  @override
+  String get hostSwapErrInvalid =>
+      'Questo salvataggio ha una struttura imprevista. Non è stato modificato nulla.';
+
+  @override
+  String get hostSwapErrNoSpace =>
+      'Nessuno spazio libero in fattoria per riposizionare gli oggetti. Non è stato modificato nulla.';
+
+  @override
+  String get hostSwapErrWrite =>
+      'Impossibile scrivere il nuovo salvataggio (disco/permessi). Non è stato modificato nulla.';
+
+  @override
+  String get hostSwapErrValidation =>
+      'La verifica del nuovo salvataggio non è riuscita, quindi è stato scartato. L\'originale è intatto.';
 }

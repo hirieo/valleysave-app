@@ -508,5 +508,40 @@
   "settingsGameExeNotFound": "자동으로 찾을 수 없음",
   "settingsGameExeBrowse": "찾아보기…",
   "settingsGameExeSaved": "경로 저장됨",
-  "snackLaunchError": "게임을 열 수 없습니다"
+  "snackLaunchError": "게임을 열 수 없습니다",
+  "makeHostAction": "호스트로 만들기",
+  "makeHostExperimental": "실험적 기능",
+  "makeHostDialogTitle": "호스트 변경",
+  "makeHostDialogIntro": "{playerName}님이 {farmName}의 호스트가 됩니다.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "새 세이브 파일이 생성됩니다. 이후 원본을 어떻게 할지 직접 결정합니다.",
+  "makeHostMoveCount": "{count, plural, other{집을 지을 공간을 확보하기 위해 농장의 오브젝트 {count}개가 이동합니다. 아무것도 삭제되지 않습니다.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "새 호스트의 집은 게임의 메인 농장 주택처럼 보입니다. 오두막 외관은 모드 없이는 지원되지 않습니다.",
+  "makeHostConfirmButton": "호스트로 만들기",
+  "makeHostSuccess": "새 세이브 파일 생성됨: 이제 {playerName}님이 호스트입니다.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "이 기기에서 원본 세이브 파일을 삭제할까요?",
+  "makeHostDeleteOriginalBody": "새 세이브 파일이 준비되었습니다. 원본을 먼저 Drive에 백업하거나(나중에 다시 다운로드할 수 있습니다) 로컬 사본만 삭제할 수 있습니다.",
+  "makeHostDeleteWithoutUpload": "업로드 없이 삭제",
+  "makeHostDeleteOriginalUploadBody": "원본 세이브 파일이 먼저 백업으로 Drive에 업로드된 다음, 이 기기의 로컬 사본이 삭제됩니다.",
+  "makeHostDeleteOriginalNoBackupBody": "Drive 연결 없음: 백업이 남지 않습니다. 이 기기의 로컬 사본만 삭제됩니다.",
+  "makeHostUploadAndDelete": "업로드 후 삭제",
+  "hostSwapErrInvalid": "이 세이브 파일의 구조가 예상과 다릅니다. 아무것도 변경되지 않았습니다.",
+  "hostSwapErrNoSpace": "오브젝트를 재배치할 여유 공간이 농장에 없습니다. 아무것도 변경되지 않았습니다.",
+  "hostSwapErrWrite": "새 세이브 파일을 쓸 수 없습니다(디스크/권한). 아무것도 변경되지 않았습니다.",
+  "hostSwapErrValidation": "새 세이브 파일 검증에 실패하여 폐기되었습니다. 원본은 그대로입니다."
 }

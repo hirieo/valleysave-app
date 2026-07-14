@@ -16,6 +16,8 @@ class SharedSaveEntry {
     this.revoked = false,
     this.ownDriveStats,
     this.ownDriveFolderId,
+    this.ownerDrivePresent = false,
+    this.ownerDriveVerified = true,
   });
 
   final String folderId;
@@ -43,24 +45,32 @@ class SharedSaveEntry {
   final SaveFile? ownDriveStats;
   final String? ownDriveFolderId;
 
+  /// La carpeta del dueño existe y fue visible en la última comprobación.
+  /// Se mantiene separado de [driveStats]: una carpeta puede existir aunque
+  /// Drive falle temporalmente al leer `SaveGameInfo`.
+  final bool ownerDrivePresent;
+
+  /// `false` significa "no se pudo comprobar ahora", nunca "no existe".
+  /// Evita convertir cuotas, rate limits o fallos temporales en revocaciones.
+  final bool ownerDriveVerified;
+
+  bool get hasOwnerDrive => ownerDrivePresent || driveStats != null;
+
   bool get canSync => myRole == 'writer' && !revoked;
 
   /// Reutiliza el MISMO cálculo de estado que las tarjetas propias
   /// (`SaveEntry.status`) para LOCAL vs Drive DEL DUEÑO — controla la
   /// franja de color superior de la tarjeta.
-  SaveEntry get asEntry => SaveEntry(
-        local: localMatch,
-        drive: driveStats,
-        driveFolderId: folderId,
-      );
+  SaveEntry get asEntry =>
+      SaveEntry(local: localMatch, drive: driveStats, driveFolderId: folderId);
 
   /// Mismo cálculo pero LOCAL vs TU PROPIO Drive — comparación
   /// independiente, usada solo para decidir qué botones de sync mostrar.
   SaveEntry get asOwnEntry => SaveEntry(
-        local: localMatch,
-        drive: ownDriveStats,
-        driveFolderId: ownDriveFolderId,
-      );
+    local: localMatch,
+    drive: ownDriveStats,
+    driveFolderId: ownDriveFolderId,
+  );
 
   /// `null` si no hay copia local con la que comparar (no debería pasar
   /// donde se usa esto — esos botones solo se muestran con `localMatch`).
@@ -74,6 +84,8 @@ class SharedSaveEntry {
     bool? revoked,
     SaveFile? ownDriveStats,
     String? ownDriveFolderId,
+    bool? ownerDrivePresent,
+    bool? ownerDriveVerified,
   }) {
     return SharedSaveEntry(
       folderId: folderId,
@@ -85,6 +97,8 @@ class SharedSaveEntry {
       revoked: revoked ?? this.revoked,
       ownDriveStats: ownDriveStats ?? this.ownDriveStats,
       ownDriveFolderId: ownDriveFolderId ?? this.ownDriveFolderId,
+      ownerDrivePresent: ownerDrivePresent ?? this.ownerDrivePresent,
+      ownerDriveVerified: ownerDriveVerified ?? this.ownerDriveVerified,
     );
   }
 }

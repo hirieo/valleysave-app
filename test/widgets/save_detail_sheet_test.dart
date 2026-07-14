@@ -287,12 +287,21 @@ void main() {
               onSync: () {},
               onSyncBoth: () {},
               onDownload: () {},
+              onSyncRequested: () {},
+              onDownloadRequested: () {},
             ),
           ),
         ),
       ),
     );
     await tester.pump();
+
+    expect(find.text('Totalmente sincronizado'), findsOneWidget);
+    expect(find.text('Backups'), findsNothing);
+    expect(find.text('HACER ANFITRIÓN'), findsNothing);
+    expect(find.text('Subir a mi Drive'), findsNothing);
+    expect(find.text('Sincronizar'), findsNothing);
+    expect(find.text('Descargar'), findsNothing);
 
     await tester.tap(find.text('EN ESTE DISPOSITIVO'));
     await tester.pumpAndSettle();
@@ -308,7 +317,7 @@ void main() {
     expect(find.text('Descargar partida'), findsNothing);
   });
 
-  testWidgets('subir a Mi Drive muestra indicador y bloquea doble toque', (
+  testWidgets('estado ocupado muestra indicador y bloquea la acción', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(900, 1600);
@@ -336,7 +345,7 @@ void main() {
                 localMatch: save,
               ),
               busy: true,
-              onUploadToOwnDrive: () => uploads++,
+              onSyncRequested: () => uploads++,
             ),
           ),
         ),
@@ -348,9 +357,60 @@ void main() {
       find.byKey(const ValueKey('shared-save-busy-indicator')),
       findsOneWidget,
     );
-    await tester.tap(find.text('Subir a mi Drive'));
+    expect(find.text('Sincronizar'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('shared-manage-copies-action')),
+      findsNothing,
+    );
     expect(uploads, 0);
   });
+
+  testWidgets(
+    'coop no comprobable no confunde el Drive del dueño con ausente',
+    (tester) async {
+      tester.view.physicalSize = const Size(900, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final local = _save(players: [ana, bruno]);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SharedSaveCard(
+                entry: SharedSaveEntry(
+                  folderId: 'owner-folder',
+                  folderName: local.folderName,
+                  ownerEmail: 'owner@gmail.com',
+                  myRole: 'reader',
+                  localMatch: local,
+                  ownerDrivePresent: true,
+                  ownerDriveVerified: false,
+                ),
+                onSyncRequested: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('EN ESTE DISPOSITIVO'), findsOneWidget);
+      expect(find.text('MI DRIVE'), findsOneWidget);
+      expect(find.text('DRIVE EN OWNER@GMAIL.COM'), findsOneWidget);
+      expect(find.text('No está aquí'), findsOneWidget);
+      expect(find.text('No se pudo comprobar'), findsOneWidget);
+      expect(
+        find.text('No se pudo comprobar Drive en owner@gmail.com'),
+        findsOneWidget,
+      );
+      expect(find.text('Ya no tienes acceso'), findsNothing);
+    },
+  );
 
   testWidgets('coop muestra desconectar y papelera como iconos compactos', (
     tester,
@@ -393,19 +453,11 @@ void main() {
 
     expect(find.text('Desconectar'), findsNothing);
     expect(find.byIcon(Icons.sync_disabled_rounded), findsOneWidget);
-    final statusRow = find
-        .ancestor(
-          of: find.text('Sincronizado (local + los dos Drive)'),
-          matching: find.byType(Row),
-        )
-        .first;
-    expect(
-      find.descendant(
-        of: statusRow,
-        matching: find.byKey(const ValueKey('shared-disconnect-action')),
-      ),
-      findsOneWidget,
+    final statusCenter = tester.getCenter(find.text('Totalmente sincronizado'));
+    final disconnectCenter = tester.getCenter(
+      find.byKey(const ValueKey('shared-disconnect-action')),
     );
+    expect((statusCenter.dy - disconnectCenter.dy).abs(), lessThan(20));
     await tester.tap(find.byKey(const ValueKey('shared-disconnect-action')));
     await tester.tap(find.byKey(const ValueKey('shared-manage-copies-action')));
     expect(disconnects, 1);
@@ -441,7 +493,35 @@ void main() {
     expect(manages, 1);
   });
 
-  testWidgets('partida compartida sin copia local permite abrir Backups', (
+  testWidgets('carga de partida normal ocupa el inicio de la fila de estado', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final save = _save(players: [ana, bruno]);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: SaveCard(entry: SaveEntry(local: save), busy: true),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final loader = find.byKey(const ValueKey('save-busy-indicator'));
+    final status = find.text('Solo en este equipo');
+    expect(loader, findsOneWidget);
+    expect(status, findsOneWidget);
+    expect(tester.getCenter(loader).dx, lessThan(tester.getCenter(status).dx));
+  });
+
+  testWidgets('partida compartida abre Backups solo desde el detalle', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(900, 1600);
@@ -475,9 +555,60 @@ void main() {
     );
     await tester.pump();
 
+    expect(find.text('Backups'), findsNothing);
+    await tester.tap(find.text('DRIVE EN OWNER@GMAIL.COM'));
+    await tester.pumpAndSettle();
     expect(find.text('Backups').hitTestable(), findsOneWidget);
     await tester.tap(find.text('Backups').hitTestable());
     expect(opens, 1);
+  });
+
+  testWidgets('coop local por delante ofrece una única sincronización', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    var syncs = 0;
+    final local = _save(players: [ana, bruno], dayOfMonth: 5);
+    final cloud = _save(players: [ana, bruno], dayOfMonth: 4);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: SharedSaveCard(
+              entry: SharedSaveEntry(
+                folderId: 'owner-folder',
+                folderName: local.folderName,
+                ownerEmail: 'owner@gmail.com',
+                myRole: 'writer',
+                driveStats: cloud,
+                localMatch: local,
+              ),
+              onSyncRequested: () => syncs++,
+              onRemove: () {},
+              onManageCopies: () {},
+              onBackups: () {},
+              onMakeHost: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Solo en este equipo'), findsOneWidget);
+    expect(find.text('Sincronizar'), findsOneWidget);
+    expect(find.text('Backups'), findsNothing);
+    expect(find.text('HACER ANFITRIÓN'), findsNothing);
+    expect(find.text('Subir a mi Drive'), findsNothing);
+    await tester.tap(find.text('Sincronizar'));
+    expect(syncs, 1);
   });
 
   testWidgets('detalle individual ofrece Backups con contador cero', (
@@ -541,14 +672,14 @@ PlayerStats _player(String name, String id, {bool isHost = false}) {
   );
 }
 
-SaveFile _save({required List<PlayerStats> players}) {
+SaveFile _save({required List<PlayerStats> players, int dayOfMonth = 4}) {
   final host = players.firstWhere((player) => player.isHost);
   return SaveFile(
     folderPath: 'C:/Saves/Stardust_1',
     folderName: 'Stardust_1',
     playerName: host.name,
     farmName: 'Stardust',
-    dayOfMonth: 4,
+    dayOfMonth: dayOfMonth,
     currentSeason: 'spring',
     year: 1,
     currentMoney: host.currentMoney,

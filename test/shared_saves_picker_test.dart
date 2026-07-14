@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:googleapis_auth/googleapis_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:valleysave/core/models/player_stats.dart';
 import 'package:valleysave/core/services/drive_service.dart';
 
 /// [AuthClient] falso: responde con una respuesta enlatada por llamada, en
@@ -30,6 +31,10 @@ class _QueueAuthClient extends http.BaseClient implements AuthClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     requests.add(request);
+    // Un cliente real consume el cuerpo antes de responder. Hacerlo también
+    // aquí libera los streams de File.openRead() en Windows y permite que los
+    // temporales de las pruebas de subida se eliminen correctamente.
+    await request.finalize().drain<void>();
     if (_i >= _responses.length) {
       throw StateError(
         'No hay más respuestas enlatadas (petición ${_i + 1}: ${request.url})',
@@ -74,6 +79,9 @@ const _fullSaveXml = '''<SaveGame>
   <player><name>Amiga</name><UniqueMultiplayerID>1</UniqueMultiplayerID></player>
   <farmhands><Farmer><name>Hirieo</name><UniqueMultiplayerID>2</UniqueMultiplayerID></Farmer></farmhands>
 </SaveGame>''';
+
+PlayerStats _player(String name, String id, {bool host = false}) =>
+    PlayerStats.fromJson({'name': name, 'uniqueId': id, 'isHost': host});
 
 void main() {
   setUp(() {
@@ -241,7 +249,43 @@ void main() {
       },
     );
 
-    test('G4: acceso revocado (403) se marca revoked, no lanza', () async {
+    test(
+      'un 404 conserva el registro para no ocultar una compartida',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'shared_saves_registry': jsonEncode([
+            {
+              'folderId': 'f1',
+              'folderName': 'Ajena',
+              'ownerEmail': 'owner@example.com',
+            },
+          ]),
+        });
+        final client = _QueueAuthClient([
+          _json({
+            'error': {
+              'code': 404,
+              'message': 'File not found',
+              'errors': [
+                {'reason': 'notFound'},
+              ],
+            },
+          }, status: 404),
+        ]);
+        final service = DriveService(client);
+
+        final result = await service.listSharedSaves();
+
+        expect(result, hasLength(1));
+        expect(result.single.ownerDriveVerified, isFalse);
+        final prefs = await SharedPreferences.getInstance();
+        final stored =
+            jsonDecode(prefs.getString('shared_saves_registry')!) as List;
+        expect(stored, hasLength(1));
+      },
+    );
+
+    test('un 403 de cuota queda sin comprobar, nunca revocado', () async {
       SharedPreferences.setMockInitialValues({
         'shared_saves_registry': jsonEncode([
           {
@@ -253,17 +297,99 @@ void main() {
       });
       final client = _QueueAuthClient([
         _json({
-          'error': {'code': 403, 'message': 'forbidden'},
+          'error': {
+            'code': 403,
+            'message': 'rate limit',
+            'errors': [
+              {'reason': 'rateLimitExceeded'},
+            ],
+          },
         }, status: 403),
       ]);
-      final service = DriveService(client);
 
-      final result = await service.listSharedSaves();
+      final result = await DriveService(client).listSharedSaves();
 
       expect(result, hasLength(1));
-      expect(result.single.revoked, isTrue);
-      expect(result.single.folderName, 'Ajena');
+      expect(result.single.revoked, isFalse);
+      expect(result.single.ownerDriveVerified, isFalse);
+      final prefs = await SharedPreferences.getInstance();
+      final stored =
+          jsonDecode(prefs.getString('shared_saves_registry')!) as List;
+      expect(stored, hasLength(1));
     });
+
+    test(
+      'un 500 de Drive queda sin comprobar y conserva el registro',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'shared_saves_registry': jsonEncode([
+            {
+              'folderId': 'f1',
+              'folderName': 'Ajena',
+              'ownerEmail': 'owner@example.com',
+            },
+          ]),
+        });
+        final client = _QueueAuthClient([
+          _json({
+            'error': {'code': 500, 'message': 'backend error'},
+          }, status: 500),
+        ]);
+
+        final result = await DriveService(client).listSharedSaves();
+
+        expect(result.single.revoked, isFalse);
+        expect(result.single.ownerDriveVerified, isFalse);
+      },
+    );
+
+    test(
+      'si la carpeta existe pero falla SaveGameInfo no dice que desapareció',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'shared_saves_registry': jsonEncode([
+            {
+              'folderId': 'f1',
+              'folderName': 'Ajena',
+              'ownerEmail': 'owner@example.com',
+            },
+          ]),
+        });
+        final client = _QueueAuthClient([
+          _json({
+            'id': 'f1',
+            'name': 'Ajena',
+            'trashed': false,
+            'capabilities': {'canEdit': true},
+            'owners': [
+              {'emailAddress': 'owner@example.com'},
+            ],
+          }),
+          _json({
+            'files': [
+              {'id': 'i1', 'name': 'SaveGameInfo'},
+              {'id': 'm1', 'name': 'Ajena'},
+            ],
+          }),
+          _json({
+            'error': {
+              'code': 403,
+              'message': 'rate limit',
+              'errors': [
+                {'reason': 'rateLimitExceeded'},
+              ],
+            },
+          }, status: 403),
+        ]);
+
+        final result = await DriveService(client).listSharedSaves();
+
+        expect(result.single.revoked, isFalse);
+        expect(result.single.ownerDrivePresent, isTrue);
+        expect(result.single.ownerDriveVerified, isFalse);
+        expect(result.single.driveStats, isNull);
+      },
+    );
   });
 
   group('removeSharedSave (G8)', () {
@@ -317,6 +443,69 @@ void main() {
         expect(client.requests, hasLength(1));
       },
     );
+
+    test('sincroniza players.json al Drive compartido', () async {
+      final tempDir = await Directory.systemTemp.createTemp('vs_shared_up_');
+      addTearDown(() async {
+        if (await tempDir.exists()) await tempDir.delete(recursive: true);
+      });
+      final folderName = tempDir.path.split(Platform.pathSeparator).last;
+      await File(
+        '${tempDir.path}${Platform.pathSeparator}SaveGameInfo',
+      ).writeAsString(_infoXml);
+      await File(
+        '${tempDir.path}${Platform.pathSeparator}$folderName',
+      ).writeAsString(_fullSaveXml);
+
+      final client = _QueueAuthClient([
+        _json({
+          'capabilities': {'canEdit': true},
+        }),
+        _json({'files': []}),
+        _json({'id': 'info'}),
+        _json({'files': []}),
+        _json({'id': 'main'}),
+        _json({'files': []}),
+        _json({'id': 'players'}),
+      ]);
+
+      await DriveService(client).uploadToSharedSave(
+        'f1',
+        tempDir.path,
+        players: [_player('Amiga', '1', host: true), _player('Hirieo', '2')],
+      );
+
+      expect(client.requests, hasLength(7));
+      expect(
+        client.requests.where(
+          (r) => r.url.path.contains('/upload/drive/v3/files'),
+        ),
+        hasLength(3),
+      );
+    });
+
+    test('retira players.json coop antiguo si queda un jugador', () async {
+      final client = _QueueAuthClient([
+        _json({
+          'capabilities': {'canEdit': true},
+        }),
+        _json({
+          'files': [
+            {'id': 'players-old'},
+          ],
+        }),
+        _text('', status: 204),
+      ]);
+
+      await DriveService(client).uploadToSharedSave(
+        'f1',
+        'C:${Platform.pathSeparator}no${Platform.pathSeparator}existe',
+        players: [_player('Amiga', '1', host: true)],
+      );
+
+      expect(client.requests, hasLength(3));
+      expect(client.requests.last.method, 'DELETE');
+    });
   });
 
   group('downloadSharedSave (G5)', () {
@@ -347,5 +536,37 @@ void main() {
         expect(await downloaded.readAsString(), _infoXml);
       },
     );
+
+    test('no copia players.json dentro de la carpeta del juego', () async {
+      final tempDir = await Directory.systemTemp.createTemp('vs_shared_meta_');
+      addTearDown(() async {
+        if (await tempDir.exists()) await tempDir.delete(recursive: true);
+      });
+      final client = _QueueAuthClient([
+        _json({
+          'files': [
+            {'id': 'i1', 'name': 'SaveGameInfo'},
+            {'id': 'p1', 'name': 'players.json'},
+          ],
+        }),
+        _text(_infoXml),
+      ]);
+
+      await DriveService(client).downloadSharedSave('f1', tempDir.path);
+
+      expect(
+        await File(
+          '${tempDir.path}${Platform.pathSeparator}SaveGameInfo',
+        ).exists(),
+        isTrue,
+      );
+      expect(
+        await File(
+          '${tempDir.path}${Platform.pathSeparator}players.json',
+        ).exists(),
+        isFalse,
+      );
+      expect(client.requests, hasLength(2));
+    });
   });
 }

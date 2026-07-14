@@ -21,9 +21,6 @@ class HowItWorksScreen extends StatefulWidget {
 
 class _HowItWorksScreenState extends State<HowItWorksScreen>
     with SingleTickerProviderStateMixin {
-  static const _gamePath =
-      'Android/data/com.chucklefish.stardewvalley/files/Saves';
-
   final _shizukuKey = GlobalKey();
   late ScrollController _scrollController;
   bool _privacyPressed = false;

@@ -1219,6 +1219,120 @@ abstract class AppLocalizations {
   /// **'Out of sync — check each Drive'**
   String get sharedStatusMixed;
 
+  /// No description provided for @sharedStatusFullySynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Fully synchronized'**
+  String get sharedStatusFullySynced;
+
+  /// No description provided for @sharedStatusSyncedOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'My Drive synchronized'**
+  String get sharedStatusSyncedOwn;
+
+  /// No description provided for @sharedStatusSyncedOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Drive synchronized'**
+  String get sharedStatusSyncedOwner;
+
+  /// No description provided for @sharedStatusNotCloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Only on this device'**
+  String get sharedStatusNotCloud;
+
+  /// No description provided for @sharedStatusOwnerAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive at {email} is ahead'**
+  String sharedStatusOwnerAhead(Object email);
+
+  /// No description provided for @sharedStatusBothAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Both Drives are ahead'**
+  String get sharedStatusBothAhead;
+
+  /// No description provided for @sharedStatusLocalMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Not on this device'**
+  String get sharedStatusLocalMissing;
+
+  /// No description provided for @sharedStatusOwnerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check Drive at {email}'**
+  String sharedStatusOwnerUnavailable(Object email);
+
+  /// No description provided for @sharedStatusWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Synchronizing…'**
+  String get sharedStatusWorking;
+
+  /// No description provided for @sharedSideUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check'**
+  String get sharedSideUnavailable;
+
+  /// No description provided for @sharedSyncChooseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where do you want to synchronize?'**
+  String get sharedSyncChooseTitle;
+
+  /// No description provided for @sharedSyncChooseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which cloud copies to update from this device.'**
+  String get sharedSyncChooseBody;
+
+  /// No description provided for @sharedSyncTargetOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'My Drive'**
+  String get sharedSyncTargetOwn;
+
+  /// No description provided for @sharedSyncTargetOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive at {email}'**
+  String sharedSyncTargetOwner(Object email);
+
+  /// No description provided for @sharedSyncTargetBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Both Drives'**
+  String get sharedSyncTargetBoth;
+
+  /// No description provided for @sharedDownloadChooseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which copy do you want to download?'**
+  String get sharedDownloadChooseTitle;
+
+  /// No description provided for @sharedDownloadChooseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'More than one copy is ahead. Choose which one to bring to this device.'**
+  String get sharedDownloadChooseBody;
+
+  /// No description provided for @sharedDownloadSourceOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'From My Drive'**
+  String get sharedDownloadSourceOwn;
+
+  /// No description provided for @sharedDownloadSourceOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'From Drive at {email}'**
+  String sharedDownloadSourceOwner(Object email);
+
   /// No description provided for @sharedWithMePickerTitle.
   ///
   /// In en, this message translates to:

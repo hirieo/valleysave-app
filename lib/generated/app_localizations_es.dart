@@ -633,6 +633,73 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sharedStatusMixed => 'Desincronizado — revisa cada Drive';
 
   @override
+  String get sharedStatusFullySynced => 'Totalmente sincronizado';
+
+  @override
+  String get sharedStatusSyncedOwn => 'Sincronizado Mi Drive';
+
+  @override
+  String get sharedStatusSyncedOwner => 'Sincronizado compartido';
+
+  @override
+  String get sharedStatusNotCloud => 'Solo en este equipo';
+
+  @override
+  String sharedStatusOwnerAhead(Object email) {
+    return 'Drive en $email va por delante';
+  }
+
+  @override
+  String get sharedStatusBothAhead => 'Los dos Drive van por delante';
+
+  @override
+  String get sharedStatusLocalMissing => 'No está en este dispositivo';
+
+  @override
+  String sharedStatusOwnerUnavailable(Object email) {
+    return 'No se pudo comprobar Drive en $email';
+  }
+
+  @override
+  String get sharedStatusWorking => 'Sincronizando…';
+
+  @override
+  String get sharedSideUnavailable => 'No se pudo comprobar';
+
+  @override
+  String get sharedSyncChooseTitle => '¿Dónde quieres sincronizar?';
+
+  @override
+  String get sharedSyncChooseBody =>
+      'Elige qué copias de la nube quieres actualizar con la partida de este dispositivo.';
+
+  @override
+  String get sharedSyncTargetOwn => 'Mi Drive';
+
+  @override
+  String sharedSyncTargetOwner(Object email) {
+    return 'Drive en $email';
+  }
+
+  @override
+  String get sharedSyncTargetBoth => 'Los dos Drive';
+
+  @override
+  String get sharedDownloadChooseTitle => '¿Qué copia quieres descargar?';
+
+  @override
+  String get sharedDownloadChooseBody =>
+      'Hay más de una copia por delante. Elige cuál quieres traer a este dispositivo.';
+
+  @override
+  String get sharedDownloadSourceOwn => 'Desde Mi Drive';
+
+  @override
+  String sharedDownloadSourceOwner(Object email) {
+    return 'Desde Drive en $email';
+  }
+
+  @override
   String get sharedWithMePickerTitle => 'Añadir save compartido';
 
   @override

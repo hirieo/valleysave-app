@@ -1399,7 +1399,13 @@ class _Footer extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
         child: Row(
           children: [
-            _Dot(color: statusColor),
+            if (busy)
+              SaveBusyIndicator(
+                key: const ValueKey('save-busy-indicator'),
+                season: SeasonController.instance.season.value,
+              )
+            else
+              _Dot(color: statusColor),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
@@ -1413,11 +1419,9 @@ class _Footer extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            if (busy)
-              SaveBusyIndicator(season: SeasonController.instance.season.value)
-            else if (status == SaveSyncStatus.synced)
+            if (!busy && status == SaveSyncStatus.synced)
               Icon(Icons.check_rounded, size: 16, color: _kSynced)
-            else ...[
+            else if (!busy) ...[
               // Secundario siempre a la izquierda, principal a la derecha
               if (hasLocal && hasDrive && recommendUpload) ...[
                 ActionBtn(
@@ -1475,7 +1479,13 @@ class _Footer extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
       child: Row(
         children: [
-          _Dot(color: statusColor),
+          if (busy)
+            SaveBusyIndicator(
+              key: const ValueKey('save-busy-indicator'),
+              season: SeasonController.instance.season.value,
+            )
+          else
+            _Dot(color: statusColor),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
@@ -1489,9 +1499,7 @@ class _Footer extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          if (busy)
-            SaveBusyIndicator(season: SeasonController.instance.season.value)
-          else if (status != SaveSyncStatus.synced) ...[
+          if (!busy && status != SaveSyncStatus.synced) ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
               ActionBtn(
                 label: l10n.cardActionUpload,

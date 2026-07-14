@@ -19,6 +19,7 @@ import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/models/season_state.dart';
 import '../../core/models/shared_save_entry.dart';
+import '../../core/models/shared_sync_state.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/services/drive_service.dart';
@@ -58,6 +59,10 @@ enum _DeleteChoice { localOnly, driveOnly, both }
 
 enum _BackupDeleteChoice { local, ownDrive, sharedDrive, all }
 
+enum _SharedSyncTarget { ownDrive, ownerDrive, both }
+
+enum _SharedDownloadSource { ownDrive, ownerDrive }
+
 class SavesScreen extends StatefulWidget {
   const SavesScreen({super.key, this.drive});
 
@@ -78,6 +83,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // ── US5 — Compartidas conmigo (independiente de _entries/_loading) ──
   List<SharedSaveEntry> _sharedEntries = [];
   bool _sharedLoading = true;
+  final GlobalKey _sharedSectionKey = GlobalKey();
+  bool _showSharedHeader = false;
+  bool _hostSwapProgressVisible = false;
 
   // ── spec 007 — respaldos pre-swap: conteo LOCAL por folderName, para el
   // badge del botón "Backups" en la hoja de detalle (rápido, sin red).
@@ -103,6 +111,26 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  /// El título de la cabecera representa el bloque que está entrando bajo
+  /// ella. Se mide la posición real del bloque, por lo que funciona igual con
+  /// una, muchas o ninguna tarjeta propia y al cambiar el tamaño de ventana.
+  void _updateSharedHeaderFromScroll() {
+    final context = _sharedSectionKey.currentContext;
+    if (context == null) return;
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return;
+
+    final sharedTop = renderObject.localToGlobal(Offset.zero).dy;
+    final media = MediaQuery.maybeOf(this.context);
+    // El bloque ya es la sección activa cuando ha llegado justo debajo de la
+    // barra superior. No depende de píxeles de scroll ni de la altura de cards.
+    final headerBottom = (media?.padding.top ?? 0) + 78;
+    final shouldShowSharedTitle = sharedTop <= headerBottom;
+    if (shouldShowSharedTitle != _showSharedHeader && mounted) {
+      setState(() => _showSharedHeader = shouldShowSharedTitle);
+    }
   }
 
   @override
@@ -353,8 +381,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       SeasonController.instance.setFromSaves(entries);
     }
 
-    unawaited(_loadSharedSaves(local));
-    unawaited(_loadBackupCounts());
+    // Las acciones esperan también a que la vista COOP recomponga sus tres
+    // ubicaciones. Así el spinner no termina antes de que "Mi Drive" refleje
+    // una subida o un borrado, igual que en las partidas normales.
+    await Future.wait([_loadSharedSaves(local), _loadBackupCounts()]);
   }
 
   /// spec 007 — conteo LOCAL de backups por save, para el badge del botón
@@ -425,27 +455,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _handleDownloadShared(SharedSaveEntry entry) async {
-    final l10n = AppLocalizations.of(context)!;
-    if (widget.drive == null) return;
-    if (_busy.contains(entry.folderName)) return;
-
-    setState(() => _busy.add(entry.folderName));
-    try {
-      final savesDir = SaveService.savesDirectory;
-      if (savesDir == null) {
-        if (mounted) _snack(l10n.snackPlatformNotSupported);
-        return;
-      }
-      await Directory(savesDir).create(recursive: true);
-      final target = '$savesDir${Platform.pathSeparator}${entry.folderName}';
-      await widget.drive!.downloadSharedSave(entry.folderId, target);
-      await _load(silent: true);
-      if (mounted) _snack(l10n.snackDownloaded);
-    } catch (e) {
-      if (mounted) _snack(l10n.snackDownloadError(e.toString()));
-    } finally {
-      if (mounted) setState(() => _busy.remove(entry.folderName));
-    }
+    // La carpeta compartida también es una carpeta normal de Drive para la
+    // API. Reutilizar el flujo estándar conserva preview, confirmación,
+    // Shizuku/root y el indicador estacional en todas las plataformas.
+    await _handleDownload(entry.asEntry);
   }
 
   Future<void> _handleSyncShared(SharedSaveEntry entry) async {
@@ -461,6 +474,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       await widget.drive!.uploadToSharedSave(
         entry.folderId,
         entry.localMatch!.folderPath,
+        players: entry.localMatch!.players,
       );
       await _load(silent: true);
       if (mounted) _snack(l10n.exportSuccess);
@@ -468,6 +482,80 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
       if (mounted) setState(() => _busy.remove(entry.folderName));
+    }
+  }
+
+  Future<void> _handleSharedSyncRequested(SharedSaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
+    final drive = widget.drive;
+    final local = entry.localMatch;
+    if (drive == null || local == null || _busy.contains(entry.folderName)) {
+      return;
+    }
+
+    final state = SharedSyncState.fromEntry(entry);
+    final canOwn = state.uploadTargets.contains(SharedCloudLocation.ownDrive);
+    final canOwner = state.uploadTargets.contains(
+      SharedCloudLocation.ownerDrive,
+    );
+    if (!canOwn && !canOwner) return;
+
+    final target = await _chooseSharedSyncTarget(
+      entry,
+      canOwn: canOwn,
+      canOwner: canOwner,
+    );
+    if (target == null || !mounted) return;
+
+    setState(() => _busy.add(entry.folderName));
+    try {
+      if (target == _SharedSyncTarget.ownDrive ||
+          target == _SharedSyncTarget.both) {
+        await drive.uploadSave(
+          local.folderPath,
+          entry.folderName,
+          players: local.players,
+        );
+      }
+      if (target == _SharedSyncTarget.ownerDrive ||
+          target == _SharedSyncTarget.both) {
+        await drive.uploadToSharedSave(
+          entry.folderId,
+          local.folderPath,
+          players: local.players,
+        );
+      }
+      await _load(silent: true);
+      if (mounted) _snack(l10n.exportSuccess);
+    } catch (e) {
+      if (mounted) _snack(l10n.exportError(e.toString()));
+    } finally {
+      if (mounted) setState(() => _busy.remove(entry.folderName));
+    }
+  }
+
+  Future<void> _handleSharedDownloadRequested(SharedSaveEntry entry) async {
+    final state = SharedSyncState.fromEntry(entry);
+    final canOwn = state.downloadSources.contains(SharedCloudLocation.ownDrive);
+    final canOwner = state.downloadSources.contains(
+      SharedCloudLocation.ownerDrive,
+    );
+    if (!canOwn && !canOwner) return;
+
+    final _SharedDownloadSource? source;
+    if (canOwn && canOwner) {
+      source = await _chooseSharedDownloadSource(entry);
+    } else {
+      source = canOwn
+          ? _SharedDownloadSource.ownDrive
+          : _SharedDownloadSource.ownerDrive;
+    }
+    if (source == null || !mounted) return;
+
+    if (source == _SharedDownloadSource.ownDrive) {
+      await _handleDownload(entry.asOwnEntry);
+    } else {
+      await _handleDownloadShared(entry);
     }
   }
 
@@ -495,6 +583,165 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     }
+  }
+
+  Future<T?> _showSharedChoice<T>({
+    required Color accent,
+    required String title,
+    required String body,
+    required List<({String label, IconData icon, Color color, T value})>
+    choices,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    return showGeneralDialog<T>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: l10n.cancel,
+      barrierColor: Colors.black.withValues(alpha: 0.54),
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (dialogContext, _, _) => Material(
+        type: MaterialType.transparency,
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: _glassDialogShell(
+                accent: accent,
+                child: _dialogBody(
+                  title: Text(
+                    title,
+                    style: GoogleFonts.bodoniModa(
+                      color: AppColors.text,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        body,
+                        style: GoogleFonts.firaCode(
+                          fontSize: 11.5,
+                          height: 1.5,
+                          color: Colors.white.withValues(alpha: 0.72),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      for (var i = 0; i < choices.length; i++) ...[
+                        if (i > 0) const SizedBox(height: 8),
+                        ActionBtn(
+                          key: ValueKey('shared-choice-$i'),
+                          label: choices[i].label,
+                          icon: choices[i].icon,
+                          color: choices[i].color,
+                          filled: true,
+                          onTap: () =>
+                              Navigator.pop(dialogContext, choices[i].value),
+                        ),
+                      ],
+                    ],
+                  ),
+                  actions: [
+                    ActionBtn(
+                      label: l10n.cancel,
+                      color: Colors.white.withValues(alpha: 0.55),
+                      filled: false,
+                      onTap: () => Navigator.pop(dialogContext),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      transitionBuilder: (dialogContext, animation, _, child) {
+        final reduceMotion =
+            MediaQuery.maybeOf(dialogContext)?.disableAnimations ?? false;
+        return FadeTransition(
+          opacity: animation,
+          child: AnimatedBuilder(
+            animation: animation,
+            child: child,
+            builder: (_, animatedChild) {
+              if (reduceMotion) return animatedChild!;
+              final value = Curves.easeOutCubic.transform(animation.value);
+              return Transform.translate(
+                offset: Offset(0, (1 - value) * 3),
+                child: Transform.scale(
+                  scale: 0.96 + (0.04 * value),
+                  alignment: Alignment.center,
+                  child: animatedChild,
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<_SharedSyncTarget?> _chooseSharedSyncTarget(
+    SharedSaveEntry entry, {
+    required bool canOwn,
+    required bool canOwner,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    return _showSharedChoice<_SharedSyncTarget>(
+      accent: const Color(0xFFE0B850),
+      title: l10n.sharedSyncChooseTitle,
+      body: l10n.sharedSyncChooseBody,
+      choices: [
+        if (canOwn)
+          (
+            label: l10n.sharedSyncTargetOwn,
+            icon: Icons.cloud_outlined,
+            color: const Color(0xFF5AA8E0),
+            value: _SharedSyncTarget.ownDrive,
+          ),
+        if (canOwner)
+          (
+            label: l10n.sharedSyncTargetOwner(entry.ownerEmail),
+            icon: Icons.link_rounded,
+            color: const Color(0xFF42D392),
+            value: _SharedSyncTarget.ownerDrive,
+          ),
+        if (canOwn && canOwner)
+          (
+            label: l10n.sharedSyncTargetBoth,
+            icon: Icons.cloud_sync_outlined,
+            color: const Color(0xFF62B074),
+            value: _SharedSyncTarget.both,
+          ),
+      ],
+    );
+  }
+
+  Future<_SharedDownloadSource?> _chooseSharedDownloadSource(
+    SharedSaveEntry entry,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    return _showSharedChoice<_SharedDownloadSource>(
+      accent: const Color(0xFF5AA8E0),
+      title: l10n.sharedDownloadChooseTitle,
+      body: l10n.sharedDownloadChooseBody,
+      choices: [
+        (
+          label: l10n.sharedDownloadSourceOwn,
+          icon: Icons.cloud_download_outlined,
+          color: const Color(0xFF5AA8E0),
+          value: _SharedDownloadSource.ownDrive,
+        ),
+        (
+          label: l10n.sharedDownloadSourceOwner(entry.ownerEmail),
+          icon: Icons.link_rounded,
+          color: const Color(0xFF42D392),
+          value: _SharedDownloadSource.ownerDrive,
+        ),
+      ],
+    );
   }
 
   Future<bool?> _confirmSyncShared(String ownerEmail) {
@@ -938,7 +1185,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (confirmed != true) return;
 
     setState(() => _busy.add(name));
-    _showHostSwapProgress();
     try {
       if (Platform.isAndroid && _mode == AndroidMode.root) {
         final out = await ShizukuService.instance.prepareOut(name);
@@ -1043,6 +1289,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// temporal, creando el respaldo y validando el resultado antes de tocar
   /// la partida real. No se puede cerrar a mitad de operación.
   void _showHostSwapProgress() {
+    if (!mounted || _hostSwapProgressVisible) return;
+    _hostSwapProgressVisible = true;
     showDialog<void>(
       context: context,
       useRootNavigator: true,
@@ -1087,7 +1335,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           ),
         ),
       ),
-    );
+    ).whenComplete(() => _hostSwapProgressVisible = false);
+  }
+
+  /// Cierra exclusivamente el diálogo creado por [_showHostSwapProgress].
+  /// Todas las salidas del swap pasan por `finally`, también error y retorno
+  /// temprano, para no dejar la interfaz bloqueada.
+  void _dismissHostSwapProgress() {
+    if (!mounted || !_hostSwapProgressVisible) return;
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   /// F1 — exporta la cara LOCAL de [entry] a un archivo transportable.
@@ -1711,6 +1967,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (confirmed != true) return;
 
     setState(() => _busy.add(name));
+    _showHostSwapProgress();
+    String? backupZipPath;
     try {
       final backupsDir = await _backupsDirPath();
       final result = await service.execute(
@@ -1724,13 +1982,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       }
       await _load(silent: true);
       if (mounted) _snack(l10n.makeHostSuccess(target.name));
-      if (mounted && result.backupZipPath != null) {
-        await _handleSwapBackupChoice(result.backupZipPath!);
-      }
+      backupZipPath = result.backupZipPath;
     } catch (e) {
       if (mounted) _snack(l10n.snackDeleteError(e.toString()));
     } finally {
+      _dismissHostSwapProgress();
       if (mounted) setState(() => _busy.remove(name));
+    }
+
+    // El diálogo de progreso ya se cerró antes de preguntar qué hacer con el
+    // respaldo: de otra forma su barrera impediría interactuar con esta hoja.
+    if (mounted && backupZipPath != null) {
+      await _handleSwapBackupChoice(backupZipPath);
     }
   }
 
@@ -3022,28 +3285,33 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             final idx = coop
                 ? playerIndex.clamp(0, playerBase.players.length - 1)
                 : 0;
-            final selected = playerBase.players[idx];
+            // Un SaveGameInfo remoto puede no traer `players.json`.
+            // En ese caso la granja sigue siendo descargable, pero no hay
+            // jugador que seleccionar ni comparar por uniqueId.
+            final selected = coop ? playerBase.players[idx] : null;
             // Cada lado busca a la MISMA persona (por uniqueId) en su PROPIA
             // lista, en vez de reutilizar el PlayerStats de un solo lado —
             // tras un swap, el índice 0 ya no es la misma persona en local y
             // en Drive (feedback 2026-07-12: "falso positivo" en la comparación).
             final drivePlayer = coop
-                ? _matchPlayerById(driveBase.players, selected.uniqueId) ??
+                ? _matchPlayerById(driveBase.players, selected!.uniqueId) ??
                       selected
-                : selected;
-            final drive = coop ? driveBase.forPlayer(drivePlayer) : driveBase;
+                : null;
+            final drive = coop ? driveBase.forPlayer(drivePlayer!) : driveBase;
             final local = localBase == null
                 ? null
                 : (coop
                       ? localBase.forPlayer(
                           _matchPlayerById(
                                 localBase.players,
-                                selected.uniqueId,
+                                selected!.uniqueId,
                               ) ??
                               selected,
                         )
                       : localBase);
-            final hostIndex = playerBase.players.indexWhere((p) => p.isHost);
+            final hostIndex = coop
+                ? playerBase.players.indexWhere((p) => p.isHost)
+                : -1;
             final switcher = coop
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
@@ -3181,8 +3449,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             final idx = coop
                 ? playerIndex.clamp(0, localBase.players.length - 1)
                 : 0;
-            final selected = localBase.players[idx];
-            final local = coop ? localBase.forPlayer(selected) : localBase;
+            final selected = coop ? localBase.players[idx] : null;
+            final local = coop ? localBase.forPlayer(selected!) : localBase;
             // Mismo fix que _confirmDownload: buscar a la misma persona (por
             // uniqueId) en la lista PROPIA de Drive, no reutilizar el
             // PlayerStats local para ambas columnas.
@@ -3192,12 +3460,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       ? driveBase.forPlayer(
                           _matchPlayerById(
                                 driveBase.players,
-                                selected.uniqueId,
+                                selected!.uniqueId,
                               ) ??
                               selected,
                         )
                       : driveBase);
-            final hostIndex = localBase.players.indexWhere((p) => p.isHost);
+            final hostIndex = coop
+                ? localBase.players.indexWhere((p) => p.isHost)
+                : -1;
             final switcher = coop
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
@@ -3656,6 +3926,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     canLaunchGame: _gameCanLaunch,
                     onLaunch: _handleLaunchGame,
                     onImport: _handleImport,
+                    showSharedTitle: _showSharedHeader,
                   ),
                   Expanded(child: _buildBody()),
                 ],
@@ -3701,87 +3972,104 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     final itemCount = visibleEntries.length + (showShared ? 1 : 0);
 
-    return RefreshIndicator(
-      onRefresh: _load,
-      color: AppColors.accent,
-      backgroundColor: AppColors.surface,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        itemCount: itemCount,
-        separatorBuilder: (context, index) => const SizedBox(height: 14),
-        itemBuilder: (_, i) {
-          if (showShared && i == visibleEntries.length) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is ScrollUpdateNotification ||
+            notification is ScrollEndNotification) {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => _updateSharedHeaderFromScroll(),
+          );
+        }
+        return false;
+      },
+      child: RefreshIndicator(
+        onRefresh: _load,
+        color: AppColors.accent,
+        backgroundColor: AppColors.surface,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          itemCount: itemCount,
+          separatorBuilder: (context, index) => const SizedBox(height: 14),
+          itemBuilder: (_, i) {
+            if (showShared && i == visibleEntries.length) {
+              return KeyedSubtree(
+                key: _sharedSectionKey,
+                child: StaggerItem(
+                  key: ValueKey('${_staggerVersion}_shared'),
+                  index: i,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 460),
+                      child: _buildSharedSection(),
+                    ),
+                  ),
+                ),
+              );
+            }
             return StaggerItem(
-              key: ValueKey('${_staggerVersion}_shared'),
+              key: ValueKey('${_staggerVersion}_$i'),
               index: i,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 460),
-                  child: _buildSharedSection(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (i == 0)
+                        LatestBadge(
+                          color: visibleEntries[0].primary.seasonColor,
+                        ),
+                      SaveCard(
+                        entry: visibleEntries[i],
+                        busy: _busy.contains(visibleEntries[i].folderName),
+                        onUpload: () => _handleUpload(visibleEntries[i]),
+                        onDownload: () => _handleDownload(visibleEntries[i]),
+                        onDeleteFromDrive:
+                            visibleEntries[i].driveFolderId != null &&
+                                widget.drive != null
+                            ? () => _handleDelete(
+                                visibleEntries[i],
+                                location: _DeleteChoice.driveOnly,
+                              )
+                            : null,
+                        onDeleteLocal: visibleEntries[i].local != null
+                            ? () => _handleDelete(
+                                visibleEntries[i],
+                                location: _DeleteChoice.localOnly,
+                              )
+                            : null,
+                        onManageCopies: () => _handleDelete(visibleEntries[i]),
+                        // F3 — v1 solo Windows; el gate de plataforma vive aquí,
+                        // en un único sitio (ver plan.md §Flujo UI).
+                        onMakeHost:
+                            Platform.isWindows &&
+                                visibleEntries[i].local != null
+                            ? (target) =>
+                                  _handleMakeHost(visibleEntries[i], target)
+                            : null,
+                        onExport: visibleEntries[i].local != null
+                            ? () => _handleExport(visibleEntries[i])
+                            : null,
+                        onShare:
+                            widget.drive != null &&
+                                visibleEntries[i].driveFolderId != null
+                            ? () => _handleShare(visibleEntries[i])
+                            : null,
+                        onBackups: visibleEntries[i].local != null
+                            ? () => _handleOpenBackups(visibleEntries[i])
+                            : null,
+                        backupCount:
+                            _backupCounts[visibleEntries[i].folderName] ?? 0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
-          }
-          return StaggerItem(
-            key: ValueKey('${_staggerVersion}_$i'),
-            index: i,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 460),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (i == 0)
-                      LatestBadge(color: visibleEntries[0].primary.seasonColor),
-                    SaveCard(
-                      entry: visibleEntries[i],
-                      busy: _busy.contains(visibleEntries[i].folderName),
-                      onUpload: () => _handleUpload(visibleEntries[i]),
-                      onDownload: () => _handleDownload(visibleEntries[i]),
-                      onDeleteFromDrive:
-                          visibleEntries[i].driveFolderId != null &&
-                              widget.drive != null
-                          ? () => _handleDelete(
-                              visibleEntries[i],
-                              location: _DeleteChoice.driveOnly,
-                            )
-                          : null,
-                      onDeleteLocal: visibleEntries[i].local != null
-                          ? () => _handleDelete(
-                              visibleEntries[i],
-                              location: _DeleteChoice.localOnly,
-                            )
-                          : null,
-                      onManageCopies: () => _handleDelete(visibleEntries[i]),
-                      // F3 — v1 solo Windows; el gate de plataforma vive aquí,
-                      // en un único sitio (ver plan.md §Flujo UI).
-                      onMakeHost:
-                          Platform.isWindows && visibleEntries[i].local != null
-                          ? (target) =>
-                                _handleMakeHost(visibleEntries[i], target)
-                          : null,
-                      onExport: visibleEntries[i].local != null
-                          ? () => _handleExport(visibleEntries[i])
-                          : null,
-                      onShare:
-                          widget.drive != null &&
-                              visibleEntries[i].driveFolderId != null
-                          ? () => _handleShare(visibleEntries[i])
-                          : null,
-                      onBackups: visibleEntries[i].local != null
-                          ? () => _handleOpenBackups(visibleEntries[i])
-                          : null,
-                      backupCount:
-                          _backupCounts[visibleEntries[i].folderName] ?? 0,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -3794,45 +4082,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (_entries.isNotEmpty) const SizedBox(height: 6),
-        // Título y botones en líneas separadas — todo en una sola fila
-        // desbordaba en ventanas estrechas (feedback 2026-07-12, captura
-        // con "RIGHT OVERFLOWED").
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE07040).withValues(alpha: 0.12),
-              border: Border.all(
-                color: const Color(0xFFE07040).withValues(alpha: 0.4),
-              ),
-              borderRadius: BorderRadius.circular(7),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.link_rounded,
-                  size: 12,
-                  color: Color(0xFFE07040),
-                ),
-                const SizedBox(width: 5),
-                Flexible(
-                  child: Text(
-                    l10n.sharedWithMeTitle.toUpperCase(),
-                    style: GoogleFonts.firaCode(
-                      fontSize: 10.5,
-                      letterSpacing: 1.2,
-                      color: const Color(0xFFE07040),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
+        // El nombre ya ocupa el título principal al llegar a esta sección:
+        // no se repite en una píldora secundaria dentro de la lista.
         Wrap(
           spacing: 6,
           runSpacing: 6,
@@ -3927,6 +4178,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               onDownload: () => _handleDownloadShared(e),
               onSync: (e.canSync && e.localMatch != null)
                   ? () => _handleSyncShared(e)
+                  : null,
+              onDownloadRequested: () => _handleSharedDownloadRequested(e),
+              onSyncRequested: e.localMatch != null
+                  ? () => _handleSharedSyncRequested(e)
                   : null,
               onRemove: () => _handleRemoveShared(e),
               // F3 — mismo gate que la lista principal (v1 solo Windows,

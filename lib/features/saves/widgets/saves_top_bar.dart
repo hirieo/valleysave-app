@@ -14,6 +14,7 @@ class SavesTopBar extends StatelessWidget {
     required this.canLaunchGame,
     required this.onLaunch,
     required this.onImport,
+    this.showSharedTitle = false,
   });
 
   final VoidCallback onBack;
@@ -23,6 +24,10 @@ class SavesTopBar extends StatelessWidget {
   final bool canLaunchGame;
   final VoidCallback onLaunch;
   final VoidCallback onImport;
+
+  /// Cambia al llegar al bloque final de saves compartidos. El padre decide
+  /// cuándo ese bloque ha alcanzado la cabecera durante el scroll.
+  final bool showSharedTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +39,41 @@ class SavesTopBar extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 492),
           child: Row(
             children: [
-              IconCircleButton(
-                icon: Icons.arrow_back_rounded,
-                onTap: onBack,
-              ),
-              const Spacer(),
-              Text(
-                l10n.mySaves,
-                style: GoogleFonts.bodoniModa(
-                  fontSize: 24,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.92),
+              IconCircleButton(icon: Icons.arrow_back_rounded, onTap: onBack),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    transitionBuilder: (child, animation) => FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 0.12),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    ),
+                    child: FittedBox(
+                      key: ValueKey(showSharedTitle),
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        showSharedTitle ? l10n.sharedWithMeTitle : l10n.mySaves,
+                        maxLines: 1,
+                        style: GoogleFonts.bodoniModa(
+                          fontSize: 24,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white.withValues(alpha: 0.92),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              const Spacer(),
               if (canLaunchGame) ...[
                 TweenAnimationBuilder<double>(
                   tween: Tween(begin: 0.0, end: 1.0),

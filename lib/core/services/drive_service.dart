@@ -266,8 +266,32 @@ class DriveService {
       }
     }
 
+    await _syncPlayersJson(saveFolderId, players);
+  }
+
+  /// Mantiene el resumen de jugadores coherente con los archivos reales.
+  ///
+  /// - varios jugadores: crea o actualiza `players.json`;
+  /// - un jugador confirmado: elimina un resumen coop antiguo;
+  /// - lista vacía: no toca nada, porque significa "no se pudo determinar"
+  ///   y no queremos borrar metadatos válidos por un fallo de parseo.
+  Future<void> _syncPlayersJson(
+    String saveFolderId,
+    List<PlayerStats> players,
+  ) async {
+    if (players.isEmpty) return;
     if (players.length > 1) {
       await _uploadPlayersJson(saveFolderId, players);
+      return;
+    }
+
+    final existing = await _api.files.list(
+      q: "name='$_playersJsonName' and '$saveFolderId' in parents and trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id)',
+    );
+    for (final file in existing.files ?? <drive.File>[]) {
+      if (file.id != null) await _api.files.delete(file.id!);
     }
   }
 
@@ -435,6 +459,9 @@ class DriveService {
 
     for (final f in files.files ?? <drive.File>[]) {
       if (f.id == null || f.name == null) continue;
+      // `players.json` es metadato de ValleySave para pintar el selector en
+      // la nube. Stardew no lo necesita dentro de su carpeta de saves.
+      if (f.name == _playersJsonName) continue;
       final media =
           await _api.files.get(
                 f.id!,
@@ -778,6 +805,8 @@ class DriveService {
       ownerEmail: ownerEmail,
       myRole: role,
       driveStats: save,
+      ownerDrivePresent: true,
+      ownerDriveVerified: true,
     );
   }
 
@@ -793,34 +822,52 @@ class DriveService {
       final storedName = entry['folderName'] ?? '';
       final storedEmail = entry['ownerEmail'] ?? '';
 
+      drive.File file;
       try {
-        final file =
+        file =
             await _api.files.get(
                   folderId,
                   $fields:
                       'id,name,trashed,capabilities(canEdit),owners(emailAddress)',
                 )
                 as drive.File;
+      } on drive.DetailedApiRequestError {
+        // Un 404 no es una señal segura para borrar estado local: Drive lo
+        // devuelve tanto por un recurso eliminado como por acceso temporal,
+        // permisos heredados o visibilidad aún no propagada. Conservamos la
+        // relación y la mostramos como "sin comprobar", para que una recarga
+        // posterior pueda recuperarla sin obligar a añadirla otra vez.
+        results.add(
+          SharedSaveEntry(
+            folderId: folderId,
+            folderName: storedName,
+            ownerEmail: storedEmail,
+            myRole: 'reader',
+            ownerDriveVerified: false,
+          ),
+        );
+        continue;
+      }
 
-        if (file.trashed == true) {
-          results.add(
-            SharedSaveEntry(
-              folderId: folderId,
-              folderName: storedName,
-              ownerEmail: storedEmail,
-              myRole: 'reader',
-              revoked: true,
-            ),
-          );
-          continue;
-        }
+      if (file.trashed == true) {
+        results.add(
+          SharedSaveEntry(
+            folderId: folderId,
+            folderName: storedName,
+            ownerEmail: storedEmail,
+            myRole: 'reader',
+            ownerDriveVerified: false,
+          ),
+        );
+        continue;
+      }
 
-        final folderName = file.name ?? storedName;
-        final ownerEmail = (file.owners != null && file.owners!.isNotEmpty)
-            ? (file.owners!.first.emailAddress ?? storedEmail)
-            : storedEmail;
-        final role = file.capabilities?.canEdit == true ? 'writer' : 'reader';
-
+      final folderName = file.name ?? storedName;
+      final ownerEmail = (file.owners != null && file.owners!.isNotEmpty)
+          ? (file.owners!.first.emailAddress ?? storedEmail)
+          : storedEmail;
+      final role = file.capabilities?.canEdit == true ? 'writer' : 'reader';
+      try {
         final children = await _api.files.list(
           q: "'$folderId' in parents and trashed=false",
           spaces: 'drive',
@@ -871,18 +918,22 @@ class DriveService {
             ownerEmail: ownerEmail,
             myRole: role,
             driveStats: save,
+            ownerDrivePresent: true,
+            ownerDriveVerified: true,
           ),
         );
-      } catch (_) {
-        // 403/404 (revocado, borrado) u otro fallo de red: se marca
-        // revocado en vez de propagar la excepción (G4).
+      } on drive.DetailedApiRequestError {
+        // La carpeta YA se leyó arriba: un fallo al listar/descargar sus hijos
+        // no demuestra revocación. Conservamos su presencia y bloqueamos las
+        // decisiones de progreso hasta que una recarga pueda verificar stats.
         results.add(
           SharedSaveEntry(
             folderId: folderId,
-            folderName: storedName,
-            ownerEmail: storedEmail,
-            myRole: 'reader',
-            revoked: true,
+            folderName: folderName,
+            ownerEmail: ownerEmail,
+            myRole: role,
+            ownerDrivePresent: true,
+            ownerDriveVerified: false,
           ),
         );
       }
@@ -907,8 +958,9 @@ class DriveService {
   /// profundidad aunque la UI ya oculte el botón (G6).
   Future<void> uploadToSharedSave(
     String folderId,
-    String localFolderPath,
-  ) async {
+    String localFolderPath, {
+    List<PlayerStats> players = const [],
+  }) async {
     final file =
         await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
             as drive.File;
@@ -953,6 +1005,10 @@ class DriveService {
         await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
       }
     }
+
+    // Mismo contrato que Mi Drive: un swap o cambio de jugadores debe quedar
+    // reflejado también en el Drive del propietario.
+    await _syncPlayersJson(folderId, players);
   }
 }
 

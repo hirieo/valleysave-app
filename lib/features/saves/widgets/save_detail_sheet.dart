@@ -91,6 +91,7 @@ void showSaveDetail(
   VoidCallback? onShare,
   VoidCallback? onBackups,
   int backupCount = 0,
+  bool backupsOnRemote = false,
   int initialPlayerIndex = 0,
   ValueChanged<int>? onPlayerIndexChanged,
   String? initialPlayerId,
@@ -151,6 +152,8 @@ void showSaveDetail(
         onAction: onDownload,
         onDelete: onDeleteFromDrive,
         onShare: onShare,
+        onBackups: backupsOnRemote ? onBackups : null,
+        backupCount: backupCount,
       ),
     if (extraDrive != null)
       _DetailSide(
@@ -162,6 +165,8 @@ void showSaveDetail(
         actionLabel: l10n.cardDetailDownload,
         actionIcon: Icons.cloud_download_outlined,
         onAction: onExtraDownload,
+        onBackups: backupsOnRemote ? onBackups : null,
+        backupCount: backupCount,
         onRemove: onRemove,
         removeLabel: removeLabel ?? '',
       ),

@@ -8,7 +8,12 @@ import 'package:xml/xml.dart';
 import 'save_service.dart';
 
 /// Motivo por el que `analyze`/`execute` no pudieron completarse.
-enum HostSwapError { invalidSave, noFreeTile, writeFailure, postValidationFailed }
+enum HostSwapError {
+  invalidSave,
+  noFreeTile,
+  writeFailure,
+  postValidationFailed,
+}
 
 /// Resultado de la fase de solo lectura ([HostSwapService.analyze]).
 class HostSwapAnalysis {
@@ -71,12 +76,40 @@ class HostSwapService {
   static const _closeRadius = 6;
   static const _farRadius = 20;
   static const _contentFields = [
-    'buildings', 'animals', 'piecesOfHay', 'characters', 'objects',
-    'resourceClumps', 'largeTerrainFeatures', 'terrainFeatures',
-    'numberOfSpawnedObjectsOnMap', 'miniJukeboxCount', 'miniJukeboxTrack',
-    'furniture', 'Animals', 'IsGreenhouse', 'wallPaper', 'appliedWallpaper',
-    'floor', 'appliedFloor', 'fridge', 'fridgePosition', 'cribStyle',
+    'buildings',
+    'animals',
+    'piecesOfHay',
+    'characters',
+    'objects',
+    'resourceClumps',
+    'largeTerrainFeatures',
+    'terrainFeatures',
+    'numberOfSpawnedObjectsOnMap',
+    'miniJukeboxCount',
+    'miniJukeboxTrack',
+    'furniture',
+    'Animals',
+    'IsGreenhouse',
+    'wallPaper',
+    'appliedWallpaper',
+    'floor',
+    'appliedFloor',
+    'fridge',
+    'fridgePosition',
+    'cribStyle',
   ];
+
+  /// Campos de [SaveGameInfo] que pertenecen a la partida, no al jugador.
+  /// El XML completo guarda el jugador anfitrión en `<player>`, pero estos
+  /// valores solo viven en SaveGameInfo. Al convertir un farmhand en host no
+  /// deben desaparecer: si lo hicieran, la copia se mostraría con otro día o
+  /// sin versión aunque sea exactamente la misma partida.
+  static const _saveInfoGameFields = {
+    'seasonForSaveGame',
+    'dayOfMonthForSaveGame',
+    'yearForSaveGame',
+    'gameVersion',
+  };
 
   /// Solo lectura: nunca escribe ni crea nada en disco.
   Future<HostSwapAnalysis> analyze({
@@ -88,13 +121,19 @@ class HostSwapService {
       final folderName = saveFolderPath.split(sep).last;
       final mainFile = File('$saveFolderPath$sep$folderName');
       if (!await mainFile.exists()) {
-        return const HostSwapAnalysis(ok: false, error: HostSwapError.invalidSave);
+        return const HostSwapAnalysis(
+          ok: false,
+          error: HostSwapError.invalidSave,
+        );
       }
 
       final doc = XmlDocument.parse(await mainFile.readAsString());
       final ctx = _loadContext(doc, targetUniqueId);
       if (ctx == null) {
-        return const HostSwapAnalysis(ok: false, error: HostSwapError.invalidSave);
+        return const HostSwapAnalysis(
+          ok: false,
+          error: HostSwapError.invalidSave,
+        );
       }
 
       final plan = _planRelocation(ctx);
@@ -112,7 +151,10 @@ class HostSwapService {
         targetName: ctx.targetName,
       );
     } catch (_) {
-      return const HostSwapAnalysis(ok: false, error: HostSwapError.invalidSave);
+      return const HostSwapAnalysis(
+        ok: false,
+        error: HostSwapError.invalidSave,
+      );
     }
   }
 
@@ -133,7 +175,10 @@ class HostSwapService {
       final folderName = saveFolderPath.split(sep).last;
       final sourceMain = File('$saveFolderPath$sep$folderName');
       if (!await sourceMain.exists()) {
-        return const HostSwapResult(ok: false, error: HostSwapError.invalidSave);
+        return const HostSwapResult(
+          ok: false,
+          error: HostSwapError.invalidSave,
+        );
       }
 
       // Trabajo sobre una copia TEMPORAL (nunca sobre savesDir) — el
@@ -153,7 +198,10 @@ class HostSwapService {
       final newMain = File('${workDir.path}$sep$folderName');
       if (!await newMain.exists()) {
         await _safeDelete(tempRoot);
-        return const HostSwapResult(ok: false, error: HostSwapError.writeFailure);
+        return const HostSwapResult(
+          ok: false,
+          error: HostSwapError.writeFailure,
+        );
       }
       final infoPath = File('${workDir.path}${sep}SaveGameInfo');
 
@@ -166,7 +214,10 @@ class HostSwapService {
       final ctx = _loadContext(doc, targetUniqueId);
       if (ctx == null) {
         await _safeDelete(tempRoot);
-        return const HostSwapResult(ok: false, error: HostSwapError.invalidSave);
+        return const HostSwapResult(
+          ok: false,
+          error: HostSwapError.invalidSave,
+        );
       }
 
       final plan = _planRelocation(ctx);
@@ -183,11 +234,15 @@ class HostSwapService {
       final oldHostClone = ctx.player.copy();
       final newHostClone = ctx.target.copy();
       final oldHostId = _text(ctx.player, 'UniqueMultiplayerID') ?? '';
-      final targetCabinInterior =
-          ctx.targetCabinBuilding.findElements('indoors').firstOrNull;
+      final targetCabinInterior = ctx.targetCabinBuilding
+          .findElements('indoors')
+          .firstOrNull;
       if (targetCabinInterior == null) {
         await _safeDelete(tempRoot);
-        return const HostSwapResult(ok: false, error: HostSwapError.invalidSave);
+        return const HostSwapResult(
+          ok: false,
+          error: HostSwapError.invalidSave,
+        );
       }
       final origFarmHouseInteriorClone = ctx.topFarmHouse.copy();
 
@@ -216,7 +271,10 @@ class HostSwapService {
       _setElementValue(ctx.targetCabinBuilding, 'tileY', fy);
 
       // Copiar contenido de interior en ambos sentidos.
-      _copyInteriorContent(source: targetCabinInterior, target: ctx.topFarmHouse);
+      _copyInteriorContent(
+        source: targetCabinInterior,
+        target: ctx.topFarmHouse,
+      );
       _setElementValue(ctx.topFarmHouse, 'name', 'FarmHouse');
       _setElementValue(ctx.topFarmHouse, 'isStructure', 'false');
 
@@ -239,8 +297,41 @@ class HostSwapService {
       if (await infoPath.exists() && newHostName.isNotEmpty) {
         final infoDoc = XmlDocument.parse(await infoPath.readAsString());
         final oldInfoRoot = infoDoc.rootElement;
+        // Partimos del SaveGameInfo existente para conservar los metadatos de
+        // la partida (día, estación, año y versión), y solo sustituimos los
+        // campos propios del nuevo anfitrión.
         final newInfoRoot = XmlElement(XmlName(newHostName));
-        newInfoRoot.children.addAll(ctx.player.children.map((c) => c.copy()));
+        // Conserva las declaraciones xmlns del SaveGameInfo original. Sin
+        // ellas los nodos `xsi:type` del jugador quedan inválidos y Stardew
+        // (y nuestro parser) no puede leer el archivo resultante.
+        newInfoRoot.attributes.addAll(
+          oldInfoRoot.attributes.map((attribute) => attribute.copy()),
+        );
+        newInfoRoot.children.addAll(oldInfoRoot.children.map((c) => c.copy()));
+        _mergePlayerIntoSaveInfo(newInfoRoot, ctx.player);
+        // Estas cuatro propiedades pertenecen a la granja y su fuente de
+        // verdad es el XML principal, no el nodo del jugador ni un
+        // SaveGameInfo ya generado por una versión anterior del swap.
+        _setElementValue(
+          newInfoRoot,
+          'seasonForSaveGame',
+          _seasonForSaveGame(_text(root, 'currentSeason')),
+        );
+        _setElementValue(
+          newInfoRoot,
+          'dayOfMonthForSaveGame',
+          _text(root, 'dayOfMonth') ?? '',
+        );
+        _setElementValue(
+          newInfoRoot,
+          'yearForSaveGame',
+          _text(root, 'year') ?? '',
+        );
+        _setElementValue(
+          newInfoRoot,
+          'gameVersion',
+          _text(root, 'gameVersion') ?? '',
+        );
         _setElementValue(newInfoRoot, 'homeLocation', 'FarmHouse');
         _setElementValue(newInfoRoot, 'slotCanHost', 'true');
         final infoChildren = infoDoc.children;
@@ -258,10 +349,12 @@ class HostSwapService {
       // Validación post-swap (delta: automática, no manual).
       final verifyRaw = await newMain.readAsString();
       final players = SaveService.parseFullSave(verifyRaw);
-      final newHost =
-          players.where((p) => p.uniqueId == targetUniqueId).firstOrNull;
-      final oldHostVerify =
-          players.where((p) => p.uniqueId == oldHostId).firstOrNull;
+      final newHost = players
+          .where((p) => p.uniqueId == targetUniqueId)
+          .firstOrNull;
+      final oldHostVerify = players
+          .where((p) => p.uniqueId == oldHostId)
+          .firstOrNull;
       final verifyDoc = XmlDocument.parse(verifyRaw);
       final verifyId = _text(verifyDoc.rootElement, 'uniqueIDForThisGame');
 
@@ -273,7 +366,8 @@ class HostSwapService {
         }
       }
 
-      final integrityOk = newHost != null &&
+      final integrityOk =
+          newHost != null &&
           newHost.isHost &&
           oldHostVerify != null &&
           !oldHostVerify.isHost &&
@@ -292,17 +386,26 @@ class HostSwapService {
       // Paso 3-4 (spec 007, G1/G4): comprimir el ORIGINAL — todavía intacto
       // en [saveFolderPath] — y verificar que el zip es un save parseable
       // ANTES de reemplazar nada.
-      final backupZip = await _zipFolder(saveFolderPath, folderName, backupsDir);
+      final backupZip = await _zipFolder(
+        saveFolderPath,
+        folderName,
+        backupsDir,
+      );
       if (backupZip == null || !await _verifyBackupZip(backupZip, folderName)) {
         if (backupZip != null) await _safeDeleteFile(backupZip);
         await _safeDelete(tempRoot);
-        return const HostSwapResult(ok: false, error: HostSwapError.writeFailure);
+        return const HostSwapResult(
+          ok: false,
+          error: HostSwapError.writeFailure,
+        );
       }
 
       // Paso 5-7: rename dance. Si el segundo rename falla, se revierte el
       // primero — el original NUNCA queda sin nombre válido (G1).
       final originalDir = Directory(saveFolderPath);
-      final oldTmp = Directory('${originalDir.parent.path}$sep${folderName}_old_tmp');
+      final oldTmp = Directory(
+        '${originalDir.parent.path}$sep${folderName}_old_tmp',
+      );
       if (await oldTmp.exists()) await oldTmp.delete(recursive: true);
       await originalDir.rename(oldTmp.path);
       try {
@@ -311,7 +414,10 @@ class HostSwapService {
         await oldTmp.rename(saveFolderPath);
         await _safeDeleteFile(backupZip);
         await _safeDelete(tempRoot);
-        return const HostSwapResult(ok: false, error: HostSwapError.writeFailure);
+        return const HostSwapResult(
+          ok: false,
+          error: HostSwapError.writeFailure,
+        );
       }
       await _safeDelete(oldTmp);
       await _safeDelete(tempRoot);
@@ -326,6 +432,26 @@ class HostSwapService {
       return const HostSwapResult(ok: false, error: HostSwapError.writeFailure);
     }
   }
+
+  static void _mergePlayerIntoSaveInfo(XmlElement infoRoot, XmlElement player) {
+    for (final child in player.childElements) {
+      if (_saveInfoGameFields.contains(child.name.local)) continue;
+      final existing = infoRoot.findElements(child.name.local).firstOrNull;
+      if (existing == null) {
+        infoRoot.children.add(child.copy());
+      } else {
+        existing.replace(child.copy());
+      }
+    }
+  }
+
+  static String _seasonForSaveGame(String? season) => switch (season) {
+    'spring' => '0',
+    'summer' => '1',
+    'fall' => '2',
+    'winter' => '3',
+    _ => '0',
+  };
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -497,8 +623,11 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
     final container = ctx.farm.findElements(containerName).firstOrNull;
     if (container == null) return;
     for (final item in container.findElements('item')) {
-      final vec =
-          item.findElements('key').firstOrNull?.findElements('Vector2').firstOrNull;
+      final vec = item
+          .findElements('key')
+          .firstOrNull
+          ?.findElements('Vector2')
+          .firstOrNull;
       if (vec == null) continue;
       final tx = _intText(vec, 'X');
       final ty = _intText(vec, 'Y');
@@ -514,7 +643,11 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
       if (valChild == null) continue;
       final type = _itemType(valChild);
       final priority = _itemPriority(valChild, type);
-      setOcc(tx, ty, _Occupant('item', priority: priority, item: item, type: type));
+      setOcc(
+        tx,
+        ty,
+        _Occupant('item', priority: priority, item: item, type: type),
+      );
     }
   }
 
@@ -527,13 +660,16 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
     for (var iy = y0; iy <= y1; iy++) {
       final occ = getOcc(ix, iy);
       if (occ != null && occ.kind == 'item') {
-        toMove.add(_FootprintEntry(occ.item!, occ.type!, occ.priority!, ix, iy));
+        toMove.add(
+          _FootprintEntry(occ.item!, occ.type!, occ.priority!, ix, iy),
+        );
       }
     }
   }
   final high = toMove.where((e) => e.priority == 'alta').toList();
   final low = toMove.where((e) => e.priority == 'baja').toList();
-  final itemsInFootprint = high.length + low.length; // ignorable: ni se mueve ni se cuenta
+  final itemsInFootprint =
+      high.length + low.length; // ignorable: ni se mueve ni se cuenta
 
   int directionalScore(int tx, int ty) {
     if (ty < y0) return 1000; // norte / detrás: el sprite lo tapa
@@ -591,13 +727,20 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
   final moves = <_RelocationMove>[];
 
   for (final entry in high) {
-    final result =
-        findCloseTileWithEviction(entry.x, entry.y, HostSwapService._closeRadius);
+    final result = findCloseTileWithEviction(
+      entry.x,
+      entry.y,
+      HostSwapService._closeRadius,
+    );
     if (result == null) return null;
     final dest = result.tile;
     final evict = result.evict;
     if (evict != null) {
-      final farDest = findFreeTile(evict.x, evict.y, HostSwapService._farRadius);
+      final farDest = findFreeTile(
+        evict.x,
+        evict.y,
+        HostSwapService._farRadius,
+      );
       if (farDest == null) return null;
       moves.add(_RelocationMove(evict.item, farDest.x, farDest.y));
       occupancy.remove('${evict.x},${evict.y}');
@@ -641,7 +784,11 @@ String _itemPriority(XmlElement valChild, String type) {
 // ─────────────────────────────────────────────────────────────────────────
 
 void _moveItemTo(XmlElement item, int newX, int newY) {
-  final vec = item.findElements('key').firstOrNull?.findElements('Vector2').firstOrNull;
+  final vec = item
+      .findElements('key')
+      .firstOrNull
+      ?.findElements('Vector2')
+      .firstOrNull;
   if (vec != null) {
     _setElementValue(vec, 'X', newX.toString());
     _setElementValue(vec, 'Y', newY.toString());
@@ -677,7 +824,10 @@ void _moveItemTo(XmlElement item, int newX, int newY) {
   }
 }
 
-void _copyInteriorContent({required XmlElement source, required XmlElement target}) {
+void _copyInteriorContent({
+  required XmlElement source,
+  required XmlElement target,
+}) {
   for (final field in HostSwapService._contentFields) {
     final sourceNode = source.findElements(field).firstOrNull;
     final targetNode = target.findElements(field).firstOrNull;
@@ -759,8 +909,9 @@ Future<File?> _zipFolder(
     final dir = Directory(backupsDir);
     await dir.create(recursive: true);
     final sep = Platform.pathSeparator;
-    final outFile =
-        File('$backupsDir$sep${folderName}_pre-swap_${_backupTimestamp()}.zip');
+    final outFile = File(
+      '$backupsDir$sep${folderName}_pre-swap_${_backupTimestamp()}.zip',
+    );
     await outFile.writeAsBytes(zipBytes);
     return outFile;
   } catch (_) {

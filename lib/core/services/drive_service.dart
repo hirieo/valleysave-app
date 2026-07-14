@@ -119,14 +119,51 @@ class DriveService {
   /// vacío, y aunque el usuario eligiera la carpeta a través del Picker de
   /// Google, ni el propio Picker podía ver su contenido (no es dueño de la
   /// carpeta) — ver research 2026-07-12.
+  ///
+  /// Filtra a carpetas que de verdad contienen una partida. Drive marca como
+  /// `sharedWithMe` la carpeta compartida directamente; sus hijos solo heredan
+  /// el permiso, por lo que buscar `SaveGameInfo` con ese mismo predicado deja
+  /// fuera saves válidos. Primero lista carpetas y luego valida cada candidata.
   Future<List<drive.File>> listSharedFolders() async {
-    final result = await _api.files.list(
-      q: "sharedWithMe=true and mimeType='$_folderMime' and trashed=false",
-      spaces: 'drive',
-      orderBy: 'modifiedTime desc',
-      $fields: 'files(id,name,modifiedTime,owners(emailAddress,displayName))',
+    final candidates = <drive.File>[];
+    String? pageToken;
+    do {
+      final page = await _api.files.list(
+        q: "sharedWithMe and mimeType='$_folderMime' and trashed=false",
+        spaces: 'drive',
+        pageSize: 1000,
+        pageToken: pageToken,
+        $fields:
+            'nextPageToken,files(id,name,mimeType,trashed,modifiedTime,owners(emailAddress,displayName))',
+      );
+      candidates.addAll(page.files ?? const <drive.File>[]);
+      pageToken = page.nextPageToken;
+    } while (pageToken != null && pageToken.isNotEmpty);
+
+    final folders = <drive.File>[];
+    for (final folder in candidates) {
+      final folderId = folder.id;
+      if (folderId == null) continue;
+      try {
+        final info = await _api.files.list(
+          q: "'$folderId' in parents and name='SaveGameInfo' and trashed=false",
+          spaces: 'drive',
+          pageSize: 1,
+          $fields: 'files(id)',
+        );
+        if (info.files?.isNotEmpty == true) {
+          folders.add(folder);
+        }
+      } catch (_) {
+        // Carpeta revocada entre listado y validación: omitir sin romper todo.
+      }
+    }
+    folders.sort(
+      (a, b) => (b.modifiedTime ?? DateTime(0)).compareTo(
+        a.modifiedTime ?? DateTime(0),
+      ),
     );
-    return result.files ?? [];
+    return folders;
   }
 
   /// Sube un archivo local. Si [driveFileId] != null actualiza el existente,
@@ -238,7 +275,9 @@ class DriveService {
     String saveFolderId,
     List<PlayerStats> players,
   ) async {
-    final json = jsonEncode({'players': players.map((p) => p.toJson()).toList()});
+    final json = jsonEncode({
+      'players': players.map((p) => p.toJson()).toList(),
+    });
     final bytes = utf8.encode(json);
     final media = drive.Media(Stream.fromIterable([bytes]), bytes.length);
 
@@ -296,10 +335,12 @@ class DriveService {
       }
       if (infoFile == null) return null;
 
-      final media = await _api.files.get(
-        infoFile.id!,
-        downloadOptions: drive.DownloadOptions.fullMedia,
-      ) as drive.Media;
+      final media =
+          await _api.files.get(
+                infoFile.id!,
+                downloadOptions: drive.DownloadOptions.fullMedia,
+              )
+              as drive.Media;
       final bytes = await _readAll(media.stream);
       final xml = utf8.decode(bytes, allowMalformed: true);
 
@@ -335,10 +376,12 @@ class DriveService {
   Future<List<PlayerStats>> _fetchPlayersJson(drive.File? playersFile) async {
     if (playersFile?.id == null) return const [];
     try {
-      final media = await _api.files.get(
-        playersFile!.id!,
-        downloadOptions: drive.DownloadOptions.fullMedia,
-      ) as drive.Media;
+      final media =
+          await _api.files.get(
+                playersFile!.id!,
+                downloadOptions: drive.DownloadOptions.fullMedia,
+              )
+              as drive.Media;
       final bytes = await _readAll(media.stream);
       final json = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
       final list = json['players'] as List<dynamic>? ?? [];
@@ -350,9 +393,38 @@ class DriveService {
     }
   }
 
+  /// Las versiones recientes suben `players.json`, ligero y suficiente para
+  /// pintar el selector. En compartidos antiguos aún no existe: como último
+  /// recurso leemos el archivo principal ya accesible para extraer la lista
+  /// real, evitando que la cara del Drive del dueño pierda sus jugadores.
+  Future<List<PlayerStats>> _fetchSharedPlayers({
+    required drive.File? playersFile,
+    required drive.File? mainFile,
+  }) async {
+    final players = await _fetchPlayersJson(playersFile);
+    if (players.isNotEmpty || mainFile?.id == null) return players;
+    try {
+      final media =
+          await _api.files.get(
+                mainFile!.id!,
+                downloadOptions: drive.DownloadOptions.fullMedia,
+              )
+              as drive.Media;
+      final bytes = await _readAll(media.stream);
+      return SaveService.parseFullSave(
+        utf8.decode(bytes, allowMalformed: true),
+      );
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// Descarga todos los archivos de un save de Drive a [localFolderPath],
   /// sobrescribiendo los locales.
-  Future<void> downloadSave(String driveFolderId, String localFolderPath) async {
+  Future<void> downloadSave(
+    String driveFolderId,
+    String localFolderPath,
+  ) async {
     final files = await _api.files.list(
       q: "'$driveFolderId' in parents and trashed=false",
       spaces: 'drive',
@@ -363,10 +435,12 @@ class DriveService {
 
     for (final f in files.files ?? <drive.File>[]) {
       if (f.id == null || f.name == null) continue;
-      final media = await _api.files.get(
-        f.id!,
-        downloadOptions: drive.DownloadOptions.fullMedia,
-      ) as drive.Media;
+      final media =
+          await _api.files.get(
+                f.id!,
+                downloadOptions: drive.DownloadOptions.fullMedia,
+              )
+              as drive.Media;
       final out = File('$localFolderPath${Platform.pathSeparator}${f.name}');
       await media.stream.pipe(out.openWrite());
     }
@@ -449,6 +523,16 @@ class DriveService {
     await _api.permissions.delete(saveFolderId, permissionId);
   }
 
+  /// US5 — "Salir del compartido": revoca TU PROPIO acceso a una carpeta
+  /// que no es tuya (a diferencia de `removeSharedSave`, que solo borra el
+  /// registro local — esto sí toca Drive de verdad, irreversible sin que
+  /// el dueño vuelva a compartir). La API de Drive admite `'me'` como
+  /// permissionId especial para el propio usuario autenticado — no hace
+  /// falta averiguar tu email ni listar permisos para encontrar el tuyo.
+  Future<void> leaveSharedSave(String folderId) async {
+    await _api.permissions.delete(folderId, 'me');
+  }
+
   /// Cambia el rol de una persona ya con acceso, sin revocar ni volver a
   /// notificar por email. SOLO tiene sentido para saves coop (ver contrato).
   Future<void> updatePermission(
@@ -470,7 +554,8 @@ class DriveService {
   Future<String> _ensureBackupsFolder() async {
     final rootId = await ensureFolder();
     final result = await _api.files.list(
-      q: "name='$_backupsFolderName' and mimeType='$_folderMime' and "
+      q:
+          "name='$_backupsFolderName' and mimeType='$_folderMime' and "
           "'$rootId' in parents and trashed=false",
       spaces: 'drive',
       $fields: 'files(id)',
@@ -490,14 +575,43 @@ class DriveService {
   /// un save (G6 del contrato 007).
   Future<String> uploadBackupZip(String localPath) async {
     final backupsFolderId = await _ensureBackupsFolder();
+    return _uploadBackupZipToFolder(localPath, backupsFolderId);
+  }
+
+  /// Sube un respaldo al mismo folder de un save compartido. Solo se permite
+  /// cuando Drive confirma permiso de edición: no se crea nada en partidas
+  /// compartidas como lectura.
+  Future<String> uploadBackupZipToSharedSave(
+    String folderId,
+    String localPath,
+  ) async {
+    final folder =
+        await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
+            as drive.File;
+    if (folder.capabilities?.canEdit != true) {
+      throw StateError(
+        'Ya no tienes permiso para subir a esta partida compartida.',
+      );
+    }
+    return _uploadBackupZipToFolder(localPath, folderId);
+  }
+
+  Future<String> _uploadBackupZipToFolder(
+    String localPath,
+    String folderId,
+  ) async {
     final file = File(localPath);
     final name = file.path.split(Platform.pathSeparator).last;
     final length = await file.length();
     final media = drive.Media(file.openRead(), length);
     final metadata = drive.File()
       ..name = name
-      ..parents = [backupsFolderId];
-    final created = await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
+      ..parents = [folderId];
+    final created = await _api.files.create(
+      metadata,
+      uploadMedia: media,
+      $fields: 'id',
+    );
     return created.id!;
   }
 
@@ -505,8 +619,32 @@ class DriveService {
   /// se pasa. Archivos que no siguen el patrón de nombre se ignoran.
   Future<List<BackupEntry>> listDriveBackups({String? folderName}) async {
     final backupsFolderId = await _ensureBackupsFolder();
+    return _listBackupsInFolder(
+      backupsFolderId,
+      folderName: folderName,
+      shared: false,
+    );
+  }
+
+  /// Lista los respaldos que el propietario guardó dentro de la carpeta de
+  /// una partida compartida. Se mantienen separados de "Mi Drive" para que
+  /// la UI pueda decidir con precisión qué ubicación falta o se va a borrar.
+  Future<List<BackupEntry>> listSharedSaveBackups(
+    String sharedFolderId, {
+    String? folderName,
+  }) => _listBackupsInFolder(
+    sharedFolderId,
+    folderName: folderName,
+    shared: true,
+  );
+
+  Future<List<BackupEntry>> _listBackupsInFolder(
+    String folderId, {
+    required bool shared,
+    String? folderName,
+  }) async {
     final result = await _api.files.list(
-      q: "'$backupsFolderId' in parents and trashed=false",
+      q: "'$folderId' in parents and trashed=false",
       spaces: 'drive',
       $fields: 'files(id,name,size,modifiedTime)',
     );
@@ -518,13 +656,16 @@ class DriveService {
       final parsed = BackupEntry.parseFileName(name);
       if (parsed == null) continue;
       if (folderName != null && parsed.folderName != folderName) continue;
-      out.add(BackupEntry(
-        fileName: name,
-        folderName: parsed.folderName,
-        timestamp: parsed.timestamp,
-        driveFileId: id,
-        sizeBytes: int.tryParse(f.size ?? '0') ?? 0,
-      ));
+      out.add(
+        BackupEntry(
+          fileName: name,
+          folderName: parsed.folderName,
+          timestamp: parsed.timestamp,
+          driveFileId: shared ? null : id,
+          sharedDriveFileId: shared ? id : null,
+          sizeBytes: int.tryParse(f.size ?? '0') ?? 0,
+        ),
+      );
     }
     return out;
   }
@@ -537,10 +678,12 @@ class DriveService {
 
   /// Descarga un archivo de Drive a [localPath].
   Future<void> downloadFile(String fileId, String localPath) async {
-    final media = await _api.files.get(
-      fileId,
-      downloadOptions: drive.DownloadOptions.fullMedia,
-    ) as drive.Media;
+    final media =
+        await _api.files.get(
+              fileId,
+              downloadOptions: drive.DownloadOptions.fullMedia,
+            )
+            as drive.Media;
 
     final output = File(localPath);
     await output.create(recursive: true);
@@ -554,9 +697,7 @@ class DriveService {
     final raw = prefs.getString(_sharedSavesRegistryKey);
     if (raw == null) return [];
     final list = jsonDecode(raw) as List<dynamic>;
-    return list
-        .map((e) => Map<String, String>.from(e as Map))
-        .toList();
+    return list.map((e) => Map<String, String>.from(e as Map)).toList();
   }
 
   Future<void> _saveSharedRegistry(List<Map<String, String>> entries) async {
@@ -567,10 +708,13 @@ class DriveService {
   /// Se llama tras el flujo de Picker: [folderId] es la carpeta elegida.
   /// Valida que es un save real antes de persistir el registro local (G1).
   Future<SharedSaveEntry> addSharedSave(String folderId) async {
-    final file = await _api.files.get(
-      folderId,
-      $fields: 'id,name,trashed,mimeType,capabilities(canEdit),owners(emailAddress)',
-    ) as drive.File;
+    final file =
+        await _api.files.get(
+              folderId,
+              $fields:
+                  'id,name,trashed,mimeType,capabilities(canEdit),owners(emailAddress)',
+            )
+            as drive.File;
     if (file.trashed == true || file.mimeType != _folderMime) {
       throw StateError('No es una carpeta de save válida.');
     }
@@ -583,18 +727,22 @@ class DriveService {
     );
     drive.File? infoFile;
     drive.File? mainFile;
+    drive.File? playersFile;
     for (final f in children.files ?? <drive.File>[]) {
       if (f.name == 'SaveGameInfo') infoFile = f;
       if (f.name == folderName) mainFile = f;
+      if (f.name == _playersJsonName) playersFile = f;
     }
     if (infoFile == null || mainFile == null) {
       throw StateError('Esta carpeta no contiene un save reconocible.');
     }
 
-    final media = await _api.files.get(
-      infoFile.id!,
-      downloadOptions: drive.DownloadOptions.fullMedia,
-    ) as drive.Media;
+    final media =
+        await _api.files.get(
+              infoFile.id!,
+              downloadOptions: drive.DownloadOptions.fullMedia,
+            )
+            as drive.Media;
     final bytes = await _readAll(media.stream);
     final xml = utf8.decode(bytes, allowMalformed: true);
     final savedAt =
@@ -604,6 +752,7 @@ class DriveService {
       xml,
       folderName: folderName,
       lastModified: savedAt,
+      players: await _fetchPlayersJson(playersFile),
     );
     if (save == null) {
       throw StateError('Esta carpeta no contiene un save reconocible.');
@@ -645,20 +794,24 @@ class DriveService {
       final storedEmail = entry['ownerEmail'] ?? '';
 
       try {
-        final file = await _api.files.get(
-          folderId,
-          $fields:
-              'id,name,trashed,capabilities(canEdit),owners(emailAddress)',
-        ) as drive.File;
+        final file =
+            await _api.files.get(
+                  folderId,
+                  $fields:
+                      'id,name,trashed,capabilities(canEdit),owners(emailAddress)',
+                )
+                as drive.File;
 
         if (file.trashed == true) {
-          results.add(SharedSaveEntry(
-            folderId: folderId,
-            folderName: storedName,
-            ownerEmail: storedEmail,
-            myRole: 'reader',
-            revoked: true,
-          ));
+          results.add(
+            SharedSaveEntry(
+              folderId: folderId,
+              folderName: storedName,
+              ownerEmail: storedEmail,
+              myRole: 'reader',
+              revoked: true,
+            ),
+          );
           continue;
         }
 
@@ -675,47 +828,63 @@ class DriveService {
         );
         drive.File? infoFile;
         drive.File? mainFile;
+        drive.File? playersFile;
         for (final f in children.files ?? <drive.File>[]) {
           if (f.name == 'SaveGameInfo') infoFile = f;
           if (f.name == folderName) mainFile = f;
+          if (f.name == _playersJsonName) playersFile = f;
         }
 
         SaveFile? save;
         if (infoFile != null) {
-          final media = await _api.files.get(
-            infoFile.id!,
-            downloadOptions: drive.DownloadOptions.fullMedia,
-          ) as drive.Media;
+          final media =
+              await _api.files.get(
+                    infoFile.id!,
+                    downloadOptions: drive.DownloadOptions.fullMedia,
+                  )
+                  as drive.Media;
           final bytes = await _readAll(media.stream);
           final xml = utf8.decode(bytes, allowMalformed: true);
-          final savedAt = (mainFile?.modifiedTime ??
-                  infoFile.modifiedTime ??
-                  DateTime.now())
-              .toLocal();
+          final savedAt =
+              (mainFile?.modifiedTime ??
+                      infoFile.modifiedTime ??
+                      DateTime.now())
+                  .toLocal();
           save = SaveService.parseSaveGameInfo(
             xml,
             folderName: folderName,
             lastModified: savedAt,
+            // `SaveGameInfo` solo conoce al anfitrión. El resumen ligero se
+            // comparte junto al save y conserva el selector de jugadores en
+            // la cara "Drive en …"; saves antiguos usan el fallback seguro.
+            players: await _fetchSharedPlayers(
+              playersFile: playersFile,
+              mainFile: mainFile,
+            ),
           );
         }
 
-        results.add(SharedSaveEntry(
-          folderId: folderId,
-          folderName: folderName,
-          ownerEmail: ownerEmail,
-          myRole: role,
-          driveStats: save,
-        ));
+        results.add(
+          SharedSaveEntry(
+            folderId: folderId,
+            folderName: folderName,
+            ownerEmail: ownerEmail,
+            myRole: role,
+            driveStats: save,
+          ),
+        );
       } catch (_) {
         // 403/404 (revocado, borrado) u otro fallo de red: se marca
         // revocado en vez de propagar la excepción (G4).
-        results.add(SharedSaveEntry(
-          folderId: folderId,
-          folderName: storedName,
-          ownerEmail: storedEmail,
-          myRole: 'reader',
-          revoked: true,
-        ));
+        results.add(
+          SharedSaveEntry(
+            folderId: folderId,
+            folderName: storedName,
+            ownerEmail: storedEmail,
+            myRole: 'reader',
+            revoked: true,
+          ),
+        );
       }
     }
     return results;
@@ -740,10 +909,9 @@ class DriveService {
     String folderId,
     String localFolderPath,
   ) async {
-    final file = await _api.files.get(
-      folderId,
-      $fields: 'capabilities(canEdit)',
-    ) as drive.File;
+    final file =
+        await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
+            as drive.File;
     if (file.capabilities?.canEdit != true) {
       throw StateError('Ya no tienes permiso para sincronizar este save.');
     }

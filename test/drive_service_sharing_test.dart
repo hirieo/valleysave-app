@@ -14,14 +14,14 @@ class _FakeAuthClient extends http.BaseClient implements AuthClient {
 
   @override
   AccessCredentials get credentials => AccessCredentials(
-        AccessToken(
-          'Bearer',
-          'fake-token',
-          DateTime.now().toUtc().add(const Duration(hours: 1)),
-        ),
-        null,
-        const ['https://www.googleapis.com/auth/drive.file'],
-      );
+    AccessToken(
+      'Bearer',
+      'fake-token',
+      DateTime.now().toUtc().add(const Duration(hours: 1)),
+    ),
+    null,
+    const ['https://www.googleapis.com/auth/drive.file'],
+  );
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
@@ -50,33 +50,92 @@ Future<String> _bodyOf(http.BaseRequest request) async {
 }
 
 void main() {
+  group('listSharedFolders', () {
+    test(
+      'lista carpetas compartidas y conserva solo las que contienen un save',
+      () async {
+        final client = _FakeAuthClient((request) {
+          final q = request.url.queryParameters['q'] ?? '';
+          if (q.contains('sharedWithMe')) {
+            return _jsonResponse({
+              'files': [
+                {
+                  'id': 'valid-folder',
+                  'name': 'Stardust_1',
+                  'mimeType': 'application/vnd.google-apps.folder',
+                  'modifiedTime': '2026-07-13T10:00:00Z',
+                  'owners': [
+                    {'emailAddress': 'licendey@gmail.com'},
+                  ],
+                },
+                {
+                  'id': 'other-folder',
+                  'name': 'Documentos',
+                  'mimeType': 'application/vnd.google-apps.folder',
+                  'modifiedTime': '2026-07-12T10:00:00Z',
+                },
+              ],
+            });
+          }
+          if (q.contains("'valid-folder' in parents")) {
+            return _jsonResponse({
+              'files': [
+                {'id': 'info-1', 'name': 'SaveGameInfo'},
+              ],
+            });
+          }
+          if (q.contains("'other-folder' in parents")) {
+            return _jsonResponse({'files': []});
+          }
+          fail('Consulta inesperada: $q');
+        });
+
+        final folders = await DriveService(client).listSharedFolders();
+
+        expect(folders.map((f) => f.id), ['valid-folder']);
+        expect(folders.single.name, 'Stardust_1');
+        expect(
+          folders.single.owners!.single.emailAddress,
+          'licendey@gmail.com',
+        );
+        expect(
+          client.requests.first.url.queryParameters['q'],
+          contains("mimeType='application/vnd.google-apps.folder'"),
+        );
+        expect(client.requests, hasLength(3));
+      },
+    );
+  });
+
   group('shareSave (G1, G2)', () {
-    test('G1: crea permiso type=user con el rol pedido (reader por defecto)',
-        () async {
-      final client = _FakeAuthClient(
-        (_) => _jsonResponse({
-          'id': 'perm1',
-          'type': 'user',
-          'role': 'reader',
-          'emailAddress': 'friend@example.com',
-        }),
-      );
-      final service = DriveService(client);
+    test(
+      'G1: crea permiso type=user con el rol pedido (reader por defecto)',
+      () async {
+        final client = _FakeAuthClient(
+          (_) => _jsonResponse({
+            'id': 'perm1',
+            'type': 'user',
+            'role': 'reader',
+            'emailAddress': 'friend@example.com',
+          }),
+        );
+        final service = DriveService(client);
 
-      final id = await service.shareSave('folder123', 'friend@example.com');
+        final id = await service.shareSave('folder123', 'friend@example.com');
 
-      expect(id, 'perm1');
-      expect(client.requests, hasLength(1));
-      final req = client.requests.single;
-      expect(req.method, 'POST');
-      expect(req.url.path, contains('folder123'));
-      expect(req.url.path, contains('permissions'));
+        expect(id, 'perm1');
+        expect(client.requests, hasLength(1));
+        final req = client.requests.single;
+        expect(req.method, 'POST');
+        expect(req.url.path, contains('folder123'));
+        expect(req.url.path, contains('permissions'));
 
-      final body = jsonDecode(await _bodyOf(req)) as Map<String, dynamic>;
-      expect(body['type'], 'user');
-      expect(body['role'], 'reader');
-      expect(body['emailAddress'], 'friend@example.com');
-    });
+        final body = jsonDecode(await _bodyOf(req)) as Map<String, dynamic>;
+        expect(body['type'], 'user');
+        expect(body['role'], 'reader');
+        expect(body['emailAddress'], 'friend@example.com');
+      },
+    );
 
     test('G1b: acepta role=writer explícito (coop)', () async {
       final client = _FakeAuthClient(
@@ -84,10 +143,15 @@ void main() {
       );
       final service = DriveService(client);
 
-      await service.shareSave('folder123', 'friend@example.com', role: 'writer');
+      await service.shareSave(
+        'folder123',
+        'friend@example.com',
+        role: 'writer',
+      );
 
-      final body = jsonDecode(await _bodyOf(client.requests.single))
-          as Map<String, dynamic>;
+      final body =
+          jsonDecode(await _bodyOf(client.requests.single))
+              as Map<String, dynamic>;
       expect(body['role'], 'writer');
     });
 
@@ -119,7 +183,12 @@ void main() {
       final client = _FakeAuthClient(
         (_) => _jsonResponse({
           'permissions': [
-            {'id': 'p0', 'type': 'user', 'role': 'owner', 'emailAddress': 'me@x.com'},
+            {
+              'id': 'p0',
+              'type': 'user',
+              'role': 'owner',
+              'emailAddress': 'me@x.com',
+            },
             {
               'id': 'p1',
               'type': 'user',
@@ -146,18 +215,20 @@ void main() {
   });
 
   group('unshareSave (G4)', () {
-    test('G4: llama a permissions.delete con fileId y permissionId correctos',
-        () async {
-      final client = _FakeAuthClient((_) => _emptyResponse());
-      final service = DriveService(client);
+    test(
+      'G4: llama a permissions.delete con fileId y permissionId correctos',
+      () async {
+        final client = _FakeAuthClient((_) => _emptyResponse());
+        final service = DriveService(client);
 
-      await service.unshareSave('folder123', 'perm1');
+        await service.unshareSave('folder123', 'perm1');
 
-      final req = client.requests.single;
-      expect(req.method, 'DELETE');
-      expect(req.url.path, contains('folder123'));
-      expect(req.url.path, contains('perm1'));
-    });
+        final req = client.requests.single;
+        expect(req.method, 'DELETE');
+        expect(req.url.path, contains('folder123'));
+        expect(req.url.path, contains('perm1'));
+      },
+    );
   });
 
   group('updatePermission (G6)', () {
@@ -172,7 +243,10 @@ void main() {
       final req = client.requests.single;
       expect(req.url.path, contains('folder123'));
       expect(req.url.path, contains('perm1'));
-      expect(req.url.queryParameters.containsKey('sendNotificationEmail'), isFalse);
+      expect(
+        req.url.queryParameters.containsKey('sendNotificationEmail'),
+        isFalse,
+      );
 
       final body = jsonDecode(await _bodyOf(req)) as Map<String, dynamic>;
       expect(body['role'], 'reader');

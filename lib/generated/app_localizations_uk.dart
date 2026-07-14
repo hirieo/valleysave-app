@@ -550,7 +550,30 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String sharedWithMeRemoveConfirm(String email) {
-    return 'Remove from your list? This only affects your device — the save stays in $email\'s Drive.';
+    return 'You\'ll stop syncing with $email\'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.';
+  }
+
+  @override
+  String sharedLeaveConfirm(Object email) {
+    return 'You\'ll lose access to this save for real. You won\'t be able to add it back unless $email shares it with you again. Your local copy remains a normal coop save.';
+  }
+
+  @override
+  String get sharedManageButton => 'Manage';
+
+  @override
+  String get sharedManageDialogTitle => 'Manage shared saves';
+
+  @override
+  String get sharedManageDialogHint =>
+      'Here you can really leave a shared save.';
+
+  @override
+  String get sharedLeaveButton => 'Leave shared save';
+
+  @override
+  String sharedLeaveSuccess(Object email) {
+    return 'You left $email\'s shared save.';
   }
 
   @override
@@ -563,6 +586,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get sharedWithMeUploadOwn => 'Upload to my Drive';
+
+  @override
+  String get sharedDownloadOwn => 'Download from my Drive';
+
+  @override
+  String get sharedStatusOwnDriveAhead => 'Your Drive is ahead — bring it down';
 
   @override
   String get sharedSyncBoth => 'Sync both';
@@ -692,6 +721,74 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get backupsCreate => 'Create local backup';
+
+  @override
+  String get backupsCreateLocalHint =>
+      'Backups are created on this device first. You can upload them to Drive afterwards.';
+
+  @override
+  String get backupsCreateOk => 'Backup created.';
+
+  @override
+  String backupsCreateErr(String error) {
+    return 'Couldn\'t create the backup: $error';
+  }
+
+  @override
+  String get backupsDownload => 'Download';
+
+  @override
+  String get backupsDownloadOk => 'Backup downloaded to this device.';
+
+  @override
+  String backupsDownloadErr(String error) {
+    return 'Couldn\'t download the backup: $error';
+  }
+
+  @override
+  String get backupsCopyOwn => 'Copy to my Drive';
+
+  @override
+  String get backupsUploadOwn => 'To my Drive';
+
+  @override
+  String get backupsUploadShared => 'To shared Drive';
+
+  @override
+  String get backupsUploadOk => 'Backup uploaded.';
+
+  @override
+  String backupsUploadErr(String error) {
+    return 'Couldn\'t upload the backup: $error';
+  }
+
+  @override
+  String get backupsLocationLocal => 'This device';
+
+  @override
+  String get backupsLocationOwnDrive => 'My Drive';
+
+  @override
+  String get backupsLocationSharedDrive => 'Shared Drive';
+
+  @override
+  String get backupsDeleteChooseBody =>
+      'Choose exactly where to delete it. Only locations where this backup exists are shown.';
+
+  @override
+  String get backupsDeleteLocalOnly => 'Only from this device';
+
+  @override
+  String get backupsDeleteOwnOnly => 'Only from my Drive';
+
+  @override
+  String get backupsDeleteSharedOnly => 'Only from shared Drive';
+
+  @override
+  String get backupsDeleteAll => 'From all copies';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Delete $farmName?';
   }
@@ -699,6 +796,52 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get deleteChooseLocationBody =>
       'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).';
+
+  @override
+  String deleteDriveContextTitle(String farmName) {
+    return 'Delete $farmName from Drive?';
+  }
+
+  @override
+  String get deleteDriveContextBody =>
+      'The Drive copy will move to Trash, where it can be recovered for 30 days.';
+
+  @override
+  String get deleteDriveLocalKept =>
+      'The copy on this device will remain unchanged.';
+
+  @override
+  String deleteLocalContextTitle(String farmName) {
+    return 'Delete $farmName from this device?';
+  }
+
+  @override
+  String get deleteLocalContextBody =>
+      'The copy on this device will be deleted permanently.';
+
+  @override
+  String deleteLocalDriveCurrent(String date) {
+    return 'Your Drive copy is up to date ($date) and will remain available.';
+  }
+
+  @override
+  String deleteLocalDriveAhead(String date) {
+    return 'Your Drive copy is newer ($date) and will remain available.';
+  }
+
+  @override
+  String deleteLocalDriveOlder(String driveDate, String localDate) {
+    return 'Your Drive copy is older ($driveDate); this device is at $localDate.';
+  }
+
+  @override
+  String deleteLocalBackupAvailable(int count) {
+    return 'There are $count local backups available if you need an earlier copy.';
+  }
+
+  @override
+  String get deleteLocalNoRecovery =>
+      'There is no Drive copy or local backup to recover this game from.';
 
   @override
   String get deleteOptionLocalOnly => 'Only from this device';

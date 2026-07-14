@@ -90,3 +90,6 @@ run.ps1
 graphify-out/
 lib/graphify-out/
 .preview/
+
+# Binarios empaquetados localmente; se publican como artefactos/releases.
+dist/

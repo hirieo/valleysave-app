@@ -7,7 +7,10 @@ import '../../../core/models/player_stats.dart';
 import '../../../core/models/save_entry.dart';
 import '../../../core/models/save_file.dart';
 import '../../../core/models/shared_save_entry.dart';
+import '../../../core/services/season_controller.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../shared/widgets/save_busy_indicator.dart';
+import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart';
 import 'save_detail_sheet.dart';
 
@@ -18,6 +21,11 @@ const _kBlue = Color(0xFF5AA8E0);
 // Mismo verde que `_kSynced` (privado) en save_card.dart — misma semántica
 // de "coinciden" en toda la app.
 const _kSyncedGreen = Color(0xFF62B074);
+// Verde menta — identidad de "Drive del dueño" (nunca el tuyo): caja,
+// hoja de detalle, texto de estado y botones que actúan sobre ESE Drive
+// comparten este color. Se diferencia de `_kSyncedGreen`: este identifica
+// el origen compartido; aquel confirma que dos copias coinciden.
+const _kOwnerAccent = Color(0xFF42D392);
 
 /// Tarjeta de "Compartidas conmigo" — MISMO `SaveCard` que "Mis partidas"
 /// (cabecera, chips, selector de jugador, stats completos), solo cambia la
@@ -34,10 +42,14 @@ class SharedSaveCard extends StatelessWidget {
     this.onRemove,
     this.onMakeHost,
     this.onUploadToOwnDrive,
+    this.onDownloadFromOwnDrive,
     this.onSyncBoth,
     this.onExport,
     this.onBackups,
     this.backupCount = 0,
+    this.onDeleteLocal,
+    this.onDeleteFromOwnDrive,
+    this.onManageCopies,
   });
 
   final SharedSaveEntry entry;
@@ -56,6 +68,11 @@ class SharedSaveCard extends StatelessWidget {
   /// activo o revocado por igual.
   final VoidCallback? onUploadToOwnDrive;
 
+  /// Caso inverso: tu Drive tiene una versión más avanzada que la local
+  /// (jugaste en otro equipo y subiste desde ahí) — bajarla aquí. Solo
+  /// tiene sentido dentro de la hoja "Mi Drive" (`_openOwnDetail`).
+  final VoidCallback? onDownloadFromOwnDrive;
+
   /// Sube a tu Drive Y sincroniza con el dueño en una sola acción — solo
   /// tiene sentido cuando ambas hacen falta a la vez (ver `_SharedFooter`).
   final VoidCallback? onSyncBoth;
@@ -70,23 +87,37 @@ class SharedSaveCard extends StatelessWidget {
   final VoidCallback? onBackups;
   final int backupCount;
 
+  /// Acciones separadas para que cada cara borre solo su propia ubicación.
+  /// NUNCA apuntan al Drive del dueño.
+  final VoidCallback? onDeleteLocal;
+  final VoidCallback? onDeleteFromOwnDrive;
+  final VoidCallback? onManageCopies;
+
   @override
   Widget build(BuildContext context) {
     return SaveCard(
       entry: entry.asEntry,
       busy: busy,
-      footer: _SharedFooter(
-        entry: entry,
-        onDownload: onDownload,
-        onSync: onSync,
-        onRemove: onRemove,
-        onMakeHost: onMakeHost,
-        onExport: onExport,
-        onBackups: onBackups,
-        backupCount: backupCount,
-        onUploadToOwnDrive: onUploadToOwnDrive,
-        onSyncBoth: onSyncBoth,
-      ),
+      footerBuilder: (context, selectedPlayerId, onPlayerIdChanged) =>
+          _SharedFooter(
+            entry: entry,
+            busy: busy,
+            selectedPlayerId: selectedPlayerId,
+            onPlayerIdChanged: onPlayerIdChanged,
+            onDownload: onDownload,
+            onSync: onSync,
+            onRemove: onRemove,
+            onMakeHost: onMakeHost,
+            onExport: onExport,
+            onBackups: onBackups,
+            backupCount: backupCount,
+            onUploadToOwnDrive: onUploadToOwnDrive,
+            onDownloadFromOwnDrive: onDownloadFromOwnDrive,
+            onSyncBoth: onSyncBoth,
+            onDeleteLocal: onDeleteLocal,
+            onDeleteFromOwnDrive: onDeleteFromOwnDrive,
+            onManageCopies: onManageCopies,
+          ),
     );
   }
 }
@@ -94,57 +125,100 @@ class SharedSaveCard extends StatelessWidget {
 class _SharedFooter extends StatelessWidget {
   const _SharedFooter({
     required this.entry,
+    required this.busy,
+    required this.selectedPlayerId,
+    required this.onPlayerIdChanged,
     this.onDownload,
     this.onSync,
     this.onRemove,
     this.onMakeHost,
     this.onUploadToOwnDrive,
+    this.onDownloadFromOwnDrive,
     this.onSyncBoth,
     this.onExport,
     this.onBackups,
     this.backupCount = 0,
+    this.onDeleteLocal,
+    this.onDeleteFromOwnDrive,
+    this.onManageCopies,
   });
 
   final SharedSaveEntry entry;
+  final bool busy;
+  final String? selectedPlayerId;
+  final ValueChanged<String> onPlayerIdChanged;
   final VoidCallback? onDownload;
   final VoidCallback? onSync;
   final VoidCallback? onRemove;
   final void Function(PlayerStats target)? onMakeHost;
   final VoidCallback? onUploadToOwnDrive;
+  final VoidCallback? onDownloadFromOwnDrive;
   final VoidCallback? onSyncBoth;
   final VoidCallback? onExport;
   final VoidCallback? onBackups;
   final int backupCount;
+  final VoidCallback? onDeleteLocal;
+  final VoidCallback? onDeleteFromOwnDrive;
+  final VoidCallback? onManageCopies;
 
-  /// Hoja de detalle de SIEMPRE (stats por cara, swipe, HACER ANFITRIÓN con
-  /// su lógica de anfitrión-visible, comparativas, Exportar, Backups) sobre
-  /// el par local ↔ Drive del dueño. "Subir" de la cara local = sincronizar
-  /// con el dueño. Deliberadamente sin `onShare` (ver doc de `SharedSaveCard`).
-  void _openDetail(BuildContext context, {required bool startOnLocal}) {
-    showSaveDetail(
-      context,
-      entry: entry.asEntry,
-      startOnLocal: startOnLocal,
-      onUpload: onSync,
-      onDownload: onDownload,
-      onMakeHost: onMakeHost,
-      onExport: onExport,
-      onBackups: onBackups,
-      backupCount: backupCount,
-    );
-  }
+  /// Única hoja para los tres sitios. El orden siempre es local → Mi Drive →
+  /// Drive del dueño, independientemente de la caja desde la que se abra.
+  void _openDetail(
+    BuildContext context, {
+    required SaveDetailLocation initialLocation,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    final ownerStatus = entry.asEntry.status;
+    final ownStatus = entry.ownDriveSyncStatus;
+    final ownerNeedsUpload =
+        ownerStatus == SaveSyncStatus.localAhead ||
+        ownerStatus == SaveSyncStatus.localOnly;
+    final ownNeedsUpload =
+        ownStatus == SaveSyncStatus.localAhead ||
+        ownStatus == SaveSyncStatus.localOnly;
+    final ownerNeedsDownload =
+        ownerStatus == SaveSyncStatus.driveAhead ||
+        ownerStatus == SaveSyncStatus.driveOnly;
+    final ownNeedsDownload =
+        ownStatus == SaveSyncStatus.driveAhead ||
+        ownStatus == SaveSyncStatus.driveOnly;
 
-  /// Misma hoja sobre el par local ↔ MI Drive. "Subir" = subir a mi Drive.
-  void _openOwnDetail(BuildContext context) {
+    var localActionLabel = l10n.sharedWithMeUploadOwn;
+    VoidCallback? localAction;
+    if (ownerNeedsUpload && ownNeedsUpload && onSyncBoth != null) {
+      localActionLabel = l10n.sharedSyncBoth;
+      localAction = onSyncBoth;
+    } else if (ownerNeedsUpload && onSync != null) {
+      localActionLabel = l10n.sharedWithMeSync;
+      localAction = onSync;
+    } else if (ownNeedsUpload && onUploadToOwnDrive != null) {
+      localActionLabel = l10n.sharedWithMeUploadOwn;
+      localAction = onUploadToOwnDrive;
+    }
+
     showSaveDetail(
       context,
       entry: entry.asOwnEntry,
-      startOnLocal: entry.ownDriveStats == null,
-      onUpload: onUploadToOwnDrive,
+      startOnLocal: initialLocation == SaveDetailLocation.local,
+      initialLocation: initialLocation,
+      onUpload: localAction,
+      localActionLabel: localActionLabel,
+      onDownload: ownNeedsDownload ? onDownloadFromOwnDrive : null,
       onMakeHost: onMakeHost,
       onExport: onExport,
       onBackups: onBackups,
       backupCount: backupCount,
+      onDeleteLocal: onDeleteLocal,
+      onDeleteFromDrive: onDeleteFromOwnDrive,
+      driveTitle: l10n.sharedSideMyDrive,
+      extraDrive: entry.revoked ? null : entry.driveStats,
+      extraDriveTitle: l10n.sharedSideOwnerDrive(entry.ownerEmail),
+      extraDriveColor: _kOwnerAccent,
+      onExtraDownload: ownerNeedsDownload ? onDownload : null,
+      onRemove: onRemove,
+      removeLabel: l10n.sharedWithMeRemove,
+      initialPlayerId: selectedPlayerId,
+      onPlayerIdChanged: onPlayerIdChanged,
     );
   }
 
@@ -160,25 +234,32 @@ class _SharedFooter extends StatelessWidget {
     if (!hasOwnDrive) {
       return switch (ownerStatus) {
         SaveSyncStatus.synced => (
-            color: _kSyncedGreen,
-            text: l10n.sharedStatusSyncedNoOwnDrive
-          ),
+          color: _kSyncedGreen,
+          text: l10n.sharedStatusSyncedNoOwnDrive,
+        ),
         SaveSyncStatus.localAhead => (
-            color: kLocal,
-            text: l10n.sharedStatusAheadNoOwnDrive
-          ),
+          color: kLocal,
+          text: l10n.sharedStatusAheadNoOwnDrive,
+        ),
         _ => (
-            color: kDrive,
-            text: l10n.sharedStatusOwnerAheadNoOwnDrive(entry.ownerEmail)
-          ),
+          color: _kOwnerAccent,
+          text: l10n.sharedStatusOwnerAheadNoOwnDrive(entry.ownerEmail),
+        ),
       };
     }
 
-    if (ownerStatus == SaveSyncStatus.synced && ownStatus == SaveSyncStatus.synced) {
+    if (ownerStatus == SaveSyncStatus.synced &&
+        ownStatus == SaveSyncStatus.synced) {
       return (color: _kSyncedGreen, text: l10n.sharedStatusAllSynced);
     }
-    if (ownerStatus == SaveSyncStatus.localAhead && ownStatus == SaveSyncStatus.localAhead) {
+    if (ownerStatus == SaveSyncStatus.localAhead &&
+        ownStatus == SaveSyncStatus.localAhead) {
       return (color: kLocal, text: l10n.sharedStatusAheadBoth);
+    }
+    // Jugaste en otro equipo y subiste desde ahí: tu Drive va por delante
+    // de esta copia local.
+    if (ownStatus == SaveSyncStatus.driveAhead) {
+      return (color: kDrive, text: l10n.sharedStatusOwnDriveAhead);
     }
     return (color: _kReadAccent, text: l10n.sharedStatusMixed);
   }
@@ -187,7 +268,8 @@ class _SharedFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final canMakeHost = Platform.isWindows &&
+    final canMakeHost =
+        Platform.isWindows &&
         onMakeHost != null &&
         entry.localMatch?.hasMultiplePlayers == true;
 
@@ -203,15 +285,18 @@ class _SharedFooter extends StatelessWidget {
                   child: Text(
                     l10n.sharedWithMeOwnedBy(entry.ownerEmail),
                     style: GoogleFonts.firaCode(
-                        fontSize: 10.5,
-                        color: Colors.white.withValues(alpha: 0.35)),
+                      fontSize: 10.5,
+                      color: Colors.white.withValues(alpha: 0.35),
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Text(
                   l10n.sharedWithMeRevoked,
                   style: GoogleFonts.firaCode(
-                      fontSize: 10, color: _kDanger.withValues(alpha: 0.85)),
+                    fontSize: 10,
+                    color: _kDanger.withValues(alpha: 0.85),
+                  ),
                 ),
               ],
             ),
@@ -225,6 +310,7 @@ class _SharedFooter extends StatelessWidget {
                         label: l10n.sharedWithMeUploadOwn,
                         icon: Icons.cloud_upload_outlined,
                         color: _kBlue,
+                        busy: busy,
                         onTap: onUploadToOwnDrive,
                       ),
                     ),
@@ -238,14 +324,31 @@ class _SharedFooter extends StatelessWidget {
                         color: const Color(0xFFF0C040),
                         // Revocado: el Drive del dueño ya no existe para
                         // nosotros — la hoja abre sobre local ↔ mi Drive.
-                        onTap: () => _openOwnDetail(context),
+                        onTap: () => _openDetail(
+                          context,
+                          initialLocation: SaveDetailLocation.local,
+                        ),
                       ),
                     ),
                 ],
               ),
             ],
+            if (onBackups != null) ...[
+              const SizedBox(height: 8),
+              _FooterAction(
+                label: l10n.backupsAction,
+                icon: Icons.inventory_2_outlined,
+                color: const Color(0xFF97C459),
+                onTap: onBackups,
+              ),
+            ],
             const SizedBox(height: 8),
-            _RemoveLink(label: l10n.sharedWithMeRemove, onTap: onRemove),
+            _ManagementActions(
+              disconnectLabel: l10n.sharedWithMeRemove,
+              manageLabel: l10n.deleteDataTitle,
+              onDisconnect: onRemove,
+              onManageCopies: onManageCopies,
+            ),
           ],
         ),
       );
@@ -269,12 +372,19 @@ class _SharedFooter extends StatelessWidget {
                   child: Text(
                     l10n.sharedWithMeOwnedBy(entry.ownerEmail),
                     style: GoogleFonts.firaCode(
-                        fontSize: 10.5, color: Colors.white.withValues(alpha: 0.55)),
+                      fontSize: 10.5,
+                      color: Colors.white.withValues(alpha: 0.55),
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(width: 6),
-                _RoleBadge(sync: canSync, label: canSync ? l10n.sharedWithMeRoleSync : l10n.sharedWithMeRoleRead),
+                _RoleBadge(
+                  sync: canSync,
+                  label: canSync
+                      ? l10n.sharedWithMeRoleSync
+                      : l10n.sharedWithMeRoleRead,
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -285,6 +395,7 @@ class _SharedFooter extends StatelessWidget {
                     label: l10n.sharedWithMeDownload,
                     icon: Icons.cloud_download_outlined,
                     color: _kBlue,
+                    busy: busy,
                     onTap: onDownload,
                   ),
                 ),
@@ -295,14 +406,29 @@ class _SharedFooter extends StatelessWidget {
                       label: l10n.sharedWithMeSync,
                       icon: Icons.sync_rounded,
                       color: _kSyncAccent,
+                      busy: busy,
                       onTap: onSync,
                     ),
                   ),
                 ],
               ],
             ),
+            if (onBackups != null) ...[
+              const SizedBox(height: 8),
+              _FooterAction(
+                label: l10n.backupsAction,
+                icon: Icons.inventory_2_outlined,
+                color: const Color(0xFF97C459),
+                onTap: onBackups,
+              ),
+            ],
             const SizedBox(height: 6),
-            _RemoveLink(label: l10n.sharedWithMeRemove, onTap: onRemove),
+            _ManagementActions(
+              disconnectLabel: l10n.sharedWithMeRemove,
+              manageLabel: l10n.deleteDataTitle,
+              onDisconnect: onRemove,
+              onManageCopies: onManageCopies,
+            ),
           ],
         ),
       );
@@ -318,11 +444,18 @@ class _SharedFooter extends StatelessWidget {
         onDownload != null && ownerStatus == SaveSyncStatus.driveAhead;
     final showSyncOwner =
         onSync != null && ownerStatus == SaveSyncStatus.localAhead;
-    final showUploadOwn = onUploadToOwnDrive != null &&
+    final showUploadOwn =
+        onUploadToOwnDrive != null &&
         (ownStatus == SaveSyncStatus.localOnly ||
             ownStatus == SaveSyncStatus.localAhead);
+    // Caso inverso: jugaste en otro equipo y subiste desde ahí — tu Drive
+    // va por delante de esta copia local, tráelo de vuelta.
+    final showDownloadOwn =
+        onDownloadFromOwnDrive != null &&
+        ownStatus == SaveSyncStatus.driveAhead;
     final showSyncBoth = onSyncBoth != null && showUploadOwn && showSyncOwner;
-    final anyAction = showDownload || showSyncOwner || showUploadOwn;
+    final anyAction =
+        showDownload || showSyncOwner || showUploadOwn || showDownloadOwn;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
@@ -336,12 +469,19 @@ class _SharedFooter extends StatelessWidget {
                 child: Text(
                   l10n.sharedWithMeOwnedBy(entry.ownerEmail),
                   style: GoogleFonts.firaCode(
-                      fontSize: 10.5, color: Colors.white.withValues(alpha: 0.55)),
+                    fontSize: 10.5,
+                    color: Colors.white.withValues(alpha: 0.55),
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               const SizedBox(width: 6),
-              _RoleBadge(sync: canSync, label: canSync ? l10n.sharedWithMeRoleSync : l10n.sharedWithMeRoleRead),
+              _RoleBadge(
+                sync: canSync,
+                label: canSync
+                    ? l10n.sharedWithMeRoleSync
+                    : l10n.sharedWithMeRoleRead,
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -351,9 +491,14 @@ class _SharedFooter extends StatelessWidget {
           // de "Mis partidas".
           _ThreeSitesRow(
             entry: entry,
-            onTapLocal: () => _openDetail(context, startOnLocal: true),
-            onTapOwnDrive: () => _openOwnDetail(context),
-            onTapOwnerDrive: () => _openDetail(context, startOnLocal: false),
+            onTapLocal: () =>
+                _openDetail(context, initialLocation: SaveDetailLocation.local),
+            onTapOwnDrive: () =>
+                _openDetail(context, initialLocation: SaveDetailLocation.drive),
+            onTapOwnerDrive: () => _openDetail(
+              context,
+              initialLocation: SaveDetailLocation.extraDrive,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -361,53 +506,73 @@ class _SharedFooter extends StatelessWidget {
               Container(
                 width: 6,
                 height: 6,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: status.color),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: status.color,
+                ),
               ),
               const SizedBox(width: 7),
               Expanded(
                 child: Text(
                   status.text,
-                  style: GoogleFonts.firaCode(fontSize: 10.5, color: status.color),
+                  style: GoogleFonts.firaCode(
+                    fontSize: 10.5,
+                    color: status.color,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
+              ),
+              const SizedBox(width: 8),
+              _ManagementActions(
+                disconnectLabel: l10n.sharedWithMeRemove,
+                manageLabel: l10n.deleteDataTitle,
+                onDisconnect: onRemove,
+                onManageCopies: onManageCopies,
               ),
             ],
           ),
           if (anyAction) ...[
             const SizedBox(height: 8),
             Row(
-              children: [
-                if (showDownload)
-                  Expanded(
-                    child: _FooterAction(
-                      label: l10n.sharedWithMeDownload,
-                      icon: Icons.cloud_download_outlined,
-                      color: kDrive,
-                      onTap: onDownload,
-                    ),
-                  ),
-                if (showDownload && (showSyncOwner || showUploadOwn))
-                  const SizedBox(width: 8),
-                if (showSyncOwner)
-                  Expanded(
-                    child: _FooterAction(
-                      label: l10n.sharedWithMeSync,
-                      icon: Icons.sync_rounded,
-                      color: _kSyncAccent,
-                      onTap: onSync,
-                    ),
-                  ),
-                if (showSyncOwner && showUploadOwn) const SizedBox(width: 8),
-                if (showUploadOwn)
-                  Expanded(
-                    child: _FooterAction(
-                      label: l10n.sharedWithMeUploadOwn,
-                      icon: Icons.cloud_upload_outlined,
-                      color: kLocal,
-                      onTap: onUploadToOwnDrive,
-                    ),
-                  ),
-              ],
+              children:
+                  [
+                      if (showDownload)
+                        _FooterAction(
+                          label: l10n.sharedWithMeDownload,
+                          icon: Icons.cloud_download_outlined,
+                          color: _kOwnerAccent,
+                          busy: busy,
+                          onTap: onDownload,
+                        ),
+                      if (showSyncOwner)
+                        _FooterAction(
+                          label: l10n.sharedWithMeSync,
+                          icon: Icons.sync_rounded,
+                          color: _kOwnerAccent,
+                          busy: busy,
+                          onTap: onSync,
+                        ),
+                      if (showUploadOwn)
+                        _FooterAction(
+                          label: l10n.sharedWithMeUploadOwn,
+                          icon: Icons.cloud_upload_outlined,
+                          color: kDrive,
+                          busy: busy,
+                          onTap: onUploadToOwnDrive,
+                        ),
+                      if (showDownloadOwn)
+                        _FooterAction(
+                          label: l10n.sharedDownloadOwn,
+                          icon: Icons.cloud_download_outlined,
+                          color: kDrive,
+                          busy: busy,
+                          onTap: onDownloadFromOwnDrive,
+                        ),
+                    ].expand((btn) sync* {
+                      yield Expanded(child: btn);
+                      yield const SizedBox(width: 8);
+                    }).toList()
+                    ..removeLast(),
             ),
             if (showSyncBoth) ...[
               const SizedBox(height: 6),
@@ -415,12 +580,11 @@ class _SharedFooter extends StatelessWidget {
                 label: l10n.sharedSyncBoth,
                 icon: Icons.publish_rounded,
                 color: _kSyncedGreen,
+                busy: busy,
                 onTap: onSyncBoth,
               ),
             ],
           ],
-          const SizedBox(height: 6),
-          _RemoveLink(label: l10n.sharedWithMeRemove, onTap: onRemove),
         ],
       ),
     );
@@ -450,8 +614,9 @@ class _ThreeSitesRow extends StatelessWidget {
         Expanded(
           child: _SiteBox(
             label: l10n.cardLocalPresence,
+            emoji: '💻',
             save: entry.localMatch,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: kLocal,
             onTap: entry.localMatch != null ? onTapLocal : null,
           ),
         ),
@@ -459,8 +624,9 @@ class _ThreeSitesRow extends StatelessWidget {
         Expanded(
           child: _SiteBox(
             label: l10n.sharedSideMyDrive,
+            emoji: '☁',
             save: entry.ownDriveStats,
-            color: kLocal,
+            color: kDrive,
             onTap: entry.ownDriveStats != null ? onTapOwnDrive : null,
           ),
         ),
@@ -468,8 +634,9 @@ class _ThreeSitesRow extends StatelessWidget {
         Expanded(
           child: _SiteBox(
             label: l10n.sharedSideOwnerDrive(entry.ownerEmail),
+            emoji: '🔗',
             save: entry.driveStats,
-            color: kDrive,
+            color: _kOwnerAccent,
             onTap: entry.driveStats != null ? onTapOwnerDrive : null,
           ),
         ),
@@ -478,14 +645,19 @@ class _ThreeSitesRow extends StatelessWidget {
   }
 }
 
+/// Caja de un sitio (dispositivo/Drive). Mismo formato que las cajas
+/// "EN ESTE DISPOSITIVO"/"EN DRIVE" de un save propio (emoji + fecha +
+/// versión) — sin la hora relativa, para caber en 3 columnas.
 class _SiteBox extends StatelessWidget {
   const _SiteBox({
     required this.label,
+    required this.emoji,
     required this.save,
     required this.color,
     this.onTap,
   });
   final String label;
+  final String emoji;
   final SaveFile? save;
   final Color color;
   final VoidCallback? onTap;
@@ -498,7 +670,9 @@ class _SiteBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
       decoration: BoxDecoration(
         border: Border.all(
-          color: present ? color.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.12),
+          color: present
+              ? color.withValues(alpha: 0.4)
+              : Colors.white.withValues(alpha: 0.12),
           style: present ? BorderStyle.solid : BorderStyle.none,
         ),
         borderRadius: BorderRadius.circular(9),
@@ -506,15 +680,25 @@ class _SiteBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label.toUpperCase(),
-            style: GoogleFonts.firaCode(
-              fontSize: 7.5,
-              letterSpacing: 0.3,
-              color: present ? color.withValues(alpha: 0.85) : Colors.white.withValues(alpha: 0.3),
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Text(emoji, style: const TextStyle(fontSize: 9)),
+              const SizedBox(width: 3),
+              Expanded(
+                child: Text(
+                  label.toUpperCase(),
+                  style: GoogleFonts.firaCode(
+                    fontSize: 7.5,
+                    letterSpacing: 0.3,
+                    color: present
+                        ? color.withValues(alpha: 0.85)
+                        : Colors.white.withValues(alpha: 0.3),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 3),
           Text(
@@ -523,16 +707,30 @@ class _SiteBox extends StatelessWidget {
                 : l10n.cardNotPresent,
             style: GoogleFonts.firaCode(
               fontSize: 10,
-              color: present ? Colors.white.withValues(alpha: 0.9) : Colors.white.withValues(alpha: 0.3),
+              color: present
+                  ? Colors.white.withValues(alpha: 0.9)
+                  : Colors.white.withValues(alpha: 0.3),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
+          if (present && save!.gameVersion.isNotEmpty) ...[
+            const SizedBox(height: 2),
+            Text(
+              'v${save!.gameVersion}',
+              style: GoogleFonts.firaCode(
+                fontSize: 8.5,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ],
       ),
     );
     if (onTap == null) return box;
-    return GestureDetector(onTap: onTap, child: box);
+    return PressableScale(onTap: onTap, child: box);
   }
 }
 
@@ -554,8 +752,11 @@ class _RoleBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(sync ? Icons.sync_rounded : Icons.visibility_outlined,
-              size: 10, color: color),
+          Icon(
+            sync ? Icons.sync_rounded : Icons.visibility_outlined,
+            size: 10,
+            color: color,
+          ),
           const SizedBox(width: 3),
           Text(
             label.toUpperCase(),
@@ -577,11 +778,13 @@ class _FooterAction extends StatefulWidget {
     required this.label,
     required this.icon,
     required this.color,
+    this.busy = false,
     this.onTap,
   });
   final String label;
   final IconData icon;
   final Color color;
+  final bool busy;
   final VoidCallback? onTap;
 
   @override
@@ -593,9 +796,10 @@ class _FooterActionState extends State<_FooterAction> {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = widget.onTap != null && !widget.busy;
     return GestureDetector(
-      onTap: widget.onTap,
-      onTapDown: widget.onTap != null ? (_) => setState(() => _pressed = true) : null,
+      onTap: enabled ? widget.onTap : null,
+      onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
       onTapUp: (_) => setState(() => _pressed = false),
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedScale(
@@ -613,7 +817,14 @@ class _FooterActionState extends State<_FooterAction> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(widget.icon, size: 14, color: widget.color),
+              if (widget.busy)
+                SaveBusyIndicator(
+                  key: const ValueKey('shared-save-busy-indicator'),
+                  season: SeasonController.instance.season.value,
+                  size: 14,
+                )
+              else
+                Icon(widget.icon, size: 14, color: widget.color),
               const SizedBox(width: 5),
               Text(
                 widget.label,
@@ -631,24 +842,63 @@ class _FooterActionState extends State<_FooterAction> {
   }
 }
 
-class _RemoveLink extends StatelessWidget {
-  const _RemoveLink({required this.label, this.onTap});
-  final String label;
-  final VoidCallback? onTap;
+class _ManagementActions extends StatelessWidget {
+  const _ManagementActions({
+    required this.disconnectLabel,
+    required this.manageLabel,
+    this.onDisconnect,
+    this.onManageCopies,
+  });
+
+  final String disconnectLabel;
+  final String manageLabel;
+  final VoidCallback? onDisconnect;
+  final VoidCallback? onManageCopies;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Text(
-        label,
-        textAlign: TextAlign.right,
-        style: GoogleFonts.firaCode(
-          fontSize: 10,
-          color: Colors.white.withValues(alpha: 0.4),
-          decoration: TextDecoration.underline,
-          decorationColor: Colors.white.withValues(alpha: 0.15),
-        ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Tooltip(
+            message: disconnectLabel,
+            child: SizedBox(
+              width: 42,
+              height: 36,
+              child: ActionBtn(
+                key: const ValueKey('shared-disconnect-action'),
+                label: '',
+                icon: Icons.sync_disabled_rounded,
+                iconSize: 15,
+                color: const Color(0xFFE8783A),
+                filled: true,
+                iconOnly: true,
+                onTap: onDisconnect,
+              ),
+            ),
+          ),
+          if (onManageCopies != null) ...[
+            const SizedBox(width: 8),
+            Tooltip(
+              message: manageLabel,
+              child: SizedBox(
+                width: 42,
+                height: 36,
+                child: ActionBtn(
+                  key: const ValueKey('shared-manage-copies-action'),
+                  label: '',
+                  icon: Icons.delete_outline_rounded,
+                  color: const Color(0xFFE05252),
+                  filled: true,
+                  iconOnly: true,
+                  onTap: onManageCopies,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

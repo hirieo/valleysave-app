@@ -33,9 +33,13 @@ class CoopSaveFixture {
     final folder = Directory('${savesDir.path}$sep$originalFolderName');
     await folder.create(recursive: true);
 
-    await File('${folder.path}$sep$originalFolderName').writeAsString(mainXml());
+    await File(
+      '${folder.path}$sep$originalFolderName',
+    ).writeAsString(mainXml());
     await File('${folder.path}${sep}SaveGameInfo').writeAsString(infoXml());
-    await File('${folder.path}$sep${originalFolderName}_old').writeAsString('stale');
+    await File(
+      '${folder.path}$sep${originalFolderName}_old',
+    ).writeAsString('stale');
     await File('${folder.path}${sep}SaveGameInfo_old').writeAsString('stale');
 
     return (saveFolderPath: folder.path, savesDir: savesDir.path);
@@ -51,10 +55,17 @@ class CoopSaveFixture {
   static String mainXml() => _mainXml();
 
   static String _mainXml({bool withCollisions = true, bool saturated = false}) {
-    final farm = _farmLocation(withCollisions: withCollisions, saturated: saturated);
+    final farm = _farmLocation(
+      withCollisions: withCollisions,
+      saturated: saturated,
+    );
     return '''<?xml version="1.0" encoding="utf-8"?>
 <SaveGame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <uniqueIDForThisGame>$originalId</uniqueIDForThisGame>
+  <currentSeason>spring</currentSeason>
+  <dayOfMonth>5</dayOfMonth>
+  <year>1</year>
+  <gameVersion>1.6.15</gameVersion>
   <player>
     <name>$hostName</name>
     <UniqueMultiplayerID>$hostUniqueId</UniqueMultiplayerID>
@@ -118,10 +129,15 @@ class CoopSaveFixture {
 </SaveGame>''';
   }
 
-  static String _farmLocation({required bool withCollisions, required bool saturated}) {
+  static String _farmLocation({
+    required bool withCollisions,
+    required bool saturated,
+  }) {
     final buildings = saturated ? _saturatedBuildings() : _normalBuildings();
     final objects = withCollisions ? _collidingObjects() : _freeObjects();
-    final terrain = withCollisions ? _collidingTerrainFeatures() : _freeTerrainFeatures();
+    final terrain = withCollisions
+        ? _collidingTerrainFeatures()
+        : _freeTerrainFeatures();
     return '''
     <GameLocation>
       <name>Farm</name>
@@ -139,7 +155,8 @@ class CoopSaveFixture {
     </GameLocation>''';
   }
 
-  static String _normalBuildings() => '''
+  static String _normalBuildings() =>
+      '''
         <Building>
           <buildingType>Farmhouse</buildingType>
           <tileX>59</tileX><tileY>12</tileY>
@@ -295,7 +312,8 @@ class CoopSaveFixture {
           </value>
         </item>''';
 
-  static String infoXml() => '''<?xml version="1.0" encoding="utf-8"?>
+  static String infoXml() =>
+      '''<?xml version="1.0" encoding="utf-8"?>
 <$hostName>
   <name>$hostName</name>
   <farmName>Granja Test</farmName>
@@ -304,6 +322,7 @@ class CoopSaveFixture {
   <seasonForSaveGame>0</seasonForSaveGame>
   <dayOfMonthForSaveGame>5</dayOfMonthForSaveGame>
   <yearForSaveGame>1</yearForSaveGame>
+  <gameVersion>1.6.15</gameVersion>
   <money>5000</money>
   <UniqueMultiplayerID>$hostUniqueId</UniqueMultiplayerID>
 </$hostName>''';

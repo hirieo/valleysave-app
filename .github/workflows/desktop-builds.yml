@@ -1,0 +1,147 @@
+name: Desktop builds
+
+# Ejecución manual: evita consumir minutos por cada push de desarrollo.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-builds-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: 3.44.0
+
+jobs:
+  linux:
+    name: Linux x64
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            libgtk-3-dev \
+            liblzma-dev \
+            libsecret-1-dev \
+            ninja-build \
+            pkg-config
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+          pub-cache: true
+
+      - name: Restore private desktop environment
+        env:
+          VALLEYSAVE_ENV_B64: ${{ secrets.VALLEYSAVE_ENV_B64 }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import os
+          from pathlib import Path
+
+          encoded = os.environ.get('VALLEYSAVE_ENV_B64', '')
+          if not encoded:
+              raise SystemExit('Missing GitHub secret VALLEYSAVE_ENV_B64')
+          Path('.env').write_bytes(base64.b64decode(encoded, validate=True))
+          PY
+
+      - name: Resolve packages
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Test
+        run: flutter test
+
+      - name: Build Linux release
+        run: flutter build linux --release
+
+      - name: Package Linux bundle
+        run: |
+          tar \
+            -C build/linux/x64/release \
+            -czf "$GITHUB_WORKSPACE/valleysave-linux-x64.tar.gz" \
+            bundle
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: valleysave-linux-x64
+          path: valleysave-linux-x64.tar.gz
+          if-no-files-found: error
+          retention-days: 14
+
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+          pub-cache: true
+
+      - name: Restore private desktop environment
+        env:
+          VALLEYSAVE_ENV_B64: ${{ secrets.VALLEYSAVE_ENV_B64 }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import os
+          from pathlib import Path
+
+          encoded = os.environ.get('VALLEYSAVE_ENV_B64', '')
+          if not encoded:
+              raise SystemExit('Missing GitHub secret VALLEYSAVE_ENV_B64')
+          Path('.env').write_bytes(base64.b64decode(encoded, validate=True))
+          PY
+
+      - name: Resolve packages
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Test
+        run: flutter test
+
+      - name: Build macOS release
+        run: flutter build macos --release
+
+      - name: Package macOS app
+        run: |
+          ditto \
+            -c -k --sequesterRsrc --keepParent \
+            build/macos/Build/Products/Release/valleysave.app \
+            valleysave-macos.zip
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: valleysave-macos
+          path: valleysave-macos.zip
+          if-no-files-found: error
+          retention-days: 14

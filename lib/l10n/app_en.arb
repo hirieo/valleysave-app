@@ -221,7 +221,13 @@
   "sharedWithMeSync": "Sync",
   "sharedWithMeDownload": "Download",
   "sharedWithMeRemove": "Remove from list",
-  "sharedWithMeRemoveConfirm": "Remove from your list? This only affects your device — the save stays in {email}'s Drive.",
+  "sharedWithMeRemoveConfirm": "You'll stop syncing with {email}'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.",
+  "sharedLeaveConfirm": "You'll lose access to this save for real. You won't be able to add it back unless {email} shares it with you again. Your local copy remains a normal coop save.",
+  "sharedManageButton": "Manage",
+  "sharedManageDialogTitle": "Manage shared saves",
+  "sharedManageDialogHint": "Here you can really leave a shared save.",
+  "sharedLeaveButton": "Leave shared save",
+  "sharedLeaveSuccess": "You left {email}'s shared save.",
   "@sharedWithMeRemoveConfirm": {
     "placeholders": {
       "email": {"type": "String"}
@@ -235,6 +241,8 @@
   },
   "sharedWithMeRevoked": "You no longer have access",
   "sharedWithMeUploadOwn": "Upload to my Drive",
+  "sharedDownloadOwn": "Download from my Drive",
+  "sharedStatusOwnDriveAhead": "Your Drive is ahead — bring it down",
   "sharedSyncBoth": "Sync both",
   "sharedSideMyDrive": "MY DRIVE",
   "sharedSideOwnerDrive": "{email}'s DRIVE",
@@ -311,6 +319,41 @@
       "error": {"type": "String"}
     }
   },
+  "backupsCreate": "Create local backup",
+  "backupsCreateLocalHint": "Backups are created on this device first. You can upload them to Drive afterwards.",
+  "backupsCreateOk": "Backup created.",
+  "backupsCreateErr": "Couldn't create the backup: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsDownload": "Download",
+  "backupsDownloadOk": "Backup downloaded to this device.",
+  "backupsDownloadErr": "Couldn't download the backup: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsCopyOwn": "Copy to my Drive",
+  "backupsUploadOwn": "To my Drive",
+  "backupsUploadShared": "To shared Drive",
+  "backupsUploadOk": "Backup uploaded.",
+  "backupsUploadErr": "Couldn't upload the backup: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsLocationLocal": "This device",
+  "backupsLocationOwnDrive": "My Drive",
+  "backupsLocationSharedDrive": "Shared Drive",
+  "backupsDeleteChooseBody": "Choose exactly where to delete it. Only locations where this backup exists are shown.",
+  "backupsDeleteLocalOnly": "Only from this device",
+  "backupsDeleteOwnOnly": "Only from my Drive",
+  "backupsDeleteSharedOnly": "Only from shared Drive",
+  "backupsDeleteAll": "From all copies",
   "deleteUnifiedTitle": "Delete {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {
@@ -318,6 +361,47 @@
     }
   },
   "deleteChooseLocationBody": "Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).",
+  "deleteDriveContextTitle": "Delete {farmName} from Drive?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "deleteDriveContextBody": "The Drive copy will move to Trash, where it can be recovered for 30 days.",
+  "deleteDriveLocalKept": "The copy on this device will remain unchanged.",
+  "deleteLocalContextTitle": "Delete {farmName} from this device?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "deleteLocalContextBody": "The copy on this device will be deleted permanently.",
+  "deleteLocalDriveCurrent": "Your Drive copy is up to date ({date}) and will remain available.",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "deleteLocalDriveAhead": "Your Drive copy is newer ({date}) and will remain available.",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "deleteLocalDriveOlder": "Your Drive copy is older ({driveDate}); this device is at {localDate}.",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {"type": "String"},
+      "localDate": {"type": "String"}
+    }
+  },
+  "deleteLocalBackupAvailable": "There are {count} local backups available if you need an earlier copy.",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "deleteLocalNoRecovery": "There is no Drive copy or local backup to recover this game from.",
   "deleteOptionLocalOnly": "Only from this device",
   "deleteOptionDriveOnly": "Only from Drive",
   "deleteOptionBoth": "From both (device + Drive)",

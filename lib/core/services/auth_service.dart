@@ -20,6 +20,11 @@ export 'package:googleapis_auth/auth_io.dart' show AuthClient;
 const _scopes = ['https://www.googleapis.com/auth/drive'];
 const _storageKey = 'google_auth_credentials';
 
+bool hasRequiredDriveScopes(Iterable<String> grantedScopes) {
+  final granted = grantedScopes.toSet();
+  return _scopes.every(granted.contains);
+}
+
 class AuthService {
   AuthService._();
   static final AuthService instance = AuthService._();
@@ -92,24 +97,24 @@ class AuthService {
     final id = dotenv.env['GOOGLE_CLIENT_ID'];
     final secret = dotenv.env['GOOGLE_CLIENT_SECRET'];
     assert(id != null && id.isNotEmpty, 'GOOGLE_CLIENT_ID no está en .env');
-    assert(secret != null && secret.isNotEmpty, 'GOOGLE_CLIENT_SECRET no está en .env');
+    assert(
+      secret != null && secret.isNotEmpty,
+      'GOOGLE_CLIENT_SECRET no está en .env',
+    );
     return ClientId(id!, secret!);
   }
 
   Future<AuthClient?> _signInDesktop() async {
     final clientId = _desktopClientId();
-    try {
-      final authClient = await clientViaUserConsent(
-        clientId,
-        _scopes,
-        (url) async => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
-      );
-      _client = authClient;
-      await _persistCredentials(authClient.credentials);
-      return authClient;
-    } catch (_) {
-      return null;
-    }
+    final authClient = await clientViaUserConsent(
+      clientId,
+      _scopes,
+      (url) async =>
+          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+    );
+    await _persistCredentials(authClient.credentials);
+    _client = authClient;
+    return authClient;
   }
 
   Future<AuthClient?> _tryRestoreDesktop() async {
@@ -119,6 +124,10 @@ class AuthService {
     final json = jsonDecode(stored) as Map<String, dynamic>;
     final creds = _credentialsFromJson(json);
     if (creds == null) {
+      await _storage.delete(key: _storageKey);
+      return null;
+    }
+    if (!hasRequiredDriveScopes(creds.scopes)) {
       await _storage.delete(key: _storageKey);
       return null;
     }

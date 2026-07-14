@@ -8,6 +8,42 @@ import 'transfer_service.dart';
 /// (`listDriveBackups`/`uploadBackupZip`/`deleteDriveBackup`), el caller
 /// (`saves_screen.dart`) hace el merge por nombre de archivo (G10).
 class BackupService {
+  /// Crea un respaldo manual sin tocar la partida. Reutiliza el mismo zip
+  /// seguro que exportación/importación y lo conserva fuera de `Saves`.
+  Future<BackupEntry> createBackup({
+    required String saveFolderPath,
+    required String folderName,
+    required String backupsDir,
+    DateTime? now,
+  }) async {
+    final exported = await TransferService().exportSave(
+      saveFolderPath,
+      folderName,
+    );
+    final timestamp = now ?? DateTime.now();
+    final fileName = '${folderName}_backup_${_timestamp(timestamp)}.zip';
+    final destinationDir = Directory(backupsDir);
+    await destinationDir.create(recursive: true);
+    final destination = File('$backupsDir${Platform.pathSeparator}$fileName');
+    try {
+      await exported.copy(destination.path);
+    } finally {
+      try {
+        final tempDir = exported.parent;
+        if (await tempDir.exists()) await tempDir.delete(recursive: true);
+      } catch (_) {
+        // Limpieza best-effort; el respaldo final ya está fuera del temporal.
+      }
+    }
+    return BackupEntry(
+      fileName: fileName,
+      folderName: folderName,
+      timestamp: timestamp,
+      localPath: destination.path,
+      sizeBytes: await destination.length(),
+    );
+  }
+
   /// Nunca hace llamadas de red (G9) — solo lee el directorio local.
   Future<List<BackupEntry>> listLocalBackups(
     String backupsDir, {
@@ -22,13 +58,15 @@ class BackupService {
       final parsed = BackupEntry.parseFileName(name);
       if (parsed == null) continue;
       if (folderName != null && parsed.folderName != folderName) continue;
-      out.add(BackupEntry(
-        fileName: name,
-        folderName: parsed.folderName,
-        timestamp: parsed.timestamp,
-        localPath: entity.path,
-        sizeBytes: await entity.length(),
-      ));
+      out.add(
+        BackupEntry(
+          fileName: name,
+          folderName: parsed.folderName,
+          timestamp: parsed.timestamp,
+          localPath: entity.path,
+          sizeBytes: await entity.length(),
+        ),
+      );
     }
     out.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     return out;
@@ -79,5 +117,11 @@ class BackupService {
   Future<void> deleteLocalBackup(String localPath) async {
     final file = File(localPath);
     if (await file.exists()) await file.delete();
+  }
+
+  static String _timestamp(DateTime value) {
+    String p(int n) => n.toString().padLeft(2, '0');
+    return '${value.year}${p(value.month)}${p(value.day)}-'
+        '${p(value.hour)}${p(value.minute)}${p(value.second)}';
   }
 }

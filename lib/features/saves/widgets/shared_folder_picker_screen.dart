@@ -5,13 +5,24 @@ import 'package:googleapis/drive/v3.dart' as drive;
 
 import '../../../core/services/drive_service.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart' show ActionBtn;
 import 'stagger_item.dart';
 
 const _kAccent = Color(0xFF97C459);
 const _kMonths = [
-  'ene', 'feb', 'mar', 'abr', 'may', 'jun',
-  'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+  'ene',
+  'feb',
+  'mar',
+  'abr',
+  'may',
+  'jun',
+  'jul',
+  'ago',
+  'sep',
+  'oct',
+  'nov',
+  'dic',
 ];
 
 /// Selector de carpetas de "Compartido conmigo" en Drive, como diálogo
@@ -42,8 +53,7 @@ class _SharedFolderPickerDialog extends StatefulWidget {
       _SharedFolderPickerDialogState();
 }
 
-class _SharedFolderPickerDialogState
-    extends State<_SharedFolderPickerDialog> {
+class _SharedFolderPickerDialogState extends State<_SharedFolderPickerDialog> {
   List<drive.File>? _folders;
   String? _error;
 
@@ -101,19 +111,25 @@ class _SharedFolderPickerDialogState
                 const SizedBox(height: 14),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: GestureDetector(
+                  child: PressableScale(
                     onTap: () => Navigator.of(context).pop(),
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 7,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color: const Color(0xFFE05252).withValues(alpha: 0.5)),
+                          color: const Color(0xFFE05252).withValues(alpha: 0.5),
+                        ),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         l10n.cancel,
-                        style: const TextStyle(color: Color(0xFFE05252), fontSize: 10),
+                        style: const TextStyle(
+                          color: Color(0xFFE05252),
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ),
@@ -145,7 +161,9 @@ class _SharedFolderPickerDialogState
             width: 18,
             height: 18,
             child: CircularProgressIndicator(
-                color: Colors.white38, strokeWidth: 2),
+              color: Colors.white38,
+              strokeWidth: 2,
+            ),
           ),
         ),
       );
@@ -230,8 +248,10 @@ class _SharedFolderRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style:
-                        const TextStyle(color: Colors.white38, fontSize: 10.5),
+                    style: const TextStyle(
+                      color: Colors.white38,
+                      fontSize: 10.5,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

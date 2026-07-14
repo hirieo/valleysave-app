@@ -1090,8 +1090,44 @@ abstract class AppLocalizations {
   /// No description provided for @sharedWithMeRemoveConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Remove from your list? This only affects your device — the save stays in {email}\'s Drive.'**
+  /// **'You\'ll stop syncing with {email}\'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.'**
   String sharedWithMeRemoveConfirm(String email);
+
+  /// No description provided for @sharedLeaveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll lose access to this save for real. You won\'t be able to add it back unless {email} shares it with you again. Your local copy remains a normal coop save.'**
+  String sharedLeaveConfirm(Object email);
+
+  /// No description provided for @sharedManageButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get sharedManageButton;
+
+  /// No description provided for @sharedManageDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage shared saves'**
+  String get sharedManageDialogTitle;
+
+  /// No description provided for @sharedManageDialogHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Here you can really leave a shared save.'**
+  String get sharedManageDialogHint;
+
+  /// No description provided for @sharedLeaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave shared save'**
+  String get sharedLeaveButton;
+
+  /// No description provided for @sharedLeaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You left {email}\'s shared save.'**
+  String sharedLeaveSuccess(Object email);
 
   /// No description provided for @sharedWithMeSyncConfirm.
   ///
@@ -1110,6 +1146,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload to my Drive'**
   String get sharedWithMeUploadOwn;
+
+  /// No description provided for @sharedDownloadOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'Download from my Drive'**
+  String get sharedDownloadOwn;
+
+  /// No description provided for @sharedStatusOwnDriveAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Drive is ahead — bring it down'**
+  String get sharedStatusOwnDriveAhead;
 
   /// No description provided for @sharedSyncBoth.
   ///
@@ -1321,6 +1369,126 @@ abstract class AppLocalizations {
   /// **'Couldn\'t delete the backup: {error}'**
   String backupsDeleteErr(String error);
 
+  /// No description provided for @backupsCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create local backup'**
+  String get backupsCreate;
+
+  /// No description provided for @backupsCreateLocalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups are created on this device first. You can upload them to Drive afterwards.'**
+  String get backupsCreateLocalHint;
+
+  /// No description provided for @backupsCreateOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup created.'**
+  String get backupsCreateOk;
+
+  /// No description provided for @backupsCreateErr.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the backup: {error}'**
+  String backupsCreateErr(String error);
+
+  /// No description provided for @backupsDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get backupsDownload;
+
+  /// No description provided for @backupsDownloadOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup downloaded to this device.'**
+  String get backupsDownloadOk;
+
+  /// No description provided for @backupsDownloadErr.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t download the backup: {error}'**
+  String backupsDownloadErr(String error);
+
+  /// No description provided for @backupsCopyOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to my Drive'**
+  String get backupsCopyOwn;
+
+  /// No description provided for @backupsUploadOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'To my Drive'**
+  String get backupsUploadOwn;
+
+  /// No description provided for @backupsUploadShared.
+  ///
+  /// In en, this message translates to:
+  /// **'To shared Drive'**
+  String get backupsUploadShared;
+
+  /// No description provided for @backupsUploadOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup uploaded.'**
+  String get backupsUploadOk;
+
+  /// No description provided for @backupsUploadErr.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t upload the backup: {error}'**
+  String backupsUploadErr(String error);
+
+  /// No description provided for @backupsLocationLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get backupsLocationLocal;
+
+  /// No description provided for @backupsLocationOwnDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'My Drive'**
+  String get backupsLocationOwnDrive;
+
+  /// No description provided for @backupsLocationSharedDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Drive'**
+  String get backupsLocationSharedDrive;
+
+  /// No description provided for @backupsDeleteChooseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose exactly where to delete it. Only locations where this backup exists are shown.'**
+  String get backupsDeleteChooseBody;
+
+  /// No description provided for @backupsDeleteLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only from this device'**
+  String get backupsDeleteLocalOnly;
+
+  /// No description provided for @backupsDeleteOwnOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only from my Drive'**
+  String get backupsDeleteOwnOnly;
+
+  /// No description provided for @backupsDeleteSharedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only from shared Drive'**
+  String get backupsDeleteSharedOnly;
+
+  /// No description provided for @backupsDeleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'From all copies'**
+  String get backupsDeleteAll;
+
   /// No description provided for @deleteUnifiedTitle.
   ///
   /// In en, this message translates to:
@@ -1332,6 +1500,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).'**
   String get deleteChooseLocationBody;
+
+  /// No description provided for @deleteDriveContextTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {farmName} from Drive?'**
+  String deleteDriveContextTitle(String farmName);
+
+  /// No description provided for @deleteDriveContextBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The Drive copy will move to Trash, where it can be recovered for 30 days.'**
+  String get deleteDriveContextBody;
+
+  /// No description provided for @deleteDriveLocalKept.
+  ///
+  /// In en, this message translates to:
+  /// **'The copy on this device will remain unchanged.'**
+  String get deleteDriveLocalKept;
+
+  /// No description provided for @deleteLocalContextTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {farmName} from this device?'**
+  String deleteLocalContextTitle(String farmName);
+
+  /// No description provided for @deleteLocalContextBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The copy on this device will be deleted permanently.'**
+  String get deleteLocalContextBody;
+
+  /// No description provided for @deleteLocalDriveCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Drive copy is up to date ({date}) and will remain available.'**
+  String deleteLocalDriveCurrent(String date);
+
+  /// No description provided for @deleteLocalDriveAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Drive copy is newer ({date}) and will remain available.'**
+  String deleteLocalDriveAhead(String date);
+
+  /// No description provided for @deleteLocalDriveOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Drive copy is older ({driveDate}); this device is at {localDate}.'**
+  String deleteLocalDriveOlder(String driveDate, String localDate);
+
+  /// No description provided for @deleteLocalBackupAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'There are {count} local backups available if you need an earlier copy.'**
+  String deleteLocalBackupAvailable(int count);
+
+  /// No description provided for @deleteLocalNoRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no Drive copy or local backup to recover this game from.'**
+  String get deleteLocalNoRecovery;
 
   /// No description provided for @deleteOptionLocalOnly.
   ///

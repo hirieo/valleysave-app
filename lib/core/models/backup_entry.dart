@@ -8,6 +8,7 @@ class BackupEntry {
     required this.timestamp,
     this.localPath,
     this.driveFileId,
+    this.sharedDriveFileId,
     required this.sizeBytes,
   });
 
@@ -16,16 +17,24 @@ class BackupEntry {
   final DateTime timestamp;
   final String? localPath;
   final String? driveFileId;
+  final String? sharedDriveFileId;
   final int sizeBytes;
 
   bool get isLocal => localPath != null;
   bool get isOnDrive => driveFileId != null;
+  bool get isOnSharedDrive => sharedDriveFileId != null;
+  int get locationCount =>
+      (isLocal ? 1 : 0) + (isOnDrive ? 1 : 0) + (isOnSharedDrive ? 1 : 0);
 
-  static final _pattern = RegExp(r'^(.+)_pre-swap_(\d{8}-\d{6})\.zip$');
+  static final _pattern = RegExp(
+    r'^(.+)_(?:pre-swap|backup)_(\d{8}-\d{6})\.zip$',
+  );
 
   /// Parsea `<folderName>_pre-swap_<yyyyMMdd-HHmmss>.zip`. Devuelve `null`
   /// si el nombre no sigue el patrón (archivo ajeno en la misma carpeta).
-  static ({String folderName, DateTime timestamp})? parseFileName(String fileName) {
+  static ({String folderName, DateTime timestamp})? parseFileName(
+    String fileName,
+  ) {
     final match = _pattern.firstMatch(fileName);
     if (match == null) return null;
     final folderName = match.group(1)!;
@@ -46,14 +55,39 @@ class BackupEntry {
     }
   }
 
-  BackupEntry copyWith({String? localPath, String? driveFileId, int? sizeBytes}) {
+  BackupEntry copyWith({
+    String? localPath,
+    String? driveFileId,
+    String? sharedDriveFileId,
+    int? sizeBytes,
+    bool clearLocalPath = false,
+    bool clearDriveFileId = false,
+    bool clearSharedDriveFileId = false,
+  }) {
     return BackupEntry(
       fileName: fileName,
       folderName: folderName,
       timestamp: timestamp,
-      localPath: localPath ?? this.localPath,
-      driveFileId: driveFileId ?? this.driveFileId,
+      localPath: clearLocalPath ? null : localPath ?? this.localPath,
+      driveFileId: clearDriveFileId ? null : driveFileId ?? this.driveFileId,
+      sharedDriveFileId: clearSharedDriveFileId
+          ? null
+          : sharedDriveFileId ?? this.sharedDriveFileId,
       sizeBytes: sizeBytes ?? this.sizeBytes,
+    );
+  }
+
+  /// Une las ubicaciones de dos descripciones del MISMO zip. El nombre
+  /// exacto es la identidad; nunca se empareja por una fecha aproximada.
+  BackupEntry mergeWith(BackupEntry other) {
+    if (fileName != other.fileName) {
+      throw ArgumentError('No se pueden unir backups con nombres distintos.');
+    }
+    return copyWith(
+      localPath: other.localPath,
+      driveFileId: other.driveFileId,
+      sharedDriveFileId: other.sharedDriveFileId,
+      sizeBytes: other.sizeBytes > sizeBytes ? other.sizeBytes : sizeBytes,
     );
   }
 }

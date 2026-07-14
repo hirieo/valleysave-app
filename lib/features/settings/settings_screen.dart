@@ -16,6 +16,7 @@ import '../../core/services/update_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../shared/widgets/icon_circle_button.dart';
+import '../../shared/widgets/pressable_scale.dart';
 import '../../shared/widgets/update_download_animation.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import 'widgets/language_dialog.dart';
@@ -23,21 +24,25 @@ import 'widgets/language_dialog.dart';
 enum _UpdateState { idle, checking, upToDate, available, downloading, error }
 
 const _kLangs = [
-  (null,                                                                  '🌐',                      'Auto · sistema'),
-  (Locale('es'),                                                          '🇪🇸',                     'Español'),
-  (Locale('en'),                                                          '🇬🇧',                     'English'),
-  (Locale('eu'),                                                          'assets/flags/eu.svg',      'Euskera'),
-  (Locale('fr'),                                                          '🇫🇷',                     'Français'),
-  (Locale('de'),                                                          '🇩🇪',                     'Deutsch'),
-  (Locale('it'),                                                          '🇮🇹',                     'Italiano'),
-  (Locale('pt'),                                                          '🇵🇹',                     'Português'),
-  (Locale('ru'),                                                          '🇷🇺',                     'Русский'),
-  (Locale('uk'),                                                          '🇺🇦',                     'Українська'),
-  (Locale('ja'),                                                          '🇯🇵',                     '日本語'),
-  (Locale('zh'),                                                          '🇨🇳',                     '中文'),
-  (Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),           '🇹🇼',                     '中文 (繁體)'),
-  (Locale('th'),                                                          '🇹🇭',                     'ไทย'),
-  (Locale('ko'),                                                          '🇰🇷',                     '한국어'),
+  (null, '🌐', 'Auto · sistema'),
+  (Locale('es'), '🇪🇸', 'Español'),
+  (Locale('en'), '🇬🇧', 'English'),
+  (Locale('eu'), 'assets/flags/eu.svg', 'Euskera'),
+  (Locale('fr'), '🇫🇷', 'Français'),
+  (Locale('de'), '🇩🇪', 'Deutsch'),
+  (Locale('it'), '🇮🇹', 'Italiano'),
+  (Locale('pt'), '🇵🇹', 'Português'),
+  (Locale('ru'), '🇷🇺', 'Русский'),
+  (Locale('uk'), '🇺🇦', 'Українська'),
+  (Locale('ja'), '🇯🇵', '日本語'),
+  (Locale('zh'), '🇨🇳', '中文'),
+  (
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+    '🇹🇼',
+    '中文 (繁體)',
+  ),
+  (Locale('th'), '🇹🇭', 'ไทย'),
+  (Locale('ko'), '🇰🇷', '한국어'),
 ];
 
 class SettingsScreen extends StatefulWidget {
@@ -50,7 +55,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen>
     with TickerProviderStateMixin {
-  final _service  = SeasonService();
+  final _service = SeasonService();
   SeasonSettings _settings = const SeasonSettings();
   bool _loading = true;
   _UpdateState _updateState = _UpdateState.idle;
@@ -79,7 +84,11 @@ class _SettingsScreenState extends State<SettingsScreen>
       vsync: this,
       duration: const Duration(milliseconds: 350),
     );
-    if (WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations) {
+    if (WidgetsBinding
+        .instance
+        .platformDispatcher
+        .accessibilityFeatures
+        .disableAnimations) {
       _entranceCtrl.value = 1.0;
     } else {
       _entranceCtrl.forward();
@@ -110,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (info != null) {
       setState(() {
         _updateState = _UpdateState.available;
-        _updateInfo  = info;
+        _updateInfo = info;
       });
     } else {
       setState(() => _updateState = _UpdateState.upToDate);
@@ -122,7 +131,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (info == null) return;
     _progressNotifier.value = 0;
     setState(() {
-      _updateState      = _UpdateState.downloading;
+      _updateState = _UpdateState.downloading;
       _downloadProgress = 0;
     });
     showUpdateDownloadDialog(
@@ -158,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (mounted) {
       setState(() {
         _settings = s;
-        _loading  = false;
+        _loading = false;
         if (Platform.isWindows) {
           _gameExePath = GameLaunchService.instance.resolvedExePath;
         }
@@ -199,7 +208,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                 const SizedBox(height: 6),
                 Text(
                   l10n.disconnectBody,
-                  style: AppTypography.mono(color: AppColors.textMuted, size: 12),
+                  style: AppTypography.mono(
+                    color: AppColors.textMuted,
+                    size: 12,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -209,7 +221,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                         onPressed: () => Navigator.pop(ctx, false),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white.withValues(alpha: 0.60),
-                          side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
+                          side: BorderSide(
+                            color: Colors.white.withValues(alpha: 0.15),
+                          ),
                           minimumSize: const Size(0, 40),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: const StadiumBorder(),
@@ -230,9 +244,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFFC06050),
                           side: BorderSide(
-                            color: const Color(0xFFC06050).withValues(alpha: 0.45),
+                            color: const Color(
+                              0xFFC06050,
+                            ).withValues(alpha: 0.45),
                           ),
-                          backgroundColor: const Color(0xFFC06050).withValues(alpha: 0.08),
+                          backgroundColor: const Color(
+                            0xFFC06050,
+                          ).withValues(alpha: 0.08),
                           minimumSize: const Size(0, 40),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: const StadiumBorder(),
@@ -263,7 +281,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
     final l10n = AppLocalizations.of(context)!;
-    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+    final accent =
+        SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: Stack(
@@ -343,48 +362,76 @@ class _SettingsScreenState extends State<SettingsScreen>
                           constraints: const BoxConstraints(maxWidth: 480),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(l10n.sectionLanguage.toUpperCase(), style: AppTypography.eyebrow()),
-                          const SizedBox(height: 12),
-                          ValueListenableBuilder<Locale?>(
-                            valueListenable: LocaleController.instance.locale,
-                            builder: (_, current, _) => _languageTile(current, l10n),
-                          ),
-                          const SizedBox(height: 32),
-                          Text(l10n.sectionMode.toUpperCase(), style: AppTypography.eyebrow()),
-                          const SizedBox(height: 12),
-                          _modeDropdown(accent, l10n),
-                          _modeExplainer(accent, l10n),
-                          if (_settings.mode == SeasonMode.fixed) ...[
-                            const SizedBox(height: 32),
-                            Text(l10n.sectionSeason.toUpperCase(), style: AppTypography.eyebrow()),
-                            const SizedBox(height: 12),
-                            _seasonPicker(l10n),
-                          ],
-                          if (Platform.isWindows) ...[
-                            const SizedBox(height: 32),
-                            Text(l10n.settingsGameSection.toUpperCase(), style: AppTypography.eyebrow()),
-                            const SizedBox(height: 12),
-                            _gameTile(accent, l10n),
-                          ],
-                          if (Platform.isAndroid) ...[
-                            const SizedBox(height: 32),
-                            Text(l10n.bridgeChangeMode.toUpperCase(), style: AppTypography.eyebrow()),
-                            const SizedBox(height: 12),
-                            _changeAccessTile(accent, l10n),
-                          ],
-                          const SizedBox(height: 32),
-                          Text(l10n.application.toUpperCase(), style: AppTypography.eyebrow()),
-                          const SizedBox(height: 12),
-                          _versionTile(l10n),
-                          const SizedBox(height: 8),
-                          _updateTile(SeasonData.data[SeasonController.instance.season.value]!.accentColor, l10n),
-                          if (widget.showDisconnect) ...[
-                            const SizedBox(height: 32),
-                            _disconnectButton(l10n),
-                          ],
-                          const SizedBox(height: 48),
-                        ],
+                            children: [
+                              Text(
+                                l10n.sectionLanguage.toUpperCase(),
+                                style: AppTypography.eyebrow(),
+                              ),
+                              const SizedBox(height: 12),
+                              ValueListenableBuilder<Locale?>(
+                                valueListenable:
+                                    LocaleController.instance.locale,
+                                builder: (_, current, _) =>
+                                    _languageTile(current, l10n),
+                              ),
+                              const SizedBox(height: 32),
+                              Text(
+                                l10n.sectionMode.toUpperCase(),
+                                style: AppTypography.eyebrow(),
+                              ),
+                              const SizedBox(height: 12),
+                              _modeDropdown(accent, l10n),
+                              _modeExplainer(accent, l10n),
+                              if (_settings.mode == SeasonMode.fixed) ...[
+                                const SizedBox(height: 32),
+                                Text(
+                                  l10n.sectionSeason.toUpperCase(),
+                                  style: AppTypography.eyebrow(),
+                                ),
+                                const SizedBox(height: 12),
+                                _seasonPicker(l10n),
+                              ],
+                              if (Platform.isWindows) ...[
+                                const SizedBox(height: 32),
+                                Text(
+                                  l10n.settingsGameSection.toUpperCase(),
+                                  style: AppTypography.eyebrow(),
+                                ),
+                                const SizedBox(height: 12),
+                                _gameTile(accent, l10n),
+                              ],
+                              if (Platform.isAndroid) ...[
+                                const SizedBox(height: 32),
+                                Text(
+                                  l10n.bridgeChangeMode.toUpperCase(),
+                                  style: AppTypography.eyebrow(),
+                                ),
+                                const SizedBox(height: 12),
+                                _changeAccessTile(accent, l10n),
+                              ],
+                              const SizedBox(height: 32),
+                              Text(
+                                l10n.application.toUpperCase(),
+                                style: AppTypography.eyebrow(),
+                              ),
+                              const SizedBox(height: 12),
+                              _versionTile(l10n),
+                              const SizedBox(height: 8),
+                              _updateTile(
+                                SeasonData
+                                    .data[SeasonController
+                                        .instance
+                                        .season
+                                        .value]!
+                                    .accentColor,
+                                l10n,
+                              ),
+                              if (widget.showDisconnect) ...[
+                                const SizedBox(height: 32),
+                                _disconnectButton(l10n),
+                              ],
+                              const SizedBox(height: 48),
+                            ],
                           ),
                         ),
                       ),
@@ -427,7 +474,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                     children: [
                       Text(
                         'ROOT / SHIZUKU',
-                        style: AppTypography.mono(color: AppColors.textFaint, size: 9),
+                        style: AppTypography.mono(
+                          color: AppColors.textFaint,
+                          size: 9,
+                        ),
                       ),
                       const SizedBox(height: 3),
                       Text(
@@ -437,8 +487,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right_rounded,
-                    color: Colors.white.withValues(alpha: 0.40)),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.white.withValues(alpha: 0.40),
+                ),
               ],
             ),
           ),
@@ -449,11 +501,11 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Widget _modeDropdown(Color accent, AppLocalizations l10n) {
     final modes = [
-      (SeasonMode.auto,      'AUT', l10n.modeAutoTitle),
+      (SeasonMode.auto, 'AUT', l10n.modeAutoTitle),
       (SeasonMode.savesOnly, 'SAV', l10n.modeSavesTitle),
-      (SeasonMode.geoOnly,   'GEO', l10n.modeGeoTitle),
-      (SeasonMode.fixed,     'FIX', l10n.modeFixedTitle),
-      (SeasonMode.random,    'RND', l10n.modeRandomTitle),
+      (SeasonMode.geoOnly, 'GEO', l10n.modeGeoTitle),
+      (SeasonMode.fixed, 'FIX', l10n.modeFixedTitle),
+      (SeasonMode.random, 'RND', l10n.modeRandomTitle),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -497,7 +549,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                       children: [
                         Text(
                           l10n.sectionMode.toUpperCase(),
-                          style: AppTypography.mono(color: AppColors.textFaint, size: 9),
+                          style: AppTypography.mono(
+                            color: AppColors.textFaint,
+                            size: 9,
+                          ),
                         ),
                         const SizedBox(height: 3),
                         Text(
@@ -540,9 +595,15 @@ class _SettingsScreenState extends State<SettingsScreen>
                         color: const Color(0xFF03080A).withValues(alpha: 0.97),
                         border: Border(
                           top: BorderSide(color: accent, width: 1.5),
-                          left: BorderSide(color: accent.withValues(alpha: 0.28)),
-                          right: BorderSide(color: accent.withValues(alpha: 0.28)),
-                          bottom: BorderSide(color: accent.withValues(alpha: 0.28)),
+                          left: BorderSide(
+                            color: accent.withValues(alpha: 0.28),
+                          ),
+                          right: BorderSide(
+                            color: accent.withValues(alpha: 0.28),
+                          ),
+                          bottom: BorderSide(
+                            color: accent.withValues(alpha: 0.28),
+                          ),
                         ),
                       ),
                       child: Column(
@@ -575,8 +636,13 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _modeListItem(
-      SeasonMode mode, String badge, String label, bool selected, Color accent) {
-    return GestureDetector(
+    SeasonMode mode,
+    String badge,
+    String label,
+    bool selected,
+    Color accent,
+  ) {
+    return PressableScale(
       onTap: () {
         final next = mode == SeasonMode.fixed
             ? SeasonSettings(
@@ -591,7 +657,9 @@ class _SettingsScreenState extends State<SettingsScreen>
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: selected ? Colors.white.withValues(alpha: 0.05) : Colors.transparent,
+          color: selected
+              ? Colors.white.withValues(alpha: 0.05)
+              : Colors.transparent,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
         child: Row(
@@ -628,7 +696,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                 label,
                 style: selected
                     ? AppTypography.bodyStrong(color: accent)
-                    : AppTypography.body(color: AppColors.text.withValues(alpha: 0.55)),
+                    : AppTypography.body(
+                        color: AppColors.text.withValues(alpha: 0.55),
+                      ),
               ),
             ),
             AnimatedOpacity(
@@ -647,7 +717,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       padding: const EdgeInsets.only(top: 10),
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 280),
-        transitionBuilder: (child, anim) => FadeTransition(opacity: anim, child: child),
+        transitionBuilder: (child, anim) =>
+            FadeTransition(opacity: anim, child: child),
         child: _settings.mode == SeasonMode.auto
             ? KeyedSubtree(
                 key: const ValueKey('auto'),
@@ -678,28 +749,28 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   String _currentModeLabel(AppLocalizations l10n) => switch (_settings.mode) {
-    SeasonMode.auto      => l10n.modeAutoTitle,
+    SeasonMode.auto => l10n.modeAutoTitle,
     SeasonMode.savesOnly => l10n.modeSavesTitle,
-    SeasonMode.geoOnly   => l10n.modeGeoTitle,
-    SeasonMode.fixed     => l10n.modeFixedTitle,
-    SeasonMode.random    => l10n.modeRandomTitle,
+    SeasonMode.geoOnly => l10n.modeGeoTitle,
+    SeasonMode.fixed => l10n.modeFixedTitle,
+    SeasonMode.random => l10n.modeRandomTitle,
   };
 
   String _currentModeDesc(AppLocalizations l10n) => switch (_settings.mode) {
-    SeasonMode.auto      => l10n.modeAutoDesc,
+    SeasonMode.auto => l10n.modeAutoDesc,
     SeasonMode.savesOnly => l10n.modeSavesDesc,
-    SeasonMode.geoOnly   => l10n.modeGeoDesc,
-    SeasonMode.fixed     => l10n.modeFixedDesc,
-    SeasonMode.random    => l10n.modeRandomDesc,
+    SeasonMode.geoOnly => l10n.modeGeoDesc,
+    SeasonMode.fixed => l10n.modeFixedDesc,
+    SeasonMode.random => l10n.modeRandomDesc,
   };
 
   Widget _seasonPicker(AppLocalizations l10n) {
     final seasons = [
       (SeasonState.initial, '✨', l10n.seasonInitial),
-      (SeasonState.spring,  '🌸', l10n.seasonSpring),
-      (SeasonState.summer,  '☀️', l10n.seasonSummer),
-      (SeasonState.fall,    '🍂', l10n.seasonFall),
-      (SeasonState.winter,  '❄️', l10n.seasonWinter),
+      (SeasonState.spring, '🌸', l10n.seasonSpring),
+      (SeasonState.summer, '☀️', l10n.seasonSummer),
+      (SeasonState.fall, '🍂', l10n.seasonFall),
+      (SeasonState.winter, '❄️', l10n.seasonWinter),
     ];
     return Wrap(
       spacing: 8,
@@ -707,12 +778,10 @@ class _SettingsScreenState extends State<SettingsScreen>
       children: seasons.map((entry) {
         final (s, emoji, label) = entry;
         final selected = _settings.fixedSeason == s;
-        final accent   = SeasonData.data[s]!.accentColor;
+        final accent = SeasonData.data[s]!.accentColor;
         return GestureDetector(
-          onTap: () => _save(SeasonSettings(
-            mode: SeasonMode.fixed,
-            fixedSeason: s,
-          )),
+          onTap: () =>
+              _save(SeasonSettings(mode: SeasonMode.fixed, fixedSeason: s)),
           onTapDown: (_) => setState(() => _pressedSeason = s),
           onTapUp: (_) => setState(() => _pressedSeason = null),
           onTapCancel: () => setState(() => _pressedSeason = null),
@@ -764,7 +833,10 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.autoPriorityTitle, style: AppTypography.eyebrow(color: accent)),
+          Text(
+            l10n.autoPriorityTitle,
+            style: AppTypography.eyebrow(color: accent),
+          ),
           const SizedBox(height: 12),
           _step('1', l10n.autoStep1Title, l10n.autoStep1Desc),
           const SizedBox(height: 10),
@@ -793,10 +865,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: Center(
             child: Text(
               num,
-              style: AppTypography.mono(
-                color: AppColors.accent,
-                size: 10,
-              ),
+              style: AppTypography.mono(color: AppColors.accent, size: 10),
             ),
           ),
         ),
@@ -806,7 +875,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title, style: AppTypography.bodyStrong()),
-              Text(desc,  style: AppTypography.body()),
+              Text(desc, style: AppTypography.body()),
             ],
           ),
         ),
@@ -822,7 +891,11 @@ class _SettingsScreenState extends State<SettingsScreen>
         if (picked == null || !mounted) return;
         await GameLaunchService.instance.setCustomExePath(picked);
         await GameLaunchService.instance.init();
-        if (mounted) setState(() => _gameExePath = GameLaunchService.instance.resolvedExePath);
+        if (mounted) {
+          setState(
+            () => _gameExePath = GameLaunchService.instance.resolvedExePath,
+          );
+        }
       },
       onTapDown: (_) => setState(() => _gameExeTilePressed = true),
       onTapUp: (_) => setState(() => _gameExeTilePressed = false),
@@ -846,12 +919,17 @@ class _SettingsScreenState extends State<SettingsScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.settingsGameExePath, style: AppTypography.bodyStrong()),
+                    Text(
+                      l10n.settingsGameExePath,
+                      style: AppTypography.bodyStrong(),
+                    ),
                     const SizedBox(height: 2),
                     Text(
                       hasPath ? _gameExePath! : l10n.settingsGameExeNotFound,
                       style: AppTypography.mono(
-                        color: hasPath ? AppColors.statusOk : AppColors.textFaint,
+                        color: hasPath
+                            ? AppColors.statusOk
+                            : AppColors.textFaint,
                         size: 10,
                       ),
                       maxLines: 2,
@@ -862,7 +940,10 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               const SizedBox(width: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(8),
@@ -891,7 +972,10 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Row(
         children: [
           Expanded(
-            child: Text(l10n.versionInstalled, style: AppTypography.bodyStrong()),
+            child: Text(
+              l10n.versionInstalled,
+              style: AppTypography.bodyStrong(),
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -921,7 +1005,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(l10n.checkForUpdates, style: AppTypography.bodyStrong()),
-                  Text(l10n.updateNeverChecked, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                  Text(
+                    l10n.updateNeverChecked,
+                    style: AppTypography.mono(
+                      color: AppColors.textFaint,
+                      size: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -932,10 +1022,19 @@ class _SettingsScreenState extends State<SettingsScreen>
       case _UpdateState.checking:
         content = Row(
           children: [
-            Expanded(child: Text(l10n.checkingUpdates, style: AppTypography.bodyStrong())),
+            Expanded(
+              child: Text(
+                l10n.checkingUpdates,
+                style: AppTypography.bodyStrong(),
+              ),
+            ),
             const SizedBox(
-              width: 16, height: 16,
-              child: CircularProgressIndicator(strokeWidth: 1.5, color: AppColors.textFaint),
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+                color: AppColors.textFaint,
+              ),
             ),
           ],
         );
@@ -946,8 +1045,17 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l10n.upToDate, style: AppTypography.bodyStrong(color: AppColors.statusOk)),
-                  Text(l10n.updateCheckedNow, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                  Text(
+                    l10n.upToDate,
+                    style: AppTypography.bodyStrong(color: AppColors.statusOk),
+                  ),
+                  Text(
+                    l10n.updateCheckedNow,
+                    style: AppTypography.mono(
+                      color: AppColors.textFaint,
+                      size: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -962,8 +1070,17 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l10n.updateVersionAvailable(_updateInfo!.version), style: AppTypography.bodyStrong(color: accent)),
-                  Text(l10n.updateOutdatedDownload, style: AppTypography.mono(color: AppColors.textFaint, size: 11)),
+                  Text(
+                    l10n.updateVersionAvailable(_updateInfo!.version),
+                    style: AppTypography.bodyStrong(color: accent),
+                  ),
+                  Text(
+                    l10n.updateOutdatedDownload,
+                    style: AppTypography.mono(
+                      color: AppColors.textFaint,
+                      size: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -975,37 +1092,61 @@ class _SettingsScreenState extends State<SettingsScreen>
         content = Row(
           children: [
             SizedBox(
-              width: 13, height: 13,
+              width: 13,
+              height: 13,
               child: CircularProgressIndicator(strokeWidth: 1.5, color: accent),
             ),
             const SizedBox(width: 10),
-            Expanded(child: Text(l10n.updateDownloading,
-                style: AppTypography.bodyStrong(color: accent))),
-            Text('${(_downloadProgress * 100).round()}%',
-                style: AppTypography.mono(color: accent, size: 11)),
+            Expanded(
+              child: Text(
+                l10n.updateDownloading,
+                style: AppTypography.bodyStrong(color: accent),
+              ),
+            ),
+            Text(
+              '${(_downloadProgress * 100).round()}%',
+              style: AppTypography.mono(color: accent, size: 11),
+            ),
           ],
         );
       case _UpdateState.error:
         content = Row(
           children: [
-            Expanded(child: Text(l10n.updateError, style: AppTypography.bodyStrong(color: const Color(0xFFE05252)))),
+            Expanded(
+              child: Text(
+                l10n.updateError,
+                style: AppTypography.bodyStrong(color: const Color(0xFFE05252)),
+              ),
+            ),
             const SizedBox(width: 12),
-            const Icon(Icons.error_outline_rounded, size: 16, color: Color(0xFFE05252)),
+            const Icon(
+              Icons.error_outline_rounded,
+              size: 16,
+              color: Color(0xFFE05252),
+            ),
           ],
         );
     }
 
-    final isTappable = _updateState == _UpdateState.idle || _updateState == _UpdateState.available;
+    final isTappable =
+        _updateState == _UpdateState.idle ||
+        _updateState == _UpdateState.available;
 
     return GestureDetector(
       onTap: _updateState == _UpdateState.available
           ? _startInstall
           : _updateState == _UpdateState.idle
-              ? _checkUpdateFromSettings
-              : null,
-      onTapDown: isTappable ? (_) => setState(() => _updateTilePressed = true) : null,
-      onTapUp:   isTappable ? (_) => setState(() => _updateTilePressed = false) : null,
-      onTapCancel: isTappable ? () => setState(() => _updateTilePressed = false) : null,
+          ? _checkUpdateFromSettings
+          : null,
+      onTapDown: isTappable
+          ? (_) => setState(() => _updateTilePressed = true)
+          : null,
+      onTapUp: isTappable
+          ? (_) => setState(() => _updateTilePressed = false)
+          : null,
+      onTapCancel: isTappable
+          ? () => setState(() => _updateTilePressed = false)
+          : null,
       child: AnimatedScale(
         scale: _updateTilePressed ? 0.97 : 1.0,
         duration: _updateTilePressed
@@ -1018,7 +1159,10 @@ class _SettingsScreenState extends State<SettingsScreen>
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: _updateState == _UpdateState.available
-                ? Color.alphaBlend(accent.withValues(alpha: 0.06), Colors.black.withValues(alpha: 0.45))
+                ? Color.alphaBlend(
+                    accent.withValues(alpha: 0.06),
+                    Colors.black.withValues(alpha: 0.45),
+                  )
                 : Colors.black.withValues(alpha: 0.45),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
@@ -1053,7 +1197,8 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Widget _languageTile(Locale? current, AppLocalizations l10n) {
     final (flag, label) = _langLabel(current, l10n);
-    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+    final accent =
+        SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     return GestureDetector(
       onTap: () => _openLanguageDialog(context, l10n),
       onTapDown: (_) => setState(() => _langTilePressed = true),
@@ -1075,10 +1220,16 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: Row(
             children: [
               Expanded(
-                child: Text(l10n.languageTileLabel, style: AppTypography.bodyStrong()),
+                child: Text(
+                  l10n.languageTileLabel,
+                  style: AppTypography.bodyStrong(),
+                ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(8),
@@ -1089,12 +1240,19 @@ class _SettingsScreenState extends State<SettingsScreen>
                   children: [
                     flagView(flag, 13),
                     const SizedBox(width: 6),
-                    Text(label, style: AppTypography.mono(color: accent, size: 12)),
+                    Text(
+                      label,
+                      style: AppTypography.mono(color: accent, size: 12),
+                    ),
                   ],
                 ),
               ),
               const SizedBox(width: 12),
-              Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.textFaint),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 18,
+                color: AppColors.textFaint,
+              ),
             ],
           ),
         ),
@@ -1103,7 +1261,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void _openLanguageDialog(BuildContext context, AppLocalizations l10n) {
-    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+    final accent =
+        SeasonData.data[SeasonController.instance.season.value]!.accentColor;
     showGeneralDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -1152,10 +1311,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           decoration: BoxDecoration(
             color: const Color(0xFFC84632).withValues(alpha: 0.14),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color(0xFFC84632),
-              width: 1.5,
-            ),
+            border: Border.all(color: const Color(0xFFC84632), width: 1.5),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1168,9 +1324,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               const SizedBox(width: 8),
               Text(
                 l10n.disconnectButton,
-                style: AppTypography.bodyStrong(
-                  color: const Color(0xFFE85840),
-                ),
+                style: AppTypography.bodyStrong(color: const Color(0xFFE85840)),
               ),
             ],
           ),
@@ -1179,4 +1333,3 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 }
-

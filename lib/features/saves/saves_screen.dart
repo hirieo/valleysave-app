@@ -31,9 +31,11 @@ import '../../core/services/transfer_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
+import '../../shared/widgets/pressable_scale.dart';
 import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
 import 'save_card.dart';
+import 'widgets/backup_action_button.dart';
 import 'widgets/latest_badge.dart';
 import 'widgets/shared_folder_picker_screen.dart';
 import 'widgets/saves_top_bar.dart';
@@ -53,6 +55,8 @@ enum _SwapBackupChoice { upload, keepLocal, deleteNow }
 /// Borrado unificado (feedback 2026-07-12): un solo punto de entrada para
 /// borrar un save, sea cual sea la cara desde la que se abra.
 enum _DeleteChoice { localOnly, driveOnly, both }
+
+enum _BackupDeleteChoice { local, ownDrive, sharedDrive, all }
 
 class SavesScreen extends StatefulWidget {
   const SavesScreen({super.key, this.drive});
@@ -112,7 +116,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<void> _init() async {
     await GameLaunchService.instance.init();
-    if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+    if (mounted) {
+      setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+    }
 
     if (!Platform.isAndroid) {
       await _load();
@@ -126,7 +132,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     // Evita un popup de Magisk inesperado antes de que el usuario haya elegido nada.
     if (saved == null) {
       if (!mounted) return;
-      setState(() { _mode = AndroidMode.chooser; _loading = false; });
+      setState(() {
+        _mode = AndroidMode.chooser;
+        _loading = false;
+      });
       return;
     }
 
@@ -143,7 +152,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     final mode = switch (saved) {
       'shizuku' => AndroidMode.shizuku,
-      _         => AndroidMode.shizuku,
+      _ => AndroidMode.shizuku,
     };
     if (!mounted) return;
     setState(() => _mode = mode);
@@ -200,7 +209,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<void> _checkShizuku() async {
     final running = await ShizukuService.instance.isRunning();
-    final granted = running ? await ShizukuService.instance.hasPermission() : false;
+    final granted = running
+        ? await ShizukuService.instance.hasPermission()
+        : false;
     if (!mounted) return;
     setState(() {
       _shizukuRunning = running;
@@ -219,7 +230,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<void> _openShizukuPlayStore() async {
     final uri = Uri.parse(
-        'https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api');
+      'https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api',
+    );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -295,7 +307,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       } catch (e, st) {
         debugPrint('DRIVE_ERROR: $e\n$st');
         if (!mounted) return;
-        final isAuthError = e.toString().contains('invalid_grant') ||
+        final isAuthError =
+            e.toString().contains('invalid_grant') ||
             e.toString().contains('access credentials');
         if (isAuthError) {
           await AuthService.instance.signOut();
@@ -305,7 +318,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             Navigator.pop(context, true);
           }
         } else {
-          if (mounted) _snack(AppLocalizations.of(context)!.snackDriveError(e.toString()));
+          if (mounted) {
+            _snack(AppLocalizations.of(context)!.snackDriveError(e.toString()));
+          }
         }
       }
     }
@@ -317,14 +332,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final entries = <SaveEntry>[];
     for (final name in names) {
       final d = driveByName[name];
-      entries.add(SaveEntry(
-        local: localByName[name],
-        drive: d?.save,
-        driveFolderId: d?.folderId,
-      ));
+      entries.add(
+        SaveEntry(
+          local: localByName[name],
+          drive: d?.save,
+          driveFolderId: d?.folderId,
+        ),
+      );
     }
     entries.sort(
-        (a, b) => b.primary.lastModified.compareTo(a.primary.lastModified));
+      (a, b) => b.primary.lastModified.compareTo(a.primary.lastModified),
+    );
 
     if (mounted) {
       setState(() {
@@ -395,10 +413,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _handleAddShared() async {
     final l10n = AppLocalizations.of(context)!;
     if (widget.drive == null) return;
-    final folderId = await showPickerScreen(
-      context,
-      drive: widget.drive!,
-    );
+    final folderId = await showPickerScreen(context, drive: widget.drive!);
     if (folderId == null || folderId.isEmpty) return;
 
     try {
@@ -443,8 +458,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(entry.folderName));
     try {
-      await widget.drive!
-          .uploadToSharedSave(entry.folderId, entry.localMatch!.folderPath);
+      await widget.drive!.uploadToSharedSave(
+        entry.folderId,
+        entry.localMatch!.folderPath,
+      );
       await _load(silent: true);
       if (mounted) _snack(l10n.exportSuccess);
     } catch (e) {
@@ -462,6 +479,24 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     await _load(silent: true);
   }
 
+  /// "Salir del compartido" — a diferencia de `_handleRemoveShared`, esto
+  /// SÍ revoca tu acceso de verdad en Drive (`leaveSharedSave`, permiso
+  /// `'me'`). Irreversible sin que el dueño vuelva a compartir contigo.
+  Future<void> _handleLeaveShared(SharedSaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
+    if (widget.drive == null) return;
+    final confirmed = await _confirmLeaveShared(entry.ownerEmail);
+    if (confirmed != true) return;
+    try {
+      await widget.drive!.leaveSharedSave(entry.folderId);
+      await widget.drive!.removeSharedSave(entry.folderId);
+      if (mounted) _snack(l10n.sharedLeaveSuccess(entry.ownerEmail));
+      await _load(silent: true);
+    } catch (e) {
+      if (mounted) _snack(l10n.exportError(e.toString()));
+    }
+  }
+
   Future<bool?> _confirmSyncShared(String ownerEmail) {
     final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
@@ -472,17 +507,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         child: _glassDialogShell(
           accent: const Color(0xFFE0B850),
           child: _dialogBody(
-            title: Text(l10n.sharedWithMeSync,
-                style: GoogleFonts.bodoniModa(
-                    color: AppColors.text,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
+            title: Text(
+              l10n.sharedWithMeSync,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             content: Text(
               l10n.sharedWithMeSyncConfirm(ownerEmail),
               style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.80)),
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
             ),
             actions: [
               ActionBtn(
@@ -513,19 +552,23 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: _glassDialogShell(
-          accent: Colors.white.withValues(alpha: 0.3),
+          accent: const Color(0xFFE0B850),
           child: _dialogBody(
-            title: Text(l10n.sharedWithMeRemove,
-                style: GoogleFonts.bodoniModa(
-                    color: AppColors.text,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
+            title: Text(
+              l10n.sharedWithMeRemove,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             content: Text(
               l10n.sharedWithMeRemoveConfirm(ownerEmail),
               style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.80)),
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
             ),
             actions: [
               ActionBtn(
@@ -536,10 +579,169 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.sharedWithMeRemove,
-                color: Colors.white.withValues(alpha: 0.75),
+                color: const Color(0xFFE0B850),
                 icon: Icons.close_rounded,
                 filled: true,
                 onTap: () => Navigator.pop(ctx, true),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// "Salir del compartido" — misma estructura que `_confirmRemoveShared`
+  /// pero en rojo (acción con más consecuencia: revoca el acceso real).
+  Future<bool?> _confirmLeaveShared(String ownerEmail) {
+    final l10n = AppLocalizations.of(context)!;
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          accent: const Color(0xFFE05252),
+          child: _dialogBody(
+            title: Text(
+              l10n.sharedLeaveButton,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Text(
+              l10n.sharedLeaveConfirm(ownerEmail),
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
+            ),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              ActionBtn(
+                label: l10n.sharedLeaveButton,
+                color: const Color(0xFFE05252),
+                icon: Icons.link_off_rounded,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Diálogo "Administrar" (junto a "+ Añadir save compartido") — lista
+  /// TODAS las compartidas con sus dos acciones, separado de las tarjetas
+  /// para que ningún desliz al tocar una tarjeta dispare "Salir del
+  /// compartido" por accidente.
+  Future<void> _showManageSharedDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    return showDialog<void>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          accent: const Color(0xFFE07040),
+          child: _dialogBody(
+            title: Text(
+              l10n.sharedManageDialogTitle,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.sharedManageDialogHint,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 10.5,
+                    color: Colors.white.withValues(alpha: 0.4),
+                  ),
+                ),
+                for (final e in _sharedEntries) ...[
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.only(top: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.08),
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          e.folderName,
+                          style: GoogleFonts.firaCode(
+                            fontSize: 13,
+                            color: Colors.white.withValues(alpha: 0.92),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          l10n.sharedWithMeOwnedBy(e.ownerEmail),
+                          style: GoogleFonts.firaCode(
+                            fontSize: 10,
+                            color: const Color(0xFFE07040),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ActionBtn(
+                                label: l10n.sharedWithMeRemove,
+                                color: const Color(0xFFE0B850),
+                                filled: false,
+                                onTap: () async {
+                                  Navigator.pop(ctx);
+                                  await _handleRemoveShared(e);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Expanded(
+                              child: ActionBtn(
+                                label: l10n.sharedLeaveButton,
+                                color: const Color(0xFFE05252),
+                                filled: false,
+                                onTap: () async {
+                                  Navigator.pop(ctx);
+                                  await _handleLeaveShared(e);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            actions: [
+              ActionBtn(
+                label: l10n.cardCloseBarrier,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx),
               ),
             ],
           ),
@@ -560,7 +762,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       _showChangeModeDialog();
     } else {
       await GameLaunchService.instance.init();
-      if (mounted) setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+      if (mounted) {
+        setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+      }
     }
   }
 
@@ -579,24 +783,39 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Color.alphaBlend(
-            accent.withValues(alpha: 0.06), const Color(0xFF0A0A0B)),
+          accent.withValues(alpha: 0.06),
+          const Color(0xFF0A0A0B),
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: accent.withValues(alpha: 0.22)),
         ),
-        title: Text(l10n.bridgeChangeMode,
-            style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700)),
+        title: Text(
+          l10n.bridgeChangeMode,
+          style: GoogleFonts.bodoniModa(
+            color: AppColors.text,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _changeModeOption(ctx, l10n.chooserRootBadge, l10n.chooserRootTitle,
-                AndroidMode.root, accent),
+            _changeModeOption(
+              ctx,
+              l10n.chooserRootBadge,
+              l10n.chooserRootTitle,
+              AndroidMode.root,
+              accent,
+            ),
             const SizedBox(height: 8),
-            _changeModeOption(ctx, l10n.hiwShizukuBadge, l10n.hiwShizukuTitle,
-                AndroidMode.shizuku, accent),
+            _changeModeOption(
+              ctx,
+              l10n.hiwShizukuBadge,
+              l10n.hiwShizukuTitle,
+              AndroidMode.shizuku,
+              accent,
+            ),
           ],
         ),
         actions: [
@@ -612,9 +831,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Widget _changeModeOption(
-      BuildContext ctx, String badge, String title, AndroidMode mode, Color accent) {
+    BuildContext ctx,
+    String badge,
+    String title,
+    AndroidMode mode,
+    Color accent,
+  ) {
     final isActive = _mode == mode;
-    return GestureDetector(
+    return PressableScale(
       onTap: () {
         Navigator.pop(ctx);
         if (!isActive) _chooseMode(mode);
@@ -639,18 +863,24 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(badge,
-                      style: GoogleFonts.firaCode(
-                          fontSize: 8.5,
-                          letterSpacing: 1.1,
-                          fontWeight: FontWeight.w700,
-                          color: isActive ? accent : AppColors.textFaint)),
+                  Text(
+                    badge,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 8.5,
+                      letterSpacing: 1.1,
+                      fontWeight: FontWeight.w700,
+                      color: isActive ? accent : AppColors.textFaint,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(title,
-                      style: GoogleFonts.firaCode(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: isActive ? accent : AppColors.text)),
+                  Text(
+                    title,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: isActive ? accent : AppColors.text,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -684,7 +914,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     setState(() => _busy.add(name));
     try {
-      await widget.drive!.uploadSave(local.folderPath, name, players: local.players);
+      await widget.drive!.uploadSave(
+        local.folderPath,
+        name,
+        players: local.players,
+      );
       await _load(silent: true);
     } catch (e) {
       if (mounted) _snack(l10n.snackUploadError(e.toString()));
@@ -704,6 +938,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (confirmed != true) return;
 
     setState(() => _busy.add(name));
+    _showHostSwapProgress();
     try {
       if (Platform.isAndroid && _mode == AndroidMode.root) {
         final out = await ShizukuService.instance.prepareOut(name);
@@ -749,10 +984,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Borrado unificado (feedback 2026-07-12): UN solo punto de entrada,
-  /// sea cual sea la cara desde la que se abra — el diálogo detecta qué
-  /// ubicaciones existen de verdad y solo ofrece esas.
-  Future<void> _handleDelete(SaveEntry entry) async {
+  /// Desde una cara concreta confirma solo esa ubicación; desde la papelera
+  /// compacta permite escoger local, Drive propio o ambas.
+  Future<void> _handleDelete(SaveEntry entry, {_DeleteChoice? location}) async {
     final l10n = AppLocalizations.of(context)!;
     final hasLocal = entry.local != null;
     final hasDrive = entry.driveFolderId != null && widget.drive != null;
@@ -763,9 +997,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (_busy.contains(name)) return;
 
     final choice = await _confirmUnifiedDelete(
-      farmName,
-      hasLocal: hasLocal,
-      hasDrive: hasDrive,
+      entry,
+      requestedLocation: location,
+      backupCount: _backupCounts[name] ?? 0,
     );
     if (choice == null) return;
 
@@ -805,6 +1039,57 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
+  /// Hace visible que el cambio de anfitrión está trabajando sobre una copia
+  /// temporal, creando el respaldo y validando el resultado antes de tocar
+  /// la partida real. No se puede cerrar a mitad de operación.
+  void _showHostSwapProgress() {
+    showDialog<void>(
+      context: context,
+      useRootNavigator: true,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 36),
+          child: _glassDialogShell(
+            maxWidth: 330,
+            accent: const Color(0xFFE9C44B),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(26, 30, 26, 26),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _seasonalLoader(),
+                  const SizedBox(height: 18),
+                  Text(
+                    'Cambiando anfitrión…',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.text,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Guardando un respaldo y verificando la partida.',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 10,
+                      height: 1.45,
+                      color: Colors.white.withValues(alpha: .55),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   /// F1 — exporta la cara LOCAL de [entry] a un archivo transportable.
   /// Windows: selector nativo "Guardar como" (`file_picker`). Android: hoja
   /// de compartir nativa del sistema (`share_plus`) — la app nunca impone
@@ -824,11 +1109,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         // (la app receptora lo procesa en segundo plano) — el temporal NO
         // se borra aquí, se deja al ciclo de vida normal del directorio
         // temporal del sistema.
-        await SharePlus.instance.share(
-          ShareParams(files: [XFile(zip.path)]),
-        );
+        await SharePlus.instance.share(ShareParams(files: [XFile(zip.path)]));
       } else {
-        await FilePicker.saveFile(
+        await FilePicker.platform.saveFile(
           fileName: '$name.zip',
           type: FileType.custom,
           allowedExtensions: ['zip'],
@@ -847,7 +1130,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// F1 — punto de entrada de "Importar partida" (barra superior): abre el
   /// selector nativo filtrado a `.zip` y arranca el pipeline de import.
   Future<void> _handleImport() async {
-    final picked = await FilePicker.pickFiles(
+    final picked = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['zip'],
     );
@@ -887,7 +1170,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// refleja lo que hay realmente en el juego.
   Future<void> _importAndroid(String zipPath, {required bool overwrite}) async {
     final l10n = AppLocalizations.of(context)!;
-    final stagingDir = await Directory.systemTemp.createTemp('vs_import_stage_');
+    final stagingDir = await Directory.systemTemp.createTemp(
+      'vs_import_stage_',
+    );
     try {
       final result = await TransferService().importSave(
         zipPath,
@@ -921,8 +1206,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final out = await ShizukuService.instance.prepareOut(folderName);
       final outDir = Directory(out);
       if (await outDir.exists()) await outDir.delete(recursive: true);
-      await Directory('${stagingDir.path}${Platform.pathSeparator}$folderName')
-          .rename(out);
+      await Directory(
+        '${stagingDir.path}${Platform.pathSeparator}$folderName',
+      ).rename(out);
 
       final ok = _mode == AndroidMode.root
           ? await ShizukuService.instance.pushSaveAsRoot(out, folderName)
@@ -996,7 +1282,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       if (current == null) {
         await widget.drive!.shareSave(folderId, email, role: role);
       } else if (coop && current.role != role && current.id != null) {
-        await widget.drive!.updatePermission(folderId, current.id as String, role);
+        await widget.drive!.updatePermission(
+          folderId,
+          current.id as String,
+          role,
+        );
       }
       if (mounted) _snack(l10n.shareSuccess(email));
     } catch (e) {
@@ -1025,41 +1315,57 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           builder: (ctx, setState) => _glassDialogShell(
             accent: const Color(0xFFE0B850),
             child: _dialogBody(
-              title: Text(l10n.shareDialogTitle,
-                  style: GoogleFonts.bodoniModa(
-                      color: AppColors.text,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w700)),
+              title: Text(
+                l10n.shareDialogTitle,
+                style: GoogleFonts.bodoniModa(
+                  color: AppColors.text,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(farmName,
-                      style: GoogleFonts.firaCode(
-                          fontSize: 11,
-                          color: Colors.white.withValues(alpha: 0.55))),
+                  Text(
+                    farmName,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 11,
+                      color: Colors.white.withValues(alpha: 0.55),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   TextField(
                     controller: controller,
                     autofocus: true,
                     style: GoogleFonts.firaCode(
-                        fontSize: 13, color: Colors.white.withValues(alpha: 0.92)),
+                      fontSize: 13,
+                      color: Colors.white.withValues(alpha: 0.92),
+                    ),
                     decoration: InputDecoration(
                       hintText: l10n.shareEmailPlaceholder,
                       hintStyle: GoogleFonts.firaCode(
-                          fontSize: 13, color: Colors.white.withValues(alpha: 0.3)),
+                        fontSize: 13,
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
                       isDense: true,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 9,
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            BorderSide(color: Colors.white.withValues(alpha: 0.14)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.14),
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
-                            color: const Color(0xFFE0B850).withValues(alpha: 0.55)),
+                          color: const Color(
+                            0xFFE0B850,
+                          ).withValues(alpha: 0.55),
+                        ),
                       ),
                     ),
                   ),
@@ -1092,7 +1398,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     text: coop ? l10n.shareInfoNoteCoop : l10n.shareInfoNote,
                   ),
                   const SizedBox(height: 10),
-                  GestureDetector(
+                  PressableScale(
                     onTap: () {
                       Navigator.pop(ctx);
                       _showManageAccess(entry);
@@ -1111,18 +1417,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               actions: [
                 ActionBtn(
-                  label: l10n.cancel,
-                  color: Colors.white.withValues(alpha: 0.55),
-                  filled: false,
-                  onTap: () => Navigator.pop(ctx),
-                ),
-                ActionBtn(
                   label: l10n.shareConfirmButton,
                   color: const Color(0xFFE0B850),
                   icon: Icons.person_add_alt_1_rounded,
                   filled: true,
                   onTap: () =>
                       Navigator.pop(ctx, (controller.text.trim(), role)),
+                ),
+                ActionBtn(
+                  label: l10n.cancel,
+                  color: Colors.white.withValues(alpha: 0.55),
+                  filled: false,
+                  onTap: () => Navigator.pop(ctx),
                 ),
               ],
             ),
@@ -1138,14 +1444,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     required VoidCallback onTap,
   }) {
     const accent = Color(0xFFE0B850);
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: accent.withValues(alpha: selected ? 0.16 : 0.0),
-          border: Border.all(color: accent.withValues(alpha: selected ? 0.55 : 0.20)),
+          border: Border.all(
+            color: accent.withValues(alpha: selected ? 0.55 : 0.20),
+          ),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -1187,11 +1495,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             maxWidth: 420,
             accent: const Color(0xFFE0B850),
             child: _dialogBody(
-              title: Text(l10n.manageAccessTitle,
-                  style: GoogleFonts.bodoniModa(
-                      color: AppColors.text,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w700)),
+              title: Text(
+                l10n.manageAccessTitle,
+                style: GoogleFonts.bodoniModa(
+                  color: AppColors.text,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1199,10 +1510,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   if (permissions.isEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(l10n.manageAccessEmpty,
-                          style: GoogleFonts.firaCode(
-                              fontSize: 12,
-                              color: Colors.white.withValues(alpha: 0.5))),
+                      child: Text(
+                        l10n.manageAccessEmpty,
+                        style: GoogleFonts.firaCode(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
+                      ),
                     )
                   else
                     for (final p in permissions)
@@ -1216,14 +1530,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: const Color(0xFFE0B850).withValues(alpha: 0.16),
+                                color: const Color(
+                                  0xFFE0B850,
+                                ).withValues(alpha: 0.16),
                               ),
                               child: Text(
                                 (p.emailAddress as String? ?? '?')
                                     .substring(0, 1)
                                     .toUpperCase(),
                                 style: GoogleFonts.firaCode(
-                                    fontSize: 11, color: const Color(0xFFE0B850)),
+                                  fontSize: 11,
+                                  color: const Color(0xFFE0B850),
+                                ),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -1231,8 +1549,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               child: Text(
                                 p.emailAddress as String? ?? '',
                                 style: GoogleFonts.firaCode(
-                                    fontSize: 12,
-                                    color: Colors.white.withValues(alpha: 0.85)),
+                                  fontSize: 12,
+                                  color: Colors.white.withValues(alpha: 0.85),
+                                ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -1244,10 +1563,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                   if (p.role == 'reader') return;
                                   try {
                                     await widget.drive!.updatePermission(
-                                        folderId, p.id as String, 'reader');
+                                      folderId,
+                                      p.id as String,
+                                      'reader',
+                                    );
                                     setState(() => p.role = 'reader');
                                   } catch (e) {
-                                    if (mounted) _snack(l10n.exportError(e.toString()));
+                                    if (mounted) {
+                                      _snack(l10n.exportError(e.toString()));
+                                    }
                                   }
                                 },
                               ),
@@ -1259,27 +1583,46 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                   if (p.role == 'writer') return;
                                   try {
                                     await widget.drive!.updatePermission(
-                                        folderId, p.id as String, 'writer');
+                                      folderId,
+                                      p.id as String,
+                                      'writer',
+                                    );
                                     setState(() => p.role = 'writer');
                                   } catch (e) {
-                                    if (mounted) _snack(l10n.exportError(e.toString()));
+                                    if (mounted) {
+                                      _snack(l10n.exportError(e.toString()));
+                                    }
                                   }
                                 },
                               ),
                             ],
-                            IconButton(
-                              icon: const Icon(Icons.close_rounded,
-                                  size: 16, color: Color(0xFFE05252)),
-                              tooltip: l10n.manageAccessRevoke,
-                              onPressed: () async {
-                                try {
-                                  await widget.drive!
-                                      .unshareSave(folderId, p.id as String);
-                                  setState(() => permissions.remove(p));
-                                } catch (e) {
-                                  if (mounted) _snack(l10n.exportError(e.toString()));
-                                }
-                              },
+                            Tooltip(
+                              message: l10n.manageAccessRevoke,
+                              child: PressableScale(
+                                semanticLabel: l10n.manageAccessRevoke,
+                                onTap: () async {
+                                  try {
+                                    await widget.drive!.unshareSave(
+                                      folderId,
+                                      p.id as String,
+                                    );
+                                    setState(() => permissions.remove(p));
+                                  } catch (e) {
+                                    if (mounted) {
+                                      _snack(l10n.exportError(e.toString()));
+                                    }
+                                  }
+                                },
+                                child: const SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Icon(
+                                    Icons.close_rounded,
+                                    size: 16,
+                                    color: Color(0xFFE05252),
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -1315,13 +1658,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     required VoidCallback onTap,
   }) {
     const accent = Color(0xFFE0B850);
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
         decoration: BoxDecoration(
           color: accent.withValues(alpha: selected ? 0.16 : 0.0),
-          border: Border.all(color: accent.withValues(alpha: selected ? 0.5 : 0.18)),
+          border: Border.all(
+            color: accent.withValues(alpha: selected ? 0.5 : 0.18),
+          ),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
@@ -1480,7 +1825,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// Aviso inline: tinte muy sutil, sin borde — más compacto y translúcido
   /// que un `Container` con borde sólido (opción B aprobada, 2026-07-11).
-  Widget _infoBox({required Color color, required IconData icon, required String text}) {
+  Widget _infoBox({
+    required Color color,
+    required IconData icon,
+    required String text,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
@@ -1496,7 +1845,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             child: Text(
               text,
               style: GoogleFonts.firaCode(
-                  fontSize: 10, height: 1.5, color: color.withValues(alpha: 0.85)),
+                fontSize: 10,
+                height: 1.5,
+                color: color.withValues(alpha: 0.85),
+              ),
             ),
           ),
         ],
@@ -1522,9 +1874,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             title: Text(
               l10n.makeHostDialogTitle,
               style: GoogleFonts.bodoniModa(
-                  color: AppColors.text,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700),
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1533,7 +1886,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 Text(
                   l10n.makeHostDialogIntro(targetName, farmName),
                   style: GoogleFonts.firaCode(
-                      fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+                    fontSize: 12,
+                    color: Colors.white.withValues(alpha: 0.80),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 _infoBox(
@@ -1634,16 +1989,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             title: Text(
               l10n.swapBackupDialogTitle,
               style: GoogleFonts.bodoniModa(
-                  color: AppColors.text,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700),
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             content: Text(
               l10n.swapBackupDialogBody,
               style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.80)),
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
             ),
             actions: [
               SizedBox(
@@ -1685,20 +2042,39 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// spec 007 — abre la gestión de respaldos: merge local+Drive por
   /// `fileName` exacto (G10), nunca por proximidad de fecha.
-  Future<void> _handleOpenBackups(SaveEntry entry) async {
-    final local = entry.local;
-    if (local == null) return;
+  Future<void> _handleOpenBackups(
+    SaveEntry entry, {
+    String? sharedFolderId,
+    bool canEditShared = false,
+  }) async {
+    final source = entry.local ?? entry.drive;
+    if (source == null) return;
 
     final backupsDir = await _backupsDirPath();
-    final localBackups = await BackupService()
-        .listLocalBackups(backupsDir, folderName: local.folderName);
+    final localBackups = await BackupService().listLocalBackups(
+      backupsDir,
+      folderName: source.folderName,
+    );
 
     var driveBackups = <BackupEntry>[];
+    var sharedBackups = <BackupEntry>[];
     if (widget.drive != null) {
       try {
-        driveBackups = await widget.drive!.listDriveBackups(folderName: local.folderName);
+        driveBackups = await widget.drive!.listDriveBackups(
+          folderName: source.folderName,
+        );
       } catch (_) {
         // sin red o sin permiso: se sigue mostrando lo local
+      }
+      if (sharedFolderId != null) {
+        try {
+          sharedBackups = await widget.drive!.listSharedSaveBackups(
+            sharedFolderId,
+            folderName: source.folderName,
+          );
+        } catch (_) {
+          // El propietario pudo revocar el acceso; el resto sigue disponible.
+        }
       }
     }
 
@@ -1708,17 +2084,34 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
     for (final b in driveBackups) {
       final existing = merged[b.fileName];
-      merged[b.fileName] =
-          existing?.copyWith(driveFileId: b.driveFileId) ?? b;
+      merged[b.fileName] = existing?.mergeWith(b) ?? b;
+    }
+    for (final b in sharedBackups) {
+      final existing = merged[b.fileName];
+      merged[b.fileName] = existing?.mergeWith(b) ?? b;
     }
     final list = merged.values.toList()
       ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
     if (!mounted) return;
-    await _showBackupsDialog(local.farmName, list);
+    await _showBackupsDialog(
+      source.farmName,
+      list,
+      backupsDir: backupsDir,
+      localSave: entry.local,
+      sharedFolderId: sharedFolderId,
+      canEditShared: canEditShared,
+    );
   }
 
-  Future<void> _showBackupsDialog(String farmName, List<BackupEntry> initial) async {
+  Future<void> _showBackupsDialog(
+    String farmName,
+    List<BackupEntry> initial, {
+    required String backupsDir,
+    SaveFile? localSave,
+    String? sharedFolderId,
+    required bool canEditShared,
+  }) async {
     final l10n = AppLocalizations.of(context)!;
     await showDialog<void>(
       context: context,
@@ -1729,40 +2122,123 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           builder: (ctx, setState) {
             final entries = initial;
             return _glassDialogShell(
-              maxWidth: 460,
+              maxWidth: 420,
               accent: const Color(0xFF97C459),
               child: _dialogBody(
-                title: Text(l10n.backupsScreenTitle(farmName),
-                    style: GoogleFonts.bodoniModa(
-                        color: AppColors.text,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w700)),
-                content: entries.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(l10n.backupsEmpty,
-                            style: GoogleFonts.firaCode(
-                                fontSize: 12,
-                                color: Colors.white.withValues(alpha: 0.5))),
-                      )
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                title: Text(
+                  l10n.backupsScreenTitle(farmName),
+                  style: GoogleFonts.bodoniModa(
+                    color: AppColors.text,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (localSave != null) ...[
+                      _infoBox(
+                        color: const Color(0xFF97C459),
+                        icon: Icons.laptop_mac_rounded,
+                        text: l10n.backupsCreateLocalHint,
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                    if (localSave != null || entries.isEmpty)
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          for (final entry in entries)
-                            _backupRow(
-                              entry,
-                              onRestore: () async {
-                                await _handleRestoreBackup(entry);
-                                if (ctx.mounted) Navigator.pop(ctx);
-                              },
-                              onDelete: () async {
-                                final ok = await _handleDeleteBackup(entry);
-                                if (ok) setState(() => entries.remove(entry));
-                              },
+                          if (localSave != null)
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 235),
+                              child: BackupActionButton(
+                                key: const ValueKey('backup-create-action'),
+                                label: l10n.backupsCreate,
+                                icon: Icons.add_box_outlined,
+                                color: const Color(0xFFE0B850),
+                                filled: true,
+                                onPressed: () => _createManualBackup(
+                                  localSave,
+                                  backupsDir,
+                                  entries,
+                                  setState,
+                                ),
+                              ),
+                            ),
+                          if (entries.isEmpty)
+                            Text(
+                              l10n.backupsEmpty,
+                              style: GoogleFonts.firaCode(
+                                fontSize: 11,
+                                color: Colors.white.withValues(alpha: 0.5),
+                              ),
                             ),
                         ],
                       ),
+                    if (localSave != null || entries.isEmpty)
+                      const SizedBox(height: 5),
+                    if (entries.isNotEmpty)
+                      for (final entry in List<BackupEntry>.of(entries))
+                        _backupRow(
+                          entry,
+                          onRestore: () async {
+                            await _handleRestoreBackup(entry);
+                          },
+                          onDelete: _canDeleteBackup(entry, canEditShared)
+                              ? () async {
+                                  final result = await _handleDeleteBackup(
+                                    entry,
+                                    canEditShared: canEditShared,
+                                  );
+                                  if (!result.changed) return;
+                                  setState(() {
+                                    final index = entries.indexWhere(
+                                      (item) => item.fileName == entry.fileName,
+                                    );
+                                    if (index < 0) return;
+                                    final remaining = result.remaining;
+                                    if (remaining == null) {
+                                      entries.removeAt(index);
+                                    } else {
+                                      entries[index] = remaining;
+                                    }
+                                  });
+                                }
+                              : null,
+                          onDownload:
+                              !entry.isLocal &&
+                                  widget.drive != null &&
+                                  (entry.isOnDrive || entry.isOnSharedDrive)
+                              ? () => _downloadBackup(
+                                  entry,
+                                  backupsDir,
+                                  entries,
+                                  setState,
+                                )
+                              : null,
+                          onUploadOwn: widget.drive != null && !entry.isOnDrive
+                              ? () => _uploadBackup(entry, entries, setState)
+                              : null,
+                          ownActionCopiesRemote:
+                              !entry.isLocal && entry.isOnSharedDrive,
+                          onUploadShared:
+                              widget.drive != null &&
+                                  sharedFolderId != null &&
+                                  canEditShared &&
+                                  !entry.isOnSharedDrive
+                              ? () => _uploadBackup(
+                                  entry,
+                                  entries,
+                                  setState,
+                                  sharedFolderId: sharedFolderId,
+                                )
+                              : null,
+                        ),
+                  ],
+                ),
                 actions: [
                   ActionBtn(
                     label: l10n.cardCloseBarrier,
@@ -1781,66 +2257,278 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _backupRow(
     BackupEntry entry, {
-    required VoidCallback onRestore,
-    required VoidCallback onDelete,
+    required Future<void> Function() onRestore,
+    Future<void> Function()? onDelete,
+    Future<void> Function()? onDownload,
+    Future<void> Function()? onUploadOwn,
+    Future<void> Function()? onUploadShared,
+    bool ownActionCopiesRemote = false,
   }) {
     final l10n = AppLocalizations.of(context)!;
     final ts = entry.timestamp;
     String p(int n) => n.toString().padLeft(2, '0');
-    final dateLabel = '${p(ts.day)}/${p(ts.month)}/${ts.year} · ${p(ts.hour)}:${p(ts.minute)}';
-    final sizeLabel = '${(entry.sizeBytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    final dateLabel =
+        '${p(ts.day)}/${p(ts.month)}/${ts.year} · ${p(ts.hour)}:${p(ts.minute)}';
+    final sizeLabel =
+        '${(entry.sizeBytes / (1024 * 1024)).toStringAsFixed(1)} MB';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: .035),
+          borderRadius: BorderRadius.circular(13),
+          border: Border.all(
+            color: const Color(0xFF8C795A).withValues(alpha: .38),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
               children: [
-                Text(dateLabel,
-                    style: GoogleFonts.firaCode(
-                        fontSize: 12, color: Colors.white.withValues(alpha: 0.85))),
-                Text(sizeLabel,
-                    style: GoogleFonts.firaCode(
-                        fontSize: 9.5, color: Colors.white.withValues(alpha: 0.4))),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dateLabel,
+                        style: GoogleFonts.firaCode(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: .85),
+                        ),
+                      ),
+                      Text(
+                        sizeLabel,
+                        style: GoogleFonts.firaCode(
+                          fontSize: 9.5,
+                          color: Colors.white.withValues(alpha: .4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _backupLocationIcon(
+                  icon: Icons.laptop_mac_rounded,
+                  active: entry.isLocal,
+                  activeColor: const Color(0xFFE0B850),
+                  tooltip: l10n.backupsLocationLocal,
+                ),
+                const SizedBox(width: 5),
+                _backupLocationIcon(
+                  icon: Icons.cloud_outlined,
+                  active: entry.isOnDrive,
+                  activeColor: const Color(0xFF5AA8E0),
+                  tooltip: l10n.backupsLocationOwnDrive,
+                ),
+                const SizedBox(width: 5),
+                _backupLocationIcon(
+                  icon: Icons.link_rounded,
+                  active: entry.isOnSharedDrive,
+                  activeColor: const Color(0xFF42D392),
+                  tooltip: l10n.backupsLocationSharedDrive,
+                ),
+                const SizedBox(width: 6),
+                BackupActionButton(
+                  key: ValueKey('backup-restore-${entry.fileName}'),
+                  label: l10n.backupsRestore,
+                  icon: Icons.settings_backup_restore_rounded,
+                  color: const Color(0xFF7FC4F5),
+                  onPressed: onRestore,
+                ),
+                if (onDelete != null) ...[
+                  const SizedBox(width: 6),
+                  BackupActionButton(
+                    key: ValueKey('backup-delete-${entry.fileName}'),
+                    label: l10n.backupsDelete,
+                    icon: Icons.delete_outline_rounded,
+                    color: const Color(0xFFE05252),
+                    iconOnly: true,
+                    tooltip: l10n.backupsDelete,
+                    onPressed: onDelete,
+                  ),
+                ],
               ],
             ),
-          ),
-          Icon(Icons.laptop_mac_rounded,
-              size: 14,
-              color: entry.isLocal
-                  ? Colors.white.withValues(alpha: 0.7)
-                  : Colors.white.withValues(alpha: 0.12)),
-          const SizedBox(width: 6),
-          Icon(Icons.cloud_outlined,
-              size: 14,
-              color: entry.isOnDrive
-                  ? const Color(0xFF5AA8E0)
-                  : Colors.white.withValues(alpha: 0.12)),
-          const SizedBox(width: 10),
-          GestureDetector(
-            onTap: onRestore,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              decoration: BoxDecoration(
-                border:
-                    Border.all(color: const Color(0xFF5AA8E0).withValues(alpha: 0.5)),
-                borderRadius: BorderRadius.circular(7),
+            if (onDownload != null ||
+                onUploadOwn != null ||
+                onUploadShared != null) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 7,
+                runSpacing: 7,
+                children: [
+                  if (onDownload != null)
+                    BackupActionButton(
+                      key: ValueKey('backup-download-${entry.fileName}'),
+                      label: l10n.backupsDownload,
+                      icon: Icons.download_rounded,
+                      color: const Color(0xFF7FC4F5),
+                      filled: true,
+                      onPressed: onDownload,
+                    ),
+                  if (onUploadOwn != null)
+                    BackupActionButton(
+                      key: ValueKey('backup-upload-own-${entry.fileName}'),
+                      label: ownActionCopiesRemote
+                          ? l10n.backupsCopyOwn
+                          : l10n.backupsUploadOwn,
+                      icon: Icons.cloud_upload_outlined,
+                      color: const Color(0xFF5AA8E0),
+                      onPressed: onUploadOwn,
+                    ),
+                  if (onUploadShared != null)
+                    BackupActionButton(
+                      key: ValueKey('backup-upload-shared-${entry.fileName}'),
+                      label: l10n.backupsUploadShared,
+                      icon: Icons.link_rounded,
+                      color: const Color(0xFF42D392),
+                      onPressed: onUploadShared,
+                    ),
+                ],
               ),
-              child: Text(l10n.backupsRestore,
-                  style: GoogleFonts.firaCode(fontSize: 10.5, color: const Color(0xFF7FC4F5))),
-            ),
-          ),
-          const SizedBox(width: 6),
-          GestureDetector(
-            onTap: onDelete,
-            child: Icon(Icons.delete_outline_rounded,
-                size: 16, color: const Color(0xFFE05252).withValues(alpha: 0.8)),
-          ),
-        ],
+            ],
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _backupLocationIcon({
+    required IconData icon,
+    required bool active,
+    required Color activeColor,
+    required String tooltip,
+  }) => Tooltip(
+    message: tooltip,
+    child: Container(
+      width: 25,
+      height: 25,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: active ? activeColor.withValues(alpha: .10) : Colors.transparent,
+        border: Border.all(
+          color: active
+              ? activeColor.withValues(alpha: .55)
+              : Colors.white.withValues(alpha: .10),
+        ),
+        borderRadius: BorderRadius.circular(7),
+      ),
+      child: Icon(
+        icon,
+        size: 14,
+        color: active ? activeColor : Colors.white.withValues(alpha: .16),
+      ),
+    ),
+  );
+
+  Future<void> _uploadBackup(
+    BackupEntry entry,
+    List<BackupEntry> entries,
+    void Function(void Function()) refresh, {
+    String? sharedFolderId,
+  }) async {
+    if (widget.drive == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final id = await _withBackupFile(
+        entry,
+        (path) => sharedFolderId == null
+            ? widget.drive!.uploadBackupZip(path)
+            : widget.drive!.uploadBackupZipToSharedSave(sharedFolderId, path),
+      );
+      final updated = sharedFolderId == null
+          ? entry.copyWith(driveFileId: id)
+          : entry.copyWith(sharedDriveFileId: id);
+      _replaceBackupEntry(entry, updated, entries, refresh);
+      if (mounted) _snack(l10n.backupsUploadOk);
+    } catch (e) {
+      if (mounted) _snack(l10n.backupsUploadErr(e.toString()));
+    }
+  }
+
+  Future<void> _createManualBackup(
+    SaveFile local,
+    String backupsDir,
+    List<BackupEntry> entries,
+    void Function(void Function()) refresh,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final created = await BackupService().createBackup(
+        saveFolderPath: local.folderPath,
+        folderName: local.folderName,
+        backupsDir: backupsDir,
+      );
+      refresh(() {
+        entries.insert(0, created);
+        entries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+      });
+      unawaited(_loadBackupCounts());
+      if (mounted) _snack(l10n.backupsCreateOk);
+    } catch (e) {
+      if (mounted) _snack(l10n.backupsCreateErr(e.toString()));
+    }
+  }
+
+  Future<void> _downloadBackup(
+    BackupEntry entry,
+    String backupsDir,
+    List<BackupEntry> entries,
+    void Function(void Function()) refresh,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
+    if (widget.drive == null || remoteId == null) return;
+    try {
+      final path = '$backupsDir${Platform.pathSeparator}${entry.fileName}';
+      await widget.drive!.downloadFile(remoteId, path);
+      final updated = entry.copyWith(
+        localPath: path,
+        sizeBytes: await File(path).length(),
+      );
+      _replaceBackupEntry(entry, updated, entries, refresh);
+      unawaited(_loadBackupCounts());
+      if (mounted) _snack(l10n.backupsDownloadOk);
+    } catch (e) {
+      if (mounted) _snack(l10n.backupsDownloadErr(e.toString()));
+    }
+  }
+
+  Future<T> _withBackupFile<T>(
+    BackupEntry entry,
+    Future<T> Function(String path) action,
+  ) async {
+    if (entry.localPath != null) return action(entry.localPath!);
+    final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
+    if (widget.drive == null || remoteId == null) {
+      throw StateError('El respaldo no está disponible para transferirlo.');
+    }
+    final tempDir = await Directory.systemTemp.createTemp('vs_backup_copy_');
+    final path = '${tempDir.path}${Platform.pathSeparator}${entry.fileName}';
+    try {
+      await widget.drive!.downloadFile(remoteId, path);
+      return await action(path);
+    } finally {
+      try {
+        if (await tempDir.exists()) await tempDir.delete(recursive: true);
+      } catch (_) {
+        // Limpieza best-effort del puente remoto → remoto.
+      }
+    }
+  }
+
+  void _replaceBackupEntry(
+    BackupEntry previous,
+    BackupEntry updated,
+    List<BackupEntry> entries,
+    void Function(void Function()) refresh,
+  ) {
+    final index = entries.indexWhere(
+      (item) => item.fileName == previous.fileName,
+    );
+    if (index >= 0) refresh(() => entries[index] = updated);
   }
 
   Future<void> _handleRestoreBackup(BackupEntry entry) async {
@@ -1860,11 +2548,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       return;
     }
     try {
+      final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
       final result = await BackupService().restoreBackup(
         entry,
         savesDir: savesDir,
-        downloadToPath: (entry.driveFileId != null && widget.drive != null)
-            ? (path) => widget.drive!.downloadFile(entry.driveFileId!, path)
+        downloadToPath: (remoteId != null && widget.drive != null)
+            ? (path) => widget.drive!.downloadFile(remoteId, path)
             : null,
       );
       if (!result.ok) {
@@ -1878,31 +2567,154 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Devuelve `true` si se borró (para que el caller quite la fila).
-  Future<bool> _handleDeleteBackup(BackupEntry entry) async {
+  bool _canDeleteBackup(BackupEntry entry, bool canEditShared) =>
+      entry.isLocal ||
+      entry.isOnDrive ||
+      (entry.isOnSharedDrive && canEditShared);
+
+  Future<({bool changed, BackupEntry? remaining})> _handleDeleteBackup(
+    BackupEntry entry, {
+    required bool canEditShared,
+  }) async {
     final l10n = AppLocalizations.of(context)!;
-    final confirmed = await _confirmBackupAction(
-      accent: const Color(0xFFE05252),
-      title: l10n.backupsDeleteConfirmTitle,
-      body: l10n.backupsDeleteConfirmBody,
-      confirmLabel: l10n.backupsDelete,
-      confirmIcon: Icons.delete_outline_rounded,
+    final choice = await _confirmBackupDelete(
+      entry,
+      canEditShared: canEditShared,
     );
-    if (confirmed != true) return false;
+    if (choice == null) return (changed: false, remaining: entry);
 
     try {
-      if (entry.localPath != null) {
+      var remaining = entry;
+      if ((choice == _BackupDeleteChoice.local ||
+              choice == _BackupDeleteChoice.all) &&
+          entry.localPath != null) {
         await BackupService().deleteLocalBackup(entry.localPath!);
+        remaining = remaining.copyWith(clearLocalPath: true);
       }
-      if (entry.driveFileId != null && widget.drive != null) {
+      if ((choice == _BackupDeleteChoice.ownDrive ||
+              choice == _BackupDeleteChoice.all) &&
+          entry.driveFileId != null &&
+          widget.drive != null) {
         await widget.drive!.deleteDriveBackup(entry.driveFileId!);
+        remaining = remaining.copyWith(clearDriveFileId: true);
+      }
+      if ((choice == _BackupDeleteChoice.sharedDrive ||
+              choice == _BackupDeleteChoice.all) &&
+          entry.sharedDriveFileId != null &&
+          canEditShared &&
+          widget.drive != null) {
+        await widget.drive!.deleteDriveBackup(entry.sharedDriveFileId!);
+        remaining = remaining.copyWith(clearSharedDriveFileId: true);
       }
       unawaited(_loadBackupCounts());
-      return true;
+      return (
+        changed: true,
+        remaining: remaining.locationCount == 0 ? null : remaining,
+      );
     } catch (e) {
       if (mounted) _snack(l10n.backupsDeleteErr(e.toString()));
-      return false;
+      return (changed: false, remaining: entry);
     }
+  }
+
+  Future<_BackupDeleteChoice?> _confirmBackupDelete(
+    BackupEntry entry, {
+    required bool canEditShared,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    final deletableCount =
+        (entry.isLocal ? 1 : 0) +
+        (entry.isOnDrive ? 1 : 0) +
+        (entry.isOnSharedDrive && canEditShared ? 1 : 0);
+    final canDeleteAll =
+        deletableCount > 1 && deletableCount == entry.locationCount;
+    return showDialog<_BackupDeleteChoice>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          accent: const Color(0xFFE05252),
+          child: _dialogBody(
+            title: Text(
+              l10n.backupsDeleteConfirmTitle,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Text(
+              l10n.backupsDeleteChooseBody,
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: .80),
+              ),
+            ),
+            actions: [
+              if (entry.isLocal)
+                SizedBox(
+                  width: double.infinity,
+                  child: BackupActionButton(
+                    label: l10n.backupsDeleteLocalOnly,
+                    color: const Color(0xFFE0B850),
+                    icon: Icons.laptop_mac_rounded,
+                    filled: false,
+                    onPressed: () async =>
+                        Navigator.pop(ctx, _BackupDeleteChoice.local),
+                  ),
+                ),
+              if (entry.isOnDrive)
+                SizedBox(
+                  width: double.infinity,
+                  child: BackupActionButton(
+                    label: l10n.backupsDeleteOwnOnly,
+                    color: const Color(0xFF5AA8E0),
+                    icon: Icons.cloud_outlined,
+                    filled: false,
+                    onPressed: () async =>
+                        Navigator.pop(ctx, _BackupDeleteChoice.ownDrive),
+                  ),
+                ),
+              if (entry.isOnSharedDrive && canEditShared)
+                SizedBox(
+                  width: double.infinity,
+                  child: BackupActionButton(
+                    label: l10n.backupsDeleteSharedOnly,
+                    color: const Color(0xFF42D392),
+                    icon: Icons.link_rounded,
+                    filled: false,
+                    onPressed: () async =>
+                        Navigator.pop(ctx, _BackupDeleteChoice.sharedDrive),
+                  ),
+                ),
+              if (canDeleteAll)
+                SizedBox(
+                  width: double.infinity,
+                  child: BackupActionButton(
+                    label: l10n.backupsDeleteAll,
+                    color: const Color(0xFFE05252),
+                    icon: Icons.delete_outline_rounded,
+                    filled: true,
+                    onPressed: () async =>
+                        Navigator.pop(ctx, _BackupDeleteChoice.all),
+                  ),
+                ),
+              SizedBox(
+                width: double.infinity,
+                child: ActionBtn(
+                  label: l10n.cancel,
+                  color: Colors.white.withValues(alpha: .55),
+                  filled: false,
+                  onTap: () => Navigator.pop(ctx),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<bool?> _confirmBackupAction({
@@ -1921,15 +2733,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         child: _glassDialogShell(
           accent: accent,
           child: _dialogBody(
-            title: Text(title,
-                style: GoogleFonts.bodoniModa(
-                    color: AppColors.text,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
+            title: Text(
+              title,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             content: Text(
               body,
               style: GoogleFonts.firaCode(
-                  fontSize: 12, height: 1.5, color: Colors.white.withValues(alpha: 0.80)),
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
             ),
             actions: [
               SizedBox(
@@ -1962,11 +2780,88 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// dónde exista de verdad el save — nunca se ofrece borrar una ubicación
   /// que no existe.
   Future<_DeleteChoice?> _confirmUnifiedDelete(
-    String farmName, {
-    required bool hasLocal,
-    required bool hasDrive,
+    SaveEntry entry, {
+    _DeleteChoice? requestedLocation,
+    required int backupCount,
   }) {
     final l10n = AppLocalizations.of(context)!;
+    final hasLocal = entry.local != null;
+    final hasDrive = entry.driveFolderId != null && widget.drive != null;
+    final farmName = entry.primary.farmName;
+    final deletingLocal = requestedLocation == _DeleteChoice.localOnly;
+    final deletingDrive = requestedLocation == _DeleteChoice.driveOnly;
+
+    final title = deletingLocal
+        ? l10n.deleteLocalContextTitle(farmName)
+        : deletingDrive
+        ? l10n.deleteDriveContextTitle(farmName)
+        : l10n.deleteUnifiedTitle(farmName);
+
+    final notices = <Widget>[];
+    if (deletingDrive && hasLocal) {
+      notices.add(
+        _infoBox(
+          color: const Color(0xFF7FBF7F),
+          icon: Icons.laptop_mac_rounded,
+          text: l10n.deleteDriveLocalKept,
+        ),
+      );
+    } else if (deletingLocal) {
+      final local = entry.local;
+      final drive = entry.drive;
+      if (drive != null) {
+        final driveDate = l10n.statDayYear(drive.dayOfMonth, drive.year);
+        final (color, icon, text) = switch (entry.status) {
+          SaveSyncStatus.synced => (
+            const Color(0xFF5AA8E0),
+            Icons.cloud_done_outlined,
+            l10n.deleteLocalDriveCurrent(driveDate),
+          ),
+          SaveSyncStatus.driveAhead => (
+            const Color(0xFF5AA8E0),
+            Icons.cloud_done_outlined,
+            l10n.deleteLocalDriveAhead(driveDate),
+          ),
+          SaveSyncStatus.localAhead => (
+            const Color(0xFFE0A860),
+            Icons.warning_amber_rounded,
+            l10n.deleteLocalDriveOlder(
+              driveDate,
+              l10n.statDayYear(local!.dayOfMonth, local.year),
+            ),
+          ),
+          _ => (
+            const Color(0xFF5AA8E0),
+            Icons.cloud_outlined,
+            l10n.deleteLocalDriveCurrent(driveDate),
+          ),
+        };
+        notices.add(_infoBox(color: color, icon: icon, text: text));
+      } else if (backupCount > 0) {
+        notices.add(
+          _infoBox(
+            color: const Color(0xFF97C459),
+            icon: Icons.inventory_2_outlined,
+            text: l10n.deleteLocalBackupAvailable(backupCount),
+          ),
+        );
+      } else {
+        notices.add(
+          _infoBox(
+            color: const Color(0xFFE05252),
+            icon: Icons.warning_amber_rounded,
+            text: l10n.deleteLocalNoRecovery,
+          ),
+        );
+      }
+    }
+
+    final body = deletingLocal
+        ? l10n.deleteLocalContextBody
+        : deletingDrive
+        ? l10n.deleteDriveContextBody
+        : l10n.deleteChooseLocationBody;
+
     return showDialog<_DeleteChoice>(
       context: context,
       builder: (ctx) => Dialog(
@@ -1975,18 +2870,34 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         child: _glassDialogShell(
           accent: const Color(0xFFE05252),
           child: _dialogBody(
-            title: Text(l10n.deleteUnifiedTitle(farmName),
-                style: GoogleFonts.bodoniModa(
-                    color: AppColors.text,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
-            content: Text(
-              l10n.deleteChooseLocationBody,
-              style: GoogleFonts.firaCode(
-                  fontSize: 12, height: 1.5, color: Colors.white.withValues(alpha: 0.80)),
+            title: Text(
+              title,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  body,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 12,
+                    height: 1.5,
+                    color: Colors.white.withValues(alpha: 0.80),
+                  ),
+                ),
+                if (notices.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  ...notices,
+                ],
+              ],
             ),
             actions: [
-              if (hasLocal)
+              if (hasLocal && !deletingDrive)
                 SizedBox(
                   width: double.infinity,
                   child: ActionBtn(
@@ -1997,7 +2908,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     onTap: () => Navigator.pop(ctx, _DeleteChoice.localOnly),
                   ),
                 ),
-              if (hasDrive)
+              if (hasDrive && !deletingLocal)
                 SizedBox(
                   width: double.infinity,
                   child: ActionBtn(
@@ -2008,7 +2919,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     onTap: () => Navigator.pop(ctx, _DeleteChoice.driveOnly),
                   ),
                 ),
-              if (hasLocal && hasDrive)
+              if (requestedLocation == null && hasLocal && hasDrive)
                 SizedBox(
                   width: double.infinity,
                   child: ActionBtn(
@@ -2047,17 +2958,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         child: _glassDialogShell(
           accent: const Color(0xFFE05252),
           child: _dialogBody(
-            title: Text(l10n.importConflictTitle,
-                style: GoogleFonts.bodoniModa(
-                    color: AppColors.text,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
+            title: Text(
+              l10n.importConflictTitle,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             content: Text(
               l10n.importConflictBody,
               style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.80)),
+                fontSize: 12,
+                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
             ),
             actions: [
               ActionBtn(
@@ -2103,127 +3018,148 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: StatefulBuilder(
-        builder: (ctx, setDialogState) {
-          final idx = coop ? playerIndex.clamp(0, playerBase.players.length - 1) : 0;
-          final selected = playerBase.players[idx];
-          // Cada lado busca a la MISMA persona (por uniqueId) en su PROPIA
-          // lista, en vez de reutilizar el PlayerStats de un solo lado —
-          // tras un swap, el índice 0 ya no es la misma persona en local y
-          // en Drive (feedback 2026-07-12: "falso positivo" en la comparación).
-          final drivePlayer = coop
-              ? _matchPlayerById(driveBase.players, selected.uniqueId) ?? selected
-              : selected;
-          final drive = coop ? driveBase.forPlayer(drivePlayer) : driveBase;
-          final local = localBase == null
-              ? null
-              : (coop
-                  ? localBase.forPlayer(
-                      _matchPlayerById(localBase.players, selected.uniqueId) ?? selected)
-                  : localBase);
-          final hostIndex = playerBase.players.indexWhere((p) => p.isHost);
-          final switcher = coop
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    PlayerNameLabel(
-                      name: drive.playerName,
-                      gender: drive.genderLabel,
-                      isHost: idx == hostIndex,
-                    ),
-                    const SizedBox(height: 6),
-                    PlayerSwitcher(
-                      count: playerBase.players.length,
-                      index: idx,
-                      hostIndex: hostIndex,
-                      onSelect: (i) => setDialogState(() => playerIndex = i),
-                    ),
-                  ],
-                )
-              : null;
-          return _glassDialogShell(
-            maxWidth: 460,
-            child: _dialogBody(
-            title: Text(l10n.dlgDownloadTitle,
-                style: GoogleFonts.bodoniModa(
+          builder: (ctx, setDialogState) {
+            final idx = coop
+                ? playerIndex.clamp(0, playerBase.players.length - 1)
+                : 0;
+            final selected = playerBase.players[idx];
+            // Cada lado busca a la MISMA persona (por uniqueId) en su PROPIA
+            // lista, en vez de reutilizar el PlayerStats de un solo lado —
+            // tras un swap, el índice 0 ya no es la misma persona en local y
+            // en Drive (feedback 2026-07-12: "falso positivo" en la comparación).
+            final drivePlayer = coop
+                ? _matchPlayerById(driveBase.players, selected.uniqueId) ??
+                      selected
+                : selected;
+            final drive = coop ? driveBase.forPlayer(drivePlayer) : driveBase;
+            final local = localBase == null
+                ? null
+                : (coop
+                      ? localBase.forPlayer(
+                          _matchPlayerById(
+                                localBase.players,
+                                selected.uniqueId,
+                              ) ??
+                              selected,
+                        )
+                      : localBase);
+            final hostIndex = playerBase.players.indexWhere((p) => p.isHost);
+            final switcher = coop
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      PlayerNameLabel(
+                        name: drive.playerName,
+                        gender: drive.genderLabel,
+                        isHost: idx == hostIndex,
+                      ),
+                      const SizedBox(height: 6),
+                      PlayerSwitcher(
+                        count: playerBase.players.length,
+                        index: idx,
+                        hostIndex: hostIndex,
+                        onSelect: (i) => setDialogState(() => playerIndex = i),
+                      ),
+                    ],
+                  )
+                : null;
+            return _glassDialogShell(
+              maxWidth: 460,
+              child: _dialogBody(
+                title: Text(
+                  l10n.dlgDownloadTitle,
+                  style: GoogleFonts.bodoniModa(
                     color: AppColors.text,
                     fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (local == null) ...[
-                  Text(
-                    l10n.dlgDownloadNewDesc(
-                      drive.farmName,
-                      drive.dayOfMonth,
-                      drive.playtimeLabel,
-                    ),
-                    style: GoogleFonts.firaCode(
-                        fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+                    fontWeight: FontWeight.w700,
                   ),
-                  if (switcher != null) ...[
-                    const SizedBox(height: 12),
-                    Center(child: switcher),
-                  ],
-                ] else
-                  _overwritePreview(
-                    l10n: l10n,
-                    intro: l10n.dlgDownloadOverwrite(drive.farmName),
-                    current: local,
-                    result: drive,
-                    currentLabel: l10n.previewLocalLabel,
-                    resultLabel: l10n.previewFromDrive,
-                    currentIcon: _localIcon,
-                    resultIcon: '☁️',
-                    resultColor: const Color(0xFF5AA8E0),
-                    afterIntro: switcher,
-                  ),
-                if (local != null &&
-                    drive.gameVersion.isNotEmpty &&
-                    local.gameVersion.isNotEmpty &&
-                    drive.gameVersion != local.gameVersion) ...[
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE09020).withValues(alpha: 0.10),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: const Color(0xFFE09020).withValues(alpha: 0.40)),
-                    ),
-                    child: Text(
-                      l10n.versionMismatch(
-                        local.gameVersion,
-                        drive.gameVersion,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (local == null) ...[
+                      Text(
+                        l10n.dlgDownloadNewDesc(
+                          drive.farmName,
+                          drive.dayOfMonth,
+                          drive.playtimeLabel,
+                        ),
+                        style: GoogleFonts.firaCode(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.80),
+                        ),
                       ),
-                      style: GoogleFonts.firaCode(
-                          fontSize: 10,
-                          height: 1.5,
-                          color: const Color(0xFFE09020).withValues(alpha: 0.90)),
-                    ),
+                      if (switcher != null) ...[
+                        const SizedBox(height: 12),
+                        Center(child: switcher),
+                      ],
+                    ] else
+                      _overwritePreview(
+                        l10n: l10n,
+                        intro: l10n.dlgDownloadOverwrite(drive.farmName),
+                        current: local,
+                        result: drive,
+                        currentLabel: l10n.previewLocalLabel,
+                        resultLabel: l10n.previewFromDrive,
+                        currentIcon: _localIcon,
+                        resultIcon: '☁️',
+                        resultColor: const Color(0xFF5AA8E0),
+                        afterIntro: switcher,
+                      ),
+                    if (local != null &&
+                        drive.gameVersion.isNotEmpty &&
+                        local.gameVersion.isNotEmpty &&
+                        drive.gameVersion != local.gameVersion) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                            0xFFE09020,
+                          ).withValues(alpha: 0.10),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color(
+                              0xFFE09020,
+                            ).withValues(alpha: 0.40),
+                          ),
+                        ),
+                        child: Text(
+                          l10n.versionMismatch(
+                            local.gameVersion,
+                            drive.gameVersion,
+                          ),
+                          style: GoogleFonts.firaCode(
+                            fontSize: 10,
+                            height: 1.5,
+                            color: const Color(
+                              0xFFE09020,
+                            ).withValues(alpha: 0.90),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                actions: [
+                  ActionBtn(
+                    label: l10n.cancel,
+                    color: Colors.white.withValues(alpha: 0.55),
+                    filled: false,
+                    onTap: () => Navigator.pop(ctx, false),
+                  ),
+                  ActionBtn(
+                    label: l10n.dlgDownloadButton,
+                    color: const Color(0xFF5AA8E0),
+                    icon: Icons.cloud_download_outlined,
+                    filled: true,
+                    onTap: () => Navigator.pop(ctx, true),
                   ),
                 ],
-              ],
-            ),
-            actions: [
-              ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
               ),
-              ActionBtn(
-                label: l10n.dlgDownloadButton,
-                color: const Color(0xFF5AA8E0),
-                icon: Icons.cloud_download_outlined,
-                filled: true,
-                onTap: () => Navigator.pop(ctx, true),
-              ),
-            ],
-            ),
-          );
-        },
+            );
+          },
         ),
       ),
     );
@@ -2241,97 +3177,109 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: StatefulBuilder(
-        builder: (ctx, setDialogState) {
-          final idx = coop ? playerIndex.clamp(0, localBase.players.length - 1) : 0;
-          final selected = localBase.players[idx];
-          final local = coop ? localBase.forPlayer(selected) : localBase;
-          // Mismo fix que _confirmDownload: buscar a la misma persona (por
-          // uniqueId) en la lista PROPIA de Drive, no reutilizar el
-          // PlayerStats local para ambas columnas.
-          final drive = driveBase == null
-              ? null
-              : (coop
-                  ? driveBase.forPlayer(
-                      _matchPlayerById(driveBase.players, selected.uniqueId) ?? selected)
-                  : driveBase);
-          final hostIndex = localBase.players.indexWhere((p) => p.isHost);
-          final switcher = coop
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    PlayerNameLabel(
-                      name: local.playerName,
-                      gender: local.genderLabel,
-                      isHost: idx == hostIndex,
-                    ),
-                    const SizedBox(height: 6),
-                    PlayerSwitcher(
-                      count: localBase.players.length,
-                      index: idx,
-                      hostIndex: hostIndex,
-                      onSelect: (i) => setDialogState(() => playerIndex = i),
-                    ),
-                  ],
-                )
-              : null;
-          return _glassDialogShell(
-            maxWidth: 460,
-            child: _dialogBody(
-            title: Text(l10n.dlgUploadTitle,
-                style: GoogleFonts.bodoniModa(
-                    color: AppColors.text,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700)),
-            content: drive == null
+          builder: (ctx, setDialogState) {
+            final idx = coop
+                ? playerIndex.clamp(0, localBase.players.length - 1)
+                : 0;
+            final selected = localBase.players[idx];
+            final local = coop ? localBase.forPlayer(selected) : localBase;
+            // Mismo fix que _confirmDownload: buscar a la misma persona (por
+            // uniqueId) en la lista PROPIA de Drive, no reutilizar el
+            // PlayerStats local para ambas columnas.
+            final drive = driveBase == null
+                ? null
+                : (coop
+                      ? driveBase.forPlayer(
+                          _matchPlayerById(
+                                driveBase.players,
+                                selected.uniqueId,
+                              ) ??
+                              selected,
+                        )
+                      : driveBase);
+            final hostIndex = localBase.players.indexWhere((p) => p.isHost);
+            final switcher = coop
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.dlgUploadNewDesc(
-                          local.farmName,
-                          local.dayOfMonth,
-                          local.playtimeLabel,
-                        ),
-                        style: GoogleFonts.firaCode(
-                            fontSize: 12, color: Colors.white.withValues(alpha: 0.80)),
+                      PlayerNameLabel(
+                        name: local.playerName,
+                        gender: local.genderLabel,
+                        isHost: idx == hostIndex,
                       ),
-                      if (switcher != null) ...[
-                        const SizedBox(height: 12),
-                        Center(child: switcher),
-                      ],
+                      const SizedBox(height: 6),
+                      PlayerSwitcher(
+                        count: localBase.players.length,
+                        index: idx,
+                        hostIndex: hostIndex,
+                        onSelect: (i) => setDialogState(() => playerIndex = i),
+                      ),
                     ],
                   )
-                : _overwritePreview(
-                    l10n: l10n,
-                    intro: l10n.dlgUploadOverwriteDrive(local.farmName),
-                    current: drive,
-                    result: local,
-                    currentLabel: l10n.previewDriveLabel,
-                    resultLabel: l10n.previewFromDevice,
-                    currentIcon: '☁️',
-                    resultIcon: _localIcon,
-                    resultColor: const Color(0xFFE0B850),
-                    afterIntro: switcher,
+                : null;
+            return _glassDialogShell(
+              maxWidth: 460,
+              child: _dialogBody(
+                title: Text(
+                  l10n.dlgUploadTitle,
+                  style: GoogleFonts.bodoniModa(
+                    color: AppColors.text,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w700,
                   ),
-            actions: [
-              ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
+                ),
+                content: drive == null
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.dlgUploadNewDesc(
+                              local.farmName,
+                              local.dayOfMonth,
+                              local.playtimeLabel,
+                            ),
+                            style: GoogleFonts.firaCode(
+                              fontSize: 12,
+                              color: Colors.white.withValues(alpha: 0.80),
+                            ),
+                          ),
+                          if (switcher != null) ...[
+                            const SizedBox(height: 12),
+                            Center(child: switcher),
+                          ],
+                        ],
+                      )
+                    : _overwritePreview(
+                        l10n: l10n,
+                        intro: l10n.dlgUploadOverwriteDrive(local.farmName),
+                        current: drive,
+                        result: local,
+                        currentLabel: l10n.previewDriveLabel,
+                        resultLabel: l10n.previewFromDevice,
+                        currentIcon: '☁️',
+                        resultIcon: _localIcon,
+                        resultColor: const Color(0xFFE0B850),
+                        afterIntro: switcher,
+                      ),
+                actions: [
+                  ActionBtn(
+                    label: l10n.cancel,
+                    color: Colors.white.withValues(alpha: 0.55),
+                    filled: false,
+                    onTap: () => Navigator.pop(ctx, false),
+                  ),
+                  ActionBtn(
+                    label: l10n.dlgUploadButton,
+                    color: const Color(0xFFE0B850),
+                    icon: Icons.cloud_upload_outlined,
+                    filled: true,
+                    onTap: () => Navigator.pop(ctx, true),
+                  ),
+                ],
               ),
-              ActionBtn(
-                label: l10n.dlgUploadButton,
-                color: const Color(0xFFE0B850),
-                icon: Icons.cloud_upload_outlined,
-                filled: true,
-                onTap: () => Navigator.pop(ctx, true),
-              ),
-            ],
-            ),
-          );
-        },
+            );
+          },
         ),
       ),
     );
@@ -2357,9 +3305,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         Text(
           intro,
           style: GoogleFonts.firaCode(
-              fontSize: 12,
-              height: 1.5,
-              color: Colors.white.withValues(alpha: 0.80)),
+            fontSize: 12,
+            height: 1.5,
+            color: Colors.white.withValues(alpha: 0.80),
+          ),
         ),
         if (afterIntro != null) ...[
           const SizedBox(height: 12),
@@ -2371,19 +3320,32 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: _previewCol(l10n, currentLabel, current,
-                    other: result,
-                    accent: Colors.white.withValues(alpha: 0.40),
-                    icon: currentIcon),
+                child: _previewCol(
+                  l10n,
+                  currentLabel,
+                  current,
+                  other: result,
+                  accent: Colors.white.withValues(alpha: 0.40),
+                  icon: currentIcon,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(Icons.arrow_forward_rounded,
-                    size: 18, color: Colors.white.withValues(alpha: 0.45)),
+                child: Icon(
+                  Icons.arrow_forward_rounded,
+                  size: 18,
+                  color: Colors.white.withValues(alpha: 0.45),
+                ),
               ),
               Expanded(
-                child: _previewCol(l10n, resultLabel, result,
-                    other: current, accent: resultColor, icon: resultIcon),
+                child: _previewCol(
+                  l10n,
+                  resultLabel,
+                  result,
+                  other: current,
+                  accent: resultColor,
+                  icon: resultIcon,
+                ),
               ),
             ],
           ),
@@ -2397,15 +3359,30 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   String get _localIcon => (Platform.isAndroid || Platform.isIOS) ? '📱' : '💻';
 
-  Widget _previewCol(AppLocalizations l10n, String header, SaveFile s,
-      {required SaveFile other, required Color accent, required String icon}) {
+  Widget _previewCol(
+    AppLocalizations l10n,
+    String header,
+    SaveFile s, {
+    required SaveFile other,
+    required Color accent,
+    required String icon,
+  }) {
     final hl = _seasonAccent;
-    String mine(SaveFile x) =>
-        x.deepestMineLevel == 0 ? l10n.previewColUnexplored : 'Nv. ${x.deepestMineLevel}';
+    String mine(SaveFile x) => x.deepestMineLevel == 0
+        ? l10n.previewColUnexplored
+        : 'Nv. ${x.deepestMineLevel}';
     // true = este valor es peor que el otro (lower is worse), false = mejor, null = igual
-    bool? w(num a, num b) => a == b ? null : a < b ? true : false;
+    bool? w(num a, num b) => a == b
+        ? null
+        : a < b
+        ? true
+        : false;
     // invertido: más = peor (desmayos)
-    bool? wi(num a, num b) => a == b ? null : a > b ? true : false;
+    bool? wi(num a, num b) => a == b
+        ? null
+        : a > b
+        ? true
+        : false;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -2421,74 +3398,124 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             children: [
               Text(icon, style: const TextStyle(fontSize: 11)),
               const SizedBox(width: 5),
-              Text(header,
-                  style: GoogleFonts.firaCode(
-                      fontSize: 8,
-                      letterSpacing: 0.8,
-                      fontWeight: FontWeight.w700,
-                      color: accent)),
+              Text(
+                header,
+                style: GoogleFonts.firaCode(
+                  fontSize: 8,
+                  letterSpacing: 0.8,
+                  fontWeight: FontWeight.w700,
+                  color: accent,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 6),
-          _previewRow(l10n.previewColDayYear, l10n.statDayYear(s.dayOfMonth, s.year),
-              changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,
-              hl: hl,
-              worse: w(s.year * 28 + s.dayOfMonth, other.year * 28 + other.dayOfMonth)),
-          _previewRow(l10n.previewColTime, s.playtimeLabel,
-              changed: s.millisecondsPlayed != other.millisecondsPlayed,
-              hl: hl,
-              worse: w(s.millisecondsPlayed, other.millisecondsPlayed)),
-          _previewRow(l10n.previewColMoney, s.currentMoneyLabel,
-              changed: s.currentMoney != other.currentMoney,
-              hl: hl,
-              worse: w(s.currentMoney, other.currentMoney)),
-          _previewRow(l10n.previewColTotal, s.totalMoneyLabel,
-              changed: s.totalMoneyEarned != other.totalMoneyEarned,
-              hl: hl,
-              worse: w(s.totalMoneyEarned, other.totalMoneyEarned)),
-          _previewRow(l10n.previewColFarming, '${s.farmingLevel}',
-              changed: s.farmingLevel != other.farmingLevel,
-              hl: hl,
-              worse: w(s.farmingLevel, other.farmingLevel)),
-          _previewRow(l10n.previewColForaging, '${s.foragingLevel}',
-              changed: s.foragingLevel != other.foragingLevel,
-              hl: hl,
-              worse: w(s.foragingLevel, other.foragingLevel)),
-          _previewRow(l10n.previewColMining, '${s.miningLevel}',
-              changed: s.miningLevel != other.miningLevel,
-              hl: hl,
-              worse: w(s.miningLevel, other.miningLevel)),
-          _previewRow(l10n.previewColFishing, '${s.fishingLevel}',
-              changed: s.fishingLevel != other.fishingLevel,
-              hl: hl,
-              worse: w(s.fishingLevel, other.fishingLevel)),
-          _previewRow(l10n.previewColCombat, '${s.combatLevel}',
-              changed: s.combatLevel != other.combatLevel,
-              hl: hl,
-              worse: w(s.combatLevel, other.combatLevel)),
-          _previewRow(l10n.previewColFriends, '${s.goodFriends}',
-              changed: s.goodFriends != other.goodFriends,
-              hl: hl,
-              worse: w(s.goodFriends, other.goodFriends)),
-          _previewRow(l10n.previewColMonsters, SaveFile.formatCount(s.monstersKilled),
-              changed: s.monstersKilled != other.monstersKilled,
-              hl: hl,
-              worse: w(s.monstersKilled, other.monstersKilled)),
-          _previewRow(l10n.previewColFaints, '${s.timesUnconscious}',
-              changed: s.timesUnconscious != other.timesUnconscious,
-              hl: hl,
-              worse: wi(s.timesUnconscious, other.timesUnconscious)),
-          _previewRow(l10n.previewColMine, mine(s),
-              changed: s.deepestMineLevel != other.deepestMineLevel,
-              hl: hl,
-              worse: w(s.deepestMineLevel, other.deepestMineLevel)),
+          _previewRow(
+            l10n.previewColDayYear,
+            l10n.statDayYear(s.dayOfMonth, s.year),
+            changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,
+            hl: hl,
+            worse: w(
+              s.year * 28 + s.dayOfMonth,
+              other.year * 28 + other.dayOfMonth,
+            ),
+          ),
+          _previewRow(
+            l10n.previewColTime,
+            s.playtimeLabel,
+            changed: s.millisecondsPlayed != other.millisecondsPlayed,
+            hl: hl,
+            worse: w(s.millisecondsPlayed, other.millisecondsPlayed),
+          ),
+          _previewRow(
+            l10n.previewColMoney,
+            s.currentMoneyLabel,
+            changed: s.currentMoney != other.currentMoney,
+            hl: hl,
+            worse: w(s.currentMoney, other.currentMoney),
+          ),
+          _previewRow(
+            l10n.previewColTotal,
+            s.totalMoneyLabel,
+            changed: s.totalMoneyEarned != other.totalMoneyEarned,
+            hl: hl,
+            worse: w(s.totalMoneyEarned, other.totalMoneyEarned),
+          ),
+          _previewRow(
+            l10n.previewColFarming,
+            '${s.farmingLevel}',
+            changed: s.farmingLevel != other.farmingLevel,
+            hl: hl,
+            worse: w(s.farmingLevel, other.farmingLevel),
+          ),
+          _previewRow(
+            l10n.previewColForaging,
+            '${s.foragingLevel}',
+            changed: s.foragingLevel != other.foragingLevel,
+            hl: hl,
+            worse: w(s.foragingLevel, other.foragingLevel),
+          ),
+          _previewRow(
+            l10n.previewColMining,
+            '${s.miningLevel}',
+            changed: s.miningLevel != other.miningLevel,
+            hl: hl,
+            worse: w(s.miningLevel, other.miningLevel),
+          ),
+          _previewRow(
+            l10n.previewColFishing,
+            '${s.fishingLevel}',
+            changed: s.fishingLevel != other.fishingLevel,
+            hl: hl,
+            worse: w(s.fishingLevel, other.fishingLevel),
+          ),
+          _previewRow(
+            l10n.previewColCombat,
+            '${s.combatLevel}',
+            changed: s.combatLevel != other.combatLevel,
+            hl: hl,
+            worse: w(s.combatLevel, other.combatLevel),
+          ),
+          _previewRow(
+            l10n.previewColFriends,
+            '${s.goodFriends}',
+            changed: s.goodFriends != other.goodFriends,
+            hl: hl,
+            worse: w(s.goodFriends, other.goodFriends),
+          ),
+          _previewRow(
+            l10n.previewColMonsters,
+            SaveFile.formatCount(s.monstersKilled),
+            changed: s.monstersKilled != other.monstersKilled,
+            hl: hl,
+            worse: w(s.monstersKilled, other.monstersKilled),
+          ),
+          _previewRow(
+            l10n.previewColFaints,
+            '${s.timesUnconscious}',
+            changed: s.timesUnconscious != other.timesUnconscious,
+            hl: hl,
+            worse: wi(s.timesUnconscious, other.timesUnconscious),
+          ),
+          _previewRow(
+            l10n.previewColMine,
+            mine(s),
+            changed: s.deepestMineLevel != other.deepestMineLevel,
+            hl: hl,
+            worse: w(s.deepestMineLevel, other.deepestMineLevel),
+          ),
         ],
       ),
     );
   }
 
-  Widget _previewRow(String label, String value,
-      {required bool changed, required Color hl, bool? worse}) {
+  Widget _previewRow(
+    String label,
+    String value, {
+    required bool changed,
+    required Color hl,
+    bool? worse,
+  }) {
     const kRed = Color(0xFFE05C5C);
     final pillColor = (changed && worse == true) ? kRed : hl;
     return Padding(
@@ -2496,11 +3523,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label.toUpperCase(),
-              style: GoogleFonts.firaCode(
-                  fontSize: 7.5,
-                  letterSpacing: 0.6,
-                  color: AppColors.textFaint)),
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.firaCode(
+              fontSize: 7.5,
+              letterSpacing: 0.6,
+              color: AppColors.textFaint,
+            ),
+          ),
           const SizedBox(height: 1),
           if (changed)
             Container(
@@ -2510,18 +3540,24 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: pillColor.withValues(alpha: 0.32)),
               ),
-              child: Text(value,
-                  style: GoogleFonts.firaCode(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: pillColor)),
+              child: Text(
+                value,
+                style: GoogleFonts.firaCode(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: pillColor,
+                ),
+              ),
             )
           else
-            Text(value,
-                style: GoogleFonts.firaCode(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withValues(alpha: 0.75))),
+            Text(
+              value,
+              style: GoogleFonts.firaCode(
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+                color: Colors.white.withValues(alpha: 0.75),
+              ),
+            ),
         ],
       ),
     );
@@ -2584,49 +3620,49 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         return KeyEventResult.ignored;
       },
       child: Scaffold(
-      backgroundColor: AppColors.bg,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: ValueListenableBuilder<SeasonState>(
-              valueListenable: SeasonController.instance.season,
-              builder: (_, season, _) => ValleyCanvasWidget(season: season),
+        backgroundColor: AppColors.bg,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: ValueListenableBuilder<SeasonState>(
+                valueListenable: SeasonController.instance.season,
+                builder: (_, season, _) => ValleyCanvasWidget(season: season),
+              ),
             ),
-          ),
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.40, 1.0],
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.28),
-                    Colors.black.withValues(alpha: 0.62),
-                  ],
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.40, 1.0],
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.28),
+                      Colors.black.withValues(alpha: 0.62),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                SavesTopBar(
-                  onBack: () => Navigator.pop(context),
-                  onSettings: _openSettings,
-                  onRefresh: _refresh,
-                  refreshing: _refreshing,
-                  canLaunchGame: _gameCanLaunch,
-                  onLaunch: _handleLaunchGame,
-                  onImport: _handleImport,
-                ),
-                Expanded(child: _buildBody()),
-              ],
+            SafeArea(
+              child: Column(
+                children: [
+                  SavesTopBar(
+                    onBack: () => Navigator.pop(context),
+                    onSettings: _openSettings,
+                    onRefresh: _refresh,
+                    refreshing: _refreshing,
+                    canLaunchGame: _gameCanLaunch,
+                    onLaunch: _handleLaunchGame,
+                    onImport: _handleImport,
+                  ),
+                  Expanded(child: _buildBody()),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -2655,10 +3691,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     // verdad en la carpeta Saves del juego (necesario para cargarlo), solo
     // se oculta de esta lista.
     final sharedFolderNames = _sharedEntries.map((e) => e.folderName).toSet();
-    final visibleEntries =
-        _entries.where((e) => !sharedFolderNames.contains(e.folderName)).toList();
+    final visibleEntries = _entries
+        .where((e) => !sharedFolderNames.contains(e.folderName))
+        .toList();
     final entriesEmpty = visibleEntries.isEmpty;
-    final sharedEmpty = !showShared || (_sharedEntries.isEmpty && !_sharedLoading);
+    final sharedEmpty =
+        !showShared || (_sharedEntries.isEmpty && !_sharedLoading);
     if (entriesEmpty && sharedEmpty) return _buildEmpty();
 
     final itemCount = visibleEntries.length + (showShared ? 1 : 0);
@@ -2702,34 +3740,41 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       busy: _busy.contains(visibleEntries[i].folderName),
                       onUpload: () => _handleUpload(visibleEntries[i]),
                       onDownload: () => _handleDownload(visibleEntries[i]),
-                      // Borrado unificado: da igual desde qué cara se pulse
-                      // "Eliminar" — el mismo diálogo detecta qué ubicaciones
-                      // existen y ofrece solo esas (feedback 2026-07-12).
-                      onDeleteFromDrive: (visibleEntries[i].driveFolderId != null &&
-                                  widget.drive != null) ||
-                              visibleEntries[i].local != null
-                          ? () => _handleDelete(visibleEntries[i])
+                      onDeleteFromDrive:
+                          visibleEntries[i].driveFolderId != null &&
+                              widget.drive != null
+                          ? () => _handleDelete(
+                              visibleEntries[i],
+                              location: _DeleteChoice.driveOnly,
+                            )
                           : null,
-                      onDeleteLocal: (visibleEntries[i].driveFolderId != null &&
-                                  widget.drive != null) ||
-                              visibleEntries[i].local != null
-                          ? () => _handleDelete(visibleEntries[i])
+                      onDeleteLocal: visibleEntries[i].local != null
+                          ? () => _handleDelete(
+                              visibleEntries[i],
+                              location: _DeleteChoice.localOnly,
+                            )
                           : null,
+                      onManageCopies: () => _handleDelete(visibleEntries[i]),
                       // F3 — v1 solo Windows; el gate de plataforma vive aquí,
                       // en un único sitio (ver plan.md §Flujo UI).
-                      onMakeHost: Platform.isWindows && visibleEntries[i].local != null
-                          ? (target) => _handleMakeHost(visibleEntries[i], target)
+                      onMakeHost:
+                          Platform.isWindows && visibleEntries[i].local != null
+                          ? (target) =>
+                                _handleMakeHost(visibleEntries[i], target)
                           : null,
                       onExport: visibleEntries[i].local != null
                           ? () => _handleExport(visibleEntries[i])
                           : null,
-                      onShare: widget.drive != null && visibleEntries[i].driveFolderId != null
+                      onShare:
+                          widget.drive != null &&
+                              visibleEntries[i].driveFolderId != null
                           ? () => _handleShare(visibleEntries[i])
                           : null,
-                      onBackups: (_backupCounts[visibleEntries[i].folderName] ?? 0) > 0
+                      onBackups: visibleEntries[i].local != null
                           ? () => _handleOpenBackups(visibleEntries[i])
                           : null,
-                      backupCount: _backupCounts[visibleEntries[i].folderName] ?? 0,
+                      backupCount:
+                          _backupCounts[visibleEntries[i].folderName] ?? 0,
                     ),
                   ],
                 ),
@@ -2749,32 +3794,103 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (_entries.isNotEmpty) const SizedBox(height: 6),
-        Row(
+        // Título y botones en líneas separadas — todo en una sola fila
+        // desbordaba en ventanas estrechas (feedback 2026-07-12, captura
+        // con "RIGHT OVERFLOWED").
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE07040).withValues(alpha: 0.12),
+              border: Border.all(
+                color: const Color(0xFFE07040).withValues(alpha: 0.4),
+              ),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.link_rounded,
+                  size: 12,
+                  color: Color(0xFFE07040),
+                ),
+                const SizedBox(width: 5),
+                Flexible(
+                  child: Text(
+                    l10n.sharedWithMeTitle.toUpperCase(),
+                    style: GoogleFonts.firaCode(
+                      fontSize: 10.5,
+                      letterSpacing: 1.2,
+                      color: const Color(0xFFE07040),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
           children: [
-            Expanded(
-              child: Text(
-                l10n.sharedWithMeTitle.toUpperCase(),
-                style: GoogleFonts.firaCode(
-                  fontSize: 10.5,
-                  letterSpacing: 1.2,
-                  color: Colors.white.withValues(alpha: 0.4),
+            if (_sharedEntries.isNotEmpty)
+              PressableScale(
+                onTap: _showManageSharedDialog,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.25),
+                    ),
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.people_alt_outlined,
+                        size: 12,
+                        color: Colors.white.withValues(alpha: 0.65),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        l10n.sharedManageButton,
+                        style: GoogleFonts.firaCode(
+                          fontSize: 10,
+                          color: Colors.white.withValues(alpha: 0.65),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            GestureDetector(
+            PressableScale(
               onTap: _handleAddShared,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFE0B850).withValues(alpha: 0.16),
-                  border:
-                      Border.all(color: const Color(0xFFE0B850).withValues(alpha: 0.5)),
+                  border: Border.all(
+                    color: const Color(0xFFE0B850).withValues(alpha: 0.5),
+                  ),
                   borderRadius: BorderRadius.circular(7),
                 ),
                 child: Text(
                   '+ ${l10n.sharedWithMeAdd}',
                   style: GoogleFonts.firaCode(
-                      fontSize: 10.5, color: const Color(0xFFE0B850)),
+                    fontSize: 10.5,
+                    color: const Color(0xFFE0B850),
+                  ),
                 ),
               ),
             ),
@@ -2798,7 +3914,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             child: Text(
               l10n.sharedWithMeEmpty,
               style: GoogleFonts.firaCode(
-                  fontSize: 12, color: Colors.white.withValues(alpha: 0.35)),
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
             ),
           )
         else
@@ -2826,9 +3944,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               onUploadToOwnDrive: widget.drive != null && e.localMatch != null
                   ? () => _handleUpload(e.asOwnEntry)
                   : null,
-              onSyncBoth: widget.drive != null &&
-                      e.localMatch != null &&
-                      e.canSync
+              // Caso inverso: jugaste en otro equipo y subiste a tu Drive
+              // — tráelo de vuelta aquí. Solo si ya hay algo que bajar.
+              onDownloadFromOwnDrive: e.ownDriveStats != null
+                  ? () => _handleDownload(e.asOwnEntry)
+                  : null,
+              onSyncBoth:
+                  widget.drive != null && e.localMatch != null && e.canSync
                   ? () async {
                       await _handleUpload(e.asOwnEntry);
                       if (mounted) await _handleSyncShared(e);
@@ -2840,10 +3962,34 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               onExport: e.localMatch != null
                   ? () => _handleExport(e.asEntry)
                   : null,
-              onBackups: (_backupCounts[e.folderName] ?? 0) > 0
-                  ? () => _handleOpenBackups(e.asEntry)
+              onBackups: e.localMatch != null || e.driveStats != null
+                  ? () => _handleOpenBackups(
+                      e.asEntry,
+                      sharedFolderId: e.folderId,
+                      canEditShared: e.canSync,
+                    )
                   : null,
               backupCount: _backupCounts[e.folderName] ?? 0,
+              // Solo puede borrar TU copia local o TU Drive. El Drive del
+              // dueño nunca se expone a estas callbacks.
+              onDeleteLocal: e.localMatch != null
+                  ? () => _handleDelete(
+                      e.asOwnEntry,
+                      location: _DeleteChoice.localOnly,
+                    )
+                  : null,
+              onDeleteFromOwnDrive:
+                  e.ownDriveStats != null && e.ownDriveFolderId != null
+                  ? () => _handleDelete(
+                      e.asOwnEntry,
+                      location: _DeleteChoice.driveOnly,
+                    )
+                  : null,
+              onManageCopies:
+                  e.localMatch != null ||
+                      (e.ownDriveStats != null && e.ownDriveFolderId != null)
+                  ? () => _handleDelete(e.asOwnEntry)
+                  : null,
             ),
             const SizedBox(height: 14),
           ],
@@ -2854,12 +4000,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Widget _spinner() => _seasonalLoader();
 
   Widget _seasonalLoader() => ValueListenableBuilder<SeasonState>(
-        valueListenable: SeasonController.instance.season,
-        builder: (_, season, _) => SeasonalLoader(
-          key: ValueKey(season),
-          season: season,
-        ),
-      );
+    valueListenable: SeasonController.instance.season,
+    builder: (_, season, _) =>
+        SeasonalLoader(key: ValueKey(season), season: season),
+  );
 
   Widget _buildEmpty() {
     final l10n = AppLocalizations.of(context)!;
@@ -2871,7 +4015,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           const SizedBox(height: 12),
           Text(
             l10n.emptyNoSaves,
-            style: GoogleFonts.firaCode(fontSize: 13, color: AppColors.textFaint),
+            style: GoogleFonts.firaCode(
+              fontSize: 13,
+              color: AppColors.textFaint,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
@@ -2990,29 +4137,35 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(badge,
-                            style: GoogleFonts.firaCode(
-                              fontSize: 8.5,
-                              letterSpacing: 1.1,
-                              fontWeight: FontWeight.w700,
-                              color: recommended ? season : AppColors.textFaint,
-                            )),
+                        Text(
+                          badge,
+                          style: GoogleFonts.firaCode(
+                            fontSize: 8.5,
+                            letterSpacing: 1.1,
+                            fontWeight: FontWeight.w700,
+                            color: recommended ? season : AppColors.textFaint,
+                          ),
+                        ),
                         const SizedBox(height: 4),
-                        Text(title,
-                            style: GoogleFonts.firaCode(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: recommended ? season : AppColors.text,
-                            )),
+                        Text(
+                          title,
+                          style: GoogleFonts.firaCode(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: recommended ? season : AppColors.text,
+                          ),
+                        ),
                         const SizedBox(height: 5),
-                        Text(desc,
-                            style: GoogleFonts.firaCode(
-                              fontSize: 12,
-                              height: 1.5,
-                              color: recommended
-                                  ? Colors.white.withValues(alpha: 0.82)
-                                  : AppColors.textFaint,
-                            )),
+                        Text(
+                          desc,
+                          style: GoogleFonts.firaCode(
+                            fontSize: 12,
+                            height: 1.5,
+                            color: recommended
+                                ? Colors.white.withValues(alpha: 0.82)
+                                : AppColors.textFaint,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -3027,11 +4180,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       border: recommended
                           ? null
                           : Border.all(
-                              color: season.withValues(alpha: 0.30), width: 2),
+                              color: season.withValues(alpha: 0.30),
+                              width: 2,
+                            ),
                     ),
                     child: recommended
-                        ? const Icon(Icons.check_rounded,
-                            size: 13, color: Colors.black)
+                        ? const Icon(
+                            Icons.check_rounded,
+                            size: 13,
+                            color: Colors.black,
+                          )
                         : null,
                   ),
                 ],
@@ -3056,8 +4214,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           onTap: () => Navigator.push(
             context,
             AppPageRoute(
-                builder: (_) =>
-                    const HowItWorksScreen(scrollToSection: 'shizuku')),
+              builder: (_) =>
+                  const HowItWorksScreen(scrollToSection: 'shizuku'),
+            ),
           ),
           child: AnimatedScale(
             scale: pressed ? 0.97 : 1.0,
@@ -3075,8 +4234,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.help_outline_rounded,
-                      size: 15, color: Colors.white.withValues(alpha: 0.90)),
+                  Icon(
+                    Icons.help_outline_rounded,
+                    size: 15,
+                    color: Colors.white.withValues(alpha: 0.90),
+                  ),
                   const SizedBox(width: 7),
                   Text(
                     AppLocalizations.of(context)!.howItWorks,
@@ -3094,6 +4256,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       ),
     );
   }
+
   Widget _buildShizukuGate() {
     final l10n = AppLocalizations.of(context)!;
     final running = _shizukuRunning == true;
@@ -3133,7 +4296,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               // integra en la fila de permiso cuando Shizuku ya está activo.
               _statusRow(
                 l10n.shizukuStatusLabel,
-                running ? l10n.shizukuStatusRunning : l10n.shizukuStatusNotDetected,
+                running
+                    ? l10n.shizukuStatusRunning
+                    : l10n.shizukuStatusNotDetected,
                 running,
               ),
               _statusRow(
@@ -3144,7 +4309,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 _shizukuGranted,
                 action: (running && !_shizukuGranted)
                     ? _miniGateButton(
-                        l10n.shizukuGrant, _requestShizukuPermission, _seasonAccent)
+                        l10n.shizukuGrant,
+                        _requestShizukuPermission,
+                        _seasonAccent,
+                      )
                     : null,
               ),
               const SizedBox(height: 12),
@@ -3157,7 +4325,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   ).withValues(alpha: 0.45),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: _seasonAccent.withValues(alpha: 0.16)),
+                    color: _seasonAccent.withValues(alpha: 0.16),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -3172,26 +4341,57 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _guideStep('1', l10n.shizukuStep1Title,
-                        l10n.shizukuStep1DescFull,
-                        action: Wrap(spacing: 8, runSpacing: 8, children: [
-                          _smallButton(l10n.btnPlayStore, _openShizukuPlayStore),
+                    _guideStep(
+                      '1',
+                      l10n.shizukuStep1Title,
+                      l10n.shizukuStep1DescFull,
+                      action: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _smallButton(
+                            l10n.btnPlayStore,
+                            _openShizukuPlayStore,
+                          ),
                           _smallButton(l10n.btnApkGithub, _openShizukuGithub),
-                        ])),
-                    _guideStep('2', l10n.shizukuStep2TitleFull,
-                        l10n.shizukuStep2DescFull),
-                    _guideStep('3', l10n.shizukuStep3TitleFull,
-                        l10n.shizukuStep3DescFull,
-                        action: _smallButton(l10n.btnOpenAndHighlight, _openWirelessDebug,
-                            icon: Icons.open_in_new_rounded)),
-                    _guideStep('4', l10n.shizukuStep4Title,
-                        l10n.shizukuStep4Desc,
-                        action: _smallButton(l10n.btnOpenShizuku, _openShizukuApp,
-                            icon: Icons.open_in_new_rounded)),
-                    _guideStep('5', l10n.shizukuStep5Title,
-                        l10n.shizukuStep5Desc,
-                        action: _smallButton(l10n.btnShizukuAppInfo,
-                            _openShizukuAppInfo, icon: Icons.open_in_new_rounded)),
+                        ],
+                      ),
+                    ),
+                    _guideStep(
+                      '2',
+                      l10n.shizukuStep2TitleFull,
+                      l10n.shizukuStep2DescFull,
+                    ),
+                    _guideStep(
+                      '3',
+                      l10n.shizukuStep3TitleFull,
+                      l10n.shizukuStep3DescFull,
+                      action: _smallButton(
+                        l10n.btnOpenAndHighlight,
+                        _openWirelessDebug,
+                        icon: Icons.open_in_new_rounded,
+                      ),
+                    ),
+                    _guideStep(
+                      '4',
+                      l10n.shizukuStep4Title,
+                      l10n.shizukuStep4Desc,
+                      action: _smallButton(
+                        l10n.btnOpenShizuku,
+                        _openShizukuApp,
+                        icon: Icons.open_in_new_rounded,
+                      ),
+                    ),
+                    _guideStep(
+                      '5',
+                      l10n.shizukuStep5Title,
+                      l10n.shizukuStep5Desc,
+                      action: _smallButton(
+                        l10n.btnShizukuAppInfo,
+                        _openShizukuAppInfo,
+                        icon: Icons.open_in_new_rounded,
+                      ),
+                    ),
                     _guideStep(
                       '6',
                       l10n.shizukuStep3Title,
@@ -3200,16 +4400,25 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                           : l10n.shizukuStep6DescWaiting,
                       action: running
                           ? _gateButton(
-                              l10n.btnGrantPermission, _requestShizukuPermission,
-                              filled: true)
+                              l10n.btnGrantPermission,
+                              _requestShizukuPermission,
+                              filled: true,
+                            )
                           : null,
                     ),
                     const SizedBox(height: 16),
                     if (!running)
-                      _gateButton(l10n.btnCheckShizuku, _checkShizuku,
-                          filled: true),
+                      _gateButton(
+                        l10n.btnCheckShizuku,
+                        _checkShizuku,
+                        filled: true,
+                      ),
                     const SizedBox(height: 10),
-                    _gateButton(l10n.bridgeChangeMode, _resetMode, filled: false),
+                    _gateButton(
+                      l10n.bridgeChangeMode,
+                      _resetMode,
+                      filled: false,
+                    ),
                   ],
                 ),
               ),
@@ -3222,7 +4431,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  Widget _statusRow(String label, String sublabel, bool done, {Widget? action}) {
+  Widget _statusRow(
+    String label,
+    String sublabel,
+    bool done, {
+    Widget? action,
+  }) {
     // Hecho → verde de estado real. Pendiente → acento de la estación.
     final tone = done ? AppColors.statusOk : _seasonAccent;
     return Container(
@@ -3350,8 +4564,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             decoration: BoxDecoration(
               color: _seasonAccent.withValues(alpha: 0.14),
               shape: BoxShape.circle,
-              border:
-                  Border.all(color: _seasonAccent.withValues(alpha: 0.35)),
+              border: Border.all(color: _seasonAccent.withValues(alpha: 0.35)),
             ),
             child: Text(
               n,
@@ -3387,10 +4600,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     color: Colors.white.withValues(alpha: 0.88),
                   ),
                 ),
-                if (action != null) ...[
-                  const SizedBox(height: 9),
-                  action,
-                ],
+                if (action != null) ...[const SizedBox(height: 9), action],
               ],
             ),
           ),
@@ -3467,9 +4677,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               padding: const EdgeInsets.symmetric(vertical: 14),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: filled ? tone.withValues(alpha: 0.14) : Colors.transparent,
+                color: filled
+                    ? tone.withValues(alpha: 0.14)
+                    : Colors.transparent,
                 border: Border.all(
-                    color: tone.withValues(alpha: filled ? 0.55 : 0.28)),
+                  color: tone.withValues(alpha: filled ? 0.55 : 0.28),
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

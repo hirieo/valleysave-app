@@ -408,7 +408,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardDetailDeleteLocal => 'Eliminar de este equipo';
 
   @override
-  String get cardDetailDeleteRemote => 'Eliminar de Drive';
+  String get cardDetailDeleteRemote => 'Borrar de mi Drive';
 
   @override
   String get cardCloseBarrier => 'Cerrar';
@@ -547,11 +547,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sharedWithMeDownload => 'Descargar';
 
   @override
-  String get sharedWithMeRemove => 'Quitar de la lista';
+  String get sharedWithMeRemove => 'Desconectar';
 
   @override
   String sharedWithMeRemoveConfirm(String email) {
-    return '¿Quitar de tu lista? Esto solo afecta a tu dispositivo — la partida sigue en el Drive de $email.';
+    return 'Ya no sincronizarás con el Drive de $email, pero puedes volver a añadirla cuando quieras — sigue compartida. Tu copia local se queda como una partida coop normal.';
+  }
+
+  @override
+  String sharedLeaveConfirm(Object email) {
+    return 'Perderás el acceso a esta partida de verdad. No podrás volver a añadirla salvo que $email vuelva a compartirla contigo. Tu copia local se queda como una partida coop normal.';
+  }
+
+  @override
+  String get sharedManageButton => 'Administrar';
+
+  @override
+  String get sharedManageDialogTitle => 'Gestionar compartidas';
+
+  @override
+  String get sharedManageDialogHint =>
+      'Aquí puedes salir de verdad de una partida compartida.';
+
+  @override
+  String get sharedLeaveButton => 'Salir del compartido';
+
+  @override
+  String sharedLeaveSuccess(Object email) {
+    return 'Has salido del compartido de $email.';
   }
 
   @override
@@ -566,6 +589,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sharedWithMeUploadOwn => 'Subir a mi Drive';
 
   @override
+  String get sharedDownloadOwn => 'Bajar de mi Drive';
+
+  @override
+  String get sharedStatusOwnDriveAhead => 'Tu Drive va por delante — bájalo';
+
+  @override
   String get sharedSyncBoth => 'Sincronizar ambos';
 
   @override
@@ -573,7 +602,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String sharedSideOwnerDrive(String email) {
-    return 'DRIVE DE $email';
+    return 'DRIVE EN $email';
   }
 
   @override
@@ -693,6 +722,74 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get backupsCreate => 'Crear respaldo local';
+
+  @override
+  String get backupsCreateLocalHint =>
+      'Los respaldos se crean primero en este equipo. Después podrás subirlos a Drive.';
+
+  @override
+  String get backupsCreateOk => 'Respaldo creado.';
+
+  @override
+  String backupsCreateErr(String error) {
+    return 'No se pudo crear el respaldo: $error';
+  }
+
+  @override
+  String get backupsDownload => 'Descargar';
+
+  @override
+  String get backupsDownloadOk => 'Respaldo descargado en este equipo.';
+
+  @override
+  String backupsDownloadErr(String error) {
+    return 'No se pudo descargar el respaldo: $error';
+  }
+
+  @override
+  String get backupsCopyOwn => 'Copiar a mi Drive';
+
+  @override
+  String get backupsUploadOwn => 'A mi Drive';
+
+  @override
+  String get backupsUploadShared => 'Al Drive compartido';
+
+  @override
+  String get backupsUploadOk => 'Respaldo subido.';
+
+  @override
+  String backupsUploadErr(String error) {
+    return 'No se pudo subir el respaldo: $error';
+  }
+
+  @override
+  String get backupsLocationLocal => 'Este equipo';
+
+  @override
+  String get backupsLocationOwnDrive => 'Mi Drive';
+
+  @override
+  String get backupsLocationSharedDrive => 'Drive compartido';
+
+  @override
+  String get backupsDeleteChooseBody =>
+      'Elige exactamente dónde borrarlo. Solo aparecen las ubicaciones donde existe este respaldo.';
+
+  @override
+  String get backupsDeleteLocalOnly => 'Solo de este equipo';
+
+  @override
+  String get backupsDeleteOwnOnly => 'Solo de mi Drive';
+
+  @override
+  String get backupsDeleteSharedOnly => 'Solo del Drive compartido';
+
+  @override
+  String get backupsDeleteAll => 'De todas las copias';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '¿Eliminar $farmName?';
   }
@@ -702,13 +799,59 @@ class AppLocalizationsEs extends AppLocalizations {
       'Elige de dónde. La copia de este equipo se borra para siempre; la de Drive va a la papelera (30 días).';
 
   @override
+  String deleteDriveContextTitle(String farmName) {
+    return '¿Eliminar $farmName de Drive?';
+  }
+
+  @override
+  String get deleteDriveContextBody =>
+      'La copia de Drive irá a la papelera, donde podrás recuperarla durante 30 días.';
+
+  @override
+  String get deleteDriveLocalKept =>
+      'La copia de este equipo se mantendrá sin cambios.';
+
+  @override
+  String deleteLocalContextTitle(String farmName) {
+    return '¿Eliminar $farmName de este equipo?';
+  }
+
+  @override
+  String get deleteLocalContextBody =>
+      'La copia de este equipo se borrará para siempre.';
+
+  @override
+  String deleteLocalDriveCurrent(String date) {
+    return 'Tu copia de Drive está actualizada ($date) y seguirá disponible.';
+  }
+
+  @override
+  String deleteLocalDriveAhead(String date) {
+    return 'Tu copia de Drive es más reciente ($date) y seguirá disponible.';
+  }
+
+  @override
+  String deleteLocalDriveOlder(String driveDate, String localDate) {
+    return 'Tu copia de Drive es anterior ($driveDate); este equipo está en $localDate.';
+  }
+
+  @override
+  String deleteLocalBackupAvailable(int count) {
+    return 'Hay $count respaldos locales disponibles por si necesitas una copia anterior.';
+  }
+
+  @override
+  String get deleteLocalNoRecovery =>
+      'No hay una copia en Drive ni un respaldo local desde el que recuperar esta partida.';
+
+  @override
   String get deleteOptionLocalOnly => 'Solo de este equipo';
 
   @override
-  String get deleteOptionDriveOnly => 'Solo de Drive';
+  String get deleteOptionDriveOnly => 'Solo de mi Drive';
 
   @override
-  String get deleteOptionBoth => 'De ambas (equipo + Drive)';
+  String get deleteOptionBoth => 'De ambas copias';
 
   @override
   String get viewPlayersHint => 'Ver jugadores';

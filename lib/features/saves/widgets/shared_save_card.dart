@@ -656,11 +656,16 @@ class _FooterAction extends StatefulWidget {
 
 class _FooterActionState extends State<_FooterAction> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
     final enabled = widget.onTap != null;
-    return GestureDetector(
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
+      onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+      child: GestureDetector(
       onTap: enabled ? widget.onTap : null,
       onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
       onTapUp: (_) => setState(() => _pressed = false),
@@ -669,12 +674,16 @@ class _FooterActionState extends State<_FooterAction> {
         scale: _pressed ? 0.96 : 1.0,
         duration: const Duration(milliseconds: 140),
         curve: const Cubic(0.23, 1, 0.32, 1),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOut,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha: 0.16),
-            border: Border.all(color: widget.color.withValues(alpha: 0.5)),
+            color: widget.color.withValues(alpha: _hovered ? 0.24 : 0.16),
+            border: Border.all(
+              color: widget.color.withValues(alpha: _hovered ? 0.75 : 0.5),
+            ),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -693,6 +702,7 @@ class _FooterActionState extends State<_FooterAction> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

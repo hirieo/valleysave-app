@@ -93,8 +93,20 @@
   "updateDownloading": "Descargando actualización…",
   "updateError": "Error — toca para reintentar",
   "disconnectTitle": "¿Desconectar Drive?",
-  "disconnectBody": "Tus saves en Drive no se borran. Podrás reconectarte cuando quieras.",
+  "disconnectBody": "Se cerrará la sesión de {email}. Tus saves en Drive no se borran, puedes reconectar cuando quieras.",
+  "@disconnectBody": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
   "disconnectButton": "Desconectar Drive",
+  "disconnectButtonEmail": "Desconectar de {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "connectedAsPrefix": "Conectado en",
   "languageTileLabel": "Idioma",
   "languageDialogTitle": "Idioma de la app",
   "searchHint": "Buscar…",
@@ -120,7 +132,7 @@
   "cardDetailDownload": "Descargar partida",
   "cardDetailDeleteLabel": "Eliminar",
   "cardDetailDeleteLocal": "Eliminar de este equipo",
-  "cardDetailDeleteRemote": "Eliminar de Drive",
+  "cardDetailDeleteRemote": "Borrar de mi Drive",
   "cardCloseBarrier": "Cerrar",
   "statDayYear": "Día {day} · Año {year}",
   "statDayOnly": "Día {day}",
@@ -272,7 +284,9 @@
   "snackDriveError": "Drive: {error}",
   "@snackDriveError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "dlgDeleteLocalWarning": "⚠️ Si no la has subido a Drive, se perderá para siempre. No hay recuperación.",
@@ -283,7 +297,9 @@
   "dlgBridgeCopyDesc": "La partida está lista. Con tu app de Archivos, copia la carpeta \"{saveName}\" y pégala en la carpeta de Stardew.",
   "@dlgBridgeCopyDesc": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "labelFrom": "Desde",
@@ -291,29 +307,45 @@
   "dlgDownloadNewDesc": "Se copiará \"{saveName}\" (Día {day}, {playtime}) a este equipo.",
   "@dlgDownloadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgDownloadOverwrite": "Esto SOBRESCRIBE tu save local de \"{saveName}\".",
   "@dlgDownloadOverwrite": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadNewDesc": "Se subirá \"{saveName}\" (Día {day}, {playtime}) a tu Drive.",
   "@dlgUploadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadOverwriteDrive": "Esto SOBRESCRIBE la versión en Drive de \"{saveName}\".",
   "@dlgUploadOverwriteDrive": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "pathLabelFromStardew": "Desde (Stardew)",
@@ -359,8 +391,12 @@
   "saveDateLabel": "{season} · Año {year}",
   "@saveDateLabel": {
     "placeholders": {
-      "season": { "type": "String" },
-      "year": { "type": "int" }
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "petCat": "Gato",
@@ -372,7 +408,9 @@
   "houseLevelN": "Nv. {level}",
   "@houseLevelN": {
     "placeholders": {
-      "level": { "type": "int" }
+      "level": {
+        "type": "int"
+      }
     }
   },
   "tooltipLaunchGame": "Jugar",
@@ -385,5 +423,221 @@
   "settingsGameExeNotFound": "No encontrado automáticamente",
   "settingsGameExeBrowse": "Buscar…",
   "settingsGameExeSaved": "Ruta guardada",
-  "snackLaunchError": "No se pudo abrir el juego"
+  "snackLaunchError": "No se pudo abrir el juego",
+  "makeHostAction": "HACER ANFITRIÓN",
+  "makeHostExperimental": "EXPERIMENTAL",
+  "makeHostDialogTitle": "Cambiar anfitrión",
+  "makeHostDialogIntro": "{playerName} pasará a ser el anfitrión de {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "makeHostNewCopyNote": "Se crea una partida nueva. Después decides qué hacer con la original.",
+  "makeHostMoveCount": "{count, plural, one{Se moverá 1 objeto de la granja para hacer sitio a la casa. Nada se borra.} other{Se moverán {count} objetos de la granja para hacer sitio a la casa. Nada se borra.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "makeHostHouseWarning": "La casa del nuevo anfitrión se verá como la casa grande del juego. La estética de cabaña no está soportada sin mods.",
+  "makeHostConfirmButton": "Hacer anfitrión",
+  "makeHostSuccess": "Nueva partida creada: {playerName} es ahora el anfitrión.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "¿Borrar la partida original de este equipo?",
+  "makeHostDeleteOriginalBody": "La nueva partida ya está lista. Sube la original a tu Drive como respaldo (podrás redescargarla luego) o borra solo la copia local.",
+  "makeHostDeleteWithoutUpload": "Borrar sin subir",
+  "makeHostDeleteOriginalUploadBody": "La partida original se subirá primero a tu Drive como respaldo y luego se borrará la copia local de este equipo.",
+  "makeHostDeleteOriginalNoBackupBody": "Sin conexión con Drive: no quedará ningún respaldo. Solo se borrará la copia local de este equipo.",
+  "makeHostUploadAndDelete": "Subir y borrar",
+  "hostSwapErrInvalid": "Esta partida tiene una estructura inesperada. No se cambió nada.",
+  "hostSwapErrNoSpace": "No hay espacio libre en la granja para reubicar objetos. No se cambió nada.",
+  "hostSwapErrWrite": "No se pudo escribir la partida nueva (disco/permisos). No se cambió nada.",
+  "hostSwapErrValidation": "La verificación de la partida nueva falló, así que se descartó. La original está intacta.",
+  "exportAction": "Exportar",
+  "exportSuccess": "Partida exportada.",
+  "exportError": "No se pudo exportar la partida: {error}",
+  "importAction": "Importar partida",
+  "importSuccess": "Partida de {playerName} importada.",
+  "importErrInvalidZip": "Este archivo no es un zip válido.",
+  "importErrUnsafePath": "Este archivo tiene una estructura insegura y se ha rechazado.",
+  "importErrTooLarge": "Este archivo es demasiado grande para importarlo.",
+  "importErrNotASave": "Este archivo no contiene una partida reconocible.",
+  "importErrWrite": "No se pudo escribir la partida importada (disco/permisos).",
+  "importConflictTitle": "Ya existe una partida con este nombre",
+  "importConflictBody": "Importar reemplazará la copia local existente. No se puede deshacer.",
+  "importConflictConfirm": "Sobrescribir",
+  "shareAction": "Compartir",
+  "shareUploadFirstCta": "Subir primero",
+  "shareDialogTitle": "Compartir partida",
+  "shareEmailPlaceholder": "nombre@ejemplo.com",
+  "shareInfoNote": "Compartir da acceso de ver y descargar. Solo tú puedes editar o borrar tu copia en Drive.",
+  "shareRoleReader": "Solo lectura",
+  "shareRoleWriter": "Permitir sincronizar",
+  "shareInfoNoteCoop": "Solo lectura permite ver y descargar. Permitir sincronizar permite sobrescribir tu copia en Drive — nunca podrán borrarla.",
+  "shareConfirmButton": "Compartir",
+  "shareSuccess": "Compartido con {email}.",
+  "manageAccessTitle": "Personas con acceso",
+  "manageAccessEmpty": "Nadie más tiene acceso todavía.",
+  "manageAccessRoleLabel": "Acceso",
+  "manageAccessRevoke": "Revocar",
+  "manageAccessRevokeConfirm": "¿Quitar el acceso a {email}? Cualquier copia local que ya se haya descargado sigue siendo suya.",
+  "driveOnlyControlsYourCopy": "Compartir controla tu copia en Drive. Si alguien la descarga, esa copia es suya.",
+  "driveOnlyControlsYourCopyCoop": "Sincronizar controla tu copia en Drive — se puede sobrescribir, pero nunca borrar, por quien autorices.",
+  "sharedWithMeTitle": "Compartidas conmigo",
+  "sharedWithMeEmpty": "Nada compartido contigo todavía.",
+  "sharedWithMeAdd": "Añadir save compartido",
+  "sharedWithMeOwnedBy": "Compartida por {email}",
+  "sharedWithMeRoleSync": "Sincroniza",
+  "sharedWithMeRoleRead": "Solo lectura",
+  "sharedWithMeSync": "Sincronizar",
+  "sharedWithMeDownload": "Descargar",
+  "sharedWithMeRemove": "Desconectar",
+  "sharedWithMeRemoveConfirm": "Ya no sincronizarás con el Drive de {email}, pero puedes volver a añadirla cuando quieras — sigue compartida. Tu copia local se queda como una partida coop normal.",
+  "sharedLeaveConfirm": "Perderás el acceso a esta partida de verdad. No podrás volver a añadirla salvo que {email} vuelva a compartirla contigo. Tu copia local se queda como una partida coop normal.",
+  "sharedManageButton": "Administrar",
+  "sharedManageDialogTitle": "Gestionar compartidas",
+  "sharedManageDialogHint": "Aquí puedes salir de verdad de una partida compartida.",
+  "sharedLeaveButton": "Salir del compartido",
+  "sharedLeaveSuccess": "Has salido del compartido de {email}.",
+  "sharedWithMeSyncConfirm": "¿Sobrescribir la copia de {email} en Drive con tu partida local?",
+  "sharedWithMeRevoked": "Ya no tienes acceso",
+  "sharedRevokedDialogBody": "{email} ha dejado de compartir {farmName} contigo. Tu copia local y la de tu Drive se quedan tal cual, ahora en Mis partidas.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {"type": "String"},
+      "farmName": {"type": "String"}
+    }
+  },
+  "sharedRevokedAccept": "Aceptar",
+  "sharedSelfCleanupTitle": "Registro corregido",
+  "sharedSelfCleanupBody": "{farmName} apareció como compartida contigo por error — en realidad es tuya. Se ha corregido, ahora está en Mis partidas.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "sharedWithMeUploadOwn": "Subir a mi Drive",
+  "sharedDownloadOwn": "Bajar de mi Drive",
+  "sharedStatusOwnDriveAhead": "Tu Drive va por delante — bájalo",
+  "sharedSyncBoth": "Sincronizar ambos",
+  "sharedSideMyDrive": "MI DRIVE",
+  "sharedSideOwnerDrive": "DRIVE EN {email}",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedSideDate": "Día {day} · Año {year}",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {"type": "int"},
+      "year": {"type": "int"}
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "Sincronizado con el dueño · sin copia en tu Drive",
+  "sharedStatusAheadNoOwnDrive": "Vas por delante · sin copia en tu Drive",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} va por delante · sin copia en tu Drive",
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedStatusAllSynced": "Sincronizado (local + los dos Drive)",
+  "sharedStatusAheadBoth": "Vas por delante en los dos Drive",
+  "sharedStatusMixed": "Desincronizado — revisa cada Drive",
+  "sharedStatusFullySynced": "Totalmente sincronizado",
+  "sharedStatusSyncedOwn": "Sincronizado Mi Drive",
+  "sharedStatusSyncedOwner": "Sincronizado compartido",
+  "sharedStatusNotCloud": "Solo en este equipo",
+  "sharedStatusOwnerAhead": "Drive en {email} va por delante",
+  "sharedStatusBothAhead": "Los dos Drive van por delante",
+  "sharedStatusLocalMissing": "No está en este dispositivo",
+  "sharedStatusOwnerUnavailable": "No se pudo comprobar Drive en {email}",
+  "sharedStatusWorking": "Sincronizando…",
+  "sharedSideUnavailable": "No se pudo comprobar",
+  "sharedSyncChooseTitle": "¿Dónde quieres sincronizar?",
+  "sharedSyncChooseBody": "Elige qué copias de la nube quieres actualizar con la partida de este dispositivo.",
+  "sharedSyncTargetOwn": "Mi Drive",
+  "sharedSyncTargetOwner": "Drive en {email}",
+  "sharedSyncTargetBoth": "Los dos Drive",
+  "sharedDownloadChooseTitle": "¿Qué copia quieres descargar?",
+  "sharedDownloadChooseBody": "Hay más de una copia por delante. Elige cuál quieres traer a este dispositivo.",
+  "sharedDownloadSourceOwn": "Desde Mi Drive",
+  "sharedDownloadSourceOwner": "Desde Drive en {email}",
+  "sharedWithMePickerTitle": "Añadir save compartido",
+  "sharedPickerEmptyHint": "Aquí aparece lo que otro jugador te comparta desde Drive.",
+  "sharedPickerAddButton": "Añadir",
+  "sharedOriginBadge": "Compartida",
+  "sharedOriginFrom": "de {email}",
+  "swapBackupDialogTitle": "Respaldo creado",
+  "swapBackupDialogBody": "La versión anterior se guardó como zip. ¿Qué quieres hacer con ella?",
+  "swapBackupUpload": "Subir a Drive",
+  "swapBackupLocalOnly": "Mantener en este equipo",
+  "swapBackupDeleteNow": "Borrar ahora",
+  "swapBackupUploadOk": "Respaldo subido a Drive.",
+  "swapBackupUploadErr": "No se pudo subir el respaldo: {error}",
+  "swapBackupLocalOnlySnack": "Respaldo guardado en este equipo.",
+  "backupsAction": "Backups",
+  "backupsScreenTitle": "Respaldos de {farmName}",
+  "backupsEmpty": "Sin respaldos todavía.",
+  "backupsRestore": "Restaurar",
+  "backupsRestoreConfirmTitle": "¿Restaurar este respaldo?",
+  "backupsRestoreConfirmBody": "Esto sobrescribe tu partida actual con esta versión anterior. No se puede deshacer.",
+  "backupsDelete": "Eliminar",
+  "backupsDeleteConfirmTitle": "¿Eliminar este respaldo?",
+  "backupsDeleteConfirmBody": "Se borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió). No se puede deshacer.",
+  "backupsRestoreOk": "Respaldo restaurado.",
+  "backupsRestoreErr": "No se pudo restaurar el respaldo: {error}",
+  "backupsDeleteErr": "No se pudo eliminar el respaldo: {error}",
+  "backupsCreate": "Crear respaldo local",
+  "backupsCreateLocalHint": "Los respaldos se crean primero en este equipo. Después podrás subirlos a Drive.",
+  "backupsCreateOk": "Respaldo creado.",
+  "backupsCreateErr": "No se pudo crear el respaldo: {error}",
+  "backupsDownload": "Descargar",
+  "backupsDownloadOk": "Respaldo descargado en este equipo.",
+  "backupsDownloadErr": "No se pudo descargar el respaldo: {error}",
+  "backupsCopyOwn": "Copiar a mi Drive",
+  "backupsUploadOwn": "A mi Drive",
+  "backupsUploadShared": "Al Drive compartido",
+  "backupsUploadOk": "Respaldo subido.",
+  "backupsUploadErr": "No se pudo subir el respaldo: {error}",
+  "backupsLocationLocal": "Este equipo",
+  "backupsLocationOwnDrive": "Mi Drive",
+  "backupsLocationSharedDrive": "Drive compartido",
+  "backupsDeleteChooseBody": "Elige exactamente dónde borrarlo. Solo aparecen las ubicaciones donde existe este respaldo.",
+  "backupsDeleteLocalOnly": "Solo de este equipo",
+  "backupsDeleteOwnOnly": "Solo de mi Drive",
+  "backupsDeleteSharedOnly": "Solo del Drive compartido",
+  "backupsDeleteAll": "De todas las copias",
+  "deleteUnifiedTitle": "¿Eliminar {farmName}?",
+  "deleteChooseLocationBody": "Elige de dónde. La copia de este equipo se borra para siempre; la de Drive va a la papelera (30 días).",
+  "deleteDriveContextTitle": "¿Eliminar {farmName} de Drive?",
+  "deleteDriveContextBody": "La copia de Drive irá a la papelera, donde podrás recuperarla durante 30 días.",
+  "deleteDriveLocalKept": "La copia de este equipo se mantendrá sin cambios.",
+  "deleteLocalContextTitle": "¿Eliminar {farmName} de este equipo?",
+  "deleteLocalContextBody": "La copia de este equipo se borrará para siempre.",
+  "deleteLocalDriveCurrent": "Tu copia de Drive está actualizada ({date}) y seguirá disponible.",
+  "deleteLocalDriveAhead": "Tu copia de Drive es más reciente ({date}) y seguirá disponible.",
+  "deleteLocalDriveOlder": "Tu copia de Drive es anterior ({driveDate}); este equipo está en {localDate}.",
+  "deleteLocalBackupAvailable": "Hay {count} respaldos locales disponibles por si necesitas una copia anterior.",
+  "deleteLocalNoRecovery": "No hay una copia en Drive ni un respaldo local desde el que recuperar esta partida.",
+  "deleteOptionLocalOnly": "Solo de este equipo",
+  "deleteOptionDriveOnly": "Solo de mi Drive",
+  "deleteOptionBoth": "De ambas copias",
+  "viewPlayersHint": "Ver jugadores",
+  "snackDeletedBoth": "\"{saveName}\" eliminada de este equipo y movida a la papelera de Drive."
 }

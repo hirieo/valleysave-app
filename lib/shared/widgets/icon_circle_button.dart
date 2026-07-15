@@ -23,6 +23,7 @@ class IconCircleButton extends StatefulWidget {
 class _IconCircleButtonState extends State<IconCircleButton>
     with SingleTickerProviderStateMixin {
   bool _pressed = false;
+  bool _hovered = false;
   late final AnimationController _spin;
 
   @override
@@ -54,39 +55,51 @@ class _IconCircleButtonState extends State<IconCircleButton>
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = widget.color != null
-        ? widget.color!.withValues(alpha: 0.55)
-        : Colors.white.withValues(alpha: 0.45);
+    final baseColor = widget.color ?? Colors.white;
+    final borderColor = baseColor.withValues(
+      alpha: widget.color != null
+          ? (_hovered ? 0.85 : 0.55)
+          : (_hovered ? 0.7 : 0.45),
+    );
     final iconColor = widget.color != null
         ? widget.color!
         : Colors.white.withValues(alpha: 0.88);
 
-    Widget button = GestureDetector(
-      onTap: widget.onTap,
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.90 : 1.0,
-        duration: _pressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            shape: BoxShape.circle,
-            border: Border.all(color: borderColor, width: 1.0),
-          ),
-          child: AnimatedBuilder(
-            animation: _spin,
-            builder: (_, child) => Transform.rotate(
-              angle: widget.spinning ? _spin.value * 2 * math.pi : 0,
-              child: child,
+    Widget button = MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedScale(
+          scale: _pressed ? 0.90 : (_hovered ? 1.06 : 1.0),
+          duration: _pressed
+              ? const Duration(milliseconds: 100)
+              : const Duration(milliseconds: 160),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 140),
+            curve: Curves.easeOut,
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: _hovered
+                  ? baseColor.withValues(alpha: 0.08)
+                  : Colors.transparent,
+              shape: BoxShape.circle,
+              border: Border.all(color: borderColor, width: 1.0),
             ),
-            child: Icon(widget.icon, size: 18, color: iconColor),
+            child: AnimatedBuilder(
+              animation: _spin,
+              builder: (_, child) => Transform.rotate(
+                angle: widget.spinning ? _spin.value * 2 * math.pi : 0,
+                child: child,
+              ),
+              child: Icon(widget.icon, size: 18, color: iconColor),
+            ),
           ),
         ),
       ),

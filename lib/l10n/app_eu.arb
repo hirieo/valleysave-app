@@ -508,5 +508,40 @@
   "settingsGameExeNotFound": "Ez da automatikoki aurkitu",
   "settingsGameExeBrowse": "Bilatu…",
   "settingsGameExeSaved": "Bidea gordeta",
-  "snackLaunchError": "Ezin izan da jokoa ireki"
+  "snackLaunchError": "Ezin izan da jokoa ireki",
+  "makeHostAction": "OSTALARI BIHURTU",
+  "makeHostExperimental": "ESPERIMENTALA",
+  "makeHostDialogTitle": "Ostalaria aldatu",
+  "makeHostDialogIntro": "{playerName} {farmName} baserriko ostalari izango da.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Partida berri bat sortzen da. Gero erabakiko duzu jatorrizkoarekin zer egin.",
+  "makeHostMoveCount": "{count, plural, one{Baserriko objektu 1 lekuz aldatuko da etxeari tokia egiteko. Ezer ez da ezabatzen.} other{Baserriko {count} objektu lekuz aldatuko dira etxeari tokia egiteko. Ezer ez da ezabatzen.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "Ostalari berriaren etxea jokoaren baserri handi bezala ikusiko da. Etxolaren itxura ez da onartzen modrik gabe.",
+  "makeHostConfirmButton": "Ostalari bihurtu",
+  "makeHostSuccess": "Partida berria sortu da: {playerName} da orain ostalaria.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Jatorrizko partida gailu honetatik ezabatu?",
+  "makeHostDeleteOriginalBody": "Partida berria prest dago. Igo jatorrizkoa zure Drive-ra babeskopia gisa (gero berriz deskarga dezakezu), edo ezabatu kopia lokala soilik.",
+  "makeHostDeleteWithoutUpload": "Ezabatu igo gabe",
+  "makeHostDeleteOriginalUploadBody": "Jatorrizko partida zure Drive-ra igoko da lehenik babeskopia gisa, eta gero gailu honetako kopia lokala ezabatuko da.",
+  "makeHostDeleteOriginalNoBackupBody": "Driverekin konexiorik ez: ez da babeskopiarik geratuko. Gailu honetako kopia lokala bakarrik ezabatuko da.",
+  "makeHostUploadAndDelete": "Igo eta ezabatu",
+  "hostSwapErrInvalid": "Partida honek ustekabeko egitura du. Ez da ezer aldatu.",
+  "hostSwapErrNoSpace": "Ez dago leku librerik baserrian objektuak lekuz aldatzeko. Ez da ezer aldatu.",
+  "hostSwapErrWrite": "Ezin izan da partida berria idatzi (diskoa/baimenak). Ez da ezer aldatu.",
+  "hostSwapErrValidation": "Partida berriaren egiaztapenak huts egin du eta baztertu egin da. Jatorrizkoa osorik dago."
 }

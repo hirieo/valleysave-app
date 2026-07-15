@@ -2,7 +2,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../core/models/season_state.dart';
 
-Color _busyColor(SeasonState s) => switch (s) {
+/// Color de "trabajando" para la estación actual — pétalo rosa en
+/// primavera, hoja naranja en otoño, etc. Público para que cualquier texto
+/// junto al indicador (p. ej. "Sincronizando…") pueda usar el MISMO color,
+/// en vez de un dorado fijo que no combina con el icono.
+Color seasonBusyColor(SeasonState s) => switch (s) {
   SeasonState.spring  => const Color(0xFFE8608A),
   SeasonState.summer  => const Color(0xFFF5A623),
   SeasonState.fall    => const Color(0xFFD4722A),
@@ -63,7 +67,7 @@ class _BusyPainter extends CustomPainter {
     final cx = size.width / 2;
     final cy = size.height / 2;
     final r  = size.width * 0.34;
-    final color = _busyColor(season);
+    final color = seasonBusyColor(season);
 
     // anillo sutil
     canvas.drawCircle(
@@ -90,7 +94,7 @@ class _BusyPainter extends CustomPainter {
         case SeasonState.spring:
           _petal(canvas, Offset(px, py), a + t * 0.5, color, pulse);
         case SeasonState.summer:
-          _firefly(canvas, Offset(px, py), color, pulse);
+          _firefly(canvas, Offset(px, py), a + t * 0.4, color, pulse);
         case SeasonState.fall:
           _leaf(canvas, Offset(px, py), a + t * 0.6, color, pulse);
         case SeasonState.winter:
@@ -113,66 +117,143 @@ class _BusyPainter extends CustomPainter {
       i == 0 ? path.moveTo(x, y) : path.lineTo(x, y);
     }
     path.close();
-    canvas.drawPath(
-      path,
-      Paint()..color = _busyColor(season).withValues(alpha: alpha),
+    canvas.drawPath(path, Paint()..color = color.withValues(alpha: alpha));
+
+    // Destellos finos en las 4 direcciones cardinales — vende "brillo",
+    // no solo silueta plana (2026-07-15, refinado de partículas).
+    final sparkPaint = Paint()
+      ..color = Color.lerp(color, Colors.white, 0.55)!.withValues(alpha: alpha * 0.9)
+      ..strokeWidth = 0.9
+      ..strokeCap = StrokeCap.round;
+    final sparkGap = outer * 1.15;
+    final sparkLen = outer * 1.7;
+    for (final da in [0.0, math.pi / 2, math.pi, math.pi * 3 / 2]) {
+      final dx = math.cos(da + rot);
+      final dy = math.sin(da + rot);
+      canvas.drawLine(
+        Offset(pos.dx + dx * sparkGap, pos.dy + dy * sparkGap),
+        Offset(pos.dx + dx * sparkLen, pos.dy + dy * sparkLen),
+        sparkPaint,
+      );
+    }
+    canvas.drawCircle(
+      pos, inner * 0.55,
+      Paint()..color = Colors.white.withValues(alpha: alpha * 0.7),
     );
   }
 
   void _petal(Canvas canvas, Offset pos, double angle, Color color, double alpha) {
     canvas.translate(pos.dx, pos.dy);
     canvas.rotate(angle);
+    // Muesca en la punta — silueta de flor de cerezo, no una lágrima
+    // genérica (2026-07-15, refinado de partículas).
     final path = Path()
-      ..moveTo(0, -3.5)
-      ..cubicTo(2.5, -2, 2.5, 2, 0, 3.5)
-      ..cubicTo(-2.5, 2, -2.5, -2, 0, -3.5);
+      ..moveTo(-1.1, -3.4)
+      ..cubicTo(-2.6, -2.2, -2.4, 1.7, 0, 3.5)
+      ..cubicTo(2.4, 1.7, 2.6, -2.2, 1.1, -3.4)
+      ..cubicTo(0.6, -3.0, -0.6, -3.0, -1.1, -3.4)
+      ..close();
     canvas.drawPath(path, Paint()..color = color.withValues(alpha: alpha));
+    canvas.drawLine(
+      const Offset(0, 3.2), const Offset(0, -2.2),
+      Paint()
+        ..color = Colors.white.withValues(alpha: alpha * 0.25)
+        ..strokeWidth = 0.5,
+    );
   }
 
-  void _firefly(Canvas canvas, Offset pos, Color color, double alpha) {
-    // halo difuso
-    canvas.drawCircle(pos, 5.0,
-        Paint()..color = color.withValues(alpha: alpha * 0.20));
-    canvas.drawCircle(pos, 2.8,
-        Paint()..color = color.withValues(alpha: alpha * 0.55));
-    // núcleo
-    canvas.drawCircle(pos, 1.5,
-        Paint()..color = color.withValues(alpha: alpha));
-    // brillo blanco
-    canvas.drawCircle(
-      Offset(pos.dx - 0.5, pos.dy - 0.5), 0.6,
-      Paint()..color = Colors.white.withValues(alpha: alpha * 0.65),
+  void _firefly(Canvas canvas, Offset pos, double angle, Color color, double alpha) {
+    // Cuerpo alargado + alas + brillo concentrado en la cola (el abdomen
+    // bioluminiscente) — antes era un punto de luz simétrico indistinguible
+    // de una chispa cualquiera (2026-07-15, refinado de partículas).
+    canvas.save();
+    canvas.translate(pos.dx, pos.dy);
+    canvas.rotate(angle);
+
+    final wingPaint = Paint()..color = color.withValues(alpha: alpha * 0.18);
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(-2.2, -2.6), width: 3.0, height: 1.7),
+      wingPaint,
     );
+    canvas.drawOval(
+      Rect.fromCenter(center: const Offset(2.2, -2.6), width: 3.0, height: 1.7),
+      wingPaint,
+    );
+
+    canvas.drawOval(
+      Rect.fromCenter(center: Offset.zero, width: 2.4, height: 5.0),
+      Paint()..color = Color.lerp(color, Colors.black, 0.72)!.withValues(alpha: alpha),
+    );
+
+    const tail = Offset(0, 2.2);
+    canvas.drawCircle(tail, 3.2, Paint()..color = color.withValues(alpha: alpha * 0.28));
+    canvas.drawCircle(tail, 1.6, Paint()..color = color.withValues(alpha: alpha * 0.75));
+    canvas.drawCircle(
+      tail, 0.75,
+      Paint()..color = Color.lerp(color, Colors.white, 0.5)!.withValues(alpha: alpha),
+    );
+
+    canvas.restore();
   }
 
   void _leaf(Canvas canvas, Offset pos, double angle, Color color, double alpha) {
     canvas.translate(pos.dx, pos.dy);
     canvas.rotate(angle);
-    canvas.drawOval(
-      Rect.fromCenter(center: Offset.zero, width: 8, height: 4.5),
-      Paint()..color = color.withValues(alpha: alpha),
-    );
-    canvas.drawOval(
-      Rect.fromCenter(center: const Offset(0.8, 0), width: 5, height: 3),
-      Paint()..color = color.withValues(alpha: alpha * 0.65),
-    );
+    // Silueta de hoja de verdad (nervio + tallo) en vez de dos óvalos
+    // superpuestos, que a tamaño pequeño se leían como un borrón
+    // (2026-07-15, refinado de partículas — la mejora más notable).
+    final path = Path()
+      ..moveTo(0, -4.6)
+      ..cubicTo(2.6, -3.0, 2.6, 3.0, 0, 4.6)
+      ..cubicTo(-2.6, 3.0, -2.6, -3.0, 0, -4.6)
+      ..close();
+    canvas.drawPath(path, Paint()..color = color.withValues(alpha: alpha));
+
+    final veinPaint = Paint()
+      ..color = Color.lerp(color, Colors.black, 0.4)!.withValues(alpha: alpha * 0.7)
+      ..strokeWidth = 0.5
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(const Offset(0, -4.2), const Offset(0, 5.6), veinPaint);
+    canvas.drawLine(const Offset(0, -1.6), const Offset(1.6, -0.4), veinPaint);
+    canvas.drawLine(const Offset(0, -1.6), const Offset(-1.6, -0.4), veinPaint);
+    canvas.drawLine(const Offset(0, 1.0), const Offset(1.3, 2.0), veinPaint);
+    canvas.drawLine(const Offset(0, 1.0), const Offset(-1.3, 2.0), veinPaint);
   }
 
   void _snowflake(Canvas canvas, Offset pos, Color color, double alpha) {
+    // 6 brazos con dendritas — antes eran 3 líneas cruzadas (solo 6
+    // "medios brazos" sin ramificar), se veía a medias (2026-07-15,
+    // refinado de partículas).
     final paint = Paint()
       ..color       = color.withValues(alpha: alpha * 0.85)
-      ..strokeWidth = 1.1
+      ..strokeWidth = 0.85
       ..strokeCap   = StrokeCap.round;
-    for (var k = 0; k < 3; k++) {
-      final ka = k * math.pi / 3 + t * 0.4;
+    for (var k = 0; k < 6; k++) {
+      final ka = k * math.pi / 3 + t * 0.3;
+      final dx = math.cos(ka);
+      final dy = math.sin(ka);
+      final tip = Offset(pos.dx + dx * 3.6, pos.dy + dy * 3.6);
+      canvas.drawLine(pos, tip, paint);
+
+      const midR = 2.2;
+      final mid = Offset(pos.dx + dx * midR, pos.dy + dy * midR);
+      const branchLen = 1.1;
+      final perpA = ka + math.pi / 2.6;
       canvas.drawLine(
-        Offset(pos.dx - math.cos(ka) * 3.5, pos.dy - math.sin(ka) * 3.5),
-        Offset(pos.dx + math.cos(ka) * 3.5, pos.dy + math.sin(ka) * 3.5),
+        mid,
+        Offset(mid.dx + math.cos(perpA) * branchLen, mid.dy + math.sin(perpA) * branchLen),
+        paint,
+      );
+      canvas.drawLine(
+        mid,
+        Offset(mid.dx - math.cos(perpA) * branchLen, mid.dy - math.sin(perpA) * branchLen),
         paint,
       );
     }
-    canvas.drawCircle(pos, 1.2,
-        Paint()..color = color.withValues(alpha: alpha));
+    canvas.drawCircle(
+      pos, 1.0,
+      Paint()..color = Color.lerp(color, Colors.white, 0.4)!.withValues(alpha: alpha),
+    );
   }
 
   @override

@@ -361,5 +361,40 @@
   "settingsGameExeNotFound": "Não encontrado automaticamente",
   "settingsGameExeBrowse": "Procurar…",
   "settingsGameExeSaved": "Caminho salvo",
-  "snackLaunchError": "Não foi possível abrir o jogo"
+  "snackLaunchError": "Não foi possível abrir o jogo",
+  "makeHostAction": "TORNAR ANFITRIÃO",
+  "makeHostExperimental": "EXPERIMENTAL",
+  "makeHostDialogTitle": "Trocar anfitrião",
+  "makeHostDialogIntro": "{playerName} passará a ser o anfitrião de {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Um novo save é criado. Depois você decide o que fazer com o original.",
+  "makeHostMoveCount": "{count, plural, one{1 objeto da fazenda será movido para abrir espaço para a casa. Nada é apagado.} other{{count} objetos da fazenda serão movidos para abrir espaço para a casa. Nada é apagado.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "A casa do novo anfitrião vai parecer a casa grande do jogo. A aparência de cabana não é suportada sem mods.",
+  "makeHostConfirmButton": "Tornar anfitrião",
+  "makeHostSuccess": "Novo save criado: {playerName} agora é o anfitrião.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Apagar o save original deste dispositivo?",
+  "makeHostDeleteOriginalBody": "O novo save está pronto. Faça backup do original no seu Drive primeiro (você poderá baixá-lo de novo depois) ou apague só a cópia local.",
+  "makeHostDeleteWithoutUpload": "Apagar sem enviar",
+  "makeHostDeleteOriginalUploadBody": "O save original será primeiro enviado ao seu Drive como backup e, em seguida, a cópia local deste dispositivo será apagada.",
+  "makeHostDeleteOriginalNoBackupBody": "Sem conexão com o Drive: não restará nenhum backup. Só a cópia local deste dispositivo será apagada.",
+  "makeHostUploadAndDelete": "Enviar e apagar",
+  "hostSwapErrInvalid": "Este save tem uma estrutura inesperada. Nada foi alterado.",
+  "hostSwapErrNoSpace": "Não há espaço livre na fazenda para reposicionar objetos. Nada foi alterado.",
+  "hostSwapErrWrite": "Não foi possível gravar o novo save (disco/permissões). Nada foi alterado.",
+  "hostSwapErrValidation": "A verificação do novo save falhou e foi descartado. O original está intacto."
 }

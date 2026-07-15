@@ -508,5 +508,40 @@
   "settingsGameExeNotFound": "自動検出されませんでした",
   "settingsGameExeBrowse": "参照…",
   "settingsGameExeSaved": "パスを保存しました",
-  "snackLaunchError": "ゲームを開けませんでした"
+  "snackLaunchError": "ゲームを開けませんでした",
+  "makeHostAction": "ホストにする",
+  "makeHostExperimental": "実験的機能",
+  "makeHostDialogTitle": "ホストを変更",
+  "makeHostDialogIntro": "{playerName}が{farmName}のホストになります。",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "新しいセーブデータが作成されます。その後、元のデータをどうするか選べます。",
+  "makeHostMoveCount": "{count, plural, other{家を建てるスペースを確保するため、農場のオブジェクトが{count}個移動します。何も削除されません。}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "新しいホストの家は、ゲームのメインの農場家に見えます。コテージの見た目はMODなしではサポートされません。",
+  "makeHostConfirmButton": "ホストにする",
+  "makeHostSuccess": "新しいセーブデータを作成しました：{playerName}が新しいホストです。",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "この端末から元のセーブデータを削除しますか？",
+  "makeHostDeleteOriginalBody": "新しいセーブデータの準備ができました。元のデータをまずDriveにバックアップする（後で再ダウンロードできます）か、ローカルコピーだけを削除できます。",
+  "makeHostDeleteWithoutUpload": "アップロードせずに削除",
+  "makeHostDeleteOriginalUploadBody": "元のセーブデータはまずバックアップとしてDriveにアップロードされ、その後この端末のローカルコピーが削除されます。",
+  "makeHostDeleteOriginalNoBackupBody": "Drive未接続：バックアップは残りません。この端末のローカルコピーのみが削除されます。",
+  "makeHostUploadAndDelete": "アップロードして削除",
+  "hostSwapErrInvalid": "このセーブデータは予期しない構造をしています。何も変更されていません。",
+  "hostSwapErrNoSpace": "農場にオブジェクトを移動する空きスペースがありません。何も変更されていません。",
+  "hostSwapErrWrite": "新しいセーブデータを書き込めませんでした（ディスク／権限）。何も変更されていません。",
+  "hostSwapErrValidation": "新しいセーブデータの検証に失敗したため、破棄されました。元のデータは無事です。"
 }

@@ -23,16 +23,20 @@ class SaveEntry {
     return (l ?? d)!;
   }
 
-  /// Estado calculado por progreso (millisecondsPlayed). "Sincronizado" =
-  /// mismo tiempo jugado → mismo punto de la partida.
+  /// Estado calculado por progreso de CALENDARIO (año/estación/día — nivel
+  /// granja, igual para cualquier jugador). "Sincronizado" = mismo día →
+  /// mismo punto de la partida. NUNCA se compara por `millisecondsPlayed`
+  /// (tiempo jugado es por-jugador; tras un cambio de anfitrión, "el host"
+  /// de cada lado puede ser una persona distinta — comparar sus tiempos
+  /// jugados no dice nada del avance real de la granja).
   SaveSyncStatus get status {
     final l = local, d = drive;
     if (l != null && d == null) return SaveSyncStatus.localOnly;
     if (l == null && d != null) return SaveSyncStatus.driveOnly;
-    if (l!.millisecondsPlayed == d!.millisecondsPlayed) {
+    if (l!.calendarDayOrdinal == d!.calendarDayOrdinal) {
       return SaveSyncStatus.synced;
     }
-    return l.millisecondsPlayed > d.millisecondsPlayed
+    return l.calendarDayOrdinal > d.calendarDayOrdinal
         ? SaveSyncStatus.localAhead
         : SaveSyncStatus.driveAhead;
   }

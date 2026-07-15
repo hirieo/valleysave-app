@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,52 +11,60 @@ import '../../core/models/save_file.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/save_busy_indicator.dart';
+import '../../shared/widgets/pressable_scale.dart';
 import 'widgets/save_detail_sheet.dart';
 
 // Card-local color tokens
-const _kSkillName  = Color(0xFF8AB890);
-const _kMoneyNow   = Color(0xFFC8A830);
+const _kSkillName = Color(0xFF8AB890);
+const _kMoneyNow = Color(0xFFC8A830);
 const _kMoneyTotal = Color(0xFF8898A8);
-const _kMineLevel  = Color(0xFFA888D8);
-const _kTileLbl    = Color(0xFFA8B898);
+const _kMineLevel = Color(0xFFA888D8);
+const _kTileLbl = Color(0xFFA8B898);
 
 const _kMonstruos = Color(0xFFE07040);
-const _kAmigos    = Color(0xFFE878A0);
-const _kDesmayos  = Color(0xFFA8B0D8);
+const _kAmigos = Color(0xFFE878A0);
+const _kDesmayos = Color(0xFFA8B0D8);
 
 // Estado de sincronización
-const kLocal  = Color(0xFFE0B850); // dorado = en tu equipo
-const kDrive  = Color(0xFF5AA8E0); // azul = nube
+const kLocal = Color(0xFFE0B850); // dorado = en tu equipo
+const kDrive = Color(0xFF5AA8E0); // azul = nube
 const _kSynced = Color(0xFF62B074); // verde = coinciden
 
 // Card surface: negro semitransparente + tinte estacional
-Color _cardSurface(Color s) =>
-    Color.alphaBlend(s.withValues(alpha: 0.10), const Color(0xFF040405))
-        .withValues(alpha: 0.62);
+Color _cardSurface(Color s) => Color.alphaBlend(
+  s.withValues(alpha: 0.10),
+  const Color(0xFF040405),
+).withValues(alpha: 0.62);
 
 // Tiles: negro más oscuro + tinte
-Color _tileBg(Color s) =>
-    Color.alphaBlend(s.withValues(alpha: 0.14), Colors.black)
-        .withValues(alpha: 0.42);
+Color _tileBg(Color s) => Color.alphaBlend(
+  s.withValues(alpha: 0.14),
+  Colors.black,
+).withValues(alpha: 0.42);
 Color _tileBdr(Color s) => s.withValues(alpha: 0.32);
 
 // Divisor horizontal sutil (compartido por la card y por SaveStatsView).
-final kDivider =
-    Container(height: 1, color: Colors.white.withValues(alpha: 0.08));
+final kDivider = Container(
+  height: 1,
+  color: Colors.white.withValues(alpha: 0.08),
+);
 
-const _kPipFarming  = Color(0xFFC8960A);
-const _kPipMining   = Color(0xFFA878C0);
-const _kPipCombat   = Color(0xFFE07040);
+const _kPipFarming = Color(0xFFC8960A);
+const _kPipMining = Color(0xFFA878C0);
+const _kPipCombat = Color(0xFFE07040);
 const _kPipForaging = Color(0xFF60A858);
-const _kPipFishing  = Color(0xFF4888C8);
+const _kPipFishing = Color(0xFF4888C8);
 
-({Color color, String label}) _statusStyle(SaveSyncStatus s, AppLocalizations l10n) => switch (s) {
-      SaveSyncStatus.synced     => (color: _kSynced, label: l10n.cardSynced),
-      SaveSyncStatus.localAhead => (color: kLocal,  label: l10n.cardLocalAhead),
-      SaveSyncStatus.driveAhead => (color: kDrive,  label: l10n.cardDriveAhead),
-      SaveSyncStatus.localOnly  => (color: kLocal,  label: l10n.cardLocalOnly),
-      SaveSyncStatus.driveOnly  => (color: kDrive,  label: l10n.cardDriveOnly),
-    };
+({Color color, String label}) _statusStyle(
+  SaveSyncStatus s,
+  AppLocalizations l10n,
+) => switch (s) {
+  SaveSyncStatus.synced => (color: _kSynced, label: l10n.cardSynced),
+  SaveSyncStatus.localAhead => (color: kLocal, label: l10n.cardLocalAhead),
+  SaveSyncStatus.driveAhead => (color: kDrive, label: l10n.cardDriveAhead),
+  SaveSyncStatus.localOnly => (color: kLocal, label: l10n.cardLocalOnly),
+  SaveSyncStatus.driveOnly => (color: kDrive, label: l10n.cardDriveOnly),
+};
 
 // Etiqueta de estado corta para la fila de acción (evita truncado en móvil).
 
@@ -69,6 +78,13 @@ String _rel(DateTime t, AppLocalizations l10n) {
   return l10n.cardTimeMonthsAgo(m);
 }
 
+typedef SaveCardFooterBuilder =
+    Widget Function(
+      BuildContext context,
+      String? selectedPlayerId,
+      ValueChanged<String> onPlayerIdChanged,
+    );
+
 class SaveCard extends StatefulWidget {
   const SaveCard({
     super.key,
@@ -78,26 +94,74 @@ class SaveCard extends StatefulWidget {
     this.onDownload,
     this.onDeleteFromDrive,
     this.onDeleteLocal,
+    this.onManageCopies,
+    this.onMakeHost,
+    this.onExport,
+    this.onShare,
+    this.onBackups,
+    this.backupCount = 0,
+    this.footer,
+    this.footerBuilder,
+    this.sharedOwnerEmail,
   });
 
   final SaveEntry entry;
   final bool busy;
-  final VoidCallback? onUpload;           // local → Drive
-  final VoidCallback? onDownload;         // Drive → local
-  final VoidCallback? onDeleteFromDrive;  // Drive → papelera
-  final VoidCallback? onDeleteLocal;      // local → delete
+  final VoidCallback? onUpload; // local → Drive
+  final VoidCallback? onDownload; // Drive → local
+  final VoidCallback? onDeleteFromDrive; // Drive → papelera
+  final VoidCallback? onDeleteLocal; // local → delete
+  final VoidCallback? onManageCopies; // elige local / Drive / ambas
+  final void Function(PlayerStats target)? onMakeHost; // F3 — solo cara local
+  final VoidCallback? onExport; // F1 — solo cara local
+  final VoidCallback? onShare; // F2 — solo cara Mi Drive
+  final VoidCallback? onBackups; // spec 007 — solo cara local
+  final int backupCount;
+
+  /// US5 — no-null cuando este save (por `folderName`) proviene de un
+  /// compartido de otra persona: pinta la píldora dorada COMPARTIDA + línea
+  /// "de {email}". NUNCA capa acciones (Subir a Drive propio y cambio de
+  /// anfitrión siguen disponibles — decisión del usuario 2026-07-12: si el
+  /// dueño revoca, la copia local + Drive propio vuelven a ser partida
+  /// normal).
+  final String? sharedOwnerEmail;
+
+  /// US5 — cuando no es `null`, SUSTITUYE `_PresenceRow`+`_Footer` (que
+  /// hablan de "este equipo" vs "Drive propio", sin sentido para un save
+  /// ajeno). Cabecera/chips/selector/stats se quedan exactamente igual —
+  /// mismo `SaveCard`, la tarjeta de "Compartidas conmigo" no es una versión
+  /// reducida (ver contracts/shared_saves_picker.md).
+  final Widget? footer;
+
+  /// Variante dinámica del footer para vistas que necesitan compartir el
+  /// jugador seleccionado con diálogos externos. El ID estable evita que un
+  /// cambio de anfitrión (que reordena la lista) cambie de persona al navegar.
+  final SaveCardFooterBuilder? footerBuilder;
 
   @override
   State<SaveCard> createState() => _SaveCardState();
 }
 
 class _SaveCardState extends State<SaveCard> {
-  int _playerIndex = 0;
+  String? _selectedPlayerId;
+
+  int _playerIndexFor(SaveFile base) {
+    if (!base.hasMultiplePlayers || _selectedPlayerId == null) return 0;
+    final index = base.players.indexWhere(
+      (player) => player.uniqueId == _selectedPlayerId,
+    );
+    return index < 0 ? 0 : index;
+  }
 
   void _selectPlayer(int i) {
-    final n = widget.entry.primary.players.length;
-    if (i < 0 || i >= n || i == _playerIndex) return;
-    setState(() => _playerIndex = i);
+    final players = widget.entry.primary.players;
+    if (i < 0 || i >= players.length) return;
+    _selectPlayerId(players[i].uniqueId);
+  }
+
+  void _selectPlayerId(String id) {
+    if (id.isEmpty || id == _selectedPlayerId) return;
+    setState(() => _selectedPlayerId = id);
   }
 
   @override
@@ -105,7 +169,7 @@ class _SaveCardState extends State<SaveCard> {
     final l10n = AppLocalizations.of(context)!;
     final base = widget.entry.primary;
     final coop = base.hasMultiplePlayers;
-    final idx = coop ? _playerIndex.clamp(0, base.players.length - 1) : 0;
+    final idx = coop ? _playerIndexFor(base) : 0;
     // La tarjeta muestra el jugador seleccionado (o el anfitrión en solitario).
     final save = coop ? base.forPlayer(base.players[idx]) : base;
     final status = widget.entry.status;
@@ -129,6 +193,7 @@ class _SaveCardState extends State<SaveCard> {
               playerIndex: idx,
               hostSelected: coop && base.players[idx].isHost,
               onSelectPlayer: _selectPlayer,
+              sharedOwnerEmail: widget.sharedOwnerEmail,
             ),
             kDivider,
             // Los stats por-jugador se cruzan con un fundido al cambiar.
@@ -140,22 +205,42 @@ class _SaveCardState extends State<SaveCard> {
                   FadeTransition(opacity: anim, child: child),
               child: SaveStatsView(key: ValueKey(idx), save: save),
             ),
-            kDivider,
-            _PresenceRow(
-              entry: widget.entry,
-              onUpload: widget.onUpload,
-              onDownload: widget.onDownload,
-              onDeleteFromDrive: widget.onDeleteFromDrive,
-              onDeleteLocal: widget.onDeleteLocal,
-            ),
-            kDivider,
-            _Footer(
-              entry: widget.entry,
-              statusColor: st.color,
-              busy: widget.busy,
-              onUpload: widget.onUpload,
-              onDownload: widget.onDownload,
-            ),
+            if (widget.footerBuilder != null) ...[
+              kDivider,
+              widget.footerBuilder!(
+                context,
+                coop ? base.players[idx].uniqueId : null,
+                _selectPlayerId,
+              ),
+            ] else if (widget.footer != null) ...[
+              kDivider,
+              widget.footer!,
+            ] else ...[
+              kDivider,
+              _PresenceRow(
+                entry: widget.entry,
+                selectedPlayerId: coop ? base.players[idx].uniqueId : null,
+                onPlayerIdChanged: _selectPlayerId,
+                onUpload: widget.onUpload,
+                onDownload: widget.onDownload,
+                onDeleteFromDrive: widget.onDeleteFromDrive,
+                onDeleteLocal: widget.onDeleteLocal,
+                onMakeHost: widget.onMakeHost,
+                onExport: widget.onExport,
+                onShare: widget.onShare,
+                onBackups: widget.onBackups,
+                backupCount: widget.backupCount,
+              ),
+              kDivider,
+              _Footer(
+                entry: widget.entry,
+                statusColor: st.color,
+                busy: widget.busy,
+                onUpload: widget.onUpload,
+                onDownload: widget.onDownload,
+                onManageCopies: widget.onManageCopies,
+              ),
+            ],
           ],
         ),
       ),
@@ -193,13 +278,15 @@ class _Header extends StatelessWidget {
     this.playerIndex = 0,
     this.hostSelected = false,
     this.onSelectPlayer,
+    this.sharedOwnerEmail,
   });
 
   final SaveFile save;
-  final List<PlayerStats> players;   // vacío = solitario (sin selector)
+  final List<PlayerStats> players; // vacío = solitario (sin selector)
   final int playerIndex;
   final bool hostSelected;
   final ValueChanged<int>? onSelectPlayer;
+  final String? sharedOwnerEmail;
 
   bool get _coop => players.length > 1;
 
@@ -232,9 +319,10 @@ class _Header extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (_coop) ...[
-                      const SizedBox(width: 8),
-                      const CoopBadge(),
+                    if (_coop) ...[const SizedBox(width: 8), const CoopBadge()],
+                    if (sharedOwnerEmail != null) ...[
+                      const SizedBox(width: 6),
+                      SharedOriginBadge(label: l10n.sharedOriginBadge),
                     ],
                   ],
                 ),
@@ -253,6 +341,30 @@ class _Header extends StatelessWidget {
               ),
             ],
           ),
+          if (sharedOwnerEmail != null) ...[
+            const SizedBox(height: 5),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.link_rounded,
+                  size: 11,
+                  color: Color(0xFFE0B850),
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    l10n.sharedOriginFrom(sharedOwnerEmail!),
+                    style: GoogleFonts.firaCode(
+                      fontSize: 9.5,
+                      color: const Color(0xFFE0B850),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 8),
           // Chips a todo el ancho (ya no compiten con la fecha)
           Wrap(
@@ -265,11 +377,15 @@ class _Header extends StatelessWidget {
                 borderColor: const Color(0xFF5A3E08),
                 bgColor: const Color(0xFF140E04),
                 onTap: _coop
-                    ? () => onSelectPlayer?.call((playerIndex + 1) % players.length)
+                    ? () => onSelectPlayer?.call(
+                        (playerIndex + 1) % players.length,
+                      )
                     : null,
               ),
               _Chip(
-                save.petType == 'cat' ? '🐱 ${l10n.petCat}' : '🐶 ${l10n.petDog}',
+                save.petType == 'cat'
+                    ? '🐱 ${l10n.petCat}'
+                    : '🐶 ${l10n.petDog}',
                 textColor: const Color(0xFF60A858),
                 borderColor: const Color(0xFF264A20),
                 bgColor: const Color(0xFF080E08),
@@ -284,11 +400,24 @@ class _Header extends StatelessWidget {
           ),
           if (_coop) ...[
             const SizedBox(height: 10),
-            PlayerSwitcher(
-              count: players.length,
-              index: playerIndex,
-              hostIndex: players.indexWhere((p) => p.isHost),
-              onSelect: (i) => onSelectPlayer?.call(i),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PlayerSwitcher(
+                  count: players.length,
+                  index: playerIndex,
+                  hostIndex: players.indexWhere((p) => p.isHost),
+                  onSelect: (i) => onSelectPlayer?.call(i),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  l10n.viewPlayersHint,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 9,
+                    color: Colors.white.withValues(alpha: 0.32),
+                  ),
+                ),
+              ],
             ),
           ],
         ],
@@ -307,7 +436,9 @@ class CoopBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: const Color(0xFF97C459).withValues(alpha: 0.14),
-        border: Border.all(color: const Color(0xFF97C459).withValues(alpha: 0.40)),
+        border: Border.all(
+          color: const Color(0xFF97C459).withValues(alpha: 0.40),
+        ),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
@@ -315,44 +446,118 @@ class CoopBadge extends StatelessWidget {
         children: [
           const Icon(Icons.groups_rounded, size: 11, color: Color(0xFF97C459)),
           const SizedBox(width: 4),
-          Text('COOP',
-              style: GoogleFonts.firaCode(
-                fontSize: 8.5,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-                color: const Color(0xFF97C459),
-              )),
+          Text(
+            'COOP',
+            style: GoogleFonts.firaCode(
+              fontSize: 8.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+              color: const Color(0xFF97C459),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-/// Corona del anfitrión, junto a la fecha. Solo visible cuando el jugador
-/// seleccionado es el anfitrión. Caja ajustada al emoji (padding mínimo).
-class HostCrown extends StatelessWidget {
-  const HostCrown({super.key});
+/// Insignia dorada junto al nombre: este save local proviene de un
+/// compartido de otra persona (US5). Solo informa — no capa acciones.
+class SharedOriginBadge extends StatelessWidget {
+  const SharedOriginBadge({super.key, required this.label});
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0C040).withValues(alpha: 0.14),
-        border: Border.all(color: const Color(0xFFF0C040).withValues(alpha: 0.45)),
-        borderRadius: BorderRadius.circular(7),
-      ),
-      // Ajustado a ojo: la fuente de emoji del sistema no centra el glifo en
-      // su línea de texto (queda pegado abajo). -2.5px lo sube al centro real.
-      child: Transform.translate(
-        offset: const Offset(0, -2.5),
-        child: const Text(
-          '👑',
-          style: TextStyle(fontSize: 21, height: 1),
+        color: const Color(0xFFE0B850).withValues(alpha: 0.10),
+        border: Border.all(
+          color: const Color(0xFFE0B850).withValues(alpha: 0.55),
         ),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.link_rounded, size: 11, color: Color(0xFFE0B850)),
+          const SizedBox(width: 4),
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.firaCode(
+              fontSize: 8.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+              color: const Color(0xFFE0B850),
+            ),
+          ),
+        ],
       ),
     );
   }
+}
+
+/// Marca al anfitrión, junto a la fecha. Solo visible cuando el jugador
+/// seleccionado es el anfitrión. Estrella de la suerte de 5 puntas (como la
+/// del noticiero de Stardew Valley) en el índigo real del Stardrop del
+/// juego — antes un emoji 👑 genérico sin relación con la estética del
+/// juego (reemplazado 2026-07-15, mockup aprobado con color extraído del
+/// sprite real).
+class HostCrown extends StatelessWidget {
+  const HostCrown({super.key});
+
+  static const _kIndigo = Color(0xFF8020E0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // El emoji 👑 anterior no tenía tamaño fijo (fontSize 21 + padding 3
+      // por lado) — su glifo renderiza más grande que el fontSize nominal,
+      // así que el badge real rondaba los 32px, no 27. Se iguala aquí.
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: _kIndigo.withValues(alpha: 0.14),
+        border: Border.all(color: _kIndigo.withValues(alpha: 0.55)),
+        borderRadius: BorderRadius.circular(7),
+      ),
+      child: const CustomPaint(painter: _LuckStarPainter()),
+    );
+  }
+}
+
+class _LuckStarPainter extends CustomPainter {
+  const _LuckStarPainter();
+
+  static const _outer = Color(0xFF8020E0);
+  static const _inner = Color(0xFFD8A8F5);
+
+  Path _star(Offset center, double outerR, double innerR) {
+    final path = Path();
+    for (var i = 0; i < 10; i++) {
+      final a = -math.pi / 2 + i * math.pi / 5;
+      final r = i.isEven ? outerR : innerR;
+      final x = center.dx + math.cos(a) * r;
+      final y = center.dy + math.sin(a) * r;
+      i == 0 ? path.moveTo(x, y) : path.lineTo(x, y);
+    }
+    path.close();
+    return path;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final outerR = size.width * 0.41;
+
+    canvas.drawCircle(center, size.width * 0.44, Paint()..color = _outer.withValues(alpha: 0.35));
+    canvas.drawPath(_star(center, outerR, outerR * 0.382), Paint()..color = _outer);
+    canvas.drawPath(_star(center, outerR * 0.52, outerR * 0.52 * 0.382), Paint()..color = _inner);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 /// Nombre + género del jugador seleccionado. Para usar junto a [PlayerSwitcher]
@@ -410,7 +615,7 @@ class PlayerSwitcher extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         for (var i = 0; i < count; i++)
-          GestureDetector(
+          PressableScale(
             onTap: () => onSelect(i),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 240),
@@ -420,7 +625,9 @@ class PlayerSwitcher extends StatelessWidget {
               height: 6,
               decoration: BoxDecoration(
                 color: i == index
-                    ? (i == hostIndex ? const Color(0xFFE0B850) : const Color(0xFFF0D060))
+                    ? (i == hostIndex
+                          ? const Color(0xFFE0B850)
+                          : const Color(0xFFF0D060))
                     : Colors.white.withValues(alpha: 0.30),
                 borderRadius: BorderRadius.circular(3),
               ),
@@ -438,14 +645,18 @@ class PlayerSwitcher extends StatelessWidget {
 }
 
 class _SwitchArrow extends StatelessWidget {
-  const _SwitchArrow({required this.icon, required this.enabled, required this.onTap});
+  const _SwitchArrow({
+    required this.icon,
+    required this.enabled,
+    required this.onTap,
+  });
   final IconData icon;
   final bool enabled;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return PressableScale(
       onTap: enabled ? onTap : null,
       child: Container(
         width: 24,
@@ -453,14 +664,18 @@ class _SwitchArrow extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: const Color(0xFFF0B8C8)
-                .withValues(alpha: enabled ? 0.30 : 0.10),
+            color: const Color(
+              0xFFF0B8C8,
+            ).withValues(alpha: enabled ? 0.30 : 0.10),
           ),
         ),
-        child: Icon(icon,
-            size: 15,
-            color: const Color(0xFFF0B8C8)
-                .withValues(alpha: enabled ? 0.75 : 0.20)),
+        child: Icon(
+          icon,
+          size: 15,
+          color: const Color(
+            0xFFF0B8C8,
+          ).withValues(alpha: enabled ? 0.75 : 0.20),
+        ),
       ),
     );
   }
@@ -519,9 +734,11 @@ class _TilesRow extends StatelessWidget {
     final mineValue = save.deepestMineLevel == 0
         ? l10n.statMineUnexplored
         : '${save.deepestMineLevel}';
-    final mineLabel = save.deepestMineLevel == 0 ? l10n.statMine : l10n.statMineLvl;
+    final mineLabel = save.deepestMineLevel == 0
+        ? l10n.statMine
+        : l10n.statMineLvl;
 
-    final bg  = _tileBg(save.seasonColor);
+    final bg = _tileBg(save.seasonColor);
     final bdr = _tileBdr(save.seasonColor);
 
     final coins = _MiniTile(
@@ -550,7 +767,7 @@ class _TilesRow extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
       child: LayoutBuilder(
         builder: (context, constraints) {
           // Estrecho (móvil): apilar Monedas/Total/Mina en columna junto al
@@ -567,9 +784,9 @@ class _TilesRow extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(child: coins),
-                        const SizedBox(height: 7),
+                        const SizedBox(height: 5),
                         Expanded(child: total),
-                        const SizedBox(height: 7),
+                        const SizedBox(height: 5),
                         Expanded(child: mine),
                       ],
                     ),
@@ -751,33 +968,37 @@ class _SkillsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final skills = [
-      (l10n.skillFarming,  save.farmingLevel,  _kPipFarming),
+      (l10n.skillFarming, save.farmingLevel, _kPipFarming),
       (l10n.skillForaging, save.foragingLevel, _kPipForaging),
-      (l10n.skillMining,   save.miningLevel,   _kPipMining),
-      (l10n.skillFishing,  save.fishingLevel,  _kPipFishing),
-      (l10n.skillCombat,   save.combatLevel,   _kPipCombat),
+      (l10n.skillMining, save.miningLevel, _kPipMining),
+      (l10n.skillFishing, save.fishingLevel, _kPipFishing),
+      (l10n.skillCombat, save.combatLevel, _kPipCombat),
     ];
 
     final rows = <Widget>[];
     for (var i = 0; i < skills.length; i += 2) {
       final a = skills[i];
       final b = i + 1 < skills.length ? skills[i + 1] : null;
-      rows.add(Row(
-        children: [
-          Expanded(child: _SkillRow(name: a.$1, level: a.$2, color: a.$3)),
-          const SizedBox(width: 14),
-          Expanded(
-            child: b != null
-                ? _SkillRow(name: b.$1, level: b.$2, color: b.$3)
-                : const SizedBox(),
-          ),
-        ],
-      ));
-      if (i + 2 < skills.length) rows.add(const SizedBox(height: 5));
+      rows.add(
+        Row(
+          children: [
+            Expanded(
+              child: _SkillRow(name: a.$1, level: a.$2, color: a.$3),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: b != null
+                  ? _SkillRow(name: b.$1, level: b.$2, color: b.$3)
+                  : const SizedBox(),
+            ),
+          ],
+        ),
+      );
+      if (i + 2 < skills.length) rows.add(const SizedBox(height: 4));
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+      padding: const EdgeInsets.fromLTRB(14, 7, 14, 7),
       child: Column(children: rows),
     );
   }
@@ -868,7 +1089,7 @@ class _PillsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       child: Wrap(
         spacing: 6,
         runSpacing: 6,
@@ -915,25 +1136,46 @@ class _PillsRow extends StatelessWidget {
 class _PresenceRow extends StatelessWidget {
   const _PresenceRow({
     required this.entry,
+    this.selectedPlayerId,
+    this.onPlayerIdChanged,
     this.onUpload,
     this.onDownload,
     this.onDeleteFromDrive,
     this.onDeleteLocal,
+    this.onMakeHost,
+    this.onExport,
+    this.onShare,
+    this.onBackups,
+    this.backupCount = 0,
   });
   final SaveEntry entry;
+
+  /// Jugador seleccionado ahora mismo en la tarjeta — se pasa como valor
+  /// inicial al abrir la hoja de detalle, y se actualiza si se cambia
+  /// DENTRO de la hoja, para que abrir la otra cara no lo resetee
+  /// (feedback 2026-07-12).
+  final String? selectedPlayerId;
+  final ValueChanged<String>? onPlayerIdChanged;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
   final VoidCallback? onDeleteFromDrive;
   final VoidCallback? onDeleteLocal;
+  final void Function(PlayerStats target)? onMakeHost;
+  final VoidCallback? onExport;
+  final VoidCallback? onShare;
+  final VoidCallback? onBackups;
+  final int backupCount;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final status = entry.status;
     final localAhead =
-        status == SaveSyncStatus.localAhead || status == SaveSyncStatus.localOnly;
+        status == SaveSyncStatus.localAhead ||
+        status == SaveSyncStatus.localOnly;
     final driveAhead =
-        status == SaveSyncStatus.driveAhead || status == SaveSyncStatus.driveOnly;
+        status == SaveSyncStatus.driveAhead ||
+        status == SaveSyncStatus.driveOnly;
     final isMobile = Platform.isAndroid || Platform.isIOS;
 
     return Padding(
@@ -951,10 +1193,17 @@ class _PresenceRow extends StatelessWidget {
                 highlight: localAhead && entry.drive != null,
                 entry: entry,
                 isLocalSide: true,
+                selectedPlayerId: selectedPlayerId,
+                onPlayerIdChanged: onPlayerIdChanged,
                 onUpload: onUpload,
                 onDownload: onDownload,
                 onDeleteFromDrive: onDeleteFromDrive,
                 onDeleteLocal: onDeleteLocal,
+                onMakeHost: onMakeHost,
+                onExport: onExport,
+                onShare: onShare,
+                onBackups: onBackups,
+                backupCount: backupCount,
               ),
             ),
             const SizedBox(width: 7),
@@ -967,10 +1216,17 @@ class _PresenceRow extends StatelessWidget {
                 highlight: driveAhead && entry.local != null,
                 entry: entry,
                 isLocalSide: false,
+                selectedPlayerId: selectedPlayerId,
+                onPlayerIdChanged: onPlayerIdChanged,
                 onUpload: onUpload,
                 onDownload: onDownload,
                 onDeleteFromDrive: onDeleteFromDrive,
                 onDeleteLocal: onDeleteLocal,
+                onMakeHost: onMakeHost,
+                onExport: onExport,
+                onShare: onShare,
+                onBackups: onBackups,
+                backupCount: backupCount,
               ),
             ),
           ],
@@ -989,10 +1245,17 @@ class _SideTile extends StatefulWidget {
     required this.highlight,
     required this.entry,
     required this.isLocalSide,
+    this.selectedPlayerId,
+    this.onPlayerIdChanged,
     this.onUpload,
     this.onDownload,
     this.onDeleteFromDrive,
     this.onDeleteLocal,
+    this.onMakeHost,
+    this.onExport,
+    this.onShare,
+    this.onBackups,
+    this.backupCount = 0,
   });
 
   final Color color;
@@ -1002,10 +1265,17 @@ class _SideTile extends StatefulWidget {
   final bool highlight;
   final SaveEntry entry;
   final bool isLocalSide;
+  final String? selectedPlayerId;
+  final ValueChanged<String>? onPlayerIdChanged;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
   final VoidCallback? onDeleteFromDrive;
   final VoidCallback? onDeleteLocal;
+  final void Function(PlayerStats target)? onMakeHost;
+  final VoidCallback? onExport;
+  final VoidCallback? onShare;
+  final VoidCallback? onBackups;
+  final int backupCount;
 
   @override
   State<_SideTile> createState() => _SideTileState();
@@ -1013,6 +1283,7 @@ class _SideTile extends StatefulWidget {
 
 class _SideTileState extends State<_SideTile> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1020,14 +1291,18 @@ class _SideTileState extends State<_SideTile> {
     final present = widget.save != null;
     final base = present ? widget.color : Colors.white.withValues(alpha: 0.20);
 
-    final content = Container(
+    final content = AnimatedContainer(
+      duration: const Duration(milliseconds: 140),
+      curve: Curves.easeOut,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: present
-            ? widget.color.withValues(alpha: 0.08)
+            ? widget.color.withValues(alpha: _hovered ? 0.13 : 0.08)
             : Colors.white.withValues(alpha: 0.02),
         border: Border.all(
-          color: base.withValues(alpha: widget.highlight ? 0.9 : 0.36),
+          color: base.withValues(
+            alpha: widget.highlight ? 0.9 : (_hovered ? 0.55 : 0.36),
+          ),
           width: widget.highlight ? 1.4 : 1,
         ),
         borderRadius: BorderRadius.circular(8),
@@ -1094,27 +1369,39 @@ class _SideTileState extends State<_SideTile> {
     );
 
     if (!present) return content;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => showSaveDetail(
-        context,
-        entry: widget.entry,
-        startOnLocal: widget.isLocalSide,
-        onUpload: widget.onUpload,
-        onDownload: widget.onDownload,
-        onDeleteFromDrive: widget.onDeleteFromDrive,
-        onDeleteLocal: widget.onDeleteLocal,
-      ),
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: _pressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: content,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => showSaveDetail(
+          context,
+          entry: widget.entry,
+          startOnLocal: widget.isLocalSide,
+          onUpload: widget.onUpload,
+          onDownload: widget.onDownload,
+          onDeleteFromDrive: widget.onDeleteFromDrive,
+          onDeleteLocal: widget.onDeleteLocal,
+          onMakeHost: widget.onMakeHost,
+          onExport: widget.onExport,
+          onShare: widget.onShare,
+          onBackups: widget.onBackups,
+          backupCount: widget.backupCount,
+          initialPlayerId: widget.selectedPlayerId,
+          onPlayerIdChanged: widget.onPlayerIdChanged,
+        ),
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : (_hovered ? 1.02 : 1.0),
+          duration: _pressed
+              ? const Duration(milliseconds: 100)
+              : const Duration(milliseconds: 200),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: content,
+        ),
       ),
     );
   }
@@ -1129,6 +1416,7 @@ class _Footer extends StatelessWidget {
     required this.busy,
     this.onUpload,
     this.onDownload,
+    this.onManageCopies,
   });
 
   final SaveEntry entry;
@@ -1136,6 +1424,7 @@ class _Footer extends StatelessWidget {
   final bool busy;
   final VoidCallback? onUpload;
   final VoidCallback? onDownload;
+  final VoidCallback? onManageCopies;
 
   @override
   Widget build(BuildContext context) {
@@ -1144,65 +1433,97 @@ class _Footer extends StatelessWidget {
     final hasLocal = entry.local != null;
     final hasDrive = entry.drive != null;
     final recommendUpload =
-        status == SaveSyncStatus.localOnly || status == SaveSyncStatus.localAhead;
+        status == SaveSyncStatus.localOnly ||
+        status == SaveSyncStatus.localAhead;
     final recommendDownload =
-        status == SaveSyncStatus.driveOnly || status == SaveSyncStatus.driveAhead;
+        status == SaveSyncStatus.driveOnly ||
+        status == SaveSyncStatus.driveAhead;
     final isMobile = Platform.isAndroid || Platform.isIOS;
 
+    // Mientras sube/baja, el texto acompaña al icono estacional en vez de
+    // quedarse con la etiqueta/color de antes de empezar (2026-07-15,
+    // auditoría de consistencia visual — antes decía p. ej. "Local por
+    // delante" en dorado durante toda la subida).
+    final displayColor = busy
+        ? seasonBusyColor(SeasonController.instance.season.value)
+        : statusColor;
+    final displayLabel = busy
+        ? l10n.sharedStatusWorking
+        : _statusStyle(status, l10n).label;
+
     if (isMobile) {
-      final statusLabel = _statusStyle(status, l10n).label;
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
         child: Row(
           children: [
-            _Dot(color: statusColor),
+            if (busy)
+              SaveBusyIndicator(
+                key: const ValueKey('save-busy-indicator'),
+                season: SeasonController.instance.season.value,
+              )
+            else
+              _Dot(color: statusColor),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                statusLabel,
+                displayLabel,
                 style: GoogleFonts.firaCode(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: statusColor,
+                  color: displayColor,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(width: 8),
-            if (busy)
-              SaveBusyIndicator(season: SeasonController.instance.season.value)
-            else if (status == SaveSyncStatus.synced)
+            if (!busy && status == SaveSyncStatus.synced)
               Icon(Icons.check_rounded, size: 16, color: _kSynced)
-            else ...[
+            else if (!busy) ...[
               // Secundario siempre a la izquierda, principal a la derecha
               if (hasLocal && hasDrive && recommendUpload) ...[
                 ActionBtn(
-                  label: '', color: kDrive,
+                  label: '',
+                  color: kDrive,
                   icon: Icons.cloud_download_outlined,
-                  filled: false, iconOnly: true, onTap: onDownload,
+                  filled: false,
+                  iconOnly: true,
+                  onTap: onDownload,
                 ),
                 const SizedBox(width: 8),
               ],
               if (hasLocal && hasDrive && recommendDownload) ...[
                 ActionBtn(
-                  label: '', color: kLocal,
+                  label: '',
+                  color: kLocal,
                   icon: Icons.cloud_upload_outlined,
-                  filled: false, iconOnly: true, onTap: onUpload,
+                  filled: false,
+                  iconOnly: true,
+                  onTap: onUpload,
                 ),
                 const SizedBox(width: 8),
               ],
               if (recommendUpload)
                 ActionBtn(
-                  label: '', color: kLocal,
+                  label: '',
+                  color: kLocal,
                   icon: Icons.cloud_upload_outlined,
-                  filled: true, iconOnly: true, onTap: onUpload,
+                  filled: true,
+                  iconOnly: true,
+                  onTap: onUpload,
                 ),
               if (recommendDownload)
                 ActionBtn(
-                  label: '', color: kDrive,
+                  label: '',
+                  color: kDrive,
                   icon: Icons.cloud_download_outlined,
-                  filled: true, iconOnly: true, onTap: onDownload,
+                  filled: true,
+                  iconOnly: true,
+                  onTap: onDownload,
                 ),
+            ],
+            if (!busy && onManageCopies != null) ...[
+              const SizedBox(width: 8),
+              _ManageCopiesButton(onTap: onManageCopies!),
             ],
           ],
         ),
@@ -1210,28 +1531,31 @@ class _Footer extends StatelessWidget {
     }
 
     // Desktop: dot + etiqueta descriptiva + botones con label
-    final statusLabel = _statusStyle(status, l10n).label;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
       child: Row(
         children: [
-          _Dot(color: statusColor),
+          if (busy)
+            SaveBusyIndicator(
+              key: const ValueKey('save-busy-indicator'),
+              season: SeasonController.instance.season.value,
+            )
+          else
+            _Dot(color: statusColor),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              statusLabel,
+              displayLabel,
               style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: statusColor,
+                color: displayColor,
               ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(width: 8),
-          if (busy)
-            SaveBusyIndicator(season: SeasonController.instance.season.value)
-          else if (status != SaveSyncStatus.synced) ...[
+          if (!busy && status != SaveSyncStatus.synced) ...[
             if (hasLocal && hasDrive && recommendDownload) ...[
               ActionBtn(
                 label: l10n.cardActionUpload,
@@ -1269,7 +1593,38 @@ class _Footer extends StatelessWidget {
                 onTap: onDownload,
               ),
           ],
+          if (!busy && onManageCopies != null) ...[
+            const SizedBox(width: 8),
+            _ManageCopiesButton(onTap: onManageCopies!),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+class _ManageCopiesButton extends StatelessWidget {
+  const _ManageCopiesButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Tooltip(
+      message: l10n.deleteDataTitle,
+      child: SizedBox(
+        width: 42,
+        height: 36,
+        child: ActionBtn(
+          key: const ValueKey('save-manage-copies-action'),
+          label: '',
+          color: const Color(0xFFE05252),
+          icon: Icons.delete_outline_rounded,
+          filled: true,
+          iconOnly: true,
+          onTap: onTap,
+        ),
       ),
     );
   }
@@ -1287,7 +1642,9 @@ class _Dot extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
-        boxShadow: [BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 6)],
+        boxShadow: [
+          BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 6),
+        ],
       ),
     );
   }
@@ -1301,6 +1658,7 @@ class ActionBtn extends StatefulWidget {
     this.icon,
     required this.filled,
     this.iconOnly = false,
+    this.iconSize = 15,
     this.onTap,
   });
 
@@ -1309,6 +1667,7 @@ class ActionBtn extends StatefulWidget {
   final IconData? icon;
   final bool filled;
   final bool iconOnly;
+  final double iconSize;
   final VoidCallback? onTap;
 
   @override
@@ -1317,12 +1676,20 @@ class ActionBtn extends StatefulWidget {
 
 class _ActionBtnState extends State<ActionBtn> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final enabled = widget.onTap != null;
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
+      onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+      child: GestureDetector(
       onTap: widget.onTap,
-      onTapDown: widget.onTap != null ? (_) => setState(() => _pressed = true) : null,
+      onTapDown: widget.onTap != null
+          ? (_) => setState(() => _pressed = true)
+          : null,
       onTapUp: (_) => setState(() => _pressed = false),
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedScale(
@@ -1331,17 +1698,26 @@ class _ActionBtnState extends State<ActionBtn> {
             ? const Duration(milliseconds: 100)
             : const Duration(milliseconds: 200),
         curve: const Cubic(0.23, 1, 0.32, 1),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOut,
           padding: widget.iconOnly
               ? const EdgeInsets.all(8)
               : const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha: widget.filled ? 0.16 : 0.0),
-            border: Border.all(color: widget.color.withValues(alpha: 0.50)),
+            color: widget.color.withValues(
+              alpha: widget.filled
+                  ? (_hovered ? 0.24 : 0.16)
+                  : (_hovered ? 0.08 : 0.0),
+            ),
+            border: Border.all(
+              color: widget.color.withValues(alpha: _hovered ? 0.75 : 0.50),
+            ),
             borderRadius: BorderRadius.circular(8),
           ),
           child: widget.iconOnly
-              ? Icon(widget.icon, size: 15, color: widget.color)
+              ? Icon(widget.icon, size: widget.iconSize, color: widget.color)
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -1351,11 +1727,15 @@ class _ActionBtnState extends State<ActionBtn> {
                     ],
                     Text(
                       widget.label,
-                      style: GoogleFonts.firaCode(fontSize: 10, color: widget.color),
+                      style: GoogleFonts.firaCode(
+                        fontSize: 10,
+                        color: widget.color,
+                      ),
                     ),
                   ],
                 ),
         ),
+      ),
       ),
     );
   }
@@ -1397,7 +1777,11 @@ class _Chip extends StatelessWidget {
       ),
     );
     if (onTap == null) return chip;
-    return GestureDetector(onTap: onTap, behavior: HitTestBehavior.opaque, child: chip);
+    return PressableScale(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: chip,
+    );
   }
 }
 
@@ -1435,9 +1819,9 @@ String _saveDateLabel(SaveFile save, AppLocalizations l10n) {
   final season = switch (save.currentSeason.toLowerCase()) {
     'spring' => l10n.seasonSpring,
     'summer' => l10n.seasonSummer,
-    'fall'   => l10n.seasonFall,
+    'fall' => l10n.seasonFall,
     'winter' => l10n.seasonWinter,
-    _        => save.currentSeason,
+    _ => save.currentSeason,
   };
   return l10n.saveDateLabel(season, save.year);
 }

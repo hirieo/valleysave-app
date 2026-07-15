@@ -361,5 +361,40 @@
   "settingsGameExeNotFound": "Non trouvé automatiquement",
   "settingsGameExeBrowse": "Parcourir…",
   "settingsGameExeSaved": "Chemin enregistré",
-  "snackLaunchError": "Impossible d’ouvrir le jeu"
+  "snackLaunchError": "Impossible d’ouvrir le jeu",
+  "makeHostAction": "DEVENIR HÔTE",
+  "makeHostExperimental": "EXPÉRIMENTAL",
+  "makeHostDialogTitle": "Changer d'hôte",
+  "makeHostDialogIntro": "{playerName} deviendra l'hôte de {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Une nouvelle sauvegarde est créée. Vous déciderez ensuite quoi faire de l'originale.",
+  "makeHostMoveCount": "{count, plural, one{1 objet de la ferme sera déplacé pour faire de la place à la maison. Rien n'est supprimé.} other{{count} objets de la ferme seront déplacés pour faire de la place à la maison. Rien n'est supprimé.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "La maison du nouvel hôte ressemblera à la grande ferme du jeu. L'apparence de cabane n'est pas prise en charge sans mods.",
+  "makeHostConfirmButton": "Devenir hôte",
+  "makeHostSuccess": "Nouvelle sauvegarde créée : {playerName} est maintenant l'hôte.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Supprimer la sauvegarde d'origine de cet appareil ?",
+  "makeHostDeleteOriginalBody": "La nouvelle sauvegarde est prête. Sauvegardez d'abord l'originale sur votre Drive (vous pourrez la retélécharger plus tard) ou supprimez simplement la copie locale.",
+  "makeHostDeleteWithoutUpload": "Supprimer sans téléverser",
+  "makeHostDeleteOriginalUploadBody": "La sauvegarde d'origine sera d'abord téléversée sur votre Drive comme sauvegarde de secours, puis la copie locale sur cet appareil sera supprimée.",
+  "makeHostDeleteOriginalNoBackupBody": "Pas de connexion à Drive : aucune sauvegarde ne subsistera. Seule la copie locale sur cet appareil sera supprimée.",
+  "makeHostUploadAndDelete": "Téléverser et supprimer",
+  "hostSwapErrInvalid": "Cette sauvegarde a une structure inattendue. Rien n'a été modifié.",
+  "hostSwapErrNoSpace": "Pas d'espace libre dans la ferme pour déplacer les objets. Rien n'a été modifié.",
+  "hostSwapErrWrite": "Impossible d'écrire la nouvelle sauvegarde (disque/permissions). Rien n'a été modifié.",
+  "hostSwapErrValidation": "La vérification de la nouvelle sauvegarde a échoué, elle a donc été supprimée. L'originale est intacte."
 }

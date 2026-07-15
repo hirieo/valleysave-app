@@ -185,7 +185,7 @@ class HostSwapService {
       // original en [saveFolderPath] no se toca hasta el paso 5.
       tempRoot = await Directory.systemTemp.createTemp('vs_swap_');
       final workDir = Directory('${tempRoot.path}$sep$folderName');
-      await _copyDirectory(Directory(saveFolderPath), workDir);
+      await copyDirectory(Directory(saveFolderPath), workDir);
 
       // Delta: borrar *_old sobrantes (el juego los crea al jugar; lección
       // de la sesión de pruebas B3/B4).
@@ -959,13 +959,16 @@ Future<void> _safeDeleteFile(File file) async {
   }
 }
 
-Future<void> _copyDirectory(Directory src, Directory dst) async {
+/// Pública para que otros callers (p. ej. el puente de Shizuku/root en
+/// Android) puedan preparar su propia copia de trabajo sin duplicar esta
+/// lógica — [HostSwapService] la usa internamente para su copia temporal.
+Future<void> copyDirectory(Directory src, Directory dst) async {
   await dst.create(recursive: true);
   await for (final entity in src.list(recursive: false)) {
     final name = entity.path.split(Platform.pathSeparator).last;
     final newPath = '${dst.path}${Platform.pathSeparator}$name';
     if (entity is Directory) {
-      await _copyDirectory(entity, Directory(newPath));
+      await copyDirectory(entity, Directory(newPath));
     } else if (entity is File) {
       await entity.copy(newPath);
     }

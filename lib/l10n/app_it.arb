@@ -482,5 +482,40 @@
   "settingsGameExeNotFound": "Non trovato automaticamente",
   "settingsGameExeBrowse": "Sfoglia…",
   "settingsGameExeSaved": "Percorso salvato",
-  "snackLaunchError": "Impossibile aprire il gioco"
+  "snackLaunchError": "Impossibile aprire il gioco",
+  "makeHostAction": "DIVENTA OSPITANTE",
+  "makeHostExperimental": "SPERIMENTALE",
+  "makeHostDialogTitle": "Cambia ospitante",
+  "makeHostDialogIntro": "{playerName} diventerà l'ospitante di {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "Viene creato un nuovo salvataggio. Deciderai poi cosa fare con l'originale.",
+  "makeHostMoveCount": "{count, plural, one{1 oggetto della fattoria verrà spostato per fare spazio alla casa. Nulla viene eliminato.} other{{count} oggetti della fattoria verranno spostati per fare spazio alla casa. Nulla viene eliminato.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "La casa del nuovo ospitante avrà l'aspetto della fattoria principale del gioco. L'aspetto della baita non è supportato senza mod.",
+  "makeHostConfirmButton": "Diventa ospitante",
+  "makeHostSuccess": "Nuovo salvataggio creato: {playerName} è ora l'ospitante.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "Eliminare il salvataggio originale da questo dispositivo?",
+  "makeHostDeleteOriginalBody": "Il nuovo salvataggio è pronto. Fai prima il backup dell'originale sul tuo Drive (potrai riscaricarlo in seguito) o elimina solo la copia locale.",
+  "makeHostDeleteWithoutUpload": "Elimina senza caricare",
+  "makeHostDeleteOriginalUploadBody": "Il salvataggio originale verrà prima caricato sul tuo Drive come backup, poi la copia locale su questo dispositivo verrà eliminata.",
+  "makeHostDeleteOriginalNoBackupBody": "Nessuna connessione a Drive: non resterà alcun backup. Verrà eliminata solo la copia locale su questo dispositivo.",
+  "makeHostUploadAndDelete": "Carica ed elimina",
+  "hostSwapErrInvalid": "Questo salvataggio ha una struttura imprevista. Non è stato modificato nulla.",
+  "hostSwapErrNoSpace": "Nessuno spazio libero in fattoria per riposizionare gli oggetti. Non è stato modificato nulla.",
+  "hostSwapErrWrite": "Impossibile scrivere il nuovo salvataggio (disco/permessi). Non è stato modificato nulla.",
+  "hostSwapErrValidation": "La verifica del nuovo salvataggio non è riuscita, quindi è stato scartato. L'originale è intatto."
 }

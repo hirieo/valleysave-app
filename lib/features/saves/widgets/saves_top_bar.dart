@@ -13,6 +13,9 @@ class SavesTopBar extends StatelessWidget {
     required this.refreshing,
     required this.canLaunchGame,
     required this.onLaunch,
+    required this.onImport,
+    this.showSharedTitle = false,
+    this.connectedEmail,
   });
 
   final VoidCallback onBack;
@@ -21,6 +24,15 @@ class SavesTopBar extends StatelessWidget {
   final bool refreshing;
   final bool canLaunchGame;
   final VoidCallback onLaunch;
+  final VoidCallback onImport;
+
+  /// Cambia al llegar al bloque final de saves compartidos. El padre decide
+  /// cuándo ese bloque ha alcanzado la cabecera durante el scroll.
+  final bool showSharedTitle;
+
+  /// Cuenta Google conectada — subtítulo bajo el título, `null` mientras se
+  /// resuelve o sin Drive conectado (no ocupa espacio en ese caso).
+  final String? connectedEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +43,73 @@ class SavesTopBar extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 492),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              IconCircleButton(
-                icon: Icons.arrow_back_rounded,
-                onTap: onBack,
-              ),
-              const Spacer(),
-              Text(
-                l10n.mySaves,
-                style: GoogleFonts.bodoniModa(
-                  fontSize: 24,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.92),
+              IconCircleButton(icon: Icons.arrow_back_rounded, onTap: onBack),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        switchInCurve: Curves.easeOutCubic,
+                        switchOutCurve: Curves.easeInCubic,
+                        transitionBuilder: (child, animation) =>
+                            FadeTransition(
+                              opacity: animation,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0, 0.12),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              ),
+                            ),
+                        child: FittedBox(
+                          key: ValueKey(showSharedTitle),
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            showSharedTitle
+                                ? l10n.sharedWithMeTitle
+                                : l10n.mySaves,
+                            maxLines: 1,
+                            style: GoogleFonts.bodoniModa(
+                              fontSize: 24,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white.withValues(alpha: 0.92),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (connectedEmail != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2, bottom: 10),
+                          child: Text.rich(
+                            TextSpan(
+                              style: GoogleFonts.firaCode(
+                                fontSize: 10,
+                                color: Colors.white.withValues(alpha: 0.4),
+                              ),
+                              children: [
+                                TextSpan(text: '${l10n.connectedAsPrefix} '),
+                                TextSpan(
+                                  text: connectedEmail,
+                                  style: const TextStyle(
+                                    color: Color(0xFFE0B850),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
-              const Spacer(),
               if (canLaunchGame) ...[
                 TweenAnimationBuilder<double>(
                   tween: Tween(begin: 0.0, end: 1.0),
@@ -64,6 +127,12 @@ class SavesTopBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
               ],
+              IconCircleButton(
+                icon: Icons.upload_file_rounded,
+                onTap: onImport,
+                tooltip: l10n.importAction,
+              ),
+              const SizedBox(width: 8),
               IconCircleButton(
                 icon: Icons.refresh_rounded,
                 onTap: onRefresh,

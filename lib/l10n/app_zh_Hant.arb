@@ -471,5 +471,40 @@
     "placeholders": {
       "level": { "type": "int" }
     }
-  }
+  },
+  "makeHostAction": "設為房主",
+  "makeHostExperimental": "實驗性功能",
+  "makeHostDialogTitle": "更換房主",
+  "makeHostDialogIntro": "{playerName}將成為{farmName}的房主。",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "將建立一個新存檔。之後由你決定如何處理原始存檔。",
+  "makeHostMoveCount": "{count, plural, other{農場中的{count}個物體將被移動以為房屋騰出空間。不會刪除任何東西。}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "新房主的房子看起來會像遊戲中的主農舍。沒有模組的情況下不支援小屋外觀。",
+  "makeHostConfirmButton": "設為房主",
+  "makeHostSuccess": "已建立新存檔：{playerName}現在是房主。",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "makeHostDeleteOriginalTitle": "要從此裝置刪除原始存檔嗎？",
+  "makeHostDeleteOriginalBody": "新存檔已就緒。可以先把原始存檔備份到你的 Drive（之後可重新下載），或者只刪除本機副本。",
+  "makeHostDeleteWithoutUpload": "不上傳直接刪除",
+  "makeHostDeleteOriginalUploadBody": "原始存檔會先上傳到你的 Drive 作為備份，然後再刪除本裝置上的本機副本。",
+  "makeHostDeleteOriginalNoBackupBody": "未連接 Drive：不會保留任何備份。僅會刪除本裝置上的本機副本。",
+  "makeHostUploadAndDelete": "上傳並刪除",
+  "hostSwapErrInvalid": "此存檔的結構異常，未做任何變更。",
+  "hostSwapErrNoSpace": "農場沒有可用空間來重新放置物體，未做任何變更。",
+  "hostSwapErrWrite": "無法寫入新存檔（磁碟/權限問題），未做任何變更。",
+  "hostSwapErrValidation": "新存檔的驗證失敗，已被捨棄。原始存檔完好無損。"
 }

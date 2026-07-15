@@ -26,6 +26,7 @@ class _PrivacyScreenState extends State<PrivacyScreen>
   late final Animation<double> _headerAnim;
   late final Animation<double> _ctaAnim;
   bool _ctaPressed = false;
+  bool _ctaHovered = false;
 
   @override
   void initState() {
@@ -183,25 +184,35 @@ class _PrivacyScreenState extends State<PrivacyScreen>
                         child: Center(
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 480),
-                            child: GestureDetector(
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              onEnter: (_) => setState(() => _ctaHovered = true),
+                              onExit: (_) => setState(() => _ctaHovered = false),
+                              child: GestureDetector(
                               onTap: _accept,
                               onTapDown: (_) => setState(() => _ctaPressed = true),
                               onTapUp: (_) => setState(() => _ctaPressed = false),
                               onTapCancel: () => setState(() => _ctaPressed = false),
                               child: AnimatedScale(
-                                scale: _ctaPressed ? 0.97 : 1.0,
+                                scale: _ctaPressed ? 0.97 : (_ctaHovered ? 1.015 : 1.0),
                                 duration: _ctaPressed
                                     ? const Duration(milliseconds: 100)
                                     : const Duration(milliseconds: 200),
                                 curve: const Cubic(0.23, 1, 0.32, 1),
-                                child: Container(
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 140),
+                                  curve: Curves.easeOut,
                                   width: double.infinity,
                                   padding: const EdgeInsets.symmetric(vertical: 14),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: AppColors.accent.withValues(alpha: 0.15),
+                                    color: AppColors.accent.withValues(
+                                      alpha: _ctaHovered ? 0.22 : 0.15,
+                                    ),
                                     border: Border.all(
-                                      color: AppColors.accent.withValues(alpha: 0.55),
+                                      color: AppColors.accent.withValues(
+                                        alpha: _ctaHovered ? 0.75 : 0.55,
+                                      ),
                                     ),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -214,6 +225,7 @@ class _PrivacyScreenState extends State<PrivacyScreen>
                                     ),
                                   ),
                                 ),
+                              ),
                               ),
                             ),
                           ),

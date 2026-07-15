@@ -318,11 +318,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get disconnectTitle => '¿Desconectar Drive?';
 
   @override
-  String get disconnectBody =>
-      'Tus saves en Drive no se borran. Podrás reconectarte cuando quieras.';
+  String disconnectBody(String email) {
+    return 'Se cerrará la sesión de $email. Tus saves en Drive no se borran, puedes reconectar cuando quieras.';
+  }
 
   @override
   String get disconnectButton => 'Desconectar Drive';
+
+  @override
+  String disconnectButtonEmail(String email) {
+    return 'Desconectar de $email';
+  }
+
+  @override
+  String get connectedAsPrefix => 'Conectado en';
 
   @override
   String get languageTileLabel => 'Idioma';
@@ -408,10 +417,541 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardDetailDeleteLocal => 'Eliminar de este equipo';
 
   @override
-  String get cardDetailDeleteRemote => 'Eliminar de Drive';
+  String get cardDetailDeleteRemote => 'Borrar de mi Drive';
 
   @override
   String get cardCloseBarrier => 'Cerrar';
+
+  @override
+  String get exportAction => 'Exportar';
+
+  @override
+  String get exportSuccess => 'Partida exportada.';
+
+  @override
+  String exportError(String error) {
+    return 'No se pudo exportar la partida: $error';
+  }
+
+  @override
+  String get importAction => 'Importar partida';
+
+  @override
+  String importSuccess(String playerName) {
+    return 'Partida de $playerName importada.';
+  }
+
+  @override
+  String get importErrInvalidZip => 'Este archivo no es un zip válido.';
+
+  @override
+  String get importErrUnsafePath =>
+      'Este archivo tiene una estructura insegura y se ha rechazado.';
+
+  @override
+  String get importErrTooLarge =>
+      'Este archivo es demasiado grande para importarlo.';
+
+  @override
+  String get importErrNotASave =>
+      'Este archivo no contiene una partida reconocible.';
+
+  @override
+  String get importErrWrite =>
+      'No se pudo escribir la partida importada (disco/permisos).';
+
+  @override
+  String get importConflictTitle => 'Ya existe una partida con este nombre';
+
+  @override
+  String get importConflictBody =>
+      'Importar reemplazará la copia local existente. No se puede deshacer.';
+
+  @override
+  String get importConflictConfirm => 'Sobrescribir';
+
+  @override
+  String get shareAction => 'Compartir';
+
+  @override
+  String get shareUploadFirstCta => 'Subir primero';
+
+  @override
+  String get shareDialogTitle => 'Compartir partida';
+
+  @override
+  String get shareEmailPlaceholder => 'nombre@ejemplo.com';
+
+  @override
+  String get shareInfoNote =>
+      'Compartir da acceso de ver y descargar. Solo tú puedes editar o borrar tu copia en Drive.';
+
+  @override
+  String get shareRoleReader => 'Solo lectura';
+
+  @override
+  String get shareRoleWriter => 'Permitir sincronizar';
+
+  @override
+  String get shareInfoNoteCoop =>
+      'Solo lectura permite ver y descargar. Permitir sincronizar permite sobrescribir tu copia en Drive — nunca podrán borrarla.';
+
+  @override
+  String get shareConfirmButton => 'Compartir';
+
+  @override
+  String shareSuccess(String email) {
+    return 'Compartido con $email.';
+  }
+
+  @override
+  String get manageAccessTitle => 'Personas con acceso';
+
+  @override
+  String get manageAccessEmpty => 'Nadie más tiene acceso todavía.';
+
+  @override
+  String get manageAccessRoleLabel => 'Acceso';
+
+  @override
+  String get manageAccessRevoke => 'Revocar';
+
+  @override
+  String manageAccessRevokeConfirm(String email) {
+    return '¿Quitar el acceso a $email? Cualquier copia local que ya se haya descargado sigue siendo suya.';
+  }
+
+  @override
+  String get driveOnlyControlsYourCopy =>
+      'Compartir controla tu copia en Drive. Si alguien la descarga, esa copia es suya.';
+
+  @override
+  String get driveOnlyControlsYourCopyCoop =>
+      'Sincronizar controla tu copia en Drive — se puede sobrescribir, pero nunca borrar, por quien autorices.';
+
+  @override
+  String get sharedWithMeTitle => 'Compartidas conmigo';
+
+  @override
+  String get sharedWithMeEmpty => 'Nada compartido contigo todavía.';
+
+  @override
+  String get sharedWithMeAdd => 'Añadir save compartido';
+
+  @override
+  String sharedWithMeOwnedBy(String email) {
+    return 'Compartida por $email';
+  }
+
+  @override
+  String get sharedWithMeRoleSync => 'Sincroniza';
+
+  @override
+  String get sharedWithMeRoleRead => 'Solo lectura';
+
+  @override
+  String get sharedWithMeSync => 'Sincronizar';
+
+  @override
+  String get sharedWithMeDownload => 'Descargar';
+
+  @override
+  String get sharedWithMeRemove => 'Desconectar';
+
+  @override
+  String sharedWithMeRemoveConfirm(String email) {
+    return 'Ya no sincronizarás con el Drive de $email, pero puedes volver a añadirla cuando quieras — sigue compartida. Tu copia local se queda como una partida coop normal.';
+  }
+
+  @override
+  String sharedLeaveConfirm(Object email) {
+    return 'Perderás el acceso a esta partida de verdad. No podrás volver a añadirla salvo que $email vuelva a compartirla contigo. Tu copia local se queda como una partida coop normal.';
+  }
+
+  @override
+  String get sharedManageButton => 'Administrar';
+
+  @override
+  String get sharedManageDialogTitle => 'Gestionar compartidas';
+
+  @override
+  String get sharedManageDialogHint =>
+      'Aquí puedes salir de verdad de una partida compartida.';
+
+  @override
+  String get sharedLeaveButton => 'Salir del compartido';
+
+  @override
+  String sharedLeaveSuccess(Object email) {
+    return 'Has salido del compartido de $email.';
+  }
+
+  @override
+  String sharedWithMeSyncConfirm(String email) {
+    return '¿Sobrescribir la copia de $email en Drive con tu partida local?';
+  }
+
+  @override
+  String get sharedWithMeRevoked => 'Ya no tienes acceso';
+
+  @override
+  String sharedRevokedDialogBody(String email, String farmName) {
+    return '$email ha dejado de compartir $farmName contigo. Tu copia local y la de tu Drive se quedan tal cual, ahora en Mis partidas.';
+  }
+
+  @override
+  String get sharedRevokedAccept => 'Aceptar';
+
+  @override
+  String get sharedSelfCleanupTitle => 'Registro corregido';
+
+  @override
+  String sharedSelfCleanupBody(String farmName) {
+    return '$farmName apareció como compartida contigo por error — en realidad es tuya. Se ha corregido, ahora está en Mis partidas.';
+  }
+
+  @override
+  String get sharedWithMeUploadOwn => 'Subir a mi Drive';
+
+  @override
+  String get sharedDownloadOwn => 'Bajar de mi Drive';
+
+  @override
+  String get sharedStatusOwnDriveAhead => 'Tu Drive va por delante — bájalo';
+
+  @override
+  String get sharedSyncBoth => 'Sincronizar ambos';
+
+  @override
+  String get sharedSideMyDrive => 'MI DRIVE';
+
+  @override
+  String sharedSideOwnerDrive(String email) {
+    return 'DRIVE EN $email';
+  }
+
+  @override
+  String sharedSideDate(int day, int year) {
+    return 'Día $day · Año $year';
+  }
+
+  @override
+  String get sharedStatusSyncedNoOwnDrive =>
+      'Sincronizado con el dueño · sin copia en tu Drive';
+
+  @override
+  String get sharedStatusAheadNoOwnDrive =>
+      'Vas por delante · sin copia en tu Drive';
+
+  @override
+  String sharedStatusOwnerAheadNoOwnDrive(String email) {
+    return '$email va por delante · sin copia en tu Drive';
+  }
+
+  @override
+  String get sharedStatusAllSynced => 'Sincronizado (local + los dos Drive)';
+
+  @override
+  String get sharedStatusAheadBoth => 'Vas por delante en los dos Drive';
+
+  @override
+  String get sharedStatusMixed => 'Desincronizado — revisa cada Drive';
+
+  @override
+  String get sharedStatusFullySynced => 'Totalmente sincronizado';
+
+  @override
+  String get sharedStatusSyncedOwn => 'Sincronizado Mi Drive';
+
+  @override
+  String get sharedStatusSyncedOwner => 'Sincronizado compartido';
+
+  @override
+  String get sharedStatusNotCloud => 'Solo en este equipo';
+
+  @override
+  String sharedStatusOwnerAhead(Object email) {
+    return 'Drive en $email va por delante';
+  }
+
+  @override
+  String get sharedStatusBothAhead => 'Los dos Drive van por delante';
+
+  @override
+  String get sharedStatusLocalMissing => 'No está en este dispositivo';
+
+  @override
+  String sharedStatusOwnerUnavailable(Object email) {
+    return 'No se pudo comprobar Drive en $email';
+  }
+
+  @override
+  String get sharedStatusWorking => 'Sincronizando…';
+
+  @override
+  String get sharedSideUnavailable => 'No se pudo comprobar';
+
+  @override
+  String get sharedSyncChooseTitle => '¿Dónde quieres sincronizar?';
+
+  @override
+  String get sharedSyncChooseBody =>
+      'Elige qué copias de la nube quieres actualizar con la partida de este dispositivo.';
+
+  @override
+  String get sharedSyncTargetOwn => 'Mi Drive';
+
+  @override
+  String sharedSyncTargetOwner(Object email) {
+    return 'Drive en $email';
+  }
+
+  @override
+  String get sharedSyncTargetBoth => 'Los dos Drive';
+
+  @override
+  String get sharedDownloadChooseTitle => '¿Qué copia quieres descargar?';
+
+  @override
+  String get sharedDownloadChooseBody =>
+      'Hay más de una copia por delante. Elige cuál quieres traer a este dispositivo.';
+
+  @override
+  String get sharedDownloadSourceOwn => 'Desde Mi Drive';
+
+  @override
+  String sharedDownloadSourceOwner(Object email) {
+    return 'Desde Drive en $email';
+  }
+
+  @override
+  String get sharedWithMePickerTitle => 'Añadir save compartido';
+
+  @override
+  String get sharedPickerEmptyHint =>
+      'Aquí aparece lo que otro jugador te comparta desde Drive.';
+
+  @override
+  String get sharedPickerAddButton => 'Añadir';
+
+  @override
+  String get sharedOriginBadge => 'Compartida';
+
+  @override
+  String sharedOriginFrom(String email) {
+    return 'de $email';
+  }
+
+  @override
+  String get swapBackupDialogTitle => 'Respaldo creado';
+
+  @override
+  String get swapBackupDialogBody =>
+      'La versión anterior se guardó como zip. ¿Qué quieres hacer con ella?';
+
+  @override
+  String get swapBackupUpload => 'Subir a Drive';
+
+  @override
+  String get swapBackupLocalOnly => 'Mantener en este equipo';
+
+  @override
+  String get swapBackupDeleteNow => 'Borrar ahora';
+
+  @override
+  String get swapBackupUploadOk => 'Respaldo subido a Drive.';
+
+  @override
+  String swapBackupUploadErr(String error) {
+    return 'No se pudo subir el respaldo: $error';
+  }
+
+  @override
+  String get swapBackupLocalOnlySnack => 'Respaldo guardado en este equipo.';
+
+  @override
+  String get backupsAction => 'Backups';
+
+  @override
+  String backupsScreenTitle(String farmName) {
+    return 'Respaldos de $farmName';
+  }
+
+  @override
+  String get backupsEmpty => 'Sin respaldos todavía.';
+
+  @override
+  String get backupsRestore => 'Restaurar';
+
+  @override
+  String get backupsRestoreConfirmTitle => '¿Restaurar este respaldo?';
+
+  @override
+  String get backupsRestoreConfirmBody =>
+      'Esto sobrescribe tu partida actual con esta versión anterior. No se puede deshacer.';
+
+  @override
+  String get backupsDelete => 'Eliminar';
+
+  @override
+  String get backupsDeleteConfirmTitle => '¿Eliminar este respaldo?';
+
+  @override
+  String get backupsDeleteConfirmBody =>
+      'Se borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió). No se puede deshacer.';
+
+  @override
+  String get backupsRestoreOk => 'Respaldo restaurado.';
+
+  @override
+  String backupsRestoreErr(String error) {
+    return 'No se pudo restaurar el respaldo: $error';
+  }
+
+  @override
+  String backupsDeleteErr(String error) {
+    return 'No se pudo eliminar el respaldo: $error';
+  }
+
+  @override
+  String get backupsCreate => 'Crear respaldo local';
+
+  @override
+  String get backupsCreateLocalHint =>
+      'Los respaldos se crean primero en este equipo. Después podrás subirlos a Drive.';
+
+  @override
+  String get backupsCreateOk => 'Respaldo creado.';
+
+  @override
+  String backupsCreateErr(String error) {
+    return 'No se pudo crear el respaldo: $error';
+  }
+
+  @override
+  String get backupsDownload => 'Descargar';
+
+  @override
+  String get backupsDownloadOk => 'Respaldo descargado en este equipo.';
+
+  @override
+  String backupsDownloadErr(String error) {
+    return 'No se pudo descargar el respaldo: $error';
+  }
+
+  @override
+  String get backupsCopyOwn => 'Copiar a mi Drive';
+
+  @override
+  String get backupsUploadOwn => 'A mi Drive';
+
+  @override
+  String get backupsUploadShared => 'Al Drive compartido';
+
+  @override
+  String get backupsUploadOk => 'Respaldo subido.';
+
+  @override
+  String backupsUploadErr(String error) {
+    return 'No se pudo subir el respaldo: $error';
+  }
+
+  @override
+  String get backupsLocationLocal => 'Este equipo';
+
+  @override
+  String get backupsLocationOwnDrive => 'Mi Drive';
+
+  @override
+  String get backupsLocationSharedDrive => 'Drive compartido';
+
+  @override
+  String get backupsDeleteChooseBody =>
+      'Elige exactamente dónde borrarlo. Solo aparecen las ubicaciones donde existe este respaldo.';
+
+  @override
+  String get backupsDeleteLocalOnly => 'Solo de este equipo';
+
+  @override
+  String get backupsDeleteOwnOnly => 'Solo de mi Drive';
+
+  @override
+  String get backupsDeleteSharedOnly => 'Solo del Drive compartido';
+
+  @override
+  String get backupsDeleteAll => 'De todas las copias';
+
+  @override
+  String deleteUnifiedTitle(String farmName) {
+    return '¿Eliminar $farmName?';
+  }
+
+  @override
+  String get deleteChooseLocationBody =>
+      'Elige de dónde. La copia de este equipo se borra para siempre; la de Drive va a la papelera (30 días).';
+
+  @override
+  String deleteDriveContextTitle(String farmName) {
+    return '¿Eliminar $farmName de Drive?';
+  }
+
+  @override
+  String get deleteDriveContextBody =>
+      'La copia de Drive irá a la papelera, donde podrás recuperarla durante 30 días.';
+
+  @override
+  String get deleteDriveLocalKept =>
+      'La copia de este equipo se mantendrá sin cambios.';
+
+  @override
+  String deleteLocalContextTitle(String farmName) {
+    return '¿Eliminar $farmName de este equipo?';
+  }
+
+  @override
+  String get deleteLocalContextBody =>
+      'La copia de este equipo se borrará para siempre.';
+
+  @override
+  String deleteLocalDriveCurrent(String date) {
+    return 'Tu copia de Drive está actualizada ($date) y seguirá disponible.';
+  }
+
+  @override
+  String deleteLocalDriveAhead(String date) {
+    return 'Tu copia de Drive es más reciente ($date) y seguirá disponible.';
+  }
+
+  @override
+  String deleteLocalDriveOlder(String driveDate, String localDate) {
+    return 'Tu copia de Drive es anterior ($driveDate); este equipo está en $localDate.';
+  }
+
+  @override
+  String deleteLocalBackupAvailable(int count) {
+    return 'Hay $count respaldos locales disponibles por si necesitas una copia anterior.';
+  }
+
+  @override
+  String get deleteLocalNoRecovery =>
+      'No hay una copia en Drive ni un respaldo local desde el que recuperar esta partida.';
+
+  @override
+  String get deleteOptionLocalOnly => 'Solo de este equipo';
+
+  @override
+  String get deleteOptionDriveOnly => 'Solo de mi Drive';
+
+  @override
+  String get deleteOptionBoth => 'De ambas copias';
+
+  @override
+  String get viewPlayersHint => 'Ver jugadores';
+
+  @override
+  String snackDeletedBoth(String saveName) {
+    return '\"$saveName\" eliminada de este equipo y movida a la papelera de Drive.';
+  }
 
   @override
   String statDayYear(int day, int year) {
@@ -1154,4 +1694,63 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get snackLaunchError => 'No se pudo abrir el juego';
+
+  @override
+  String get makeHostAction => 'HACER ANFITRIÓN';
+
+  @override
+  String get makeHostExperimental => 'EXPERIMENTAL';
+
+  @override
+  String get makeHostDialogTitle => 'Cambiar anfitrión';
+
+  @override
+  String makeHostDialogIntro(String playerName, String farmName) {
+    return '$playerName pasará a ser el anfitrión de $farmName.';
+  }
+
+  @override
+  String get makeHostNewCopyNote =>
+      'Se crea una partida nueva. Después decides qué hacer con la original.';
+
+  @override
+  String makeHostMoveCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Se moverán $count objetos de la granja para hacer sitio a la casa. Nada se borra.',
+      one:
+          'Se moverá 1 objeto de la granja para hacer sitio a la casa. Nada se borra.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get makeHostHouseWarning =>
+      'La casa del nuevo anfitrión se verá como la casa grande del juego. La estética de cabaña no está soportada sin mods.';
+
+  @override
+  String get makeHostConfirmButton => 'Hacer anfitrión';
+
+  @override
+  String makeHostSuccess(String playerName) {
+    return 'Nueva partida creada: $playerName es ahora el anfitrión.';
+  }
+
+  @override
+  String get hostSwapErrInvalid =>
+      'Esta partida tiene una estructura inesperada. No se cambió nada.';
+
+  @override
+  String get hostSwapErrNoSpace =>
+      'No hay espacio libre en la granja para reubicar objetos. No se cambió nada.';
+
+  @override
+  String get hostSwapErrWrite =>
+      'No se pudo escribir la partida nueva (disco/permisos). No se cambió nada.';
+
+  @override
+  String get hostSwapErrValidation =>
+      'La verificación de la partida nueva falló, así que se descartó. La original está intacta.';
 }

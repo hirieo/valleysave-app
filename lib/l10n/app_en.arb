@@ -100,8 +100,20 @@
   "updateDownloading": "Downloading update…",
   "updateError": "Error — tap to retry",
   "disconnectTitle": "Disconnect Drive?",
-  "disconnectBody": "Your saves on Drive won't be deleted. You can reconnect anytime.",
+  "disconnectBody": "This will sign {email} out. Your saves on Drive won't be deleted, you can reconnect anytime.",
+  "@disconnectBody": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
   "disconnectButton": "Disconnect Drive",
+  "disconnectButtonEmail": "Disconnect from {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "connectedAsPrefix": "Connected as",
   "languageTileLabel": "Language",
   "languageDialogTitle": "App language",
   "searchHint": "Search…",
@@ -157,6 +169,295 @@
   "cardDetailDeleteLocal": "Delete from this device",
   "cardDetailDeleteRemote": "Delete from Drive",
   "cardCloseBarrier": "Close",
+  "exportAction": "Export",
+  "exportSuccess": "Save exported.",
+  "exportError": "Couldn't export the save: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "importAction": "Import save",
+  "importSuccess": "{playerName}'s save imported.",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": {"type": "String"}
+    }
+  },
+  "importErrInvalidZip": "This isn't a valid zip file.",
+  "importErrUnsafePath": "This file has an unsafe structure and was rejected.",
+  "importErrTooLarge": "This file is too large to import.",
+  "importErrNotASave": "This file doesn't contain a recognizable save.",
+  "importErrWrite": "Couldn't write the imported save (disk/permissions).",
+  "importConflictTitle": "A save with this name already exists",
+  "importConflictBody": "Importing will replace the existing local copy. This can't be undone.",
+  "importConflictConfirm": "Overwrite",
+  "shareAction": "Share",
+  "shareUploadFirstCta": "Upload first",
+  "shareDialogTitle": "Share save",
+  "shareEmailPlaceholder": "name@example.com",
+  "shareInfoNote": "Sharing gives view-and-download access only. Only you can edit or delete your copy in Drive.",
+  "shareRoleReader": "Read only",
+  "shareRoleWriter": "Allow sync",
+  "shareInfoNoteCoop": "Read only lets them view and download. Allow sync lets them overwrite your copy in Drive — they can never delete it.",
+  "shareConfirmButton": "Share",
+  "shareSuccess": "Shared with {email}.",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "manageAccessTitle": "People with access",
+  "manageAccessEmpty": "Nobody else has access yet.",
+  "manageAccessRoleLabel": "Access",
+  "manageAccessRevoke": "Revoke",
+  "manageAccessRevokeConfirm": "Remove {email}'s access? Any local copy they already downloaded is theirs to keep.",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "driveOnlyControlsYourCopy": "Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.",
+  "driveOnlyControlsYourCopyCoop": "Sync controls your copy in Drive — it can be overwritten, but never deleted, by people you allow to sync.",
+  "sharedWithMeTitle": "Shared with me",
+  "sharedWithMeEmpty": "Nothing shared with you yet.",
+  "sharedWithMeAdd": "Add shared save",
+  "sharedWithMeOwnedBy": "Shared by {email}",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedWithMeRoleSync": "Sync",
+  "sharedWithMeRoleRead": "Read only",
+  "sharedWithMeSync": "Sync",
+  "sharedWithMeDownload": "Download",
+  "sharedWithMeRemove": "Remove from list",
+  "sharedWithMeRemoveConfirm": "You'll stop syncing with {email}'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.",
+  "sharedLeaveConfirm": "You'll lose access to this save for real. You won't be able to add it back unless {email} shares it with you again. Your local copy remains a normal coop save.",
+  "sharedManageButton": "Manage",
+  "sharedManageDialogTitle": "Manage shared saves",
+  "sharedManageDialogHint": "Here you can really leave a shared save.",
+  "sharedLeaveButton": "Leave shared save",
+  "sharedLeaveSuccess": "You left {email}'s shared save.",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedWithMeSyncConfirm": "Overwrite {email}'s copy in Drive with your local save?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedWithMeRevoked": "You no longer have access",
+  "sharedRevokedDialogBody": "{email} stopped sharing {farmName} with you. Your local copy and the one on your Drive stay as they are, now under My saves.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {"type": "String"},
+      "farmName": {"type": "String"}
+    }
+  },
+  "sharedRevokedAccept": "Accept",
+  "sharedSelfCleanupTitle": "Record fixed",
+  "sharedSelfCleanupBody": "{farmName} showed up as shared with you by mistake — it's actually yours. It's been fixed, now it's under My saves.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "sharedWithMeUploadOwn": "Upload to my Drive",
+  "sharedDownloadOwn": "Download from my Drive",
+  "sharedStatusOwnDriveAhead": "Your Drive is ahead — bring it down",
+  "sharedSyncBoth": "Sync both",
+  "sharedSideMyDrive": "MY DRIVE",
+  "sharedSideOwnerDrive": "{email}'s DRIVE",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedSideDate": "Day {day} · Year {year}",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {"type": "int"},
+      "year": {"type": "int"}
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "Synced with the owner · no copy in your Drive",
+  "sharedStatusAheadNoOwnDrive": "You're ahead · no copy in your Drive",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} is ahead · no copy in your Drive",
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "sharedStatusAllSynced": "Synced (local + both Drives)",
+  "sharedStatusAheadBoth": "You're ahead on both Drives",
+  "sharedStatusMixed": "Out of sync — check each Drive",
+  "sharedStatusFullySynced": "Fully synchronized",
+  "sharedStatusSyncedOwn": "My Drive synchronized",
+  "sharedStatusSyncedOwner": "Shared Drive synchronized",
+  "sharedStatusNotCloud": "Only on this device",
+  "sharedStatusOwnerAhead": "Drive at {email} is ahead",
+  "sharedStatusBothAhead": "Both Drives are ahead",
+  "sharedStatusLocalMissing": "Not on this device",
+  "sharedStatusOwnerUnavailable": "Could not check Drive at {email}",
+  "sharedStatusWorking": "Synchronizing…",
+  "sharedSideUnavailable": "Could not check",
+  "sharedSyncChooseTitle": "Where do you want to synchronize?",
+  "sharedSyncChooseBody": "Choose which cloud copies to update from this device.",
+  "sharedSyncTargetOwn": "My Drive",
+  "sharedSyncTargetOwner": "Drive at {email}",
+  "sharedSyncTargetBoth": "Both Drives",
+  "sharedDownloadChooseTitle": "Which copy do you want to download?",
+  "sharedDownloadChooseBody": "More than one copy is ahead. Choose which one to bring to this device.",
+  "sharedDownloadSourceOwn": "From My Drive",
+  "sharedDownloadSourceOwner": "From Drive at {email}",
+  "sharedWithMePickerTitle": "Add shared save",
+  "sharedPickerEmptyHint": "Folders another player shares with you from Drive show up here.",
+  "sharedPickerAddButton": "Add",
+  "sharedOriginBadge": "Shared",
+  "sharedOriginFrom": "from {email}",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "swapBackupDialogTitle": "Backup created",
+  "swapBackupDialogBody": "The previous version was saved as a zip. What do you want to do with it?",
+  "swapBackupUpload": "Upload to Drive",
+  "swapBackupLocalOnly": "Keep on this device",
+  "swapBackupDeleteNow": "Delete now",
+  "swapBackupUploadOk": "Backup uploaded to Drive.",
+  "swapBackupUploadErr": "Couldn't upload the backup: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "swapBackupLocalOnlySnack": "Backup saved on this device.",
+  "backupsAction": "Backups",
+  "backupsScreenTitle": "Backups of {farmName}",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "backupsEmpty": "No backups yet.",
+  "backupsRestore": "Restore",
+  "backupsRestoreConfirmTitle": "Restore this backup?",
+  "backupsRestoreConfirmBody": "This overwrites your current save with this earlier version. This can't be undone.",
+  "backupsDelete": "Delete",
+  "backupsDeleteConfirmTitle": "Delete this backup?",
+  "backupsDeleteConfirmBody": "Deletes it everywhere it exists (this device and Drive, if uploaded). This can't be undone.",
+  "backupsRestoreOk": "Backup restored.",
+  "backupsRestoreErr": "Couldn't restore the backup: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsDeleteErr": "Couldn't delete the backup: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsCreate": "Create local backup",
+  "backupsCreateLocalHint": "Backups are created on this device first. You can upload them to Drive afterwards.",
+  "backupsCreateOk": "Backup created.",
+  "backupsCreateErr": "Couldn't create the backup: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsDownload": "Download",
+  "backupsDownloadOk": "Backup downloaded to this device.",
+  "backupsDownloadErr": "Couldn't download the backup: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsCopyOwn": "Copy to my Drive",
+  "backupsUploadOwn": "To my Drive",
+  "backupsUploadShared": "To shared Drive",
+  "backupsUploadOk": "Backup uploaded.",
+  "backupsUploadErr": "Couldn't upload the backup: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "backupsLocationLocal": "This device",
+  "backupsLocationOwnDrive": "My Drive",
+  "backupsLocationSharedDrive": "Shared Drive",
+  "backupsDeleteChooseBody": "Choose exactly where to delete it. Only locations where this backup exists are shown.",
+  "backupsDeleteLocalOnly": "Only from this device",
+  "backupsDeleteOwnOnly": "Only from my Drive",
+  "backupsDeleteSharedOnly": "Only from shared Drive",
+  "backupsDeleteAll": "From all copies",
+  "deleteUnifiedTitle": "Delete {farmName}?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "deleteChooseLocationBody": "Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).",
+  "deleteDriveContextTitle": "Delete {farmName} from Drive?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "deleteDriveContextBody": "The Drive copy will move to Trash, where it can be recovered for 30 days.",
+  "deleteDriveLocalKept": "The copy on this device will remain unchanged.",
+  "deleteLocalContextTitle": "Delete {farmName} from this device?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
+  "deleteLocalContextBody": "The copy on this device will be deleted permanently.",
+  "deleteLocalDriveCurrent": "Your Drive copy is up to date ({date}) and will remain available.",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "deleteLocalDriveAhead": "Your Drive copy is newer ({date}) and will remain available.",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "deleteLocalDriveOlder": "Your Drive copy is older ({driveDate}); this device is at {localDate}.",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {"type": "String"},
+      "localDate": {"type": "String"}
+    }
+  },
+  "deleteLocalBackupAvailable": "There are {count} local backups available if you need an earlier copy.",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "deleteLocalNoRecovery": "There is no Drive copy or local backup to recover this game from.",
+  "deleteOptionLocalOnly": "Only from this device",
+  "deleteOptionDriveOnly": "Only from Drive",
+  "deleteOptionBoth": "From both (device + Drive)",
+  "viewPlayersHint": "View players",
+  "snackDeletedBoth": "\"{saveName}\" deleted from this device and moved to Drive Trash.",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": {"type": "String"}
+    }
+  },
   "statDayYear": "Day {day} · Year {year}",
   "@statDayYear": {
     "placeholders": {
@@ -482,5 +783,34 @@
   "settingsGameExeNotFound": "Not found automatically",
   "settingsGameExeBrowse": "Browse…",
   "settingsGameExeSaved": "Path saved",
-  "snackLaunchError": "Couldn’t open the game"
+  "snackLaunchError": "Couldn’t open the game",
+  "makeHostAction": "MAKE HOST",
+  "makeHostExperimental": "EXPERIMENTAL",
+  "makeHostDialogTitle": "Change host",
+  "makeHostDialogIntro": "{playerName} will become the host of {farmName}.",
+  "@makeHostDialogIntro": {
+    "placeholders": {
+      "playerName": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "makeHostNewCopyNote": "A new save is created. You'll decide what to do with the original next.",
+  "makeHostMoveCount": "{count, plural, one{1 farm object will be moved to make room for the house. Nothing is deleted.} other{{count} farm objects will be moved to make room for the house. Nothing is deleted.}}",
+  "@makeHostMoveCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "makeHostHouseWarning": "The new host's home will look like the game's main farmhouse. Cabin looks aren't supported without mods.",
+  "makeHostConfirmButton": "Make host",
+  "makeHostSuccess": "New save created: {playerName} is now the host.",
+  "@makeHostSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "hostSwapErrInvalid": "This save has an unexpected structure. Nothing was changed.",
+  "hostSwapErrNoSpace": "No free space on the farm to relocate objects. Nothing was changed.",
+  "hostSwapErrWrite": "Could not write the new save (disk/permissions). Nothing was changed.",
+  "hostSwapErrValidation": "Verification of the new save failed, so it was discarded. The original is intact."
 }

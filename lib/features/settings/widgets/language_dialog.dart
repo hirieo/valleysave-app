@@ -7,6 +7,8 @@ import '../../../generated/app_localizations.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../shared/widgets/glass_dialog.dart';
+import '../../../shared/widgets/pressable_scale.dart';
 
 Widget flagView(String flag, double size) {
   if (flag.startsWith('assets/')) {
@@ -74,25 +76,29 @@ class _LanguageDialogState extends State<LanguageDialog>
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 340),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.55),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: widget.accent.withValues(alpha: 0.35)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+      child: glassDialogShell(
+        context,
+        maxWidth: 340,
+        accent: widget.accent,
+        // Selector de lista: quiere ir pegado a los bordes (su propia
+        // cabecera y la lista ya traen su padding), no el hueco pensado
+        // para título+cuerpo+acciones de un diálogo de confirmación.
+        padding: EdgeInsets.zero,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 14, 12, 10),
                 child: Row(
                   children: [
-                    Text(widget.l10n.languageDialogTitle.toUpperCase(), style: AppTypography.eyebrow()),
+                    Text(
+                      widget.l10n.languageDialogTitle.toUpperCase(),
+                      style: AppTypography.eyebrow(),
+                    ),
                     const Spacer(),
-                    GestureDetector(
+                    PressableScale(
                       onTap: () => Navigator.pop(context),
+                      semanticLabel: widget.l10n.cancel,
                       child: Icon(
                         Icons.close_rounded,
                         size: 18,
@@ -108,28 +114,39 @@ class _LanguageDialogState extends State<LanguageDialog>
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.40),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.10),
+                    ),
                   ),
                   child: Row(
                     children: [
                       const SizedBox(width: 12),
-                      Icon(Icons.search_rounded, size: 16, color: AppColors.textFaint),
+                      Icon(
+                        Icons.search_rounded,
+                        size: 16,
+                        color: AppColors.textFaint,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: TextField(
                           controller: _search,
-                          onChanged: (v) => setState(() => _query = v.toLowerCase()),
+                          onChanged: (v) =>
+                              setState(() => _query = v.toLowerCase()),
                           style: AppTypography.body(color: AppColors.text),
                           decoration: InputDecoration(
                             hintText: widget.l10n.searchHint,
-                            hintStyle: AppTypography.body(color: AppColors.textFaint),
+                            hintStyle: AppTypography.body(
+                              color: AppColors.textFaint,
+                            ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
                           ),
                         ),
                       ),
                       if (_query.isNotEmpty)
-                        GestureDetector(
+                        PressableScale(
                           onTap: () {
                             _search.clear();
                             setState(() => _query = '');
@@ -176,7 +193,6 @@ class _LanguageDialogState extends State<LanguageDialog>
             ],
           ),
         ),
-      ),
     );
   }
 }
@@ -210,6 +226,7 @@ class _LangRow extends StatefulWidget {
 
 class _LangRowState extends State<_LangRow> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -229,13 +246,17 @@ class _LangRowState extends State<_LangRow> {
           child: child,
         ),
       ),
-      child: GestureDetector(
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
         onTap: widget.onTap,
         onTapDown: (_) => setState(() => _pressed = true),
         onTapUp: (_) => setState(() => _pressed = false),
         onTapCancel: () => setState(() => _pressed = false),
         child: AnimatedScale(
-          scale: _pressed ? 0.985 : 1.0,
+          scale: _pressed ? 0.985 : (_hovered ? 1.01 : 1.0),
           duration: _pressed
               ? const Duration(milliseconds: 80)
               : const Duration(milliseconds: 200),
@@ -249,8 +270,10 @@ class _LangRowState extends State<_LangRow> {
               color: widget.selected
                   ? widget.accent.withValues(alpha: 0.10)
                   : _pressed
-                      ? Colors.white.withValues(alpha: 0.04)
-                      : Colors.transparent,
+                  ? Colors.white.withValues(alpha: 0.04)
+                  : _hovered
+                  ? Colors.white.withValues(alpha: 0.03)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -264,7 +287,9 @@ class _LangRowState extends State<_LangRow> {
                       Text(
                         widget.label,
                         style: AppTypography.bodyStrong(
-                          color: widget.selected ? widget.accent : AppColors.text,
+                          color: widget.selected
+                              ? widget.accent
+                              : AppColors.text,
                         ),
                       ),
                       if (widget.isAuto)
@@ -295,6 +320,7 @@ class _LangRowState extends State<_LangRow> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );

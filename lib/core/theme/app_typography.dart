@@ -5,7 +5,8 @@ import 'app_colors.dart';
 
 /// ValleySave typography tokens.
 ///
-/// Fraunces (italic) for display, DM Sans for body, DM Mono for stats/labels.
+/// Bodoni Moda (itálica) para display, Fira Code para todo lo demás —
+/// mismo par en toda la app (tarjetas, diálogos, cabeceras).
 class AppTypography {
   AppTypography._();
 
@@ -44,22 +45,22 @@ class AppTypography {
         ),
       );
 
-  // ----- Body (Urbanist) -----
+  // ----- Body (Fira Code) -----
   static TextStyle body({Color color = AppColors.textMuted}) =>
-      GoogleFonts.urbanist(
+      GoogleFonts.firaCode(
         textStyle: TextStyle(
           color: color,
-          fontSize: 17,
+          fontSize: 15,
           fontWeight: FontWeight.w400,
           height: 1.5,
         ),
       );
 
   static TextStyle bodyStrong({Color color = AppColors.text}) =>
-      GoogleFonts.urbanist(
+      GoogleFonts.firaCode(
         textStyle: TextStyle(
           color: color,
-          fontSize: 17,
+          fontSize: 15,
           fontWeight: FontWeight.w500,
           height: 1.5,
         ),
@@ -77,20 +78,20 @@ class AppTypography {
       );
 
   static TextStyle button({Color color = AppColors.text}) =>
-      GoogleFonts.urbanist(
+      GoogleFonts.firaCode(
         textStyle: TextStyle(
           color: color,
-          fontSize: 17,
-          fontWeight: FontWeight.w700,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0.2,
         ),
       );
 
   static TextStyle eyebrow({Color color = AppColors.green}) =>
-      GoogleFonts.urbanist(
+      GoogleFonts.firaCode(
         textStyle: TextStyle(
           color: color,
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.6,
         ),

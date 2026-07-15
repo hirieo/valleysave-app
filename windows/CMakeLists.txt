@@ -32,6 +32,13 @@ set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE}")
 # Use Unicode for all projects.
 add_definitions(-DUNICODE -D_UNICODE)
 
+# webview_windows (0.4.0, sin release más nueva) usa <experimental/coroutine>,
+# que el SDK de Windows/MSVC recientes convierten en error duro (C2338) en vez
+# de warning. No hay fix upstream del plugin todavía — workaround oficial de
+# Microsoft: silenciar la deprecación. Debe ir ANTES de add_subdirectory de
+# flutter/plugins para propagarse a los targets de los plugins.
+add_definitions(-D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+
 # Compilation settings that should be applied to most targets.
 #
 # Be cautious about adding new options here, as plugins use this function by

@@ -131,6 +131,18 @@ class SaveFile {
     return '${h}h';
   }
 
+  /// Progreso de CALENDARIO (año/estación/día) — nivel granja, igual para
+  /// cualquier jugador. Se usa para "quién va por delante" (SaveEntry.status)
+  /// en vez de `millisecondsPlayed`, que es por-jugador y deja de servir en
+  /// cuanto cambia quién es el anfitrión (feedback 2026-07-12: tras un swap,
+  /// comparar tiempo jugado comparaba a DOS PERSONAS DISTINTAS, no el avance
+  /// real de la partida).
+  int get calendarDayOrdinal {
+    const seasonOrder = {'spring': 0, 'summer': 1, 'fall': 2, 'winter': 3};
+    final seasonIndex = seasonOrder[currentSeason.toLowerCase()] ?? 0;
+    return (year - 1) * 112 + seasonIndex * 28 + dayOfMonth;
+  }
+
   // ── Season ──────────────────────────────────────────────────────────
   SeasonState get seasonState => switch (currentSeason.toLowerCase()) {
     'spring' => SeasonState.spring,

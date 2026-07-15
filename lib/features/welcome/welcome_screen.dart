@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/models/season_state.dart';
 import '../../core/services/auth_service.dart';
@@ -39,6 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   final _progressNotifier = ValueNotifier<double>(0);
   // ignore: unused_field — se pasará a la SyncScreen cuando esté implementada
   DriveService? _drive;
+  OverlayEntry? _snackEntry;
 
   late final AnimationController _pulseCtrl;
   late final Animation<double> _pulseAnim;
@@ -86,6 +88,51 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
   }
 
+  /// Cápsula centrada abajo, mismo patrón que `_snack` en `saves_screen.dart`
+  /// — reemplaza el `SnackBar` nativo de Material (barra roja pegada abajo)
+  /// que desentonaba con el resto de la app (2026-07-15, auditoría visual).
+  void _snack(String msg) {
+    if (!mounted) return;
+    _snackEntry?.remove();
+    final accent = SeasonData.data[SeasonController.instance.season.value]!.accentColor;
+    _snackEntry = OverlayEntry(
+      builder: (_) => Positioned(
+        bottom: 48,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 360),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.13),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: accent.withValues(alpha: 0.32)),
+              ),
+              child: Text(
+                msg,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.firaCode(
+                  fontSize: 12,
+                  color: Colors.white.withValues(alpha: 0.85),
+                  height: 1.45,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    Overlay.of(context).insert(_snackEntry!);
+    Future.delayed(const Duration(seconds: 4), () {
+      _snackEntry?.remove();
+      _snackEntry = null;
+    });
+  }
+
   Future<void> _tryRestoreAuth() async {
     AuthClient? client;
     try {
@@ -120,13 +167,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     } catch (e) {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${l10n.error}: $e'),
-            backgroundColor: const Color(0xFFC06050),
-            duration: const Duration(seconds: 10),
-          ),
-        );
+        _snack('${l10n.error}: $e');
       }
     } finally {
       if (mounted) setState(() => _authLoading = false);
@@ -181,13 +222,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         if (mounted) {
           Navigator.of(context, rootNavigator: true).maybePop();
           setState(() => _updateDownloading = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${AppLocalizations.of(context)!.error}: $e'),
-              backgroundColor: const Color(0xFFC06050),
-              duration: const Duration(seconds: 8),
-            ),
-          );
+          _snack('${AppLocalizations.of(context)!.error}: $e');
         }
       },
     );
@@ -270,7 +305,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     final result = await Navigator.push<String?>(
       context,
       AppPageRoute(
-        builder: (_) => SettingsScreen(showDisconnect: _authConnected),
+        builder: (_) =>
+            SettingsScreen(showDisconnect: _authConnected, drive: _drive),
       ),
     );
     if (mounted && result == 'disconnect') {

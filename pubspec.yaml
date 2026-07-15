@@ -1,7 +1,7 @@
 name: valleysave
 description: "Sync Stardew Valley save files across devices via Google Drive."
 publish_to: 'none'
-version: 0.1.18+26
+version: 0.2.0+27
 
 environment:
   sdk: ^3.12.0
@@ -32,6 +32,14 @@ dependencies:
   shizuku_api: ^1.2.2
   android_intent_plus: ^5.2.0
   meta: ^1.16.0
+  archive: ^4.0.9
+  # 11.0.2 no registra su clase Kotlin con AGP 9 cuando Flutter mantiene
+  # android.builtInKotlin=false para plugins legacy. 10.3.10 es la última
+  # estable publicada compatible e incluye los parches Android críticos.
+  file_picker: 10.3.10
+  share_plus: ^12.0.2
+  webview_flutter: ^4.14.1
+  webview_windows: ^0.4.0
 
 dev_dependencies:
   flutter_test:

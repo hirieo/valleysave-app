@@ -30,6 +30,7 @@ class BackupActionButton extends StatefulWidget {
 class _BackupActionButtonState extends State<BackupActionButton> {
   bool _pressed = false;
   bool _busy = false;
+  bool _hovered = false;
 
   Future<void> _run() async {
     if (_busy || widget.onPressed == null) return;
@@ -50,14 +51,18 @@ class _BackupActionButtonState extends State<BackupActionButton> {
     final reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final backgroundAlpha = widget.filled
-        ? (_pressed ? .22 : .14)
-        : (_pressed || _busy ? .12 : .05);
+        ? (_pressed ? .22 : (_hovered ? .20 : .14))
+        : (_pressed || _busy ? .12 : (_hovered ? .09 : .05));
 
     Widget button = Semantics(
       button: true,
       enabled: enabled,
       label: widget.label,
-      child: GestureDetector(
+      child: MouseRegion(
+        cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+        onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
+        onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+        child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: enabled ? _run : null,
         onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
@@ -82,7 +87,9 @@ class _BackupActionButtonState extends State<BackupActionButton> {
             decoration: BoxDecoration(
               color: widget.color.withValues(alpha: backgroundAlpha),
               border: Border.all(
-                color: widget.color.withValues(alpha: enabled ? .66 : .28),
+                color: widget.color.withValues(
+                  alpha: enabled ? (_hovered ? .85 : .66) : .28,
+                ),
               ),
               borderRadius: BorderRadius.circular(9),
             ),
@@ -112,6 +119,7 @@ class _BackupActionButtonState extends State<BackupActionButton> {
                   ),
           ),
         ),
+      ),
       ),
     );
 

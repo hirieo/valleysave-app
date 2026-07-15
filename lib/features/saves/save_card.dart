@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -497,30 +498,66 @@ class SharedOriginBadge extends StatelessWidget {
   }
 }
 
-/// Corona del anfitrión, junto a la fecha. Solo visible cuando el jugador
-/// seleccionado es el anfitrión. Caja ajustada al emoji (padding mínimo).
+/// Marca al anfitrión, junto a la fecha. Solo visible cuando el jugador
+/// seleccionado es el anfitrión. Estrella de la suerte de 5 puntas (como la
+/// del noticiero de Stardew Valley) en el índigo real del Stardrop del
+/// juego — antes un emoji 👑 genérico sin relación con la estética del
+/// juego (reemplazado 2026-07-15, mockup aprobado con color extraído del
+/// sprite real).
 class HostCrown extends StatelessWidget {
   const HostCrown({super.key});
+
+  static const _kIndigo = Color(0xFF8020E0);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(3),
+      // El emoji 👑 anterior no tenía tamaño fijo (fontSize 21 + padding 3
+      // por lado) — su glifo renderiza más grande que el fontSize nominal,
+      // así que el badge real rondaba los 32px, no 27. Se iguala aquí.
+      width: 32,
+      height: 32,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0C040).withValues(alpha: 0.14),
-        border: Border.all(
-          color: const Color(0xFFF0C040).withValues(alpha: 0.45),
-        ),
+        color: _kIndigo.withValues(alpha: 0.14),
+        border: Border.all(color: _kIndigo.withValues(alpha: 0.55)),
         borderRadius: BorderRadius.circular(7),
       ),
-      // Ajustado a ojo: la fuente de emoji del sistema no centra el glifo en
-      // su línea de texto (queda pegado abajo). -2.5px lo sube al centro real.
-      child: Transform.translate(
-        offset: const Offset(0, -2.5),
-        child: const Text('👑', style: TextStyle(fontSize: 21, height: 1)),
-      ),
+      child: const CustomPaint(painter: _LuckStarPainter()),
     );
   }
+}
+
+class _LuckStarPainter extends CustomPainter {
+  const _LuckStarPainter();
+
+  static const _outer = Color(0xFF8020E0);
+  static const _inner = Color(0xFFD8A8F5);
+
+  Path _star(Offset center, double outerR, double innerR) {
+    final path = Path();
+    for (var i = 0; i < 10; i++) {
+      final a = -math.pi / 2 + i * math.pi / 5;
+      final r = i.isEven ? outerR : innerR;
+      final x = center.dx + math.cos(a) * r;
+      final y = center.dy + math.sin(a) * r;
+      i == 0 ? path.moveTo(x, y) : path.lineTo(x, y);
+    }
+    path.close();
+    return path;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final outerR = size.width * 0.41;
+
+    canvas.drawCircle(center, size.width * 0.44, Paint()..color = _outer.withValues(alpha: 0.35));
+    canvas.drawPath(_star(center, outerR, outerR * 0.382), Paint()..color = _outer);
+    canvas.drawPath(_star(center, outerR * 0.52, outerR * 0.52 * 0.382), Paint()..color = _inner);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 /// Nombre + género del jugador seleccionado. Para usar junto a [PlayerSwitcher]
@@ -1629,10 +1666,16 @@ class ActionBtn extends StatefulWidget {
 
 class _ActionBtnState extends State<ActionBtn> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final enabled = widget.onTap != null;
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
+      onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+      child: GestureDetector(
       onTap: widget.onTap,
       onTapDown: widget.onTap != null
           ? (_) => setState(() => _pressed = true)
@@ -1645,14 +1688,22 @@ class _ActionBtnState extends State<ActionBtn> {
             ? const Duration(milliseconds: 100)
             : const Duration(milliseconds: 200),
         curve: const Cubic(0.23, 1, 0.32, 1),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOut,
           padding: widget.iconOnly
               ? const EdgeInsets.all(8)
               : const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha: widget.filled ? 0.16 : 0.0),
-            border: Border.all(color: widget.color.withValues(alpha: 0.50)),
+            color: widget.color.withValues(
+              alpha: widget.filled
+                  ? (_hovered ? 0.24 : 0.16)
+                  : (_hovered ? 0.08 : 0.0),
+            ),
+            border: Border.all(
+              color: widget.color.withValues(alpha: _hovered ? 0.75 : 0.50),
+            ),
             borderRadius: BorderRadius.circular(8),
           ),
           child: widget.iconOnly
@@ -1674,6 +1725,7 @@ class _ActionBtnState extends State<ActionBtn> {
                   ],
                 ),
         ),
+      ),
       ),
     );
   }

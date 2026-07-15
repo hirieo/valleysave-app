@@ -309,10 +309,20 @@ class AppLocalizationsKo extends AppLocalizations {
   String get disconnectTitle => 'Drive 연결을 끊으시겠습니까?';
 
   @override
-  String get disconnectBody => 'Drive의 저장은 삭제되지 않습니다. 언제든지 다시 연결할 수 있습니다.';
+  String disconnectBody(String email) {
+    return 'Drive의 저장은 삭제되지 않습니다. 언제든지 다시 연결할 수 있습니다.';
+  }
 
   @override
   String get disconnectButton => 'Drive 연결 해제';
+
+  @override
+  String disconnectButtonEmail(String email) {
+    return 'Disconnect from $email';
+  }
+
+  @override
+  String get connectedAsPrefix => 'Connected as';
 
   @override
   String get languageTileLabel => '언어';
@@ -573,6 +583,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get sharedWithMeRevoked => 'You no longer have access';
+
+  @override
+  String sharedRevokedDialogBody(String email, String farmName) {
+    return '$email stopped sharing $farmName with you. Your local copy and the one on your Drive stay as they are, now under My saves.';
+  }
+
+  @override
+  String get sharedRevokedAccept => 'Accept';
+
+  @override
+  String get sharedSelfCleanupTitle => 'Record fixed';
+
+  @override
+  String sharedSelfCleanupBody(String farmName) {
+    return '$farmName showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.';
+  }
 
   @override
   String get sharedWithMeUploadOwn => 'Upload to my Drive';

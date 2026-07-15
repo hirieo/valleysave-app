@@ -270,7 +270,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     final result = await Navigator.push<String?>(
       context,
       AppPageRoute(
-        builder: (_) => SettingsScreen(showDisconnect: _authConnected),
+        builder: (_) =>
+            SettingsScreen(showDisconnect: _authConnected, drive: _drive),
       ),
     );
     if (mounted && result == 'disconnect') {

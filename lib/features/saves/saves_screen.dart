@@ -91,6 +91,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // badge del botón "Backups" en la hoja de detalle (rápido, sin red).
   Map<String, int> _backupCounts = {};
 
+  // Cuenta Google conectada — subtítulo bajo el título de la cabecera.
+  String? _connectedEmail;
+
   // ── Modo de acceso en Android ──
   static const _modePrefKey = 'android_access_mode';
   AndroidMode? _mode; // null = aún leyendo la preferencia
@@ -105,6 +108,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _init();
+    _loadConnectedEmail();
+  }
+
+  Future<void> _loadConnectedEmail() async {
+    final email = await widget.drive?.myEmail();
+    if (mounted && email != null) setState(() => _connectedEmail = email);
   }
 
   @override
@@ -412,6 +421,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       return;
     }
     try {
+      // Auto-detección: cualquier carpeta que Drive ya marca `sharedWithMe`
+      // y que coincide con algo que ya tenemos (local o nuestro propio
+      // Drive) se registra sola como compartida — no hace falta pasar por
+      // "Añadir" si ya jugábamos esa granja (2026-07-15, petición usuario).
+      await _autoRegisterMatchingShares(local);
+
       final shared = await widget.drive!.listSharedSaves();
       final localByName = {for (final s in local) s.folderName: s};
       // `_entries` ya está actualizado en este punto (lo fija `_load` con
@@ -419,13 +434,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       // reutilizamos su emparejamiento local↔Drive PROPIO sin llamada extra
       // a la API (modelo de 3 sitios, ver `SharedSaveEntry.ownDriveStats`).
       final ownByName = {for (final e in _entries) e.folderName: e};
+
+      // Revocación REAL confirmada por la vía pasiva (racha de 24h ver
+      // `DriveService.listSharedSaves`) — se deja de rastrear como
+      // compartida y pasa a ser una partida normal (2026-07-15, petición
+      // usuario). Los fallos transitorios (cuota, red) NUNCA llegan aquí.
+      final reallyRevoked = shared.where((s) => s.revoked).toList();
+
       final merged = [
         for (final s in shared)
-          s.copyWith(
-            localMatch: localByName[s.folderName],
-            ownDriveStats: ownByName[s.folderName]?.drive,
-            ownDriveFolderId: ownByName[s.folderName]?.driveFolderId,
-          ),
+          if (!s.revoked)
+            s.copyWith(
+              localMatch: localByName[s.folderName],
+              ownDriveStats: ownByName[s.folderName]?.drive,
+              ownDriveFolderId: ownByName[s.folderName]?.driveFolderId,
+            ),
       ];
       if (mounted) {
         setState(() {
@@ -433,9 +456,135 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           _sharedLoading = false;
         });
       }
+      final myEmail = reallyRevoked.isEmpty
+          ? null
+          : await widget.drive!.myEmail();
+      for (final r in reallyRevoked) {
+        await _handleConfirmedRevocation(
+          folderId: r.folderId,
+          ownerEmail: r.ownerEmail,
+          farmName: r.folderName,
+          reload: false,
+          // Registro corrupto (dueño == tú mismo, ver `DriveService.
+          // listSharedSaves`) — no una revocación de verdad de otra
+          // persona. Mensaje distinto: "email X ha dejado de compartir
+          // contigo" no tiene sentido cuando X eres tú.
+          selfCleanup: myEmail != null && r.ownerEmail == myEmail,
+        );
+      }
     } catch (_) {
       if (mounted) setState(() => _sharedLoading = false);
     }
+  }
+
+  /// Punto único para las dos vías de revocación confirmada (2026-07-15):
+  /// pasiva (racha de 24h en `listSharedSaves`) y activa (Drive responde con
+  /// éxito "ya no hay permiso" al intentar sincronizar/subir un backup,
+  /// `SharedAccessRevokedException` — señal inmediata, no espera la racha).
+  /// En ambos casos: se deja de rastrear + aviso único con "Aceptar".
+  /// [reload] se salta cuando el caller (`_loadSharedSaves`) ya va a hacer
+  /// su propio `setState` justo después, para no recargar dos veces.
+  Future<void> _handleConfirmedRevocation({
+    required String folderId,
+    required String ownerEmail,
+    required String farmName,
+    bool reload = true,
+    bool selfCleanup = false,
+  }) async {
+    if (widget.drive == null) return;
+    await widget.drive!.removeSharedSave(folderId);
+    if (reload) await _load(silent: true);
+    if (mounted) {
+      await _showSharedRevokedDialog(
+        ownerEmail,
+        farmName,
+        selfCleanup: selfCleanup,
+      );
+    }
+  }
+
+  /// B — coincidencia por `folderName` entre lo ya registrado en
+  /// "Compartidas conmigo" y algo que Drive ya marca como compartido con
+  /// nosotros: se registra sola. `folderName` incluye un ID numérico único
+  /// por granja, así que una coincidencia es prácticamente inequívoca.
+  /// Best-effort: cualquier fallo se ignora, la siguiente carga reintenta.
+  Future<void> _autoRegisterMatchingShares(List<SaveFile> local) async {
+    final drive = widget.drive;
+    if (drive == null) return;
+    try {
+      final knownFolderNames = {
+        for (final s in local) s.folderName,
+        for (final e in _entries)
+          if (e.drive != null) e.folderName,
+      };
+      if (knownFolderNames.isEmpty) return;
+      final alreadyTracked = await drive.sharedFolderIds();
+      final candidates = await drive.listSharedFolders();
+      for (final folder in candidates) {
+        final id = folder.id;
+        final name = folder.name;
+        if (id == null || name == null) continue;
+        if (alreadyTracked.contains(id)) continue;
+        if (!knownFolderNames.contains(name)) continue;
+        try {
+          await drive.addSharedSave(id);
+        } catch (_) {}
+      }
+    } catch (_) {}
+  }
+
+  /// A — aviso único, centrado, que exige "Aceptar" (no un snackbar: es una
+  /// pérdida de acceso, debe quedar claro que se ha visto). Mockup aprobado
+  /// 2026-07-15. [selfCleanup]: el registro apuntaba a un save del que TÚ
+  /// eres dueño (dato corrupto, ver `DriveService.listSharedSaves`) — texto
+  /// distinto, "email X ha dejado de compartir contigo" no tiene sentido
+  /// cuando X eres tú mismo.
+  Future<void> _showSharedRevokedDialog(
+    String ownerEmail,
+    String farmName, {
+    bool selfCleanup = false,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    return showDialog<void>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          accent: const Color(0xFFE0B850),
+          child: _dialogBody(
+            title: Text(
+              selfCleanup
+                  ? l10n.sharedSelfCleanupTitle
+                  : l10n.sharedWithMeRevoked,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Text(
+              selfCleanup
+                  ? l10n.sharedSelfCleanupBody(farmName)
+                  : l10n.sharedRevokedDialogBody(ownerEmail, farmName),
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                height: 1.6,
+                color: Colors.white.withValues(alpha: 0.80),
+              ),
+            ),
+            actions: [
+              ActionBtn(
+                label: l10n.sharedRevokedAccept,
+                color: const Color(0xFFE0B850),
+                filled: true,
+                onTap: () => Navigator.pop(ctx),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// US5 — botón "Añadir" de la sección: abre el selector de carpetas
@@ -478,6 +627,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
       await _load(silent: true);
       if (mounted) _snack(l10n.exportSuccess);
+    } on SharedAccessRevokedException {
+      // Vía activa: Drive respondió con éxito "ya no hay permiso" — señal
+      // inmediata y fiable, no hace falta esperar la racha pasiva de 24h.
+      await _handleConfirmedRevocation(
+        folderId: entry.folderId,
+        ownerEmail: entry.ownerEmail,
+        farmName: entry.folderName,
+      );
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
@@ -527,6 +684,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       }
       await _load(silent: true);
       if (mounted) _snack(l10n.exportSuccess);
+    } on SharedAccessRevokedException {
+      // Vía activa (ver `_handleSyncShared`): puede pasar aquí también si
+      // se eligió "Ambos" y solo falló la mitad del Drive del dueño.
+      await _handleConfirmedRevocation(
+        folderId: entry.folderId,
+        ownerEmail: entry.ownerEmail,
+        farmName: entry.folderName,
+      );
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
@@ -1000,7 +1165,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _openSettings() async {
     final result = await Navigator.push<String?>(
       context,
-      AppPageRoute(builder: (_) => const SettingsScreen(showDisconnect: true)),
+      AppPageRoute(
+        builder: (_) =>
+            SettingsScreen(showDisconnect: true, drive: widget.drive),
+      ),
     );
     if (!mounted) return;
     if (result == 'disconnect') {
@@ -1659,13 +1827,38 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       Navigator.pop(ctx);
                       _showManageAccess(entry);
                     },
-                    child: Text(
-                      l10n.manageAccessTitle,
-                      style: GoogleFonts.firaCode(
-                        fontSize: 10.5,
-                        color: Colors.white.withValues(alpha: 0.45),
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.white.withValues(alpha: 0.2),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE0B850).withValues(alpha: 0.10),
+                        border: Border.all(
+                          color: const Color(
+                            0xFFE0B850,
+                          ).withValues(alpha: 0.35),
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.people_alt_outlined,
+                            size: 13,
+                            color: Color(0xFFE0B850),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            l10n.manageAccessTitle,
+                            style: GoogleFonts.firaCode(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFFE0B850),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -2309,6 +2502,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     SaveEntry entry, {
     String? sharedFolderId,
     bool canEditShared = false,
+    String? sharedOwnerEmail,
   }) async {
     final source = entry.local ?? entry.drive;
     if (source == null) return;
@@ -2364,6 +2558,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       localSave: entry.local,
       sharedFolderId: sharedFolderId,
       canEditShared: canEditShared,
+      sharedOwnerEmail: sharedOwnerEmail,
     );
   }
 
@@ -2374,6 +2569,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     SaveFile? localSave,
     String? sharedFolderId,
     required bool canEditShared,
+    String? sharedOwnerEmail,
   }) async {
     final l10n = AppLocalizations.of(context)!;
     await showDialog<void>(
@@ -2497,6 +2693,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                   entries,
                                   setState,
                                   sharedFolderId: sharedFolderId,
+                                  sharedOwnerEmail: sharedOwnerEmail,
                                 )
                               : null,
                         ),
@@ -2691,6 +2888,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     List<BackupEntry> entries,
     void Function(void Function()) refresh, {
     String? sharedFolderId,
+    String? sharedOwnerEmail,
   }) async {
     if (widget.drive == null) return;
     final l10n = AppLocalizations.of(context)!;
@@ -2706,6 +2904,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           : entry.copyWith(sharedDriveFileId: id);
       _replaceBackupEntry(entry, updated, entries, refresh);
       if (mounted) _snack(l10n.backupsUploadOk);
+    } on SharedAccessRevokedException {
+      // Vía activa (ver `_handleSyncShared`) — también puede saltar al
+      // intentar subir un backup a un compartido que ya no es nuestro.
+      if (sharedFolderId != null && sharedOwnerEmail != null) {
+        if (mounted) Navigator.of(context).pop();
+        await _handleConfirmedRevocation(
+          folderId: sharedFolderId,
+          ownerEmail: sharedOwnerEmail,
+          farmName: entry.folderName,
+        );
+      }
     } catch (e) {
       if (mounted) _snack(l10n.backupsUploadErr(e.toString()));
     }
@@ -3927,6 +4136,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     onLaunch: _handleLaunchGame,
                     onImport: _handleImport,
                     showSharedTitle: _showSharedHeader,
+                    connectedEmail: _connectedEmail,
                   ),
                   Expanded(child: _buildBody()),
                 ],
@@ -4222,6 +4432,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       e.asEntry,
                       sharedFolderId: e.folderId,
                       canEditShared: e.canSync,
+                      sharedOwnerEmail: e.ownerEmail,
                     )
                   : null,
               backupCount: _backupCounts[e.folderName] ?? 0,

@@ -40,16 +40,40 @@ Una vez eliminados definitivamente, los saves se pierden para siempre.
 La responsabilidad de gestionar los archivos en Drive es tuya.
 ''';
 
+/// Señal fuerte e inmediata de revocación: Drive respondió con ÉXITO a la
+/// lectura de metadatos pero indicó explícitamente que ya no hay permiso de
+/// escritura (`capabilities.canEdit == false`). A diferencia de un fallo de
+/// red o cuota (ambiguo, ver [DriveService.listSharedSaves]), esto es una
+/// respuesta completa y actual de Drive — se trata como revocación
+/// confirmada al momento, sin esperar la racha pasiva de 24h.
+class SharedAccessRevokedException implements Exception {
+  const SharedAccessRevokedException(this.folderId);
+  final String folderId;
+}
+
 class DriveService {
   DriveService(this._client) : _api = drive.DriveApi(_client);
 
   final AuthClient _client;
   final drive.DriveApi _api;
   String? _folderId;
+  String? _myEmail;
 
   /// Token OAuth vigente — solo lo necesita el WebView de Picker (US5), que
   /// se autentica como el usuario ya logueado sin ampliar el scope.
   String get accessToken => _client.credentials.accessToken.data;
+
+  /// Email de la cuenta Google conectada — para descartar carpetas que
+  /// Drive devuelve como `sharedWithMe` pero cuyo dueño eres tú mismo (ver
+  /// [listSharedFolders]). Cacheado: no cambia dentro de una sesión.
+  Future<String?> myEmail() async {
+    if (_myEmail != null) return _myEmail;
+    try {
+      final about = await _api.about.get($fields: 'user(emailAddress)');
+      _myEmail = about.user?.emailAddress;
+    } catch (_) {}
+    return _myEmail;
+  }
 
   /// Busca o crea la carpeta ValleySave/ en el Drive del usuario.
   Future<String> ensureFolder() async {
@@ -125,6 +149,13 @@ class DriveService {
   /// el permiso, por lo que buscar `SaveGameInfo` con ese mismo predicado deja
   /// fuera saves válidos. Primero lista carpetas y luego valida cada candidata.
   Future<List<drive.File>> listSharedFolders() async {
+    // Drive puede devolver `sharedWithMe: true` para una carpeta cuyo dueño
+    // eres tú mismo (relación recíproca cuando el colaborador te vuelve a
+    // dar acceso a SU copia con el mismo nombre, u otras rarezas de la API)
+    // — no tiene sentido "compartírtela a ti mismo", se descarta. Una sola
+    // llamada al principio (posición fija, se cachea el resto de la sesión).
+    final myEmail = await this.myEmail();
+
     final candidates = <drive.File>[];
     String? pageToken;
     do {
@@ -144,6 +175,10 @@ class DriveService {
     for (final folder in candidates) {
       final folderId = folder.id;
       if (folderId == null) continue;
+      final ownerEmail = (folder.owners != null && folder.owners!.isNotEmpty)
+          ? folder.owners!.first.emailAddress
+          : null;
+      if (myEmail != null && ownerEmail == myEmail) continue;
       try {
         final info = await _api.files.list(
           q: "'$folderId' in parents and name='SaveGameInfo' and trashed=false",
@@ -616,9 +651,7 @@ class DriveService {
         await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
             as drive.File;
     if (folder.capabilities?.canEdit != true) {
-      throw StateError(
-        'Ya no tienes permiso para subir a esta partida compartida.',
-      );
+      throw SharedAccessRevokedException(folderId);
     }
     return _uploadBackupZipToFolder(localPath, folderId);
   }
@@ -727,9 +760,28 @@ class DriveService {
     return list.map((e) => Map<String, String>.from(e as Map)).toList();
   }
 
+  /// IDs de carpeta ya registrados en "Compartidas conmigo" — solo lee el
+  /// registro local, sin llamadas de red. Lo usa el auto-detector de saves
+  /// ya en "Mis partidas" para no volver a registrar lo que ya está.
+  Future<Set<String>> sharedFolderIds() async {
+    final registry = await _loadSharedRegistry();
+    return {
+      for (final e in registry)
+        if (e['folderId'] != null) e['folderId']!,
+    };
+  }
+
   Future<void> _saveSharedRegistry(List<Map<String, String>> entries) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_sharedSavesRegistryKey, jsonEncode(entries));
+  }
+
+  /// Llamado desde `AuthService.signOut()`: "Compartidas conmigo" es de la
+  /// cuenta Google que se desconecta, no del dispositivo — si no se limpia,
+  /// la siguiente cuenta que conecte hereda registros ajenos.
+  static Future<void> clearAccountScopedCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_sharedSavesRegistryKey);
   }
 
   /// Se llama tras el flujo de Picker: [folderId] es la carpeta elegida.
@@ -810,17 +862,52 @@ class DriveService {
     );
   }
 
+  /// Umbral de la vía pasiva (2026-07-15): ni un 403 ni un 404 aislados son
+  /// fiables (pueden ser cuota o propagación lenta, no revocación — ver
+  /// tests). Solo tras esta ventana ININTERRUMPIDA de fallos se da por
+  /// revocación real. La vía activa (`SharedAccessRevokedException`, cuando
+  /// el usuario intenta sincronizar y Drive responde con éxito que ya no
+  /// hay permiso) no espera esta ventana — es una señal inmediata y fiable.
+  static const _unavailableRevokeThreshold = Duration(hours: 24);
+
   /// Refresca `myRole`/stats/estado de revocación contra Drive en cada
   /// llamada — NUNCA confía en el registro local para esos campos (G3, G4).
   Future<List<SharedSaveEntry>> listSharedSaves() async {
     final registry = await _loadSharedRegistry();
     final results = <SharedSaveEntry>[];
+    // Una sola llamada al principio (posición fija) — se usa por entrada
+    // más abajo para descartar auto-compartidos contigo mismo.
+    final myEmail = await this.myEmail();
+    var registryChanged = false;
 
     for (final entry in registry) {
       final folderId = entry['folderId'];
       if (folderId == null) continue;
       final storedName = entry['folderName'] ?? '';
       final storedEmail = entry['ownerEmail'] ?? '';
+
+      // Racha de "sin comprobar": se marca la PRIMERA vez que falla y se
+      // conserva hasta que una comprobación tenga éxito. Solo si lleva
+      // ininterrumpida más del umbral se da por revocación real.
+      bool crossedThreshold() {
+        final since = entry['unavailableSince'];
+        if (since == null) return false;
+        final parsed = DateTime.tryParse(since);
+        if (parsed == null) return false;
+        return DateTime.now().toUtc().difference(parsed) >=
+            _unavailableRevokeThreshold;
+      }
+
+      void markUnavailable() {
+        if (entry['unavailableSince'] == null) {
+          entry['unavailableSince'] = DateTime.now().toUtc().toIso8601String();
+          registryChanged = true;
+        }
+      }
+
+      void markAvailable() {
+        if (entry.remove('unavailableSince') != null) registryChanged = true;
+      }
 
       drive.File file;
       try {
@@ -832,17 +919,15 @@ class DriveService {
                 )
                 as drive.File;
       } on drive.DetailedApiRequestError {
-        // Un 404 no es una señal segura para borrar estado local: Drive lo
-        // devuelve tanto por un recurso eliminado como por acceso temporal,
-        // permisos heredados o visibilidad aún no propagada. Conservamos la
-        // relación y la mostramos como "sin comprobar", para que una recarga
-        // posterior pueda recuperarla sin obligar a añadirla otra vez.
+        final reallyRevoked = crossedThreshold();
+        markUnavailable();
         results.add(
           SharedSaveEntry(
             folderId: folderId,
             folderName: storedName,
             ownerEmail: storedEmail,
             myRole: 'reader',
+            revoked: reallyRevoked,
             ownerDriveVerified: false,
           ),
         );
@@ -850,12 +935,15 @@ class DriveService {
       }
 
       if (file.trashed == true) {
+        final reallyRevoked = crossedThreshold();
+        markUnavailable();
         results.add(
           SharedSaveEntry(
             folderId: folderId,
             folderName: storedName,
             ownerEmail: storedEmail,
             myRole: 'reader',
+            revoked: reallyRevoked,
             ownerDriveVerified: false,
           ),
         );
@@ -866,6 +954,23 @@ class DriveService {
       final ownerEmail = (file.owners != null && file.owners!.isNotEmpty)
           ? (file.owners!.first.emailAddress ?? storedEmail)
           : storedEmail;
+
+      // Auto-saneado: una entrada cuyo dueño eres tú mismo no puede ser un
+      // save "compartido contigo" de verdad (ver `listSharedFolders`) — se
+      // trata como revocación confirmada al momento, sin esperar racha.
+      if (myEmail != null && ownerEmail == myEmail) {
+        results.add(
+          SharedSaveEntry(
+            folderId: folderId,
+            folderName: folderName,
+            ownerEmail: ownerEmail,
+            myRole: 'reader',
+            revoked: true,
+          ),
+        );
+        continue;
+      }
+
       final role = file.capabilities?.canEdit == true ? 'writer' : 'reader';
       try {
         final children = await _api.files.list(
@@ -911,6 +1016,7 @@ class DriveService {
           );
         }
 
+        markAvailable();
         results.add(
           SharedSaveEntry(
             folderId: folderId,
@@ -924,20 +1030,23 @@ class DriveService {
         );
       } on drive.DetailedApiRequestError {
         // La carpeta YA se leyó arriba: un fallo al listar/descargar sus hijos
-        // no demuestra revocación. Conservamos su presencia y bloqueamos las
-        // decisiones de progreso hasta que una recarga pueda verificar stats.
+        // no demuestra revocación por sí solo. Cuenta para la misma racha.
+        final reallyRevoked = crossedThreshold();
+        markUnavailable();
         results.add(
           SharedSaveEntry(
             folderId: folderId,
             folderName: folderName,
             ownerEmail: ownerEmail,
             myRole: role,
+            revoked: reallyRevoked,
             ownerDrivePresent: true,
             ownerDriveVerified: false,
           ),
         );
       }
     }
+    if (registryChanged) await _saveSharedRegistry(registry);
     return results;
   }
 
@@ -965,7 +1074,7 @@ class DriveService {
         await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
             as drive.File;
     if (file.capabilities?.canEdit != true) {
-      throw StateError('Ya no tienes permiso para sincronizar este save.');
+      throw SharedAccessRevokedException(folderId);
     }
 
     final sep = Platform.pathSeparator;

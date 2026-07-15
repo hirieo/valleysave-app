@@ -100,8 +100,20 @@
   "updateDownloading": "Downloading update…",
   "updateError": "Error — tap to retry",
   "disconnectTitle": "Disconnect Drive?",
-  "disconnectBody": "Your saves on Drive won't be deleted. You can reconnect anytime.",
+  "disconnectBody": "This will sign {email} out. Your saves on Drive won't be deleted, you can reconnect anytime.",
+  "@disconnectBody": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
   "disconnectButton": "Disconnect Drive",
+  "disconnectButtonEmail": "Disconnect from {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "connectedAsPrefix": "Connected as",
   "languageTileLabel": "Language",
   "languageDialogTitle": "App language",
   "searchHint": "Search…",
@@ -240,6 +252,21 @@
     }
   },
   "sharedWithMeRevoked": "You no longer have access",
+  "sharedRevokedDialogBody": "{email} stopped sharing {farmName} with you. Your local copy and the one on your Drive stay as they are, now under My saves.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {"type": "String"},
+      "farmName": {"type": "String"}
+    }
+  },
+  "sharedRevokedAccept": "Accept",
+  "sharedSelfCleanupTitle": "Record fixed",
+  "sharedSelfCleanupBody": "{farmName} showed up as shared with you by mistake — it's actually yours. It's been fixed, now it's under My saves.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
   "sharedWithMeUploadOwn": "Upload to my Drive",
   "sharedDownloadOwn": "Download from my Drive",
   "sharedStatusOwnDriveAhead": "Your Drive is ahead — bring it down",

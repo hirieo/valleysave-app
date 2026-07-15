@@ -682,14 +682,26 @@ abstract class AppLocalizations {
   /// No description provided for @disconnectBody.
   ///
   /// In en, this message translates to:
-  /// **'Your saves on Drive won\'t be deleted. You can reconnect anytime.'**
-  String get disconnectBody;
+  /// **'This will sign {email} out. Your saves on Drive won\'t be deleted, you can reconnect anytime.'**
+  String disconnectBody(String email);
 
   /// No description provided for @disconnectButton.
   ///
   /// In en, this message translates to:
   /// **'Disconnect Drive'**
   String get disconnectButton;
+
+  /// No description provided for @disconnectButtonEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect from {email}'**
+  String disconnectButtonEmail(String email);
+
+  /// No description provided for @connectedAsPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected as'**
+  String get connectedAsPrefix;
 
   /// No description provided for @languageTileLabel.
   ///
@@ -1140,6 +1152,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You no longer have access'**
   String get sharedWithMeRevoked;
+
+  /// No description provided for @sharedRevokedDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{email} stopped sharing {farmName} with you. Your local copy and the one on your Drive stay as they are, now under My saves.'**
+  String sharedRevokedDialogBody(String email, String farmName);
+
+  /// No description provided for @sharedRevokedAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get sharedRevokedAccept;
+
+  /// No description provided for @sharedSelfCleanupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record fixed'**
+  String get sharedSelfCleanupTitle;
+
+  /// No description provided for @sharedSelfCleanupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{farmName} showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.'**
+  String sharedSelfCleanupBody(String farmName);
 
   /// No description provided for @sharedWithMeUploadOwn.
   ///

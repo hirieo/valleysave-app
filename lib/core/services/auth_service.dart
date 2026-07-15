@@ -9,6 +9,8 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
+import 'drive_service.dart';
+
 export 'package:googleapis_auth/auth_io.dart' show AuthClient;
 
 // Scope completo (no drive.file): "Compartidas conmigo" necesita leer
@@ -50,6 +52,12 @@ class AuthService {
     _client?.close();
     _client = null;
     await _storage.delete(key: _storageKey);
+    // Este dispositivo puede volver a conectarse con OTRA cuenta Google —
+    // "Compartidas conmigo" es un registro de la cuenta anterior, no del
+    // dispositivo (a diferencia de idioma/ruta del juego/estación, que sí
+    // son del dispositivo y se quedan). Sin esto, la cuenta nueva hereda
+    // entradas ajenas (2026-07-15, detectado probando con 2 cuentas).
+    await DriveService.clearAccountScopedCache();
   }
 
   /// Intenta restaurar la sesión anterior sin mostrar UI.

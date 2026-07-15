@@ -8,6 +8,7 @@ import '../../generated/app_localizations.dart';
 
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
+import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/locale_controller.dart';
 import '../../core/services/season_controller.dart';
@@ -46,8 +47,9 @@ const _kLangs = [
 ];
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key, this.showDisconnect = false});
+  const SettingsScreen({super.key, this.showDisconnect = false, this.drive});
   final bool showDisconnect;
+  final DriveService? drive;
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -74,12 +76,14 @@ class _SettingsScreenState extends State<SettingsScreen>
   bool _modeDropdownOpen = false;
   bool _ddTrigPressed = false;
   SeasonState? _pressedSeason;
+  String? _connectedEmail;
 
   @override
   void initState() {
     super.initState();
     _load();
     _loadVersion();
+    _loadConnectedEmail();
     _entranceCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
@@ -109,6 +113,11 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> _loadVersion() async {
     final info = await PackageInfo.fromPlatform();
     if (mounted) setState(() => _appVersion = info.version);
+  }
+
+  Future<void> _loadConnectedEmail() async {
+    final email = await widget.drive?.myEmail();
+    if (mounted && email != null) setState(() => _connectedEmail = email);
   }
 
   Future<void> _checkUpdateFromSettings() async {
@@ -207,7 +216,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  l10n.disconnectBody,
+                  l10n.disconnectBody(_connectedEmail ?? ''),
                   style: AppTypography.mono(
                     color: AppColors.textMuted,
                     size: 12,
@@ -1322,9 +1331,15 @@ class _SettingsScreenState extends State<SettingsScreen>
                 color: const Color(0xFFE85840),
               ),
               const SizedBox(width: 8),
-              Text(
-                l10n.disconnectButton,
-                style: AppTypography.bodyStrong(color: const Color(0xFFE85840)),
+              Flexible(
+                child: Text(
+                  _connectedEmail == null
+                      ? l10n.disconnectButton
+                      : l10n.disconnectButtonEmail(_connectedEmail!),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.bodyStrong(color: const Color(0xFFE85840)),
+                ),
               ),
             ],
           ),

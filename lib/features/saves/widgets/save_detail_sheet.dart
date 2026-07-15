@@ -306,41 +306,53 @@ class _DetailSheetState extends State<_DetailSheet>
     required VoidCallback onTap,
     required ValueChanged<bool> onPressChange,
   }) {
-    return GestureDetector(
+    return StatefulBuilder(
       key: key,
-      onTap: enabled ? onTap : null,
-      onTapDown: enabled ? (_) => onPressChange(true) : null,
-      onTapUp: (_) => onPressChange(false),
-      onTapCancel: () => onPressChange(false),
-      child: AnimatedScale(
-        scale: (enabled && pressed) ? 0.88 : 1.0,
-        duration: (enabled && pressed)
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            color: enabled ? color.withValues(alpha: 0.14) : Colors.transparent,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: enabled
-                  ? color.withValues(alpha: 0.40)
-                  : Colors.white.withValues(alpha: 0.10),
+      builder: (_, setHover) {
+        bool hovered = false;
+        return MouseRegion(
+          cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+          onEnter: enabled ? (_) => setHover(() => hovered = true) : null,
+          onExit: enabled ? (_) => setHover(() => hovered = false) : null,
+          child: GestureDetector(
+            onTap: enabled ? onTap : null,
+            onTapDown: enabled ? (_) => onPressChange(true) : null,
+            onTapUp: (_) => onPressChange(false),
+            onTapCancel: () => onPressChange(false),
+            child: AnimatedScale(
+              scale: (enabled && pressed) ? 0.88 : (enabled && hovered ? 1.10 : 1.0),
+              duration: (enabled && pressed)
+                  ? const Duration(milliseconds: 100)
+                  : const Duration(milliseconds: 200),
+              curve: const Cubic(0.23, 1, 0.32, 1),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 140),
+                curve: Curves.easeOut,
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: enabled
+                      ? color.withValues(alpha: hovered ? 0.22 : 0.14)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: enabled
+                        ? color.withValues(alpha: hovered ? 0.60 : 0.40)
+                        : Colors.white.withValues(alpha: 0.10),
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  size: 16,
+                  color: enabled
+                      ? color.withValues(alpha: 0.90)
+                      : Colors.white.withValues(alpha: 0.20),
+                ),
+              ),
             ),
           ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: enabled
-                ? color.withValues(alpha: 0.90)
-                : Colors.white.withValues(alpha: 0.20),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -1058,19 +1070,25 @@ class _Pressable extends StatefulWidget {
 
 class _PressableState extends State<_Pressable> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: const Duration(milliseconds: 140),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: widget.child,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : (_hovered ? 1.02 : 1.0),
+          duration: const Duration(milliseconds: 140),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: widget.child,
+        ),
       ),
     );
   }

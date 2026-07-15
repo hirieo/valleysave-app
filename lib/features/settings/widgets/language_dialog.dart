@@ -226,6 +226,7 @@ class _LangRow extends StatefulWidget {
 
 class _LangRowState extends State<_LangRow> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -245,13 +246,17 @@ class _LangRowState extends State<_LangRow> {
           child: child,
         ),
       ),
-      child: GestureDetector(
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
         onTap: widget.onTap,
         onTapDown: (_) => setState(() => _pressed = true),
         onTapUp: (_) => setState(() => _pressed = false),
         onTapCancel: () => setState(() => _pressed = false),
         child: AnimatedScale(
-          scale: _pressed ? 0.985 : 1.0,
+          scale: _pressed ? 0.985 : (_hovered ? 1.01 : 1.0),
           duration: _pressed
               ? const Duration(milliseconds: 80)
               : const Duration(milliseconds: 200),
@@ -266,6 +271,8 @@ class _LangRowState extends State<_LangRow> {
                   ? widget.accent.withValues(alpha: 0.10)
                   : _pressed
                   ? Colors.white.withValues(alpha: 0.04)
+                  : _hovered
+                  ? Colors.white.withValues(alpha: 0.03)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
@@ -313,6 +320,7 @@ class _LangRowState extends State<_LangRow> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );

@@ -937,17 +937,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             actions: [
               ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
-              ),
-              ActionBtn(
                 label: l10n.sharedWithMeSync,
                 color: const Color(0xFFE0B850),
                 icon: Icons.sync_rounded,
                 filled: true,
                 onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
               ),
             ],
           ),
@@ -984,17 +984,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             actions: [
               ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
-              ),
-              ActionBtn(
                 label: l10n.sharedWithMeRemove,
                 color: const Color(0xFFE0B850),
                 icon: Icons.close_rounded,
                 filled: true,
                 onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
               ),
             ],
           ),
@@ -1033,17 +1033,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             actions: [
               ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
-              ),
-              ActionBtn(
                 label: l10n.sharedLeaveButton,
                 color: const Color(0xFFE05252),
                 icon: Icons.link_off_rounded,
                 filled: true,
                 onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
               ),
             ],
           ),
@@ -3404,17 +3404,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             ),
             actions: [
               ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
-              ),
-              ActionBtn(
                 label: l10n.importConflictConfirm,
                 color: const Color(0xFFE05252),
                 icon: Icons.sync_alt_rounded,
                 filled: true,
                 onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
               ),
             ],
           ),
@@ -3577,17 +3577,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 ),
                 actions: [
                   ActionBtn(
-                    label: l10n.cancel,
-                    color: Colors.white.withValues(alpha: 0.55),
-                    filled: false,
-                    onTap: () => Navigator.pop(ctx, false),
-                  ),
-                  ActionBtn(
                     label: l10n.dlgDownloadButton,
                     color: const Color(0xFF5AA8E0),
                     icon: Icons.cloud_download_outlined,
                     filled: true,
                     onTap: () => Navigator.pop(ctx, true),
+                  ),
+                  ActionBtn(
+                    label: l10n.cancel,
+                    color: Colors.white.withValues(alpha: 0.55),
+                    filled: false,
+                    onTap: () => Navigator.pop(ctx, false),
                   ),
                 ],
               ),
@@ -3699,17 +3699,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       ),
                 actions: [
                   ActionBtn(
-                    label: l10n.cancel,
-                    color: Colors.white.withValues(alpha: 0.55),
-                    filled: false,
-                    onTap: () => Navigator.pop(ctx, false),
-                  ),
-                  ActionBtn(
                     label: l10n.dlgUploadButton,
                     color: const Color(0xFFE0B850),
                     icon: Icons.cloud_upload_outlined,
                     filled: true,
                     onTap: () => Navigator.pop(ctx, true),
+                  ),
+                  ActionBtn(
+                    label: l10n.cancel,
+                    color: Colors.white.withValues(alpha: 0.55),
+                    filled: false,
+                    onTap: () => Navigator.pop(ctx, false),
                   ),
                 ],
               ),
@@ -4940,24 +4940,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// Botón compacto (p. ej. "conceder") para integrar dentro de una fila.
   Widget _miniGateButton(String label, VoidCallback onTap, Color tone) {
     bool pressed = false;
+    bool hovered = false;
     return StatefulBuilder(
-      builder: (_, setState) => GestureDetector(
+      builder: (_, setState) => MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => hovered = true),
+        onExit: (_) => setState(() => hovered = false),
+        child: GestureDetector(
         onTap: onTap,
         onTapDown: (_) => setState(() => pressed = true),
         onTapUp: (_) => setState(() => pressed = false),
         onTapCancel: () => setState(() => pressed = false),
         child: AnimatedScale(
-          scale: pressed ? 0.94 : 1.0,
+          scale: pressed ? 0.94 : (hovered ? 1.04 : 1.0),
           duration: pressed
               ? const Duration(milliseconds: 100)
               : const Duration(milliseconds: 200),
           curve: const Cubic(0.23, 1, 0.32, 1),
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 140),
+            curve: Curves.easeOut,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
-              color: tone.withValues(alpha: 0.18),
+              color: tone.withValues(alpha: hovered ? 0.26 : 0.18),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: tone.withValues(alpha: 0.45)),
+              border: Border.all(color: tone.withValues(alpha: hovered ? 0.65 : 0.45)),
             ),
             child: Text(
               label,
@@ -4968,6 +4975,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
             ),
           ),
+        ),
         ),
       ),
     );

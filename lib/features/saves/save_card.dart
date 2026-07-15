@@ -1283,6 +1283,7 @@ class _SideTile extends StatefulWidget {
 
 class _SideTileState extends State<_SideTile> {
   bool _pressed = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1290,14 +1291,18 @@ class _SideTileState extends State<_SideTile> {
     final present = widget.save != null;
     final base = present ? widget.color : Colors.white.withValues(alpha: 0.20);
 
-    final content = Container(
+    final content = AnimatedContainer(
+      duration: const Duration(milliseconds: 140),
+      curve: Curves.easeOut,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: present
-            ? widget.color.withValues(alpha: 0.08)
+            ? widget.color.withValues(alpha: _hovered ? 0.13 : 0.08)
             : Colors.white.withValues(alpha: 0.02),
         border: Border.all(
-          color: base.withValues(alpha: widget.highlight ? 0.9 : 0.36),
+          color: base.withValues(
+            alpha: widget.highlight ? 0.9 : (_hovered ? 0.55 : 0.36),
+          ),
           width: widget.highlight ? 1.4 : 1,
         ),
         borderRadius: BorderRadius.circular(8),
@@ -1364,34 +1369,39 @@ class _SideTileState extends State<_SideTile> {
     );
 
     if (!present) return content;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => showSaveDetail(
-        context,
-        entry: widget.entry,
-        startOnLocal: widget.isLocalSide,
-        onUpload: widget.onUpload,
-        onDownload: widget.onDownload,
-        onDeleteFromDrive: widget.onDeleteFromDrive,
-        onDeleteLocal: widget.onDeleteLocal,
-        onMakeHost: widget.onMakeHost,
-        onExport: widget.onExport,
-        onShare: widget.onShare,
-        onBackups: widget.onBackups,
-        backupCount: widget.backupCount,
-        initialPlayerId: widget.selectedPlayerId,
-        onPlayerIdChanged: widget.onPlayerIdChanged,
-      ),
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: _pressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: content,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => showSaveDetail(
+          context,
+          entry: widget.entry,
+          startOnLocal: widget.isLocalSide,
+          onUpload: widget.onUpload,
+          onDownload: widget.onDownload,
+          onDeleteFromDrive: widget.onDeleteFromDrive,
+          onDeleteLocal: widget.onDeleteLocal,
+          onMakeHost: widget.onMakeHost,
+          onExport: widget.onExport,
+          onShare: widget.onShare,
+          onBackups: widget.onBackups,
+          backupCount: widget.backupCount,
+          initialPlayerId: widget.selectedPlayerId,
+          onPlayerIdChanged: widget.onPlayerIdChanged,
+        ),
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : (_hovered ? 1.02 : 1.0),
+          duration: _pressed
+              ? const Duration(milliseconds: 100)
+              : const Duration(milliseconds: 200),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          child: content,
+        ),
       ),
     );
   }

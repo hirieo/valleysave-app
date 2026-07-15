@@ -319,11 +319,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get disconnectTitle => 'Отключить Drive?';
 
   @override
-  String get disconnectBody =>
-      'Ваши сохранения на Drive не будут удалены. Вы можете переподключиться в любое время.';
+  String disconnectBody(String email) {
+    return 'Ваши сохранения на Drive не будут удалены. Вы можете переподключиться в любое время.';
+  }
 
   @override
   String get disconnectButton => 'Отключить Drive';
+
+  @override
+  String disconnectButtonEmail(String email) {
+    return 'Disconnect from $email';
+  }
+
+  @override
+  String get connectedAsPrefix => 'Connected as';
 
   @override
   String get languageTileLabel => 'Язык';
@@ -584,6 +593,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sharedWithMeRevoked => 'You no longer have access';
+
+  @override
+  String sharedRevokedDialogBody(String email, String farmName) {
+    return '$email stopped sharing $farmName with you. Your local copy and the one on your Drive stay as they are, now under My saves.';
+  }
+
+  @override
+  String get sharedRevokedAccept => 'Accept';
+
+  @override
+  String get sharedSelfCleanupTitle => 'Record fixed';
+
+  @override
+  String sharedSelfCleanupBody(String farmName) {
+    return '$farmName showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.';
+  }
 
   @override
   String get sharedWithMeUploadOwn => 'Upload to my Drive';

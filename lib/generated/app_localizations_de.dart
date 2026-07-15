@@ -320,11 +320,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get disconnectTitle => 'Drive trennen?';
 
   @override
-  String get disconnectBody =>
-      'Ihre Speicherstände auf Drive werden nicht gelöscht. Sie können sich jederzeit erneut verbinden.';
+  String disconnectBody(String email) {
+    return 'Ihre Speicherstände auf Drive werden nicht gelöscht. Sie können sich jederzeit erneut verbinden.';
+  }
 
   @override
   String get disconnectButton => 'Drive trennen';
+
+  @override
+  String disconnectButtonEmail(String email) {
+    return 'Disconnect from $email';
+  }
+
+  @override
+  String get connectedAsPrefix => 'Connected as';
 
   @override
   String get languageTileLabel => 'Sprache';
@@ -585,6 +594,22 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get sharedWithMeRevoked => 'You no longer have access';
+
+  @override
+  String sharedRevokedDialogBody(String email, String farmName) {
+    return '$email stopped sharing $farmName with you. Your local copy and the one on your Drive stay as they are, now under My saves.';
+  }
+
+  @override
+  String get sharedRevokedAccept => 'Accept';
+
+  @override
+  String get sharedSelfCleanupTitle => 'Record fixed';
+
+  @override
+  String sharedSelfCleanupBody(String farmName) {
+    return '$farmName showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.';
+  }
 
   @override
   String get sharedWithMeUploadOwn => 'Upload to my Drive';

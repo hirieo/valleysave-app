@@ -55,6 +55,11 @@ void main() {
       'lista carpetas compartidas y conserva solo las que contienen un save',
       () async {
         final client = _FakeAuthClient((request) {
+          if (request.url.path.contains('/about')) {
+            return _jsonResponse({
+              'user': {'emailAddress': 'me@example.com'},
+            });
+          }
           final q = request.url.queryParameters['q'] ?? '';
           if (q.contains('sharedWithMe')) {
             return _jsonResponse({
@@ -99,10 +104,10 @@ void main() {
           'licendey@gmail.com',
         );
         expect(
-          client.requests.first.url.queryParameters['q'],
+          client.requests[1].url.queryParameters['q'],
           contains("mimeType='application/vnd.google-apps.folder'"),
         );
-        expect(client.requests, hasLength(3));
+        expect(client.requests, hasLength(4));
       },
     );
   });

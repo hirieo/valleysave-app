@@ -93,8 +93,20 @@
   "updateDownloading": "Descargando actualización…",
   "updateError": "Error — toca para reintentar",
   "disconnectTitle": "¿Desconectar Drive?",
-  "disconnectBody": "Tus saves en Drive no se borran. Podrás reconectarte cuando quieras.",
+  "disconnectBody": "Se cerrará la sesión de {email}. Tus saves en Drive no se borran, puedes reconectar cuando quieras.",
+  "@disconnectBody": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
   "disconnectButton": "Desconectar Drive",
+  "disconnectButtonEmail": "Desconectar de {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "connectedAsPrefix": "Conectado en",
   "languageTileLabel": "Idioma",
   "languageDialogTitle": "Idioma de la app",
   "searchHint": "Buscar…",
@@ -503,6 +515,21 @@
   "sharedLeaveSuccess": "Has salido del compartido de {email}.",
   "sharedWithMeSyncConfirm": "¿Sobrescribir la copia de {email} en Drive con tu partida local?",
   "sharedWithMeRevoked": "Ya no tienes acceso",
+  "sharedRevokedDialogBody": "{email} ha dejado de compartir {farmName} contigo. Tu copia local y la de tu Drive se quedan tal cual, ahora en Mis partidas.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {"type": "String"},
+      "farmName": {"type": "String"}
+    }
+  },
+  "sharedRevokedAccept": "Aceptar",
+  "sharedSelfCleanupTitle": "Registro corregido",
+  "sharedSelfCleanupBody": "{farmName} apareció como compartida contigo por error — en realidad es tuya. Se ha corregido, ahora está en Mis partidas.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {"type": "String"}
+    }
+  },
   "sharedWithMeUploadOwn": "Subir a mi Drive",
   "sharedDownloadOwn": "Bajar de mi Drive",
   "sharedStatusOwnDriveAhead": "Tu Drive va por delante — bájalo",

@@ -53,6 +53,12 @@ http.StreamedResponse _json(Object body, {int status = 200}) {
   );
 }
 
+/// `listSharedSaves`/`listSharedFolders` consultan `about.get` una vez al
+/// principio para descartar auto-compartidos contigo mismo — toda prueba que
+/// llame a cualquiera de los dos necesita esta respuesta como la PRIMERA.
+http.StreamedResponse _aboutResponse() =>
+    _json({'user': {'emailAddress': 'me@example.com'}});
+
 http.StreamedResponse _text(String content, {int status = 200}) {
   final bytes = utf8.encode(content);
   return http.StreamedResponse(
@@ -173,6 +179,7 @@ void main() {
           ]),
         });
         final client = _QueueAuthClient([
+          _aboutResponse(),
           _json({
             'id': 'f1',
             'name': 'Ajena',
@@ -215,6 +222,7 @@ void main() {
           ]),
         });
         final client = _QueueAuthClient([
+          _aboutResponse(),
           _json({
             'id': 'f1',
             'name': 'Ajena',
@@ -262,6 +270,7 @@ void main() {
           ]),
         });
         final client = _QueueAuthClient([
+          _aboutResponse(),
           _json({
             'error': {
               'code': 404,
@@ -296,6 +305,7 @@ void main() {
         ]),
       });
       final client = _QueueAuthClient([
+        _aboutResponse(),
         _json({
           'error': {
             'code': 403,
@@ -316,7 +326,116 @@ void main() {
       final stored =
           jsonDecode(prefs.getString('shared_saves_registry')!) as List;
       expect(stored, hasLength(1));
+      expect(
+        (stored.single as Map)['unavailableSince'],
+        isNotNull,
+        reason: 'la primera vez que falla se marca el inicio de la racha',
+      );
     });
+
+    test(
+      'un segundo 403 dentro de las 24h sigue sin revocar',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'shared_saves_registry': jsonEncode([
+            {
+              'folderId': 'f1',
+              'folderName': 'Ajena',
+              'ownerEmail': 'owner@example.com',
+              'unavailableSince': DateTime.now()
+                  .toUtc()
+                  .subtract(const Duration(hours: 1))
+                  .toIso8601String(),
+            },
+          ]),
+        });
+        final client = _QueueAuthClient([
+          _aboutResponse(),
+          _json({
+            'error': {'code': 403, 'message': 'rate limit'},
+          }, status: 403),
+        ]);
+
+        final result = await DriveService(client).listSharedSaves();
+
+        expect(result.single.revoked, isFalse);
+        expect(result.single.ownerDriveVerified, isFalse);
+      },
+    );
+
+    test(
+      'un 403 tras 24h ININTERRUMPIDAS de fallo SÍ se da por revocado',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'shared_saves_registry': jsonEncode([
+            {
+              'folderId': 'f1',
+              'folderName': 'Ajena',
+              'ownerEmail': 'owner@example.com',
+              'unavailableSince': DateTime.now()
+                  .toUtc()
+                  .subtract(const Duration(hours: 25))
+                  .toIso8601String(),
+            },
+          ]),
+        });
+        final client = _QueueAuthClient([
+          _aboutResponse(),
+          _json({
+            'error': {'code': 403, 'message': 'forbidden'},
+          }, status: 403),
+        ]);
+
+        final result = await DriveService(client).listSharedSaves();
+
+        expect(result.single.revoked, isTrue);
+      },
+    );
+
+    test(
+      'una comprobación con éxito borra la racha de fallos previa',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'shared_saves_registry': jsonEncode([
+            {
+              'folderId': 'f1',
+              'folderName': 'Ajena',
+              'ownerEmail': 'owner@example.com',
+              'unavailableSince': DateTime.now()
+                  .toUtc()
+                  .subtract(const Duration(hours: 20))
+                  .toIso8601String(),
+            },
+          ]),
+        });
+        final client = _QueueAuthClient([
+          _aboutResponse(),
+          _json({
+            'id': 'f1',
+            'name': 'Ajena',
+            'trashed': false,
+            'capabilities': {'canEdit': true},
+            'owners': [
+              {'emailAddress': 'owner@example.com'},
+            ],
+          }),
+          _json({'files': []}),
+        ]);
+
+        final result = await DriveService(client).listSharedSaves();
+
+        expect(result.single.revoked, isFalse);
+        expect(result.single.ownerDriveVerified, isTrue);
+        final prefs = await SharedPreferences.getInstance();
+        final stored =
+            jsonDecode(prefs.getString('shared_saves_registry')!) as List;
+        expect(
+          (stored.single as Map)['unavailableSince'],
+          isNull,
+          reason: 'un éxito reinicia la racha, aunque llevara casi 24h',
+        );
+      },
+    );
 
     test(
       'un 500 de Drive queda sin comprobar y conserva el registro',
@@ -331,6 +450,7 @@ void main() {
           ]),
         });
         final client = _QueueAuthClient([
+          _aboutResponse(),
           _json({
             'error': {'code': 500, 'message': 'backend error'},
           }, status: 500),
@@ -356,6 +476,7 @@ void main() {
           ]),
         });
         final client = _QueueAuthClient([
+          _aboutResponse(),
           _json({
             'id': 'f1',
             'name': 'Ajena',
@@ -438,7 +559,7 @@ void main() {
 
         await expectLater(
           () => service.uploadToSharedSave('f1', 'C:/no/existe'),
-          throwsStateError,
+          throwsA(isA<SharedAccessRevokedException>()),
         );
         expect(client.requests, hasLength(1));
       },

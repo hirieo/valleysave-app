@@ -635,6 +635,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ownerEmail: entry.ownerEmail,
         farmName: entry.folderName,
       );
+    } on SharedAccessReadOnlyException {
+      // El acceso SIGUE siendo válido (Drive respondió con éxito), solo
+      // bajó a lector — no es una revocación, no se quita de la lista.
+      await _load(silent: true);
+      if (mounted) _snack(l10n.sharedAccessReadOnly(entry.ownerEmail));
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
@@ -692,6 +697,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ownerEmail: entry.ownerEmail,
         farmName: entry.folderName,
       );
+    } on SharedAccessReadOnlyException {
+      // Ver `_handleSyncShared` — acceso válido, solo bajó a lector.
+      await _load(silent: true);
+      if (mounted) _snack(l10n.sharedAccessReadOnly(entry.ownerEmail));
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
@@ -2870,6 +2879,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           ownerEmail: sharedOwnerEmail,
           farmName: entry.folderName,
         );
+      }
+    } on SharedAccessReadOnlyException {
+      // Ver `_handleSyncShared` — acceso válido, solo bajó a lector.
+      if (mounted && sharedOwnerEmail != null) {
+        _snack(l10n.sharedAccessReadOnly(sharedOwnerEmail));
       }
     } catch (e) {
       if (mounted) _snack(l10n.backupsUploadErr(e.toString()));

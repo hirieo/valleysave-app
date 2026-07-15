@@ -251,6 +251,12 @@
       "email": {"type": "String"}
     }
   },
+  "sharedAccessReadOnly": "{email} set your access to read-only — you can view and download, but not sync to their Drive.",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
   "sharedWithMeRevoked": "You no longer have access",
   "sharedRevokedDialogBody": "{email} stopped sharing {farmName} with you. Your local copy and the one on your Drive stay as they are, now under My saves.",
   "@sharedRevokedDialogBody": {

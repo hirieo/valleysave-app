@@ -1147,6 +1147,12 @@ abstract class AppLocalizations {
   /// **'Overwrite {email}\'s copy in Drive with your local save?'**
   String sharedWithMeSyncConfirm(String email);
 
+  /// No description provided for @sharedAccessReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{email} set your access to read-only — you can view and download, but not sync to their Drive.'**
+  String sharedAccessReadOnly(String email);
+
   /// No description provided for @sharedWithMeRevoked.
   ///
   /// In en, this message translates to:

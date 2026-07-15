@@ -51,6 +51,41 @@ class SharedAccessRevokedException implements Exception {
   final String folderId;
 }
 
+/// Señal de que el acceso SIGUE siendo válido pero ya no incluye escritura
+/// (el dueño bajó de escritor a lector, o el rol nunca fue de escritor).
+/// A diferencia de [SharedAccessRevokedException], aquí Drive respondió con
+/// éxito a la lectura de metadatos — el usuario sigue viendo/descargando,
+/// solo no puede sincronizar hacia el Drive del dueño.
+class SharedAccessReadOnlyException implements Exception {
+  const SharedAccessReadOnlyException(this.folderId);
+  final String folderId;
+}
+
+/// Motivos de 403 que SÍ confirman permiso insuficiente de verdad. Drive
+/// reutiliza el mismo status 403 para cuota, rate-limit y otros fallos
+/// transitorios, así que solo estos motivos explícitos cuentan — cualquier
+/// otro (incluido un 403 sin `errors`/`reason`, o uno de cuota) se trata
+/// como ambiguo, NUNCA como revocación. Por defecto se asume ambigüedad
+/// salvo prueba de permiso — no al revés — para no sacar una partida válida
+/// de "Compartidas conmigo" por un simple 429/cuota durante un intento de
+/// sincronizar o subir un backup (2026-07-15, corrección: mi primera versión
+/// asumía permiso denegado por defecto salvo que reconociera cuota, más
+/// arriesgado; alineado con la solución independiente de Codex sobre el
+/// mismo diagnóstico).
+const _confirmedPermissionReasons = {
+  'insufficientfilepermissions',
+  'insufficientpermissions',
+  'permissiondenied',
+};
+
+bool _isPermissionError(drive.DetailedApiRequestError e) {
+  if (e.status == 404) return true;
+  if (e.status != 403) return false;
+  return e.errors.any(
+    (d) => _confirmedPermissionReasons.contains(d.reason?.toLowerCase()),
+  );
+}
+
 class DriveService {
   DriveService(this._client) : _api = drive.DriveApi(_client);
 
@@ -647,11 +682,17 @@ class DriveService {
     String folderId,
     String localPath,
   ) async {
-    final folder =
-        await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
-            as drive.File;
+    drive.File folder;
+    try {
+      folder =
+          await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
+              as drive.File;
+    } on drive.DetailedApiRequestError catch (e) {
+      if (_isPermissionError(e)) throw SharedAccessRevokedException(folderId);
+      rethrow;
+    }
     if (folder.capabilities?.canEdit != true) {
-      throw SharedAccessRevokedException(folderId);
+      throw SharedAccessReadOnlyException(folderId);
     }
     return _uploadBackupZipToFolder(localPath, folderId);
   }
@@ -752,17 +793,53 @@ class DriveService {
 
   // ── Compartidas conmigo (F2/US5) — ver contracts/shared_saves_picker.md ──
 
+  /// Clave por cuenta (`shared_saves_registry::<email>`) — antes era una
+  /// única clave global y se borraba entera en `signOut()` para no mezclar
+  /// cuentas; eso también borraba el historial de la cuenta que se
+  /// desconectaba. Con la clave por email, cada cuenta tiene su propio
+  /// registro de forma natural y no hace falta borrar nada al desconectar
+  /// (2026-07-15, corrección: alternar cuentas ya no pierde el registro).
+  /// SIEMPRE async y resuelve `myEmail()` — antes era síncrona y caía a la
+  /// clave global si el email aún no estaba cacheado; eso permitía que
+  /// `addSharedSave` escribiera en la clave global mientras una carga
+  /// posterior (que sí cachea el email antes) leyera ya la clave por
+  /// cuenta, vacía — la partida recién añadida "desaparecía". Resolver
+  /// siempre el mismo email garantiza que lectura y escritura usan
+  /// exactamente la misma clave (2026-07-15, corrección).
+  Future<String> _registryKey() async {
+    final email = await myEmail();
+    return email == null
+        ? _sharedSavesRegistryKey
+        : '$_sharedSavesRegistryKey::$email';
+  }
+
   Future<List<Map<String, String>>> _loadSharedRegistry() async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_sharedSavesRegistryKey);
+    final key = await _registryKey();
+    var raw = prefs.getString(key);
+    if (raw == null && key != _sharedSavesRegistryKey) {
+      // Migración desde la clave global de antes de escopar por cuenta
+      // (2026-07-15): solo podía haber una cuenta conectada a la vez, así
+      // que ese registro le pertenece a quien esté conectado ahora. Se
+      // mueve UNA sola vez (se borra la clave vieja) para que actualizar la
+      // app no vacíe "Compartidas conmigo" de quien ya tenía saves ahí.
+      final legacy = prefs.getString(_sharedSavesRegistryKey);
+      if (legacy != null) {
+        await prefs.setString(key, legacy);
+        await prefs.remove(_sharedSavesRegistryKey);
+        raw = legacy;
+      }
+    }
     if (raw == null) return [];
     final list = jsonDecode(raw) as List<dynamic>;
     return list.map((e) => Map<String, String>.from(e as Map)).toList();
   }
 
   /// IDs de carpeta ya registrados en "Compartidas conmigo" — solo lee el
-  /// registro local, sin llamadas de red. Lo usa el auto-detector de saves
-  /// ya en "Mis partidas" para no volver a registrar lo que ya está.
+  /// registro local, sin llamadas de red propias (resolver el email puede
+  /// añadir una si aún no está cacheado en esta sesión). Lo usa el
+  /// auto-detector de saves ya en "Mis partidas" para no volver a
+  /// registrar lo que ya está.
   Future<Set<String>> sharedFolderIds() async {
     final registry = await _loadSharedRegistry();
     return {
@@ -773,15 +850,7 @@ class DriveService {
 
   Future<void> _saveSharedRegistry(List<Map<String, String>> entries) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_sharedSavesRegistryKey, jsonEncode(entries));
-  }
-
-  /// Llamado desde `AuthService.signOut()`: "Compartidas conmigo" es de la
-  /// cuenta Google que se desconecta, no del dispositivo — si no se limpia,
-  /// la siguiente cuenta que conecte hereda registros ajenos.
-  static Future<void> clearAccountScopedCache() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_sharedSavesRegistryKey);
+    await prefs.setString(await _registryKey(), jsonEncode(entries));
   }
 
   /// Se llama tras el flujo de Picker: [folderId] es la carpeta elegida.
@@ -862,22 +931,26 @@ class DriveService {
     );
   }
 
-  /// Umbral de la vía pasiva (2026-07-15): ni un 403 ni un 404 aislados son
-  /// fiables (pueden ser cuota o propagación lenta, no revocación — ver
-  /// tests). Solo tras esta ventana ININTERRUMPIDA de fallos se da por
-  /// revocación real. La vía activa (`SharedAccessRevokedException`, cuando
-  /// el usuario intenta sincronizar y Drive responde con éxito que ya no
-  /// hay permiso) no espera esta ventana — es una señal inmediata y fiable.
+  /// Umbral para una carpeta que Drive devuelve continuamente como ausente
+  /// (2026-07-15, corregido tras comparar con la solución independiente de
+  /// Codex sobre el mismo diagnóstico). Los errores 403, 429 y 5xx pueden
+  /// ser cuota, red o backend y NUNCA convierten una compartida en partida
+  /// normal, por muy larga que sea la racha — Drive ya devuelve 404 (no
+  /// 403) cuando de verdad no tienes ningún acceso, precisamente para no
+  /// filtrar si un archivo existe. Solo un 404 ininterrumpido durante esta
+  /// ventana se da por acceso perdido de verdad.
   static const _unavailableRevokeThreshold = Duration(hours: 24);
 
   /// Refresca `myRole`/stats/estado de revocación contra Drive en cada
   /// llamada — NUNCA confía en el registro local para esos campos (G3, G4).
   Future<List<SharedSaveEntry>> listSharedSaves() async {
+    // Una sola llamada al principio (posición fija) — se usa por entrada
+    // más abajo para descartar auto-compartidos contigo mismo. `myEmail()`
+    // está cacheado, así que esto no añade una segunda llamada aparte de la
+    // que ya hace `_loadSharedRegistry()` para resolver la clave por cuenta.
+    final myEmail = await this.myEmail();
     final registry = await _loadSharedRegistry();
     final results = <SharedSaveEntry>[];
-    // Una sola llamada al principio (posición fija) — se usa por entrada
-    // más abajo para descartar auto-compartidos contigo mismo.
-    final myEmail = await this.myEmail();
     var registryChanged = false;
 
     for (final entry in registry) {
@@ -886,18 +959,9 @@ class DriveService {
       final storedName = entry['folderName'] ?? '';
       final storedEmail = entry['ownerEmail'] ?? '';
 
-      // Racha de "sin comprobar": se marca la PRIMERA vez que falla y se
-      // conserva hasta que una comprobación tenga éxito. Solo si lleva
-      // ininterrumpida más del umbral se da por revocación real.
-      bool crossedThreshold() {
-        final since = entry['unavailableSince'];
-        if (since == null) return false;
-        final parsed = DateTime.tryParse(since);
-        if (parsed == null) return false;
-        return DateTime.now().toUtc().difference(parsed) >=
-            _unavailableRevokeThreshold;
-      }
-
+      // "unavailableSince": racha genérica de "sin comprobar" — CUALQUIER
+      // fallo la marca, solo informa a la UI (ownerDriveVerified=false), NO
+      // decide revocación por sí sola.
       void markUnavailable() {
         if (entry['unavailableSince'] == null) {
           entry['unavailableSince'] = DateTime.now().toUtc().toIso8601String();
@@ -905,8 +969,31 @@ class DriveService {
         }
       }
 
+      // "missingSince": racha ESTRICTA, solo avanza con 404 (carpeta
+      // realmente ausente) — la única que puede confirmar revocación.
+      bool missingForLongEnough() {
+        final since = entry['missingSince'];
+        if (since == null) return false;
+        final parsed = DateTime.tryParse(since);
+        if (parsed == null) return false;
+        return DateTime.now().toUtc().difference(parsed) >=
+            _unavailableRevokeThreshold;
+      }
+
+      void markMissingCandidate() {
+        if (entry['missingSince'] == null) {
+          entry['missingSince'] = DateTime.now().toUtc().toIso8601String();
+          registryChanged = true;
+        }
+      }
+
+      void clearMissingCandidate() {
+        if (entry.remove('missingSince') != null) registryChanged = true;
+      }
+
       void markAvailable() {
         if (entry.remove('unavailableSince') != null) registryChanged = true;
+        clearMissingCandidate();
       }
 
       drive.File file;
@@ -918,9 +1005,19 @@ class DriveService {
                       'id,name,trashed,capabilities(canEdit),owners(emailAddress)',
                 )
                 as drive.File;
-      } on drive.DetailedApiRequestError {
-        final reallyRevoked = crossedThreshold();
+      } on drive.DetailedApiRequestError catch (e) {
+        // Solo un 404 (carpeta realmente ausente) puede avanzar la racha
+        // que confirma revocación — el resto (403, 429, 5xx) es ambigüedad
+        // de red/cuota/servidor y NUNCA cuenta para ello, por larga que sea
+        // la racha (2026-07-15, corrección tras comparar con Codex).
+        final isMissing = e.status == 404;
+        final reallyRevoked = isMissing && missingForLongEnough();
         markUnavailable();
+        if (isMissing) {
+          markMissingCandidate();
+        } else {
+          clearMissingCandidate();
+        }
         results.add(
           SharedSaveEntry(
             folderId: folderId,
@@ -935,15 +1032,16 @@ class DriveService {
       }
 
       if (file.trashed == true) {
-        final reallyRevoked = crossedThreshold();
-        markUnavailable();
         results.add(
           SharedSaveEntry(
             folderId: folderId,
             folderName: storedName,
             ownerEmail: storedEmail,
             myRole: 'reader',
-            revoked: reallyRevoked,
+            // Drive confirmó con éxito que la carpeta está en la papelera —
+            // señal completa y actual, no hace falta esperar la racha
+            // (2026-07-15, corrección: antes esperaba 24h también aquí).
+            revoked: true,
             ownerDriveVerified: false,
           ),
         );
@@ -1029,17 +1127,20 @@ class DriveService {
           ),
         );
       } on drive.DetailedApiRequestError {
-        // La carpeta YA se leyó arriba: un fallo al listar/descargar sus hijos
-        // no demuestra revocación por sí solo. Cuenta para la misma racha.
-        final reallyRevoked = crossedThreshold();
+        // La carpeta YA se leyó arriba con éxito: un fallo al listar/
+        // descargar sus hijos no demuestra revocación — el acceso a la
+        // carpeta en sí ya está confirmado, sigue siendo accesible y
+        // descargable (2026-07-15, corrección: antes también contaba para
+        // la racha, pudiendo revocar por un 500 pasajero).
         markUnavailable();
+        clearMissingCandidate();
         results.add(
           SharedSaveEntry(
             folderId: folderId,
             folderName: folderName,
             ownerEmail: ownerEmail,
             myRole: role,
-            revoked: reallyRevoked,
+            revoked: false,
             ownerDrivePresent: true,
             ownerDriveVerified: false,
           ),
@@ -1070,11 +1171,17 @@ class DriveService {
     String localFolderPath, {
     List<PlayerStats> players = const [],
   }) async {
-    final file =
-        await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
-            as drive.File;
+    drive.File file;
+    try {
+      file =
+          await _api.files.get(folderId, $fields: 'capabilities(canEdit)')
+              as drive.File;
+    } on drive.DetailedApiRequestError catch (e) {
+      if (_isPermissionError(e)) throw SharedAccessRevokedException(folderId);
+      rethrow;
+    }
     if (file.capabilities?.canEdit != true) {
-      throw SharedAccessRevokedException(folderId);
+      throw SharedAccessReadOnlyException(folderId);
     }
 
     final sep = Platform.pathSeparator;

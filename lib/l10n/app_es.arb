@@ -514,6 +514,12 @@
   "sharedLeaveButton": "Salir del compartido",
   "sharedLeaveSuccess": "Has salido del compartido de {email}.",
   "sharedWithMeSyncConfirm": "¿Sobrescribir la copia de {email} en Drive con tu partida local?",
+  "sharedAccessReadOnly": "{email} te ha puesto en modo solo lectura — puedes ver y descargar, pero no sincronizar hacia su Drive.",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
   "sharedWithMeRevoked": "Ya no tienes acceso",
   "sharedRevokedDialogBody": "{email} ha dejado de compartir {farmName} contigo. Tu copia local y la de tu Drive se quedan tal cual, ahora en Mis partidas.",
   "@sharedRevokedDialogBody": {

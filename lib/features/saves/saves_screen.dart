@@ -2143,12 +2143,36 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// uniqueIDForThisGame — el folderId de Drive nunca cambia, así los
   /// permisos de compartir y "Compartidas conmigo" sobreviven al swap). El
   /// original se preserva SIEMPRE como zip antes de tocar nada.
+  /// F3 v2 (2026-07-15): Windows siempre; Android solo en root/Shizuku, los
+  /// únicos modos con una copia local sobre la que se puede escribir de
+  /// verdad (el modo Puente no da esa garantía). Punto único — reutilizado
+  /// en los dos gates de la UI (lista principal y tarjeta compartida).
+  bool get _hostSwapAvailable =>
+      Platform.isWindows ||
+      (Platform.isAndroid &&
+          (_mode == AndroidMode.root || _mode == AndroidMode.shizuku));
+
+  /// F3 v2 (2026-07-15) — Android root/Shizuku: [entry.local.folderPath] YA
+  /// es la copia puente legible (`pullSaves`/`pullSavesAsRoot`), así que
+  /// `analyze` (solo lectura) corre directo sobre ella. `execute` en cambio
+  /// SÍ escribe — se hace sobre una copia de trabajo aparte
+  /// (`prepareOut`) y solo se empuja al juego si termina con éxito, para
+  /// que un fallo a mitad de camino nunca deje la copia que lee la app a
+  /// medio reorganizar.
   Future<void> _handleMakeHost(SaveEntry entry, PlayerStats target) async {
     final l10n = AppLocalizations.of(context)!;
     final local = entry.local;
     if (local == null) return;
     final name = entry.folderName;
     if (_busy.contains(name)) return;
+
+    final androidBridge =
+        Platform.isAndroid &&
+        (_mode == AndroidMode.root || _mode == AndroidMode.shizuku);
+    if (androidBridge && _mode == AndroidMode.shizuku && !_shizukuReady) {
+      if (mounted) _snack(l10n.activateShizuku);
+      return;
+    }
 
     final service = HostSwapService();
     final analysis = await service.analyze(
@@ -2172,14 +2196,29 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     String? backupZipPath;
     try {
       final backupsDir = await _backupsDirPath();
+      final workingPath = androidBridge
+          ? await ShizukuService.instance.prepareOut(name)
+          : local.folderPath;
+      if (androidBridge) {
+        await copyDirectory(Directory(local.folderPath), Directory(workingPath));
+      }
       final result = await service.execute(
-        saveFolderPath: local.folderPath,
+        saveFolderPath: workingPath,
         targetUniqueId: target.uniqueId,
         backupsDir: backupsDir,
       );
       if (!result.ok) {
         if (mounted) _snack(_hostSwapErrorMessage(result.error));
         return;
+      }
+      if (androidBridge) {
+        final pushed = _mode == AndroidMode.root
+            ? await ShizukuService.instance.pushSaveAsRoot(workingPath, name)
+            : await ShizukuService.instance.pushSave(name);
+        if (!pushed) {
+          if (mounted) _snack(l10n.snackWriteError);
+          return;
+        }
       }
       await _load(silent: true);
       if (mounted) _snack(l10n.makeHostSuccess(target.name));
@@ -4221,10 +4260,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               )
                             : null,
                         onManageCopies: () => _handleDelete(visibleEntries[i]),
-                        // F3 — v1 solo Windows; el gate de plataforma vive aquí,
-                        // en un único sitio (ver plan.md §Flujo UI).
+                        // F3 — gate de plataforma centralizado en
+                        // `_hostSwapAvailable` (ver F3 v2, 2026-07-15).
                         onMakeHost:
-                            Platform.isWindows &&
+                            _hostSwapAvailable &&
                                 visibleEntries[i].local != null
                             ? (target) =>
                                   _handleMakeHost(visibleEntries[i], target)
@@ -4364,10 +4403,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   ? () => _handleSharedSyncRequested(e)
                   : null,
               onRemove: () => _handleRemoveShared(e),
-              // F3 — mismo gate que la lista principal (v1 solo Windows,
-              // solo con copia local); la hoja de detalle aplica el resto
-              // (coop + jugador visible no-anfitrión).
-              onMakeHost: Platform.isWindows && e.localMatch != null
+              // F3 — mismo gate que la lista principal
+              // (`_hostSwapAvailable`, solo con copia local); la hoja de
+              // detalle aplica el resto (coop + jugador visible no-anfitrión).
+              onMakeHost: _hostSwapAvailable && e.localMatch != null
                   ? (target) => _handleMakeHost(e.asEntry, target)
                   : null,
               // Modelo de 3 sitios: "Subir a mi Drive" compara LOCAL contra

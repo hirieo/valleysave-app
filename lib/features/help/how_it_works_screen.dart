@@ -24,7 +24,9 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
   final _shizukuKey = GlobalKey();
   late ScrollController _scrollController;
   bool _privacyPressed = false;
+  bool _privacyHovered = false;
   bool _copyPressed = false;
+  bool _copyHovered = false;
 
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
@@ -946,18 +948,27 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
               ],
             ),
           ),
-          GestureDetector(
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            onEnter: (_) => setState(() => _copyHovered = true),
+            onExit: (_) => setState(() => _copyHovered = false),
+            child: GestureDetector(
             onTap: () => Clipboard.setData(ClipboardData(text: path)),
             onTapDown: (_) => setState(() => _copyPressed = true),
             onTapUp: (_) => setState(() => _copyPressed = false),
             onTapCancel: () => setState(() => _copyPressed = false),
             child: AnimatedScale(
-              scale: _copyPressed ? 0.88 : 1.0,
+              scale: _copyPressed ? 0.88 : (_copyHovered ? 1.12 : 1.0),
               duration: _copyPressed
                   ? const Duration(milliseconds: 100)
                   : const Duration(milliseconds: 200),
               curve: const Cubic(0.23, 1, 0.32, 1),
-              child: Icon(Icons.copy_rounded, size: 15, color: AppColors.textFaint),
+              child: Icon(
+                Icons.copy_rounded,
+                size: 15,
+                color: _copyHovered ? AppColors.textMuted : AppColors.textFaint,
+              ),
+            ),
             ),
           ),
         ],
@@ -966,7 +977,11 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
   }
 
   Widget _privacyLink(BuildContext context, Color accent, AppLocalizations l10n) {
-    return GestureDetector(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _privacyHovered = true),
+      onExit: (_) => setState(() => _privacyHovered = false),
+      child: GestureDetector(
       onTap: () => Navigator.push(
         context,
         AppPageRoute(
@@ -977,17 +992,21 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
       onTapUp: (_) => setState(() => _privacyPressed = false),
       onTapCancel: () => setState(() => _privacyPressed = false),
       child: AnimatedScale(
-        scale: _privacyPressed ? 0.97 : 1.0,
+        scale: _privacyPressed ? 0.97 : (_privacyHovered ? 1.015 : 1.0),
         duration: _privacyPressed
             ? const Duration(milliseconds: 100)
             : const Duration(milliseconds: 200),
         curve: const Cubic(0.23, 1, 0.32, 1),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOut,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: accent.withValues(alpha: 0.08),
+            color: accent.withValues(alpha: _privacyHovered ? 0.13 : 0.08),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: accent.withValues(alpha: 0.40)),
+            border: Border.all(
+              color: accent.withValues(alpha: _privacyHovered ? 0.55 : 0.40),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1014,6 +1033,7 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             ],
           ),
         ),
+      ),
       ),
     );
   }

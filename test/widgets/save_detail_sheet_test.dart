@@ -515,7 +515,11 @@ void main() {
     await tester.pump();
 
     final loader = find.byKey(const ValueKey('save-busy-indicator'));
-    final status = find.text('Solo en este equipo');
+    // Mientras carga, el texto acompaña al icono estacional con
+    // "Sincronizando…" — no se queda con la etiqueta de antes de empezar
+    // (2026-07-15, fix de consistencia visual: color/texto ya no se quedan
+    // en el estado previo mientras sube/baja).
+    final status = find.text('Sincronizando…');
     expect(loader, findsOneWidget);
     expect(status, findsOneWidget);
     expect(tester.getCenter(loader).dx, lessThan(tester.getCenter(status).dx));

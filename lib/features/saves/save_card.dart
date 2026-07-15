@@ -1393,8 +1393,18 @@ class _Footer extends StatelessWidget {
         status == SaveSyncStatus.driveAhead;
     final isMobile = Platform.isAndroid || Platform.isIOS;
 
+    // Mientras sube/baja, el texto acompaña al icono estacional en vez de
+    // quedarse con la etiqueta/color de antes de empezar (2026-07-15,
+    // auditoría de consistencia visual — antes decía p. ej. "Local por
+    // delante" en dorado durante toda la subida).
+    final displayColor = busy
+        ? seasonBusyColor(SeasonController.instance.season.value)
+        : statusColor;
+    final displayLabel = busy
+        ? l10n.sharedStatusWorking
+        : _statusStyle(status, l10n).label;
+
     if (isMobile) {
-      final statusLabel = _statusStyle(status, l10n).label;
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
         child: Row(
@@ -1409,11 +1419,11 @@ class _Footer extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                statusLabel,
+                displayLabel,
                 style: GoogleFonts.firaCode(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: statusColor,
+                  color: displayColor,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1474,7 +1484,6 @@ class _Footer extends StatelessWidget {
     }
 
     // Desktop: dot + etiqueta descriptiva + botones con label
-    final statusLabel = _statusStyle(status, l10n).label;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
       child: Row(
@@ -1489,11 +1498,11 @@ class _Footer extends StatelessWidget {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              statusLabel,
+              displayLabel,
               style: GoogleFonts.firaCode(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: statusColor,
+                color: displayColor,
               ),
               overflow: TextOverflow.ellipsis,
             ),

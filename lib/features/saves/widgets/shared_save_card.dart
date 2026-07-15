@@ -298,8 +298,14 @@ class _SharedFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = SharedSyncState.fromEntry(entry);
+    // Mismo color que el icono estacional de al lado (pétalo rosa en
+    // primavera, hoja naranja en otoño…) — antes era un dorado fijo que no
+    // combinaba (2026-07-15, auditoría de consistencia visual).
     final status = busy
-        ? (color: _kSyncAccent, text: l10n.sharedStatusWorking)
+        ? (
+            color: seasonBusyColor(SeasonController.instance.season.value),
+            text: l10n.sharedStatusWorking,
+          )
         : _statusSpec(l10n, state);
     final showDownload =
         !busy && state.needsDownload && onDownloadRequested != null;

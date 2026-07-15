@@ -16,10 +16,12 @@ import '../../core/services/season_service.dart';
 import '../../core/services/update_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
+import '../../shared/widgets/glass_dialog.dart';
 import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/pressable_scale.dart';
 import '../../shared/widgets/update_download_animation.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
+import '../saves/save_card.dart' show ActionBtn;
 import 'widgets/language_dialog.dart';
 
 enum _UpdateState { idle, checking, upToDate, available, downloading, error }
@@ -192,91 +194,44 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Future<void> _showDisconnectDialog() async {
     final l10n = AppLocalizations.of(context)!;
+    const danger = Color(0xFFC06050);
     final confirm = await showDialog<bool>(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.60),
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 340),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.75),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: glassDialogShell(
+          ctx,
+          maxWidth: 340,
+          accent: danger,
+          child: dialogBody(
+            title: Text(
+              l10n.disconnectTitle,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.disconnectTitle,
-                  style: AppTypography.bodyStrong(color: AppColors.text),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  l10n.disconnectBody(_connectedEmail ?? ''),
-                  style: AppTypography.mono(
-                    color: AppColors.textMuted,
-                    size: 12,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(ctx, false),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white.withValues(alpha: 0.60),
-                          side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.15),
-                          ),
-                          minimumSize: const Size(0, 40),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: const StadiumBorder(),
-                        ),
-                        child: Text(
-                          l10n.cancel,
-                          style: AppTypography.mono(
-                            size: 12,
-                            color: Colors.white.withValues(alpha: 0.60),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(ctx, true),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFFC06050),
-                          side: BorderSide(
-                            color: const Color(
-                              0xFFC06050,
-                            ).withValues(alpha: 0.45),
-                          ),
-                          backgroundColor: const Color(
-                            0xFFC06050,
-                          ).withValues(alpha: 0.08),
-                          minimumSize: const Size(0, 40),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: const StadiumBorder(),
-                        ),
-                        child: Text(
-                          l10n.disconnect,
-                          style: AppTypography.mono(
-                            size: 12,
-                            color: const Color(0xFFC06050),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            content: Text(
+              l10n.disconnectBody(_connectedEmail ?? ''),
+              style: AppTypography.mono(color: AppColors.textMuted, size: 12),
             ),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              ActionBtn(
+                label: l10n.disconnect,
+                color: danger,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+            ],
           ),
         ),
       ),

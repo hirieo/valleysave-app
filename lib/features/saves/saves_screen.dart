@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' show ImageFilter;
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:file_picker/file_picker.dart';
@@ -33,6 +32,7 @@ import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../../shared/widgets/pressable_scale.dart';
+import '../../shared/widgets/glass_dialog.dart';
 import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
 import 'save_card.dart';
@@ -1196,51 +1196,50 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final accent = _seasonAccent;
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Color.alphaBlend(
-          accent.withValues(alpha: 0.06),
-          const Color(0xFF0A0A0B),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: accent.withValues(alpha: 0.22)),
-        ),
-        title: Text(
-          l10n.bridgeChangeMode,
-          style: GoogleFonts.bodoniModa(
-            color: AppColors.text,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.w700,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          accent: accent,
+          child: _dialogBody(
+            title: Text(
+              l10n.bridgeChangeMode,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _changeModeOption(
+                  ctx,
+                  l10n.chooserRootBadge,
+                  l10n.chooserRootTitle,
+                  AndroidMode.root,
+                  accent,
+                ),
+                const SizedBox(height: 8),
+                _changeModeOption(
+                  ctx,
+                  l10n.hiwShizukuBadge,
+                  l10n.hiwShizukuTitle,
+                  AndroidMode.shizuku,
+                  accent,
+                ),
+              ],
+            ),
+            actions: [
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx),
+              ),
+            ],
           ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _changeModeOption(
-              ctx,
-              l10n.chooserRootBadge,
-              l10n.chooserRootTitle,
-              AndroidMode.root,
-              accent,
-            ),
-            const SizedBox(height: 8),
-            _changeModeOption(
-              ctx,
-              l10n.hiwShizukuBadge,
-              l10n.hiwShizukuTitle,
-              AndroidMode.shizuku,
-              accent,
-            ),
-          ],
-        ),
-        actions: [
-          ActionBtn(
-            label: l10n.cancel,
-            color: Colors.white.withValues(alpha: 0.55),
-            filled: false,
-            onTap: () => Navigator.pop(ctx),
-          ),
-        ],
       ),
     );
   }
@@ -2216,68 +2215,25 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// ancho acotado (evita la "barra rectangular" a lo ancho de la ventana),
   /// fondo mezclado con blur sutil detrás (sensación de profundidad, nunca
   /// negro plano) y esquinas más suaves que un `AlertDialog` por defecto.
+  /// Delegan al widget compartido `lib/shared/widgets/glass_dialog.dart`
+  /// (2026-07-15 — antes vivían solo aquí duplicados; ahora Settings y el
+  /// diálogo de idioma también los usan, una sola fuente de verdad).
   Widget _glassDialogShell({
     required Widget child,
     double maxWidth = 380,
     Color? accent,
-  }) {
-    final borderColor = (accent ?? _seasonAccent).withValues(alpha: 0.22);
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-        maxHeight: MediaQuery.of(context).size.height * 0.85,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF14110A).withValues(alpha: 0.92),
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: borderColor),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.55),
-                  blurRadius: 44,
-                  offset: const Offset(0, 16),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
-            child: child,
-          ),
-        ),
-      ),
-    );
-  }
+  }) => glassDialogShell(
+    context,
+    maxWidth: maxWidth,
+    accent: accent ?? _seasonAccent,
+    child: child,
+  );
 
-  /// Estructura título/contenido-scrollable/acciones común a todos los
-  /// diálogos. `Wrap` en vez de `Row` para las acciones: con el ancho ahora
-  /// acotado, 3 botones (como en el archivado) necesitan poder bajar de línea
-  /// sin desbordar.
   Widget _dialogBody({
     required Widget title,
     required Widget content,
     required List<Widget> actions,
-  }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        title,
-        const SizedBox(height: 12),
-        Flexible(child: SingleChildScrollView(child: content)),
-        const SizedBox(height: 14),
-        Wrap(
-          alignment: WrapAlignment.end,
-          spacing: 8,
-          runSpacing: 8,
-          children: actions,
-        ),
-      ],
-    );
-  }
+  }) => dialogBody(title: title, content: content, actions: actions);
 
   /// Aviso inline: tinte muy sutil, sin borde — más compacto y translúcido
   /// que un `Container` con borde sólido (opción B aprobada, 2026-07-11).

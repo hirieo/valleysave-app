@@ -1,10 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 
 import '../../../core/services/drive_service.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../shared/widgets/glass_dialog.dart';
 import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart' show ActionBtn;
 import 'stagger_item.dart';
@@ -75,68 +76,55 @@ class _SharedFolderPickerDialogState extends State<_SharedFolderPickerDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: 420,
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF14110A).withValues(alpha: 0.92),
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: _kAccent.withValues(alpha: 0.22)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.55),
-                  blurRadius: 44,
-                  offset: const Offset(0, 16),
-                ),
-              ],
+    return glassDialogShell(
+      context,
+      maxWidth: 420,
+      accent: _kAccent,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.7,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.sharedWithMePickerTitle,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.sharedWithMePickerTitle,
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                ),
-                const SizedBox(height: 12),
-                Flexible(child: _buildBody(l10n)),
-                const SizedBox(height: 14),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: PressableScale(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 7,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color(0xFFE05252).withValues(alpha: 0.5),
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        l10n.cancel,
-                        style: const TextStyle(
-                          color: Color(0xFFE05252),
-                          fontSize: 10,
-                        ),
-                      ),
+            const SizedBox(height: 12),
+            Flexible(child: _buildBody(l10n)),
+            const SizedBox(height: 14),
+            Align(
+              alignment: Alignment.centerRight,
+              child: PressableScale(
+                onTap: () => Navigator.of(context).pop(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color(0xFFE05252).withValues(alpha: 0.5),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    l10n.cancel,
+                    style: GoogleFonts.firaCode(
+                      color: const Color(0xFFE05252),
+                      fontSize: 10,
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -148,7 +136,10 @@ class _SharedFolderPickerDialogState extends State<_SharedFolderPickerDialog> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
           _error!,
-          style: const TextStyle(color: Colors.white54, fontSize: 12),
+          style: GoogleFonts.firaCode(
+            color: Colors.white54,
+            fontSize: 12,
+          ),
           textAlign: TextAlign.center,
         ),
       );
@@ -173,7 +164,10 @@ class _SharedFolderPickerDialogState extends State<_SharedFolderPickerDialog> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
           l10n.sharedPickerEmptyHint,
-          style: const TextStyle(color: Colors.white38, fontSize: 12),
+          style: GoogleFonts.firaCode(
+            color: Colors.white38,
+            fontSize: 12,
+          ),
           textAlign: TextAlign.center,
         ),
       );
@@ -241,14 +235,17 @@ class _SharedFolderRow extends StatelessWidget {
               children: [
                 Text(
                   file.name ?? '',
-                  style: const TextStyle(color: Colors.white, fontSize: 12.5),
+                  style: GoogleFonts.firaCode(
+                    color: Colors.white,
+                    fontSize: 12.5,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (subtitle.isNotEmpty) ...[
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: GoogleFonts.firaCode(
                       color: Colors.white38,
                       fontSize: 10.5,
                     ),

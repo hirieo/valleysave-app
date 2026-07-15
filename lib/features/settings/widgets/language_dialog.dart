@@ -7,6 +7,7 @@ import '../../../generated/app_localizations.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../shared/widgets/glass_dialog.dart';
 import '../../../shared/widgets/pressable_scale.dart';
 
 Widget flagView(String flag, double size) {
@@ -75,17 +76,17 @@ class _LanguageDialogState extends State<LanguageDialog>
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 340),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.55),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: widget.accent.withValues(alpha: 0.35)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+      child: glassDialogShell(
+        context,
+        maxWidth: 340,
+        accent: widget.accent,
+        // Selector de lista: quiere ir pegado a los bordes (su propia
+        // cabecera y la lista ya traen su padding), no el hueco pensado
+        // para título+cuerpo+acciones de un diálogo de confirmación.
+        padding: EdgeInsets.zero,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 14, 12, 10),
                 child: Row(
@@ -192,7 +193,6 @@ class _LanguageDialogState extends State<LanguageDialog>
             ],
           ),
         ),
-      ),
     );
   }
 }

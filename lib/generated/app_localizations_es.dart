@@ -592,6 +592,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String sharedAccessReadOnly(String email) {
+    return '$email te ha puesto en modo solo lectura — puedes ver y descargar, pero no sincronizar hacia su Drive.';
+  }
+
+  @override
   String get sharedWithMeRevoked => 'Ya no tienes acceso';
 
   @override

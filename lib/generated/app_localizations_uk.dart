@@ -591,6 +591,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String sharedAccessReadOnly(String email) {
+    return '$email set your access to read-only — you can view and download, but not sync to their Drive.';
+  }
+
+  @override
   String get sharedWithMeRevoked => 'You no longer have access';
 
   @override

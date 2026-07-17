@@ -6,6 +6,7 @@
 .pub-cache/
 .pub/
 build/
+*.deb
 ios/Pods/
 ios/.symlinks/
 ios/Flutter/Flutter.framework

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ValleySave
+Comment=Sincroniza tus partidas de Stardew Valley vía Google Drive
+Exec=/usr/lib/valleysave/valleysave
+Icon=valleysave
+Terminal=false
+Categories=Game;Utility;
+StartupWMClass=com.hirieo.valleysave

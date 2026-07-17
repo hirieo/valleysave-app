@@ -120,6 +120,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              _sectionConnect(l10n),
+                              const SizedBox(height: 12),
                               _sectionSync(l10n),
                               const SizedBox(height: 12),
                               _sectionUpload(l10n),
@@ -134,7 +136,15 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                               const SizedBox(height: 12),
                               _sectionCompatibility(l10n),
                               const SizedBox(height: 12),
+                              _sectionShare(l10n),
+                              const SizedBox(height: 12),
+                              _sectionHostSwap(l10n),
+                              const SizedBox(height: 12),
+                              _sectionBackups(l10n),
+                              const SizedBox(height: 12),
                               _sectionLaunchGame(l10n),
+                              const SizedBox(height: 12),
+                              _sectionSaveLocations(l10n),
                               const SizedBox(height: 28),
                               _androidDivider(l10n),
                               const SizedBox(height: 16),
@@ -191,6 +201,40 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
         ],
           ),
         ),
+      ),
+    );
+  }
+
+  // ── Section: connect account ────────────────────────────────────────────
+
+  Widget _sectionConnect(AppLocalizations l10n) {
+    return _infoCard(
+      icon: Icons.link_rounded,
+      color: AppColors.accent,
+      title: l10n.hiwConnectTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwConnectDesc, style: _body()),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _flowNode(Icons.account_circle_outlined, l10n.hiwConnectStepGoogle, AppColors.accent),
+              _flowArrows(),
+              _flowNode(Icons.folder_shared_outlined, l10n.hiwConnectStepDrive, const Color(0xFF4A90D9)),
+              _flowArrows(),
+              _flowNode(Icons.check_circle_outline_rounded, l10n.hiwConnectStepReady, AppColors.green),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.lock_outline_rounded,
+            color: AppColors.accent,
+            text: l10n.hiwConnectTipOwnership,
+          ),
+        ],
       ),
     );
   }
@@ -600,6 +644,135 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
     );
   }
 
+  // ── Section: share with others (F2) ─────────────────────────────────────
+
+  Widget _sectionShare(AppLocalizations l10n) {
+    const purple = Color(0xFF9B72CF);
+    return _infoCard(
+      icon: Icons.people_alt_rounded,
+      color: purple,
+      title: l10n.hiwShareTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwShareDesc, style: _body()),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _flowNode(Icons.folder_outlined, l10n.hiwShareStepYourSave, purple),
+              _flowArrows(),
+              _flowNode(Icons.mail_outline_rounded, l10n.hiwShareStepShare, const Color(0xFF4A90D9)),
+              _flowArrows(),
+              _flowNode(Icons.person_outline_rounded, l10n.hiwShareStepFriend, AppColors.green),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.admin_panel_settings_outlined,
+            color: purple,
+            text: l10n.hiwShareTipRoles,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.link_off_rounded,
+            color: purple,
+            text: l10n.hiwShareTipDisconnect,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Section: host swap (F3) ─────────────────────────────────────────────
+
+  Widget _sectionHostSwap(AppLocalizations l10n) {
+    const coral = Color(0xFFD97748);
+    return _infoCard(
+      icon: Icons.swap_horiz_rounded,
+      color: coral,
+      title: l10n.hiwHostSwapTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwHostSwapDesc, style: _body()),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _flowNode(Icons.groups_outlined, l10n.hiwHostSwapStepPick, coral),
+              _flowArrows(),
+              _flowNode(Icons.check_circle_outline_rounded, l10n.hiwHostSwapStepConfirm, AppColors.green),
+              _flowArrows(),
+              _flowNode(Icons.home_work_outlined, l10n.hiwHostSwapStepDone, coral),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.move_down_rounded,
+            color: coral,
+            text: l10n.hiwHostSwapTipMove,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.warning_amber_rounded,
+            color: coral,
+            text: l10n.hiwHostSwapTipHouse,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Section: backups ─────────────────────────────────────────────────────
+
+  Widget _sectionBackups(AppLocalizations l10n) {
+    const teal = Color(0xFF3FA8A0);
+    return _infoCard(
+      icon: Icons.history_rounded,
+      color: teal,
+      title: l10n.hiwBackupsTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwBackupsDesc, style: _body()),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _flowNode(Icons.folder_outlined, l10n.hiwBackupsStepSave, teal),
+              _flowArrows(),
+              _flowNode(Icons.archive_outlined, l10n.hiwBackupsStepSnapshot, AppColors.accent),
+              _flowArrows(),
+              _flowNode(Icons.save_outlined, l10n.hiwBackupsStepStore, const Color(0xFF4A90D9)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.restore_rounded,
+            color: teal,
+            text: l10n.hiwBackupsTipRestore,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.delete_outline_rounded,
+            color: teal,
+            text: l10n.hiwBackupsTipDelete,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.folder_zip_outlined,
+            color: teal,
+            text: l10n.hiwBackupsTipExport,
+          ),
+        ],
+      ),
+    );
+  }
+
   // ── Section: launch game ─────────────────────────────────────────────────
 
   Widget _sectionLaunchGame(AppLocalizations l10n) {
@@ -623,6 +796,47 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             icon: Icons.phone_android_rounded,
             color: green,
             text: l10n.hiwLaunchTipAndroid,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.desktop_windows_rounded,
+            color: green,
+            text: l10n.hiwLaunchTipLinux,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Section: save locations ──────────────────────────────────────────────
+
+  Widget _sectionSaveLocations(AppLocalizations l10n) {
+    const blue = Color(0xFF4A90D9);
+    return _infoCard(
+      icon: Icons.folder_open_rounded,
+      color: blue,
+      title: l10n.hiwSaveLocationsTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwSaveLocationsDesc, style: _body()),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.desktop_windows_rounded,
+            color: blue,
+            text: l10n.hiwSaveLocationWindows,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.phone_android_rounded,
+            color: blue,
+            text: l10n.hiwSaveLocationAndroid,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.desktop_windows_rounded,
+            color: blue,
+            text: l10n.hiwSaveLocationLinux,
           ),
         ],
       ),

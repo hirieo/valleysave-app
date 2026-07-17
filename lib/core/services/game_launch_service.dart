@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,20 +11,28 @@ class GameLaunchService {
   static const _native = MethodChannel('valleysave/game');
   static const _prefKey = 'stardew_exe_path';
 
-  static const _knownPaths = [
+  static const _knownPathsWindows = [
     r'C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Stardew Valley.exe',
     r'C:\Program Files\Steam\steamapps\common\Stardew Valley\Stardew Valley.exe',
     r'C:\XboxGames\Stardew Valley\Content\Stardew Valley.exe',
     r'C:\Program Files (x86)\GOG Galaxy\Games\Stardew Valley\Stardew Valley.exe',
   ];
 
+  static List<String> _knownPathsLinux(String home) => [
+    '$home/.steam/steam/steamapps/common/Stardew Valley/StardewValley',
+    '$home/.local/share/Steam/steamapps/common/Stardew Valley/StardewValley',
+    '$home/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Stardew Valley/StardewValley',
+    // Steam vía snap: corre confinado con su propio $HOME (~/snap/steam/common).
+    '$home/snap/steam/common/.local/share/Steam/steamapps/common/Stardew Valley/StardewValley',
+  ];
+
   bool _androidInstalled = false;
-  String? _windowsExePath;
+  String? _desktopExePath;
 
   bool get canLaunch =>
-      Platform.isAndroid ? _androidInstalled : _windowsExePath != null;
+      Platform.isAndroid ? _androidInstalled : _desktopExePath != null;
 
-  String? get resolvedExePath => _windowsExePath;
+  String? get resolvedExePath => _desktopExePath;
 
   Future<void> init() async {
     if (Platform.isAndroid) {
@@ -32,32 +41,37 @@ class GameLaunchService {
       } catch (_) {
         _androidInstalled = false;
       }
-    } else if (Platform.isWindows) {
-      final prefs = await SharedPreferences.getInstance();
-      final saved = prefs.getString(_prefKey);
-      if (saved != null && await File(saved).exists()) {
-        _windowsExePath = saved;
+      return;
+    }
+    if (!Platform.isWindows && !Platform.isLinux) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_prefKey);
+    if (saved != null && await File(saved).exists()) {
+      _desktopExePath = saved;
+      return;
+    }
+    final candidates = Platform.isWindows
+        ? _knownPathsWindows
+        : _knownPathsLinux(Platform.environment['HOME'] ?? '');
+    for (final path in candidates) {
+      if (await File(path).exists()) {
+        _desktopExePath = path;
         return;
       }
-      for (final path in _knownPaths) {
-        if (await File(path).exists()) {
-          _windowsExePath = path;
-          return;
-        }
-      }
-      _windowsExePath = null;
     }
+    _desktopExePath = null;
   }
 
   Future<void> launch() async {
     if (Platform.isAndroid) {
       final ok = (await _native.invokeMethod<bool>('launch')) ?? false;
       if (!ok) throw StateError('No se pudo lanzar Stardew Valley');
-    } else if (Platform.isWindows) {
-      final path = _windowsExePath;
-      if (path == null) throw StateError('No exe path configured');
-      await Process.start(path, [], mode: ProcessStartMode.detached);
+      return;
     }
+    final path = _desktopExePath;
+    if (path == null) throw StateError('No exe path configured');
+    await Process.start(path, [], mode: ProcessStartMode.detached);
   }
 
   Future<String?> pickExePathWindows() async {
@@ -79,14 +93,23 @@ if ($d.ShowDialog() -eq "OK") { Write-Output $d.FileName }
     return path.isEmpty ? null : path;
   }
 
+  Future<String?> pickExePathLinux() async {
+    if (!Platform.isLinux) return null;
+    final result = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Stardew Valley',
+    );
+    if (result == null || result.files.isEmpty) return null;
+    return result.files.single.path;
+  }
+
   Future<void> setCustomExePath(String path) async {
-    _windowsExePath = path;
+    _desktopExePath = path;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefKey, path);
   }
 
   Future<void> clearCustomExePath() async {
-    _windowsExePath = null;
+    _desktopExePath = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefKey);
   }

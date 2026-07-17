@@ -1035,6 +1035,26 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hiwTitle => 'Cómo funciona';
 
   @override
+  String get hiwConnectTitle => 'Conectar tu cuenta';
+
+  @override
+  String get hiwConnectDesc =>
+      'ValleySave usa tu cuenta de Google para guardar tus partidas en una carpeta privada de ValleySave en tu propio Drive.';
+
+  @override
+  String get hiwConnectStepGoogle => 'Cuenta de\nGoogle';
+
+  @override
+  String get hiwConnectStepDrive => 'Carpeta ValleySave\ncreada';
+
+  @override
+  String get hiwConnectStepReady => 'Listo para\nsincronizar';
+
+  @override
+  String get hiwConnectTipOwnership =>
+      'Solo tú puedes editar o borrar tus copias en Drive — ValleySave solo lee y escribe dentro de su propia carpeta.';
+
+  @override
   String get hiwSyncTitle => 'Cómo se sincroniza';
 
   @override
@@ -1419,6 +1439,82 @@ class AppLocalizationsEs extends AppLocalizations {
       'Los mods de SMAPI añaden datos extra al save. Si cargas una partida con mods en un dispositivo donde esos mods no están instalados, el juego puede fallar o perder datos del mod.\n\nEn Android, SMAPI también puede instalarse para usar mods.';
 
   @override
+  String get hiwShareTitle => 'Compartir con otros';
+
+  @override
+  String get hiwShareDesc =>
+      'Comparte una partida con otro jugador por email. La verá en Compartidas conmigo en su propio dispositivo.';
+
+  @override
+  String get hiwShareStepYourSave => 'Tu\npartida';
+
+  @override
+  String get hiwShareStepShare => 'Compartir por\nemail';
+
+  @override
+  String get hiwShareStepFriend => 'Compartidas\nconmigo';
+
+  @override
+  String get hiwShareTipRoles =>
+      'Dos roles: Solo lectura permite ver y descargar. Permitir sincronizar permite sobrescribir tu copia en Drive. En ningún caso pueden borrarla — solo tú, el dueño, puedes borrar tu partida.';
+
+  @override
+  String get hiwShareTipDisconnect =>
+      'Desconectar solo detiene la sincronización de su lado — el compartido sigue activo hasta que lo dejes de verdad desde Administrar compartidas.';
+
+  @override
+  String get hiwHostSwapTitle => 'Cambio de anfitrión';
+
+  @override
+  String get hiwHostSwapDesc =>
+      'Cambia qué farmhand es el anfitrión de la partida, reemplazándola en sitio — mismo slot de guardado, mismos permisos de compartir.';
+
+  @override
+  String get hiwHostSwapStepPick => 'Elegir\nfarmhand';
+
+  @override
+  String get hiwHostSwapStepConfirm => 'Confirmar';
+
+  @override
+  String get hiwHostSwapStepDone => 'Partida nueva\ncreada';
+
+  @override
+  String get hiwHostSwapTipMove =>
+      'Algunos objetos de la granja pueden reubicarse para hacer sitio a la casa — nada se borra.';
+
+  @override
+  String get hiwHostSwapTipHouse =>
+      'La casa del nuevo anfitrión se verá como la casa grande por defecto del juego — la estética de cabaña no está soportada sin mods.';
+
+  @override
+  String get hiwBackupsTitle => 'Respaldos';
+
+  @override
+  String get hiwBackupsDesc =>
+      'Un respaldo es una foto de una partida que puedes restaurar más adelante. Créalo manualmente cuando quieras, o deja que ValleySave cree uno automáticamente antes de un cambio de anfitrión.';
+
+  @override
+  String get hiwBackupsStepSave => 'Tu\npartida';
+
+  @override
+  String get hiwBackupsStepSnapshot => 'Respaldo\ncreado';
+
+  @override
+  String get hiwBackupsStepStore => 'Local y/o\nDrive';
+
+  @override
+  String get hiwBackupsTipRestore =>
+      'Restaurar sobrescribe tu partida actual con esa versión anterior — no se puede deshacer.';
+
+  @override
+  String get hiwBackupsTipDelete =>
+      'Eliminar un respaldo lo borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió) — no se puede deshacer.';
+
+  @override
+  String get hiwBackupsTipExport =>
+      'También puedes Exportar una partida como zip para guardarla donde quieras, e Importarla de vuelta más adelante — una alternativa manual y portable a los respaldos integrados.';
+
+  @override
   String get hiwComparePrimary => 'Tiempo total jugado';
 
   @override
@@ -1681,6 +1777,29 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hiwLaunchTipAndroid =>
       'En Android abre el juego si está instalado.';
+
+  @override
+  String get hiwLaunchTipLinux =>
+      'En Linux, si el juego no se detecta automáticamente, configura la ruta del ejecutable en Ajustes → Juego.';
+
+  @override
+  String get hiwSaveLocationsTitle => 'Dónde viven tus partidas';
+
+  @override
+  String get hiwSaveLocationsDesc =>
+      'ValleySave lee y escribe directamente en la carpeta de saves del juego en cada plataforma.';
+
+  @override
+  String get hiwSaveLocationWindows =>
+      'Windows: %AppData%\\StardewValley\\Saves';
+
+  @override
+  String get hiwSaveLocationAndroid =>
+      'Android: carpeta protegida, se accede vía Shizuku o el Puente';
+
+  @override
+  String get hiwSaveLocationLinux =>
+      'Linux: ~/.config/StardewValley/Saves (o ~/snap/steam/common/.config/StardewValley/Saves si Steam está instalado vía snap)';
 
   @override
   String get settingsGameSection => 'Juego';

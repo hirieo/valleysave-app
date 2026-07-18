@@ -24,6 +24,7 @@ import '../../core/services/backup_service.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/host_swap_service.dart';
+import '../../core/services/save_replace_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
@@ -155,6 +156,19 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     await GameLaunchService.instance.init();
     if (mounted) {
       setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
+    }
+
+    // Recupera temporales huérfanas de un cierre anterior (crash, corte de
+    // luz) ANTES del primer escaneo — spec 001-integridad-transaccional-saves
+    // FR-012. Solo aplica a escritorio: Android no tiene savesDirectory
+    // directo (accede vía Shizuku/root, ver SaveService.savesDirectory).
+    final sweepDir = SaveService.savesDirectory;
+    if (sweepDir != null) {
+      final backupsDir = await _backupsDirPath();
+      await SaveReplaceService.instance.sweepOrphans(
+        sweepDir,
+        backupsDir: backupsDir,
+      );
     }
 
     if (!Platform.isAndroid) {
@@ -374,6 +388,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           local: localByName[name],
           drive: d?.save,
           driveFolderId: d?.folderId,
+          driveComplete: d?.complete ?? true,
         ),
       );
     }
@@ -448,6 +463,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               localMatch: localByName[s.folderName],
               ownDriveStats: ownByName[s.folderName]?.drive,
               ownDriveFolderId: ownByName[s.folderName]?.driveFolderId,
+              ownDriveComplete: ownByName[s.folderName]?.driveComplete ?? true,
             ),
       ];
       if (mounted) {
@@ -640,6 +656,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       // bajó a lector — no es una revocación, no se quita de la lista.
       await _load(silent: true);
       if (mounted) _snack(l10n.sharedAccessReadOnly(entry.ownerEmail));
+    } on UploadIncompleteSaveException {
+      if (mounted) _snack(l10n.snackUploadIncomplete);
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
@@ -701,6 +719,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       // Ver `_handleSyncShared` — acceso válido, solo bajó a lector.
       await _load(silent: true);
       if (mounted) _snack(l10n.sharedAccessReadOnly(entry.ownerEmail));
+    } on UploadIncompleteSaveException {
+      if (mounted) _snack(l10n.snackUploadIncomplete);
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
     } finally {
@@ -1343,6 +1363,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         players: local.players,
       );
       await _load(silent: true);
+    } on UploadIncompleteSaveException {
+      if (mounted) _snack(l10n.snackUploadIncomplete);
     } catch (e) {
       if (mounted) _snack(l10n.snackUploadError(e.toString()));
     } finally {
@@ -1356,6 +1378,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final folderId = entry.driveFolderId;
     if (drive == null || folderId == null || widget.drive == null) return;
 
+    // FR-015: nunca se ofrece descargar un save al que le falta contenido en
+    // Drive — evita bajar algo a medias. El aviso llega como snack (mismo
+    // patrón que el resto de errores), no como diálogo de confirmación.
+    if (!entry.driveComplete) {
+      _snack(l10n.snackDownloadIncomplete);
+      return;
+    }
+
     final name = drive.folderName;
     final confirmed = await _confirmDownload(entry);
     if (confirmed != true) return;
@@ -1364,7 +1394,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     try {
       if (Platform.isAndroid && _mode == AndroidMode.root) {
         final out = await ShizukuService.instance.prepareOut(name);
-        await widget.drive!.downloadSave(folderId, out);
+        await widget.drive!.downloadSaveToDir(folderId, name, Directory(out));
+        if (!await _isValidStagedSave(out, name)) {
+          if (mounted) _snack(l10n.snackReplaceValidationFailed);
+          return;
+        }
         final ok = await ShizukuService.instance.pushSaveAsRoot(out, name);
         if (!ok) {
           if (mounted) _snack(l10n.snackWriteError);
@@ -1373,13 +1407,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
       } else if (Platform.isAndroid && _mode == AndroidMode.shizuku) {
-        // Shizuku: descargar a carpeta propia → empujar al juego vía cp.
+        // Shizuku: descargar a carpeta propia → validar → empujar al juego vía cp.
         if (!_shizukuReady) {
           if (mounted) _snack(l10n.activateShizuku);
           return;
         }
         final out = await ShizukuService.instance.prepareOut(name);
-        await widget.drive!.downloadSave(folderId, out);
+        await widget.drive!.downloadSaveToDir(folderId, name, Directory(out));
+        if (!await _isValidStagedSave(out, name)) {
+          if (mounted) _snack(l10n.snackReplaceValidationFailed);
+          return;
+        }
         final ok = await ShizukuService.instance.pushSave(name);
         if (!ok) {
           if (mounted) _snack(l10n.snackWriteError);
@@ -1393,9 +1431,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           if (mounted) _snack(l10n.snackPlatformNotSupported);
           return;
         }
-        await Directory(savesDir).create(recursive: true);
-        final target = '$savesDir${Platform.pathSeparator}$name';
-        await widget.drive!.downloadSave(folderId, target);
+        final backupsDir = await _backupsDirPath();
+        final result = await SaveReplaceService.instance.replaceSaveFolder(
+          savesDir: savesDir,
+          folderName: name,
+          backupsDir: backupsDir,
+          prepare: (stagingDir) =>
+              widget.drive!.downloadSaveToDir(folderId, name, stagingDir),
+        );
+        if (!result.ok) {
+          if (mounted) _snack(_replaceErrorMessage(result.error));
+          return;
+        }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
       }
@@ -1587,6 +1634,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final result = await TransferService().importSave(
         zipPath,
         savesDir: savesDir,
+        backupsDir: await _backupsDirPath(),
         overwrite: overwrite,
       );
       await _handleImportResult(result, zipPath);
@@ -1609,6 +1657,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final result = await TransferService().importSave(
         zipPath,
         savesDir: stagingDir.path,
+        backupsDir: await _backupsDirPath(),
       );
       if (!result.ok || result.importedFolderName == null) {
         await _handleImportResult(result, zipPath);
@@ -1678,6 +1727,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       ImportError.tooLarge => l10n.importErrTooLarge,
       ImportError.notASave => l10n.importErrNotASave,
       ImportError.writeFailure => l10n.importErrWrite,
+      ImportError.backupFailed => l10n.importErrBackupFailed,
     };
     if (mounted) _snack(msg);
   }
@@ -2257,6 +2307,46 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       case null:
         return l10n.hostSwapErrInvalid;
     }
+  }
+
+  /// Mensaje para cualquier fallo de `SaveReplaceService.replaceSaveFolder`
+  /// (descarga, importación o restauración de backup) — spec
+  /// 001-integridad-transaccional-saves FR-013: distingue red/contenido
+  /// inválido/respaldo/rollback, siempre dejando claro que el destino no se
+  /// perdió (salvo [ReplaceError.busy], que ni siquiera llegó a intentarlo).
+  String _replaceErrorMessage(ReplaceError? error) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (error) {
+      case ReplaceError.prepareFailed:
+        return l10n.snackReplacePrepareFailed;
+      case ReplaceError.validationFailed:
+        return l10n.snackReplaceValidationFailed;
+      case ReplaceError.backupFailed:
+        return l10n.snackReplaceBackupFailed;
+      case ReplaceError.swapFailed:
+        return l10n.snackReplaceSwapFailed;
+      case ReplaceError.busy:
+      case null:
+        return l10n.snackReplaceBusy;
+    }
+  }
+
+  /// Valida el contenido descargado a la copia puente de Android ANTES de
+  /// empujarlo al juego (`pushSave`/`pushSaveAsRoot`) — spec
+  /// 001-integridad-transaccional-saves T008. El push nativo (`cp -rfp`) no
+  /// es transaccional (fuera de alcance de esta spec, ver Assumptions), pero
+  /// al menos nunca empuja un save a medias o corrupto.
+  Future<bool> _isValidStagedSave(String dir, String folderName) async {
+    final sep = Platform.pathSeparator;
+    final info = File('$dir${sep}SaveGameInfo');
+    final main = File('$dir$sep$folderName');
+    if (!await info.exists() || !await main.exists()) return false;
+    final parsed = SaveService.parseSaveGameInfo(
+      await info.readAsString(),
+      folderName: folderName,
+      lastModified: DateTime.now(),
+    );
+    return parsed != null;
   }
 
   /// Tarjeta translúcida compartida por todos los diálogos de confirmación:
@@ -3023,19 +3113,44 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
     if (confirmed != true) return;
 
+    // F6 (T023) — mismo gate que `_hostSwapAvailable`: root/Shizuku son los
+    // únicos submodos Android con una copia local sobre la que se puede
+    // escribir de verdad. En modo Puente no hay forma automática de empujar
+    // el backup restaurado al juego — se explica la alternativa manual en
+    // vez de mostrar el snack genérico de "plataforma no soportada".
+    final androidBridge =
+        Platform.isAndroid &&
+        (_mode == AndroidMode.root || _mode == AndroidMode.shizuku);
+    if (Platform.isAndroid && !androidBridge) {
+      await _showManualRestoreDialog();
+      return;
+    }
+    if (androidBridge && _mode == AndroidMode.shizuku && !_shizukuReady) {
+      if (mounted) _snack(l10n.activateShizuku);
+      return;
+    }
+
+    final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
+    final downloadToPath = (remoteId != null && widget.drive != null)
+        ? (String path) => widget.drive!.downloadFile(remoteId, path)
+        : null;
+
+    if (androidBridge) {
+      await _restoreBackupAndroid(entry, downloadToPath: downloadToPath);
+      return;
+    }
+
     final savesDir = SaveService.savesDirectory;
     if (savesDir == null) {
       if (mounted) _snack(l10n.snackPlatformNotSupported);
       return;
     }
     try {
-      final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
       final result = await BackupService().restoreBackup(
         entry,
         savesDir: savesDir,
-        downloadToPath: (remoteId != null && widget.drive != null)
-            ? (path) => widget.drive!.downloadFile(remoteId, path)
-            : null,
+        backupsDir: await _backupsDirPath(),
+        downloadToPath: downloadToPath,
       );
       if (!result.ok) {
         if (mounted) _snack(l10n.backupsRestoreErr(result.error?.name ?? ''));
@@ -3046,6 +3161,67 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     } catch (e) {
       if (mounted) _snack(l10n.backupsRestoreErr(e.toString()));
     }
+  }
+
+  /// F6 (T023) — Android root/Shizuku: restaura a una carpeta puente propia
+  /// (nunca al `savesDir` real, protegido) y solo empuja al juego si
+  /// `BackupService.restoreBackup` (que hereda la transaccionalidad de F5)
+  /// termina con éxito — mismo patrón que `_importAndroid`.
+  Future<void> _restoreBackupAndroid(
+    BackupEntry entry, {
+    Future<void> Function(String localPath)? downloadToPath,
+  }) async {
+    final l10n = AppLocalizations.of(context)!;
+    final folderName = entry.folderName;
+    final stagingDir = await Directory.systemTemp.createTemp(
+      'vs_restore_stage_',
+    );
+    try {
+      final result = await BackupService().restoreBackup(
+        entry,
+        savesDir: stagingDir.path,
+        backupsDir: await _backupsDirPath(),
+        downloadToPath: downloadToPath,
+      );
+      if (!result.ok) {
+        if (mounted) _snack(l10n.backupsRestoreErr(result.error?.name ?? ''));
+        return;
+      }
+
+      final out = await ShizukuService.instance.prepareOut(folderName);
+      final outDir = Directory(out);
+      if (await outDir.exists()) await outDir.delete(recursive: true);
+      await Directory(
+        '${stagingDir.path}${Platform.pathSeparator}$folderName',
+      ).rename(out);
+
+      final ok = _mode == AndroidMode.root
+          ? await ShizukuService.instance.pushSaveAsRoot(out, folderName)
+          : await ShizukuService.instance.pushSave(folderName);
+      if (!ok) {
+        if (mounted) _snack(l10n.snackWriteError);
+        return;
+      }
+      await _load(silent: true);
+      if (mounted) _snack(l10n.backupsRestoreOk);
+    } catch (e) {
+      if (mounted) _snack(l10n.backupsRestoreErr(e.toString()));
+    } finally {
+      if (await stagingDir.exists()) await stagingDir.delete(recursive: true);
+    }
+  }
+
+  /// F6 (T023) — alternativa manual para el submodo Puente: sin root ni
+  /// Shizuku no hay forma de que la app escriba en la carpeta del juego.
+  Future<void> _showManualRestoreDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    await _confirmBackupAction(
+      accent: const Color(0xFF5AA8E0),
+      title: l10n.backupsRestoreManualTitle,
+      body: l10n.backupsRestoreManualBody,
+      confirmLabel: l10n.ok,
+      confirmIcon: Icons.info_outline_rounded,
+    );
   }
 
   bool _canDeleteBackup(BackupEntry entry, bool canEditShared) =>
@@ -4244,7 +4420,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                         entry: visibleEntries[i],
                         busy: _busy.contains(visibleEntries[i].folderName),
                         onUpload: () => _handleUpload(visibleEntries[i]),
-                        onDownload: () => _handleDownload(visibleEntries[i]),
+                        // FR-015: botón atenuado (no solo bloqueado al
+                        // tocarlo) cuando la partida está incompleta en
+                        // Drive — coincide con el mockup aprobado.
+                        onDownload: visibleEntries[i].driveComplete
+                            ? () => _handleDownload(visibleEntries[i])
+                            : null,
                         onDeleteFromDrive:
                             visibleEntries[i].driveFolderId != null &&
                                 widget.drive != null
@@ -4394,7 +4575,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             SharedSaveCard(
               entry: e,
               busy: _busy.contains(e.folderName),
-              onDownload: () => _handleDownloadShared(e),
+              // FR-015: mismo gate que la lista principal.
+              onDownload: e.complete
+                  ? () => _handleDownloadShared(e)
+                  : null,
               onSync: (e.canSync && e.localMatch != null)
                   ? () => _handleSyncShared(e)
                   : null,

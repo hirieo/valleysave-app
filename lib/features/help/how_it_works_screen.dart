@@ -639,6 +639,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
           _tip(icon: Icons.system_update_alt_rounded, color: amber, text: l10n.hiwCompatVersions),
           const SizedBox(height: 8),
           _tip(icon: Icons.extension_rounded, color: amber, text: l10n.hiwCompatMods),
+          const SizedBox(height: 8),
+          _tip(icon: Icons.cloud_off_rounded, color: amber, text: l10n.hiwCompatIncomplete),
         ],
       ),
     );
@@ -767,6 +769,18 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             icon: Icons.folder_zip_outlined,
             color: teal,
             text: l10n.hiwBackupsTipExport,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.filter_5_outlined,
+            color: teal,
+            text: l10n.hiwBackupsTipRetention,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.usb_rounded,
+            color: teal,
+            text: l10n.hiwBackupsTipRestoreBridge,
           ),
         ],
       ),

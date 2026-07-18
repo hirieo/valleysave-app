@@ -212,6 +212,7 @@ void main() {
         final importResult = await TransferService().importSave(
           result.backupZipPath!,
           savesDir: restoreDir.path,
+          backupsDir: backupsDir,
         );
         expect(importResult.ok, isTrue);
         expect(

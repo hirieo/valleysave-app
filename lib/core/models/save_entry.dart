@@ -6,11 +6,22 @@ enum SaveSyncStatus { synced, localAhead, driveAhead, localOnly, driveOnly }
 /// Empareja una misma granja (mismo [SaveFile.folderName] = uniqueID)
 /// en sus dos posibles ubicaciones: este equipo y Google Drive.
 class SaveEntry {
-  const SaveEntry({this.local, this.drive, this.driveFolderId});
+  const SaveEntry({
+    this.local,
+    this.drive,
+    this.driveFolderId,
+    this.driveComplete = true,
+  });
 
   final SaveFile? local;
   final SaveFile? drive;
   final String? driveFolderId; // id de la subcarpeta en Drive (para descargar)
+
+  /// `false` cuando a [drive] le falta el archivo principal en Drive (spec
+  /// 001-integridad-transaccional-saves FR-015) — ver
+  /// `DriveSaveSummary.complete`. La UI bloquea la descarga en ese caso, para
+  /// no bajar algo a medias.
+  final bool driveComplete;
 
   String get folderName => (local ?? drive)!.folderName;
 

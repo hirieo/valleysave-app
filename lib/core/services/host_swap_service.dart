@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:archive/archive.dart';
 import 'package:xml/xml.dart';
 
+import 'backup_service.dart' show verifyBackupZipContents;
 import 'save_service.dart';
 
 /// Motivo por el que `analyze`/`execute` no pudieron completarse.
@@ -931,29 +931,9 @@ Future<File?> _zipFolder(
 
 /// Confirma que el zip generado es un save real ANTES de reemplazar el
 /// original (G4) — mismo criterio mínimo que `TransferService.importArchive`.
-Future<bool> _verifyBackupZip(File zipFile, String folderName) async {
-  try {
-    final bytes = await zipFile.readAsBytes();
-    final archive = ZipDecoder().decodeBytes(bytes);
-    ArchiveFile? info;
-    ArchiveFile? main;
-    for (final f in archive.files) {
-      final name = f.name.replaceAll('\\', '/');
-      if (name == '$folderName/SaveGameInfo') info = f;
-      if (name == '$folderName/$folderName') main = f;
-    }
-    if (info == null || main == null) return false;
-    final infoXml = utf8.decode(info.content, allowMalformed: true);
-    final parsed = SaveService.parseSaveGameInfo(
-      infoXml,
-      folderName: folderName,
-      lastModified: DateTime.now(),
-    );
-    return parsed != null;
-  } catch (_) {
-    return false;
-  }
-}
+/// Delega en [verifyBackupZipContents] (FR-002: un solo sitio que lo haga).
+Future<bool> _verifyBackupZip(File zipFile, String folderName) =>
+    verifyBackupZipContents(zipFile.path, folderName);
 
 String _backupTimestamp() {
   final now = DateTime.now();

@@ -453,6 +453,10 @@ class AppLocalizationsTh extends AppLocalizations {
       'Couldn\'t write the imported save (disk/permissions).';
 
   @override
+  String get importErrBackupFailed =>
+      'Couldn\'t create a safety backup. Nothing was imported.';
+
+  @override
   String get importConflictTitle => 'A save with this name already exists';
 
   @override
@@ -799,6 +803,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get backupsRestoreOk => 'Backup restored.';
+
+  @override
+  String get backupsRestoreManualTitle => 'Restore manually';
+
+  @override
+  String get backupsRestoreManualBody =>
+      'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.';
 
   @override
   String backupsRestoreErr(String error) {
@@ -1366,6 +1377,37 @@ class AppLocalizationsTh extends AppLocalizations {
   String get snackDownloaded => 'ดาวน์โหลดการบันทึกไปยังเกม';
 
   @override
+  String get snackReplacePrepareFailed =>
+      'Could not prepare the save. Nothing on disk was changed';
+
+  @override
+  String get snackReplaceValidationFailed =>
+      'The downloaded save looks invalid or incomplete. Nothing on disk was changed';
+
+  @override
+  String get snackReplaceBackupFailed =>
+      'Could not create a safety backup. Nothing on disk was changed';
+
+  @override
+  String get snackReplaceSwapFailed =>
+      'The swap failed, but the original save was restored from backup';
+
+  @override
+  String get snackReplaceBusy =>
+      'There\'s already an operation in progress for this save';
+
+  @override
+  String get snackUploadIncomplete =>
+      'The local save is incomplete or corrupted. Nothing was uploaded';
+
+  @override
+  String get snackDownloadIncomplete =>
+      'Can\'t download: this save is missing content on Drive';
+
+  @override
+  String get cardIncomplete => 'Incomplete on Drive';
+
+  @override
   String get snackSessionExpired =>
       'เซสชัน Drive หมดอายุแล้ว เชื่อมต่ออีกครั้ง';
 
@@ -1433,6 +1475,10 @@ class AppLocalizationsTh extends AppLocalizations {
       'โมด SMAPI เพิ่มข้อมูลพิเศษให้กับบันทึก หากคุณโหลดบันทึกที่มีการแก้ไขบนอุปกรณ์ที่ไม่ติดตั้งโมดเหล่านั้น เกมอาจขัดข้องหรือสูญเสียข้อมูลโมด\n\nบน Android SMAPI สามารถติดตั้งได้เช่นกัน เพื่อใช้โมด';
 
   @override
+  String get hiwCompatIncomplete =>
+      'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.';
+
+  @override
   String get hiwShareTitle => 'Share with others';
 
   @override
@@ -1485,7 +1531,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hiwBackupsDesc =>
-      'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before a host swap.';
+      'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).';
 
   @override
   String get hiwBackupsStepSave => 'Your\nsave';
@@ -1507,6 +1553,14 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get hiwBackupsTipExport =>
       'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.';
+
+  @override
+  String get hiwBackupsTipRetention =>
+      'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.';
+
+  @override
+  String get hiwBackupsTipRestoreBridge =>
+      'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.';
 
   @override
   String get hiwComparePrimary => 'เวลาเล่นทั้งหมด';

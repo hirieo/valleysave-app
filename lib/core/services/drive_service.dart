@@ -17,6 +17,14 @@ const _sharedSavesRegistryKey = 'shared_saves_registry';
 
 const _playersJsonName = 'players.json';
 
+/// Metadato pequeño que apunta a la generación remota activa de un save —
+/// spec 001-integridad-transaccional-saves, Clarifications 2026-07-18
+/// (FR-006): cada subida escribe en una subcarpeta de generación nueva y
+/// solo al final actualiza este archivo, en una única operación, para
+/// publicarla. Un save de antes de esta versión no tiene este archivo —
+/// se sigue leyendo en formato plano (ver `DriveService._resolveContent`).
+const _manifestFileName = 'manifest.json';
+
 const _folderName = 'ValleySave';
 const _folderMime = 'application/vnd.google-apps.folder';
 const _readmeName = 'LEEME - ValleySave.txt';
@@ -61,6 +69,13 @@ class SharedAccessReadOnlyException implements Exception {
   final String folderId;
 }
 
+/// FR-006: falta [missingFileName] localmente — `uploadSave` aborta ANTES
+/// de cualquier escritura remota, sin dejar a Drive con una versión mixta.
+class UploadIncompleteSaveException implements Exception {
+  const UploadIncompleteSaveException(this.missingFileName);
+  final String missingFileName;
+}
+
 /// Motivos de 403 que SÍ confirman permiso insuficiente de verdad. Drive
 /// reutiliza el mismo status 403 para cuota, rate-limit y otros fallos
 /// transitorios, así que solo estos motivos explícitos cuentan — cualquier
@@ -84,6 +99,19 @@ bool _isPermissionError(drive.DetailedApiRequestError e) {
   return e.errors.any(
     (d) => _confirmedPermissionReasons.contains(d.reason?.toLowerCase()),
   );
+}
+
+/// Dónde viven de verdad los archivos de un save y su listado — ver
+/// [DriveService._resolveContent]. [children] son los archivos del JUEGO
+/// (de la generación activa, o del propio folder si es formato heredado).
+/// [topLevelChildren] son SIEMPRE los hijos del folder estable original —
+/// ahí es donde viven `players.json`, `manifest.json` y `Backups/`,
+/// independientemente de si el save usa generaciones o no.
+class _ResolvedContent {
+  const _ResolvedContent(this.folderId, this.children, this.topLevelChildren);
+  final String folderId;
+  final List<drive.File> children;
+  final List<drive.File> topLevelChildren;
 }
 
 class DriveService {
@@ -270,8 +298,15 @@ class DriveService {
   /// Busca o crea subcarpeta ValleySave/[saveName]/.
   Future<String> _ensureSaveFolder(String saveName) async {
     final rootId = await ensureFolder();
+    return _ensureSubfolder(saveName, rootId);
+  }
+
+  /// Busca o crea una subcarpeta [name] dentro de [parentId]. Punto único
+  /// (FR-002): reutilizado por `_ensureSaveFolder`, `_ensureBackupsFolder` y
+  /// la carpeta de generación de `uploadSave`.
+  Future<String> _ensureSubfolder(String name, String parentId) async {
     final result = await _api.files.list(
-      q: "name='$saveName' and mimeType='$_folderMime' and '$rootId' in parents and trashed=false",
+      q: "name='$name' and mimeType='$_folderMime' and '$parentId' in parents and trashed=false",
       spaces: 'drive',
       $fields: 'files(id)',
     );
@@ -279,15 +314,30 @@ class DriveService {
       return result.files!.first.id!;
     }
     final folder = drive.File()
-      ..name = saveName
+      ..name = name
       ..mimeType = _folderMime
-      ..parents = [rootId];
+      ..parents = [parentId];
     final created = await _api.files.create(folder, $fields: 'id');
     return created.id!;
   }
 
-  /// Sube los dos archivos de un save (SaveGameInfo + archivo principal)
-  /// a ValleySave/[folderName]/. Actualiza si ya existen en Drive.
+  /// Sube un save a ValleySave/[folderName]/ mediante el modelo de
+  /// generación + manifiesto (spec 001-integridad-transaccional-saves,
+  /// Clarifications 2026-07-18; FR-006, FR-007):
+  ///
+  /// 1. Verifica ANTES de cualquier escritura remota que `SaveGameInfo` y el
+  ///    archivo principal existen y son legibles — si no, aborta con
+  ///    [UploadIncompleteSaveException] sin tocar Drive.
+  /// 2. Escribe TODOS los archivos (obligatorios + `_old` si existen) en una
+  ///    subcarpeta de generación nueva (`gen_<timestamp>`), inmutable.
+  /// 3. Publica esa generación con una ÚNICA actualización final de
+  ///    `manifest.json` — hasta ese momento, cualquier otro dispositivo
+  ///    sigue viendo la generación anterior completa; si la subida se corta
+  ///    antes de este paso, la generación nueva queda huérfana e inerte,
+  ///    nunca se hace visible a medias.
+  /// 4. Limpia (best-effort) las generaciones anteriores — Drive no crece
+  ///    sin límite.
+  ///
   /// Si [players] trae más de un jugador real (partida coop), sube además
   /// un resumen ligero (`players.json`) para que Drive pueda mostrar a todos
   /// los jugadores sin tener que descargar el archivo grande del save.
@@ -296,47 +346,113 @@ class DriveService {
     String folderName, {
     List<PlayerStats> players = const [],
   }) async {
-    final saveFolderId = await _ensureSaveFolder(folderName);
     final sep = Platform.pathSeparator;
-    final filePaths = [
-      '$folderPath${sep}SaveGameInfo',
-      '$folderPath$sep$folderName',
+    final infoFile = File('$folderPath${sep}SaveGameInfo');
+    final mainFile = File('$folderPath$sep$folderName');
+    if (!await infoFile.exists()) {
+      throw const UploadIncompleteSaveException('SaveGameInfo');
+    }
+    if (!await mainFile.exists()) {
+      throw UploadIncompleteSaveException(folderName);
+    }
+
+    final saveFolderId = await _ensureSaveFolder(folderName);
+    final generationName =
+        'gen_${DateTime.now().toUtc().millisecondsSinceEpoch}';
+    final generationId = await _ensureSubfolder(generationName, saveFolderId);
+
+    final localPaths = [
+      infoFile.path,
+      mainFile.path,
+      '$folderPath${sep}SaveGameInfo_old',
+      '$folderPath$sep${folderName}_old',
     ];
 
-    for (final localPath in filePaths) {
+    for (final localPath in localPaths) {
       final file = File(localPath);
-      if (!await file.exists()) continue;
+      if (!await file.exists()) continue; // los `_old` son opcionales
 
       final name = localPath.split(sep).last;
-      final existing = await _api.files.list(
-        q: "name='$name' and '$saveFolderId' in parents and trashed=false",
-        spaces: 'drive',
-        $fields: 'files(id)',
-      );
-
       final length = await file.length();
       final media = drive.Media(file.openRead(), length);
       // Graba la hora REAL de guardado del save (no la de subida) para
       // poder comparar local vs Drive de forma fiable más tarde.
       final savedAt = (await file.lastModified()).toUtc();
-
-      if (existing.files != null && existing.files!.isNotEmpty) {
-        await _api.files.update(
-          drive.File()..modifiedTime = savedAt,
-          existing.files!.first.id!,
-          uploadMedia: media,
-          $fields: 'id',
-        );
-      } else {
-        final metadata = drive.File()
-          ..name = name
-          ..parents = [saveFolderId]
-          ..modifiedTime = savedAt;
-        await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
-      }
+      // La generación es nueva — nunca hay un archivo previo que actualizar.
+      final metadata = drive.File()
+        ..name = name
+        ..parents = [generationId]
+        ..modifiedTime = savedAt;
+      await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
     }
 
+    await _publishManifest(saveFolderId, generationName);
+    await _cleanupOldGenerations(saveFolderId, keep: generationName);
     await _syncPlayersJson(saveFolderId, players);
+  }
+
+  /// Única actualización final que hace visible una generación — el
+  /// "publicar" de FR-006. Antes de esta llamada, la generación nueva es
+  /// invisible para cualquier lector (nadie la referencia todavía).
+  Future<void> _publishManifest(
+    String saveFolderId,
+    String generationName,
+  ) async {
+    final json = jsonEncode({'activeGeneration': generationName});
+    final bytes = utf8.encode(json);
+    final media = drive.Media(Stream.fromIterable([bytes]), bytes.length);
+
+    final existing = await _api.files.list(
+      q:
+          "name='$_manifestFileName' and '$saveFolderId' in parents and "
+          "trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id)',
+    );
+    if (existing.files != null && existing.files!.isNotEmpty) {
+      await _api.files.update(
+        drive.File(),
+        existing.files!.first.id!,
+        uploadMedia: media,
+        $fields: 'id',
+      );
+    } else {
+      final metadata = drive.File()
+        ..name = _manifestFileName
+        ..parents = [saveFolderId];
+      await _api.files.create(metadata, uploadMedia: media, $fields: 'id');
+    }
+  }
+
+  /// Borra las subcarpetas de generación (`gen_*`) que no sean [keep] —
+  /// best-effort: un fallo al limpiar una generación vieja nunca revierte
+  /// ni interrumpe la subida que ya se publicó con éxito. Nunca toca
+  /// `Backups/` ni ninguna otra carpeta que no empiece por `gen_`.
+  Future<void> _cleanupOldGenerations(
+    String saveFolderId, {
+    required String keep,
+  }) async {
+    try {
+      final children = await _api.files.list(
+        q:
+            "'$saveFolderId' in parents and trashed=false and "
+            "mimeType='$_folderMime'",
+        spaces: 'drive',
+        $fields: 'files(id,name)',
+      );
+      for (final f in children.files ?? <drive.File>[]) {
+        if (f.id == null || f.name == null) continue;
+        if (f.name == keep || !f.name!.startsWith('gen_')) continue;
+        try {
+          await _api.files.delete(f.id!);
+        } catch (_) {
+          // best-effort: una generación vieja huérfana no rompe nada — solo
+          // ocupa espacio hasta que una limpieza futura lo consiga.
+        }
+      }
+    } catch (_) {
+      // best-effort
+    }
   }
 
   /// Mantiene el resumen de jugadores coherente con los archivos reales.
@@ -398,7 +514,10 @@ class DriveService {
 
   /// Lista cada save en Drive con sus stats ya parseados (descarga el
   /// SaveGameInfo de cada subcarpeta). La hora de guardado = modifiedTime
-  /// del archivo principal (que sellamos al subir).
+  /// del archivo principal (que sellamos al subir). Resuelve la generación
+  /// activa vía [_resolveContent] — spec 001-integridad-transaccional-saves
+  /// FR-015: sin esto, un save subido con el modelo de generación quedaría
+  /// invisible aquí (sus archivos viven en `gen_<ts>/`, no al nivel raíz).
   Future<List<DriveSaveSummary>> listSaveSummaries() async {
     final rootId = await ensureFolder();
     final folders = await _api.files.list(
@@ -413,20 +532,17 @@ class DriveService {
       final folderName = folder.name;
       if (folderId == null || folderName == null) return null;
 
-      final files = await _api.files.list(
-        q: "'$folderId' in parents and trashed=false",
-        spaces: 'drive',
-        $fields: 'files(id,name,modifiedTime)',
-      );
+      final resolved = await _resolveContent(folderId);
 
       drive.File? infoFile;
       drive.File? mainFile;
-      drive.File? playersFile;
-      for (final f in files.files ?? <drive.File>[]) {
+      for (final f in resolved.children) {
         if (f.name == 'SaveGameInfo') infoFile = f;
         if (f.name == folderName) mainFile = f;
-        if (f.name == _playersJsonName) playersFile = f;
       }
+      final playersFile = resolved.topLevelChildren
+          .where((f) => f.name == _playersJsonName)
+          .firstOrNull;
       if (infoFile == null) return null;
 
       final media =
@@ -455,6 +571,9 @@ class DriveService {
         folderName: folderName,
         folderId: folderId,
         save: save,
+        // FR-015: "completa" = tiene los dos archivos que Stardew necesita
+        // para cargar — ver `save_card.dart` para el badge correspondiente.
+        complete: mainFile != null,
       );
     }
 
@@ -513,33 +632,126 @@ class DriveService {
     }
   }
 
-  /// Descarga todos los archivos de un save de Drive a [localFolderPath],
-  /// sobrescribiendo los locales.
-  Future<void> downloadSave(
+  /// Descarga SOLO los archivos que Stardew reconoce de un save de Drive a
+  /// [destino] — lista blanca exacta, no lista negra (spec
+  /// 001-integridad-transaccional-saves FR-009, constitución III):
+  /// `SaveGameInfo`, `SaveGameInfo_old`, `<folderName>`, `<folderName>_old`.
+  /// Cualquier otro archivo en la carpeta remota (backups `.zip`,
+  /// `players.json`, restos de versiones futuras de la app) NUNCA aterriza
+  /// en la carpeta del juego, sin necesidad de conocer su nombre de
+  /// antemano. No se hace ninguna llamada de red por archivo descartado.
+  /// Resuelve primero la generación activa vía [_resolveContent] — si el
+  /// save usa el modelo plano heredado (sin `manifest.json`), lee del nivel
+  /// superior exactamente como antes de esta spec.
+  Future<void> downloadSaveToDir(
     String driveFolderId,
-    String localFolderPath,
+    String folderName,
+    Directory destino,
   ) async {
-    final files = await _api.files.list(
-      q: "'$driveFolderId' in parents and trashed=false",
-      spaces: 'drive',
-      $fields: 'files(id,name)',
-    );
-    final dir = Directory(localFolderPath);
-    await dir.create(recursive: true);
+    final resolved = await _resolveContent(driveFolderId);
+    await destino.create(recursive: true);
 
-    for (final f in files.files ?? <drive.File>[]) {
+    final whitelist = {
+      'SaveGameInfo',
+      'SaveGameInfo_old',
+      folderName,
+      '${folderName}_old',
+    };
+
+    for (final f in resolved.children) {
       if (f.id == null || f.name == null) continue;
-      // `players.json` es metadato de ValleySave para pintar el selector en
-      // la nube. Stardew no lo necesita dentro de su carpeta de saves.
-      if (f.name == _playersJsonName) continue;
+      if (!whitelist.contains(f.name)) continue;
       final media =
           await _api.files.get(
                 f.id!,
                 downloadOptions: drive.DownloadOptions.fullMedia,
               )
               as drive.Media;
-      final out = File('$localFolderPath${Platform.pathSeparator}${f.name}');
+      final out = File('${destino.path}${Platform.pathSeparator}${f.name}');
       await media.stream.pipe(out.openWrite());
+    }
+  }
+
+  /// Compatibilidad con callers que aún no migraron a
+  /// [downloadSaveToDir]/`SaveReplaceService` — deriva `folderName` del
+  /// nombre base de [localFolderPath] (mismo valor que ya usaban todos los
+  /// callers reales: la carpeta de destino siempre se llama como el save).
+  Future<void> downloadSave(
+    String driveFolderId,
+    String localFolderPath,
+  ) {
+    final folderName = localFolderPath.split(Platform.pathSeparator).last;
+    return downloadSaveToDir(
+      driveFolderId,
+      folderName,
+      Directory(localFolderPath),
+    );
+  }
+
+  /// Resuelve la carpeta real de contenido de un save — formato plano
+  /// heredado (sin `manifest.json`, todo save de antes de esta versión) o
+  /// generación activa (spec 001-integridad-transaccional-saves,
+  /// Clarifications 2026-07-18). Un manifiesto roto o que apunte a una
+  /// generación inexistente cae de vuelta al nivel superior — nunca lanza
+  /// ni deja sin resolver: peor caso, se comporta como si no hubiera
+  /// manifiesto.
+  Future<_ResolvedContent> _resolveContent(String folderId) async {
+    final top = await _api.files.list(
+      q: "'$folderId' in parents and trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id,name,modifiedTime)',
+    );
+    final children = top.files ?? <drive.File>[];
+
+    final manifestFile = children
+        .where((f) => f.name == _manifestFileName)
+        .firstOrNull;
+    if (manifestFile?.id == null) {
+      return _ResolvedContent(folderId, children, children);
+    }
+
+    final activeGeneration = await _readActiveGeneration(manifestFile!.id!);
+    if (activeGeneration == null) {
+      return _ResolvedContent(folderId, children, children);
+    }
+
+    final genEntry = children
+        .where((f) => f.name == activeGeneration)
+        .firstOrNull;
+    if (genEntry?.id == null) {
+      return _ResolvedContent(folderId, children, children);
+    }
+
+    final genListing = await _api.files.list(
+      q: "'${genEntry!.id}' in parents and trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id,name,modifiedTime)',
+    );
+    return _ResolvedContent(
+      genEntry.id!,
+      genListing.files ?? <drive.File>[],
+      children,
+    );
+  }
+
+  /// Lee y parsea `manifest.json` — devuelve `null` (nunca lanza) si el
+  /// contenido no es JSON válido o no trae `activeGeneration`, para que
+  /// [_resolveContent] pueda caer de vuelta al nivel superior sin más.
+  Future<String?> _readActiveGeneration(String manifestFileId) async {
+    try {
+      final media =
+          await _api.files.get(
+                manifestFileId,
+                downloadOptions: drive.DownloadOptions.fullMedia,
+              )
+              as drive.Media;
+      final bytes = await _readAll(media.stream);
+      final json =
+          jsonDecode(utf8.decode(bytes, allowMalformed: true))
+              as Map<String, dynamic>;
+      return json['activeGeneration'] as String?;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -650,22 +862,7 @@ class DriveService {
 
   Future<String> _ensureBackupsFolder() async {
     final rootId = await ensureFolder();
-    final result = await _api.files.list(
-      q:
-          "name='$_backupsFolderName' and mimeType='$_folderMime' and "
-          "'$rootId' in parents and trashed=false",
-      spaces: 'drive',
-      $fields: 'files(id)',
-    );
-    if (result.files != null && result.files!.isNotEmpty) {
-      return result.files!.first.id!;
-    }
-    final folder = drive.File()
-      ..name = _backupsFolderName
-      ..mimeType = _folderMime
-      ..parents = [rootId];
-    final created = await _api.files.create(folder, $fields: 'id');
-    return created.id!;
+    return _ensureSubfolder(_backupsFolderName, rootId);
   }
 
   /// Sube el zip a `ValleySave/Backups/` — NUNCA dentro de la subcarpeta de
@@ -675,9 +872,12 @@ class DriveService {
     return _uploadBackupZipToFolder(localPath, backupsFolderId);
   }
 
-  /// Sube un respaldo al mismo folder de un save compartido. Solo se permite
-  /// cuando Drive confirma permiso de edición: no se crea nada en partidas
-  /// compartidas como lectura.
+  /// Sube un respaldo a `<compartida>/Backups/` (spec
+  /// 001-integridad-transaccional-saves FR-010) — mismo layout que "Mi
+  /// Drive", nunca suelto en la raíz de la carpeta compartida (que además
+  /// contiene la propia partida). Solo se permite cuando Drive confirma
+  /// permiso de edición: no se crea nada en partidas compartidas como
+  /// lectura.
   Future<String> uploadBackupZipToSharedSave(
     String folderId,
     String localPath,
@@ -694,7 +894,11 @@ class DriveService {
     if (folder.capabilities?.canEdit != true) {
       throw SharedAccessReadOnlyException(folderId);
     }
-    return _uploadBackupZipToFolder(localPath, folderId);
+    final backupsFolderId = await _ensureSubfolder(
+      _backupsFolderName,
+      folderId,
+    );
+    return _uploadBackupZipToFolder(localPath, backupsFolderId);
   }
 
   Future<String> _uploadBackupZipToFolder(
@@ -730,14 +934,47 @@ class DriveService {
   /// Lista los respaldos que el propietario guardó dentro de la carpeta de
   /// una partida compartida. Se mantienen separados de "Mi Drive" para que
   /// la UI pueda decidir con precisión qué ubicación falta o se va a borrar.
+  ///
+  /// Busca en `Backups/` (formato actual, spec
+  /// 001-integridad-transaccional-saves FR-010) Y en la raíz de la carpeta
+  /// compartida (legado — versiones anteriores subían el zip suelto ahí) —
+  /// un lector sin permiso de escritura puede LEER `Backups/` aunque nunca
+  /// pudo crearla, así que esto nunca intenta crearla (a diferencia de
+  /// [uploadBackupZipToSharedSave]).
   Future<List<BackupEntry>> listSharedSaveBackups(
     String sharedFolderId, {
     String? folderName,
-  }) => _listBackupsInFolder(
-    sharedFolderId,
-    folderName: folderName,
-    shared: true,
-  );
+  }) async {
+    final legacy = await _listBackupsInFolder(
+      sharedFolderId,
+      folderName: folderName,
+      shared: true,
+    );
+    final backupsFolderId = await _findSubfolder(
+      _backupsFolderName,
+      sharedFolderId,
+    );
+    if (backupsFolderId == null) return legacy;
+    final current = await _listBackupsInFolder(
+      backupsFolderId,
+      folderName: folderName,
+      shared: true,
+    );
+    return [...current, ...legacy];
+  }
+
+  /// Busca una subcarpeta [name] dentro de [parentId] SIN crearla si no
+  /// existe — a diferencia de [_ensureSubfolder], para caminos de solo
+  /// lectura donde el caller puede no tener permiso de escritura.
+  Future<String?> _findSubfolder(String name, String parentId) async {
+    final result = await _api.files.list(
+      q: "name='$name' and mimeType='$_folderMime' and '$parentId' in parents and trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id)',
+    );
+    if (result.files == null || result.files!.isEmpty) return null;
+    return result.files!.first.id!;
+  }
 
   Future<List<BackupEntry>> _listBackupsInFolder(
     String folderId, {
@@ -868,19 +1105,16 @@ class DriveService {
     }
     final folderName = file.name ?? '';
 
-    final children = await _api.files.list(
-      q: "'$folderId' in parents and trashed=false",
-      spaces: 'drive',
-      $fields: 'files(id,name,modifiedTime)',
-    );
+    final resolved = await _resolveContent(folderId);
     drive.File? infoFile;
     drive.File? mainFile;
-    drive.File? playersFile;
-    for (final f in children.files ?? <drive.File>[]) {
+    for (final f in resolved.children) {
       if (f.name == 'SaveGameInfo') infoFile = f;
       if (f.name == folderName) mainFile = f;
-      if (f.name == _playersJsonName) playersFile = f;
     }
+    final playersFile = resolved.topLevelChildren
+        .where((f) => f.name == _playersJsonName)
+        .firstOrNull;
     if (infoFile == null || mainFile == null) {
       throw StateError('Esta carpeta no contiene un save reconocible.');
     }
@@ -1071,19 +1305,16 @@ class DriveService {
 
       final role = file.capabilities?.canEdit == true ? 'writer' : 'reader';
       try {
-        final children = await _api.files.list(
-          q: "'$folderId' in parents and trashed=false",
-          spaces: 'drive',
-          $fields: 'files(id,name,modifiedTime)',
-        );
+        final resolved = await _resolveContent(folderId);
         drive.File? infoFile;
         drive.File? mainFile;
-        drive.File? playersFile;
-        for (final f in children.files ?? <drive.File>[]) {
+        for (final f in resolved.children) {
           if (f.name == 'SaveGameInfo') infoFile = f;
           if (f.name == folderName) mainFile = f;
-          if (f.name == _playersJsonName) playersFile = f;
         }
+        final playersFile = resolved.topLevelChildren
+            .where((f) => f.name == _playersJsonName)
+            .firstOrNull;
 
         SaveFile? save;
         if (infoFile != null) {
@@ -1124,6 +1355,9 @@ class DriveService {
             driveStats: save,
             ownerDrivePresent: true,
             ownerDriveVerified: true,
+            // FR-015: idéntico criterio que `listSaveSummaries` — completo
+            // solo si el archivo principal está en la generación activa.
+            complete: mainFile != null,
           ),
         );
       } on drive.DetailedApiRequestError {
@@ -1235,9 +1469,15 @@ class DriveSaveSummary {
     required this.folderName,
     required this.folderId,
     required this.save,
+    this.complete = true,
   });
 
   final String folderName;
   final String folderId;
   final SaveFile save;
+
+  /// FR-015: `false` cuando falta el archivo principal en la generación
+  /// activa (o el nivel raíz, en formato heredado) — nunca se descarga algo
+  /// a medias, ver `SaveEntry.driveComplete` y el badge en `save_card.dart`.
+  final bool complete;
 }

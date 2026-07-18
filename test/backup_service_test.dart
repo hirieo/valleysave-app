@@ -18,6 +18,21 @@ void main() {
     if (await tempDir.exists()) await tempDir.delete(recursive: true);
   });
 
+  /// Escribe un save real y mínimo (mismo contenido que
+  /// `ZipFixtures.validArchive()`) directamente en [dir] — necesario porque
+  /// `SaveReplaceService.replaceSaveFolder` ahora respalda el destino ANTES
+  /// de sustituirlo, y ese respaldo se verifica (`verifyBackupZipContents`):
+  /// una carpeta destino que no parece un save real (p. ej. solo un
+  /// `marker` suelto) hace fallar esa verificación con `backupFailed`.
+  Future<void> writeValidSaveFiles(Directory dir, String folderName) async {
+    await dir.create(recursive: true);
+    final sep = Platform.pathSeparator;
+    for (final f in ZipFixtures.validArchive(folderName: folderName).files) {
+      final relative = f.name.substring(folderName.length + 1);
+      await File('${dir.path}$sep$relative').writeAsBytes(f.content);
+    }
+  }
+
   group('BackupEntry.parseFileName', () {
     test('parsea folderName y timestamp del patrón esperado', () {
       final parsed = BackupEntry.parseFileName(
@@ -175,7 +190,7 @@ void main() {
         final existing = Directory(
           '${savesDir.path}${Platform.pathSeparator}${ZipFixtures.validFolderName}',
         );
-        await existing.create(recursive: true);
+        await writeValidSaveFiles(existing, ZipFixtures.validFolderName);
         await File(
           '${existing.path}${Platform.pathSeparator}marker',
         ).writeAsString('viejo');
@@ -193,9 +208,13 @@ void main() {
           sizeBytes: await zipFile.length(),
         );
 
+        final backupsDir = Directory(
+          '${tempDir.path}${Platform.pathSeparator}Backups',
+        );
         final result = await service.restoreBackup(
           entry,
           savesDir: savesDir.path,
+          backupsDir: backupsDir.path,
         );
         expect(result.ok, isTrue);
         final markerStillThere = await File(
@@ -230,10 +249,14 @@ void main() {
           sizeBytes: await zipFile.length(),
         );
 
+        final backupsDir = Directory(
+          '${tempDir.path}${Platform.pathSeparator}Backups',
+        );
         String? tempPathUsed;
         final result = await service.restoreBackup(
           entry,
           savesDir: savesDir.path,
+          backupsDir: backupsDir.path,
           downloadToPath: (path) async {
             tempPathUsed = path;
             await zipFile.copy(path);
@@ -260,7 +283,11 @@ void main() {
           sizeBytes: 0,
         );
         expect(
-          () => service.restoreBackup(entry, savesDir: tempDir.path),
+          () => service.restoreBackup(
+            entry,
+            savesDir: tempDir.path,
+            backupsDir: tempDir.path,
+          ),
           throwsA(isA<StateError>()),
         );
       },

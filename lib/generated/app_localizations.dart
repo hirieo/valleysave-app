@@ -925,6 +925,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t write the imported save (disk/permissions).'**
   String get importErrWrite;
 
+  /// No description provided for @importErrBackupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create a safety backup. Nothing was imported.'**
+  String get importErrBackupFailed;
+
   /// No description provided for @importConflictTitle.
   ///
   /// In en, this message translates to:
@@ -1512,6 +1518,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Backup restored.'**
   String get backupsRestoreOk;
+
+  /// No description provided for @backupsRestoreManualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore manually'**
+  String get backupsRestoreManualTitle;
+
+  /// No description provided for @backupsRestoreManualBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.'**
+  String get backupsRestoreManualBody;
 
   /// No description provided for @backupsRestoreErr.
   ///
@@ -2509,6 +2527,54 @@ abstract class AppLocalizations {
   /// **'Save downloaded to the game'**
   String get snackDownloaded;
 
+  /// No description provided for @snackReplacePrepareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not prepare the save. Nothing on disk was changed'**
+  String get snackReplacePrepareFailed;
+
+  /// No description provided for @snackReplaceValidationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The downloaded save looks invalid or incomplete. Nothing on disk was changed'**
+  String get snackReplaceValidationFailed;
+
+  /// No description provided for @snackReplaceBackupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create a safety backup. Nothing on disk was changed'**
+  String get snackReplaceBackupFailed;
+
+  /// No description provided for @snackReplaceSwapFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The swap failed, but the original save was restored from backup'**
+  String get snackReplaceSwapFailed;
+
+  /// No description provided for @snackReplaceBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s already an operation in progress for this save'**
+  String get snackReplaceBusy;
+
+  /// No description provided for @snackUploadIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'The local save is incomplete or corrupted. Nothing was uploaded'**
+  String get snackUploadIncomplete;
+
+  /// No description provided for @snackDownloadIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t download: this save is missing content on Drive'**
+  String get snackDownloadIncomplete;
+
+  /// No description provided for @cardIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete on Drive'**
+  String get cardIncomplete;
+
   /// No description provided for @snackSessionExpired.
   ///
   /// In en, this message translates to:
@@ -2605,6 +2671,12 @@ abstract class AppLocalizations {
   /// **'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.'**
   String get hiwCompatMods;
 
+  /// No description provided for @hiwCompatIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.'**
+  String get hiwCompatIncomplete;
+
   /// No description provided for @hiwShareTitle.
   ///
   /// In en, this message translates to:
@@ -2698,7 +2770,7 @@ abstract class AppLocalizations {
   /// No description provided for @hiwBackupsDesc.
   ///
   /// In en, this message translates to:
-  /// **'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before a host swap.'**
+  /// **'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).'**
   String get hiwBackupsDesc;
 
   /// No description provided for @hiwBackupsStepSave.
@@ -2736,6 +2808,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.'**
   String get hiwBackupsTipExport;
+
+  /// No description provided for @hiwBackupsTipRetention.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.'**
+  String get hiwBackupsTipRetention;
+
+  /// No description provided for @hiwBackupsTipRestoreBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.'**
+  String get hiwBackupsTipRestoreBridge;
 
   /// No description provided for @hiwComparePrimary.
   ///

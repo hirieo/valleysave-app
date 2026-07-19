@@ -2324,6 +2324,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       case ReplaceError.backupFailed:
         return l10n.snackReplaceBackupFailed;
       case ReplaceError.swapFailed:
+      // Mismo desenlace de cara al usuario: el original se restauró desde el
+      // rollback, no se perdió nada.
+      case ReplaceError.postValidationFailed:
         return l10n.snackReplaceSwapFailed;
       case ReplaceError.busy:
       case null:

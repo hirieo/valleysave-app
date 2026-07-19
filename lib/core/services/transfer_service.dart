@@ -20,7 +20,10 @@ ImportError _mapReplaceError(ReplaceError? error) => switch (error) {
   ReplaceError.prepareFailed || ReplaceError.validationFailed =>
     ImportError.notASave,
   ReplaceError.backupFailed => ImportError.backupFailed,
-  ReplaceError.swapFailed || ReplaceError.busy || null =>
+  ReplaceError.swapFailed ||
+  ReplaceError.postValidationFailed ||
+  ReplaceError.busy ||
+  null =>
     ImportError.writeFailure,
 };
 

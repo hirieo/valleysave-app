@@ -22,6 +22,7 @@ import '../../shared/widgets/pressable_scale.dart';
 import '../../shared/widgets/update_download_animation.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../saves/save_card.dart' show ActionBtn;
+import '../saves/widgets/seasonal_loader.dart';
 import 'widgets/language_dialog.dart';
 
 enum _UpdateState { idle, checking, upToDate, available, downloading, error }
@@ -408,6 +409,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                     ),
                   ),
                 ],
+              ),
+            )
+          else
+            Center(
+              child: ValueListenableBuilder<SeasonState>(
+                valueListenable: SeasonController.instance.season,
+                builder: (_, season, _) => SeasonalLoader(season: season),
               ),
             ),
         ],

@@ -4552,15 +4552,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         ),
         const SizedBox(height: 10),
         if (_sharedLoading)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Center(
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            child: Center(child: _seasonalLoader()),
           )
         else if (_sharedEntries.isEmpty)
           Padding(

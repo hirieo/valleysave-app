@@ -107,3 +107,7 @@ lib/graphify-out/
 
 # Binarios empaquetados localmente; se publican como artefactos/releases.
 dist/
+
+# Redistributable de VC++ para el instalador Windows — se descarga en build
+# (https://aka.ms/vs/17/release/vc_redist.x64.exe), no va al repo (25MB).
+windows/packaging/vc_redist.x64.exe

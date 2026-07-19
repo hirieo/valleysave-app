@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/services/season_controller.dart';
+import '../../../shared/widgets/save_busy_indicator.dart';
+
 /// Acción de backup con feedback inmediato y protección contra doble toque.
 /// La animación solo comunica la pulsación; el spinner comunica la operación.
 class BackupActionButton extends StatefulWidget {
@@ -53,6 +56,14 @@ class _BackupActionButtonState extends State<BackupActionButton> {
     final backgroundAlpha = widget.filled
         ? (_pressed ? .22 : (_hovered ? .20 : .14))
         : (_pressed || _busy ? .12 : (_hovered ? .09 : .05));
+    // Mientras trabaja, TODO el botón (icono, borde, fondo, texto) pasa al
+    // color estacional — no solo el icono. Antes solo cambiaba el icono y
+    // el resto se quedaba con el color fijo del botón (azul/verde/rojo),
+    // inconsistente con la estética por estación que ya usan subir/bajar
+    // (2026-07-19, aprobado tras mockup comparando antes/después).
+    final color = _busy
+        ? seasonBusyColor(SeasonController.instance.season.value)
+        : widget.color;
 
     Widget button = Semantics(
       button: true,
@@ -85,9 +96,9 @@ class _BackupActionButtonState extends State<BackupActionButton> {
                 ? const EdgeInsets.all(9)
                 : const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
             decoration: BoxDecoration(
-              color: widget.color.withValues(alpha: backgroundAlpha),
+              color: color.withValues(alpha: backgroundAlpha),
               border: Border.all(
-                color: widget.color.withValues(
+                color: color.withValues(
                   alpha: enabled ? (_hovered ? .85 : .66) : .28,
                 ),
               ),
@@ -109,7 +120,7 @@ class _BackupActionButtonState extends State<BackupActionButton> {
                           style: GoogleFonts.firaCode(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
-                            color: widget.color.withValues(
+                            color: color.withValues(
                               alpha: enabled || _busy ? 1 : .45,
                             ),
                           ),
@@ -134,7 +145,10 @@ class _BackupActionButtonState extends State<BackupActionButton> {
       return SizedBox.square(
         key: const ValueKey('backup-action-progress'),
         dimension: 15,
-        child: CircularProgressIndicator(strokeWidth: 1.8, color: widget.color),
+        child: SaveBusyIndicator(
+          season: SeasonController.instance.season.value,
+          size: 15,
+        ),
       );
     }
     return Icon(widget.icon, size: 17, color: widget.color);

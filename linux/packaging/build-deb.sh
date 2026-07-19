@@ -15,7 +15,7 @@ if [ ! -d "$BUNDLE_DIR" ]; then
 fi
 
 VERSION="$(grep '^version:' "$PROJECT_ROOT/pubspec.yaml" | sed 's/version: *//' | cut -d+ -f1)"
-ARCH="amd64"
+ARCH="$(dpkg --print-architecture)"
 PKG_NAME="valleysave"
 DEB_FILE="$OUT_DIR/${PKG_NAME}_${VERSION}_${ARCH}.deb"
 

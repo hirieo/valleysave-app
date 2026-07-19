@@ -22,16 +22,20 @@ class AndroidProtectedCommands {
   /// `null` si [folderName] o [transactionId] no son seguros para
   /// interpolar en shell (traversal, metacaracteres) — el rechazo ocurre
   /// ANTES de construir cualquier comando, nunca llega a interpolarse.
+  /// [baseDir] es la carpeta protegida real (`gameSavesPath`) en producción;
+  /// solo se sobreescribe en tests, para poder ejecutar el script contra un
+  /// directorio temporal real en vez de la ruta de Android.
   static String? replace({
     required String src,
     required String folderName,
     required String transactionId,
+    String baseDir = gameSavesPath,
   }) {
     if (!_isSafeName(folderName) || !_isSafeName(transactionId)) return null;
 
-    final dest = '$gameSavesPath/$folderName';
-    final tmp = '$gameSavesPath/.vs_tmp_$transactionId';
-    final rollback = '$gameSavesPath/.vs_rollback_$transactionId';
+    final dest = '$baseDir/$folderName';
+    final tmp = '$baseDir/.vs_tmp_$transactionId';
+    final rollback = '$baseDir/.vs_rollback_$transactionId';
     final srcQ = _shellQuote(src);
     final destQ = _shellQuote(dest);
     final tmpQ = _shellQuote(tmp);
@@ -39,9 +43,12 @@ class AndroidProtectedCommands {
 
     return '''
 set -e
+swap_done=0
 rollback() {
-  if [ -d $rollbackQ ]; then
+  if [ "\$swap_done" = "1" ]; then
     rm -rf $destQ
+  fi
+  if [ -d $rollbackQ ]; then
     mv $rollbackQ $destQ
   fi
   rm -rf $tmpQ
@@ -51,15 +58,18 @@ echo '{"phase":"preparing"}'
 rm -rf $tmpQ
 cp -rfp $srcQ $tmpQ
 if [ ! -s "$tmp/SaveGameInfo" ]; then exit 1; fi
+if [ ! -s "$tmp/$folderName" ]; then exit 1; fi
 echo '{"phase":"prepared"}'
 rm -rf $rollbackQ
-if [ -d $destQ ]; then mv $destQ $rollbackQ; fi
 echo '{"phase":"backupVerified"}'
 echo '{"phase":"movingOriginal"}'
-mv $tmpQ $destQ
+if [ -d $destQ ]; then mv $destQ $rollbackQ; fi
 echo '{"phase":"originalMoved"}'
+mv $tmpQ $destQ
+swap_done=1
 echo '{"phase":"replacementPublished"}'
 if [ ! -s "$dest/SaveGameInfo" ]; then exit 1; fi
+if [ ! -s "$dest/$folderName" ]; then exit 1; fi
 echo '{"phase":"verified"}'
 rm -rf $rollbackQ
 trap - EXIT

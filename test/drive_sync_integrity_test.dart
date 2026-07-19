@@ -142,6 +142,168 @@ void main() {
     });
   });
 
+  group('uploadSave — saneado del par _old antes de subir (2026-07-19)', () {
+    const validOldXml = '''<?xml version="1.0" encoding="utf-8"?>
+<Farmer>
+  <name>Ana</name>
+  <farmName>Granja Test</farmName>
+</Farmer>''';
+
+    Future<void> writeOldPair(
+      Directory localDir,
+      String folderName, {
+      required String infoOldContent,
+      required String mainOldContent,
+    }) async {
+      final sep = Platform.pathSeparator;
+      await File(
+        '${localDir.path}${sep}SaveGameInfo_old',
+      ).writeAsString(infoOldContent);
+      await File(
+        '${localDir.path}$sep${folderName}_old',
+      ).writeAsString(mainOldContent);
+    }
+
+    _FakeAuthClient uploadOnlyClient(List<String> createdInGen) {
+      var genFolderId = '';
+      return _FakeAuthClient((request) async {
+        final method = request.method;
+        final path = request.url.path;
+        final query = request.url.queryParameters;
+
+        if (method == 'GET' &&
+            path.endsWith('/files') &&
+            (query['q'] ?? '').contains("name='ValleySave'")) {
+          return _jsonResponse({
+            'files': [
+              {'id': 'root-id'},
+            ],
+          });
+        }
+        if (method == 'GET' &&
+            path.endsWith('/files') &&
+            (query['q'] ?? '').contains("name='Granja_1'") &&
+            (query['q'] ?? '').contains("'root-id' in parents")) {
+          return _jsonResponse({
+            'files': [
+              {'id': 'save-folder-id'},
+            ],
+          });
+        }
+        if (method == 'GET' &&
+            path.endsWith('/files') &&
+            (query['q'] ?? '').contains('gen_')) {
+          return _jsonResponse({'files': []});
+        }
+        if (method == 'POST' &&
+            path.endsWith('/drive/v3/files') &&
+            !path.contains('/upload/')) {
+          final meta = jsonDecode(await _bodyOf(request));
+          final name = meta['name'] as String;
+          if (name.startsWith('gen_')) {
+            genFolderId = 'gen-new-id';
+            return _jsonResponse({'id': genFolderId});
+          }
+          fail('POST metadata-only inesperado: $meta');
+        }
+        if (method == 'POST' && path.contains('/upload/drive/v3/files')) {
+          final meta = await _multipartMetadata(request);
+          if (meta['name'] == 'manifest.json') {
+            return _jsonResponse({'id': 'manifest-id'});
+          }
+          createdInGen.add(meta['name'] as String);
+          return _jsonResponse({'id': 'file-${meta['name']}'});
+        }
+        if (method == 'GET' &&
+            path.endsWith('/files') &&
+            (query['q'] ?? '').contains("name='manifest.json'")) {
+          return _jsonResponse({'files': []});
+        }
+        if (method == 'GET' &&
+            path.endsWith('/files') &&
+            (query['q'] ?? '').contains("'save-folder-id' in parents") &&
+            (query['q'] ?? '').contains('mimeType')) {
+          return _jsonResponse({'files': []});
+        }
+        fail('Request inesperada: $method $path?${request.url.query}');
+      });
+    }
+
+    test('_old completo y válido → se sube junto al resto', () async {
+      final localDir = await _createLocalSave(tempDir, 'Granja_1');
+      await writeOldPair(
+        localDir,
+        'Granja_1',
+        infoOldContent: validOldXml,
+        mainOldContent: 'save-data-old',
+      );
+      final createdInGen = <String>[];
+
+      await DriveService(
+        uploadOnlyClient(createdInGen),
+      ).uploadSave(localDir.path, 'Granja_1');
+
+      expect(
+        createdInGen,
+        containsAll(['SaveGameInfo', 'Granja_1', 'SaveGameInfo_old', 'Granja_1_old']),
+      );
+    });
+
+    test(
+      '_old corrupto → se omite de la subida sin tocar el origen local',
+      () async {
+        final localDir = await _createLocalSave(tempDir, 'Granja_1');
+        await writeOldPair(
+          localDir,
+          'Granja_1',
+          infoOldContent: 'esto no es xml válido de save',
+          mainOldContent: 'save-data-old',
+        );
+        final createdInGen = <String>[];
+
+        await DriveService(
+          uploadOnlyClient(createdInGen),
+        ).uploadSave(localDir.path, 'Granja_1');
+
+        expect(createdInGen, containsAll(['SaveGameInfo', 'Granja_1']));
+        expect(createdInGen, isNot(contains('SaveGameInfo_old')));
+        expect(createdInGen, isNot(contains('Granja_1_old')));
+
+        final sep = Platform.pathSeparator;
+        expect(
+          await File(
+            '${localDir.path}${sep}SaveGameInfo_old',
+          ).readAsString(),
+          'esto no es xml válido de save',
+        );
+        expect(
+          await File('${localDir.path}${sep}Granja_1_old').readAsString(),
+          'save-data-old',
+        );
+      },
+    );
+
+    test(
+      '_old incompleto (solo un archivo del par) → se omite de la subida',
+      () async {
+        final localDir = await _createLocalSave(tempDir, 'Granja_1');
+        final sep = Platform.pathSeparator;
+        await File(
+          '${localDir.path}${sep}SaveGameInfo_old',
+        ).writeAsString(validOldXml);
+        // Falta 'Granja_1_old' — el par está incompleto.
+        final createdInGen = <String>[];
+
+        await DriveService(
+          uploadOnlyClient(createdInGen),
+        ).uploadSave(localDir.path, 'Granja_1');
+
+        expect(createdInGen, isNot(contains('SaveGameInfo_old')));
+        expect(createdInGen, isNot(contains('Granja_1_old')));
+      },
+    );
+  });
+
   group('uploadSave — modelo generación + manifiesto (FR-006, FR-007)', () {
     test(
       'sube a gen_<ts>/, publica manifest.json y limpia generación previa',
@@ -396,7 +558,7 @@ void main() {
       expect(downloaded, isNot(contains('players.json')));
     });
 
-    test('manifest roto/inexistente → cae al formato plano heredado', () async {
+    test('manifest AUSENTE → formato plano heredado (legítimo)', () async {
       final destino = Directory(
         '${tempDir.path}${Platform.pathSeparator}destino',
       );
@@ -444,6 +606,59 @@ void main() {
           .toSet();
       expect(downloaded, {'SaveGameInfo', 'Granja_1'});
     });
+
+    test(
+      'manifest PRESENTE pero corrupto → CorruptManifestException (NO sirve el plano obsoleto)',
+      () async {
+        // Corrección tras comparar con Codex (2026-07-18): un save migrado a
+        // generaciones deja archivos planos viejos en el nivel superior; si
+        // el manifiesto se corrompe, servirlos silenciosamente mostraría una
+        // partida obsoleta. La presencia del manifiesto obliga a error.
+        final destino = Directory(
+          '${tempDir.path}${Platform.pathSeparator}destino',
+        );
+        const saveFolderId = 'migrated-save-id';
+
+        final client = _FakeAuthClient((request) async {
+          final method = request.method;
+          final path = request.url.path;
+          final query = request.url.queryParameters;
+
+          if (method == 'GET' &&
+              path.endsWith('/files') &&
+              (query['q'] ?? '') ==
+                  "'$saveFolderId' in parents and trashed=false") {
+            return _jsonResponse({
+              'files': [
+                // Archivos planos OBSOLETOS de antes de migrar.
+                {'id': 'old-info-id', 'name': 'SaveGameInfo'},
+                {'id': 'old-main-id', 'name': 'Granja_1'},
+                // Manifiesto presente → la carpeta ya usa generaciones.
+                {'id': 'manifest-id', 'name': 'manifest.json'},
+              ],
+            });
+          }
+          // El manifiesto se descarga pero es JSON inválido (corrupto).
+          if (method == 'GET' && path.endsWith('/files/manifest-id')) {
+            return http.StreamedResponse(
+              Stream.value(utf8.encode('esto no es json {{{')),
+              200,
+              headers: {'content-type': 'application/octet-stream'},
+            );
+          }
+          fail('Request inesperada: $method $path?${request.url.query}');
+        });
+
+        await expectLater(
+          DriveService(
+            client,
+          ).downloadSaveToDir(saveFolderId, 'Granja_1', destino),
+          throwsA(isA<CorruptManifestException>()),
+        );
+        // Y NO se descargó nada (ningún archivo plano obsoleto aterrizó).
+        expect(destino.existsSync() ? destino.listSync() : const [], isEmpty);
+      },
+    );
   });
 
   group('listSaveSummaries — completitud (FR-015)', () {

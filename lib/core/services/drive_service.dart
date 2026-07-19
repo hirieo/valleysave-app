@@ -76,6 +76,21 @@ class UploadIncompleteSaveException implements Exception {
   final String missingFileName;
 }
 
+/// Un `manifest.json` EXISTE en la carpeta del save pero no se puede resolver
+/// a una generación activa válida (ilegible, sin `activeGeneration`, o apunta
+/// a una generación inexistente). NUNCA se cae al formato plano heredado en
+/// este caso: la presencia del manifiesto significa que la carpeta ya adoptó
+/// el sistema por generaciones, así que los archivos sueltos del nivel
+/// superior (si quedaron de antes de migrar) son una versión OBSOLETA —
+/// servirlos silenciosamente mostraría o descargaría una partida vieja sin
+/// avisar. Solo la AUSENCIA de manifiesto habilita el formato plano legítimo
+/// (hallazgo de la implementación paralela de Codex, 2026-07-18: antes ambos
+/// casos caían al plano por igual).
+class CorruptManifestException implements Exception {
+  const CorruptManifestException(this.folderId);
+  final String folderId;
+}
+
 /// Motivos de 403 que SÍ confirman permiso insuficiente de verdad. Drive
 /// reutiliza el mismo status 403 para cuota, rate-limit y otros fallos
 /// transitorios, así que solo estos motivos explícitos cuentan — cualquier
@@ -361,12 +376,11 @@ class DriveService {
         'gen_${DateTime.now().toUtc().millisecondsSinceEpoch}';
     final generationId = await _ensureSubfolder(generationName, saveFolderId);
 
-    final localPaths = [
-      infoFile.path,
-      mainFile.path,
-      '$folderPath${sep}SaveGameInfo_old',
-      '$folderPath$sep${folderName}_old',
-    ];
+    final localPaths = [infoFile.path, mainFile.path];
+    if (await _hasValidOldPair(folderPath, folderName)) {
+      localPaths.add('$folderPath${sep}SaveGameInfo_old');
+      localPaths.add('$folderPath$sep${folderName}_old');
+    }
 
     for (final localPath in localPaths) {
       final file = File(localPath);
@@ -391,6 +405,28 @@ class DriveService {
     await _syncPlayersJson(saveFolderId, players);
   }
 
+  /// Saneado no destructivo del par `_old` ANTES de subir (integrado de
+  /// Codex, 2026-07-19, versión adaptada): un `_old` corrupto no invalida el
+  /// save principal (ver [SaveReplaceService._isValidSaveDir]), pero
+  /// publicarlo tal cual en la generación nueva propaga esa corrupción a
+  /// cualquier otro dispositivo que lo descargue después. Si el par no está
+  /// completo Y sano (`SaveGameInfo_old` parseable, `<folderName>_old` no
+  /// vacío), se omite de la subida — nunca se toca ni se borra el origen
+  /// local, solo se decide qué entra en la instantánea remota.
+  Future<bool> _hasValidOldPair(String folderPath, String folderName) async {
+    final sep = Platform.pathSeparator;
+    final infoOld = File('$folderPath${sep}SaveGameInfo_old');
+    final mainOld = File('$folderPath$sep${folderName}_old');
+    if (!await infoOld.exists() || !await mainOld.exists()) return false;
+    if (await mainOld.length() == 0) return false;
+    return SaveService.parseSaveGameInfo(
+          await infoOld.readAsString(),
+          folderName: folderName,
+          lastModified: DateTime.now(),
+        ) !=
+        null;
+  }
+
   /// Única actualización final que hace visible una generación — el
   /// "publicar" de FR-006. Antes de esta llamada, la generación nueva es
   /// invisible para cualquier lector (nadie la referencia todavía).
@@ -398,7 +434,9 @@ class DriveService {
     String saveFolderId,
     String generationName,
   ) async {
-    final json = jsonEncode({'activeGeneration': generationName});
+    // `schema` versiona el formato del manifiesto para poder evolucionarlo
+    // sin romper lectores antiguos (integrado de Codex, 2026-07-18).
+    final json = jsonEncode({'schema': 1, 'activeGeneration': generationName});
     final bytes = utf8.encode(json);
     final media = drive.Media(Stream.fromIterable([bytes]), bytes.length);
 
@@ -532,7 +570,16 @@ class DriveService {
       final folderName = folder.name;
       if (folderId == null || folderName == null) return null;
 
-      final resolved = await _resolveContent(folderId);
+      final _ResolvedContent resolved;
+      try {
+        resolved = await _resolveContent(folderId);
+      } on CorruptManifestException {
+        // Un save con el índice de generación corrupto no se puede resolver
+        // con seguridad — se omite de la lista (nunca se muestra la versión
+        // plana obsoleta). Si fue un fallo transitorio de red al leer el
+        // manifiesto, reaparece en el próximo refresco.
+        return null;
+      }
 
       drive.File? infoFile;
       drive.File? mainFile;
@@ -688,13 +735,19 @@ class DriveService {
     );
   }
 
-  /// Resuelve la carpeta real de contenido de un save — formato plano
-  /// heredado (sin `manifest.json`, todo save de antes de esta versión) o
-  /// generación activa (spec 001-integridad-transaccional-saves,
-  /// Clarifications 2026-07-18). Un manifiesto roto o que apunte a una
-  /// generación inexistente cae de vuelta al nivel superior — nunca lanza
-  /// ni deja sin resolver: peor caso, se comporta como si no hubiera
-  /// manifiesto.
+  /// Resuelve la carpeta real de contenido de un save. Distingue TRES casos
+  /// (spec 001-integridad-transaccional-saves; corrección tras comparar con
+  /// la implementación paralela de Codex, 2026-07-18):
+  ///
+  /// - `manifest.json` AUSENTE → formato plano heredado (todo save de antes
+  ///   de esta versión, legítimo — nunca tuvo manifiesto).
+  /// - `manifest.json` presente y resoluble → la generación activa.
+  /// - `manifest.json` presente pero NO resoluble (ilegible, sin
+  ///   `activeGeneration`, o apunta a una generación inexistente) → lanza
+  ///   [CorruptManifestException]. NUNCA cae al nivel superior: los archivos
+  ///   planos que puedan quedar ahí son una versión obsoleta anterior a la
+  ///   migración, y servirlos sin avisar mostraría/descargaría una partida
+  ///   vieja en silencio.
   Future<_ResolvedContent> _resolveContent(String folderId) async {
     final top = await _api.files.list(
       q: "'$folderId' in parents and trashed=false",
@@ -707,19 +760,22 @@ class DriveService {
         .where((f) => f.name == _manifestFileName)
         .firstOrNull;
     if (manifestFile?.id == null) {
+      // Sin manifiesto → formato plano legítimo.
       return _ResolvedContent(folderId, children, children);
     }
 
+    // Manifiesto presente: a partir de aquí, cualquier fallo es corrupción,
+    // NO un fallback al plano.
     final activeGeneration = await _readActiveGeneration(manifestFile!.id!);
     if (activeGeneration == null) {
-      return _ResolvedContent(folderId, children, children);
+      throw CorruptManifestException(folderId);
     }
 
     final genEntry = children
         .where((f) => f.name == activeGeneration)
         .firstOrNull;
     if (genEntry?.id == null) {
-      return _ResolvedContent(folderId, children, children);
+      throw CorruptManifestException(folderId);
     }
 
     final genListing = await _api.files.list(
@@ -1358,6 +1414,26 @@ class DriveService {
             // FR-015: idéntico criterio que `listSaveSummaries` — completo
             // solo si el archivo principal está en la generación activa.
             complete: mainFile != null,
+          ),
+        );
+      } on CorruptManifestException {
+        // El save existe y es accesible, pero su índice de generación está
+        // corrupto — se muestra como presente pero SIN stats ni completo
+        // (misma cara "no verificado" que un fallo de red al leer sus
+        // hijos), nunca con la versión plana obsoleta. No cuenta como
+        // revocación: la carpeta en sí sigue accesible.
+        markUnavailable();
+        clearMissingCandidate();
+        results.add(
+          SharedSaveEntry(
+            folderId: folderId,
+            folderName: folderName,
+            ownerEmail: ownerEmail,
+            myRole: role,
+            revoked: false,
+            ownerDrivePresent: true,
+            ownerDriveVerified: false,
+            complete: false,
           ),
         );
       } on drive.DetailedApiRequestError {

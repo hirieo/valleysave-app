@@ -20,6 +20,10 @@ android/gradlew.bat
 android/local.properties
 android/key.properties
 android/keystore_password.txt
+# Mismos archivos si aparecen en la raíz (restos de transferencia entre
+# máquinas) — el patrón de arriba solo cubre android/.
+/key.properties
+/keystore_password.txt
 android/**/GeneratedPluginRegistrant.java
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/Flutter/.last_build_id

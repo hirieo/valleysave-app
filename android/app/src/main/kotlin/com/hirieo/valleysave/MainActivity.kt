@@ -82,24 +82,28 @@ class MainActivity : FlutterActivity() {
                         val dst = call.argument<String>("dst")
                         if (dst == null) { result.error("NO_DST", null, null); return@setMethodCallHandler }
                         Thread {
-                            val ok = runSu("cp -rfp \"$SAVES_PATH/.\" \"$dst/\"")
+                            val ok = runSu("cp -rfp ${shellQuote("$SAVES_PATH/.")} ${shellQuote("$dst/")}")
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
                     "pushSaveAsRoot" -> {
                         val src  = call.argument<String>("src")
                         val name = call.argument<String>("name")
-                        if (src == null || name == null) { result.error("BAD_ARGS", null, null); return@setMethodCallHandler }
+                        if (src == null || name == null || !isSafeSaveName(name)) {
+                            result.error("BAD_ARGS", null, null); return@setMethodCallHandler
+                        }
                         Thread {
-                            val ok = runSu("cp -rfp \"$src\" \"$SAVES_PATH/$name\"")
+                            val ok = runSu("cp -rfp ${shellQuote(src)} ${shellQuote("$SAVES_PATH/$name")}")
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
                     "deleteLocalAsRoot" -> {
                         val name = call.argument<String>("name")
-                        if (name == null) { result.error("BAD_ARGS", null, null); return@setMethodCallHandler }
+                        if (name == null || !isSafeSaveName(name)) {
+                            result.error("BAD_ARGS", null, null); return@setMethodCallHandler
+                        }
                         Thread {
-                            val ok = runSu("rm -rf \"$SAVES_PATH/$name\"")
+                            val ok = runSu("rm -rf ${shellQuote("$SAVES_PATH/$name")}")
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
@@ -126,6 +130,24 @@ class MainActivity : FlutterActivity() {
             true
         }
     } catch (_: Throwable) { false }
+
+    /** Nombres de save aceptados en cualquier comando shell root — mismo
+     *  criterio que el lado Dart (`shizuku_service.dart`, `_isSafeSaveName`)
+     *  y que la implementación paralela de Codex: alfanumérico + `_.-`,
+     *  nunca `.`/`..`. Defensa en profundidad — el lado Dart ya valida antes
+     *  de invocar el canal, pero este método no debe confiar en que ningún
+     *  caller futuro mantenga esa garantía (2026-07-18, tras confirmar con
+     *  Codex que su propio `deleteLocalAsRoot` carecía de este guard). */
+    private fun isSafeSaveName(name: String): Boolean =
+        name.matches(Regex("^[A-Za-z0-9_.-]{1,160}$")) && name != "." && name != ".."
+
+    /** Comillas simples POSIX con escape de comillas internas (`'` →
+     *  `'\''`) — a diferencia de las comillas dobles usadas antes aquí,
+     *  bloquea también `$()`, backticks y `\`, no solo word-splitting/
+     *  globbing (2026-07-18, tras el hallazgo cruzado con Codex: comillas
+     *  dobles no son suficientes para neutralizar un nombre hostil). */
+    private fun shellQuote(value: String): String =
+        "'" + value.replace("'", "'\\''") + "'"
 
     /** Ejecuta un comando como root con timeout. Compatible con API 24+. */
     private fun runSu(cmd: String): Boolean = try {

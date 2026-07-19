@@ -81,6 +81,7 @@ class ShizukuService {
 
   /// Empuja un save (en [src]) a la carpeta del juego usando su.
   Future<bool> pushSaveAsRoot(String src, String name) async {
+    if (!_isSafeSaveName(name)) return false;
     try {
       return (await _native.invokeMethod<bool>(
             'pushSaveAsRoot',
@@ -94,6 +95,7 @@ class ShizukuService {
 
   /// Elimina un save de la carpeta del juego usando su.
   Future<bool> deleteLocalAsRoot(String name) async {
+    if (!_isSafeSaveName(name)) return false;
     try {
       return (await _native.invokeMethod<bool>('deleteLocalAsRoot', {'name': name})) ?? false;
     } catch (_) {
@@ -121,7 +123,8 @@ class ShizukuService {
   Future<String?> pullSaves() async {
     final dst = await _freshDir('game_in');
     // -p preserva mtime → la comparación local vs Drive sigue siendo válida.
-    await _api.runCommand('cp -rfp $gameSavesPath/. ${dst.path}/');
+    // Rutas propias de la app, pero se escapan igual por uniformidad.
+    await _api.runCommand('cp -rfp ${_shellQuote('$gameSavesPath/.')} ${_shellQuote('${dst.path}/')}');
     // Verificación robusta vía File API: ¿llegó algo? (no parseamos stdout)
     final empty = await dst.list().isEmpty;
     return empty ? null : dst.path;
@@ -130,6 +133,11 @@ class ShizukuService {
   /// Prepara una carpeta vacía `game_out/<folderName>` y devuelve su ruta
   /// para que el caller escriba ahí el save descargado antes de [pushSave].
   Future<String> prepareOut(String folderName) async {
+    // El nombre viene de un save de Drive (posiblemente compartido por otra
+    // persona) o de un zip importado — un `../` aquí escaparía de la sandbox.
+    if (!_isSafeSaveName(folderName)) {
+      throw ArgumentError('Nombre de save no seguro: $folderName');
+    }
     final parent = await _freshDir('game_out');
     final dir = Directory('${parent.path}/$folderName');
     await dir.create(recursive: true);
@@ -138,11 +146,16 @@ class ShizukuService {
 
   /// Empuja `game_out/<folderName>` al juego y verifica que llegó.
   Future<bool> pushSave(String folderName) async {
+    if (!_isSafeSaveName(folderName)) return false;
     final ext = await getExternalStorageDirectory();
     final src = '${ext!.path}/game_out/$folderName';
-    await _api.runCommand('cp -rfp $src $gameSavesPath/');
+    // El nombre de save (o la ruta que lo contiene) puede llegar de un
+    // compartido ajeno / zip importado — se escapa siempre antes de entrar
+    // en un shell root, nunca se interpola crudo (defensa contra inyección).
+    await _api.runCommand('cp -rfp ${_shellQuote(src)} ${_shellQuote('$gameSavesPath/')}');
     // Verificación: listar la carpeta destino dentro del juego.
-    final check = await _api.runCommand('ls $gameSavesPath/$folderName') ?? '';
+    final check =
+        await _api.runCommand('ls ${_shellQuote('$gameSavesPath/$folderName')}') ?? '';
     final low = check.toLowerCase();
     return check.trim().isNotEmpty &&
         !low.contains('no such') &&
@@ -150,3 +163,20 @@ class ShizukuService {
         !low.contains('not permitted');
   }
 }
+
+/// Nombres de save aceptados en cualquier comando shell root — mismo criterio
+/// que el formato real de Stardew (`<Nombre>_<uniqueID>`, alfanumérico +
+/// `_.-`). Rechaza traversal (`.`/`..`, `/`) y metacaracteres de shell antes
+/// de que lleguen a `su` (integrado de la implementación paralela de Codex,
+/// 2026-07-18 — nuestro código anterior los interpolaba crudos). Android-only,
+/// no ejercitado por la suite de escritorio.
+bool _isSafeSaveName(String value) =>
+    RegExp(r'^[A-Za-z0-9_.-]{1,160}$').hasMatch(value) &&
+    value != '.' &&
+    value != '..';
+
+/// Envuelve un valor en comillas simples POSIX escapando las comillas simples
+/// internas (`'` → `'\''`) — hace inofensivo cualquier metacarácter dentro de
+/// un comando shell, sin rechazar nombres legítimos.
+String _shellQuote(String value) => "'${_shellLiteral(value)}'";
+String _shellLiteral(String value) => value.replaceAll("'", "'\\''");

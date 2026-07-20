@@ -2,10 +2,30 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 
+import 'host_swap_service.dart' show copyDirectory;
+import 'save_replace_service.dart';
 import 'save_service.dart';
 
 /// Motivo por el que `importSave` no pudo completarse.
-enum ImportError { invalidZip, unsafePath, tooLarge, notASave, writeFailure }
+enum ImportError {
+  invalidZip,
+  unsafePath,
+  tooLarge,
+  notASave,
+  writeFailure,
+  backupFailed,
+}
+
+ImportError _mapReplaceError(ReplaceError? error) => switch (error) {
+  ReplaceError.prepareFailed || ReplaceError.validationFailed =>
+    ImportError.notASave,
+  ReplaceError.backupFailed => ImportError.backupFailed,
+  ReplaceError.swapFailed ||
+  ReplaceError.postValidationFailed ||
+  ReplaceError.busy ||
+  null =>
+    ImportError.writeFailure,
+};
 
 /// Resultado de [TransferService.importSave].
 class ImportResult {
@@ -66,6 +86,7 @@ class TransferService {
   Future<ImportResult> importSave(
     String zipPath, {
     required String savesDir,
+    required String backupsDir,
     bool overwrite = false,
   }) async {
     final List<int> bytes;
@@ -82,7 +103,12 @@ class TransferService {
       return const ImportResult(ok: false, error: ImportError.invalidZip);
     }
 
-    return importArchive(archive, savesDir: savesDir, overwrite: overwrite);
+    return importArchive(
+      archive,
+      savesDir: savesDir,
+      backupsDir: backupsDir,
+      overwrite: overwrite,
+    );
   }
 
   /// Núcleo del import, separado de la lectura de disco para poder probar
@@ -92,6 +118,7 @@ class TransferService {
   Future<ImportResult> importArchive(
     Archive archive, {
     required String savesDir,
+    required String backupsDir,
     bool overwrite = false,
   }) async {
     // 1) Seguridad de rutas ANTES de tocar disco: rechaza symlinks, `..` y
@@ -194,14 +221,20 @@ class TransferService {
         );
       }
 
-      // 6) Mover (no copiar) al destino final.
-      if (await destination.exists()) {
-        await destination.delete(recursive: true);
-      }
-      await Directory(savesDir).create(recursive: true);
-      await tempSaveDir.rename(destination.path);
+      // 6) Sustitución transaccional (respaldo automático + swap con
+      //    rollback) — nunca un `delete()` + `rename()` directo (spec
+      //    001-integridad-transaccional-saves FR-013).
+      final result = await SaveReplaceService.instance.replaceSaveFolder(
+        savesDir: savesDir,
+        folderName: folderName,
+        backupsDir: backupsDir,
+        prepare: (stagingDir) => copyDirectory(tempSaveDir, stagingDir),
+      );
       await _safeDelete(tempRoot);
 
+      if (!result.ok) {
+        return ImportResult(ok: false, error: _mapReplaceError(result.error));
+      }
       return ImportResult(ok: true, importedFolderName: folderName);
     } catch (_) {
       await _safeDelete(tempRoot);

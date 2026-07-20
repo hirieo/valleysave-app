@@ -461,6 +461,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo escribir la partida importada (disco/permisos).';
 
   @override
+  String get importErrBackupFailed =>
+      'No se pudo crear una copia de seguridad. No se importó nada.';
+
+  @override
   String get importConflictTitle => 'Ya existe una partida con este nombre';
 
   @override
@@ -809,6 +813,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get backupsRestoreOk => 'Respaldo restaurado.';
 
   @override
+  String get backupsRestoreManualTitle => 'Restaurar manualmente';
+
+  @override
+  String get backupsRestoreManualBody =>
+      'En modo Puente, ValleySave no puede escribir en la carpeta del juego de forma automática. Extrae tú mismo el .zip de este respaldo en la carpeta Saves de Stardew Valley, o cambia a modo Root/Shizuku en Ajustes para restaurar de forma automática.';
+
+  @override
   String backupsRestoreErr(String error) {
     return 'No se pudo restaurar el respaldo: $error';
   }
@@ -1033,6 +1044,26 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hiwTitle => 'Cómo funciona';
+
+  @override
+  String get hiwConnectTitle => 'Conectar tu cuenta';
+
+  @override
+  String get hiwConnectDesc =>
+      'ValleySave usa tu cuenta de Google para guardar tus partidas en una carpeta privada de ValleySave en tu propio Drive.';
+
+  @override
+  String get hiwConnectStepGoogle => 'Cuenta de\nGoogle';
+
+  @override
+  String get hiwConnectStepDrive => 'Carpeta ValleySave\ncreada';
+
+  @override
+  String get hiwConnectStepReady => 'Listo para\nsincronizar';
+
+  @override
+  String get hiwConnectTipOwnership =>
+      'Solo tú puedes editar o borrar tus copias en Drive — ValleySave solo lee y escribe dentro de su propia carpeta.';
 
   @override
   String get hiwSyncTitle => 'Cómo se sincroniza';
@@ -1352,6 +1383,37 @@ class AppLocalizationsEs extends AppLocalizations {
   String get snackDownloaded => 'Partida descargada en el juego';
 
   @override
+  String get snackReplacePrepareFailed =>
+      'No se pudo preparar la partida. No se modificó nada en el disco';
+
+  @override
+  String get snackReplaceValidationFailed =>
+      'La partida descargada parece inválida o incompleta. No se modificó nada en el disco';
+
+  @override
+  String get snackReplaceBackupFailed =>
+      'No se pudo crear una copia de seguridad. No se modificó nada en el disco';
+
+  @override
+  String get snackReplaceSwapFailed =>
+      'El intercambio falló, pero la partida original se restauró desde la copia de seguridad';
+
+  @override
+  String get snackReplaceBusy =>
+      'Ya hay una operación en curso para esta partida';
+
+  @override
+  String get snackUploadIncomplete =>
+      'La partida local está incompleta o dañada. No se subió nada';
+
+  @override
+  String get snackDownloadIncomplete =>
+      'No se puede descargar: le falta contenido en Drive';
+
+  @override
+  String get cardIncomplete => 'Incompleta en Drive';
+
+  @override
   String get snackSessionExpired =>
       'La sesión de Drive ha caducado. Vuelve a conectar';
 
@@ -1417,6 +1479,94 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hiwCompatMods =>
       'Los mods de SMAPI añaden datos extra al save. Si cargas una partida con mods en un dispositivo donde esos mods no están instalados, el juego puede fallar o perder datos del mod.\n\nEn Android, SMAPI también puede instalarse para usar mods.';
+
+  @override
+  String get hiwCompatIncomplete =>
+      'Si ves \"Incompleta en Drive\" en una partida, le falta algún archivo necesario en la nube — no se puede descargar hasta que se vuelva a subir bien desde otro dispositivo.';
+
+  @override
+  String get hiwShareTitle => 'Compartir con otros';
+
+  @override
+  String get hiwShareDesc =>
+      'Comparte una partida con otro jugador por email. La verá en Compartidas conmigo en su propio dispositivo.';
+
+  @override
+  String get hiwShareStepYourSave => 'Tu\npartida';
+
+  @override
+  String get hiwShareStepShare => 'Compartir por\nemail';
+
+  @override
+  String get hiwShareStepFriend => 'Compartidas\nconmigo';
+
+  @override
+  String get hiwShareTipRoles =>
+      'Dos roles: Solo lectura permite ver y descargar. Permitir sincronizar permite sobrescribir tu copia en Drive. En ningún caso pueden borrarla — solo tú, el dueño, puedes borrar tu partida.';
+
+  @override
+  String get hiwShareTipDisconnect =>
+      'Desconectar solo detiene la sincronización de su lado — el compartido sigue activo hasta que lo dejes de verdad desde Administrar compartidas.';
+
+  @override
+  String get hiwHostSwapTitle => 'Cambio de anfitrión';
+
+  @override
+  String get hiwHostSwapDesc =>
+      'Cambia qué farmhand es el anfitrión de la partida, reemplazándola en sitio — mismo slot de guardado, mismos permisos de compartir.';
+
+  @override
+  String get hiwHostSwapStepPick => 'Elegir\nfarmhand';
+
+  @override
+  String get hiwHostSwapStepConfirm => 'Confirmar';
+
+  @override
+  String get hiwHostSwapStepDone => 'Partida nueva\ncreada';
+
+  @override
+  String get hiwHostSwapTipMove =>
+      'Algunos objetos de la granja pueden reubicarse para hacer sitio a la casa — nada se borra.';
+
+  @override
+  String get hiwHostSwapTipHouse =>
+      'La casa del nuevo anfitrión se verá como la casa grande por defecto del juego — la estética de cabaña no está soportada sin mods.';
+
+  @override
+  String get hiwBackupsTitle => 'Respaldos';
+
+  @override
+  String get hiwBackupsDesc =>
+      'Un respaldo es una foto de una partida que puedes restaurar más adelante. Créalo manualmente cuando quieras, o deja que ValleySave cree uno automáticamente antes de sobrescribir una partida (al descargar, importar, restaurar o cambiar de anfitrión).';
+
+  @override
+  String get hiwBackupsStepSave => 'Tu\npartida';
+
+  @override
+  String get hiwBackupsStepSnapshot => 'Respaldo\ncreado';
+
+  @override
+  String get hiwBackupsStepStore => 'Local y/o\nDrive';
+
+  @override
+  String get hiwBackupsTipRestore =>
+      'Restaurar sobrescribe tu partida actual con esa versión anterior — no se puede deshacer.';
+
+  @override
+  String get hiwBackupsTipDelete =>
+      'Eliminar un respaldo lo borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió) — no se puede deshacer.';
+
+  @override
+  String get hiwBackupsTipExport =>
+      'También puedes Exportar una partida como zip para guardarla donde quieras, e Importarla de vuelta más adelante — una alternativa manual y portable a los respaldos integrados.';
+
+  @override
+  String get hiwBackupsTipRetention =>
+      'ValleySave conserva los 5 respaldos automáticos más recientes de cada partida; los que creas tú a mano nunca se borran solos.';
+
+  @override
+  String get hiwBackupsTipRestoreBridge =>
+      'En modo Puente (Android sin root/Shizuku), restaurar un respaldo te pide extraer el .zip a mano en la carpeta de Stardew — igual que al descargar.';
 
   @override
   String get hiwComparePrimary => 'Tiempo total jugado';
@@ -1681,6 +1831,29 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hiwLaunchTipAndroid =>
       'En Android abre el juego si está instalado.';
+
+  @override
+  String get hiwLaunchTipLinux =>
+      'En Linux, si el juego no se detecta automáticamente, configura la ruta del ejecutable en Ajustes → Juego.';
+
+  @override
+  String get hiwSaveLocationsTitle => 'Dónde viven tus partidas';
+
+  @override
+  String get hiwSaveLocationsDesc =>
+      'ValleySave lee y escribe directamente en la carpeta de saves del juego en cada plataforma.';
+
+  @override
+  String get hiwSaveLocationWindows =>
+      'Windows: %AppData%\\StardewValley\\Saves';
+
+  @override
+  String get hiwSaveLocationAndroid =>
+      'Android: carpeta protegida, se accede vía Shizuku o el Puente';
+
+  @override
+  String get hiwSaveLocationLinux =>
+      'Linux: ~/.config/StardewValley/Saves (o ~/snap/steam/common/.config/StardewValley/Saves si Steam está instalado vía snap)';
 
   @override
   String get settingsGameSection => 'Juego';

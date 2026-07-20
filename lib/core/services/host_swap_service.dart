@@ -1,10 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:archive/archive.dart';
 import 'package:xml/xml.dart';
 
+import 'backup_service.dart' show verifyBackupZipContents;
+import 'save_replace_service.dart';
 import 'save_service.dart';
 
 /// Motivo por el que `analyze`/`execute` no pudieron completarse.
@@ -356,34 +357,20 @@ class HostSwapService {
         await infoPath.writeAsString(infoDoc.toXmlString(pretty: false));
       }
 
-      // Validación post-swap (delta: automática, no manual).
-      final verifyRaw = await newMain.readAsString();
-      final players = SaveService.parseFullSave(verifyRaw);
-      final newHost = players
-          .where((p) => p.uniqueId == targetUniqueId)
-          .firstOrNull;
-      final oldHostVerify = players
-          .where((p) => p.uniqueId == oldHostId)
-          .firstOrNull;
-      final verifyDoc = XmlDocument.parse(verifyRaw);
-      final verifyId = _text(verifyDoc.rootElement, 'uniqueIDForThisGame');
-
-      var hasOldFiles = false;
-      await for (final e in workDir.list()) {
-        if (e is File && e.path.endsWith('_old')) {
-          hasOldFiles = true;
-          break;
-        }
-      }
-
-      final integrityOk =
-          newHost != null &&
-          newHost.isHost &&
-          oldHostVerify != null &&
-          !oldHostVerify.isHost &&
-          players.length >= 2 &&
-          verifyId == originalId &&
-          !hasOldFiles;
+      // Validación post-swap (delta: automática, no manual). Extraída a
+      // `_isHostSwapIntegrityValid` para poder re-ejecutarla también sobre
+      // el destino YA PUBLICADO, no solo sobre esta copia de trabajo (ver
+      // más abajo, `validate:` al núcleo — sugerencia de Codex, 2026-07-18:
+      // así una corrupción durante la copia a staging o el rename final
+      // también la detectaría esta validación específica, no solo la
+      // genérica del núcleo).
+      final integrityOk = await _isHostSwapIntegrityValid(
+        workDir,
+        folderName: folderName,
+        targetUniqueId: targetUniqueId,
+        oldHostId: oldHostId,
+        originalId: originalId,
+      );
 
       if (!integrityOk) {
         await _safeDelete(tempRoot);
@@ -410,27 +397,41 @@ class HostSwapService {
         );
       }
 
-      // Paso 5-7: rename dance. Si el segundo rename falla, se revierte el
-      // primero — el original NUNCA queda sin nombre válido (G1).
-      final originalDir = Directory(saveFolderPath);
-      final oldTmp = Directory(
-        '${originalDir.parent.path}$sep${folderName}_old_tmp',
+      // Paso 5-7: sustitución transaccional delegada en el núcleo compartido
+      // (`SaveReplaceService`) — mismo respaldo+swap+rollback que descarga e
+      // importación, sin duplicar la lógica (F9). El zip `_pre-swap_` ya
+      // hecho y verificado se pasa como preverificado: conserva su nombre
+      // permanente y la retención automática nunca lo poda. Integrado tras
+      // ver la implementación paralela de Codex (2026-07-18); condición de
+      // aceptación: los tests de host swap pasan sin modificarlos.
+      final replace = await SaveReplaceService.instance.replaceSaveFolder(
+        savesDir: Directory(saveFolderPath).parent.path,
+        folderName: folderName,
+        backupsDir: backupsDir,
+        preverifiedBackupPath: backupZip.path,
+        prepare: (staging) => copyDirectory(workDir, staging),
+        // Se re-ejecuta sobre el staging (paso 3 del núcleo) Y sobre el
+        // destino ya publicado (paso 5b) — la genérica del núcleo solo
+        // comprueba que el save cargue; esta comprueba que el swap de
+        // anfitrión en sí siga siendo correcto en la ruta final.
+        validate: (dir) => _isHostSwapIntegrityValid(
+          dir,
+          folderName: folderName,
+          targetUniqueId: targetUniqueId,
+          oldHostId: oldHostId,
+          originalId: originalId,
+        ),
       );
-      if (await oldTmp.exists()) await oldTmp.delete(recursive: true);
-      await originalDir.rename(oldTmp.path);
-      try {
-        await workDir.rename(saveFolderPath);
-      } catch (_) {
-        await oldTmp.rename(saveFolderPath);
+      await _safeDelete(tempRoot);
+      if (!replace.ok) {
         await _safeDeleteFile(backupZip);
-        await _safeDelete(tempRoot);
-        return const HostSwapResult(
+        return HostSwapResult(
           ok: false,
-          error: HostSwapError.writeFailure,
+          error: replace.error == ReplaceError.postValidationFailed
+              ? HostSwapError.postValidationFailed
+              : HostSwapError.writeFailure,
         );
       }
-      await _safeDelete(oldTmp);
-      await _safeDelete(tempRoot);
 
       return HostSwapResult(
         ok: true,
@@ -931,25 +932,57 @@ Future<File?> _zipFolder(
 
 /// Confirma que el zip generado es un save real ANTES de reemplazar el
 /// original (G4) — mismo criterio mínimo que `TransferService.importArchive`.
-Future<bool> _verifyBackupZip(File zipFile, String folderName) async {
+/// Delega en [verifyBackupZipContents] (FR-002: un solo sitio que lo haga).
+Future<bool> _verifyBackupZip(File zipFile, String folderName) =>
+    verifyBackupZipContents(zipFile.path, folderName);
+
+/// Integridad ESPECÍFICA del swap de anfitrión (no la genérica de "esto es
+/// un save cargable", que ya cubre `SaveReplaceService`): el nuevo host es
+/// realmente host, el anterior deja de serlo, el número de jugadores no
+/// cambia, `uniqueIDForThisGame` se conserva, y no quedan `_old` sobrantes
+/// en [dir]. Extraída para poder correrla tanto sobre la copia de trabajo
+/// ANTES del swap como, vía el `validate` de `replaceSaveFolder`, sobre el
+/// destino ya publicado — una corrupción durante la copia a staging o el
+/// rename final la detectaría esta comprobación, no solo la genérica del
+/// núcleo (integrado tras sugerencia de la implementación paralela de
+/// Codex, 2026-07-18).
+Future<bool> _isHostSwapIntegrityValid(
+  Directory dir, {
+  required String folderName,
+  required String targetUniqueId,
+  required String oldHostId,
+  required String originalId,
+}) async {
+  final sep = Platform.pathSeparator;
+  final mainFile = File('${dir.path}$sep$folderName');
+  if (!await mainFile.exists()) return false;
   try {
-    final bytes = await zipFile.readAsBytes();
-    final archive = ZipDecoder().decodeBytes(bytes);
-    ArchiveFile? info;
-    ArchiveFile? main;
-    for (final f in archive.files) {
-      final name = f.name.replaceAll('\\', '/');
-      if (name == '$folderName/SaveGameInfo') info = f;
-      if (name == '$folderName/$folderName') main = f;
+    final verifyRaw = await mainFile.readAsString();
+    final players = SaveService.parseFullSave(verifyRaw);
+    final newHost = players
+        .where((p) => p.uniqueId == targetUniqueId)
+        .firstOrNull;
+    final oldHostVerify = players
+        .where((p) => p.uniqueId == oldHostId)
+        .firstOrNull;
+    final verifyDoc = XmlDocument.parse(verifyRaw);
+    final verifyId = _text(verifyDoc.rootElement, 'uniqueIDForThisGame');
+
+    var hasOldFiles = false;
+    await for (final e in dir.list()) {
+      if (e is File && e.path.endsWith('_old')) {
+        hasOldFiles = true;
+        break;
+      }
     }
-    if (info == null || main == null) return false;
-    final infoXml = utf8.decode(info.content, allowMalformed: true);
-    final parsed = SaveService.parseSaveGameInfo(
-      infoXml,
-      folderName: folderName,
-      lastModified: DateTime.now(),
-    );
-    return parsed != null;
+
+    return newHost != null &&
+        newHost.isHost &&
+        oldHostVerify != null &&
+        !oldHostVerify.isHost &&
+        players.length >= 2 &&
+        verifyId == originalId &&
+        !hasOldFiles;
   } catch (_) {
     return false;
   }

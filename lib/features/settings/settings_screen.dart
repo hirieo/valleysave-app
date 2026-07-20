@@ -22,6 +22,7 @@ import '../../shared/widgets/pressable_scale.dart';
 import '../../shared/widgets/update_download_animation.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../saves/save_card.dart' show ActionBtn;
+import '../saves/widgets/seasonal_loader.dart';
 import 'widgets/language_dialog.dart';
 
 enum _UpdateState { idle, checking, upToDate, available, downloading, error }
@@ -178,14 +179,14 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Future<void> _load() async {
     final s = await _service.loadSettings();
-    if (Platform.isWindows) {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       await GameLaunchService.instance.init();
     }
     if (mounted) {
       setState(() {
         _settings = s;
         _loading = false;
-        if (Platform.isWindows) {
+        if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
           _gameExePath = GameLaunchService.instance.resolvedExePath;
         }
       });
@@ -361,7 +362,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                                 const SizedBox(height: 12),
                                 _seasonPicker(l10n),
                               ],
-                              if (Platform.isWindows) ...[
+                              if (Platform.isWindows ||
+                                  Platform.isLinux ||
+                                  Platform.isMacOS) ...[
                                 const SizedBox(height: 32),
                                 Text(
                                   l10n.settingsGameSection.toUpperCase(),
@@ -408,6 +411,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                     ),
                   ),
                 ],
+              ),
+            )
+          else
+            Center(
+              child: ValueListenableBuilder<SeasonState>(
+                valueListenable: SeasonController.instance.season,
+                builder: (_, season, _) => SeasonalLoader(season: season),
               ),
             ),
         ],
@@ -882,7 +892,11 @@ class _SettingsScreenState extends State<SettingsScreen>
       onExit: (_) => setState(() => _gameExeTileHovered = false),
       child: GestureDetector(
       onTap: () async {
-        final picked = await GameLaunchService.instance.pickExePathWindows();
+        final picked = Platform.isWindows
+            ? await GameLaunchService.instance.pickExePathWindows()
+            : Platform.isMacOS
+            ? await GameLaunchService.instance.pickExePathMacOS()
+            : await GameLaunchService.instance.pickExePathLinux();
         if (picked == null || !mounted) return;
         await GameLaunchService.instance.setCustomExePath(picked);
         await GameLaunchService.instance.init();

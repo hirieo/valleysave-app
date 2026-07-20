@@ -161,6 +161,12 @@ void main() {
       () async {
         final client = _FakeAuthClient((request, body) {
           final q = request.url.queryParameters['q'] ?? '';
+          // Búsqueda de la subcarpeta Backups/ dentro de la compartida
+          // (spec 001-integridad-transaccional-saves FR-010) — no existe en
+          // este fixture legado, así que solo se lista la raíz.
+          if (request.method == 'GET' && q.contains("name='Backups'")) {
+            return _json({'files': []});
+          }
           if (request.method == 'GET' &&
               q.contains("'shared-folder' in parents")) {
             return _json({
@@ -195,4 +201,111 @@ void main() {
       },
     );
   });
+
+  group(
+    'backups compartidos en subcarpeta (T025-T027, spec 001-integridad-transaccional-saves FR-010)',
+    () {
+      test(
+        'uploadBackupZipToSharedSave: crea/usa Backups/ dentro de la compartida, nunca la raíz',
+        () async {
+          final tempDir = await Directory.systemTemp.createTemp(
+            'vs_shared_backup_upload_',
+          );
+          addTearDown(() async {
+            if (await tempDir.exists()) await tempDir.delete(recursive: true);
+          });
+          final zip = File(
+            '${tempDir.path}${Platform.pathSeparator}Farm_backup_20260101-000000.zip',
+          );
+          await zip.writeAsBytes([1, 2, 3]);
+
+          final client = _FakeAuthClient((request, body) {
+            final q = request.url.queryParameters['q'] ?? '';
+            if (request.method == 'GET' &&
+                request.url.path.endsWith('/files/shared-folder-2')) {
+              return _json({
+                'capabilities': {'canEdit': true},
+              });
+            }
+            if (request.method == 'GET' &&
+                q.contains("name='Backups'") &&
+                q.contains("'shared-folder-2' in parents")) {
+              // No existe todavía → se crea (mismo patrón que Mi Drive).
+              return _json({'files': []});
+            }
+            if (request.method == 'POST' &&
+                !request.url.path.contains('/upload/') &&
+                body.contains('"name":"Backups"')) {
+              return _json({'id': 'shared-backups-id'});
+            }
+            if (request.method == 'POST' &&
+                body.contains('"parents":["shared-backups-id"]')) {
+              return _json({'id': 'shared-zip-id'});
+            }
+            return null;
+          });
+          final service = DriveService(client);
+
+          final id = await service.uploadBackupZipToSharedSave(
+            'shared-folder-2',
+            zip.path,
+          );
+          expect(id, 'shared-zip-id');
+        },
+      );
+
+      test(
+        'listSharedSaveBackups: ve un backup nuevo en Backups/ Y uno legado suelto en la raíz',
+        () async {
+          final client = _FakeAuthClient((request, body) {
+            final q = request.url.queryParameters['q'] ?? '';
+            if (request.method == 'GET' &&
+                q.contains("name='Backups'") &&
+                q.contains("'shared-folder-3' in parents")) {
+              return _json({
+                'files': [
+                  {'id': 'shared-backups-folder-id', 'name': 'Backups'},
+                ],
+              });
+            }
+            if (request.method == 'GET' &&
+                q.contains("'shared-backups-folder-id' in parents")) {
+              return _json({
+                'files': [
+                  {
+                    'id': 'new-zip-id',
+                    'name': 'Farm_123_autobackup_20260714-100000.zip',
+                    'size': '512',
+                  },
+                ],
+              });
+            }
+            if (request.method == 'GET' &&
+                q.contains("'shared-folder-3' in parents")) {
+              return _json({
+                'files': [
+                  {
+                    'id': 'legacy-zip-id',
+                    'name': 'Farm_123_backup_20260701-090000.zip',
+                    'size': '256',
+                  },
+                ],
+              });
+            }
+            return null;
+          });
+          final service = DriveService(client);
+
+          final result = await service.listSharedSaveBackups(
+            'shared-folder-3',
+            folderName: 'Farm_123',
+          );
+
+          expect(result, hasLength(2));
+          final ids = result.map((e) => e.sharedDriveFileId).toSet();
+          expect(ids, {'new-zip-id', 'legacy-zip-id'});
+        },
+      );
+    },
+  );
 }

@@ -29,6 +29,7 @@ const _kDesmayos = Color(0xFFA8B0D8);
 const kLocal = Color(0xFFE0B850); // dorado = en tu equipo
 const kDrive = Color(0xFF5AA8E0); // azul = nube
 const _kSynced = Color(0xFF62B074); // verde = coinciden
+const _kIncomplete = Color(0xFFC06050); // rojo-anaranjado = falta contenido en Drive
 
 // Card surface: negro semitransparente + tinte estacional
 Color _cardSurface(Color s) => Color.alphaBlend(
@@ -57,14 +58,23 @@ const _kPipFishing = Color(0xFF4888C8);
 
 ({Color color, String label}) _statusStyle(
   SaveSyncStatus s,
-  AppLocalizations l10n,
-) => switch (s) {
-  SaveSyncStatus.synced => (color: _kSynced, label: l10n.cardSynced),
-  SaveSyncStatus.localAhead => (color: kLocal, label: l10n.cardLocalAhead),
-  SaveSyncStatus.driveAhead => (color: kDrive, label: l10n.cardDriveAhead),
-  SaveSyncStatus.localOnly => (color: kLocal, label: l10n.cardLocalOnly),
-  SaveSyncStatus.driveOnly => (color: kDrive, label: l10n.cardDriveOnly),
-};
+  AppLocalizations l10n, {
+  bool driveComplete = true,
+}) {
+  // FR-015: un save incompleto en Drive manda sobre el color/etiqueta
+  // normal de "driveOnly"/"driveAhead" — nunca se disfraza de estado sano.
+  if (!driveComplete &&
+      (s == SaveSyncStatus.driveOnly || s == SaveSyncStatus.driveAhead)) {
+    return (color: _kIncomplete, label: l10n.cardIncomplete);
+  }
+  return switch (s) {
+    SaveSyncStatus.synced => (color: _kSynced, label: l10n.cardSynced),
+    SaveSyncStatus.localAhead => (color: kLocal, label: l10n.cardLocalAhead),
+    SaveSyncStatus.driveAhead => (color: kDrive, label: l10n.cardDriveAhead),
+    SaveSyncStatus.localOnly => (color: kLocal, label: l10n.cardLocalOnly),
+    SaveSyncStatus.driveOnly => (color: kDrive, label: l10n.cardDriveOnly),
+  };
+}
 
 // Etiqueta de estado corta para la fila de acción (evita truncado en móvil).
 
@@ -173,7 +183,11 @@ class _SaveCardState extends State<SaveCard> {
     // La tarjeta muestra el jugador seleccionado (o el anfitrión en solitario).
     final save = coop ? base.forPlayer(base.players[idx]) : base;
     final status = widget.entry.status;
-    final st = _statusStyle(status, l10n);
+    final st = _statusStyle(
+      status,
+      l10n,
+      driveComplete: widget.entry.driveComplete,
+    );
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
@@ -1440,6 +1454,15 @@ class _Footer extends StatelessWidget {
         status == SaveSyncStatus.driveAhead;
     final isMobile = Platform.isAndroid || Platform.isIOS;
 
+    // FR-015: el botón de descargar se atenúa (no solo se desactiva el
+    // `onTap`, que por sí solo `ActionBtn` no distingue visualmente de uno
+    // activo) cuando la partida en Drive está incompleta — nunca debe
+    // parecer una acción disponible que en realidad se bloquea al tocarla.
+    final downloadIncomplete = hasDrive && !entry.driveComplete;
+    final downloadColor = downloadIncomplete
+        ? Colors.white.withValues(alpha: 0.28)
+        : kDrive;
+
     // Mientras sube/baja, el texto acompaña al icono estacional en vez de
     // quedarse con la etiqueta/color de antes de empezar (2026-07-15,
     // auditoría de consistencia visual — antes decía p. ej. "Local por
@@ -1449,7 +1472,11 @@ class _Footer extends StatelessWidget {
         : statusColor;
     final displayLabel = busy
         ? l10n.sharedStatusWorking
-        : _statusStyle(status, l10n).label;
+        : _statusStyle(
+            status,
+            l10n,
+            driveComplete: entry.driveComplete,
+          ).label;
 
     if (isMobile) {
       return Padding(
@@ -1483,7 +1510,7 @@ class _Footer extends StatelessWidget {
               if (hasLocal && hasDrive && recommendUpload) ...[
                 ActionBtn(
                   label: '',
-                  color: kDrive,
+                  color: downloadColor,
                   icon: Icons.cloud_download_outlined,
                   filled: false,
                   iconOnly: true,
@@ -1514,7 +1541,7 @@ class _Footer extends StatelessWidget {
               if (recommendDownload)
                 ActionBtn(
                   label: '',
-                  color: kDrive,
+                  color: downloadColor,
                   icon: Icons.cloud_download_outlined,
                   filled: true,
                   iconOnly: true,
@@ -1569,7 +1596,7 @@ class _Footer extends StatelessWidget {
             if (hasLocal && hasDrive && recommendUpload) ...[
               ActionBtn(
                 label: l10n.cardActionDownload,
-                color: kDrive,
+                color: downloadColor,
                 icon: Icons.cloud_download_outlined,
                 filled: false,
                 onTap: onDownload,
@@ -1587,7 +1614,7 @@ class _Footer extends StatelessWidget {
             if (recommendDownload)
               ActionBtn(
                 label: l10n.cardActionDownload,
-                color: kDrive,
+                color: downloadColor,
                 icon: Icons.cloud_download_outlined,
                 filled: true,
                 onTap: onDownload,
@@ -1681,6 +1708,7 @@ class _ActionBtnState extends State<ActionBtn> {
   @override
   Widget build(BuildContext context) {
     final enabled = widget.onTap != null;
+    final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
       onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
@@ -1693,14 +1721,18 @@ class _ActionBtnState extends State<ActionBtn> {
       onTapUp: (_) => setState(() => _pressed = false),
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedScale(
-        scale: _pressed ? 0.93 : 1.0,
-        duration: _pressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
+        scale: reduceMotion || !_pressed ? 1.0 : 0.93,
+        duration: reduceMotion
+            ? Duration.zero
+            : _pressed
+                ? const Duration(milliseconds: 100)
+                : const Duration(milliseconds: 200),
         curve: const Cubic(0.23, 1, 0.32, 1),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
+          duration: reduceMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 140),
+          curve: const Cubic(0.23, 1, 0.32, 1),
           padding: widget.iconOnly
               ? const EdgeInsets.all(8)
               : const EdgeInsets.symmetric(horizontal: 12, vertical: 7),

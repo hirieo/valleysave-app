@@ -451,6 +451,10 @@ class AppLocalizationsJa extends AppLocalizations {
       'Couldn\'t write the imported save (disk/permissions).';
 
   @override
+  String get importErrBackupFailed =>
+      'Couldn\'t create a safety backup. Nothing was imported.';
+
+  @override
   String get importConflictTitle => 'A save with this name already exists';
 
   @override
@@ -799,6 +803,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backupsRestoreOk => 'Backup restored.';
 
   @override
+  String get backupsRestoreManualTitle => 'Restore manually';
+
+  @override
+  String get backupsRestoreManualBody =>
+      'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.';
+
+  @override
   String backupsRestoreErr(String error) {
     return 'Couldn\'t restore the backup: $error';
   }
@@ -1023,6 +1034,26 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hiwTitle => '使い方';
+
+  @override
+  String get hiwConnectTitle => 'Connect your account';
+
+  @override
+  String get hiwConnectDesc =>
+      'ValleySave uses your Google account to store your saves in a private ValleySave folder on your own Drive.';
+
+  @override
+  String get hiwConnectStepGoogle => 'Google\naccount';
+
+  @override
+  String get hiwConnectStepDrive => 'ValleySave\nfolder created';
+
+  @override
+  String get hiwConnectStepReady => 'Ready to\nsync';
+
+  @override
+  String get hiwConnectTipOwnership =>
+      'Only you can edit or delete your copies on Drive — ValleySave only reads and writes inside its own folder.';
 
   @override
   String get hiwSyncTitle => '同期の仕組み';
@@ -1334,6 +1365,37 @@ class AppLocalizationsJa extends AppLocalizations {
   String get snackDownloaded => 'セーブがゲームにダウンロードされました';
 
   @override
+  String get snackReplacePrepareFailed =>
+      'Could not prepare the save. Nothing on disk was changed';
+
+  @override
+  String get snackReplaceValidationFailed =>
+      'The downloaded save looks invalid or incomplete. Nothing on disk was changed';
+
+  @override
+  String get snackReplaceBackupFailed =>
+      'Could not create a safety backup. Nothing on disk was changed';
+
+  @override
+  String get snackReplaceSwapFailed =>
+      'The swap failed, but the original save was restored from backup';
+
+  @override
+  String get snackReplaceBusy =>
+      'There\'s already an operation in progress for this save';
+
+  @override
+  String get snackUploadIncomplete =>
+      'The local save is incomplete or corrupted. Nothing was uploaded';
+
+  @override
+  String get snackDownloadIncomplete =>
+      'Can\'t download: this save is missing content on Drive';
+
+  @override
+  String get cardIncomplete => 'Incomplete on Drive';
+
+  @override
   String get snackSessionExpired => 'Driveセッションが期限切れ。再接続してください';
 
   @override
@@ -1397,6 +1459,94 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get hiwCompatMods =>
       'SMAPI modはセーブに追加データを追加します。それらのmodがインストールされていないデバイスでmodded saveを読み込むと、ゲームがクラッシュするか、modデータが失われる可能性があります。\n\nAndroid上では、modを使用するためにSMAPIをインストールすることもできます。';
+
+  @override
+  String get hiwCompatIncomplete =>
+      'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.';
+
+  @override
+  String get hiwShareTitle => 'Share with others';
+
+  @override
+  String get hiwShareDesc =>
+      'Share a save with another player by email. They\'ll see it under Shared with me on their own device.';
+
+  @override
+  String get hiwShareStepYourSave => 'Your\nsave';
+
+  @override
+  String get hiwShareStepShare => 'Share by\nemail';
+
+  @override
+  String get hiwShareStepFriend => 'Shared\nwith me';
+
+  @override
+  String get hiwShareTipRoles =>
+      'Two roles: Read-only lets them view and download. Allow sync lets them overwrite your copy on Drive. Either way they can never delete it — only you, the owner, can delete your save.';
+
+  @override
+  String get hiwShareTipDisconnect =>
+      'Disconnecting just stops syncing on their end — the share stays active until you leave it for real from Manage shares.';
+
+  @override
+  String get hiwHostSwapTitle => 'Host swap';
+
+  @override
+  String get hiwHostSwapDesc =>
+      'Change which farmhand hosts the save, replacing it in place — same save slot, same sharing permissions.';
+
+  @override
+  String get hiwHostSwapStepPick => 'Pick a\nfarmhand';
+
+  @override
+  String get hiwHostSwapStepConfirm => 'Confirm';
+
+  @override
+  String get hiwHostSwapStepDone => 'New save\ncreated';
+
+  @override
+  String get hiwHostSwapTipMove =>
+      'Some farm objects may be relocated to make room for the house — nothing is deleted.';
+
+  @override
+  String get hiwHostSwapTipHouse =>
+      'The new host\'s house will look like the game\'s default big house — cabin styling isn\'t supported without mods.';
+
+  @override
+  String get hiwBackupsTitle => 'Backups';
+
+  @override
+  String get hiwBackupsDesc =>
+      'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).';
+
+  @override
+  String get hiwBackupsStepSave => 'Your\nsave';
+
+  @override
+  String get hiwBackupsStepSnapshot => 'Backup\nsnapshot';
+
+  @override
+  String get hiwBackupsStepStore => 'Local and/or\nDrive';
+
+  @override
+  String get hiwBackupsTipRestore =>
+      'Restoring overwrites your current save with that earlier version — this can\'t be undone.';
+
+  @override
+  String get hiwBackupsTipDelete =>
+      'Deleting a backup removes it everywhere it exists (this device and Drive, if uploaded) — this can\'t be undone.';
+
+  @override
+  String get hiwBackupsTipExport =>
+      'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.';
+
+  @override
+  String get hiwBackupsTipRetention =>
+      'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.';
+
+  @override
+  String get hiwBackupsTipRestoreBridge =>
+      'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.';
 
   @override
   String get hiwComparePrimary => '総プレイ時間';
@@ -1655,6 +1805,29 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hiwLaunchTipAndroid => 'Androidではゲームがインストールされていれば起動します。';
+
+  @override
+  String get hiwLaunchTipLinux =>
+      'On Linux, if the game isn’t detected automatically, set the executable path in Settings → Game.';
+
+  @override
+  String get hiwSaveLocationsTitle => 'Where your saves live';
+
+  @override
+  String get hiwSaveLocationsDesc =>
+      'ValleySave reads and writes directly to the game\'s save folder on each platform.';
+
+  @override
+  String get hiwSaveLocationWindows =>
+      'Windows: %AppData%\\StardewValley\\Saves';
+
+  @override
+  String get hiwSaveLocationAndroid =>
+      'Android: protected folder, accessed via Shizuku or the Bridge';
+
+  @override
+  String get hiwSaveLocationLinux =>
+      'Linux: ~/.config/StardewValley/Saves (or ~/snap/steam/common/.config/StardewValley/Saves if Steam is installed via snap)';
 
   @override
   String get settingsGameSection => 'ゲーム';

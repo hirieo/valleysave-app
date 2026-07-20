@@ -16,6 +16,7 @@ import '../../shared/widgets/primary_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
 import '../saves/saves_screen.dart';
+import '../saves/widgets/seasonal_loader.dart';
 import '../settings/settings_screen.dart';
 import '../../core/services/update_service.dart';
 import '../../shared/widgets/update_download_animation.dart';
@@ -449,7 +450,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 );
                               },
                               child: _restoring
-                                  ? const SizedBox(key: ValueKey('r'), height: 52)
+                                  ? SizedBox(
+                                      key: const ValueKey('r'),
+                                      height: 92,
+                                      child: SeasonalLoader(season: season),
+                                    )
                                   : _authConnected
                                       ? Wrap(
                                           key: const ValueKey('c'),

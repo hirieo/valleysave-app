@@ -19,6 +19,9 @@
 
 ---
 
+> [!IMPORTANT]
+> **ValleySave 目前处于抢先体验阶段。** Google 登录页面仍在等待 Google 的验证，因此目前只有白名单中的 Google 账号才能连接。如需获取权限，请发送邮件至 **lhirieo@gmail.com**，注明你将用于 ValleySave 的 Google 账号（邮箱地址）。一旦 Google 完成验证，将向所有人开放。
+
 ## ValleySave 是什么？
 
 星露谷物语在 PC 和移动端之间没有官方云存档同步。**ValleySave 填补了这个空白**：它会自动检测你的农场存档，上传到**你自己的 Google Drive** 中的 `ValleySave/` 文件夹，然后你可以在任何其他设备上下载并继续游玩 — Windows、macOS、Linux 或 Android。

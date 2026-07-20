@@ -19,6 +19,9 @@
 
 ---
 
+> [!IMPORTANT]
+> **ValleySave는 현재 얼리 액세스 단계입니다.** Google 로그인 화면이 아직 Google의 검증을 기다리고 있어, 지금은 허용 목록에 등록된 Google 계정만 연결할 수 있습니다. 액세스를 원하시면 ValleySave에서 사용할 Google 계정(이메일 주소)을 적어 **lhirieo@gmail.com**으로 메일을 보내주세요. Google 검증이 완료되는 대로 모두에게 공개됩니다.
+
 ## ValleySave란?
 
 스타듀밸리에는 PC와 모바일 간 공식 클라우드 세이브 동기화가 없습니다. **ValleySave가 그 공백을 채웁니다**: 농장을 자동으로 감지하고, **나만의 Google Drive** 안 `ValleySave/` 폴더에 업로드하며, 다른 기기(Windows, macOS, Linux, Android)에서 내려받아 이어서 플레이할 수 있게 해줍니다.

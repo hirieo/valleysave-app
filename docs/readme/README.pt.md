@@ -19,6 +19,9 @@ Sem servidores de terceiros. Sem subscrições. Sem rastreio. Os teus saves nunc
 
 ---
 
+> [!IMPORTANT]
+> **O ValleySave está em acesso antecipado.** O ecrã de início de sessão da Google ainda está pendente de verificação por parte da Google, por isso, para já, só contas Google na lista de permissões podem ligar-se. Para obteres acesso, envia um email para **lhirieo@gmail.com** com a conta Google (email) que vais usar com o ValleySave. Vai abrir para todos assim que a verificação da Google estiver concluída.
+
 ## O que é o ValleySave?
 
 O Stardew Valley não tem sincronização oficial de saves na nuvem entre PC e telemóvel. **O ValleySave preenche essa lacuna**: deteta as tuas quintas, envia-as para uma pasta `ValleySave/` no **teu próprio Google Drive**, e permite-te transferi-las e continuar a jogar em qualquer outro dispositivo — Windows, macOS, Linux ou Android.

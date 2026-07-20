@@ -19,6 +19,9 @@ Keine Drittanbieter-Server. Keine Abos. Kein Tracking. Deine Spielstände verlas
 
 ---
 
+> [!IMPORTANT]
+> **ValleySave befindet sich im Early Access.** Der Google-Anmeldebildschirm wartet noch auf Googles Verifizierung, daher können sich derzeit nur freigeschaltete Google-Konten verbinden. Um Zugang zu erhalten, schreibe eine E-Mail an **lhirieo@gmail.com** mit dem Google-Konto (E-Mail-Adresse), das du mit ValleySave nutzen möchtest. Sobald Googles Verifizierung abgeschlossen ist, öffnet sich die App für alle.
+
 ## Was ist ValleySave?
 
 Stardew Valley hat keine offizielle Cloud-Synchronisierung zwischen PC und Mobilgeräten. **ValleySave schließt diese Lücke**: Es erkennt deine Farmen, lädt sie in einen `ValleySave/`-Ordner in **deinem eigenen Google Drive** hoch und lässt dich auf jedem anderen Gerät weiterspielen — Windows, macOS, Linux oder Android.

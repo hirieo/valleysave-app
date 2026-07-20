@@ -3,7 +3,7 @@
 ; Requiere que `flutter build windows --release` ya se haya ejecutado.
 
 #define MyAppName "ValleySave"
-#define MyAppVersion "0.2.2"
+#define MyAppVersion "0.3.0"
 #define MyAppPublisher "Hirieo"
 #define MyAppURL "https://github.com/hirieo/valleysave-app"
 #define MyAppExeName "valleysave.exe"

@@ -19,6 +19,9 @@
 
 ---
 
+> [!IMPORTANT]
+> **ValleySave は現在アーリーアクセス中です。** Google のログイン画面はまだ Google による審査待ちのため、現時点では許可リストに登録された Google アカウントのみ接続できます。アクセスを希望する場合は、ValleySave で使用する Google アカウント（メールアドレス）を記載のうえ **lhirieo@gmail.com** までご連絡ください。Google の審査が完了次第、全員に公開されます。
+
 ## ValleySave とは？
 
 Stardew Valley には PC とモバイル間の公式クラウドセーブ同期がありません。**ValleySave がその穴を埋めます**。牧場のセーブデータを自動検出し、**あなた自身の Google Drive** の `ValleySave/` フォルダにアップロード。他のデバイス（Windows・macOS・Linux・Android）でダウンロードして、そのまま続きをプレイできます。

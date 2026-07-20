@@ -19,6 +19,9 @@ Hirugarrenen zerbitzaririk gabe. Harpidetzarik gabe. Jarraipenik gabe. Zure part
 
 ---
 
+> [!IMPORTANT]
+> **ValleySave goiztiar sarbidean dago.** Google-ko saioa hasteko pantaila oraindik Google-ren egiaztapenaren zain dago, beraz, oraingoz zerrenda zurian dauden Google kontuek bakarrik konekta daitezke. Sarbidea lortzeko, idatzi **lhirieo@gmail.com** helbidera ValleySave-rekin erabiliko duzun Google kontua (helbide elektronikoa) adieraziz. Google-ren egiaztapena amaitu bezain laster denentzat irekiko da.
+
 ## Zer da ValleySave?
 
 Stardew Valley-k ez du hodeiko sinkronizazio ofizialik PC eta mugikorren artean. **ValleySave-k hutsune hori betetzen du**: zure baserriak detektatzen ditu, **zure Google Drive propioko** `ValleySave/` karpeta batera igotzen ditu, eta beste edozein gailutan deskargatu eta jokatzen jarraitzeko aukera ematen dizu — Windows, macOS, Linux edo Android.

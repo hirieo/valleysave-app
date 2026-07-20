@@ -19,6 +19,9 @@
 
 ---
 
+> [!IMPORTANT]
+> **ValleySave 目前處於搶先體驗階段。** Google 登入畫面仍在等待 Google 的驗證，因此目前只有白名單中的 Google 帳號才能連線。如需取得權限，請寄信至 **lhirieo@gmail.com**，註明你將用於 ValleySave 的 Google 帳號（電子郵件地址）。一旦 Google 完成驗證，將向所有人開放。
+
 ## ValleySave 是什麼？
 
 星露谷物語在 PC 和行動裝置之間沒有官方雲端存檔同步。**ValleySave 填補了這個空缺**：它會自動偵測你的農場存檔，上傳到**你自己的 Google Drive** 中的 `ValleySave/` 資料夾，然後你可以在任何其他裝置上下載並繼續遊玩 — Windows、macOS、Linux 或 Android。

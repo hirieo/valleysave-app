@@ -1,54 +1,96 @@
-# ValleySave
-
 <div align="center">
 
-<img src="assets/icons/icon.png" width="250" height="250" alt="ValleySave Logo">
+<img src="assets/icons/icon.png" width="200" height="200" alt="ValleySave — Stardew Valley cloud save sync app logo">
 
-**Sincroniza tus partidas de Stardew Valley con tu propia cuenta de Google Drive.**
+# ValleySave
 
+**Sync your Stardew Valley saves across Windows, macOS, Linux and Android — using your own Google Drive.**
+
+No third-party servers. No subscriptions. No tracking. Your saves never leave your own Google account.
+
+[![Latest release](https://img.shields.io/github/v/release/hirieo/valleysave-app?label=Download&color=brightgreen)](https://github.com/hirieo/valleysave-app/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![License: Polyform NC](https://img.shields.io/badge/License-Polyform%20NC-orange)](./LICENSE)
-![Status: Active Development](https://img.shields.io/badge/Status-Active%20Development-blue)
-![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux-brightgreen)
+![Platforms](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
+
+🇬🇧 English · [🇪🇸 Español](docs/readme/README.es.md) · [🇫🇷 Français](docs/readme/README.fr.md) · [🇩🇪 Deutsch](docs/readme/README.de.md) · [🇮🇹 Italiano](docs/readme/README.it.md) · [🇵🇹 Português](docs/readme/README.pt.md) · [Euskera](docs/readme/README.eu.md) · [🇷🇺 Русский](docs/readme/README.ru.md) · [🇺🇦 Українська](docs/readme/README.uk.md) · [🇯🇵 日本語](docs/readme/README.ja.md) · [🇰🇷 한국어](docs/readme/README.ko.md) · [🇨🇳 中文](docs/readme/README.zh.md) · [🇹🇼 中文（繁體）](docs/readme/README.zh-Hant.md) · [🇹🇭 ไทย](docs/readme/README.th.md)
 
 </div>
 
 ---
 
-> **En desarrollo activo.** Funcional en Android y escritorio (macOS/Windows). iOS y Linux aún en testing.
+## What is ValleySave?
 
-## Introducción
+Stardew Valley has no official cloud save sync between PC and mobile. **ValleySave fills that gap**: it detects your farms, uploads them to a `ValleySave/` folder in **your own Google Drive**, and lets you download and continue playing on any other device — Windows, macOS, Linux or Android.
 
-ValleySave es una aplicación multiplataforma que sincroniza automáticamente tus partidas de Stardew Valley usando tu propia cuenta de Google Drive. 
+- 🔒 **Privacy-first** — uses Google's restricted `drive.file` scope: the app can only see files it created itself, never the rest of your Drive.
+- 🖥️ **Truly cross-platform** — one codebase (Flutter), native builds for all four platforms.
+- 🌍 **14 languages** — English, Spanish, Basque, French, German, Italian, Portuguese, Russian, Ukrainian, Japanese, Korean, Chinese (Simplified & Traditional) and Thai.
 
-**Sin servidores propios. Sin suscripciones. Sin seguimiento.**
+## Features
 
-- Solo accede a los archivos que ella misma crea (`drive.file`)
-- Disponible en Android, iOS, macOS, Windows y Linux
-- Detecta y sincroniza partidas automáticamente
-- Interfaz animada y fluida
+### Save sync & transfer
+- **Automatic farm detection** — finds your Stardew Valley saves on every platform, including Steam (native, Flatpak and Snap on Linux) and the protected `Android/data` folder on Android (root, [Shizuku](https://shizuku.rikka.app/) or manual-bridge modes).
+- **Upload / download with one click** — per-farm cards show which side is ahead (local vs Drive) and recommend the right action.
+- **Incomplete-save protection** — a save that is missing files in Drive is flagged and can't be downloaded half-broken.
 
-## Características
+### Data safety (the part we're most proud of)
+- **Transactional replace** — every download, import and restore uses a *prepare → validate → backup → swap → verify* pipeline with automatic rollback. If your PC crashes mid-download, your original save is untouched or automatically restored. Never a half-written farm.
+- **Atomic uploads** — uploads go to a new immutable "generation" folder and are published with a single final manifest update. Other devices never see a half-uploaded save.
+- **Automatic backups with retention** — a verified backup is created before any save is replaced; the app keeps the last 5 automatic backups per farm (manual backups are never deleted).
+- **Crash recovery** — leftover temp folders from an interrupted operation are detected and safely resolved on next launch, always preferring the valid copy.
 
-- **Sincronización automática** — detecta cambios en tus partidas y los sube a Drive
-- **Multi-dispositivo** — descarga y restaura desde cualquier plataforma
-- **Sin intermediarios** — tus datos viven en tu propia cuenta de Google, no en servidores ajenos
-- **Interfaz temática** — diseño estacional que respeta la atmósfera de Stardew Valley
-- **Polyform NC** — código disponible, no comercial
+### Co-op multiplayer
+- **Host migration** — transfer the host role of a co-op farm to another player in the save file, with full integrity validation before and after the swap. Play the same farm even when the usual host is away.
+- **Share farms with friends** — share a farm through Drive so other players can download it and keep playing, with role badges (read-only vs sync).
+- **Player-aware cards** — co-op farms show every farmhand, not just the host.
 
-## Descargas
+### Quality of life
+- **Launch the game from the app** — detects and starts Stardew Valley on Windows, macOS and Linux (Steam native / Flatpak / Snap).
+- **Import saves from .zip** — with the same transactional safety as downloads.
+- **Built-in updater** — checks GitHub Releases and downloads the new version for you.
+- **Seasonal UI** — the whole interface follows the in-game season: spring petals, summer fireflies, autumn leaves, winter snow.
 
-Las compilaciones oficiales aparecerán en [Releases](../../releases) cuando la app esté lista para producción.
+## Downloads
 
-Por ahora, [compila desde fuente](#compilar-desde-fuente).
+Grab the latest version from **[Releases](https://github.com/hirieo/valleysave-app/releases/latest)**:
 
-## Compilar desde fuente
+| Platform | File | Notes |
+|---|---|---|
+| **Windows** | `ValleySave-Setup-*.exe` | Installer — includes VC++ runtime, 14 languages |
+| **Windows** (portable) | `ValleySave-*-windows.zip` | Unzip & run |
+| **macOS** | `valleysave-macos.zip` | Unzip, move to Applications |
+| **Linux** (Ubuntu/Debian) | `valleysave_*_amd64.deb` | Double-click to install — menu icon included |
+| **Linux** (portable) | `valleysave-linux-x64.tar.gz` | Extract & run, any distro |
+| **Android** | `ValleySave-*.apk` | Android 8+ |
 
-### Requisitos
+## How it works
 
-- [Flutter](https://flutter.dev/docs/get-started/install) (≥3.12)
-- Android Studio (para Android) o Xcode (para iOS/macOS)
+1. **Connect** — link your own Google account (OAuth, `drive.file` scope only).
+2. **Detect** — ValleySave finds your Stardew Valley farms automatically.
+3. **Sync** — upload farms to a `ValleySave/` folder in your Drive.
+4. **Continue anywhere** — install ValleySave on another device, connect the same account, download and play.
 
-### Instrucciones
+## FAQ
+
+**Does Stardew Valley have official cloud saves between PC and mobile?**
+No — saves on PC and mobile are stored locally and there is no official cross-platform sync. ValleySave provides it using your own Google Drive.
+
+**Is my save data safe?**
+Every destructive operation is transactional: your original save is backed up and verified before being replaced, and automatically restored if anything fails. Corrupt or incomplete data is rejected before it can overwrite a good save.
+
+**Where are my saves stored?**
+In a `ValleySave/` folder inside *your own* Google Drive. There is no ValleySave server. The app uses the restricted `drive.file` scope, so it can't read anything else in your Drive.
+
+**Can I move a farm between Windows and Android?**
+Yes — that's the core use case. Also macOS and Linux, in any direction.
+
+**Can we keep playing our co-op farm when the host is away?**
+Yes. ValleySave can transfer the host role to another player (host migration) and share the farm through Drive.
+
+## Build from source
+
+Requirements: [Flutter](https://docs.flutter.dev/get-started/install) ≥ 3.12 · Android Studio (for Android builds)
 
 ```bash
 git clone https://github.com/hirieo/valleysave-app.git
@@ -56,43 +98,23 @@ cd valleysave-app
 
 flutter pub get
 cp .env.example .env
-# En macOS/Windows/Linux: rellena GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET en .env
+# Desktop: fill GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env
 flutter run
 ```
 
-**Nota:** Android e iOS requieren credenciales propias de Google Cloud:
-- **Android:** `google-services.json` (obtén desde tu proyecto en Google Cloud Console)
-- **iOS:** `GoogleService-Info.plist` (lo mismo)
-- **Desktop:** usa las variables en `.env.example`
+Android needs its own Google Cloud credentials (`google-services.json`).
 
-## Cómo funciona
+## Bug reports & contributions
 
-1. **Conecta tu cuenta** — abre la app y vincula tu Google Drive
-2. **Detecta partidas** — ValleySave encuentra tus archivos de Stardew Valley
-3. **Sincroniza automáticamente** — crea una carpeta `ValleySave/` en tu Drive y sube tus archivos
-4. **Sincroniza en otro dispositivo** — descarga y restaura desde cualquier plataforma soportada
+- Bugs that affect core functionality: [open an issue](../../issues).
+- Pull requests are welcome — the code is source-available under Polyform Noncommercial.
 
-## Reportes de errores
+## License
 
-Solo reporta bugs que afecten la funcionalidad core. Los bugs cosméticos (UI, temas) se ignoran temporalmente mientras la app esté en desarrollo temprano.
+[Polyform Noncommercial 1.0.0](./LICENSE) — you may read, learn from and contribute to the code; commercial use requires explicit permission.
 
-Para reportar: [Issues](../../issues)
-
-## Contribuciones
-
-ValleySave es código disponible bajo Polyform Noncommercial. Puedes:
-- Ver el código fuente
-- Aprender cómo funciona
-- Contribuir con mejoras (pull requests bienvenidos)
-
-**Restricción:** No puedes usar este código con fines comerciales sin autorización explícita.
-
-## Licencia
-
-[Polyform Noncommercial 1.0.0](./LICENSE)
-
-Este programa se distribuye bajo la esperanza de que sea útil, pero **sin ninguna garantía**. Usa a tu propio riesgo.
+Distributed in the hope that it will be useful, **without any warranty**. Use at your own risk.
 
 ---
 
-**Repo hermano:** [`valleysave-web`](../valleysave-web) (landing y presencia web)
+**Sister repo:** [`valleysave-web`](https://github.com/hirieo/valleysave-web) — landing page & web presence.

@@ -26,6 +26,15 @@ class GameLaunchService {
     '$home/snap/steam/common/.local/share/Steam/steamapps/common/Stardew Valley/StardewValley',
   ];
 
+  // macOS: Steam instala el juego como carpeta "Stardew Valley" SIN
+  // extensión .app — dentro, "StardewValley" (sin espacio) es solo un
+  // script que relanza "Stardew Valley" (con espacio), el binario nativo
+  // real. Apuntar directo a este último evita la indirección del script.
+  static List<String> _knownPathsMacOS(String home) => [
+    '$home/Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/Stardew Valley',
+    '/Applications/Stardew Valley.app/Contents/MacOS/Stardew Valley',
+  ];
+
   bool _androidInstalled = false;
   String? _desktopExePath;
 
@@ -43,7 +52,7 @@ class GameLaunchService {
       }
       return;
     }
-    if (!Platform.isWindows && !Platform.isLinux) return;
+    if (!Platform.isWindows && !Platform.isLinux && !Platform.isMacOS) return;
 
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_prefKey);
@@ -53,6 +62,8 @@ class GameLaunchService {
     }
     final candidates = Platform.isWindows
         ? _knownPathsWindows
+        : Platform.isMacOS
+        ? _knownPathsMacOS(Platform.environment['HOME'] ?? '')
         : _knownPathsLinux(Platform.environment['HOME'] ?? '');
     for (final path in candidates) {
       if (await File(path).exists()) {
@@ -97,6 +108,18 @@ if ($d.ShowDialog() -eq "OK") { Write-Output $d.FileName }
     if (!Platform.isLinux) return null;
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Stardew Valley',
+    );
+    if (result == null || result.files.isEmpty) return null;
+    return result.files.single.path;
+  }
+
+  Future<String?> pickExePathMacOS() async {
+    if (!Platform.isMacOS) return null;
+    final home = Platform.environment['HOME'] ?? '';
+    final result = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Stardew Valley',
+      initialDirectory:
+          '$home/Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS',
     );
     if (result == null || result.files.isEmpty) return null;
     return result.files.single.path;

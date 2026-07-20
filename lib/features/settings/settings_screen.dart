@@ -179,14 +179,14 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Future<void> _load() async {
     final s = await _service.loadSettings();
-    if (Platform.isWindows || Platform.isLinux) {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       await GameLaunchService.instance.init();
     }
     if (mounted) {
       setState(() {
         _settings = s;
         _loading = false;
-        if (Platform.isWindows || Platform.isLinux) {
+        if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
           _gameExePath = GameLaunchService.instance.resolvedExePath;
         }
       });
@@ -362,7 +362,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                                 const SizedBox(height: 12),
                                 _seasonPicker(l10n),
                               ],
-                              if (Platform.isWindows || Platform.isLinux) ...[
+                              if (Platform.isWindows ||
+                                  Platform.isLinux ||
+                                  Platform.isMacOS) ...[
                                 const SizedBox(height: 32),
                                 Text(
                                   l10n.settingsGameSection.toUpperCase(),
@@ -892,6 +894,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       onTap: () async {
         final picked = Platform.isWindows
             ? await GameLaunchService.instance.pickExePathWindows()
+            : Platform.isMacOS
+            ? await GameLaunchService.instance.pickExePathMacOS()
             : await GameLaunchService.instance.pickExePathLinux();
         if (picked == null || !mounted) return;
         await GameLaunchService.instance.setCustomExePath(picked);

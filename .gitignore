@@ -1,3 +1,9 @@
+# Paquete de traspaso Mac (contiene secretos en claro)
+/valleysave-mac-transfer/
+
+# macOS
+.DS_Store
+
 # Flutter / Dart
 .dart_tool/
 .flutter-plugins

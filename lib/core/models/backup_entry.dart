@@ -1,6 +1,14 @@
-/// Respaldo pre-swap de un save (zip generado por `HostSwapService.execute`,
-/// formato `TransferService.exportSave`). Emparejamiento local↔Drive por
-/// [fileName] EXACTO — el nombre ya es único por swap (spec 007 G10).
+/// Origen de un respaldo: creado a propósito por el usuario, o generado
+/// automáticamente por `SaveReplaceService` antes de una sobrescritura
+/// (spec 001-integridad-transaccional-saves). Los automáticos participan en
+/// la retención (`BackupService.enforceAutoRetention`); los manuales nunca
+/// se borran solos.
+enum BackupOrigin { manual, auto }
+
+/// Respaldo de un save (zip generado por `HostSwapService.execute`,
+/// `BackupService.createBackup` o `SaveReplaceService`, formato
+/// `TransferService.exportSave`). Emparejamiento local↔Drive por [fileName]
+/// EXACTO — el nombre ya es único por operación (spec 007 G10).
 class BackupEntry {
   const BackupEntry({
     required this.fileName,
@@ -10,6 +18,7 @@ class BackupEntry {
     this.driveFileId,
     this.sharedDriveFileId,
     required this.sizeBytes,
+    this.origin = BackupOrigin.manual,
   });
 
   final String fileName;
@@ -19,6 +28,7 @@ class BackupEntry {
   final String? driveFileId;
   final String? sharedDriveFileId;
   final int sizeBytes;
+  final BackupOrigin origin;
 
   bool get isLocal => localPath != null;
   bool get isOnDrive => driveFileId != null;
@@ -27,14 +37,16 @@ class BackupEntry {
       (isLocal ? 1 : 0) + (isOnDrive ? 1 : 0) + (isOnSharedDrive ? 1 : 0);
 
   static final _pattern = RegExp(
-    r'^(.+)_(?:pre-swap|backup)_(\d{8}-\d{6})\.zip$',
+    r'^(.+)_(?:pre-swap|backup|autobackup)_(\d{8}-\d{6})\.zip$',
   );
 
-  /// Parsea `<folderName>_pre-swap_<yyyyMMdd-HHmmss>.zip`. Devuelve `null`
-  /// si el nombre no sigue el patrón (archivo ajeno en la misma carpeta).
-  static ({String folderName, DateTime timestamp})? parseFileName(
-    String fileName,
-  ) {
+  /// Parsea `<folderName>_{pre-swap|backup|autobackup}_<yyyyMMdd-HHmmss>.zip`.
+  /// Devuelve `null` si el nombre no sigue el patrón (archivo ajeno en la
+  /// misma carpeta). `pre-swap` y `backup` se tratan como origen manual —
+  /// son anteriores a la distinción de origen; solo `autobackup` es
+  /// [BackupOrigin.auto].
+  static ({String folderName, DateTime timestamp, BackupOrigin origin})?
+  parseFileName(String fileName) {
     final match = _pattern.firstMatch(fileName);
     if (match == null) return null;
     final folderName = match.group(1)!;
@@ -46,9 +58,13 @@ class BackupEntry {
       final hour = int.parse(ts.substring(9, 11));
       final minute = int.parse(ts.substring(11, 13));
       final second = int.parse(ts.substring(13, 15));
+      final origin = fileName.contains('_autobackup_')
+          ? BackupOrigin.auto
+          : BackupOrigin.manual;
       return (
         folderName: folderName,
         timestamp: DateTime(year, month, day, hour, minute, second),
+        origin: origin,
       );
     } catch (_) {
       return null;
@@ -74,6 +90,7 @@ class BackupEntry {
           ? null
           : sharedDriveFileId ?? this.sharedDriveFileId,
       sizeBytes: sizeBytes ?? this.sizeBytes,
+      origin: origin,
     );
   }
 

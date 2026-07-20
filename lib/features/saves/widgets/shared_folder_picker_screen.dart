@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 
+import '../../../core/models/season_state.dart';
 import '../../../core/services/drive_service.dart';
+import '../../../core/services/season_controller.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../shared/widgets/glass_dialog.dart';
 import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart' show ActionBtn;
+import 'seasonal_loader.dart';
 import 'stagger_item.dart';
 
 const _kAccent = Color(0xFF97C459);
@@ -145,16 +148,12 @@ class _SharedFolderPickerDialogState extends State<_SharedFolderPickerDialog> {
       );
     }
     if (_folders == null) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 28),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 28),
         child: Center(
-          child: SizedBox(
-            width: 18,
-            height: 18,
-            child: CircularProgressIndicator(
-              color: Colors.white38,
-              strokeWidth: 2,
-            ),
+          child: ValueListenableBuilder<SeasonState>(
+            valueListenable: SeasonController.instance.season,
+            builder: (_, season, _) => SeasonalLoader(season: season),
           ),
         ),
       );

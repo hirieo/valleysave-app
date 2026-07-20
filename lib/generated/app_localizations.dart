@@ -925,6 +925,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t write the imported save (disk/permissions).'**
   String get importErrWrite;
 
+  /// No description provided for @importErrBackupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create a safety backup. Nothing was imported.'**
+  String get importErrBackupFailed;
+
   /// No description provided for @importConflictTitle.
   ///
   /// In en, this message translates to:
@@ -1513,6 +1519,18 @@ abstract class AppLocalizations {
   /// **'Backup restored.'**
   String get backupsRestoreOk;
 
+  /// No description provided for @backupsRestoreManualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore manually'**
+  String get backupsRestoreManualTitle;
+
+  /// No description provided for @backupsRestoreManualBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.'**
+  String get backupsRestoreManualBody;
+
   /// No description provided for @backupsRestoreErr.
   ///
   /// In en, this message translates to:
@@ -1890,6 +1908,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'How it works'**
   String get hiwTitle;
+
+  /// No description provided for @hiwConnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect your account'**
+  String get hiwConnectTitle;
+
+  /// No description provided for @hiwConnectDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave uses your Google account to store your saves in a private ValleySave folder on your own Drive.'**
+  String get hiwConnectDesc;
+
+  /// No description provided for @hiwConnectStepGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Google\naccount'**
+  String get hiwConnectStepGoogle;
+
+  /// No description provided for @hiwConnectStepDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave\nfolder created'**
+  String get hiwConnectStepDrive;
+
+  /// No description provided for @hiwConnectStepReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to\nsync'**
+  String get hiwConnectStepReady;
+
+  /// No description provided for @hiwConnectTipOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can edit or delete your copies on Drive — ValleySave only reads and writes inside its own folder.'**
+  String get hiwConnectTipOwnership;
 
   /// No description provided for @hiwSyncTitle.
   ///
@@ -2473,6 +2527,54 @@ abstract class AppLocalizations {
   /// **'Save downloaded to the game'**
   String get snackDownloaded;
 
+  /// No description provided for @snackReplacePrepareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not prepare the save. Nothing on disk was changed'**
+  String get snackReplacePrepareFailed;
+
+  /// No description provided for @snackReplaceValidationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The downloaded save looks invalid or incomplete. Nothing on disk was changed'**
+  String get snackReplaceValidationFailed;
+
+  /// No description provided for @snackReplaceBackupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create a safety backup. Nothing on disk was changed'**
+  String get snackReplaceBackupFailed;
+
+  /// No description provided for @snackReplaceSwapFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The swap failed, but the original save was restored from backup'**
+  String get snackReplaceSwapFailed;
+
+  /// No description provided for @snackReplaceBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s already an operation in progress for this save'**
+  String get snackReplaceBusy;
+
+  /// No description provided for @snackUploadIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'The local save is incomplete or corrupted. Nothing was uploaded'**
+  String get snackUploadIncomplete;
+
+  /// No description provided for @snackDownloadIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t download: this save is missing content on Drive'**
+  String get snackDownloadIncomplete;
+
+  /// No description provided for @cardIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete on Drive'**
+  String get cardIncomplete;
+
   /// No description provided for @snackSessionExpired.
   ///
   /// In en, this message translates to:
@@ -2568,6 +2670,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMAPI mods add extra data to the save. If you load a modded save on a device where those mods aren\'t installed, the game may crash or lose mod data.\n\nOn Android, SMAPI can also be installed to use mods.'**
   String get hiwCompatMods;
+
+  /// No description provided for @hiwCompatIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.'**
+  String get hiwCompatIncomplete;
+
+  /// No description provided for @hiwShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with others'**
+  String get hiwShareTitle;
+
+  /// No description provided for @hiwShareDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Share a save with another player by email. They\'ll see it under Shared with me on their own device.'**
+  String get hiwShareDesc;
+
+  /// No description provided for @hiwShareStepYourSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Your\nsave'**
+  String get hiwShareStepYourSave;
+
+  /// No description provided for @hiwShareStepShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share by\nemail'**
+  String get hiwShareStepShare;
+
+  /// No description provided for @hiwShareStepFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared\nwith me'**
+  String get hiwShareStepFriend;
+
+  /// No description provided for @hiwShareTipRoles.
+  ///
+  /// In en, this message translates to:
+  /// **'Two roles: Read-only lets them view and download. Allow sync lets them overwrite your copy on Drive. Either way they can never delete it — only you, the owner, can delete your save.'**
+  String get hiwShareTipRoles;
+
+  /// No description provided for @hiwShareTipDisconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnecting just stops syncing on their end — the share stays active until you leave it for real from Manage shares.'**
+  String get hiwShareTipDisconnect;
+
+  /// No description provided for @hiwHostSwapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Host swap'**
+  String get hiwHostSwapTitle;
+
+  /// No description provided for @hiwHostSwapDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Change which farmhand hosts the save, replacing it in place — same save slot, same sharing permissions.'**
+  String get hiwHostSwapDesc;
+
+  /// No description provided for @hiwHostSwapStepPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a\nfarmhand'**
+  String get hiwHostSwapStepPick;
+
+  /// No description provided for @hiwHostSwapStepConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get hiwHostSwapStepConfirm;
+
+  /// No description provided for @hiwHostSwapStepDone.
+  ///
+  /// In en, this message translates to:
+  /// **'New save\ncreated'**
+  String get hiwHostSwapStepDone;
+
+  /// No description provided for @hiwHostSwapTipMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Some farm objects may be relocated to make room for the house — nothing is deleted.'**
+  String get hiwHostSwapTipMove;
+
+  /// No description provided for @hiwHostSwapTipHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'The new host\'s house will look like the game\'s default big house — cabin styling isn\'t supported without mods.'**
+  String get hiwHostSwapTipHouse;
+
+  /// No description provided for @hiwBackupsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups'**
+  String get hiwBackupsTitle;
+
+  /// No description provided for @hiwBackupsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).'**
+  String get hiwBackupsDesc;
+
+  /// No description provided for @hiwBackupsStepSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Your\nsave'**
+  String get hiwBackupsStepSave;
+
+  /// No description provided for @hiwBackupsStepSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup\nsnapshot'**
+  String get hiwBackupsStepSnapshot;
+
+  /// No description provided for @hiwBackupsStepStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Local and/or\nDrive'**
+  String get hiwBackupsStepStore;
+
+  /// No description provided for @hiwBackupsTipRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring overwrites your current save with that earlier version — this can\'t be undone.'**
+  String get hiwBackupsTipRestore;
+
+  /// No description provided for @hiwBackupsTipDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting a backup removes it everywhere it exists (this device and Drive, if uploaded) — this can\'t be undone.'**
+  String get hiwBackupsTipDelete;
+
+  /// No description provided for @hiwBackupsTipExport.
+  ///
+  /// In en, this message translates to:
+  /// **'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.'**
+  String get hiwBackupsTipExport;
+
+  /// No description provided for @hiwBackupsTipRetention.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.'**
+  String get hiwBackupsTipRetention;
+
+  /// No description provided for @hiwBackupsTipRestoreBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.'**
+  String get hiwBackupsTipRestoreBridge;
 
   /// No description provided for @hiwComparePrimary.
   ///
@@ -3024,6 +3276,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'On Android, opens the game if it’s installed.'**
   String get hiwLaunchTipAndroid;
+
+  /// No description provided for @hiwLaunchTipLinux.
+  ///
+  /// In en, this message translates to:
+  /// **'On Linux, if the game isn’t detected automatically, set the executable path in Settings → Game.'**
+  String get hiwLaunchTipLinux;
+
+  /// No description provided for @hiwSaveLocationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where your saves live'**
+  String get hiwSaveLocationsTitle;
+
+  /// No description provided for @hiwSaveLocationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave reads and writes directly to the game\'s save folder on each platform.'**
+  String get hiwSaveLocationsDesc;
+
+  /// No description provided for @hiwSaveLocationWindows.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows: %AppData%\\StardewValley\\Saves'**
+  String get hiwSaveLocationWindows;
+
+  /// No description provided for @hiwSaveLocationAndroid.
+  ///
+  /// In en, this message translates to:
+  /// **'Android: protected folder, accessed via Shizuku or the Bridge'**
+  String get hiwSaveLocationAndroid;
+
+  /// No description provided for @hiwSaveLocationLinux.
+  ///
+  /// In en, this message translates to:
+  /// **'Linux: ~/.config/StardewValley/Saves (or ~/snap/steam/common/.config/StardewValley/Saves if Steam is installed via snap)'**
+  String get hiwSaveLocationLinux;
 
   /// No description provided for @settingsGameSection.
   ///

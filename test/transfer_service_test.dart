@@ -24,6 +24,27 @@ void main() {
     return dir;
   }
 
+  Future<Directory> makeBackupsDir() async {
+    final dir = Directory('${tempDir.path}${Platform.pathSeparator}Backups');
+    await dir.create(recursive: true);
+    return dir;
+  }
+
+  /// Escribe un save real y mínimo (mismo contenido que
+  /// `ZipFixtures.validArchive()`) directamente en [dir] — necesario porque
+  /// `SaveReplaceService.replaceSaveFolder` ahora respalda el destino ANTES
+  /// de sustituirlo, y ese respaldo se verifica: una carpeta destino que no
+  /// parece un save real (p. ej. solo un `marker` suelto) hace fallar esa
+  /// verificación con `backupFailed`.
+  Future<void> writeValidSaveFiles(Directory dir, String folderName) async {
+    await dir.create(recursive: true);
+    final sep = Platform.pathSeparator;
+    for (final f in ZipFixtures.validArchive(folderName: folderName).files) {
+      final relative = f.name.substring(folderName.length + 1);
+      await File('${dir.path}$sep$relative').writeAsBytes(f.content);
+    }
+  }
+
   group('exportSave (G1, G2)', () {
     test('G1: no modifica el save original', () async {
       final sep = Platform.pathSeparator;
@@ -71,6 +92,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.zipSlipArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.unsafePath);
@@ -82,6 +104,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.symlinkArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.unsafePath);
@@ -93,6 +116,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.zipBombArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.tooLarge);
@@ -104,6 +128,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.tooManyEntriesArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.tooLarge);
@@ -115,6 +140,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.notASaveArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.notASave);
@@ -126,6 +152,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.missingMainFileArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.notASave);
@@ -137,6 +164,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.corruptInfoArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.notASave);
@@ -150,6 +178,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.validArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isTrue);
       expect(result.importedFolderName, ZipFixtures.validFolderName);
@@ -184,6 +213,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.validArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.conflict, isTrue);
@@ -198,13 +228,14 @@ void main() {
       final existing = Directory(
         '${savesDir.path}$sep${ZipFixtures.validFolderName}',
       );
-      await existing.create(recursive: true);
+      await writeValidSaveFiles(existing, ZipFixtures.validFolderName);
       final marker = File('${existing.path}${sep}marker');
       await marker.writeAsString('original');
 
       final result = await TransferService().importArchive(
         ZipFixtures.validArchive(),
         savesDir: savesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
         overwrite: true,
       );
       expect(result.ok, isTrue);
@@ -225,6 +256,7 @@ void main() {
       final result = await TransferService().importArchive(
         ZipFixtures.validArchive(),
         savesDir: blocker.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isFalse);
       expect(result.error, ImportError.writeFailure);
@@ -278,6 +310,7 @@ void main() {
       final result = await TransferService().importSave(
         zipFile.path,
         savesDir: otherSavesDir.path,
+        backupsDir: (await makeBackupsDir()).path,
       );
       expect(result.ok, isTrue);
 

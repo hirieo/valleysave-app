@@ -18,6 +18,8 @@ class SharedSaveEntry {
     this.ownDriveFolderId,
     this.ownerDrivePresent = false,
     this.ownerDriveVerified = true,
+    this.complete = true,
+    this.ownDriveComplete = true,
   });
 
   final String folderId;
@@ -54,6 +56,14 @@ class SharedSaveEntry {
   /// Evita convertir cuotas, rate limits o fallos temporales en revocaciones.
   final bool ownerDriveVerified;
 
+  /// FR-015: completitud de [driveStats] (el Drive DEL DUEÑO) — ver
+  /// `DriveSaveSummary.complete`.
+  final bool complete;
+
+  /// FR-015: completitud de [ownDriveStats] (TU PROPIO Drive) — mismo
+  /// criterio, fuente distinta (ver `saves_screen._loadSharedSaves`).
+  final bool ownDriveComplete;
+
   bool get hasOwnerDrive => ownerDrivePresent || driveStats != null;
 
   bool get canSync => myRole == 'writer' && !revoked;
@@ -61,8 +71,12 @@ class SharedSaveEntry {
   /// Reutiliza el MISMO cálculo de estado que las tarjetas propias
   /// (`SaveEntry.status`) para LOCAL vs Drive DEL DUEÑO — controla la
   /// franja de color superior de la tarjeta.
-  SaveEntry get asEntry =>
-      SaveEntry(local: localMatch, drive: driveStats, driveFolderId: folderId);
+  SaveEntry get asEntry => SaveEntry(
+    local: localMatch,
+    drive: driveStats,
+    driveFolderId: folderId,
+    driveComplete: complete,
+  );
 
   /// Mismo cálculo pero LOCAL vs TU PROPIO Drive — comparación
   /// independiente, usada solo para decidir qué botones de sync mostrar.
@@ -70,6 +84,7 @@ class SharedSaveEntry {
     local: localMatch,
     drive: ownDriveStats,
     driveFolderId: ownDriveFolderId,
+    driveComplete: ownDriveComplete,
   );
 
   /// `null` si no hay copia local con la que comparar (no debería pasar
@@ -86,6 +101,8 @@ class SharedSaveEntry {
     String? ownDriveFolderId,
     bool? ownerDrivePresent,
     bool? ownerDriveVerified,
+    bool? complete,
+    bool? ownDriveComplete,
   }) {
     return SharedSaveEntry(
       folderId: folderId,
@@ -99,6 +116,8 @@ class SharedSaveEntry {
       ownDriveFolderId: ownDriveFolderId ?? this.ownDriveFolderId,
       ownerDrivePresent: ownerDrivePresent ?? this.ownerDrivePresent,
       ownerDriveVerified: ownerDriveVerified ?? this.ownerDriveVerified,
+      complete: complete ?? this.complete,
+      ownDriveComplete: ownDriveComplete ?? this.ownDriveComplete,
     );
   }
 }

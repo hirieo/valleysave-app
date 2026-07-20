@@ -10,6 +10,19 @@
 	<string>Valleysave</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.185013294687-650nloeh7ii98ld2n195339a3tq4d6sv</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>185013294687-650nloeh7ii98ld2n195339a3tq4d6sv.apps.googleusercontent.com</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

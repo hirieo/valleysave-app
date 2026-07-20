@@ -12,7 +12,16 @@ class SaveService {
       if (appData == null) return null;
       return '$appData\\StardewValley\\Saves';
     }
-    if (Platform.isMacOS || Platform.isLinux) {
+    if (Platform.isLinux) {
+      final home = Platform.environment['HOME'];
+      if (home == null) return null;
+      // Steam vía snap corre confinado con su propio $HOME
+      // (~/snap/steam/common) — ahí es donde el juego realmente lee/escribe.
+      final snapPath = '$home/snap/steam/common/.config/StardewValley/Saves';
+      if (Directory(snapPath).existsSync()) return snapPath;
+      return '$home/.config/StardewValley/Saves';
+    }
+    if (Platform.isMacOS) {
       final home = Platform.environment['HOME'];
       if (home == null) return null;
       return '$home/.config/StardewValley/Saves';

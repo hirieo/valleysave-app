@@ -1,19 +1,32 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
+
 import '../models/backup_entry.dart';
+import 'save_service.dart';
 import 'transfer_service.dart';
 
-/// Listar/restaurar respaldos LOCALES pre-swap (spec 007). Dart puro, sin
-/// dependencia de Drive — la parte de Drive vive en `DriveService`
+/// Nº máximo de respaldos AUTOMÁTICOS conservados por partida
+/// (`BackupOrigin.auto`). Los manuales nunca se borran solos (FR-005).
+const kMaxAutoBackups = 5;
+
+/// Listar/restaurar respaldos LOCALES (spec 007 + spec
+/// 001-integridad-transaccional-saves). Dart puro, sin dependencia de Drive
+/// — la parte de Drive vive en `DriveService`
 /// (`listDriveBackups`/`uploadBackupZip`/`deleteDriveBackup`), el caller
 /// (`saves_screen.dart`) hace el merge por nombre de archivo (G10).
 class BackupService {
-  /// Crea un respaldo manual sin tocar la partida. Reutiliza el mismo zip
-  /// seguro que exportación/importación y lo conserva fuera de `Saves`.
+  /// Crea un respaldo sin tocar la partida. Reutiliza el mismo zip seguro
+  /// que exportación/importación y lo conserva fuera de `Saves`.
+  /// [origin] distingue un respaldo pedido por el usuario
+  /// ([BackupOrigin.manual], default) de uno creado automáticamente por
+  /// `SaveReplaceService` antes de sobrescribir ([BackupOrigin.auto]).
   Future<BackupEntry> createBackup({
     required String saveFolderPath,
     required String folderName,
     required String backupsDir,
+    BackupOrigin origin = BackupOrigin.manual,
     DateTime? now,
   }) async {
     final exported = await TransferService().exportSave(
@@ -21,7 +34,8 @@ class BackupService {
       folderName,
     );
     final timestamp = now ?? DateTime.now();
-    final fileName = '${folderName}_backup_${_timestamp(timestamp)}.zip';
+    final tag = origin == BackupOrigin.auto ? 'autobackup' : 'backup';
+    final fileName = '${folderName}_${tag}_${_timestamp(timestamp)}.zip';
     final destinationDir = Directory(backupsDir);
     await destinationDir.create(recursive: true);
     final destination = File('$backupsDir${Platform.pathSeparator}$fileName');
@@ -41,6 +55,7 @@ class BackupService {
       timestamp: timestamp,
       localPath: destination.path,
       sizeBytes: await destination.length(),
+      origin: origin,
     );
   }
 
@@ -65,11 +80,33 @@ class BackupService {
           timestamp: parsed.timestamp,
           localPath: entity.path,
           sizeBytes: await entity.length(),
+          origin: parsed.origin,
         ),
       );
     }
     out.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     return out;
+  }
+
+  /// Borra los respaldos AUTOMÁTICOS más antiguos de [folderName] que
+  /// excedan [kMaxAutoBackups] (FR-005). Los manuales no se tocan. Se llama
+  /// tras crear un auto-backup nuevo — best-effort: un fallo al borrar no
+  /// interrumpe la operación que lo disparó.
+  Future<void> enforceAutoRetention(
+    String backupsDir,
+    String folderName,
+  ) async {
+    try {
+      final all = await listLocalBackups(backupsDir, folderName: folderName);
+      final autos = all.where((e) => e.origin == BackupOrigin.auto).toList()
+        ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+      if (autos.length <= kMaxAutoBackups) return;
+      for (final old in autos.skip(kMaxAutoBackups)) {
+        if (old.localPath != null) await deleteLocalBackup(old.localPath!);
+      }
+    } catch (_) {
+      // best-effort (FR-005 no bloquea la operación que la disparó).
+    }
   }
 
   /// Restaura [entry] sobre [savesDir] con `overwrite: true` SIEMPRE (G11) —
@@ -81,6 +118,7 @@ class BackupService {
   Future<ImportResult> restoreBackup(
     BackupEntry entry, {
     required String savesDir,
+    required String backupsDir,
     Future<void> Function(String localPath)? downloadToPath,
   }) async {
     String zipPath;
@@ -101,6 +139,7 @@ class BackupService {
       return await TransferService().importSave(
         zipPath,
         savesDir: savesDir,
+        backupsDir: backupsDir,
         overwrite: true,
       );
     } finally {
@@ -123,5 +162,34 @@ class BackupService {
     String p(int n) => n.toString().padLeft(2, '0');
     return '${value.year}${p(value.month)}${p(value.day)}-'
         '${p(value.hour)}${p(value.minute)}${p(value.second)}';
+  }
+}
+
+/// Confirma que un zip de respaldo contiene un save real ANTES de confiar en
+/// él para un rollback o una restauración — mismo criterio mínimo que
+/// `TransferService.importArchive` (SaveGameInfo parseable + archivo
+/// principal presente). Compartida por `HostSwapService` y
+/// `SaveReplaceService` (FR-002: un solo sitio, no duplicar).
+Future<bool> verifyBackupZipContents(String zipPath, String folderName) async {
+  try {
+    final bytes = await File(zipPath).readAsBytes();
+    final archive = ZipDecoder().decodeBytes(bytes);
+    ArchiveFile? info;
+    ArchiveFile? main;
+    for (final f in archive.files) {
+      final name = f.name.replaceAll('\\', '/');
+      if (name == '$folderName/SaveGameInfo') info = f;
+      if (name == '$folderName/$folderName') main = f;
+    }
+    if (info == null || main == null) return false;
+    final infoXml = utf8.decode(info.content, allowMalformed: true);
+    final parsed = SaveService.parseSaveGameInfo(
+      infoXml,
+      folderName: folderName,
+      lastModified: DateTime.now(),
+    );
+    return parsed != null;
+  } catch (_) {
+    return false;
   }
 }

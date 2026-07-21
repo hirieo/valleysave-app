@@ -315,6 +315,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get updateError => 'Error — toca para reintentar';
 
   @override
+  String get updateNeedsPermission =>
+      'Activa \"instalar apps desconocidas\" para ValleySave y toca Actualizar otra vez';
+
+  @override
   String get disconnectTitle => '¿Desconectar Drive?';
 
   @override

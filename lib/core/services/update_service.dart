@@ -51,9 +51,15 @@ class UpdateService {
     UpdateInfo info, {
     required void Function(double progress) onProgress,
     required void Function(String error) onError,
+    void Function()? onNeedsPermission,
   }) async {
     if (Platform.isAndroid) {
-      await _installAndroid(info.androidUrl, onProgress: onProgress, onError: onError);
+      await _installAndroid(
+        info.androidUrl,
+        onProgress: onProgress,
+        onError: onError,
+        onNeedsPermission: onNeedsPermission ?? () {},
+      );
     } else if (Platform.isWindows) {
       await _installWindows(info.windowsUrl, onProgress: onProgress, onError: onError);
     }
@@ -65,34 +71,64 @@ class UpdateService {
     String? apkUrl, {
     required void Function(double) onProgress,
     required void Function(String) onError,
+    required void Function() onNeedsPermission,
   }) async {
     if (apkUrl == null) { onError('APK not found in release assets'); return; }
     try {
       final tmp     = await getTemporaryDirectory();
-      final apkPath = '${tmp.path}/valleysave_update.apk';
+      final apkPath = '${tmp.path}/${apkFileNameFromUrl(apkUrl)}';
+      final apkFile = File(apkPath);
 
-      final client = http.Client();
-      try {
-        final res      = await client.send(http.Request('GET', Uri.parse(apkUrl)));
-        final total    = res.contentLength ?? 0;
-        final bytes    = <int>[];
-        var   received = 0;
-        await for (final chunk in res.stream) {
-          bytes.addAll(chunk);
-          received += chunk.length;
-          if (total > 0) onProgress((received / total).clamp(0.0, 0.99));
+      // El nombre incluye la version (viene del asset del release) — si ya
+      // se descargo entero en un intento anterior (p.ej. el sistema bloqueo
+      // la instalacion por falta de permiso), se reutiliza en vez de volver
+      // a bajar los ~60MB (2026-07-21, queja del usuario: "tengo que
+      // descargar dos veces para que instale").
+      if (!(await apkFile.exists() && await apkFile.length() > 0)) {
+        final client = http.Client();
+        try {
+          final res      = await client.send(http.Request('GET', Uri.parse(apkUrl)));
+          final total    = res.contentLength ?? 0;
+          final bytes    = <int>[];
+          var   received = 0;
+          await for (final chunk in res.stream) {
+            bytes.addAll(chunk);
+            received += chunk.length;
+            if (total > 0) onProgress((received / total).clamp(0.0, 0.99));
+          }
+          await apkFile.writeAsBytes(bytes);
+        } finally {
+          client.close();
         }
-        await File(apkPath).writeAsBytes(bytes);
-      } finally {
-        client.close();
       }
 
       const channel = MethodChannel('valleysave/apk_installer');
-      await channel.invokeMethod<void>('install', {'path': apkPath});
+      // true = el instalador del sistema se abrio; false = Android bloqueo
+      // el intento por falta del permiso "instalar apps desconocidas" y
+      // redirigio a Ajustes (ver MainActivity.kt) — sin este chequeo, ambos
+      // casos eran indistinguibles desde aqui y el dialogo se cerraba igual
+      // en silencio en los dos.
+      final launched = await channel.invokeMethod<bool>('install', {'path': apkPath}) ?? false;
+      if (!launched) {
+        onNeedsPermission();
+        return;
+      }
       onProgress(1.0); // cierra el diálogo justo cuando el instalador del sistema abre
     } catch (e) {
       onError(e.toString());
     }
+  }
+
+  /// Nombre de archivo local para el APK descargado, derivado del asset del
+  /// release (incluye version) para no colisionar entre intentos de
+  /// versiones distintas y permitir reutilizar la descarga entre reintentos
+  /// de la misma version.
+  @visibleForTesting
+  static String apkFileNameFromUrl(String url) {
+    final segments = Uri.parse(url).pathSegments;
+    return segments.isNotEmpty && segments.last.isNotEmpty
+        ? segments.last
+        : 'valleysave_update.apk';
   }
 
   // ── Windows ──────────────────────────────────────────────────────────────────

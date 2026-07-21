@@ -317,6 +317,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get updateError => 'Fehler — tippen zum Wiederholen';
 
   @override
+  String get updateNeedsPermission =>
+      'Aktiviere „Unbekannte Apps installieren“ für ValleySave und tippe erneut auf Aktualisieren';
+
+  @override
   String get disconnectTitle => 'Drive trennen?';
 
   @override

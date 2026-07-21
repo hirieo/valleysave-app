@@ -97,6 +97,7 @@
   "updateOutdatedDownload": "Не актуально · Скачать",
   "updateDownloading": "Загрузка обновления…",
   "updateError": "Ошибка — нажмите для повтора",
+  "updateNeedsPermission": "Включите «Установка неизвестных приложений» для ValleySave и снова нажмите «Обновить»",
   "disconnectTitle": "Отключить Drive?",
   "disconnectBody": "Ваши сохранения на Drive не будут удалены. Вы можете переподключиться в любое время.",
   "disconnectButton": "Отключить Drive",

@@ -7,15 +7,18 @@ import 'stardew_paths.dart';
 /// a mitad de camino — mismo patrón preparar→respaldar→sustituir→revertir
 /// que [SaveReplaceService] ya usa en escritorio.
 ///
-/// Construir el comando en Dart (en vez de interpolarlo directo en Kotlin,
-/// como hace hoy `pushSaveAsRoot`) permite testear la lógica de fases y el
+/// Construir el comando en Dart (en vez de interpolarlo directo en Kotlin
+/// o en el shell de Shizuku) permite testear la lógica de fases y el
 /// escapado de shell en el escritorio, sin dispositivo root.
 ///
-/// **NO está activado**: `ShizukuService.pushSaveAsRoot` sigue usando el
-/// `cp -rfp` plano existente. Este builder queda como candidato hasta poder
-/// verificarse en un dispositivo rooteado real (ninguna de las dos
-/// implementaciones —esta ni la de la implementación paralela de Codex—
-/// se ha probado en un dispositivo físico todavía).
+/// **Activado (2026-07-21)**: `ShizukuService.pushSaveAsRoot`/`pushSave` ya
+/// usan este script en vez del `cp -rfp` plano anterior. La construcción del
+/// script está testeada (incluida ejecución real en bash contra un
+/// directorio temporal, ver `test/android_protected_commands_test.dart`),
+/// pero la INTEGRACIÓN con `su`/Shizuku en un dispositivo real sigue SIN
+/// verificar — no hay dispositivo rooteado en este entorno de desarrollo.
+/// Probar a fondo (push normal, cambio de anfitrión, restaurar backup) antes
+/// de confiar en esta vía con saves reales.
 class AndroidProtectedCommands {
   AndroidProtectedCommands._();
 

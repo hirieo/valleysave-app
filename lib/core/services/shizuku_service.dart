@@ -1,10 +1,24 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shizuku_api/shizuku_api.dart';
 
+import 'android_protected_commands.dart';
 import 'stardew_paths.dart';
+
+final _rng = Random();
+
+/// ID corto para nombrar los temporales de una transacción (`.vs_tmp_<id>`,
+/// `.vs_rollback_<id>`) — no necesita ser criptográficamente único, solo no
+/// colisionar entre operaciones concurrentes sobre el mismo save, algo que
+/// la UI ya evita (estado `_busy` en `saves_screen.dart`). Se evita añadir
+/// el paquete `uuid` como dependencia directa por esto (solo es transitiva
+/// hoy) para algo que no lo necesita.
+String _newTransactionId() =>
+    '${DateTime.now().microsecondsSinceEpoch.toRadixString(36)}'
+    '${_rng.nextInt(0xFFFFFF).toRadixString(36)}';
 
 /// Acceso a la carpeta protegida `/Android/data` del juego usando Shizuku
 /// (ADB sin root). Patrón "puente": el shell de Shizuku solo COPIA entre la
@@ -79,13 +93,26 @@ class ShizukuService {
     }
   }
 
-  /// Empuja un save (en [src]) a la carpeta del juego usando su.
+  /// Empuja un save (en [src]) a la carpeta del juego usando su, de forma
+  /// transaccional (preparar→respaldar→sustituir→verificar→revertir ante
+  /// cualquier fallo — mismo patrón que [SaveReplaceService] en escritorio).
+  /// Antes hacía un `cp -rfp` plano en Kotlin: si el proceso moría a mitad
+  /// de la copia, el destino quedaba a medias sin ninguna forma de saberlo
+  /// ni de recuperar la versión anterior (2026-07-21, activación de
+  /// [AndroidProtectedCommands] — construido y testeado desde 2026-07-19,
+  /// pero SIN verificar hasta ahora en un dispositivo rooteado real).
   Future<bool> pushSaveAsRoot(String src, String name) async {
     if (!_isSafeSaveName(name)) return false;
+    final script = AndroidProtectedCommands.replace(
+      src: src,
+      folderName: name,
+      transactionId: _newTransactionId(),
+    );
+    if (script == null) return false;
     try {
       return (await _native.invokeMethod<bool>(
-            'pushSaveAsRoot',
-            {'src': src, 'name': name},
+            'runProtectedScriptAsRoot',
+            {'script': script},
           )) ??
           false;
     } catch (_) {
@@ -144,23 +171,42 @@ class ShizukuService {
     return dir.path;
   }
 
-  /// Empuja `game_out/<folderName>` al juego y verifica que llegó.
+  /// Empuja `game_out/<folderName>` al juego de forma transaccional (mismo
+  /// motivo y patrón que [pushSaveAsRoot] — antes un `cp -rfp` plano sin
+  /// respaldo ni rollback; 2026-07-21, SIN verificar en dispositivo real).
+  /// Shizuku ejecuta el script a través de su propio shell (`_api.runCommand`,
+  /// ya probado con comandos compuestos en [pullSaves]/[pushSave] anteriores),
+  /// no requiere el canal nativo `su` que usa la vía root.
   Future<bool> pushSave(String folderName) async {
     if (!_isSafeSaveName(folderName)) return false;
     final ext = await getExternalStorageDirectory();
     final src = '${ext!.path}/game_out/$folderName';
-    // El nombre de save (o la ruta que lo contiene) puede llegar de un
-    // compartido ajeno / zip importado — se escapa siempre antes de entrar
-    // en un shell root, nunca se interpola crudo (defensa contra inyección).
-    await _api.runCommand('cp -rfp ${_shellQuote(src)} ${_shellQuote('$gameSavesPath/')}');
-    // Verificación: listar la carpeta destino dentro del juego.
-    final check =
-        await _api.runCommand('ls ${_shellQuote('$gameSavesPath/$folderName')}') ?? '';
-    final low = check.toLowerCase();
-    return check.trim().isNotEmpty &&
-        !low.contains('no such') &&
-        !low.contains('denied') &&
-        !low.contains('not permitted');
+    final script = AndroidProtectedCommands.replace(
+      src: src,
+      folderName: folderName,
+      transactionId: _newTransactionId(),
+    );
+    if (script == null) return false;
+    final output = await _api.runCommand(script) ?? '';
+    return output.contains('"phase":"completed"');
+  }
+
+  /// Borra un save de la carpeta PROTEGIDA del juego vía Shizuku (sin root).
+  ///
+  /// Necesario porque en modo Shizuku `entry.local.folderPath` apunta a la
+  /// copia puente (`pullSaves()`), nunca a la carpeta real del juego — borrar
+  /// esa copia no borra nada de verdad, y en la siguiente carga [pullSaves]
+  /// la vuelve a copiar desde el juego, haciendo que la partida "reaparezca"
+  /// (2026-07-21, bug real: el borrado unificado solo tenía rama especial
+  /// para root — `deleteLocalAsRoot` — y en Shizuku caía al borrado genérico
+  /// de `folderPath`, que en este modo es justo la copia puente).
+  Future<bool> deleteLocalViaShizuku(String folderName) async {
+    if (!_isSafeSaveName(folderName)) return false;
+    final path = '$gameSavesPath/$folderName';
+    await _api.runCommand('rm -rf ${_shellQuote(path)}');
+    // Verificación: tras un borrado real, listar esa ruta debe fallar.
+    final check = await _api.runCommand('ls -d ${_shellQuote(path)}') ?? '';
+    return check.toLowerCase().contains('no such') || check.trim().isEmpty;
   }
 }
 

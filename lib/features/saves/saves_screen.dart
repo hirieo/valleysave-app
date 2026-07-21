@@ -1478,6 +1478,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         if (Platform.isAndroid && _mode == AndroidMode.root) {
           final ok = await ShizukuService.instance.deleteLocalAsRoot(name);
           if (!ok && mounted) _snack(l10n.snackDeleteError('su rm failed'));
+        } else if (Platform.isAndroid && _mode == AndroidMode.shizuku) {
+          // `entry.local.folderPath` es la copia puente en este modo, NUNCA
+          // la carpeta real del juego — borrarla ahí no borraría nada de
+          // verdad (ver doc de deleteLocalViaShizuku).
+          final ok = await ShizukuService.instance.deleteLocalViaShizuku(name);
+          if (!ok && mounted) _snack(l10n.snackDeleteError('shizuku rm failed'));
         } else {
           final localSave = entry.local;
           if (localSave != null) {

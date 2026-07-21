@@ -404,6 +404,99 @@ void main() {
       },
     );
 
+    test(
+      'gen_<ts> duplicada tras crear (retraso de indexación de Drive) → '
+      'se fusiona a la más antigua y se trashea la propia (2026-07-21, bug '
+      'reportado: compartir con una persona "quitaba" el acceso de la '
+      'anterior porque cada subida creaba su propia carpeta duplicada)',
+      () async {
+        final localDir = await _createLocalSave(tempDir, 'Granja_1');
+        const rootId = 'root-id';
+        const saveFolderId = 'save-folder-id';
+        const manifestId = 'manifest-id';
+        var genCreated = false;
+        final trashed = <String>[];
+        final createdInGen = <String>[];
+
+        final client = _FakeAuthClient((request) async {
+          final method = request.method;
+          final path = request.url.path;
+          final query = request.url.queryParameters;
+
+          if (method == 'GET' &&
+              path.endsWith('/files') &&
+              (query['q'] ?? '').contains("name='ValleySave'")) {
+            return _jsonResponse({
+              'files': [
+                {'id': rootId},
+              ],
+            });
+          }
+          if (method == 'GET' &&
+              path.endsWith('/files') &&
+              (query['q'] ?? '').contains("name='Granja_1'") &&
+              (query['q'] ?? '').contains("'$rootId' in parents")) {
+            return _jsonResponse({
+              'files': [
+                {'id': saveFolderId},
+              ],
+            });
+          }
+          if (method == 'GET' &&
+              path.endsWith('/files') &&
+              (query['q'] ?? '').contains('gen_')) {
+            if (!genCreated) return _jsonResponse({'files': []});
+            // Recheck tras crear: el indexado de Drive ya "ve" dos
+            // carpetas — la que ya existía (otra subida/dispositivo) y la
+            // que acabamos de crear nosotros mismos.
+            return _jsonResponse({
+              'files': [
+                {'id': 'gen-old-id'},
+                {'id': 'gen-new-id'},
+              ],
+            });
+          }
+          if (method == 'POST' &&
+              path.endsWith('/drive/v3/files') &&
+              !path.contains('/upload/')) {
+            genCreated = true;
+            return _jsonResponse({'id': 'gen-new-id'});
+          }
+          if (method == 'PATCH' && path.endsWith('/files/gen-new-id')) {
+            trashed.add('gen-new-id');
+            return _jsonResponse({'id': 'gen-new-id'});
+          }
+          if (method == 'POST' && path.contains('/upload/drive/v3/files')) {
+            final meta = await _multipartMetadata(request);
+            final parents = (meta['parents'] as List).cast<String>();
+            if (meta['name'] == 'manifest.json') {
+              return _jsonResponse({'id': manifestId});
+            }
+            expect(parents, ['gen-old-id']); // usa la superviviente
+            createdInGen.add(meta['name'] as String);
+            return _jsonResponse({'id': 'file-${meta['name']}'});
+          }
+          if (method == 'GET' &&
+              path.endsWith('/files') &&
+              (query['q'] ?? '').contains("name='manifest.json'")) {
+            return _jsonResponse({'files': []});
+          }
+          if (method == 'GET' &&
+              path.endsWith('/files') &&
+              (query['q'] ?? '').contains("'$saveFolderId' in parents") &&
+              (query['q'] ?? '').contains('mimeType')) {
+            return _jsonResponse({'files': []});
+          }
+          fail('Request inesperada: $method $path?${request.url.query}');
+        });
+
+        await DriveService(client).uploadSave(localDir.path, 'Granja_1');
+
+        expect(trashed, ['gen-new-id']);
+        expect(createdInGen, containsAll(['SaveGameInfo', 'Granja_1']));
+      },
+    );
+
     test('manifest.json ya existe → lo actualiza (update, no create)', () async {
       final localDir = await _createLocalSave(tempDir, 'Granja_1');
       const rootId = 'root-id';

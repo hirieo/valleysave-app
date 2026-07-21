@@ -333,7 +333,45 @@ class DriveService {
       ..mimeType = _folderMime
       ..parents = [parentId];
     final created = await _api.files.create(folder, $fields: 'id');
-    return created.id!;
+    return _dedupeJustCreated(name, parentId, created.id!);
+  }
+
+  /// `files.list` de Drive tiene retraso de indexación tras un `create()` —
+  /// si esta subcarpeta ya se subió antes en la misma sesión (o desde otro
+  /// dispositivo) y esa carpeta previa aún no aparecía en el listado de
+  /// arriba, ambas llamadas ven "no existe" y crean la suya propia, dejando
+  /// dos carpetas con el mismo nombre (2026-07-21, bug reportado: compartir
+  /// con una persona "quitaba" el acceso de la anterior porque cada subida
+  /// apuntaba a una carpeta distinta — confirmado por el usuario: dos
+  /// carpetas duplicadas en Drive, sin que hubiera dos dispositivos a la
+  /// vez). Se relista tras crear; si ya hay más de una, se conserva la más
+  /// antigua y se manda a la papelera la sobrante para converger a una sola.
+  Future<String> _dedupeJustCreated(
+    String name,
+    String parentId,
+    String justCreatedId,
+  ) async {
+    final recheck = await _api.files.list(
+      q: "name='$name' and mimeType='$_folderMime' and '$parentId' in parents and trashed=false",
+      spaces: 'drive',
+      orderBy: 'createdTime',
+      $fields: 'files(id)',
+    );
+    final all = recheck.files ?? [];
+    if (all.length <= 1) return justCreatedId;
+
+    final oldestId = all.first.id!;
+    for (final f in all.skip(1)) {
+      if (f.id == null) continue;
+      try {
+        await _api.files.update(drive.File()..trashed = true, f.id!, $fields: 'id');
+      } catch (_) {
+        // Best-effort: si falla el borrado de un duplicado, no bloquea el
+        // resto — se reintentará solo la próxima vez que esta carpeta se
+        // vuelva a tocar.
+      }
+    }
+    return oldestId;
   }
 
   /// Sube un save a ValleySave/[folderName]/ mediante el modelo de

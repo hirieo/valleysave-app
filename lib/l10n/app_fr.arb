@@ -93,6 +93,7 @@
   "updateOutdatedDownload": "Pas à jour · Télécharger",
   "updateDownloading": "Téléchargement de la mise à jour…",
   "updateError": "Erreur — appuyer pour réessayer",
+  "updateNeedsPermission": "Active « installer des applications inconnues » pour ValleySave, puis appuie de nouveau sur Mettre à jour",
   "disconnectTitle": "Déconnecter Drive?",
   "disconnectBody": "Vos sauvegardes sur Drive ne seront pas supprimées. Vous pouvez vous reconnecter à tout moment.",
   "disconnectButton": "Déconnecter Drive",

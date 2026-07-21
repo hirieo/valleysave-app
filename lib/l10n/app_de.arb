@@ -93,6 +93,7 @@
   "updateOutdatedDownload": "Nicht aktuell · Herunterladen",
   "updateDownloading": "Update wird heruntergeladen…",
   "updateError": "Fehler — tippen zum Wiederholen",
+  "updateNeedsPermission": "Aktiviere „Unbekannte Apps installieren“ für ValleySave und tippe erneut auf Aktualisieren",
   "disconnectTitle": "Drive trennen?",
   "disconnectBody": "Ihre Speicherstände auf Drive werden nicht gelöscht. Sie können sich jederzeit erneut verbinden.",
   "disconnectButton": "Drive trennen",

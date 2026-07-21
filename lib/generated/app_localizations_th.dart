@@ -308,6 +308,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get updateError => 'ข้อผิดพลาด — แตะเพื่อลองใหม่';
 
   @override
+  String get updateNeedsPermission =>
+      'เปิดใช้งาน \"ติดตั้งแอปที่ไม่รู้จัก\" สำหรับ ValleySave แล้วแตะอัปเดตอีกครั้ง';
+
+  @override
   String get disconnectTitle => 'ตัดการเชื่อมต่อ Drive?';
 
   @override

@@ -99,6 +99,7 @@
   "updateOutdatedDownload": "Non aggiornato · Scarica",
   "updateDownloading": "Download aggiornamento…",
   "updateError": "Errore — tocca per riprovare",
+  "updateNeedsPermission": "Attiva \"installa app sconosciute\" per ValleySave e tocca di nuovo Aggiorna",
   "disconnectTitle": "Disconnettere Drive?",
   "disconnectBody": "I tuoi salvataggi su Drive non verranno eliminati. Puoi riconnetterti in qualsiasi momento.",
   "disconnectButton": "Disconnetti Drive",

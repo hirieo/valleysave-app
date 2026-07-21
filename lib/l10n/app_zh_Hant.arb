@@ -99,6 +99,7 @@
   "updateOutdatedDownload": "不是最新 · 下載",
   "updateDownloading": "正在下載更新…",
   "updateError": "錯誤 — 點擊重試",
+  "updateNeedsPermission": "為 ValleySave 啟用「安裝未知應用程式」，然後再次點擊「更新」",
   "disconnectTitle": "斷開 Drive 連接？",
   "disconnectBody": "您在 Drive 上的存檔不會被刪除。您可以隨時重新連接。",
   "disconnectButton": "斷開 Drive 連接",

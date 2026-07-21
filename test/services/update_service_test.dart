@@ -94,4 +94,29 @@ void main() {
       expect(urls.windows, 'https://example.com/windows.zip');
     });
   });
+
+  group('UpdateService.apkFileNameFromUrl', () {
+    test('usa el nombre del asset para que cada versión tenga su archivo', () {
+      expect(
+        UpdateService.apkFileNameFromUrl(
+          'https://github.com/hirieo/valleysave-app/releases/download/v0.3.0/ValleySave-v0.3.0.apk',
+        ),
+        'ValleySave-v0.3.0.apk',
+      );
+    });
+
+    test('distingue versiones distintas para no reutilizar un APK viejo', () {
+      final a = UpdateService.apkFileNameFromUrl(
+        'https://example.com/releases/v0.3.0/ValleySave-v0.3.0.apk',
+      );
+      final b = UpdateService.apkFileNameFromUrl(
+        'https://example.com/releases/v0.3.1/ValleySave-v0.3.1.apk',
+      );
+      expect(a, isNot(equals(b)));
+    });
+
+    test('cae a un nombre por defecto si la URL no tiene segmentos', () {
+      expect(UpdateService.apkFileNameFromUrl('https://example.com'), 'valleysave_update.apk');
+    });
+  });
 }

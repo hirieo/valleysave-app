@@ -673,6 +673,12 @@ abstract class AppLocalizations {
   /// **'Error — tap to retry'**
   String get updateError;
 
+  /// No description provided for @updateNeedsPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable \"install unknown apps\" for ValleySave, then tap Update again'**
+  String get updateNeedsPermission;
+
   /// No description provided for @disconnectTitle.
   ///
   /// In en, this message translates to:

@@ -93,6 +93,7 @@
   "updateOutdatedDownload": "Desatualizado · Baixar",
   "updateDownloading": "Baixando atualização…",
   "updateError": "Erro — toque para tentar novamente",
+  "updateNeedsPermission": "Ative \"instalar apps desconhecidos\" para o ValleySave e toque em Atualizar novamente",
   "disconnectTitle": "Desconectar Drive?",
   "disconnectBody": "Seus saves no Drive não serão deletados. Você pode reconectar quando quiser.",
   "disconnectButton": "Desconectar Drive",

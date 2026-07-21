@@ -311,6 +311,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateError => 'Error — tap to retry';
 
   @override
+  String get updateNeedsPermission =>
+      'Enable \"install unknown apps\" for ValleySave, then tap Update again';
+
+  @override
   String get disconnectTitle => 'Disconnect Drive?';
 
   @override

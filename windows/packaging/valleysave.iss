@@ -2,8 +2,13 @@
 ; Compilar: ISCC.exe windows\packaging\valleysave.iss
 ; Requiere que `flutter build windows --release` ya se haya ejecutado.
 
+; MyAppVersion se pasa desde fuera con /DMyAppVersion=X.Y.Z (ver
+; build-installer.ps1, que lo lee de pubspec.yaml) — el valor de aquí es
+; solo un fallback para compilar el .iss suelto sin ese script.
+#ifndef MyAppVersion
+  #define MyAppVersion "0.0.0-dev"
+#endif
 #define MyAppName "ValleySave"
-#define MyAppVersion "0.3.0"
 #define MyAppPublisher "Hirieo"
 #define MyAppURL "https://github.com/hirieo/valleysave-app"
 #define MyAppExeName "valleysave.exe"
@@ -19,7 +24,16 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}/releases
-DefaultDirName={autopf}\{#MyAppName}
+; Carpeta POR USUARIO ({localappdata}, no Program Files) a propósito
+; (2026-07-21, corrección): el autoactualizador (`UpdateService._installWindows`)
+; hace `Expand-Archive` en la carpeta de la app SIN pedir elevación — si esa
+; carpeta fuera Program Files, la actualización silenciosa fallaba siempre
+; (acceso denegado, sin aviso claro al usuario). Con una carpeta de usuario
+; nunca hace falta UAC, ni para instalar ni para actualizar. Mismo patrón que
+; Chrome/Discord/VS Code (instalador de usuario) para permitir auto-update
+; silencioso.
+DefaultDirName={localappdata}\Programs\{#MyAppName}
+PrivilegesRequired=lowest
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\..\dist

@@ -93,5 +93,35 @@ void main() {
 
       expect(urls.windows, 'https://example.com/windows.zip');
     });
+
+    test(
+      'selecciona el tarball de Linux — antes no había NINGÚN campo linux '
+      '(2026-07-21, regresión: installUpdate no hacía nada en Linux)',
+      () {
+        final urls = UpdateService.selectAssetUrls([
+          {
+            'name': 'valleysave-linux-x64.tar.gz',
+            'browser_download_url': 'https://example.com/linux.tar.gz',
+          },
+        ]);
+
+        expect(urls.linux, 'https://example.com/linux.tar.gz');
+      },
+    );
+
+    test('el .deb de Linux NUNCA se selecciona como asset autoactualizable', () {
+      final urls = UpdateService.selectAssetUrls([
+        {
+          'name': 'valleysave_0.3.0_amd64.deb',
+          'browser_download_url': 'https://example.com/x.deb',
+        },
+        {
+          'name': 'valleysave-linux-x64.tar.gz',
+          'browser_download_url': 'https://example.com/linux.tar.gz',
+        },
+      ]);
+
+      expect(urls.linux, 'https://example.com/linux.tar.gz');
+    });
   });
 }

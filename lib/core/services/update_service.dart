@@ -12,10 +12,12 @@ class UpdateInfo {
     required this.version,
     this.windowsUrl,
     this.androidUrl,
+    this.linuxUrl,
   });
   final String version;
   final String? windowsUrl;
   final String? androidUrl;
+  final String? linuxUrl;
 }
 
 class UpdateService {
@@ -39,7 +41,12 @@ class UpdateService {
       if (tag.isEmpty || !isNewer(tag, info.version)) return null;
 
       final urls = selectAssetUrls(data['assets'] as List<dynamic>? ?? []);
-      return UpdateInfo(version: tag, windowsUrl: urls.windows, androidUrl: urls.android);
+      return UpdateInfo(
+        version: tag,
+        windowsUrl: urls.windows,
+        androidUrl: urls.android,
+        linuxUrl: urls.linux,
+      );
     } catch (_) {
       return null;
     }
@@ -56,6 +63,8 @@ class UpdateService {
       await _installAndroid(info.androidUrl, onProgress: onProgress, onError: onError);
     } else if (Platform.isWindows) {
       await _installWindows(info.windowsUrl, onProgress: onProgress, onError: onError);
+    } else if (Platform.isLinux) {
+      await _installLinux(info.linuxUrl, onProgress: onProgress, onError: onError);
     }
   }
 
@@ -167,6 +176,86 @@ class UpdateService {
     }
   }
 
+  // ── Linux ────────────────────────────────────────────────────────────────────
+
+  /// Antes no había NINGUNA rama para Linux aquí — `installUpdate` no hacía
+  /// nada (ni onProgress ni onError), y el diálogo de descarga se quedaba
+  /// colgado en 0% para siempre (2026-07-21, bug real reportado: Linux no
+  /// bajaba la actualización de 0.2.2 a 0.3.0).
+  ///
+  /// Dos formas de instalación en Linux, tratadas distinto:
+  /// - Portable (tarball extraído a mano): autoactualizar reemplazando en
+  ///   sitio es seguro, nadie más rastrea esos archivos.
+  /// - `.deb` (vive en /usr/lib/valleysave, propiedad de root, registrado
+  ///   por dpkg): NO se autoactualiza — sobrescribirlo como usuario normal
+  ///   fallaría por permisos y, aunque no fallara, desincronizaría el
+  ///   registro de dpkg. Se avisa al usuario para que actualice con su
+  ///   gestor de paquetes.
+  static Future<void> _installLinux(
+    String? tarUrl, {
+    required void Function(double) onProgress,
+    required void Function(String) onError,
+  }) async {
+    if (tarUrl == null) { onError('Linux tarball not found in release assets'); return; }
+
+    final exe = Platform.resolvedExecutable;
+    if (exe.startsWith('/usr/')) {
+      onError(
+        'Instalado vía paquete .deb — actualiza con tu gestor de paquetes '
+        '(apt/Software), no se puede autoactualizar.',
+      );
+      return;
+    }
+
+    try {
+      final tmp     = await getTemporaryDirectory();
+      final tarPath = '${tmp.path}/valleysave_update.tar.gz';
+
+      final client = http.Client();
+      try {
+        final res      = await client.send(http.Request('GET', Uri.parse(tarUrl)));
+        final total    = res.contentLength ?? 0;
+        final bytes    = <int>[];
+        var   received = 0;
+        await for (final chunk in res.stream) {
+          bytes.addAll(chunk);
+          received += chunk.length;
+          if (total > 0) onProgress((received / total).clamp(0.0, 0.99));
+        }
+        await File(tarPath).writeAsBytes(bytes);
+        onProgress(1.0);
+      } finally {
+        client.close();
+      }
+
+      // Linux no bloquea un binario en ejecución (se puede sobrescribir el
+      // archivo mientras corre) — a diferencia de Windows no hace falta
+      // reintentar por lock, solo esperar a que el proceso muera para no
+      // pisar una extracción a medias. `--strip-components=1` porque el
+      // tarball trae `bundle/` como carpeta raíz; se extrae SU CONTENIDO
+      // directo en appDir, no una carpeta anidada.
+      final appDir     = File(exe).parent.path;
+      final scriptPath = '${tmp.path}/vs_update.sh';
+      final logPath    = '${tmp.path}/vs_update.log';
+      await File(scriptPath).writeAsString('''
+#!/bin/sh
+while kill -0 $pid 2>/dev/null; do sleep 0.3; done
+tar -xzf "$tarPath" -C "$appDir" --strip-components=1 > "$logPath" 2>&1
+"$exe" &
+''');
+      await Process.run('chmod', ['+x', scriptPath]);
+      await Process.start(
+        '/bin/sh',
+        [scriptPath],
+        mode: ProcessStartMode.detached,
+      );
+
+      exit(0);
+    } catch (e) {
+      onError(e.toString());
+    }
+  }
+
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
   /// Un release trae ZIPs de varias plataformas (Windows, macOS) — filtrar
@@ -175,18 +264,22 @@ class UpdateService {
   /// (2026-07-21, corrección: antes podía instalar el zip de macOS en
   /// Windows dependiendo del orden de subida de los assets del release).
   @visibleForTesting
-  static ({String? windows, String? android}) selectAssetUrls(
+  static ({String? windows, String? android, String? linux}) selectAssetUrls(
     List<dynamic> assets,
   ) {
     String? windowsUrl;
     String? androidUrl;
+    String? linuxUrl;
     for (final asset in assets) {
       final name = (asset['name'] as String? ?? '').toLowerCase();
       final url  = asset['browser_download_url'] as String? ?? '';
       if (name.endsWith('.zip') && name.contains('windows')) windowsUrl = url;
       if (name.endsWith('.apk')) androidUrl = url;
+      // Deliberadamente NO el .deb — ese lo gestiona apt, no el
+      // autoactualizador (ver _installLinux).
+      if (name.endsWith('.tar.gz') && name.contains('linux')) linuxUrl = url;
     }
-    return (windows: windowsUrl, android: androidUrl);
+    return (windows: windowsUrl, android: androidUrl, linux: linuxUrl);
   }
 
   @visibleForTesting

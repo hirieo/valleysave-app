@@ -1,10 +1,12 @@
 package com.hirieo.valleysave
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import androidx.core.content.FileProvider
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -40,6 +42,26 @@ class MainActivity : FlutterActivity() {
                 if (call.method == "install") {
                     val path = call.argument<String>("path")
                     if (path == null) { result.error("NO_PATH", "No path provided", null); return@setMethodCallHandler }
+                    // Sin este permiso, startActivity(ACTION_VIEW) sobre un APK no
+                    // lanza excepcion pero tampoco abre el instalador en muchos
+                    // fabricantes (Xiaomi, Samsung...) - queda en silencio, sin
+                    // pantalla ni error, indistinguible de un exito real desde Dart
+                    // (2026-07-21, bug reportado: "no veo que salga nada"). Se
+                    // comprueba explicitamente y se manda a Ajustes si falta.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                        !packageManager.canRequestPackageInstalls()
+                    ) {
+                        try {
+                            val settingsIntent = Intent(
+                                Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                                Uri.parse("package:$packageName"),
+                            ).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+                            startActivity(settingsIntent)
+                        } catch (_: Exception) {
+                        }
+                        result.success(false)
+                        return@setMethodCallHandler
+                    }
                     try {
                         val file = File(path)
                         val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
@@ -49,7 +71,7 @@ class MainActivity : FlutterActivity() {
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         startActivity(intent)
-                        result.success(null)
+                        result.success(true)
                     } catch (e: Exception) {
                         result.error("INSTALL_ERROR", e.message, null)
                     }

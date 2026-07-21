@@ -306,6 +306,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get updateError => '오류 — 다시 시도하려면 탭하세요';
 
   @override
+  String get updateNeedsPermission =>
+      'ValleySave에 대해 \'알 수 없는 앱 설치\'를 허용한 후 업데이트를 다시 눌러주세요';
+
+  @override
   String get disconnectTitle => 'Drive 연결을 끊으시겠습니까?';
 
   @override

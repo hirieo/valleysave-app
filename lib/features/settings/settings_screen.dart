@@ -170,6 +170,15 @@ class _SettingsScreenState extends State<SettingsScreen>
           setState(() => _updateState = _UpdateState.error);
         }
       },
+      onNeedsPermission: () {
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true).maybePop();
+          setState(() => _updateState = _UpdateState.available);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.updateNeedsPermission)),
+          );
+        }
+      },
     );
     // Android: invokeMethod retornó → instalador del sistema abierto o error ya manejado
     if (mounted && _updateState == _UpdateState.downloading) {

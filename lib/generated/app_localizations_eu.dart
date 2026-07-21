@@ -316,6 +316,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get updateError => 'Akatsa — sakatu berriz saiatzen';
 
   @override
+  String get updateNeedsPermission =>
+      'Gaitu \"ezezaguneko aplikazioak instalatzea\" ValleySaverentzat eta sakatu Eguneratu berriro';
+
+  @override
   String get disconnectTitle => 'Drive deskonektatu?';
 
   @override

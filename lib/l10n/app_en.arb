@@ -99,6 +99,7 @@
   "updateOutdatedDownload": "Not up to date · Download",
   "updateDownloading": "Downloading update…",
   "updateError": "Error — tap to retry",
+  "updateNeedsPermission": "Enable \"install unknown apps\" for ValleySave, then tap Update again",
   "disconnectTitle": "Disconnect Drive?",
   "disconnectBody": "This will sign {email} out. Your saves on Drive won't be deleted, you can reconnect anytime.",
   "@disconnectBody": {

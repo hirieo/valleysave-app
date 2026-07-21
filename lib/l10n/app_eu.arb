@@ -99,6 +99,7 @@
   "updateOutdatedDownload": "Ez dago eguneraturik · Deskargatu",
   "updateDownloading": "Eguneratzearen deskarga egiten…",
   "updateError": "Akatsa — sakatu berriz saiatzen",
+  "updateNeedsPermission": "Gaitu \"ezezaguneko aplikazioak instalatzea\" ValleySaverentzat eta sakatu Eguneratu berriro",
   "disconnectTitle": "Drive deskonektatu?",
   "disconnectBody": "Drive-eko zure gordetzeek ez dira ezabatuko. Noiznahi berkonektatu zaitezke.",
   "disconnectButton": "Drive deskonektatu",

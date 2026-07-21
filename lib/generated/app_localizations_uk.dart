@@ -315,6 +315,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get updateError => 'Помилка — натисніть для повтору';
 
   @override
+  String get updateNeedsPermission =>
+      'Увімкніть «Встановлення невідомих застосунків» для ValleySave і знову натисніть «Оновити»';
+
+  @override
   String get disconnectTitle => 'Відключити Drive?';
 
   @override

@@ -38,16 +38,8 @@ class UpdateService {
       final tag  = (data['tag_name'] as String? ?? '').replaceFirst('v', '');
       if (tag.isEmpty || !isNewer(tag, info.version)) return null;
 
-      String? windowsUrl;
-      String? androidUrl;
-      for (final asset in (data['assets'] as List<dynamic>? ?? [])) {
-        final name = (asset['name'] as String? ?? '').toLowerCase();
-        final url  = asset['browser_download_url'] as String? ?? '';
-        if (name.endsWith('.zip')) windowsUrl = url;
-        if (name.endsWith('.apk')) androidUrl = url;
-      }
-
-      return UpdateInfo(version: tag, windowsUrl: windowsUrl, androidUrl: androidUrl);
+      final urls = selectAssetUrls(data['assets'] as List<dynamic>? ?? []);
+      return UpdateInfo(version: tag, windowsUrl: urls.windows, androidUrl: urls.android);
     } catch (_) {
       return null;
     }
@@ -176,6 +168,26 @@ class UpdateService {
   }
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
+
+  /// Un release trae ZIPs de varias plataformas (Windows, macOS) — filtrar
+  /// solo por ".zip" se queda con el ÚLTIMO que encuentre en el array, sin
+  /// mirar la plataforma. Exigir "windows"/".apk" en el nombre lo desambigua
+  /// (2026-07-21, corrección: antes podía instalar el zip de macOS en
+  /// Windows dependiendo del orden de subida de los assets del release).
+  @visibleForTesting
+  static ({String? windows, String? android}) selectAssetUrls(
+    List<dynamic> assets,
+  ) {
+    String? windowsUrl;
+    String? androidUrl;
+    for (final asset in assets) {
+      final name = (asset['name'] as String? ?? '').toLowerCase();
+      final url  = asset['browser_download_url'] as String? ?? '';
+      if (name.endsWith('.zip') && name.contains('windows')) windowsUrl = url;
+      if (name.endsWith('.apk')) androidUrl = url;
+    }
+    return (windows: windowsUrl, android: androidUrl);
+  }
 
   @visibleForTesting
   static bool isNewer(String latest, String current) {

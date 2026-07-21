@@ -316,6 +316,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get updateError => 'Ошибка — нажмите для повтора';
 
   @override
+  String get updateNeedsPermission =>
+      'Включите «Установка неизвестных приложений» для ValleySave и снова нажмите «Обновить»';
+
+  @override
   String get disconnectTitle => 'Отключить Drive?';
 
   @override

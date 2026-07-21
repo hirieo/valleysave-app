@@ -99,6 +99,7 @@
   "updateOutdatedDownload": "最新ではありません · ダウンロード",
   "updateDownloading": "アップデートをダウンロード中…",
   "updateError": "エラー — タップして再試行",
+  "updateNeedsPermission": "ValleySaveの「不明なアプリのインストール」を有効にしてから、もう一度「更新」をタップしてください",
   "disconnectTitle": "Driveを切断しますか?",
   "disconnectBody": "Drive上のセーブは削除されません。いつでも再接続できます。",
   "disconnectButton": "Driveを切断",

@@ -99,6 +99,7 @@
   "updateOutdatedDownload": "ไม่เป็นปัจจุบัน · ดาวน์โหลด",
   "updateDownloading": "กำลังดาวน์โหลดการอัปเดต…",
   "updateError": "ข้อผิดพลาด — แตะเพื่อลองใหม่",
+  "updateNeedsPermission": "เปิดใช้งาน \"ติดตั้งแอปที่ไม่รู้จัก\" สำหรับ ValleySave แล้วแตะอัปเดตอีกครั้ง",
   "disconnectTitle": "ตัดการเชื่อมต่อ Drive?",
   "disconnectBody": "บันทึกของคุณใน Drive จะไม่ถูกลบ คุณสามารถเชื่อมต่อใหม่ได้ทุกเมื่อ",
   "disconnectButton": "ตัดการเชื่อมต่อ Drive",

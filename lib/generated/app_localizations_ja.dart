@@ -306,6 +306,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get updateError => 'エラー — タップして再試行';
 
   @override
+  String get updateNeedsPermission =>
+      'ValleySaveの「不明なアプリのインストール」を有効にしてから、もう一度「更新」をタップしてください';
+
+  @override
   String get disconnectTitle => 'Driveを切断しますか?';
 
   @override

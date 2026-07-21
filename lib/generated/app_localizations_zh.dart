@@ -305,6 +305,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateError => '错误 — 点击重试';
 
   @override
+  String get updateNeedsPermission => '为 ValleySave 启用\"安装未知应用\"，然后再次点击\"更新\"';
+
+  @override
   String get disconnectTitle => '断开连接 Drive？';
 
   @override
@@ -2178,6 +2181,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get updateError => '錯誤 — 點擊重試';
+
+  @override
+  String get updateNeedsPermission => '為 ValleySave 啟用「安裝未知應用程式」，然後再次點擊「更新」';
 
   @override
   String get disconnectTitle => '斷開 Drive 連接？';

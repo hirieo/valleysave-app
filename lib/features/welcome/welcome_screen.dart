@@ -226,6 +226,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           _snack('${AppLocalizations.of(context)!.error}: $e');
         }
       },
+      onNeedsPermission: () {
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true).maybePop();
+          setState(() => _updateDownloading = false);
+          _snack(AppLocalizations.of(context)!.updateNeedsPermission);
+        }
+      },
     );
     if (mounted && _updateDownloading) {
       setState(() => _updateDownloading = false);

@@ -319,6 +319,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get updateError => 'Erreur — appuyer pour réessayer';
 
   @override
+  String get updateNeedsPermission =>
+      'Active « installer des applications inconnues » pour ValleySave, puis appuie de nouveau sur Mettre à jour';
+
+  @override
   String get disconnectTitle => 'Déconnecter Drive?';
 
   @override

@@ -86,14 +86,20 @@ class MainActivity : FlutterActivity() {
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
-                    "pushSaveAsRoot" -> {
-                        val src  = call.argument<String>("src")
-                        val name = call.argument<String>("name")
-                        if (src == null || name == null || !isSafeSaveName(name)) {
+                    "runProtectedScriptAsRoot" -> {
+                        // El script ya viene completo desde Dart
+                        // (AndroidProtectedCommands.replace) — preparar,
+                        // respaldar, sustituir, verificar, revertir ante
+                        // cualquier fallo (trap EXIT). Antes esto era un
+                        // "cp -rfp" plano sin respaldo ni rollback
+                        // (2026-07-21, activación — SIN verificar todavía
+                        // en un dispositivo rooteado real, ver Dart).
+                        val script = call.argument<String>("script")
+                        if (script == null) {
                             result.error("BAD_ARGS", null, null); return@setMethodCallHandler
                         }
                         Thread {
-                            val ok = runSu("cp -rfp ${shellQuote(src)} ${shellQuote("$SAVES_PATH/$name")}")
+                            val ok = runSu(script)
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }

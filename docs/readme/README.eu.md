@@ -6,7 +6,7 @@
 
 **Sinkronizatu zure Stardew Valley partidak Windows, macOS, Linux eta Android artean — zure Google Drive propioarekin.**
 
-Hirugarrenen zerbitzaririk gabe. Harpidetzarik gabe. Jarraipenik gabe. Zure partidak ez dira inoiz zure Google kontutik ateratzen.
+Hirugarrenen zerbitzurik gabe. Harpidetzarik gabe. Jarraipenik gabe. Zure partidak ez dira inoiz zure Google kontutik ateratzen.
 
 [![Azken bertsioa](https://img.shields.io/github/v/release/hirieo/valleysave-app?label=Deskargatu&color=brightgreen)](https://github.com/hirieo/valleysave-app/releases/latest)
 [![Deskargak](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)

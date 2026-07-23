@@ -42,7 +42,7 @@ Section: games
 Priority: optional
 Architecture: $ARCH
 Maintainer: ValleySave
-Depends: libgtk-3-0, libsecret-1-0
+Depends: libgtk-3-0 | libgtk-3-0t64, libsecret-1-0
 Description: Sincroniza tus partidas de Stardew Valley vía Google Drive
  ValleySave copia tus saves de Stardew Valley entre dispositivos usando
  tu propio Google Drive, sin servidores intermediarios.

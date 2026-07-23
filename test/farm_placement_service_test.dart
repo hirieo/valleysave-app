@@ -14,6 +14,17 @@ void main() {
       expect(VanillaFarmSurfaceRepository.forWhichFarm(999), isNull);
     });
 
+    test('loads Meadowlands from its official textual save identifier', () {
+      expect(
+        VanillaFarmSurfaceRepository.forSaveValue('MeadowlandsFarm')?.name,
+        'Farm_Ranching',
+      );
+      expect(
+        VanillaFarmSurfaceRepository.forSaveValue('7')?.name,
+        'Farm_Ranching',
+      );
+    });
+
     test('Riverland exposes bounds, water, fishing and walkability', () {
       final riverland = VanillaFarmSurfaceRepository.forWhichFarm(1)!;
       expect(riverland.name, 'Farm_Fishing');

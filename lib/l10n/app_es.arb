@@ -509,7 +509,7 @@
   "makeHostDeleteOriginalNoBackupBody": "Sin conexión con Drive: no quedará ningún respaldo. Solo se borrará la copia local de este equipo.",
   "makeHostUploadAndDelete": "Subir y borrar",
   "hostSwapErrInvalid": "Esta partida tiene una estructura inesperada. No se cambió nada.",
-  "hostSwapErrNoSpace": "No hay espacio libre en la granja para reubicar objetos. No se cambió nada.",
+  "hostSwapErrNoSpace": "No se encontró una posición segura con puerta, buzón y camino accesibles. No se cambió nada.",
   "hostSwapErrWrite": "No se pudo escribir la partida nueva (disco/permisos). No se cambió nada.",
   "hostSwapErrValidation": "La verificación de la partida nueva falló, así que se descartó. La original está intacta.",
   "exportAction": "Exportar",

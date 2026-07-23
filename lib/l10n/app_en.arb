@@ -864,7 +864,7 @@
     }
   },
   "hostSwapErrInvalid": "This save has an unexpected structure. Nothing was changed.",
-  "hostSwapErrNoSpace": "No free space on the farm to relocate objects. Nothing was changed.",
+  "hostSwapErrNoSpace": "No safe position with an accessible door, mailbox, and path was found. Nothing was changed.",
   "hostSwapErrWrite": "Could not write the new save (disk/permissions). Nothing was changed.",
   "hostSwapErrValidation": "Verification of the new save failed, so it was discarded. The original is intact."
 }

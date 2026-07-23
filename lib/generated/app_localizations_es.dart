@@ -1922,7 +1922,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hostSwapErrNoSpace =>
-      'No hay espacio libre en la granja para reubicar objetos. No se cambió nada.';
+      'No se encontró una posición segura con puerta, buzón y camino accesibles. No se cambió nada.';
 
   @override
   String get hostSwapErrWrite =>

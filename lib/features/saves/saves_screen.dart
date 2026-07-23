@@ -2226,7 +2226,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         Platform.isAndroid &&
         (_mode == AndroidMode.root || _mode == AndroidMode.shizuku);
     if (androidBridge && _mode == AndroidMode.shizuku && !_shizukuReady) {
-      if (mounted) _snack(l10n.activateShizuku);
+      if (mounted) await _showHostSwapErrorDialog(l10n.activateShizuku);
       return;
     }
 
@@ -2236,7 +2236,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       targetUniqueId: target.uniqueId,
     );
     if (!analysis.ok) {
-      if (mounted) _snack(_hostSwapErrorMessage(analysis.error));
+      if (mounted) {
+        await _showHostSwapErrorDialog(_hostSwapErrorMessage(analysis.error));
+      }
       return;
     }
 
@@ -2250,13 +2252,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     setState(() => _busy.add(name));
     _showHostSwapProgress();
     String? backupZipPath;
+    String? failureMessage;
     try {
       final backupsDir = await _backupsDirPath();
       final workingPath = androidBridge
           ? await ShizukuService.instance.prepareOut(name)
           : local.folderPath;
       if (androidBridge) {
-        await copyDirectory(Directory(local.folderPath), Directory(workingPath));
+        await copyDirectory(
+          Directory(local.folderPath),
+          Directory(workingPath),
+        );
       }
       final result = await service.execute(
         saveFolderPath: workingPath,
@@ -2264,26 +2270,36 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         backupsDir: backupsDir,
       );
       if (!result.ok) {
-        if (mounted) _snack(_hostSwapErrorMessage(result.error));
-        return;
-      }
-      if (androidBridge) {
-        final pushed = _mode == AndroidMode.root
-            ? await ShizukuService.instance.pushSaveAsRoot(workingPath, name)
-            : await ShizukuService.instance.pushSave(name);
-        if (!pushed) {
-          if (mounted) _snack(l10n.snackWriteError);
-          return;
+        failureMessage = _hostSwapErrorMessage(result.error);
+      } else {
+        var published = true;
+        if (androidBridge) {
+          published = _mode == AndroidMode.root
+              ? await ShizukuService.instance.pushSaveAsRoot(workingPath, name)
+              : await ShizukuService.instance.pushSave(name);
+          if (!published) {
+            failureMessage = l10n.snackWriteError;
+          }
+        }
+        if (published) {
+          await _load(silent: true);
+          if (mounted) _snack(l10n.makeHostSuccess(target.name));
+          backupZipPath = result.backupZipPath;
         }
       }
-      await _load(silent: true);
-      if (mounted) _snack(l10n.makeHostSuccess(target.name));
-      backupZipPath = result.backupZipPath;
     } catch (e) {
-      if (mounted) _snack(l10n.snackDeleteError(e.toString()));
+      failureMessage = l10n.snackDeleteError(e.toString());
     } finally {
       _dismissHostSwapProgress();
       if (mounted) setState(() => _busy.remove(name));
+    }
+
+    // Los errores del swap pueden implicar que la operación fue descartada
+    // o que no existe una colocación segura. No deben desaparecer solos como
+    // un snackbar: el usuario confirma que ha leído el resultado.
+    if (mounted && failureMessage != null) {
+      await _showHostSwapErrorDialog(failureMessage);
+      return;
     }
 
     // El diálogo de progreso ya se cerró antes de preguntar qué hacer con el
@@ -2313,6 +2329,49 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       case null:
         return l10n.hostSwapErrInvalid;
     }
+  }
+
+  Future<void> _showHostSwapErrorDialog(String message) {
+    final l10n = AppLocalizations.of(context)!;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          maxWidth: 420,
+          accent: AppColors.statusErr,
+          child: _dialogBody(
+            title: Text(
+              l10n.makeHostDialogTitle,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: _infoBox(
+              color: AppColors.statusErr,
+              icon: Icons.error_outline_rounded,
+              text: message,
+            ),
+            actions: [
+              SizedBox(
+                width: double.infinity,
+                child: ActionBtn(
+                  label: l10n.sharedRevokedAccept,
+                  color: AppColors.statusErr,
+                  icon: Icons.check_rounded,
+                  filled: true,
+                  onTap: () => Navigator.pop(ctx),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Mensaje para cualquier fallo de `SaveReplaceService.replaceSaveFolder`

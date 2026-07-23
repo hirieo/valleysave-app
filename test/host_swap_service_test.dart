@@ -9,12 +9,11 @@ import 'package:valleysave/core/services/transfer_service.dart';
 
 import 'fixtures/coop_save_fixture.dart';
 
-/// Huella proyectada por el fixture: Farmhouse 9x5 sobre la cabaña de Bruno
-/// (23,31) → X 23..31, Y 31..35.
-const _footprintX0 = 23,
-    _footprintX1 = 31,
-    _footprintY0 = 31,
-    _footprintY1 = 35;
+/// Huella segura elegida para el caso Riverland `Safe`.
+const _footprintX0 = 64,
+    _footprintX1 = 72,
+    _footprintY0 = 40,
+    _footprintY1 = 44;
 
 /// Snapshot de una carpeta (nombre de archivo → bytes) para comprobar que
 /// nada cambió (G1) o que el original sigue intacto (G2). Sin dependencias
@@ -145,6 +144,62 @@ void main() {
   });
 
   group('execute — swap en sitio (spec 007)', () {
+    test('reubica muebles exteriores y actualiza sus cajas', () async {
+      final main = File(mainFilePath(CoopSaveFixture.originalFolderName));
+      final raw = (await main.readAsString()).replaceFirst(
+        '<largeTerrainFeatures/>\n      <resourceClumps/>\n      <farmCaveReady>true</farmCaveReady>',
+        '<largeTerrainFeatures/><resourceClumps/><furniture><Furniture>'
+            '<name>Standing Geode</name>'
+            '<tileLocation><X>67</X><Y>43</Y></tileLocation>'
+            '<boundingBox><X>4288</X><Y>2752</Y><Width>64</Width><Height>64</Height>'
+            '<Location><X>4288</X><Y>2752</Y></Location></boundingBox>'
+            '<defaultBoundingBox><X>4288</X><Y>2752</Y><Width>64</Width><Height>64</Height>'
+            '<Location><X>4288</X><Y>2752</Y></Location></defaultBoundingBox>'
+            '</Furniture></furniture><farmCaveReady>true</farmCaveReady>',
+      );
+      await main.writeAsString(raw);
+
+      final analysis = await service.analyze(
+        saveFolderPath: saveFolderPath,
+        targetUniqueId: CoopSaveFixture.targetUniqueId,
+      );
+      expect(analysis.ok, isTrue);
+      expect(analysis.itemsToRelocate, 4);
+
+      final result = await service.execute(
+        saveFolderPath: saveFolderPath,
+        targetUniqueId: CoopSaveFixture.targetUniqueId,
+        backupsDir: backupsDir,
+      );
+      expect(result.ok, isTrue, reason: result.error?.name);
+      expect(result.relocatedCount, 4);
+
+      final document = XmlDocument.parse(await main.readAsString());
+      final farm = document.rootElement
+          .findElements('locations')
+          .single
+          .findElements('GameLocation')
+          .firstWhere(
+            (location) =>
+                location.findElements('name').first.innerText == 'Farm',
+          );
+      final furniture = farm
+          .findElements('furniture')
+          .single
+          .findElements('Furniture')
+          .single;
+      final tile = furniture.findElements('tileLocation').single;
+      final x = int.parse(tile.findElements('X').single.innerText);
+      final y = int.parse(tile.findElements('Y').single.innerText);
+      expect((x, y), isNot((67, 43)));
+      final box = furniture.findElements('boundingBox').single;
+      expect(box.findElements('X').single.innerText, '${x * 64}');
+      expect(box.findElements('Y').single.innerText, '${y * 64}');
+      final defaultBox = furniture.findElements('defaultBoundingBox').single;
+      expect(defaultBox.findElements('X').single.innerText, '${x * 64}');
+      expect(defaultBox.findElements('Y').single.innerText, '${y * 64}');
+    });
+
     test(
       'G2: folderName y uniqueIDForThisGame NO cambian tras el swap',
       () async {
@@ -369,6 +424,141 @@ void main() {
         );
       },
     );
+
+    test(
+      'Safe: conserva puertas accesibles y la decisión global de la cueva',
+      () async {
+        final before = XmlDocument.parse(CoopSaveFixture.mainXml());
+        final caveBefore = before.rootElement
+            .findElements('locations')
+            .first
+            .findElements('GameLocation')
+            .firstWhere(
+              (location) =>
+                  location.findElements('name').firstOrNull?.innerText ==
+                  'FarmCave',
+            )
+            .toXmlString();
+
+        final result = await service.execute(
+          saveFolderPath: saveFolderPath,
+          targetUniqueId: CoopSaveFixture.targetUniqueId,
+          backupsDir: backupsDir,
+        );
+        expect(result.ok, isTrue);
+
+        final after = XmlDocument.parse(
+          await File(
+            mainFilePath(CoopSaveFixture.originalFolderName),
+          ).readAsString(),
+        );
+        final locations = after.rootElement.findElements('locations').first;
+        final farm = locations
+            .findElements('GameLocation')
+            .firstWhere(
+              (location) =>
+                  location.findElements('name').firstOrNull?.innerText ==
+                  'Farm',
+            );
+        final buildings = farm
+            .findElements('buildings')
+            .first
+            .findElements('Building');
+        final farmhouse = buildings.firstWhere(
+          (building) =>
+              building.findElements('buildingType').first.innerText ==
+              'Farmhouse',
+        );
+        final cabin = buildings.firstWhere((building) {
+          if (building.findElements('buildingType').first.innerText !=
+              'Cabin') {
+            return false;
+          }
+          return building
+                  .findElements('indoors')
+                  .firstOrNull
+                  ?.findElements('uniqueName')
+                  .firstOrNull
+                  ?.innerText ==
+              CoopSaveFixture.targetHome;
+        });
+
+        int value(XmlElement parent, String name) =>
+            int.parse(parent.findElements(name).first.innerText);
+        ({int x, int y}) door(XmlElement building) {
+          final humanDoor = building.findElements('humanDoor').first;
+          return (
+            x: value(building, 'tileX') + value(humanDoor, 'X'),
+            y: value(building, 'tileY') + value(humanDoor, 'Y'),
+          );
+        }
+
+        expect(value(farmhouse, 'tileX'), 64);
+        expect(value(farmhouse, 'tileY'), 40);
+        expect(door(farmhouse), (x: 69, y: 42));
+        expect(value(cabin, 'tileX'), 62);
+        expect(value(cabin, 'tileY'), 13);
+        expect(door(cabin), (x: 64, y: 14));
+
+        final newHost = after.rootElement.findElements('player').first;
+        expect(value(newHost, 'caveChoice'), 2);
+        final events = newHost
+            .findElements('eventsSeen')
+            .first
+            .findElements('int')
+            .map((event) => event.innerText)
+            .toSet();
+        expect(events, contains('65'));
+        expect(
+          events,
+          contains('888'),
+          reason: 'conserva eventos del nuevo host',
+        );
+        expect(
+          events,
+          isNot(contains('777')),
+          reason: 'no copia eventos personales',
+        );
+
+        final caveAfter = locations
+            .findElements('GameLocation')
+            .firstWhere(
+              (location) =>
+                  location.findElements('name').firstOrNull?.innerText ==
+                  'FarmCave',
+            )
+            .toXmlString();
+        expect(caveAfter, caveBefore);
+      },
+    );
+
+    test('no inventa la elección de cueva si aún no se decidió', () async {
+      await File(
+        mainFilePath(CoopSaveFixture.originalFolderName),
+      ).writeAsString(CoopSaveFixture.mainXmlWithoutCaveChoice());
+
+      final result = await service.execute(
+        saveFolderPath: saveFolderPath,
+        targetUniqueId: CoopSaveFixture.targetUniqueId,
+        backupsDir: backupsDir,
+      );
+      expect(result.ok, isTrue);
+
+      final after = XmlDocument.parse(
+        await File(
+          mainFilePath(CoopSaveFixture.originalFolderName),
+        ).readAsString(),
+      );
+      final newHost = after.rootElement.findElements('player').first;
+      expect(newHost.findElements('caveChoice').first.innerText, '0');
+      final events = newHost
+          .findElements('eventsSeen')
+          .first
+          .findElements('int')
+          .map((event) => event.innerText);
+      expect(events, isNot(contains('65')));
+      expect(events, contains('888'));
+    });
 
     test('G7: nº total de objetos de Farm idéntico antes/después', () async {
       final beforeDoc = XmlDocument.parse(CoopSaveFixture.mainXml());

@@ -1919,7 +1919,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hostSwapErrNoSpace =>
-      'No free space on the farm to relocate objects. Nothing was changed.';
+      'No safe position with an accessible door, mailbox, and path was found. Nothing was changed.';
 
   @override
   String get hostSwapErrWrite =>

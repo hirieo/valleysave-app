@@ -4,8 +4,9 @@ import 'dart:io';
 /// de XML observados en saves reales durante la investigación de F3: xsi:type
 /// para elementos polimórficos, boundingBox en píxeles para Chest, etc.).
 ///
-/// Huella proyectada al convertir a Bruno en anfitrión (Farmhouse 9x5 sobre
-/// su cabaña en 23,31): X 23..31, Y 31..35. Dentro de esa huella hay
+/// Regresión del save real Riverland `Safe`: la cabaña objetivo está en
+/// (68,41), pero la Farmhouse segura termina en (64,40), X 64..72, Y 40..44.
+/// Dentro de esa huella hay
 /// exactamente 3 objetos no ignorables (1 Chest + 2 Tree) y 1 Weeds
 /// (ignorable) — mismo patrón validado en juego real durante A3/A4/B3/B4.
 class CoopSaveFixture {
@@ -54,6 +55,13 @@ class CoopSaveFixture {
 
   static String mainXml() => _mainXml();
 
+  static String mainXmlWithoutCaveChoice() => mainXml().replaceFirst(
+    '<caveChoice>2</caveChoice>\n    '
+        '<eventsSeen><int>65</int><int>777</int></eventsSeen>',
+    '<caveChoice>0</caveChoice>\n    '
+        '<eventsSeen><int>777</int></eventsSeen>',
+  );
+
   static String _mainXml({bool withCollisions = true, bool saturated = false}) {
     final farm = _farmLocation(
       withCollisions: withCollisions,
@@ -62,6 +70,7 @@ class CoopSaveFixture {
     return '''<?xml version="1.0" encoding="utf-8"?>
 <SaveGame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <uniqueIDForThisGame>$originalId</uniqueIDForThisGame>
+  <whichFarm>1</whichFarm>
   <currentSeason>spring</currentSeason>
   <dayOfMonth>5</dayOfMonth>
   <year>1</year>
@@ -82,6 +91,8 @@ class CoopSaveFixture {
     <combatLevel>0</combatLevel><foragingLevel>0</foragingLevel>
     <fishingLevel>0</fishingLevel><deepestMineLevel>0</deepestMineLevel>
     <health>100</health><stamina>270</stamina>
+    <caveChoice>2</caveChoice>
+    <eventsSeen><int>65</int><int>777</int></eventsSeen>
   </player>
   <farmhands>
     <Farmer>
@@ -99,6 +110,8 @@ class CoopSaveFixture {
       <combatLevel>0</combatLevel><foragingLevel>0</foragingLevel>
       <fishingLevel>0</fishingLevel><deepestMineLevel>0</deepestMineLevel>
       <health>100</health><stamina>270</stamina>
+      <caveChoice>0</caveChoice>
+      <eventsSeen><int>888</int></eventsSeen>
     </Farmer>
     <Farmer>
       <name></name>
@@ -111,6 +124,11 @@ class CoopSaveFixture {
   </farmhands>
   <locations>
     $farm
+    <GameLocation>
+      <name>FarmCave</name>
+      <isStructure>false</isStructure>
+      <objects><item><key><Vector2><X>1</X><Y>1</Y></Vector2></key><value><Object><name>CaveMarker</name></Object></value></item></objects>
+    </GameLocation>
     <GameLocation>
       <name>FarmHouse</name>
       <isStructure>false</isStructure>
@@ -152,6 +170,7 @@ class CoopSaveFixture {
       </terrainFeatures>
       <largeTerrainFeatures/>
       <resourceClumps/>
+      <farmCaveReady>true</farmCaveReady>
     </GameLocation>''';
   }
 
@@ -167,7 +186,7 @@ class CoopSaveFixture {
         <Building>
           <buildingType>Cabin</buildingType>
           <skinId><string>Log Cabin</string></skinId>
-          <tileX>23</tileX><tileY>31</tileY>
+          <tileX>68</tileX><tileY>41</tileY>
           <tilesWide>5</tilesWide><tilesHigh>3</tilesHigh>
           <humanDoor><X>2</X><Y>1</Y></humanDoor>
           <indoors xsi:type="Cabin">
@@ -190,7 +209,7 @@ class CoopSaveFixture {
         <Building>
           <buildingType>Cabin</buildingType>
           <skinId><string>Stone Cabin</string></skinId>
-          <tileX>66</tileX><tileY>37</tileY>
+          <tileX>10</tileX><tileY>20</tileY>
           <tilesWide>5</tilesWide><tilesHigh>3</tilesHigh>
           <humanDoor><X>2</X><Y>1</Y></humanDoor>
           <indoors xsi:type="Cabin">
@@ -201,16 +220,11 @@ class CoopSaveFixture {
           </indoors>
         </Building>''';
 
-  /// Cubre TODO el área alcanzable por los radios de búsqueda (cerca=6,
-  /// lejos=20) alrededor de la huella nueva (23..31, 31..35) con edificios
-  /// 1x1 sin huecos, para forzar `noFreeTile` en `analyze`/`execute`. El
-  /// radio lejano se mide desde una posible víctima desalojada (hasta 6
-  /// tiles de un objeto de la huella), así que el área cubierta es generosa:
-  /// X -5..57, Y 0..61.
+  /// Cubre todo Riverland con edificios 1x1 para forzar `noFreeTile`.
   static String _saturatedBuildings() {
     final buf = StringBuffer(_normalBuildings());
-    for (var bx = -5; bx <= 57; bx++) {
-      for (var by = 0; by <= 61; by++) {
+    for (var bx = 0; bx < 80; bx++) {
+      for (var by = 0; by < 65; by++) {
         buf.write('''
         <Building>
           <buildingType>Shed</buildingType>
@@ -225,23 +239,23 @@ class CoopSaveFixture {
 
   static String _collidingObjects() => '''
         <item>
-          <key><Vector2><X>24</X><Y>34</Y></Vector2></key>
+          <key><Vector2><X>65</X><Y>43</Y></Vector2></key>
           <value>
             <Object xsi:type="Chest">
               <name>Chest</name>
-              <tileLocation><X>24</X><Y>34</Y></tileLocation>
-              <boundingBox><X>1536</X><Y>2176</Y><Width>64</Width><Height>64</Height>
-                <Location><X>1536</X><Y>2176</Y></Location></boundingBox>
+              <tileLocation><X>65</X><Y>43</Y></tileLocation>
+              <boundingBox><X>4160</X><Y>2752</Y><Width>64</Width><Height>64</Height>
+                <Location><X>4160</X><Y>2752</Y></Location></boundingBox>
               <items/>
             </Object>
           </value>
         </item>
         <item>
-          <key><Vector2><X>29</X><Y>31</Y></Vector2></key>
+          <key><Vector2><X>69</X><Y>41</Y></Vector2></key>
           <value>
             <Object xsi:type="Weeds">
               <name>Weeds</name>
-              <tileLocation><X>29</X><Y>31</Y></tileLocation>
+              <tileLocation><X>69</X><Y>41</Y></tileLocation>
             </Object>
           </value>
         </item>
@@ -274,20 +288,20 @@ class CoopSaveFixture {
 
   static String _collidingTerrainFeatures() => '''
         <item>
-          <key><Vector2><X>29</X><Y>33</Y></Vector2></key>
+          <key><Vector2><X>70</X><Y>40</Y></Vector2></key>
           <value>
             <TerrainFeature xsi:type="Tree">
               <treeType>1</treeType><growthStage>7</growthStage>
-              <tileLocation><X>29</X><Y>33</Y></tileLocation>
+              <tileLocation><X>70</X><Y>40</Y></tileLocation>
             </TerrainFeature>
           </value>
         </item>
         <item>
-          <key><Vector2><X>31</X><Y>32</Y></Vector2></key>
+          <key><Vector2><X>72</X><Y>42</Y></Vector2></key>
           <value>
             <TerrainFeature xsi:type="Tree">
               <treeType>1</treeType><growthStage>0</growthStage>
-              <tileLocation><X>31</X><Y>32</Y></tileLocation>
+              <tileLocation><X>72</X><Y>42</Y></tileLocation>
             </TerrainFeature>
           </value>
         </item>

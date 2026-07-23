@@ -67,6 +67,9 @@ Récupérez la dernière version sur **[Releases](https://github.com/hirieo/vall
 | **Linux** (portable) | `valleysave-linux-x64.tar.gz` | Extraire et lancer, toute distribution |
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
+> [!NOTE]
+> **📱 iOS :** L'application ValleySave pour iPhone/iPad existe déjà, mais sa publication sur l'App Store nécessite une licence de développeur Apple (99 USD/an, ~99 €). Une campagne de financement participatif sera lancée pour couvrir ce coût.
+
 ## Comment ça marche
 
 1. **Connectez** — liez votre propre compte Google (OAuth, scope `drive.file` uniquement).

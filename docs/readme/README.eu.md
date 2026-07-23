@@ -67,6 +67,9 @@ Eskuratu azken bertsioa **[Releases](https://github.com/hirieo/valleysave-app/re
 | **Linux** (eramangarria) | `valleysave-linux-x64.tar.gz` | Atera eta exekutatu, edozein distro |
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
+> [!NOTE]
+> **📱 iOS:** ValleySave iPhone/iPad-erako aplikazioa jadanik existitzen da, baina App Store-n argitaratzeak Apple garatzaile-lizentzia bat behar du (99 USD/urte, ~99 €). Kostu hori estaltzeko finantzaketa kolektiboko kanpaina bat abiaraziko da.
+
 ## Nola funtzionatzen du
 
 1. **Konektatu** — lotu zure Google kontu propioa (OAuth, `drive.file` scope soilik).

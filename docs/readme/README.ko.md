@@ -67,6 +67,9 @@
 | **Linux** (포터블) | `valleysave-linux-x64.tar.gz` | 풀어서 실행, 모든 배포판 |
 | **Android** | `ValleySave-*.apk` | Android 8 이상 |
 
+> [!NOTE]
+> **📱 iOS:** ValleySave iPhone/iPad 앱은 이미 존재하지만, App Store에 게시하려면 Apple 개발자 라이선스(연 99달러, 약 99유로)가 필요합니다. 이 비용을 마련하기 위해 크라우드펀딩 캠페인을 진행할 예정입니다.
+
 ## 작동 방식
 
 1. **연결** — 내 Google 계정을 연동(OAuth, `drive.file` 스코프만).

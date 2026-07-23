@@ -67,6 +67,9 @@
 | **Linux**（便携版） | `valleysave-linux-x64.tar.gz` | 解压即用，任何发行版 |
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
+> [!NOTE]
+> **📱 iOS：** ValleySave 的 iPhone/iPad 版本已经存在，但要在 App Store 上架需要 Apple 开发者许可证（每年 99 美元，约 99 欧元）。将发起众筹活动来覆盖这笔费用。
+
 ## 工作原理
 
 1. **连接** — 关联你自己的 Google 账号（OAuth，仅 `drive.file` 权限）。

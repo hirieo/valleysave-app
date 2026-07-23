@@ -5,6 +5,7 @@ import 'package:archive/archive.dart';
 import 'package:xml/xml.dart';
 
 import 'backup_service.dart' show verifyBackupZipContents;
+import 'farm_placement_service.dart';
 import 'save_replace_service.dart';
 import 'save_service.dart';
 
@@ -28,8 +29,9 @@ class HostSwapAnalysis {
   final bool ok;
   final HostSwapError? error;
 
-  /// Nº de objetos NO ignorables (Weeds/Grass excluidos) dentro de la huella
-  /// nueva de la casa — es el "N" que ve el usuario en el diálogo.
+  /// Nº total de objetos que realmente se moverán (Weeds/Grass excluidos),
+  /// incluidos huella, corredor y posibles desalojos por prioridad. Es el
+  /// "N" que ve el usuario en el diálogo antes de confirmar.
   final int itemsToRelocate;
 
   /// Nombre visible del farmhand objetivo (para el texto del diálogo).
@@ -54,14 +56,14 @@ class HostSwapResult {
   /// original como respaldo restaurable con Importar.
   final String? backupZipPath;
 
-  /// Objetos reubicados dentro de la huella — igual a `itemsToRelocate` del
-  /// análisis previo sobre el mismo save (contrato G10 de 005).
+  /// Objetos reubicados — igual a `itemsToRelocate` del análisis previo sobre
+  /// el mismo save (contrato G10 de 005).
   final int relocatedCount;
 }
 
 /// Cambio de anfitrión 100% local: copia el save, reubica por prioridad los
-/// objetos que colisionan con la huella nueva de la Farmhouse, intercambia los
-/// nodos de jugador y los edificios, y valida el resultado antes de aceptarlo.
+/// objetos que colisionan con la vivienda o su acceso, intercambia los nodos
+/// de jugador y los edificios, y valida el resultado antes de aceptarlo.
 ///
 /// Puerto de `Test-HostSwap-PriorityRelocate.ps1` (validado en juego real —
 /// ver docs/host-swap-research/). Deltas respecto al script de pruebas:
@@ -137,7 +139,7 @@ class HostSwapService {
         );
       }
 
-      final plan = _planRelocation(ctx);
+      final plan = _planHostSwap(ctx);
       if (plan == null) {
         return HostSwapAnalysis(
           ok: false,
@@ -148,7 +150,7 @@ class HostSwapService {
 
       return HostSwapAnalysis(
         ok: true,
-        itemsToRelocate: plan.itemsInFootprint,
+        itemsToRelocate: plan.relocation.itemsInFootprint,
         targetName: ctx.targetName,
       );
     } catch (_) {
@@ -231,12 +233,14 @@ class HostSwapService {
         );
       }
 
-      final plan = _planRelocation(ctx);
+      final plan = _planHostSwap(ctx);
       if (plan == null) {
         await _safeDelete(tempRoot);
         return const HostSwapResult(ok: false, error: HostSwapError.noFreeTile);
       }
-      for (final m in plan.moves) {
+      final expectedCaveChoice = _intText(ctx.player, 'caveChoice') ?? 0;
+      final originalFarmCaveXml = _locationXml(ctx.root, 'FarmCave');
+      for (final m in plan.relocation.moves) {
         _moveItemTo(m.item, m.toX, m.toY);
       }
 
@@ -263,6 +267,7 @@ class HostSwapService {
       ctx.player.children.addAll(newHostClone.children.map((c) => c.copy()));
       _setElementValue(ctx.player, 'homeLocation', 'FarmHouse');
       _setElementValue(ctx.player, 'slotCanHost', 'true');
+      _preserveFarmCaveChoice(oldHostClone, ctx.player);
 
       // Host saliente: el <Farmer> objetivo pasa a tener los datos del host.
       ctx.target.children.clear();
@@ -270,16 +275,29 @@ class HostSwapService {
       _setElementValue(ctx.target, 'homeLocation', ctx.targetHome);
       _setElementValue(ctx.target, 'slotCanHost', 'false');
 
-      // Intercambiar tiles de los 2 edificios (único modo viable — ver
-      // investigación: el host SIEMPRE vive en buildingType=Farmhouse).
-      final fx = _text(ctx.farmhouseBuilding, 'tileX') ?? '0';
-      final fy = _text(ctx.farmhouseBuilding, 'tileY') ?? '0';
-      final cx = _text(ctx.targetCabinBuilding, 'tileX') ?? '0';
-      final cy = _text(ctx.targetCabinBuilding, 'tileY') ?? '0';
-      _setElementValue(ctx.farmhouseBuilding, 'tileX', cx);
-      _setElementValue(ctx.farmhouseBuilding, 'tileY', cy);
-      _setElementValue(ctx.targetCabinBuilding, 'tileX', fx);
-      _setElementValue(ctx.targetCabinBuilding, 'tileY', fy);
+      // El intercambio físico sigue siendo obligatorio, pero se ancla por
+      // puertas y se desplaza lo mínimo necesario para que buzón y salida
+      // sean utilizables en el mapa real de la granja.
+      _setElementValue(
+        ctx.farmhouseBuilding,
+        'tileX',
+        plan.placement.farmhouse.origin.x.toString(),
+      );
+      _setElementValue(
+        ctx.farmhouseBuilding,
+        'tileY',
+        plan.placement.farmhouse.origin.y.toString(),
+      );
+      _setElementValue(
+        ctx.targetCabinBuilding,
+        'tileX',
+        plan.placement.cabin.origin.x.toString(),
+      );
+      _setElementValue(
+        ctx.targetCabinBuilding,
+        'tileY',
+        plan.placement.cabin.origin.y.toString(),
+      );
 
       // Copiar contenido de interior en ambos sentidos.
       _copyInteriorContent(
@@ -370,6 +388,11 @@ class HostSwapService {
         targetUniqueId: targetUniqueId,
         oldHostId: oldHostId,
         originalId: originalId,
+        targetHome: ctx.targetHome,
+        expectedFarmhouseDoor: plan.placement.farmhouse.absoluteDoor,
+        expectedCabinDoor: plan.placement.cabin.absoluteDoor,
+        expectedCaveChoice: expectedCaveChoice,
+        originalFarmCaveXml: originalFarmCaveXml,
       );
 
       if (!integrityOk) {
@@ -420,6 +443,11 @@ class HostSwapService {
           targetUniqueId: targetUniqueId,
           oldHostId: oldHostId,
           originalId: originalId,
+          targetHome: ctx.targetHome,
+          expectedFarmhouseDoor: plan.placement.farmhouse.absoluteDoor,
+          expectedCabinDoor: plan.placement.cabin.absoluteDoor,
+          expectedCaveChoice: expectedCaveChoice,
+          originalFarmCaveXml: originalFarmCaveXml,
         ),
       );
       await _safeDelete(tempRoot);
@@ -436,7 +464,7 @@ class HostSwapService {
       return HostSwapResult(
         ok: true,
         backupZipPath: backupZip.path,
-        relocatedCount: plan.itemsInFootprint,
+        relocatedCount: plan.relocation.itemsInFootprint,
       );
     } catch (_) {
       if (tempRoot != null) await _safeDelete(tempRoot);
@@ -471,6 +499,7 @@ class HostSwapService {
 
 class _SwapContext {
   _SwapContext({
+    required this.root,
     required this.player,
     required this.target,
     required this.targetHome,
@@ -481,6 +510,7 @@ class _SwapContext {
     required this.targetCabinBuilding,
   });
 
+  final XmlElement root;
   final XmlElement player;
   final XmlElement target;
   final String targetHome;
@@ -537,6 +567,7 @@ _SwapContext? _loadContext(XmlDocument doc, String targetUniqueId) {
   if (farmhouseBuilding == null || targetCabinBuilding == null) return null;
 
   return _SwapContext(
+    root: root,
     player: player,
     target: target,
     targetHome: targetHome,
@@ -562,7 +593,7 @@ class _RelocationMove {
 class _RelocationPlan {
   const _RelocationPlan(this.itemsInFootprint, this.moves);
 
-  /// Objetos NO ignorables dentro de la huella nueva (lo que ve el usuario).
+  /// Objetos que se moverán realmente (lo que ve el usuario).
   final int itemsInFootprint;
 
   /// Todos los movimientos a aplicar (incluye posibles víctimas desalojadas
@@ -594,25 +625,118 @@ class _Candidate {
   final int dist;
 }
 
+class _HostSwapPlan {
+  const _HostSwapPlan({required this.placement, required this.relocation});
+
+  final HostSwapPlacement placement;
+  final _RelocationPlan relocation;
+}
+
+_HostSwapPlan? _planHostSwap(_SwapContext ctx) {
+  final whichFarm = _intText(ctx.root, 'whichFarm');
+  if (whichFarm == null) return null;
+  final surface = VanillaFarmSurfaceRepository.forWhichFarm(whichFarm);
+  if (surface == null) return null;
+
+  final farmhouse = _buildingGeometry(ctx.farmhouseBuilding, farmhouse: true);
+  final cabin = _buildingGeometry(ctx.targetCabinBuilding, farmhouse: false);
+  if (farmhouse == null || cabin == null) return null;
+
+  final otherBuildingTiles = <TilePoint>{};
+  final buildings = ctx.farm.findElements('buildings').firstOrNull;
+  if (buildings == null) return null;
+  for (final building in buildings.findElements('Building')) {
+    if (identical(building, ctx.farmhouseBuilding) ||
+        identical(building, ctx.targetCabinBuilding)) {
+      continue;
+    }
+    final x = _intText(building, 'tileX');
+    final y = _intText(building, 'tileY');
+    final width = _intText(building, 'tilesWide');
+    final height = _intText(building, 'tilesHigh');
+    if (x == null || y == null || width == null || height == null) continue;
+    for (var dx = 0; dx < width; dx++) {
+      for (var dy = 0; dy < height; dy++) {
+        otherBuildingTiles.add(TilePoint(x + dx, y + dy));
+      }
+    }
+  }
+
+  final placement = FarmPlacementService(surface).choose(
+    farmhouse: farmhouse,
+    cabin: cabin,
+    otherBuildingTiles: otherBuildingTiles,
+  );
+  if (placement == null) return null;
+  final relocation = _planRelocation(ctx, surface, placement);
+  if (relocation == null) return null;
+  return _HostSwapPlan(placement: placement, relocation: relocation);
+}
+
+BuildingGeometry? _buildingGeometry(
+  XmlElement building, {
+  required bool farmhouse,
+}) {
+  final x = _intText(building, 'tileX');
+  final y = _intText(building, 'tileY');
+  final width = _intText(building, 'tilesWide');
+  final height = _intText(building, 'tilesHigh');
+  final door = building.findElements('humanDoor').firstOrNull;
+  final doorX = door == null ? null : _intText(door, 'X');
+  final doorY = door == null ? null : _intText(door, 'Y');
+  if (x == null ||
+      y == null ||
+      width == null ||
+      height == null ||
+      doorX == null ||
+      doorY == null) {
+    return null;
+  }
+  return BuildingGeometry(
+    origin: TilePoint(x, y),
+    width: width,
+    height: height,
+    doorOffset: TilePoint(doorX, doorY),
+    collisionRows: farmhouse
+        ? FarmPlacementService.farmhouseCollision
+        : FarmPlacementService.cabinCollision,
+    mailboxOffset: farmhouse ? const TilePoint(9, 4) : null,
+    doorApproachOffset: farmhouse ? const TilePoint(5, 5) : null,
+  );
+}
+
 /// Simula la reubicación completa (cascada de prioridad + dirección) sin
 /// tocar el XML. Devuelve `null` si algún objeto no tiene hueco (noFreeTile).
-_RelocationPlan? _planRelocation(_SwapContext ctx) {
-  final fw = _intText(ctx.farmhouseBuilding, 'tilesWide');
-  final fh = _intText(ctx.farmhouseBuilding, 'tilesHigh');
-  final x0 = _intText(ctx.targetCabinBuilding, 'tileX');
-  final y0 = _intText(ctx.targetCabinBuilding, 'tileY');
-  if (fw == null || fh == null || x0 == null || y0 == null) return null;
-  final x1 = x0 + fw - 1;
-  final y1 = y0 + fh - 1;
+_RelocationPlan? _planRelocation(
+  _SwapContext ctx,
+  FarmSurface surface,
+  HostSwapPlacement placement,
+) {
+  final x0 = placement.farmhouse.origin.x;
+  final y0 = placement.farmhouse.origin.y;
+  final x1 = x0 + placement.farmhouse.width - 1;
+  final y1 = y0 + placement.farmhouse.height - 1;
+  final reserved = placement.reservedTiles;
 
   final occupancy = <String, _Occupant>{};
   void setOcc(int x, int y, _Occupant o) => occupancy['$x,$y'] = o;
   _Occupant? getOcc(int x, int y) => occupancy['$x,$y'];
-  bool isFree(int x, int y) => !occupancy.containsKey('$x,$y');
+  bool isFree(int x, int y) {
+    final tile = TilePoint(x, y);
+    return surface.isBuildable(tile) &&
+        surface.isPassable(tile) &&
+        !surface.isWater(tile) &&
+        !reserved.contains(tile) &&
+        !occupancy.containsKey('$x,$y');
+  }
 
   final buildingsEl = ctx.farm.findElements('buildings').firstOrNull;
   if (buildingsEl == null) return null;
   for (final b in buildingsEl.findElements('Building')) {
+    if (identical(b, ctx.farmhouseBuilding) ||
+        identical(b, ctx.targetCabinBuilding)) {
+      continue;
+    }
     final bx = _intText(b, 'tileX');
     final by = _intText(b, 'tileY');
     final bw = _intText(b, 'tilesWide');
@@ -624,12 +748,11 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
       }
     }
   }
-  for (var ix = x0; ix <= x1; ix++) {
-    for (var iy = y0; iy <= y1; iy++) {
-      setOcc(ix, iy, _Occupant('footprint'));
-    }
+  for (final tile in reserved) {
+    setOcc(tile.x, tile.y, _Occupant('footprint'));
   }
 
+  final registered = <_FootprintEntry>[];
   void registerContainer(String containerName) {
     final container = ctx.farm.findElements(containerName).firstOrNull;
     if (container == null) return;
@@ -654,6 +777,8 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
       if (valChild == null) continue;
       final type = _itemType(valChild);
       final priority = _itemPriority(valChild, type);
+      final entry = _FootprintEntry(item, type, priority, tx, ty);
+      registered.add(entry);
       setOcc(
         tx,
         ty,
@@ -666,21 +791,56 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
   registerContainer('terrainFeatures');
   registerContainer('largeTerrainFeatures');
 
-  final toMove = <_FootprintEntry>[];
-  for (var ix = x0; ix <= x1; ix++) {
-    for (var iy = y0; iy <= y1; iy++) {
-      final occ = getOcc(ix, iy);
-      if (occ != null && occ.kind == 'item') {
-        toMove.add(
-          _FootprintEntry(occ.item!, occ.type!, occ.priority!, ix, iy),
-        );
+  final furniture = ctx.farm.findElements('furniture').firstOrNull;
+  if (furniture != null) {
+    for (final item in furniture.children.whereType<XmlElement>()) {
+      final tile = item.findElements('tileLocation').firstOrNull;
+      final box = item.findElements('boundingBox').firstOrNull;
+      final tx = tile == null ? null : _intText(tile, 'X');
+      final ty = tile == null ? null : _intText(tile, 'Y');
+      final width = box == null ? null : _intText(box, 'Width');
+      final height = box == null ? null : _intText(box, 'Height');
+      // El plan actual reubica por casilla. Si aparece mobiliario exterior
+      // de varias casillas, abortamos en vez de recortarlo o solaparlo.
+      if (tx == null ||
+          ty == null ||
+          width == null ||
+          height == null ||
+          width <= 0 ||
+          height <= 0 ||
+          width > 64 ||
+          height > 64) {
+        return null;
       }
+      final existing = getOcc(tx, ty);
+      if (existing != null && existing.kind == 'building') continue;
+      final type = _text(item, 'name') ?? 'Furniture';
+      final entry = _FootprintEntry(item, type, 'alta', tx, ty);
+      registered.add(entry);
+      setOcc(
+        tx,
+        ty,
+        _Occupant('item', priority: 'alta', item: item, type: type),
+      );
+    }
+  }
+
+  final toMove = registered
+      .where(
+        (entry) =>
+            reserved.contains(TilePoint(entry.x, entry.y)) &&
+            entry.priority != 'ignorable',
+      )
+      .toList(growable: false);
+  for (final entry in toMove) {
+    final current = getOcc(entry.x, entry.y);
+    if (identical(current?.item, entry.item)) {
+      occupancy.remove('${entry.x},${entry.y}');
+      setOcc(entry.x, entry.y, _Occupant('footprint'));
     }
   }
   final high = toMove.where((e) => e.priority == 'alta').toList();
   final low = toMove.where((e) => e.priority == 'baja').toList();
-  final itemsInFootprint =
-      high.length + low.length; // ignorable: ni se mueve ni se cuenta
 
   int directionalScore(int tx, int ty) {
     if (ty < y0) return 1000; // norte / detrás: el sprite lo tapa
@@ -762,9 +922,6 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
   }
 
   for (final entry in low) {
-    if (isFree(entry.x, entry.y)) continue; // ya reubicado como víctima
-    final occNow = getOcc(entry.x, entry.y);
-    if (occNow == null || occNow.kind != 'item') continue;
     final dest = findFreeTile(entry.x, entry.y, HostSwapService._farRadius);
     if (dest == null) return null;
     moves.add(_RelocationMove(entry.item, dest.x, dest.y));
@@ -772,7 +929,10 @@ _RelocationPlan? _planRelocation(_SwapContext ctx) {
     setOcc(dest.x, dest.y, _Occupant('relocated'));
   }
 
-  return _RelocationPlan(itemsInFootprint, moves);
+  // El aviso debe corresponder a todo lo que realmente se moverá, incluidas
+  // las posibles víctimas de baja prioridad desalojadas para salvar un cofre
+  // o cultivo importante.
+  return _RelocationPlan(moves.length, moves);
 }
 
 String _itemType(XmlElement valChild) {
@@ -804,12 +964,14 @@ void _moveItemTo(XmlElement item, int newX, int newY) {
     _setElementValue(vec, 'X', newX.toString());
     _setElementValue(vec, 'Y', newY.toString());
   }
-  final val = item
-      .findElements('value')
-      .firstOrNull
-      ?.children
-      .whereType<XmlElement>()
-      .firstOrNull;
+  final val = item.name.local == 'Furniture'
+      ? item
+      : item
+            .findElements('value')
+            .firstOrNull
+            ?.children
+            .whereType<XmlElement>()
+            .firstOrNull;
   if (val == null) return;
 
   final tileLoc = val.findElements('tileLocation').firstOrNull;
@@ -831,6 +993,43 @@ void _moveItemTo(XmlElement item, int newX, int newY) {
     if (loc != null) {
       _setElementValue(loc, 'X', pxX.toString());
       _setElementValue(loc, 'Y', pxY.toString());
+    }
+  }
+  final defaultBox = val.findElements('defaultBoundingBox').firstOrNull;
+  if (defaultBox != null) {
+    final pxX = newX * 64;
+    final pxY = newY * 64;
+    _setElementValue(defaultBox, 'X', pxX.toString());
+    _setElementValue(defaultBox, 'Y', pxY.toString());
+    final loc = defaultBox.findElements('Location').firstOrNull;
+    if (loc != null) {
+      _setElementValue(loc, 'X', pxX.toString());
+      _setElementValue(loc, 'Y', pxY.toString());
+    }
+  }
+}
+
+/// La elección de la cueva es estado de la granja, aunque Stardew la guarda
+/// dentro del anfitrión. Solo transferimos ese dato global y su evento 65;
+/// nunca copiamos el historial personal completo del host saliente.
+void _preserveFarmCaveChoice(XmlElement oldHost, XmlElement newHost) {
+  final choice = _intText(oldHost, 'caveChoice') ?? 0;
+  _setElementValue(newHost, 'caveChoice', choice > 0 ? '$choice' : '0');
+
+  var events = newHost.findElements('eventsSeen').firstOrNull;
+  if (events == null) {
+    events = XmlElement(XmlName('eventsSeen'));
+    newHost.children.add(events);
+  }
+  final caveEvents = events
+      .findElements('int')
+      .where((event) => event.innerText.trim() == '65')
+      .toList(growable: false);
+  if (choice > 0 && caveEvents.isEmpty) {
+    events.children.add(XmlElement(XmlName('int'), [], [XmlText('65')]));
+  } else if (choice <= 0) {
+    for (final event in caveEvents) {
+      event.parent?.children.remove(event);
     }
   }
 }
@@ -952,6 +1151,11 @@ Future<bool> _isHostSwapIntegrityValid(
   required String targetUniqueId,
   required String oldHostId,
   required String originalId,
+  required String targetHome,
+  required TilePoint expectedFarmhouseDoor,
+  required TilePoint expectedCabinDoor,
+  required int expectedCaveChoice,
+  required String? originalFarmCaveXml,
 }) async {
   final sep = Platform.pathSeparator;
   final mainFile = File('${dir.path}$sep$folderName');
@@ -967,6 +1171,36 @@ Future<bool> _isHostSwapIntegrityValid(
         .firstOrNull;
     final verifyDoc = XmlDocument.parse(verifyRaw);
     final verifyId = _text(verifyDoc.rootElement, 'uniqueIDForThisGame');
+    final locations = verifyDoc.rootElement
+        .findElements('locations')
+        .firstOrNull;
+    if (locations == null) return false;
+    final farm = locations
+        .findElements('GameLocation')
+        .where((location) => _text(location, 'name') == 'Farm')
+        .firstOrNull;
+    final buildings = farm?.findElements('buildings').firstOrNull;
+    if (farm == null || buildings == null) return false;
+    final farmhouse = buildings
+        .findElements('Building')
+        .where((building) => _text(building, 'buildingType') == 'Farmhouse')
+        .firstOrNull;
+    final cabin = buildings.findElements('Building').where((building) {
+      if (_text(building, 'buildingType') != 'Cabin') return false;
+      final indoors = building.findElements('indoors').firstOrNull;
+      return indoors != null && _text(indoors, 'uniqueName') == targetHome;
+    }).firstOrNull;
+    if (farmhouse == null || cabin == null) return false;
+    final newHostXml = verifyDoc.rootElement.findElements('player').firstOrNull;
+    if (newHostXml == null) return false;
+    final caveChoice = _intText(newHostXml, 'caveChoice') ?? 0;
+    final hasCaveEvent = newHostXml
+        .findElements('eventsSeen')
+        .expand((events) => events.findElements('int'))
+        .any((event) => event.innerText.trim() == '65');
+    final caveEventOk = expectedCaveChoice > 0 ? hasCaveEvent : !hasCaveEvent;
+    final caveLocationOk =
+        _locationXml(verifyDoc.rootElement, 'FarmCave') == originalFarmCaveXml;
 
     var hasOldFiles = false;
     await for (final e in dir.list()) {
@@ -982,11 +1216,35 @@ Future<bool> _isHostSwapIntegrityValid(
         !oldHostVerify.isHost &&
         players.length >= 2 &&
         verifyId == originalId &&
+        _absoluteBuildingDoor(farmhouse) == expectedFarmhouseDoor &&
+        _absoluteBuildingDoor(cabin) == expectedCabinDoor &&
+        caveChoice == expectedCaveChoice &&
+        caveEventOk &&
+        caveLocationOk &&
         !hasOldFiles;
   } catch (_) {
     return false;
   }
 }
+
+TilePoint? _absoluteBuildingDoor(XmlElement building) {
+  final x = _intText(building, 'tileX');
+  final y = _intText(building, 'tileY');
+  final door = building.findElements('humanDoor').firstOrNull;
+  if (x == null || y == null || door == null) return null;
+  final doorX = _intText(door, 'X');
+  final doorY = _intText(door, 'Y');
+  if (doorX == null || doorY == null) return null;
+  return TilePoint(x + doorX, y + doorY);
+}
+
+String? _locationXml(XmlElement root, String name) => root
+    .findElements('locations')
+    .firstOrNull
+    ?.findElements('GameLocation')
+    .where((location) => _text(location, 'name') == name)
+    .firstOrNull
+    ?.toXmlString(pretty: false);
 
 String _backupTimestamp() {
   final now = DateTime.now();

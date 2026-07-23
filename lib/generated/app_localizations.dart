@@ -3418,7 +3418,7 @@ abstract class AppLocalizations {
   /// No description provided for @hostSwapErrNoSpace.
   ///
   /// In en, this message translates to:
-  /// **'No free space on the farm to relocate objects. Nothing was changed.'**
+  /// **'No safe position with an accessible door, mailbox, and path was found. Nothing was changed.'**
   String get hostSwapErrNoSpace;
 
   /// No description provided for @hostSwapErrWrite.

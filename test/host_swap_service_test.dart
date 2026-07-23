@@ -28,8 +28,8 @@ Future<Map<String, List<int>>> _snapshot(Directory dir) async {
   return out;
 }
 
-/// Cuenta los `<item>` dentro de objects+terrainFeatures+largeTerrainFeatures
-/// de la location `Farm` (para comprobar que nada se pierde — G7).
+/// Cuenta todo el contenido exterior persistido de `Farm` para comprobar que
+/// el swap solo reubica y nunca elimina (G7).
 int _countFarmItems(XmlDocument doc) {
   final farm = doc.rootElement
       .findElements('locations')
@@ -37,10 +37,20 @@ int _countFarmItems(XmlDocument doc) {
       .findElements('GameLocation')
       .firstWhere((l) => l.findElements('name').first.innerText == 'Farm');
   var count = 0;
-  for (final c in ['objects', 'terrainFeatures', 'largeTerrainFeatures']) {
+  for (final c in ['objects', 'terrainFeatures']) {
     final container = farm.findElements(c).firstOrNull;
     if (container == null) continue;
     count += container.findElements('item').length;
+  }
+  for (final c in ['largeTerrainFeatures', 'resourceClumps', 'furniture']) {
+    count +=
+        farm
+            .findElements(c)
+            .firstOrNull
+            ?.children
+            .whereType<XmlElement>()
+            .length ??
+        0;
   }
   return count;
 }
@@ -198,6 +208,65 @@ void main() {
       final defaultBox = furniture.findElements('defaultBoundingBox').single;
       expect(defaultBox.findElements('X').single.innerText, '${x * 64}');
       expect(defaultBox.findElements('Y').single.innerText, '${y * 64}');
+    });
+
+    test('aparta un meteorito 2x2 de la nueva casa sin eliminarlo', () async {
+      final main = File(mainFilePath(CoopSaveFixture.originalFolderName));
+      final raw = (await main.readAsString()).replaceFirst(
+        '<largeTerrainFeatures/>\n      <resourceClumps/>',
+        '<largeTerrainFeatures/>\n      '
+            '<resourceClumps><ResourceClump>'
+            '<width>2</width><height>2</height>'
+            '<tile><X>68</X><Y>42</Y></tile>'
+            '<parentSheetIndex>622</parentSheetIndex>'
+            '</ResourceClump></resourceClumps>',
+      );
+      await main.writeAsString(raw);
+
+      final analysis = await service.analyze(
+        saveFolderPath: saveFolderPath,
+        targetUniqueId: CoopSaveFixture.targetUniqueId,
+      );
+      expect(analysis.ok, isTrue, reason: analysis.error?.name);
+      expect(analysis.itemsToRelocate, 4);
+
+      final result = await service.execute(
+        saveFolderPath: saveFolderPath,
+        targetUniqueId: CoopSaveFixture.targetUniqueId,
+        backupsDir: backupsDir,
+      );
+      expect(result.ok, isTrue, reason: result.error?.name);
+      expect(result.relocatedCount, 4);
+
+      final document = XmlDocument.parse(await main.readAsString());
+      final farm = document.rootElement
+          .findElements('locations')
+          .single
+          .findElements('GameLocation')
+          .firstWhere(
+            (location) =>
+                location.findElements('name').first.innerText == 'Farm',
+          );
+      final meteor = farm
+          .findElements('resourceClumps')
+          .single
+          .findElements('ResourceClump')
+          .single;
+      expect(meteor.findElements('parentSheetIndex').single.innerText, '622');
+      final tile = meteor.findElements('tile').single;
+      final x = int.parse(tile.findElements('X').single.innerText);
+      final y = int.parse(tile.findElements('Y').single.innerText);
+      expect((x, y), isNot((68, 42)));
+      for (var dy = 0; dy < 2; dy++) {
+        for (var dx = 0; dx < 2; dx++) {
+          final insideNewHouse =
+              x + dx >= _footprintX0 &&
+              x + dx <= _footprintX1 &&
+              y + dy >= _footprintY0 &&
+              y + dy <= _footprintY1;
+          expect(insideNewHouse, isFalse);
+        }
+      }
     });
 
     test(

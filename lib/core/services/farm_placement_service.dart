@@ -100,6 +100,17 @@ class VanillaFarmSurfaceRepository {
   };
 
   static FarmSurface? forWhichFarm(int whichFarm) => _surfaces[whichFarm];
+
+  /// Meadowlands is an official farm from `Data/AdditionalFarms`, so Stardew
+  /// serializes its textual ID instead of a number.
+  static FarmSurface? forSaveValue(String? value) {
+    final normalized = value?.trim();
+    if (normalized == null || normalized.isEmpty) return null;
+    final whichFarm = normalized == 'MeadowlandsFarm'
+        ? 7
+        : int.tryParse(normalized);
+    return whichFarm == null ? null : forWhichFarm(whichFarm);
+  }
 }
 
 class BuildingGeometry {

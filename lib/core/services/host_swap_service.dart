@@ -602,20 +602,37 @@ class _RelocationPlan {
 }
 
 class _Occupant {
-  _Occupant(this.kind, {this.priority, this.item, this.type});
+  _Occupant(this.kind, {this.entry});
   final String kind; // building | footprint | item | relocated
-  final String? priority; // alta | baja | ignorable
-  final XmlElement? item;
-  final String? type;
+  final _FootprintEntry? entry;
 }
 
 class _FootprintEntry {
-  _FootprintEntry(this.item, this.type, this.priority, this.x, this.y);
+  _FootprintEntry(
+    this.item,
+    this.type,
+    this.priority,
+    this.x,
+    this.y, {
+    this.width = 1,
+    this.height = 1,
+  });
+
   final XmlElement item;
   final String type;
   final String priority;
   final int x;
   final int y;
+  final int width;
+  final int height;
+
+  Iterable<TilePoint> tilesAt(int originX, int originY) sync* {
+    for (var dy = 0; dy < height; dy++) {
+      for (var dx = 0; dx < width; dx++) {
+        yield TilePoint(originX + dx, originY + dy);
+      }
+    }
+  }
 }
 
 class _Candidate {
@@ -633,9 +650,9 @@ class _HostSwapPlan {
 }
 
 _HostSwapPlan? _planHostSwap(_SwapContext ctx) {
-  final whichFarm = _intText(ctx.root, 'whichFarm');
-  if (whichFarm == null) return null;
-  final surface = VanillaFarmSurfaceRepository.forWhichFarm(whichFarm);
+  final surface = VanillaFarmSurfaceRepository.forSaveValue(
+    _text(ctx.root, 'whichFarm'),
+  );
   if (surface == null) return null;
 
   final farmhouse = _buildingGeometry(ctx.farmhouseBuilding, farmhouse: true);
@@ -719,15 +736,36 @@ _RelocationPlan? _planRelocation(
   final reserved = placement.reservedTiles;
 
   final occupancy = <String, _Occupant>{};
+  final buildingTiles = <TilePoint>{};
   void setOcc(int x, int y, _Occupant o) => occupancy['$x,$y'] = o;
   _Occupant? getOcc(int x, int y) => occupancy['$x,$y'];
-  bool isFree(int x, int y) {
-    final tile = TilePoint(x, y);
-    return surface.isBuildable(tile) &&
-        surface.isPassable(tile) &&
-        !surface.isWater(tile) &&
-        !reserved.contains(tile) &&
-        !occupancy.containsKey('$x,$y');
+  bool isFreeArea(_FootprintEntry entry, int x, int y) {
+    return entry
+        .tilesAt(x, y)
+        .every(
+          (tile) =>
+              surface.isBuildable(tile) &&
+              surface.isPassable(tile) &&
+              !surface.isWater(tile) &&
+              !reserved.contains(tile) &&
+              !buildingTiles.contains(tile) &&
+              !occupancy.containsKey('${tile.x},${tile.y}'),
+        );
+  }
+
+  void occupyEntry(_FootprintEntry entry, int x, int y, String kind) {
+    for (final tile in entry.tilesAt(x, y)) {
+      setOcc(tile.x, tile.y, _Occupant(kind, entry: entry));
+    }
+  }
+
+  void vacateEntry(_FootprintEntry entry) {
+    for (final tile in entry.tilesAt(entry.x, entry.y)) {
+      final current = getOcc(tile.x, tile.y);
+      if (identical(current?.entry?.item, entry.item)) {
+        occupancy.remove('${tile.x},${tile.y}');
+      }
+    }
   }
 
   final buildingsEl = ctx.farm.findElements('buildings').firstOrNull;
@@ -744,15 +782,18 @@ _RelocationPlan? _planRelocation(
     if (bx == null || by == null || bw == null || bh == null) continue;
     for (var ix = bx; ix < bx + bw; ix++) {
       for (var iy = by; iy < by + bh; iy++) {
+        buildingTiles.add(TilePoint(ix, iy));
         setOcc(ix, iy, _Occupant('building'));
       }
     }
   }
-  for (final tile in reserved) {
-    setOcc(tile.x, tile.y, _Occupant('footprint'));
-  }
 
   final registered = <_FootprintEntry>[];
+  void register(_FootprintEntry entry) {
+    registered.add(entry);
+    occupyEntry(entry, entry.x, entry.y, 'item');
+  }
+
   void registerContainer(String containerName) {
     final container = ctx.farm.findElements(containerName).firstOrNull;
     if (container == null) return;
@@ -778,18 +819,67 @@ _RelocationPlan? _planRelocation(
       final type = _itemType(valChild);
       final priority = _itemPriority(valChild, type);
       final entry = _FootprintEntry(item, type, priority, tx, ty);
-      registered.add(entry);
-      setOcc(
-        tx,
-        ty,
-        _Occupant('item', priority: priority, item: item, type: type),
-      );
+      register(entry);
     }
   }
 
   registerContainer('objects');
   registerContainer('terrainFeatures');
-  registerContainer('largeTerrainFeatures');
+
+  final resourceClumps = ctx.farm.findElements('resourceClumps').firstOrNull;
+  if (resourceClumps != null) {
+    for (final clump in resourceClumps.findElements('ResourceClump')) {
+      final tile = clump.findElements('tile').firstOrNull;
+      final tx = tile == null ? null : _intText(tile, 'X');
+      final ty = tile == null ? null : _intText(tile, 'Y');
+      final width = _intText(clump, 'width');
+      final height = _intText(clump, 'height');
+      if (tx == null ||
+          ty == null ||
+          width == null ||
+          height == null ||
+          width <= 0 ||
+          height <= 0) {
+        return null;
+      }
+      final sheetIndex = _text(clump, 'parentSheetIndex') ?? 'unknown';
+      register(
+        _FootprintEntry(
+          clump,
+          'ResourceClump:$sheetIndex',
+          'alta',
+          tx,
+          ty,
+          width: width,
+          height: height,
+        ),
+      );
+    }
+  }
+
+  final largeTerrain = ctx.farm
+      .findElements('largeTerrainFeatures')
+      .firstOrNull;
+  if (largeTerrain != null) {
+    for (final feature in largeTerrain.children.whereType<XmlElement>()) {
+      final tile = feature.findElements('tilePosition').firstOrNull;
+      final tx = tile == null ? null : _intText(tile, 'X');
+      final ty = tile == null ? null : _intText(tile, 'Y');
+      final dimensions = _largeTerrainFeatureDimensions(feature);
+      if (tx == null || ty == null || dimensions == null) return null;
+      register(
+        _FootprintEntry(
+          feature,
+          _itemType(feature),
+          'alta',
+          tx,
+          ty,
+          width: dimensions.$1,
+          height: dimensions.$2,
+        ),
+      );
+    }
+  }
 
   final furniture = ctx.farm.findElements('furniture').firstOrNull;
   if (furniture != null) {
@@ -807,20 +897,20 @@ _RelocationPlan? _planRelocation(
           width == null ||
           height == null ||
           width <= 0 ||
-          height <= 0 ||
-          width > 64 ||
-          height > 64) {
+          height <= 0) {
         return null;
       }
-      final existing = getOcc(tx, ty);
-      if (existing != null && existing.kind == 'building') continue;
       final type = _text(item, 'name') ?? 'Furniture';
-      final entry = _FootprintEntry(item, type, 'alta', tx, ty);
-      registered.add(entry);
-      setOcc(
-        tx,
-        ty,
-        _Occupant('item', priority: 'alta', item: item, type: type),
+      register(
+        _FootprintEntry(
+          item,
+          type,
+          'alta',
+          tx,
+          ty,
+          width: (width + 63) ~/ 64,
+          height: (height + 63) ~/ 64,
+        ),
       );
     }
   }
@@ -828,16 +918,12 @@ _RelocationPlan? _planRelocation(
   final toMove = registered
       .where(
         (entry) =>
-            reserved.contains(TilePoint(entry.x, entry.y)) &&
+            entry.tilesAt(entry.x, entry.y).any(reserved.contains) &&
             entry.priority != 'ignorable',
       )
       .toList(growable: false);
   for (final entry in toMove) {
-    final current = getOcc(entry.x, entry.y);
-    if (identical(current?.item, entry.item)) {
-      occupancy.remove('${entry.x},${entry.y}');
-      setOcc(entry.x, entry.y, _Occupant('footprint'));
-    }
+    vacateEntry(entry);
   }
   final high = toMove.where((e) => e.priority == 'alta').toList();
   final low = toMove.where((e) => e.priority == 'baja').toList();
@@ -849,13 +935,26 @@ _RelocationPlan? _planRelocation(
     return 500;
   }
 
-  List<_Candidate> areaCandidates(int fromX, int fromY, int maxRadius) {
+  List<_Candidate> areaCandidates(
+    _FootprintEntry entry,
+    int fromX,
+    int fromY,
+    int maxRadius,
+  ) {
     final area = <_Candidate>[];
     for (var dx = -maxRadius; dx <= maxRadius; dx++) {
       for (var dy = -maxRadius; dy <= maxRadius; dy++) {
         if (dx == 0 && dy == 0) continue;
+        final x = fromX + dx;
+        final y = fromY + dy;
+        if (x < 0 ||
+            y < 0 ||
+            x + entry.width > surface.width ||
+            y + entry.height > surface.height) {
+          continue;
+        }
         final dist = math.max(dx.abs(), dy.abs());
-        area.add(_Candidate(fromX + dx, fromY + dy, dist));
+        area.add(_Candidate(x, y, dist));
       }
     }
     area.sort((a, b) {
@@ -867,29 +966,41 @@ _RelocationPlan? _planRelocation(
     return area;
   }
 
-  _Candidate? findFreeTile(int fromX, int fromY, int maxRadius) {
-    for (final c in areaCandidates(fromX, fromY, maxRadius)) {
-      if (isFree(c.x, c.y)) return c;
+  _Candidate? findFreeTile(
+    _FootprintEntry entry,
+    int fromX,
+    int fromY,
+    int maxRadius,
+  ) {
+    for (final c in areaCandidates(entry, fromX, fromY, maxRadius)) {
+      if (isFreeArea(entry, c.x, c.y)) return c;
     }
     return null;
   }
 
   ({_Candidate tile, _FootprintEntry? evict})? findCloseTileWithEviction(
+    _FootprintEntry entry,
     int fromX,
     int fromY,
     int maxRadius,
   ) {
-    final area = areaCandidates(fromX, fromY, maxRadius);
+    final area = areaCandidates(entry, fromX, fromY, maxRadius);
     for (final c in area) {
-      if (isFree(c.x, c.y)) return (tile: c, evict: null);
+      if (isFreeArea(entry, c.x, c.y)) {
+        return (tile: c, evict: null);
+      }
     }
+    if (entry.width != 1 || entry.height != 1) return null;
     for (final c in area) {
       final occ = getOcc(c.x, c.y);
-      if (occ != null && occ.kind == 'item' && occ.priority == 'baja') {
-        return (
-          tile: c,
-          evict: _FootprintEntry(occ.item!, occ.type!, occ.priority!, c.x, c.y),
-        );
+      final occupant = occ?.entry;
+      if (occ != null &&
+          occ.kind == 'item' &&
+          occupant != null &&
+          occupant.priority == 'baja' &&
+          occupant.width == 1 &&
+          occupant.height == 1) {
+        return (tile: c, evict: occupant);
       }
     }
     return null;
@@ -898,35 +1009,51 @@ _RelocationPlan? _planRelocation(
   final moves = <_RelocationMove>[];
 
   for (final entry in high) {
-    final result = findCloseTileWithEviction(
+    var result = findCloseTileWithEviction(
+      entry,
       entry.x,
       entry.y,
       HostSwapService._closeRadius,
     );
+    if (result == null) {
+      final far = findFreeTile(
+        entry,
+        entry.x,
+        entry.y,
+        HostSwapService._farRadius,
+      );
+      if (far != null) result = (tile: far, evict: null);
+    }
     if (result == null) return null;
     final dest = result.tile;
     final evict = result.evict;
     if (evict != null) {
       final farDest = findFreeTile(
+        evict,
         evict.x,
         evict.y,
         HostSwapService._farRadius,
       );
       if (farDest == null) return null;
       moves.add(_RelocationMove(evict.item, farDest.x, farDest.y));
-      occupancy.remove('${evict.x},${evict.y}');
-      setOcc(farDest.x, farDest.y, _Occupant('relocated'));
+      vacateEntry(evict);
+      occupyEntry(evict, farDest.x, farDest.y, 'relocated');
     }
     moves.add(_RelocationMove(entry.item, dest.x, dest.y));
-    setOcc(dest.x, dest.y, _Occupant('relocated'));
+    occupyEntry(entry, dest.x, dest.y, 'relocated');
   }
 
   for (final entry in low) {
-    final dest = findFreeTile(entry.x, entry.y, HostSwapService._farRadius);
+    final dest = findFreeTile(
+      entry,
+      entry.x,
+      entry.y,
+      HostSwapService._farRadius,
+    );
     if (dest == null) return null;
     moves.add(_RelocationMove(entry.item, dest.x, dest.y));
-    occupancy.remove('${entry.x},${entry.y}');
-    setOcc(dest.x, dest.y, _Occupant('relocated'));
+    vacateEntry(entry);
+    occupyEntry(entry, dest.x, dest.y, 'relocated');
   }
 
   // El aviso debe corresponder a todo lo que realmente se moverá, incluidas
@@ -950,11 +1077,36 @@ String _itemPriority(XmlElement valChild, String type) {
   return 'baja';
 }
 
+(int, int)? _largeTerrainFeatureDimensions(XmlElement feature) {
+  final type = _itemType(feature);
+  if (type != 'Bush') return const (1, 1);
+  return switch (_intText(feature, 'size')) {
+    0 => const (1, 1),
+    1 => const (2, 1),
+    2 => const (3, 2),
+    _ => null,
+  };
+}
+
 // ─────────────────────────────────────────────────────────────────────────
 // Mutación XML (privado — solo se llama desde execute)
 // ─────────────────────────────────────────────────────────────────────────
 
 void _moveItemTo(XmlElement item, int newX, int newY) {
+  final clumpTile = item.name.local == 'ResourceClump'
+      ? item.findElements('tile').firstOrNull
+      : null;
+  if (clumpTile != null) {
+    _setElementValue(clumpTile, 'X', newX.toString());
+    _setElementValue(clumpTile, 'Y', newY.toString());
+    return;
+  }
+  final featureTile = item.findElements('tilePosition').firstOrNull;
+  if (featureTile != null) {
+    _setElementValue(featureTile, 'X', newX.toString());
+    _setElementValue(featureTile, 'Y', newY.toString());
+    return;
+  }
   final vec = item
       .findElements('key')
       .firstOrNull

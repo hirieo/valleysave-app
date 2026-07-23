@@ -68,7 +68,7 @@ Obtém a versão mais recente em **[Releases](https://github.com/hirieo/valleysa
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
 > [!NOTE]
-> **📱 iOS:** O aplicativo ValleySave para iPhone/iPad já existe, mas publicá-lo na App Store exige uma licença de desenvolvedor Apple (99 USD/ano, ~99 €). Será lançada uma campanha de financiamento coletivo para cobrir esse custo.
+> **📱 iOS:** Já está pronta. O que falta são os 99 USD/ano que a Apple cobra como taxa de entrada — [ajude no Ko-fi](https://ko-fi.com/hirieo) e o iOS entra na festa.
 
 ## Como funciona
 

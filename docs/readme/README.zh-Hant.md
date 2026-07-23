@@ -68,7 +68,7 @@
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
 > [!NOTE]
-> **📱 iOS：** ValleySave 的 iPhone/iPad 版本已經存在，但要在 App Store 上架需要 Apple 開發者授權（每年 99 美元，約 99 歐元）。將發起群眾募資活動來支付這筆費用。
+> **📱 iOS：** 應用程式早就做好了，缺的是 Apple 收的每年 99 美元「入場費」—— [到 Ko-fi 支持一下](https://ko-fi.com/hirieo)，iOS 就能加入了。
 
 ## 運作方式
 

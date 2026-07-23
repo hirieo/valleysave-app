@@ -68,7 +68,7 @@
 | **Android** | `ValleySave-*.apk` | Android 8 이상 |
 
 > [!NOTE]
-> **📱 iOS:** ValleySave iPhone/iPad 앱은 이미 존재하지만, App Store에 게시하려면 Apple 개발자 라이선스(연 99달러, 약 99유로)가 필요합니다. 이 비용을 마련하기 위해 크라우드펀딩 캠페인을 진행할 예정입니다.
+> **📱 iOS:** 앱은 이미 완성했어요. 부족한 건 Apple이 입장료로 요구하는 연 99달러뿐 — [Ko-fi에서 후원해 주시면](https://ko-fi.com/hirieo) iOS도 파티에 합류할 수 있어요.
 
 ## 작동 방식
 

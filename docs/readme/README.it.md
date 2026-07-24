@@ -27,7 +27,7 @@ Nessun server di terzi. Nessun abbonamento. Nessun tracciamento. I tuoi salvatag
 
 Stardew Valley non ha una sincronizzazione cloud ufficiale tra PC e mobile. **ValleySave colma questo vuoto**: rileva le tue fattorie, le carica in una cartella `ValleySave/` nel **tuo Google Drive**, e ti permette di scaricarle e continuare a giocare su qualsiasi altro dispositivo — Windows, macOS, Linux o Android.
 
-- 🔒 **Privacy al primo posto** — usa lo scope ristretto `drive.file` di Google: l'app vede solo i file che ha creato lei stessa, mai il resto del tuo Drive.
+- 🔒 **Privacy al primo posto** — ValleySave tocca solo la propria cartella `ValleySave/` e ciò che condividi esplicitamente. Google richiede lo scope completo di Drive per supportare le fattorie condivise, ma il codice non guarda mai altrove.
 - 🖥️ **Davvero multipiattaforma** — un solo codice (Flutter), build native per tutte e quattro le piattaforme.
 - 🌍 **14 lingue** — italiano, inglese, spagnolo, basco, francese, tedesco, portoghese, russo, ucraino, giapponese, coreano, cinese (semplificato e tradizionale) e thailandese.
 
@@ -75,7 +75,7 @@ Scarica l'ultima versione da **[Releases](https://github.com/hirieo/valleysave-a
 
 ## Come funziona
 
-1. **Collega** — connetti il tuo account Google (OAuth, solo scope `drive.file`).
+1. **Collega** — connetti il tuo account Google (OAuth).
 2. **Rileva** — ValleySave trova le tue fattorie automaticamente.
 3. **Sincronizza** — carica le fattorie in una cartella `ValleySave/` del tuo Drive.
 4. **Continua ovunque** — installa ValleySave su un altro dispositivo, collega lo stesso account, scarica e gioca.

@@ -27,7 +27,7 @@ Hirugarrenen zerbitzurik gabe. Harpidetzarik gabe. Jarraipenik gabe. Zure partid
 
 Stardew Valley-k ez du hodeiko sinkronizazio ofizialik PC eta mugikorren artean. **ValleySave-k hutsune hori betetzen du**: zure baserriak detektatzen ditu, **zure Google Drive propioko** `ValleySave/` karpeta batera igotzen ditu, eta beste edozein gailutan deskargatu eta jokatzen jarraitzeko aukera ematen dizu — Windows, macOS, Linux edo Android.
 
-- 🔒 **Pribatutasuna lehenik** — Google-ren `drive.file` scope murriztua erabiltzen du: aplikazioak berak sortutako fitxategiak baino ez ditu ikusten, inoiz ez zure Drive-ko gainerakoa.
+- 🔒 **Pribatutasuna lehenik** — ValleySave-k bere `ValleySave/` karpeta eta zuk esplizituki partekatzen duzuna baino ez ditu ukitzen. Google-k Drive scope osoa eskatzen du partekatutako granjak onartzeko, baina kodeak inoiz ez du bestelakorik begiratzen.
 - 🖥️ **Benetan plataforma anitzekoa** — kode bakarra (Flutter), build natiboak lau plataformetarako.
 - 🌍 **14 hizkuntza** — euskara, ingelesa, gaztelania, frantsesa, alemana, italiera, portugesa, errusiera, ukrainera, japoniera, koreera, txinera (sinplifikatua eta tradizionala) eta thailandiera.
 
@@ -75,7 +75,7 @@ Eskuratu azken bertsioa **[Releases](https://github.com/hirieo/valleysave-app/re
 
 ## Nola funtzionatzen du
 
-1. **Konektatu** — lotu zure Google kontu propioa (OAuth, `drive.file` scope soilik).
+1. **Konektatu** — lotu zure Google kontu propioa (OAuth).
 2. **Detektatu** — ValleySave-k zure baserriak automatikoki aurkitzen ditu.
 3. **Sinkronizatu** — igo baserriak zure Drive-ko `ValleySave/` karpeta batera.
 4. **Jarraitu edonon** — instalatu ValleySave beste gailu batean, konektatu kontu bera, deskargatu eta jokatu.

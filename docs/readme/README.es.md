@@ -27,7 +27,7 @@ Sin servidores de terceros. Sin suscripciones. Sin rastreo. Tus partidas nunca s
 
 Stardew Valley no tiene sincronización oficial de partidas en la nube entre PC y móvil. **ValleySave cubre ese hueco**: detecta tus granjas, las sube a una carpeta `ValleySave/` en **tu propio Google Drive**, y te deja descargarlas y seguir jugando en cualquier otro dispositivo — Windows, macOS, Linux o Android.
 
-- 🔒 **Privacidad primero** — usa el scope restringido `drive.file` de Google: la app solo ve los archivos que ella misma crea, nunca el resto de tu Drive.
+- 🔒 **Privacidad primero** — ValleySave solo toca su propia carpeta `ValleySave/` y lo que tú compartes explícitamente. Google exige el scope completo de Drive para dar soporte a las partidas compartidas, pero el código nunca mira nada más.
 - 🖥️ **Multiplataforma de verdad** — un solo código (Flutter), builds nativas para las cuatro plataformas.
 - 🌍 **14 idiomas** — español, inglés, euskera, francés, alemán, italiano, portugués, ruso, ucraniano, japonés, coreano, chino (simplificado y tradicional) y tailandés.
 
@@ -75,7 +75,7 @@ Descarga la última versión desde **[Releases](https://github.com/hirieo/valley
 
 ## Cómo funciona
 
-1. **Conecta** — vincula tu propia cuenta de Google (OAuth, solo scope `drive.file`).
+1. **Conecta** — vincula tu propia cuenta de Google (OAuth).
 2. **Detecta** — ValleySave encuentra tus granjas de Stardew Valley automáticamente.
 3. **Sincroniza** — sube las granjas a una carpeta `ValleySave/` de tu Drive.
 4. **Continúa donde quieras** — instala ValleySave en otro dispositivo, conecta la misma cuenta, descarga y juega.
@@ -89,7 +89,7 @@ No — las partidas de PC y móvil se guardan en local y no existe sincronizaci�
 Toda operación destructiva es transaccional: tu partida original se respalda y verifica antes de sustituirse, y se restaura automáticamente si algo falla. Los datos corruptos o incompletos se rechazan antes de que puedan pisar una partida buena.
 
 **¿Dónde se guardan mis partidas?**
-En una carpeta `ValleySave/` dentro de *tu propio* Google Drive. No existe ningún servidor de ValleySave. La app usa el scope restringido `drive.file`, así que no puede leer nada más de tu Drive.
+En una carpeta `ValleySave/` dentro de *tu propio* Google Drive. No existe ningún servidor de ValleySave. Google exige el scope completo para dar soporte a las partidas compartidas, pero el código de la app solo lee/escribe en `ValleySave/` y en lo que tú compartes — nunca toca nada más por su cuenta.
 
 **¿Puedo mover una granja entre Windows y Android?**
 Sí — es el caso de uso principal. También macOS y Linux, en cualquier dirección.

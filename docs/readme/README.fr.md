@@ -27,7 +27,7 @@ Pas de serveurs tiers. Pas d'abonnement. Pas de pistage. Vos sauvegardes ne quit
 
 Stardew Valley n'a pas de synchronisation cloud officielle entre PC et mobile. **ValleySave comble ce manque** : il détecte vos fermes, les téléverse dans un dossier `ValleySave/` de **votre propre Google Drive**, et vous permet de les télécharger pour continuer à jouer sur n'importe quel autre appareil — Windows, macOS, Linux ou Android.
 
-- 🔒 **Vie privée d'abord** — utilise le scope restreint `drive.file` de Google : l'application ne voit que les fichiers qu'elle a créés, jamais le reste de votre Drive.
+- 🔒 **Vie privée d'abord** — ValleySave ne touche que son propre dossier `ValleySave/` et ce que vous partagez explicitement. Google exige le scope Drive complet pour prendre en charge les fermes partagées, mais le code ne regarde jamais ailleurs.
 - 🖥️ **Vraiment multiplateforme** — un seul code (Flutter), des builds natifs pour les quatre plateformes.
 - 🌍 **14 langues** — français, anglais, espagnol, basque, allemand, italien, portugais, russe, ukrainien, japonais, coréen, chinois (simplifié et traditionnel) et thaï.
 
@@ -75,7 +75,7 @@ Récupérez la dernière version sur **[Releases](https://github.com/hirieo/vall
 
 ## Comment ça marche
 
-1. **Connectez** — liez votre propre compte Google (OAuth, scope `drive.file` uniquement).
+1. **Connectez** — liez votre propre compte Google (OAuth).
 2. **Détectez** — ValleySave trouve vos fermes Stardew Valley automatiquement.
 3. **Synchronisez** — envoyez vos fermes dans un dossier `ValleySave/` de votre Drive.
 4. **Continuez partout** — installez ValleySave sur un autre appareil, connectez le même compte, téléchargez et jouez.

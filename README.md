@@ -27,7 +27,7 @@ No third-party servers. No subscriptions. No tracking. Your saves never leave yo
 
 Stardew Valley has no official cloud save sync between PC and mobile. **ValleySave fills that gap**: it detects your farms, uploads them to a `ValleySave/` folder in **your own Google Drive**, and lets you download and continue playing on any other device — Windows, macOS, Linux or Android.
 
-- 🔒 **Privacy-first** — uses Google's restricted `drive.file` scope: the app can only see files it created itself, never the rest of your Drive.
+- 🔒 **Privacy-first** — ValleySave only touches its own `ValleySave/` folder and whatever you explicitly share. Google requires the full Drive scope to support shared farms, but the code never looks at anything else.
 - 🖥️ **Truly cross-platform** — one codebase (Flutter), native builds for all four platforms.
 - 🌍 **14 languages** — English, Spanish, Basque, French, German, Italian, Portuguese, Russian, Ukrainian, Japanese, Korean, Chinese (Simplified & Traditional) and Thai.
 
@@ -75,7 +75,7 @@ Grab the latest version from **[Releases](https://github.com/hirieo/valleysave-a
 
 ## How it works
 
-1. **Connect** — link your own Google account (OAuth, `drive.file` scope only).
+1. **Connect** — link your own Google account (OAuth).
 2. **Detect** — ValleySave finds your Stardew Valley farms automatically.
 3. **Sync** — upload farms to a `ValleySave/` folder in your Drive.
 4. **Continue anywhere** — install ValleySave on another device, connect the same account, download and play.
@@ -89,7 +89,7 @@ No — saves on PC and mobile are stored locally and there is no official cross-
 Every destructive operation is transactional: your original save is backed up and verified before being replaced, and automatically restored if anything fails. Corrupt or incomplete data is rejected before it can overwrite a good save.
 
 **Where are my saves stored?**
-In a `ValleySave/` folder inside *your own* Google Drive. There is no ValleySave server. The app uses the restricted `drive.file` scope, so it can't read anything else in your Drive.
+In a `ValleySave/` folder inside *your own* Google Drive. There is no ValleySave server. Google requires the full Drive scope to support shared farms, but the app's code only reads/writes `ValleySave/` and whatever you share — nothing else, ever.
 
 **Can I move a farm between Windows and Android?**
 Yes — that's the core use case. Also macOS and Linux, in any direction.

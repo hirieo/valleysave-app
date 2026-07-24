@@ -27,7 +27,7 @@ Sem servidores de terceiros. Sem subscrições. Sem rastreio. Os teus saves nunc
 
 O Stardew Valley não tem sincronização oficial de saves na nuvem entre PC e telemóvel. **O ValleySave preenche essa lacuna**: deteta as tuas quintas, envia-as para uma pasta `ValleySave/` no **teu próprio Google Drive**, e permite-te transferi-las e continuar a jogar em qualquer outro dispositivo — Windows, macOS, Linux ou Android.
 
-- 🔒 **Privacidade primeiro** — usa o scope restrito `drive.file` da Google: a app só vê os ficheiros que ela própria criou, nunca o resto do teu Drive.
+- 🔒 **Privacidade primeiro** — o ValleySave só mexe na sua própria pasta `ValleySave/` e no que tu partilhas explicitamente. A Google exige o scope completo do Drive para suportar as quintas partilhadas, mas o código nunca olha para mais nada.
 - 🖥️ **Verdadeiramente multiplataforma** — um só código (Flutter), builds nativas para as quatro plataformas.
 - 🌍 **14 idiomas** — português, inglês, espanhol, basco, francês, alemão, italiano, russo, ucraniano, japonês, coreano, chinês (simplificado e tradicional) e tailandês.
 
@@ -75,7 +75,7 @@ Obtém a versão mais recente em **[Releases](https://github.com/hirieo/valleysa
 
 ## Como funciona
 
-1. **Liga** — associa a tua própria conta Google (OAuth, apenas scope `drive.file`).
+1. **Liga** — associa a tua própria conta Google (OAuth).
 2. **Deteta** — o ValleySave encontra as tuas quintas automaticamente.
 3. **Sincroniza** — envia as quintas para uma pasta `ValleySave/` do teu Drive.
 4. **Continua onde quiseres** — instala o ValleySave noutro dispositivo, liga a mesma conta, transfere e joga.

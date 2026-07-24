@@ -71,7 +71,7 @@ Obtém a versão mais recente em **[Releases](https://github.com/hirieo/valleysa
 > [!NOTE]
 > **📱 iOS:** Já está pronta. O que falta são os 99 USD/ano que a Apple cobra para publicar — [ajude no Ko-fi](https://ko-fi.com/hirieo) e o iOS entra na festa.
 >
-> Já são 7 meses trabalhando quase todo dia no ValleySave. Um café pela manhã ajuda mesmo a me animar — me dá energia para seguir com este projeto e com o que vier depois. ☕
+> Como o Pierre, mas sem subir os preços: o ValleySave é grátis, sem anúncios e sem assinaturas, feito por uma única pessoa em 7 meses. Se já te ajudou com as tuas partidas, oferece-me um [café no Ko-fi](https://ko-fi.com/hirieo) — é isso que me tira da cama pela manhã para continuar. ☕
 
 ## Como funciona
 

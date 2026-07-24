@@ -71,7 +71,7 @@ Eskuratu azken bertsioa **[Releases](https://github.com/hirieo/valleysave-app/re
 > [!NOTE]
 > **📱 iOS:** Jadanik prest dago. Falta dena Apple-k argitaratzeagatik eskatzen duen 99 USD/urtekoa da — [lagundu Ko-fi-n](https://ko-fi.com/hirieo) eta iOS jaian sartuko da.
 >
-> 7 hilabete daramatzat ia egunero ValleySave-n lanean. Goizeko kafe batek benetan laguntzen dit martxan jartzen — proiektu honekin eta datozenekin jarraitzeko energia ematen dit. ☕
+> Pierre bezala, baina prezioak igo gabe: ValleySave doakoa da, iragarkirik eta harpidetzarik gabe, pertsona bakar batek 7 hilabetetan egina. Inoiz zure partidekin lagundu badizu, gonbidatu [kafe bat Ko-fi-n](https://ko-fi.com/hirieo) — horrek ateratzen nau goizero ohetik jarraitzeko. ☕
 
 ## Nola funtzionatzen du
 

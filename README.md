@@ -71,7 +71,7 @@ Grab the latest version from **[Releases](https://github.com/hirieo/valleysave-a
 > [!NOTE]
 > **📱 iOS:** It's already built. What's missing is the 99 USD/year Apple charges to let me publish — [help me out on Ko-fi](https://ko-fi.com/hirieo) and iOS gets to join the party.
 >
-> I've been grinding on ValleySave almost daily for 7 months now. A morning coffee genuinely helps me get going — keeps me fueled for this project and whatever comes next. ☕
+> Like Pierre, but without jacking up the prices: ValleySave is free, no ads, no subscriptions, built by one person over 7 months. If it's ever bailed out your saves, buy me a [coffee on Ko-fi](https://ko-fi.com/hirieo) — it's what gets me out of bed to keep going. ☕
 
 ## How it works
 

@@ -12,6 +12,7 @@ Sin servidores de terceros. Sin suscripciones. Sin rastreo. Tus partidas nunca s
 [![Descargas](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![Licencia: Polyform NC](https://img.shields.io/badge/Licencia-Polyform%20NC-orange)](../../LICENSE)
 ![Plataformas](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
 
 [🇬🇧 English](../../README.md) · 🇪🇸 Español · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
@@ -68,7 +69,9 @@ Descarga la última versión desde **[Releases](https://github.com/hirieo/valley
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
 > [!NOTE]
-> **📱 iOS:** Ya la tengo hecha. Lo que no tengo son los 99 USD/año que Apple pide como peaje de entrada — [ayúdame a pagarlo en Ko-fi](https://ko-fi.com/hirieo) y en cuanto se junte, iOS entra a la fiesta.
+> **📱 iOS:** Ya la tengo hecha. Lo que falta son los 99 USD/año que Apple cobra por dejarme publicar — [ayúdame en Ko-fi](https://ko-fi.com/hirieo) y en cuanto se junte, iOS entra a la fiesta.
+>
+> Llevo 7 meses currándome ValleySave casi a diario. Un café por la mañana me pone las pilas de verdad — me da energía para seguir con esto y con lo próximo que venga. ☕
 
 ## Cómo funciona
 

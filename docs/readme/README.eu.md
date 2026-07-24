@@ -12,6 +12,7 @@ Hirugarrenen zerbitzurik gabe. Harpidetzarik gabe. Jarraipenik gabe. Zure partid
 [![Deskargak](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![Lizentzia: Polyform NC](https://img.shields.io/badge/Lizentzia-Polyform%20NC-orange)](../../LICENSE)
 ![Plataformak](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · Euskera · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
@@ -68,7 +69,9 @@ Eskuratu azken bertsioa **[Releases](https://github.com/hirieo/valleysave-app/re
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
 > [!NOTE]
-> **📱 iOS:** Jadanik prest dago. Falta dena Apple-k sarrera gisa eskatzen duen 99 USD/urtekoa da — [lagundu Ko-fi-n](https://ko-fi.com/hirieo) eta iOS jaian sartuko da.
+> **📱 iOS:** Jadanik prest dago. Falta dena Apple-k argitaratzeagatik eskatzen duen 99 USD/urtekoa da — [lagundu Ko-fi-n](https://ko-fi.com/hirieo) eta iOS jaian sartuko da.
+>
+> 7 hilabete daramatzat ia egunero ValleySave-n lanean. Goizeko kafe batek benetan laguntzen dit martxan jartzen — proiektu honekin eta datozenekin jarraitzeko energia ematen dit. ☕
 
 ## Nola funtzionatzen du
 

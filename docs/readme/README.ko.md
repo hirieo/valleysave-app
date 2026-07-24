@@ -12,6 +12,7 @@
 [![다운로드 수](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![라이선스: Polyform NC](https://img.shields.io/badge/License-Polyform%20NC-orange)](../../LICENSE)
 ![플랫폼](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · 🇰🇷 한국어 · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
@@ -68,7 +69,9 @@
 | **Android** | `ValleySave-*.apk` | Android 8 이상 |
 
 > [!NOTE]
-> **📱 iOS:** 앱은 이미 완성했어요. 부족한 건 Apple이 입장료로 요구하는 연 99달러뿐 — [Ko-fi에서 후원해 주시면](https://ko-fi.com/hirieo) iOS도 파티에 합류할 수 있어요.
+> **📱 iOS:** 앱은 이미 완성했어요. 부족한 건 Apple이 게시를 허락해 주는 대가로 요구하는 연 99달러뿐 — [Ko-fi에서 후원해 주시면](https://ko-fi.com/hirieo) iOS도 파티에 합류할 수 있어요.
+>
+> ValleySave를 거의 매일 붙잡고 산 지 벌써 7개월째예요. 아침에 마시는 커피 한 잔이 정말 시동을 걸어줘요 — 이 프로젝트와 앞으로 할 일들을 계속할 힘이 되거든요. ☕
 
 ## 작동 방식
 

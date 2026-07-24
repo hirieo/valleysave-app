@@ -12,6 +12,7 @@
 [![下载量](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![许可证: Polyform NC](https://img.shields.io/badge/License-Polyform%20NC-orange)](../../LICENSE)
 ![平台](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · 🇨🇳 中文 · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
@@ -68,7 +69,9 @@
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
 > [!NOTE]
-> **📱 iOS：** 应用早就做好了，缺的是 Apple 收的每年 99 美元「入场费」—— [到 Ko-fi 支持一下](https://ko-fi.com/hirieo)，iOS 就能加入了。
+> **📱 iOS：** 应用早就做好了，缺的是 Apple 收的每年 99 美元发布费 —— [到 Ko-fi 支持一下](https://ko-fi.com/hirieo)，iOS 就能加入了。
+>
+> 我几乎每天都在做 ValleySave，已经 7 个月了。早上一杯咖啡真的能让我打起精神 —— 有动力继续做这个项目和接下来的其他项目。☕
 
 ## 工作原理
 

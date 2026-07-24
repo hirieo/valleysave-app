@@ -12,6 +12,7 @@ Keine Drittanbieter-Server. Keine Abos. Kein Tracking. Deine Spielstände verlas
 [![Downloads](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![Lizenz: Polyform NC](https://img.shields.io/badge/Lizenz-Polyform%20NC-orange)](../../LICENSE)
 ![Plattformen](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · 🇩🇪 Deutsch · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
@@ -68,7 +69,9 @@ Hol dir die neueste Version von **[Releases](https://github.com/hirieo/valleysav
 | **Android** | `ValleySave-*.apk` | Android 8+ |
 
 > [!NOTE]
-> **📱 iOS:** Ist schon fertig. Was fehlt, sind die 99 USD/Jahr, die Apple als Eintrittsgebühr verlangt — [hilf mit auf Ko-fi](https://ko-fi.com/hirieo), dann darf iOS mitfeiern.
+> **📱 iOS:** Ist schon fertig. Was fehlt, sind die 99 USD/Jahr, die Apple für die Veröffentlichung verlangt — [hilf mit auf Ko-fi](https://ko-fi.com/hirieo), dann darf iOS mitfeiern.
+>
+> Ich arbeite jetzt seit 7 Monaten fast täglich an ValleySave. Ein Kaffee am Morgen hilft wirklich, in Schwung zu kommen — gibt mir Energie für dieses Projekt und alles, was danach kommt. ☕
 
 ## So funktioniert's
 

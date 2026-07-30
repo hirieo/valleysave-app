@@ -90,12 +90,29 @@ void main() {
         _entry(local: _save(6), own: _save(4), owner: _save(4)),
       );
 
-      expect(state.summary, SharedSyncSummary.notInCloud);
+      // D6 (spec 008, hallazgo en vivo 2026-07-30): los dos Drives EXISTEN
+      // pero van atrasados (`behind`, no `missing`) — antes esto caía en
+      // `notInCloud` ("Solo en este equipo"), incorrecto cuando sí hay
+      // copias en la nube. `notInCloud` se reserva para cuando NINGÚN
+      // Drive tuvo nunca copia (los dos `missing`).
+      expect(state.summary, SharedSyncSummary.localAhead);
       expect(state.uploadTargets, [
         SharedCloudLocation.ownDrive,
         SharedCloudLocation.ownerDrive,
       ]);
       expect(state.downloadSources, isEmpty);
+    });
+
+    test('sin copia en ningún Drive se queda en "solo en este equipo"', () {
+      final state = SharedSyncState.fromEntry(
+        _entry(local: _save(6), own: null, owner: null),
+      );
+
+      expect(state.summary, SharedSyncSummary.notInCloud);
+      expect(state.uploadTargets, [
+        SharedCloudLocation.ownDrive,
+        SharedCloudLocation.ownerDrive,
+      ]);
     });
 
     test('un lector nunca puede subir al Drive del dueño', () {

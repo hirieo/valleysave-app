@@ -64,6 +64,34 @@ enum _SharedSyncTarget { ownDrive, ownerDrive, both }
 
 enum _SharedDownloadSource { ownDrive, ownerDrive }
 
+/// Rediseño del diálogo subir/bajar (2026-07-29): clasificación del veredicto
+/// que se muestra sobre el ledger de diferencias. `red` (peligro) dispara
+/// además el segundo diálogo de confirmación — ver `_confirmDangerousOverwrite`.
+enum _OverwriteVerdict { green, amber, gray, red }
+
+/// Una fila del ledger: `before`→`after` ya formateados para mostrar, y si
+/// `after` es peor que `before` para ese stat (colorea la píldora en rojo).
+typedef _StatDiff = ({String label, String before, String after, bool worse});
+
+/// Resultado completo de comparar el lado que se va a sobrescribir (`current`)
+/// contra el que lo reemplazará (`result`). `headline` son los 4 stats que
+/// siempre van en fila individual (día/año, tiempo, dinero actual, dinero
+/// total); `skills` y `others` son las dos rejillas de 2 columnas (solo los
+/// stats que cambiaron, sin título de grupo). `isDanger`/`verdict` deciden el
+/// color del diálogo y si hace falta doble confirmación.
+typedef OverwriteLedger = ({
+  List<_StatDiff> headline,
+  List<_StatDiff> skills,
+  List<_StatDiff> others,
+  List<String> identicalLabels,
+  bool isDanger,
+  _OverwriteVerdict verdict,
+  String verdictText,
+  /// Frase corta ("7 días y 3h30m") ya formateada — se reutiliza tal cual en
+  /// el segundo diálogo de confirmación del caso peligro, sin recalcularla.
+  String delta,
+});
+
 class SavesScreen extends StatefulWidget {
   const SavesScreen({super.key, this.drive});
 
@@ -626,13 +654,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     await _handleDownload(entry.asEntry);
   }
 
-  Future<void> _handleSyncShared(SharedSaveEntry entry) async {
+  /// Único punto que sube al Drive del DUEÑO (mismo papel que
+  /// `_uploadToOwnDrive` para Mi Drive, ver G9) — SIN confirmación propia:
+  /// el caller decide cuándo hace falta (`_handleSyncShared` la muestra
+  /// siempre; `_handleSyncBoth`, T815, ya la mostró combinada antes de
+  /// llegar aquí). Conserva ÍNTEGRO el manejo de
+  /// `SharedAccessRevokedException`/`SharedAccessReadOnlyException` (G2) —
+  /// es la parte que NUNCA se fusiona con la subida a Mi Drive.
+  Future<void> _uploadToOwnerDrive(SharedSaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     if (widget.drive == null || entry.localMatch == null) return;
-    if (_busy.contains(entry.folderName)) return;
-
-    final confirmed = await _confirmSyncShared(entry.ownerEmail);
-    if (confirmed != true) return;
 
     setState(() => _busy.add(entry.folderName));
     try {
@@ -665,8 +696,38 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _handleSharedSyncRequested(SharedSaveEntry entry) async {
+  /// T813 (spec 008) — pasa por el mismo ledger de diferencias que
+  /// `_handleUpload` (`_confirmUploadStep`), con las etiquetas del Drive del
+  /// dueño (verde menta `#42D392`, 🔗) en vez del texto plano de
+  /// `_confirmSyncShared` (retirado, sin más usos). La ejecución real y su
+  /// `try/catch` de excepciones de compartido viven en `_uploadToOwnerDrive`
+  /// — es la única parte que NO se unifica con `_handleUpload` (spec: "seam
+  /// limpio", subir al Drive del dueño puede revocar acceso o bajar a
+  /// lector, subir a Mi Drive nunca).
+  Future<void> _handleSyncShared(SharedSaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
+    if (widget.drive == null || entry.localMatch == null) return;
+    if (_busy.contains(entry.folderName)) return;
+
+    final proceed = await _confirmUploadStep(
+      entry.asEntry,
+      remoteLabel: l10n.sharedSideOwnerDrive(entry.ownerEmail),
+      remoteColor: const Color(0xFF42D392),
+      remoteIcon: '🔗',
+      actionLabel: l10n.overwriteUploadToOwner(entry.ownerEmail),
+    );
+    if (!proceed) return;
+    await _uploadToOwnerDrive(entry);
+  }
+
+  /// T814 (spec 008) — deja de llamar `drive.uploadSave`/`uploadToSharedSave`
+  /// por su cuenta (duplicaba la subida a Mi Drive, ver G9): enruta cada
+  /// destino por su único punto de subida (`_handleUpload` /
+  /// `_handleSyncShared` / `_handleSyncBoth`), cada uno con su propio ledger
+  /// de confirmación. T818: con un solo destino válido va DIRECTO a ese
+  /// ledger, sin el selector intermedio — el selector solo aparece cuando
+  /// de verdad hay que elegir entre dos.
+  Future<void> _handleSharedSyncRequested(SharedSaveEntry entry) async {
     final drive = widget.drive;
     final local = entry.localMatch;
     if (drive == null || local == null || _busy.contains(entry.folderName)) {
@@ -680,52 +741,48 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
     if (!canOwn && !canOwner) return;
 
+    if (canOwn && !canOwner) {
+      await _handleUpload(entry.asOwnEntry);
+      return;
+    }
+    if (canOwner && !canOwn) {
+      await _handleSyncShared(entry);
+      return;
+    }
+
     final target = await _chooseSharedSyncTarget(
       entry,
       canOwn: canOwn,
       canOwner: canOwner,
     );
     if (target == null || !mounted) return;
-
-    setState(() => _busy.add(entry.folderName));
-    try {
-      if (target == _SharedSyncTarget.ownDrive ||
-          target == _SharedSyncTarget.both) {
-        await drive.uploadSave(
-          local.folderPath,
-          entry.folderName,
-          players: local.players,
-        );
-      }
-      if (target == _SharedSyncTarget.ownerDrive ||
-          target == _SharedSyncTarget.both) {
-        await drive.uploadToSharedSave(
-          entry.folderId,
-          local.folderPath,
-          players: local.players,
-        );
-      }
-      await _load(silent: true);
-      if (mounted) _snack(l10n.exportSuccess);
-    } on SharedAccessRevokedException {
-      // Vía activa (ver `_handleSyncShared`): puede pasar aquí también si
-      // se eligió "Ambos" y solo falló la mitad del Drive del dueño.
-      await _handleConfirmedRevocation(
-        folderId: entry.folderId,
-        ownerEmail: entry.ownerEmail,
-        farmName: entry.folderName,
-      );
-    } on SharedAccessReadOnlyException {
-      // Ver `_handleSyncShared` — acceso válido, solo bajó a lector.
-      await _load(silent: true);
-      if (mounted) _snack(l10n.sharedAccessReadOnly(entry.ownerEmail));
-    } on UploadIncompleteSaveException {
-      if (mounted) _snack(l10n.snackUploadIncomplete);
-    } catch (e) {
-      if (mounted) _snack(l10n.exportError(e.toString()));
-    } finally {
-      if (mounted) setState(() => _busy.remove(entry.folderName));
+    switch (target) {
+      case _SharedSyncTarget.ownDrive:
+        await _handleUpload(entry.asOwnEntry);
+      case _SharedSyncTarget.ownerDrive:
+        await _handleSyncShared(entry);
+      case _SharedSyncTarget.both:
+        await _handleSyncBoth(entry);
     }
+  }
+
+  /// T815 (spec 008, D3) — sustituye la secuencia anterior de `onSyncBoth`
+  /// (`_handleUpload` + `_handleSyncShared` encadenados, cada uno con su
+  /// propia confirmación por separado). Una única confirmación combinada
+  /// (`_confirmUploadToBoth`, dos ledgers independientes, un solo veredicto
+  /// de peligro); si se cancela, no se ejecuta ninguna subida (G6) — las dos
+  /// llamadas reales solo ocurren después de confirmar, cada una por su
+  /// único punto de subida (`_uploadToOwnDrive`/`_uploadToOwnerDrive`, G9),
+  /// conservando el manejo de excepciones de compartido de la segunda (G2).
+  Future<void> _handleSyncBoth(SharedSaveEntry entry) async {
+    if (widget.drive == null || entry.localMatch == null) return;
+    if (_busy.contains(entry.folderName)) return;
+
+    final proceed = await _confirmUploadToBoth(entry);
+    if (!proceed) return;
+
+    await _uploadToOwnDrive(entry.asOwnEntry);
+    if (mounted) await _uploadToOwnerDrive(entry);
   }
 
   Future<void> _handleSharedDownloadRequested(SharedSaveEntry entry) async {
@@ -938,52 +995,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  Future<bool?> _confirmSyncShared(String ownerEmail) {
-    final l10n = AppLocalizations.of(context)!;
-    return showDialog<bool>(
-      context: context,
-      builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        child: _glassDialogShell(
-          accent: const Color(0xFFE0B850),
-          child: _dialogBody(
-            title: Text(
-              l10n.sharedWithMeSync,
-              style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: Text(
-              l10n.sharedWithMeSyncConfirm(ownerEmail),
-              style: GoogleFonts.firaCode(
-                fontSize: 12,
-                height: 1.5,
-                color: Colors.white.withValues(alpha: 0.80),
-              ),
-            ),
-            actions: [
-              ActionBtn(
-                label: l10n.sharedWithMeSync,
-                color: const Color(0xFFE0B850),
-                icon: Icons.sync_rounded,
-                filled: true,
-                onTap: () => Navigator.pop(ctx, true),
-              ),
-              ActionBtn(
-                label: l10n.cancel,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx, false),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Future<bool?> _confirmRemoveShared(String ownerEmail) {
     final l10n = AppLocalizations.of(context)!;
@@ -1342,18 +1353,41 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   // ── Acciones ────────────────────────────────────────────────────────────
 
-  Future<void> _handleUpload(SaveEntry entry) async {
+  /// T812 (spec 008) — paso de confirmación de subida compartido entre Mi
+  /// Drive y el Drive del dueño: SOLO decide si procede subir (o si no hace
+  /// falta confirmar porque es copia nueva, `entry.drive == null`). La
+  /// llamada real a Drive (`uploadSave` vs `uploadToSharedSave`) y su
+  /// `try/catch` de excepciones de compartido (G2) siguen en cada handler —
+  /// nunca aquí. "Seam limpio": se unifica la confirmación, NO los handlers
+  /// (ver spec.md → "Diseño técnico").
+  Future<bool> _confirmUploadStep(
+    SaveEntry entry, {
+    String? remoteLabel,
+    Color? remoteColor,
+    String? remoteIcon,
+    String? actionLabel,
+  }) async {
+    if (entry.drive == null) return true;
+    final confirmed = await _confirmUpload(
+      entry,
+      remoteLabel: remoteLabel,
+      remoteColor: remoteColor,
+      remoteIcon: remoteIcon,
+      actionLabel: actionLabel,
+    );
+    return confirmed == true;
+  }
+
+  /// Único punto que sube a Mi Drive (G9: antes había dos —
+  /// `_handleSharedSyncRequested` llamaba `drive.uploadSave` por su cuenta,
+  /// ver T814). SIN confirmación propia: el caller decide cuándo hace falta
+  /// (`_handleUpload` la muestra siempre; `_handleSyncBoth`, T815, ya la
+  /// mostró combinada antes de llegar aquí).
+  Future<void> _uploadToOwnDrive(SaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     final local = entry.local;
     if (local == null || widget.drive == null) return;
     final name = local.folderName;
-    if (_busy.contains(name)) return;
-
-    // Sobrescribe una versión ya existente en Drive → preview + confirmar.
-    if (entry.drive != null) {
-      final confirmed = await _confirmUpload(entry);
-      if (confirmed != true) return;
-    }
 
     setState(() => _busy.add(name));
     try {
@@ -1370,6 +1404,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     } finally {
       if (mounted) setState(() => _busy.remove(name));
     }
+  }
+
+  Future<void> _handleUpload(SaveEntry entry) async {
+    final local = entry.local;
+    if (local == null || widget.drive == null) return;
+    final name = local.folderName;
+    if (_busy.contains(name)) return;
+
+    // Sobrescribe una versión ya existente en Drive → preview + confirmar.
+    if (!await _confirmUploadStep(entry)) return;
+    await _uploadToOwnDrive(entry);
   }
 
   Future<void> _handleDownload(SaveEntry entry) async {
@@ -3730,7 +3775,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return null;
   }
 
-  Future<bool?> _confirmDownload(SaveEntry entry) {
+  /// [remoteLabel]/[remoteColor]/[remoteIcon] (spec 008, T811): generalizan
+  /// la cara "Drive" a un tercer sitio (Drive del dueño) sin tocar el
+  /// comportamiento de las partidas propias — por defecto quedan sin usar y
+  /// `_flowHeader`/`_overwritePreview` caen en `previewDriveLabel` + azul,
+  /// exactamente como antes (G3).
+  Future<bool?> _confirmDownload(
+    SaveEntry entry, {
+    String? remoteLabel,
+    Color? remoteColor,
+    String? remoteIcon,
+  }) {
     final l10n = AppLocalizations.of(context)!;
     final driveBase = entry.drive!;
     final localBase = entry.local;
@@ -3793,6 +3848,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     ],
                   )
                 : null;
+            final ledger = local == null
+                ? null
+                : _computeOverwriteLedger(
+                    l10n,
+                    current: local,
+                    result: drive,
+                    overwrittenSideLabel: l10n.previewLocalLabel,
+                  );
+            final danger = ledger?.isDanger ?? false;
             return _glassDialogShell(
               maxWidth: 460,
               child: _dialogBody(
@@ -3820,6 +3884,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                           color: Colors.white.withValues(alpha: 0.80),
                         ),
                       ),
+                      _flowHeader(
+                        l10n,
+                        uploading: false,
+                        isNewCopy: true,
+                        remoteLabel: remoteLabel,
+                        remoteColor: remoteColor,
+                        remoteIcon: remoteIcon,
+                      ),
                       if (switcher != null) ...[
                         const SizedBox(height: 12),
                         Center(child: switcher),
@@ -3828,14 +3900,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       _overwritePreview(
                         l10n: l10n,
                         intro: l10n.dlgDownloadOverwrite(drive.farmName),
-                        current: local,
-                        result: drive,
-                        currentLabel: l10n.previewLocalLabel,
-                        resultLabel: l10n.previewFromDrive,
-                        currentIcon: _localIcon,
-                        resultIcon: '☁️',
-                        resultColor: const Color(0xFF5AA8E0),
+                        uploading: false,
+                        ledger: ledger!,
                         afterIntro: switcher,
+                        remoteLabel: remoteLabel,
+                        remoteColor: remoteColor,
+                        remoteIcon: remoteIcon,
                       ),
                     if (local != null &&
                         drive.gameVersion.isNotEmpty &&
@@ -3874,11 +3944,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 ),
                 actions: [
                   ActionBtn(
-                    label: l10n.dlgDownloadButton,
-                    color: const Color(0xFF5AA8E0),
-                    icon: Icons.cloud_download_outlined,
+                    label: danger
+                        ? l10n.overwriteDangerButtonDownload
+                        : l10n.dlgDownloadButton,
+                    color: danger
+                        ? const Color(0xFFE05C5C)
+                        : (remoteColor ?? const Color(0xFF5AA8E0)),
+                    icon: danger
+                        ? Icons.warning_amber_rounded
+                        : Icons.cloud_download_outlined,
                     filled: true,
-                    onTap: () => Navigator.pop(ctx, true),
+                    onTap: () async {
+                      if (danger) {
+                        final confirmed = await _confirmDangerousOverwrite(
+                          l10n: l10n,
+                          uploading: false,
+                          delta: ledger!.delta,
+                          target: l10n.previewLocalLabel,
+                        );
+                        if (confirmed == true && ctx.mounted) {
+                          Navigator.pop(ctx, true);
+                        }
+                      } else {
+                        Navigator.pop(ctx, true);
+                      }
+                    },
                   ),
                   ActionBtn(
                     label: l10n.cancel,
@@ -3895,7 +3985,20 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  Future<bool?> _confirmUpload(SaveEntry entry) {
+  /// [remoteLabel]/[remoteColor]/[remoteIcon] (spec 008, T811): mismo
+  /// mecanismo que `_confirmDownload` para generalizar la cara "Drive" a un
+  /// tercer sitio, sin tocar el comportamiento de las partidas propias (G3).
+  /// [actionLabel] sobrescribe el texto del botón normal (no-peligro) —
+  /// D2 exige nombres explícitos por destino ("Subir al Drive de {email}")
+  /// en vez del genérico `dlgUploadButton`; por defecto sigue siendo ese
+  /// genérico.
+  Future<bool?> _confirmUpload(
+    SaveEntry entry, {
+    String? remoteLabel,
+    Color? remoteColor,
+    String? remoteIcon,
+    String? actionLabel,
+  }) {
     final l10n = AppLocalizations.of(context)!;
     final localBase = entry.local!;
     final driveBase = entry.drive;
@@ -3949,6 +4052,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     ],
                   )
                 : null;
+            final ledger = drive == null
+                ? null
+                : _computeOverwriteLedger(
+                    l10n,
+                    current: drive,
+                    result: local,
+                    overwrittenSideLabel: remoteLabel ?? l10n.previewDriveLabel,
+                  );
+            final danger = ledger?.isDanger ?? false;
             return _glassDialogShell(
               maxWidth: 460,
               child: _dialogBody(
@@ -3976,6 +4088,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               color: Colors.white.withValues(alpha: 0.80),
                             ),
                           ),
+                          _flowHeader(
+                            l10n,
+                            uploading: true,
+                            isNewCopy: true,
+                            remoteLabel: remoteLabel,
+                            remoteColor: remoteColor,
+                            remoteIcon: remoteIcon,
+                          ),
                           if (switcher != null) ...[
                             const SizedBox(height: 12),
                             Center(child: switcher),
@@ -3985,22 +4105,40 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     : _overwritePreview(
                         l10n: l10n,
                         intro: l10n.dlgUploadOverwriteDrive(local.farmName),
-                        current: drive,
-                        result: local,
-                        currentLabel: l10n.previewDriveLabel,
-                        resultLabel: l10n.previewFromDevice,
-                        currentIcon: '☁️',
-                        resultIcon: _localIcon,
-                        resultColor: const Color(0xFFE0B850),
+                        uploading: true,
+                        ledger: ledger!,
                         afterIntro: switcher,
+                        remoteLabel: remoteLabel,
+                        remoteColor: remoteColor,
+                        remoteIcon: remoteIcon,
                       ),
                 actions: [
                   ActionBtn(
-                    label: l10n.dlgUploadButton,
-                    color: const Color(0xFFE0B850),
-                    icon: Icons.cloud_upload_outlined,
+                    label: danger
+                        ? l10n.overwriteDangerButtonUpload
+                        : (actionLabel ?? l10n.dlgUploadButton),
+                    color: danger
+                        ? const Color(0xFFE05C5C)
+                        : (remoteColor ?? const Color(0xFFE0B850)),
+                    icon: danger
+                        ? Icons.warning_amber_rounded
+                        : Icons.cloud_upload_outlined,
                     filled: true,
-                    onTap: () => Navigator.pop(ctx, true),
+                    onTap: () async {
+                      if (danger) {
+                        final confirmed = await _confirmDangerousOverwrite(
+                          l10n: l10n,
+                          uploading: true,
+                          delta: ledger!.delta,
+                          target: remoteLabel ?? l10n.previewDriveLabel,
+                        );
+                        if (confirmed == true && ctx.mounted) {
+                          Navigator.pop(ctx, true);
+                        }
+                      } else {
+                        Navigator.pop(ctx, true);
+                      }
+                    },
                   ),
                   ActionBtn(
                     label: l10n.cancel,
@@ -4017,18 +4155,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// Card "cómo quedará": estado actual del destino → estado tras la operación.
+  /// Card "cómo quedará": ledger de diferencias entre lo que se sobrescribe
+  /// (`current`) y lo que lo reemplazará (`result`). Rediseño 2026-07-29 —
+  /// reemplaza las dos columnas de 13 filas por: indicador de flujo fijo
+  /// (ESTE EQUIPO ↔ EN DRIVE, nunca invertido), ledger solo-diferencias
+  /// (habilidades/otras-stats en rejilla de 2 columnas sin título) y una
+  /// caja de veredicto. Ver memoria `project_valleysave_overwrite_dialog_redesign`.
   Widget _overwritePreview({
     required AppLocalizations l10n,
     required String intro,
-    required SaveFile current,
-    required SaveFile result,
-    required String currentLabel,
-    required String resultLabel,
-    required String currentIcon,
-    required String resultIcon,
-    required Color resultColor,
+    required bool uploading,
+    required OverwriteLedger ledger,
     Widget? afterIntro,
+    String? remoteLabel,
+    Color? remoteColor,
+    String? remoteIcon,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -4047,43 +4188,845 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           Center(child: afterIntro),
         ],
         const SizedBox(height: 14),
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        _flowHeader(
+          l10n,
+          uploading: uploading,
+          danger: ledger.isDanger,
+          remoteLabel: remoteLabel,
+          remoteColor: remoteColor,
+          remoteIcon: remoteIcon,
+        ),
+        const SizedBox(height: 14),
+        _ledgerWidget(l10n, ledger),
+        const SizedBox(height: 12),
+        _verdictBox(ledger),
+      ],
+    );
+  }
+
+  /// Indicador de flujo: IZQUIERDA = ESTE EQUIPO SIEMPRE, DERECHA = EN DRIVE
+  /// SIEMPRE (decisión aprobada — antes se invertía según subir/bajar, lo que
+  /// confundía). La flecha en círculo indica la dirección real de la copia;
+  /// la etiqueta "SE SOBRESCRIBE" va pegada al lado que se pierde.
+  ///
+  /// [remoteLabel]/[remoteColor]/[remoteIcon] generalizan la caja derecha a
+  /// un tercer sitio (spec 008, T810): por defecto siguen siendo
+  /// `l10n.previewDriveLabel` + azul `#5AA8E0` + ☁️ — las partidas propias no
+  /// cambian ni un píxel (G3). Para el Drive del dueño el caller pasa
+  /// `l10n.sharedSideOwnerDrive(email)` + verde menta `#42D392` + 🔗.
+  Widget _flowHeader(
+    AppLocalizations l10n, {
+    required bool uploading,
+    bool danger = false,
+    bool isNewCopy = false,
+    String? remoteLabel,
+    Color? remoteColor,
+    String? remoteIcon,
+  }) {
+    const kLocalColor = Color(0xFFE0B850);
+    final kDriveColor = remoteColor ?? const Color(0xFF5AA8E0);
+    const kDangerColor = Color(0xFFE05C5C);
+    final arrowColor = danger
+        ? kDangerColor
+        : (uploading ? kLocalColor : kDriveColor);
+    // Subiendo: se sobrescribe EN DRIVE (derecha). Bajando: se sobrescribe
+    // ESTE EQUIPO (izquierda).
+    final overwriteOnLeft = !uploading;
+
+    var leftLabel = l10n.previewLocalLabel;
+    var rightLabel = remoteLabel ?? l10n.previewDriveLabel;
+    if (isNewCopy) {
+      if (uploading) {
+        rightLabel = '$rightLabel (${l10n.overwriteNewCopyTag})';
+      } else {
+        leftLabel = '$leftLabel (${l10n.overwriteNewCopyTag})';
+      }
+    }
+
+    Widget box({
+      required String label,
+      required String icon,
+      required Color color,
+      required bool tagged,
+    }) {
+      return Expanded(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+          decoration: BoxDecoration(
+            color: const Color(0xFF151512),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: (tagged && danger ? kDangerColor : color)
+                  .withValues(alpha: 0.60),
+              width: 1.5,
+            ),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
             children: [
-              Expanded(
-                child: _previewCol(
-                  l10n,
-                  currentLabel,
-                  current,
-                  other: result,
-                  accent: Colors.white.withValues(alpha: 0.40),
-                  icon: currentIcon,
-                ),
-              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 18,
-                  color: Colors.white.withValues(alpha: 0.45),
+                padding: EdgeInsets.only(top: tagged ? 6 : 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(icon, style: const TextStyle(fontSize: 15)),
+                    const SizedBox(height: 3),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.firaCode(
+                        fontSize: 8,
+                        letterSpacing: 0.8,
+                        fontWeight: FontWeight.w700,
+                        color: color,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: _previewCol(
-                  l10n,
-                  resultLabel,
-                  result,
-                  other: current,
-                  accent: resultColor,
-                  icon: resultIcon,
+              if (tagged)
+                Positioned(
+                  top: -17,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kDangerColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      l10n.overwriteTagOverwritten,
+                      style: GoogleFonts.firaCode(
+                        fontSize: 6.5,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                        color: const Color(0xFF1B0E0E),
+                      ),
+                    ),
+                  ),
                 ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 9),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          box(
+            label: leftLabel,
+            icon: _localIcon,
+            color: kLocalColor,
+            tagged: !isNewCopy && overwriteOnLeft,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Container(
+              width: 34,
+              height: 34,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: arrowColor.withValues(alpha: 0.16),
+                border: Border.all(color: arrowColor, width: 2),
+              ),
+              child: Icon(
+                uploading
+                    ? Icons.arrow_forward_rounded
+                    : Icons.arrow_back_rounded,
+                size: 17,
+                color: arrowColor,
+              ),
+            ),
+          ),
+          box(
+            label: rightLabel,
+            icon: remoteIcon ?? '☁️',
+            color: kDriveColor,
+            tagged: !isNewCopy && !overwriteOnLeft,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Ledger solo-diferencias: los 4 stats "cabecera" en fila individual con
+  /// píldora, y habilidades/otras-stats en rejilla de 2 columnas sin título
+  /// (solo los que cambiaron) — decisión aprobada 2026-07-29.
+  Widget _ledgerWidget(AppLocalizations l10n, OverwriteLedger ledger) {
+    const kGreen = Color(0xFF62B074);
+    const kRed = Color(0xFFE05C5C);
+    const kTextMuted = Color(0xFFC0A980);
+
+    Widget pillRow(_StatDiff d) {
+      final color = d.worse ? kRed : kGreen;
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              d.label.toUpperCase(),
+              style: GoogleFonts.firaCode(
+                fontSize: 8,
+                letterSpacing: 0.6,
+                color: kTextMuted,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 6,
+                vertical: 2,
+              ),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: color.withValues(alpha: 0.32)),
+              ),
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${d.before} ',
+                      style: GoogleFonts.firaCode(
+                        fontSize: 10.5,
+                        color: color.withValues(alpha: 0.55),
+                      ),
+                    ),
+                    TextSpan(
+                      text: '→ ${d.after}',
+                      style: GoogleFonts.firaCode(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700,
+                        color: color,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget gridCell(_StatDiff d) {
+      final color = d.worse ? kRed : kGreen;
+      return Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Text(
+                d.label.toUpperCase(),
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.firaCode(
+                  fontSize: 8,
+                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w500,
+                  color: kTextMuted,
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '${d.before} ',
+                    style: GoogleFonts.firaCode(
+                      fontSize: 10.5,
+                      color: color.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  TextSpan(
+                    text: '→ ${d.after}',
+                    style: GoogleFonts.firaCode(
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w700,
+                      color: color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget grid(List<_StatDiff> items) {
+      if (items.isEmpty) return const SizedBox.shrink();
+      final rows = <Widget>[];
+      for (var i = 0; i < items.length; i += 2) {
+        final pair = items.sublist(i, (i + 2).clamp(0, items.length));
+        rows.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                gridCell(pair[0]),
+                if (pair.length > 1) ...[
+                  const SizedBox(width: 14),
+                  gridCell(pair[1]),
+                ] else
+                  const Spacer(),
+              ],
+            ),
+          ),
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Column(children: rows),
+      );
+    }
+
+    final identicalLine = ledger.identicalLabels.isEmpty
+        ? null
+        : l10n.overwriteIdenticalSummary(
+            ledger.identicalLabels.length,
+            ledger.identicalLabels.join(', '),
+          );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.overwriteWhatChanges.toUpperCase(),
+          style: GoogleFonts.firaCode(
+            fontSize: 8,
+            letterSpacing: 0.8,
+            fontWeight: FontWeight.w700,
+            color: kTextMuted,
+          ),
+        ),
+        const SizedBox(height: 7),
+        ...ledger.headline.map(pillRow),
+        grid(ledger.skills),
+        grid(ledger.others),
+        if (identicalLine != null)
+          Text(
+            identicalLine,
+            style: GoogleFonts.firaCode(
+              fontSize: 9,
+              height: 1.5,
+              color: AppColors.textFaint,
+            ),
+          ),
+      ],
+    );
+  }
+
+  /// Caja de veredicto/aviso — verde (por delante, seguro), ámbar (dinero
+  /// gastado, informativo), gris (diferencia insignificante) o rojo (peligro,
+  /// dispara además el segundo diálogo de confirmación al pulsar el botón).
+  Widget _verdictBox(OverwriteLedger ledger) {
+    final Color tone = switch (ledger.verdict) {
+      _OverwriteVerdict.green => const Color(0xFF62B074),
+      _OverwriteVerdict.amber => const Color(0xFFE0A850),
+      _OverwriteVerdict.gray => Colors.white,
+      _OverwriteVerdict.red => const Color(0xFFE05C5C),
+    };
+    final Color fg = switch (ledger.verdict) {
+      _OverwriteVerdict.green => const Color(0xFFA9DAB6),
+      _OverwriteVerdict.amber => const Color(0xFFE8C98F),
+      _OverwriteVerdict.gray => Colors.white.withValues(alpha: 0.65),
+      _OverwriteVerdict.red => const Color(0xFFF3B6B6),
+    };
+    final isGray = ledger.verdict == _OverwriteVerdict.gray;
+    final isRed = ledger.verdict == _OverwriteVerdict.red;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: tone.withValues(alpha: isGray ? 0.06 : 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: tone.withValues(alpha: isGray ? 0.14 : (isRed ? 1.0 : 0.32)),
+          width: isRed ? 1.5 : 1,
+        ),
+      ),
+      child: Text(
+        ledger.verdictText,
+        style: GoogleFonts.firaCode(fontSize: 11.5, height: 1.5, color: fg),
+      ),
+    );
+  }
+
+  /// Segundo diálogo de confirmación — SOLO en el caso peligro (cualquier
+  /// stat, salvo dinero actual, empeora al sobrescribir). Reutiliza
+  /// `_glassDialogShell`/`_dialogBody`, no un componente nuevo. Aprobado por
+  /// mockup 2026-07-29 (opción 3: reusar el patrón existente).
+  Future<bool?> _confirmDangerousOverwrite({
+    required AppLocalizations l10n,
+    required bool uploading,
+    required String delta,
+    required String target,
+  }) {
+    const kDangerColor = Color(0xFFE05C5C);
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          maxWidth: 340,
+          accent: kDangerColor,
+          child: _dialogBody(
+            title: Text(
+              uploading
+                  ? l10n.overwriteConfirmTitleUpload
+                  : l10n.overwriteConfirmTitleDownload,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Text(
+              l10n.overwriteConfirmBody(delta, target),
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                height: 1.55,
+                color: Colors.white.withValues(alpha: 0.82),
+              ),
+            ),
+            actions: [
+              ActionBtn(
+                label: uploading
+                    ? l10n.overwriteConfirmButtonUpload
+                    : l10n.overwriteConfirmButtonDownload,
+                color: kDangerColor,
+                icon: Icons.warning_amber_rounded,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Variante de `_confirmDangerousOverwrite` para el diálogo combinado
+  /// (D3): nombra el/los destino(s) que retroceden en vez de uno fijo.
+  /// Reutiliza `_glassDialogShell`/`_dialogBody` — mismo patrón, texto
+  /// distinto (`overwriteConfirmTitleBoth`/`overwriteConfirmBodyBoth`).
+  Future<bool?> _confirmDangerousOverwriteBoth({
+    required AppLocalizations l10n,
+    required String delta,
+    required String targets,
+  }) {
+    const kDangerColor = Color(0xFFE05C5C);
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          maxWidth: 340,
+          accent: kDangerColor,
+          child: _dialogBody(
+            title: Text(
+              l10n.overwriteConfirmTitleBoth,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Text(
+              l10n.overwriteConfirmBodyBoth(delta, targets),
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                height: 1.55,
+                color: Colors.white.withValues(alpha: 0.82),
+              ),
+            ),
+            actions: [
+              ActionBtn(
+                label: l10n.overwriteConfirmButtonUpload,
+                color: kDangerColor,
+                icon: Icons.warning_amber_rounded,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Cabecera de flujo del diálogo combinado (D3, "Diseño visual APROBADO"
+  /// punto 1): un origen (ESTE EQUIPO) a la izquierda, los dos destinos
+  /// APILADOS a la derecha (gap 16px) — cada uno con su propio color y su
+  /// propia píldora "SE SOBRESCRIBE" si retrocede. Punto 3: solo la caja del
+  /// destino que retrocede se pinta en rojo, el que no pierde nada conserva
+  /// su color normal. Mismo lenguaje visual que `_flowHeader`, adaptado a
+  /// dos destinos en vez de uno (no hay forma de reutilizar esa función tal
+  /// cual: su contrato es un único remoto).
+  Widget _combinedFlowHeader(
+    AppLocalizations l10n, {
+    required bool showOwn,
+    required bool showOwner,
+    required bool dangerOwn,
+    required bool dangerOwner,
+    required String ownerLabel,
+  }) {
+    const kLocalColor = Color(0xFFE0B850);
+    const kDriveColor = Color(0xFF5AA8E0);
+    const kOwnerColor = Color(0xFF42D392);
+    const kDangerColor = Color(0xFFE05C5C);
+    final danger = dangerOwn || dangerOwner;
+    final arrowColor = danger ? kDangerColor : kLocalColor;
+
+    Widget destBox({
+      required String label,
+      required String icon,
+      required Color color,
+      required bool isDanger,
+    }) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+        decoration: BoxDecoration(
+          color: const Color(0xFF151512),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: (isDanger ? kDangerColor : color).withValues(alpha: 0.60),
+            width: 1.5,
+          ),
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.topCenter,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: isDanger ? 6 : 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(icon, style: const TextStyle(fontSize: 13)),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: GoogleFonts.firaCode(
+                        fontSize: 8,
+                        letterSpacing: 0.8,
+                        fontWeight: FontWeight.w700,
+                        color: color,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (isDanger)
+              Positioned(
+                top: -17,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kDangerColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    l10n.overwriteTagOverwritten,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 6.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                      color: const Color(0xFF1B0E0E),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 9),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+              decoration: BoxDecoration(
+                color: const Color(0xFF151512),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: kLocalColor.withValues(alpha: 0.60),
+                  width: 1.5,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(_localIcon, style: const TextStyle(fontSize: 15)),
+                  const SizedBox(height: 3),
+                  Text(
+                    l10n.previewLocalLabel,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 8,
+                      letterSpacing: 0.8,
+                      fontWeight: FontWeight.w700,
+                      color: kLocalColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Container(
+              width: 34,
+              height: 34,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: arrowColor.withValues(alpha: 0.16),
+                border: Border.all(color: arrowColor, width: 2),
+              ),
+              child: Icon(
+                Icons.arrow_forward_rounded,
+                size: 17,
+                color: arrowColor,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (showOwn) ...[
+                  destBox(
+                    label: l10n.sharedSideMyDrive,
+                    icon: '☁️',
+                    color: kDriveColor,
+                    isDanger: dangerOwn,
+                  ),
+                  if (showOwner) const SizedBox(height: 16),
+                ],
+                if (showOwner)
+                  destBox(
+                    label: ownerLabel,
+                    icon: '🔗',
+                    color: kOwnerColor,
+                    isDanger: dangerOwner,
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Cabecera de sección por destino, solo en el diálogo combinado (punto 2
+  /// de "Diseño visual APROBADO"): nombre + línea fina del color del
+  /// destino. Sustituye al título "QUÉ CAMBIA" cuando hay dos ledgers
+  /// completos que separar — la regla de "sin títulos de grupo" aprobada
+  /// antes aplica DENTRO de un ledger (habilidades/otras-stats), no entre
+  /// dos ledgers enteros.
+  Widget _destinationSectionHeader(String label, Color color) {
+    return Row(
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: GoogleFonts.firaCode(
+            fontSize: 8,
+            letterSpacing: 0.9,
+            fontWeight: FontWeight.w700,
+            color: color,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Container(height: 1, color: color.withValues(alpha: 0.28)),
+        ),
       ],
     );
+  }
+
+  /// Diálogo combinado (D3, T815): un origen (local), dos destinos (Mi
+  /// Drive + Drive del dueño), cada uno con su propio ledger de diferencias
+  /// y su propio veredicto — sus estados son independientes (uno puede ir
+  /// por delante y el otro por detrás). `isDanger` global = OR de los dos.
+  /// Cancelar no sube a NINGÚN destino (G6): el caller (`_handleSyncBoth`)
+  /// solo ejecuta las subidas reales si esto resuelve `true`.
+  Future<bool> _confirmUploadToBoth(SharedSaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
+    final local = entry.localMatch;
+    if (local == null) return false;
+
+    final ownDrive = entry.ownDriveStats;
+    final ownerDrive = entry.driveStats;
+    final ownerLabel = l10n.sharedSideOwnerDrive(entry.ownerEmail);
+
+    final ledgerOwn = ownDrive == null
+        ? null
+        : _computeOverwriteLedger(
+            l10n,
+            current: ownDrive,
+            result: local,
+            overwrittenSideLabel: l10n.sharedSideMyDrive,
+          );
+    final ledgerOwner = ownerDrive == null
+        ? null
+        : _computeOverwriteLedger(
+            l10n,
+            current: ownerDrive,
+            result: local,
+            overwrittenSideLabel: ownerLabel,
+          );
+
+    final dangerOwn = ledgerOwn?.isDanger ?? false;
+    final dangerOwner = ledgerOwner?.isDanger ?? false;
+    final danger = dangerOwn || dangerOwner;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          maxWidth: 460,
+          accent: danger ? const Color(0xFFE05C5C) : null,
+          child: _dialogBody(
+            title: Text(
+              l10n.overwriteUploadBoth,
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.dlgUploadOverwriteDrive(local.farmName),
+                  style: GoogleFonts.firaCode(
+                    fontSize: 12,
+                    height: 1.5,
+                    color: Colors.white.withValues(alpha: 0.80),
+                  ),
+                ),
+                _combinedFlowHeader(
+                  l10n,
+                  showOwn: true,
+                  showOwner: true,
+                  dangerOwn: dangerOwn,
+                  dangerOwner: dangerOwner,
+                  ownerLabel: ownerLabel,
+                ),
+                if (ledgerOwn != null) ...[
+                  const SizedBox(height: 16),
+                  _destinationSectionHeader(
+                    l10n.sharedSideMyDrive,
+                    const Color(0xFF5AA8E0),
+                  ),
+                  const SizedBox(height: 8),
+                  _ledgerWidget(l10n, ledgerOwn),
+                  const SizedBox(height: 12),
+                  _verdictBox(ledgerOwn),
+                ],
+                if (ledgerOwner != null) ...[
+                  const SizedBox(height: 16),
+                  _destinationSectionHeader(
+                    ownerLabel,
+                    const Color(0xFF42D392),
+                  ),
+                  const SizedBox(height: 8),
+                  _ledgerWidget(l10n, ledgerOwner),
+                  const SizedBox(height: 12),
+                  _verdictBox(ledgerOwner),
+                ],
+              ],
+            ),
+            actions: [
+              ActionBtn(
+                label: danger
+                    ? l10n.overwriteDangerButtonUpload
+                    : l10n.overwriteUploadBoth,
+                color: danger
+                    ? const Color(0xFFE05C5C)
+                    : const Color(0xFFE0B850),
+                icon: danger
+                    ? Icons.warning_amber_rounded
+                    : Icons.cloud_upload_outlined,
+                filled: true,
+                onTap: () async {
+                  if (danger) {
+                    final targets = <String>[
+                      if (dangerOwn) l10n.sharedTargetOwnDrive,
+                      if (dangerOwner) l10n.sharedSyncTargetOwner(entry.ownerEmail),
+                    ];
+                    final targetsPhrase = targets.length == 2
+                        ? l10n.overwriteBothDestinationsLabel(
+                            targets[0],
+                            targets[1],
+                          )
+                        : targets.first;
+                    // Si los dos retroceden, se muestra el delta del primero
+                    // (own) — el spec no define cómo combinar dos deltas
+                    // distintos en una sola frase.
+                    final delta = dangerOwn
+                        ? ledgerOwn!.delta
+                        : ledgerOwner!.delta;
+                    final confirmed = await _confirmDangerousOverwriteBoth(
+                      l10n: l10n,
+                      delta: delta,
+                      targets: targetsPhrase,
+                    );
+                    if (confirmed == true && ctx.mounted) {
+                      Navigator.pop(ctx, true);
+                    }
+                  } else {
+                    Navigator.pop(ctx, true);
+                  }
+                },
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    return result == true;
   }
 
   Color get _seasonAccent =>
@@ -4091,207 +5034,200 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   String get _localIcon => (Platform.isAndroid || Platform.isIOS) ? '📱' : '💻';
 
-  Widget _previewCol(
-    AppLocalizations l10n,
-    String header,
-    SaveFile s, {
-    required SaveFile other,
-    required Color accent,
-    required String icon,
+  /// Compara `current` (lo que se sobrescribe) contra `result` (lo que lo
+  /// reemplazará) y devuelve el ledger completo: filas cabecera, rejillas de
+  /// habilidades/otras-stats, resumen de idénticos, y la clasificación del
+  /// veredicto (incluye si dispara el modo peligro).
+  ///
+  /// Regla del modo peligro (confirmada 2026-07-29): CUALQUIER stat salvo el
+  /// dinero actual que empeore activa peligro — el dinero actual queda fuera
+  /// a propósito, porque bajar de dinero no es perder progreso real (puede
+  /// que te lo hayas gastado), así que solo genera el aviso ámbar informativo.
+  OverwriteLedger _computeOverwriteLedger(
+    AppLocalizations l10n, {
+    required SaveFile current,
+    required SaveFile result,
+    required String overwrittenSideLabel,
   }) {
-    final hl = _seasonAccent;
-    String mine(SaveFile x) => x.deepestMineLevel == 0
+    String seasonLabel(String season) => switch (season.toLowerCase()) {
+      'spring' => l10n.seasonSpring,
+      'summer' => l10n.seasonSummer,
+      'fall' => l10n.seasonFall,
+      'winter' => l10n.seasonWinter,
+      _ => l10n.seasonInitial,
+    };
+    String dayYear(SaveFile s) =>
+        '${seasonLabel(s.currentSeason)} · ${l10n.statDayYear(s.dayOfMonth, s.year)}';
+    String preciseDuration(int ms) {
+      final d = Duration(milliseconds: ms);
+      final h = d.inHours;
+      final m = d.inMinutes.remainder(60);
+      return m == 0 ? '${h}h' : '${h}h${m.toString().padLeft(2, '0')}m';
+    }
+    String mineLabel(SaveFile s) => s.deepestMineLevel == 0
         ? l10n.previewColUnexplored
-        : 'Nv. ${x.deepestMineLevel}';
-    // true = este valor es peor que el otro (lower is worse), false = mejor, null = igual
-    bool? w(num a, num b) => a == b
-        ? null
-        : a < b
-        ? true
-        : false;
-    // invertido: más = peor (desmayos)
-    bool? wi(num a, num b) => a == b
-        ? null
-        : a > b
-        ? true
-        : false;
+        : 'Nv. ${s.deepestMineLevel}';
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF151512),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accent.withValues(alpha: 0.60), width: 1.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(icon, style: const TextStyle(fontSize: 11)),
-              const SizedBox(width: 5),
-              Text(
-                header,
-                style: GoogleFonts.firaCode(
-                  fontSize: 8,
-                  letterSpacing: 0.8,
-                  fontWeight: FontWeight.w700,
-                  color: accent,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          _previewRow(
-            l10n.previewColDayYear,
-            l10n.statDayYear(s.dayOfMonth, s.year),
-            changed: s.dayOfMonth != other.dayOfMonth || s.year != other.year,
-            hl: hl,
-            worse: w(
-              s.year * 28 + s.dayOfMonth,
-              other.year * 28 + other.dayOfMonth,
-            ),
-          ),
-          _previewRow(
-            l10n.previewColTime,
-            s.playtimeLabel,
-            changed: s.millisecondsPlayed != other.millisecondsPlayed,
-            hl: hl,
-            worse: w(s.millisecondsPlayed, other.millisecondsPlayed),
-          ),
-          _previewRow(
-            l10n.previewColMoney,
-            s.currentMoneyLabel,
-            changed: s.currentMoney != other.currentMoney,
-            hl: hl,
-            worse: w(s.currentMoney, other.currentMoney),
-          ),
-          _previewRow(
-            l10n.previewColTotal,
-            s.totalMoneyLabel,
-            changed: s.totalMoneyEarned != other.totalMoneyEarned,
-            hl: hl,
-            worse: w(s.totalMoneyEarned, other.totalMoneyEarned),
-          ),
-          _previewRow(
-            l10n.previewColFarming,
-            '${s.farmingLevel}',
-            changed: s.farmingLevel != other.farmingLevel,
-            hl: hl,
-            worse: w(s.farmingLevel, other.farmingLevel),
-          ),
-          _previewRow(
-            l10n.previewColForaging,
-            '${s.foragingLevel}',
-            changed: s.foragingLevel != other.foragingLevel,
-            hl: hl,
-            worse: w(s.foragingLevel, other.foragingLevel),
-          ),
-          _previewRow(
-            l10n.previewColMining,
-            '${s.miningLevel}',
-            changed: s.miningLevel != other.miningLevel,
-            hl: hl,
-            worse: w(s.miningLevel, other.miningLevel),
-          ),
-          _previewRow(
-            l10n.previewColFishing,
-            '${s.fishingLevel}',
-            changed: s.fishingLevel != other.fishingLevel,
-            hl: hl,
-            worse: w(s.fishingLevel, other.fishingLevel),
-          ),
-          _previewRow(
-            l10n.previewColCombat,
-            '${s.combatLevel}',
-            changed: s.combatLevel != other.combatLevel,
-            hl: hl,
-            worse: w(s.combatLevel, other.combatLevel),
-          ),
-          _previewRow(
-            l10n.previewColFriends,
-            '${s.goodFriends}',
-            changed: s.goodFriends != other.goodFriends,
-            hl: hl,
-            worse: w(s.goodFriends, other.goodFriends),
-          ),
-          _previewRow(
-            l10n.previewColMonsters,
-            SaveFile.formatCount(s.monstersKilled),
-            changed: s.monstersKilled != other.monstersKilled,
-            hl: hl,
-            worse: w(s.monstersKilled, other.monstersKilled),
-          ),
-          _previewRow(
-            l10n.previewColFaints,
-            '${s.timesUnconscious}',
-            changed: s.timesUnconscious != other.timesUnconscious,
-            hl: hl,
-            worse: wi(s.timesUnconscious, other.timesUnconscious),
-          ),
-          _previewRow(
-            l10n.previewColMine,
-            mine(s),
-            changed: s.deepestMineLevel != other.deepestMineLevel,
-            hl: hl,
-            worse: w(s.deepestMineLevel, other.deepestMineLevel),
-          ),
-        ],
-      ),
+    _StatDiff? diff(String label, bool changed, String before, String after, bool worse) =>
+        changed ? (label: label, before: before, after: after, worse: worse) : null;
+
+    final headline = <_StatDiff>[];
+    final skills = <_StatDiff>[];
+    final others = <_StatDiff>[];
+    final identical = <String>[];
+
+    final dayDiff = diff(
+      l10n.previewColDayYear,
+      current.calendarDayOrdinal != result.calendarDayOrdinal,
+      dayYear(current),
+      dayYear(result),
+      result.calendarDayOrdinal < current.calendarDayOrdinal,
     );
-  }
+    dayDiff != null
+        ? headline.add(dayDiff)
+        : identical.add(l10n.previewColDayYear.toLowerCase());
 
-  Widget _previewRow(
-    String label,
-    String value, {
-    required bool changed,
-    required Color hl,
-    bool? worse,
-  }) {
-    const kRed = Color(0xFFE05C5C);
-    final pillColor = (changed && worse == true) ? kRed : hl;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label.toUpperCase(),
-            style: GoogleFonts.firaCode(
-              fontSize: 7.5,
-              letterSpacing: 0.6,
-              color: AppColors.textFaint,
-            ),
-          ),
-          const SizedBox(height: 1),
-          if (changed)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: BoxDecoration(
-                color: pillColor.withValues(alpha: 0.14),
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: pillColor.withValues(alpha: 0.32)),
-              ),
-              child: Text(
-                value,
-                style: GoogleFonts.firaCode(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: pillColor,
-                ),
-              ),
-            )
-          else
-            Text(
-              value,
-              style: GoogleFonts.firaCode(
-                fontSize: 11,
-                fontWeight: FontWeight.w400,
-                color: Colors.white.withValues(alpha: 0.75),
-              ),
-            ),
-        ],
-      ),
+    final timeDiff = diff(
+      l10n.previewColTime,
+      current.millisecondsPlayed != result.millisecondsPlayed,
+      preciseDuration(current.millisecondsPlayed),
+      preciseDuration(result.millisecondsPlayed),
+      result.millisecondsPlayed < current.millisecondsPlayed,
+    );
+    timeDiff != null
+        ? headline.add(timeDiff)
+        : identical.add(l10n.previewColTime.toLowerCase());
+
+    final moneyNowDiff = diff(
+      l10n.previewColMoney,
+      current.currentMoney != result.currentMoney,
+      current.currentMoneyLabel,
+      result.currentMoneyLabel,
+      result.currentMoney < current.currentMoney,
+    );
+    moneyNowDiff != null
+        ? headline.add(moneyNowDiff)
+        : identical.add(l10n.previewColMoney.toLowerCase());
+
+    final moneyTotalDiff = diff(
+      l10n.previewColTotal,
+      current.totalMoneyEarned != result.totalMoneyEarned,
+      current.totalMoneyLabel,
+      result.totalMoneyLabel,
+      result.totalMoneyEarned < current.totalMoneyEarned,
+    );
+    moneyTotalDiff != null
+        ? headline.add(moneyTotalDiff)
+        : identical.add(l10n.previewColTotal.toLowerCase());
+
+    void addSkill(String label, int before, int after) {
+      final d = diff(label, before != after, '$before', '$after', after < before);
+      d != null ? skills.add(d) : identical.add(label.toLowerCase());
+    }
+
+    addSkill(l10n.previewColFarming, current.farmingLevel, result.farmingLevel);
+    addSkill(l10n.previewColForaging, current.foragingLevel, result.foragingLevel);
+    addSkill(l10n.previewColMining, current.miningLevel, result.miningLevel);
+    addSkill(l10n.previewColFishing, current.fishingLevel, result.fishingLevel);
+    addSkill(l10n.previewColCombat, current.combatLevel, result.combatLevel);
+
+    final friendsDiff = diff(
+      l10n.previewColFriends,
+      current.goodFriends != result.goodFriends,
+      '${current.goodFriends}',
+      '${result.goodFriends}',
+      result.goodFriends < current.goodFriends,
+    );
+    friendsDiff != null
+        ? others.add(friendsDiff)
+        : identical.add(l10n.previewColFriends.toLowerCase());
+
+    final monstersDiff = diff(
+      l10n.previewColMonsters,
+      current.monstersKilled != result.monstersKilled,
+      SaveFile.formatCount(current.monstersKilled),
+      SaveFile.formatCount(result.monstersKilled),
+      result.monstersKilled < current.monstersKilled,
+    );
+    monstersDiff != null
+        ? others.add(monstersDiff)
+        : identical.add(l10n.previewColMonsters.toLowerCase());
+
+    // Desmayos: invertido — MÁS es peor.
+    final faintsDiff = diff(
+      l10n.previewColFaints,
+      current.timesUnconscious != result.timesUnconscious,
+      '${current.timesUnconscious}',
+      '${result.timesUnconscious}',
+      result.timesUnconscious > current.timesUnconscious,
+    );
+    faintsDiff != null
+        ? others.add(faintsDiff)
+        : identical.add(l10n.previewColFaints.toLowerCase());
+
+    final mineDiff = diff(
+      l10n.previewColMine,
+      current.deepestMineLevel != result.deepestMineLevel,
+      mineLabel(current),
+      mineLabel(result),
+      result.deepestMineLevel < current.deepestMineLevel,
+    );
+    mineDiff != null
+        ? others.add(mineDiff)
+        : identical.add(l10n.previewColMine.toLowerCase());
+
+    // Peligro: cualquier stat salvo dinero actual que empeore.
+    final dangerCandidates = <_StatDiff>[
+      ?dayDiff,
+      ?timeDiff,
+      ?moneyTotalDiff,
+      ...skills,
+      ...others,
+    ];
+    final isDanger = dangerCandidates.any((d) => d.worse);
+
+    final dayDeltaAbs =
+        (result.calendarDayOrdinal - current.calendarDayOrdinal).abs();
+    final timeDeltaMs =
+        (result.millisecondsPlayed - current.millisecondsPlayed).abs();
+    final timeDeltaAbs = Duration(milliseconds: timeDeltaMs);
+    final h = timeDeltaAbs.inHours;
+    final m = timeDeltaAbs.inMinutes.remainder(60);
+    final timeDeltaLabel = h == 0 ? '${m}m' : '${h}h${m.toString().padLeft(2, '0')}m';
+    final delta = l10n.overwriteDeltaPhrase(dayDeltaAbs, timeDeltaLabel);
+
+    final negligible = !isDanger &&
+        dayDiff == null &&
+        skills.isEmpty &&
+        others.isEmpty &&
+        timeDeltaAbs.inMinutes < 60;
+    final moneyNowWorse = moneyNowDiff?.worse ?? false;
+
+    final _OverwriteVerdict verdict;
+    final String verdictText;
+    if (isDanger) {
+      verdict = _OverwriteVerdict.red;
+      verdictText = l10n.overwriteVerdictDanger(delta, overwrittenSideLabel);
+    } else if (negligible) {
+      verdict = _OverwriteVerdict.gray;
+      verdictText = l10n.overwriteVerdictNegligible(delta);
+    } else if (moneyNowWorse) {
+      verdict = _OverwriteVerdict.amber;
+      verdictText = l10n.overwriteVerdictMoneySpent;
+    } else {
+      verdict = _OverwriteVerdict.green;
+      verdictText = l10n.overwriteVerdictAhead(delta);
+    }
+
+    return (
+      headline: headline,
+      skills: skills,
+      others: others,
+      identicalLabels: identical,
+      isDanger: isDanger,
+      verdict: verdict,
+      verdictText: verdictText,
+      delta: delta,
     );
   }
 
@@ -4669,12 +5605,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               onDownloadFromOwnDrive: e.ownDriveStats != null
                   ? () => _handleDownload(e.asOwnEntry)
                   : null,
+              // T815 (D3): un solo diálogo combinado con las dos
+              // comparaciones y una sola confirmación — sustituye la
+              // secuencia de dos diálogos separados de antes.
               onSyncBoth:
                   widget.drive != null && e.localMatch != null && e.canSync
-                  ? () async {
-                      await _handleUpload(e.asOwnEntry);
-                      if (mounted) await _handleSyncShared(e);
-                    }
+                  ? () => _handleSyncBoth(e)
                   : null,
               // Exportar/Backups operan sobre la copia LOCAL — mismo
               // comportamiento que en "Mis partidas", recuperado tras el

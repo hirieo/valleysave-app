@@ -633,7 +633,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sharedStatusOwnDriveAhead => 'Tu Drive va por delante — bájalo';
 
   @override
-  String get sharedSyncBoth => 'Sincronizar ambos';
+  String get sharedSyncBoth => 'Subir a los dos Drive';
 
   @override
   String get sharedSideMyDrive => 'MI DRIVE';
@@ -1371,6 +1371,109 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get previewFromDevice => 'DESDE ESTE EQUIPO';
+
+  @override
+  String get overwriteWhatChanges => 'Qué cambia';
+
+  @override
+  String get overwriteTagOverwritten => 'SE SOBRESCRIBE';
+
+  @override
+  String get overwriteNewCopyTag => 'NUEVO';
+
+  @override
+  String overwriteDeltaPhrase(int days, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days días y $time',
+      one: '1 día y $time',
+      zero: '$time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overwriteVerdictAhead(String delta) {
+    return 'Vas $delta por delante. Es seguro.';
+  }
+
+  @override
+  String get overwriteVerdictMoneySpent =>
+      '💰 El dinero actual bajó, pero el progreso general avanza — probablemente te lo gastaste en algo. No es una pérdida real.';
+
+  @override
+  String overwriteVerdictNegligible(String delta) {
+    return 'Diferencia mínima ($delta). Cualquiera de las dos copias sirve.';
+  }
+
+  @override
+  String overwriteVerdictDanger(String delta, String target) {
+    return '⚠️ Vas a perder $delta de progreso en $target. Revísalo antes de continuar.';
+  }
+
+  @override
+  String get overwriteConfirmTitleUpload => '¿Confirmas la subida?';
+
+  @override
+  String get overwriteConfirmTitleDownload => '¿Confirmas la descarga?';
+
+  @override
+  String overwriteConfirmBody(String delta, String target) {
+    return 'Vas a perder $delta en $target. Esta acción no se puede deshacer.';
+  }
+
+  @override
+  String get overwriteConfirmButtonUpload => 'Confirmar subida';
+
+  @override
+  String get overwriteConfirmButtonDownload => 'Confirmar descarga';
+
+  @override
+  String get overwriteDangerButtonUpload => '⚠️ Subir de todas formas';
+
+  @override
+  String get overwriteDangerButtonDownload => '⚠️ Descargar de todas formas';
+
+  @override
+  String overwriteIdenticalSummary(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '✓ $count idénticos',
+      one: '✓ 1 idéntico',
+    );
+    return '$_temp0 — $list';
+  }
+
+  @override
+  String overwriteUploadToOwner(String email) {
+    return 'Subir al Drive de $email';
+  }
+
+  @override
+  String get overwriteUploadBoth => 'Subir a los dos Drive';
+
+  @override
+  String get overwriteConfirmTitleBoth => '¿Confirmas las dos subidas?';
+
+  @override
+  String overwriteConfirmBodyBoth(String delta, String targets) {
+    return 'Vas a perder $delta en $targets. Esta acción no se puede deshacer.';
+  }
+
+  @override
+  String overwriteBothDestinationsLabel(String first, String second) {
+    return '$first y $second';
+  }
+
+  @override
+  String get sharedTargetOwnDrive => 'tu Drive';
+
+  @override
+  String sharedStatusLocalAhead(String targets) {
+    return 'Vas por delante en $targets';
+  }
 
   @override
   String versionMismatch(String local, String drive) {

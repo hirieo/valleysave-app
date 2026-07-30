@@ -633,7 +633,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedStatusOwnDriveAhead => 'Your Drive is ahead — bring it down';
 
   @override
-  String get sharedSyncBoth => 'Sync both';
+  String get sharedSyncBoth => 'Upload to both Drives';
 
   @override
   String get sharedSideMyDrive => 'MY DRIVE';
@@ -1373,6 +1373,109 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get previewFromDevice => 'GAILU HONETATIK';
+
+  @override
+  String get overwriteWhatChanges => 'What changes';
+
+  @override
+  String get overwriteTagOverwritten => 'WILL BE OVERWRITTEN';
+
+  @override
+  String get overwriteNewCopyTag => 'NEW';
+
+  @override
+  String overwriteDeltaPhrase(int days, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days and $time',
+      one: '1 day and $time',
+      zero: '$time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overwriteVerdictAhead(String delta) {
+    return 'You\'re $delta ahead. It\'s safe.';
+  }
+
+  @override
+  String get overwriteVerdictMoneySpent =>
+      '💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That\'s not a real loss.';
+
+  @override
+  String overwriteVerdictNegligible(String delta) {
+    return 'Minimal difference ($delta). Either copy works fine.';
+  }
+
+  @override
+  String overwriteVerdictDanger(String delta, String target) {
+    return '⚠️ You\'re about to lose $delta of progress on $target. Double-check before continuing.';
+  }
+
+  @override
+  String get overwriteConfirmTitleUpload => 'Confirm the upload?';
+
+  @override
+  String get overwriteConfirmTitleDownload => 'Confirm the download?';
+
+  @override
+  String overwriteConfirmBody(String delta, String target) {
+    return 'You\'re about to lose $delta on $target. This action can\'t be undone.';
+  }
+
+  @override
+  String get overwriteConfirmButtonUpload => 'Confirm upload';
+
+  @override
+  String get overwriteConfirmButtonDownload => 'Confirm download';
+
+  @override
+  String get overwriteDangerButtonUpload => '⚠️ Upload anyway';
+
+  @override
+  String get overwriteDangerButtonDownload => '⚠️ Download anyway';
+
+  @override
+  String overwriteIdenticalSummary(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '✓ $count identical',
+      one: '✓ 1 identical',
+    );
+    return '$_temp0 — $list';
+  }
+
+  @override
+  String overwriteUploadToOwner(String email) {
+    return 'Upload to $email\'s Drive';
+  }
+
+  @override
+  String get overwriteUploadBoth => 'Upload to both Drives';
+
+  @override
+  String get overwriteConfirmTitleBoth => 'Confirm both uploads?';
+
+  @override
+  String overwriteConfirmBodyBoth(String delta, String targets) {
+    return 'You\'ll lose $delta in $targets. This action can\'t be undone.';
+  }
+
+  @override
+  String overwriteBothDestinationsLabel(String first, String second) {
+    return '$first and $second';
+  }
+
+  @override
+  String get sharedTargetOwnDrive => 'your Drive';
+
+  @override
+  String sharedStatusLocalAhead(String targets) {
+    return 'You\'re ahead in $targets';
+  }
 
   @override
   String versionMismatch(String local, String drive) {

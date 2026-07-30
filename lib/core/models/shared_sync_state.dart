@@ -17,6 +17,12 @@ enum SharedSyncSummary {
   ownerDriveAhead,
   bothDrivesAhead,
   notInCloud,
+
+  /// D6 (spec 008, hallazgo en vivo 2026-07-30): local existe y va por
+  /// delante de AL MENOS un Drive existente (ese Drive está `behind`, no
+  /// `missing`) — antes caía en [notInCloud] ("Solo en este equipo"), texto
+  /// incorrecto cuando sí hay copias en la nube, simplemente atrasadas.
+  localAhead,
   localMissing,
   ownerUnavailable,
 }
@@ -90,8 +96,15 @@ class SharedSyncState {
       summary = SharedSyncSummary.syncedWithOwnerDrive;
     } else if (ownerRelation == SharedCopyRelation.unavailable) {
       summary = SharedSyncSummary.ownerUnavailable;
-    } else {
+    } else if (ownRelation == SharedCopyRelation.missing &&
+        ownerRelation == SharedCopyRelation.missing) {
+      // Nunca hubo copia en NINGÚN Drive — "Solo en este equipo" sigue
+      // siendo correcto tal cual.
       summary = SharedSyncSummary.notInCloud;
+    } else {
+      // D6: al menos uno de los dos está `behind` (existe pero atrasado) —
+      // "vas por delante", no "solo en este equipo".
+      summary = SharedSyncSummary.localAhead;
     }
 
     return SharedSyncState(

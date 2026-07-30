@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -177,28 +179,49 @@ class _SharedFooter extends StatelessWidget {
   }) {
     final l10n = AppLocalizations.of(context)!;
     final syncState = SharedSyncState.fromEntry(entry);
-    final ownerNeedsUpload = syncState.uploadTargets.contains(
-      SharedCloudLocation.ownerDrive,
-    );
-    final ownNeedsUpload = syncState.uploadTargets.contains(
-      SharedCloudLocation.ownDrive,
-    );
-    final ownerNeedsDownload = syncState.downloadSources.contains(
-      SharedCloudLocation.ownerDrive,
-    );
-    final ownNeedsDownload = syncState.downloadSources.contains(
-      SharedCloudLocation.ownDrive,
-    );
 
+    // T817 (spec 008, D1+D2, G4): `localAction` nunca debe ser `null` si hay
+    // copia local y al menos un Drive existe sin estar YA sincronizado —
+    // antes se basaba en `uploadTargets` (missing/behind), que ocultaba la
+    // subida cuando el Drive iba "ahead" (bothDrivesAhead: ningún botón en
+    // la cara local). El retroceso ahora se ofrece y se confirma con el
+    // ledger de diferencias (modo peligro), no se esconde. Las dos
+    // excepciones legítimas se mantienen: rol lector (`entry.canSync`
+    // gatea el Drive del dueño) y todo-sincronizado (`synced` no cuenta).
+    final ownWritable =
+        entry.localMatch != null &&
+        syncState.ownDriveRelation != SharedCopyRelation.synced;
+    final ownerWritable =
+        entry.localMatch != null &&
+        entry.canSync &&
+        syncState.ownerDriveRelation != SharedCopyRelation.synced &&
+        syncState.ownerDriveRelation != SharedCopyRelation.unavailable;
+
+    // Gate de DESCARGA por existencia + "no está ya sincronizado" — sin
+    // `canSync`: bajar nunca escribe en el Drive del dueño, un rol lector
+    // puede descargar igual (2026-07-30, feedback en vivo: antes se gateaba
+    // por `ahead`, escondiendo la bajada cuando ese Drive iba por detrás en
+    // vez de ofrecerla con aviso — mismo defecto que T817 ya corrigió para
+    // subir). Excluir `synced` evita ofrecer una descarga que no cambia nada
+    // (ver test "coop sincronizado no ofrece transferencias redundantes").
+    final ownDownloadable =
+        entry.ownDriveStats != null &&
+        syncState.ownDriveRelation != SharedCopyRelation.synced;
+    final ownerDownloadable =
+        entry.ownerDriveVerified &&
+        entry.driveStats != null &&
+        syncState.ownerDriveRelation != SharedCopyRelation.synced;
+
+    // D2: nombres explícitos por destino en vez de "Sincronizar" genérico.
     var localActionLabel = l10n.sharedWithMeUploadOwn;
     VoidCallback? localAction;
-    if (ownerNeedsUpload && ownNeedsUpload && onSyncBoth != null) {
-      localActionLabel = l10n.sharedSyncBoth;
+    if (ownerWritable && ownWritable && onSyncBoth != null) {
+      localActionLabel = l10n.overwriteUploadBoth;
       localAction = onSyncBoth;
-    } else if (ownerNeedsUpload && onSync != null) {
-      localActionLabel = l10n.sharedWithMeSync;
+    } else if (ownerWritable && onSync != null) {
+      localActionLabel = l10n.overwriteUploadToOwner(entry.ownerEmail);
       localAction = onSync;
-    } else if (ownNeedsUpload && onUploadToOwnDrive != null) {
+    } else if (ownWritable && onUploadToOwnDrive != null) {
       localActionLabel = l10n.sharedWithMeUploadOwn;
       localAction = onUploadToOwnDrive;
     }
@@ -210,7 +233,7 @@ class _SharedFooter extends StatelessWidget {
       initialLocation: initialLocation,
       onUpload: localAction,
       localActionLabel: localActionLabel,
-      onDownload: ownNeedsDownload ? onDownloadFromOwnDrive : null,
+      onDownload: ownDownloadable ? onDownloadFromOwnDrive : null,
       onMakeHost: onMakeHost,
       onExport: onExport,
       onBackups: onBackups,
@@ -222,7 +245,7 @@ class _SharedFooter extends StatelessWidget {
       extraDrive: entry.ownerDriveVerified ? entry.driveStats : null,
       extraDriveTitle: l10n.sharedSideOwnerDrive(entry.ownerEmail),
       extraDriveColor: _kOwnerAccent,
-      onExtraDownload: ownerNeedsDownload ? onDownload : null,
+      onExtraDownload: ownerDownloadable ? onDownload : null,
       onRemove: onRemove,
       removeLabel: l10n.sharedWithMeRemove,
       initialPlayerId: selectedPlayerId,
@@ -270,7 +293,29 @@ class _SharedFooter extends StatelessWidget {
       color: _kLocalOnly,
       text: l10n.sharedStatusNotCloud,
     ),
+    // D6 (spec 008): local va por delante de al menos un Drive existente
+    // (behind, no missing) — dorado (`_kSyncAccent`), mismo tono que tenía
+    // "Solo en este equipo": pide acción, no es un problema.
+    SharedSyncSummary.localAhead => (
+      color: _kSyncAccent,
+      text: l10n.sharedStatusLocalAhead(_localAheadTargets(l10n, state)),
+    ),
   };
+
+  /// Sitios atrasados (`behind`, nunca `missing`) unidos con el mismo join
+  /// del diálogo combinado (D3/`overwriteBothDestinationsLabel`).
+  String _localAheadTargets(AppLocalizations l10n, SharedSyncState state) {
+    final targets = <String>[
+      if (state.ownDriveRelation == SharedCopyRelation.behind)
+        l10n.sharedTargetOwnDrive,
+      if (state.ownerDriveRelation == SharedCopyRelation.behind)
+        l10n.sharedSyncTargetOwner(entry.ownerEmail),
+    ];
+    if (targets.length == 2) {
+      return l10n.overwriteBothDestinationsLabel(targets[0], targets[1]);
+    }
+    return targets.isEmpty ? '' : targets.first;
+  }
 
   Widget _animatedState(
     BuildContext context, {
@@ -307,13 +352,34 @@ class _SharedFooter extends StatelessWidget {
             text: l10n.sharedStatusWorking,
           )
         : _statusSpec(l10n, state);
+    // T816 (spec 008, D1+D5, G5): patrón `save_card.dart` — hasta UN botón
+    // por dirección (subida/bajada), ya no mutuamente excluyentes. Antes
+    // `!state.needsDownload` mataba la subida en cuanto había algo que
+    // bajar (caso mixto: Mi Drive sin copia + Drive dueño por delante →
+    // solo salía "Descargar"). Recomendada = filled; si las dos hacen
+    // falta a la vez, la bajada es la recomendada (evita perder progreso
+    // por defecto) y la subida queda en contorno, calcado del mockup
+    // aprobado (pieza 3: footer mixto).
+    final canOwnUpload = state.uploadTargets.contains(
+      SharedCloudLocation.ownDrive,
+    );
+    final canOwnerUpload = state.uploadTargets.contains(
+      SharedCloudLocation.ownerDrive,
+    );
     final showDownload =
         !busy && state.needsDownload && onDownloadRequested != null;
-    final showSync =
-        !busy &&
-        !state.needsDownload &&
-        state.needsUpload &&
-        onSyncRequested != null;
+    final showUpload =
+        !busy && (canOwnUpload || canOwnerUpload) && onSyncRequested != null;
+    final uploadFilled = !showDownload;
+    // D2: nombre explícito cuando el destino no es ambiguo; con los dos
+    // válidos a la vez, el toque abre el selector (`_chooseSharedSyncTarget`
+    // en saves_screen.dart) — el texto se queda genérico hasta entonces.
+    final uploadLabel = canOwnerUpload && !canOwnUpload
+        ? l10n.overwriteUploadToOwner(entry.ownerEmail)
+        : (canOwnUpload && !canOwnerUpload
+              ? l10n.sharedWithMeUploadOwn
+              : l10n.dlgUploadButton);
+    final isMobile = Platform.isAndroid || Platform.isIOS;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
@@ -366,48 +432,69 @@ class _SharedFooter extends StatelessWidget {
                   ),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: _animatedState(
-                  context,
-                  stateKey: '${state.summary.name}-$busy',
-                  child: Row(
-                    children: [
-                      if (busy) ...[
-                        SaveBusyIndicator(
-                          key: const ValueKey('shared-save-busy-indicator'),
-                          season: SeasonController.instance.season.value,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 7),
-                      ] else ...[
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: status.color,
-                          ),
-                        ),
-                        const SizedBox(width: 7),
-                      ],
-                      Expanded(
-                        child: Text(
-                          status.text,
-                          style: GoogleFonts.firaCode(
-                            fontSize: 10.5,
-                            color: status.color,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+          // Estado en su propia fila (2026-07-30, feedback en vivo): antes
+          // competía por ancho con hasta 2 botones + gestión en la misma
+          // fila y se recortaba ("Sincronizado compart…"). Con 2 direcciones
+          // siempre visibles (T816) el hueco nunca alcanza. Separado, el
+          // texto tiene la fila entera y no vuelve a cortarse.
+          _animatedState(
+            context,
+            stateKey: '${state.summary.name}-$busy',
+            child: Row(
+              children: [
+                if (busy) ...[
+                  SaveBusyIndicator(
+                    key: const ValueKey('shared-save-busy-indicator'),
+                    season: SeasonController.instance.season.value,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 7),
+                ] else ...[
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: status.color,
+                    ),
+                  ),
+                  const SizedBox(width: 7),
+                ],
+                Expanded(
+                  child: Text(
+                    status.text,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 10.5,
+                      color: status.color,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ),
-              if (showDownload) ...[
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // Secundario (contorno) siempre a la izquierda, principal
+              // (relleno) a la derecha — mismo orden que `save_card.dart`.
+              if (showUpload && !uploadFilled) ...[
+                _animatedState(
+                  context,
+                  stateKey: 'upload-${state.summary.name}',
+                  child: _FooterAction(
+                    label: uploadLabel,
+                    icon: Icons.cloud_upload_outlined,
+                    color: _kSyncAccent,
+                    filled: false,
+                    iconOnly: isMobile,
+                    onTap: onSyncRequested,
+                  ),
+                ),
                 const SizedBox(width: 8),
+              ],
+              if (showDownload) ...[
                 _animatedState(
                   context,
                   stateKey: 'download-${state.summary.name}',
@@ -415,31 +502,35 @@ class _SharedFooter extends StatelessWidget {
                     label: l10n.sharedWithMeDownload,
                     icon: Icons.cloud_download_outlined,
                     color: _kBlue,
+                    filled: true,
+                    iconOnly: isMobile,
                     onTap: onDownloadRequested,
                   ),
                 ),
-              ] else if (showSync) ...[
                 const SizedBox(width: 8),
+              ],
+              if (showUpload && uploadFilled) ...[
                 _animatedState(
                   context,
-                  stateKey: 'sync-${state.summary.name}',
+                  stateKey: 'upload-${state.summary.name}',
                   child: _FooterAction(
-                    label: l10n.sharedWithMeSync,
-                    icon: Icons.sync_rounded,
+                    label: uploadLabel,
+                    icon: Icons.cloud_upload_outlined,
                     color: _kSyncAccent,
+                    filled: true,
+                    iconOnly: isMobile,
                     onTap: onSyncRequested,
                   ),
                 ),
-              ],
-              if (!busy && (onRemove != null || onManageCopies != null)) ...[
                 const SizedBox(width: 8),
+              ],
+              if (!busy && (onRemove != null || onManageCopies != null))
                 _ManagementActions(
                   disconnectLabel: l10n.sharedWithMeRemove,
                   manageLabel: l10n.deleteDataTitle,
                   onDisconnect: onRemove,
                   onManageCopies: onManageCopies,
                 ),
-              ],
             ],
           ),
         ],
@@ -644,11 +735,23 @@ class _FooterAction extends StatefulWidget {
     required this.icon,
     required this.color,
     this.onTap,
+    this.filled = true,
+    this.iconOnly = false,
   });
   final String label;
   final IconData icon;
   final Color color;
   final VoidCallback? onTap;
+
+  /// T816 (spec 008, D1): patrón `save_card.dart` — dirección recomendada
+  /// `filled: true`, la contraria `filled: false` (contorno). Por defecto
+  /// `true`, así el único botón que existía antes de la generalización
+  /// (siempre "recomendado" al ser el único) no cambia de aspecto.
+  final bool filled;
+
+  /// En móvil, solo icono (mismo patrón que `ActionBtn.iconOnly`) — con dos
+  /// direcciones a la vez no cabe el texto junto al estado + gestión.
+  final bool iconOnly;
 
   @override
   State<_FooterAction> createState() => _FooterActionState();
@@ -677,30 +780,38 @@ class _FooterActionState extends State<_FooterAction> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 140),
           curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          padding: widget.iconOnly
+              ? const EdgeInsets.all(9)
+              : const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha: _hovered ? 0.24 : 0.16),
+            color: widget.color.withValues(
+              alpha: widget.filled
+                  ? (_hovered ? 0.24 : 0.16)
+                  : (_hovered ? 0.08 : 0.0),
+            ),
             border: Border.all(
               color: widget.color.withValues(alpha: _hovered ? 0.75 : 0.5),
             ),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(widget.icon, size: 14, color: widget.color),
-              const SizedBox(width: 5),
-              Text(
-                widget.label,
-                style: GoogleFonts.firaCode(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w600,
-                  color: widget.color,
+          child: widget.iconOnly
+              ? Icon(widget.icon, size: 14, color: widget.color)
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(widget.icon, size: 14, color: widget.color),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.label,
+                      style: GoogleFonts.firaCode(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: widget.color,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
       ),

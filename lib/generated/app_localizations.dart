@@ -1216,7 +1216,7 @@ abstract class AppLocalizations {
   /// No description provided for @sharedSyncBoth.
   ///
   /// In en, this message translates to:
-  /// **'Sync both'**
+  /// **'Upload to both Drives'**
   String get sharedSyncBoth;
 
   /// No description provided for @sharedSideMyDrive.
@@ -2508,6 +2508,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'FROM THIS DEVICE'**
   String get previewFromDevice;
+
+  /// No description provided for @overwriteWhatChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'What changes'**
+  String get overwriteWhatChanges;
+
+  /// No description provided for @overwriteTagOverwritten.
+  ///
+  /// In en, this message translates to:
+  /// **'WILL BE OVERWRITTEN'**
+  String get overwriteTagOverwritten;
+
+  /// No description provided for @overwriteNewCopyTag.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW'**
+  String get overwriteNewCopyTag;
+
+  /// No description provided for @overwriteDeltaPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =0{{time}} one{1 day and {time}} other{{days} days and {time}}}'**
+  String overwriteDeltaPhrase(int days, String time);
+
+  /// No description provided for @overwriteVerdictAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re {delta} ahead. It\'s safe.'**
+  String overwriteVerdictAhead(String delta);
+
+  /// No description provided for @overwriteVerdictMoneySpent.
+  ///
+  /// In en, this message translates to:
+  /// **'💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That\'s not a real loss.'**
+  String get overwriteVerdictMoneySpent;
+
+  /// No description provided for @overwriteVerdictNegligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimal difference ({delta}). Either copy works fine.'**
+  String overwriteVerdictNegligible(String delta);
+
+  /// No description provided for @overwriteVerdictDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ You\'re about to lose {delta} of progress on {target}. Double-check before continuing.'**
+  String overwriteVerdictDanger(String delta, String target);
+
+  /// No description provided for @overwriteConfirmTitleUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm the upload?'**
+  String get overwriteConfirmTitleUpload;
+
+  /// No description provided for @overwriteConfirmTitleDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm the download?'**
+  String get overwriteConfirmTitleDownload;
+
+  /// No description provided for @overwriteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re about to lose {delta} on {target}. This action can\'t be undone.'**
+  String overwriteConfirmBody(String delta, String target);
+
+  /// No description provided for @overwriteConfirmButtonUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm upload'**
+  String get overwriteConfirmButtonUpload;
+
+  /// No description provided for @overwriteConfirmButtonDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm download'**
+  String get overwriteConfirmButtonDownload;
+
+  /// No description provided for @overwriteDangerButtonUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Upload anyway'**
+  String get overwriteDangerButtonUpload;
+
+  /// No description provided for @overwriteDangerButtonDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Download anyway'**
+  String get overwriteDangerButtonDownload;
+
+  /// No description provided for @overwriteIdenticalSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{✓ 1 identical} other{✓ {count} identical}} — {list}'**
+  String overwriteIdenticalSummary(int count, String list);
+
+  /// No description provided for @overwriteUploadToOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to {email}\'s Drive'**
+  String overwriteUploadToOwner(String email);
+
+  /// No description provided for @overwriteUploadBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to both Drives'**
+  String get overwriteUploadBoth;
+
+  /// No description provided for @overwriteConfirmTitleBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm both uploads?'**
+  String get overwriteConfirmTitleBoth;
+
+  /// No description provided for @overwriteConfirmBodyBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll lose {delta} in {targets}. This action can\'t be undone.'**
+  String overwriteConfirmBodyBoth(String delta, String targets);
+
+  /// No description provided for @overwriteBothDestinationsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} and {second}'**
+  String overwriteBothDestinationsLabel(String first, String second);
+
+  /// No description provided for @sharedTargetOwnDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'your Drive'**
+  String get sharedTargetOwnDrive;
+
+  /// No description provided for @sharedStatusLocalAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re ahead in {targets}'**
+  String sharedStatusLocalAhead(String targets);
 
   /// No description provided for @versionMismatch.
   ///

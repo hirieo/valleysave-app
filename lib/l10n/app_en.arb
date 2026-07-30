@@ -278,7 +278,7 @@
   "sharedWithMeUploadOwn": "Upload to my Drive",
   "sharedDownloadOwn": "Download from my Drive",
   "sharedStatusOwnDriveAhead": "Your Drive is ahead — bring it down",
-  "sharedSyncBoth": "Sync both",
+  "sharedSyncBoth": "Upload to both Drives",
   "sharedSideMyDrive": "MY DRIVE",
   "sharedSideOwnerDrive": "{email}'s DRIVE",
   "@sharedSideOwnerDrive": {
@@ -608,6 +608,85 @@
   "previewDriveLabel": "ON DRIVE",
   "previewFromDrive": "FROM DRIVE",
   "previewFromDevice": "FROM THIS DEVICE",
+  "overwriteWhatChanges": "What changes",
+  "overwriteTagOverwritten": "WILL BE OVERWRITTEN",
+  "overwriteNewCopyTag": "NEW",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 day and {time}} other{{days} days and {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "overwriteVerdictAhead": "You're {delta} ahead. It's safe.",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That's not a real loss.",
+  "overwriteVerdictNegligible": "Minimal difference ({delta}). Either copy works fine.",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ You're about to lose {delta} of progress on {target}. Double-check before continuing.",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmTitleUpload": "Confirm the upload?",
+  "overwriteConfirmTitleDownload": "Confirm the download?",
+  "overwriteConfirmBody": "You're about to lose {delta} on {target}. This action can't be undone.",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmButtonUpload": "Confirm upload",
+  "overwriteConfirmButtonDownload": "Confirm download",
+  "overwriteDangerButtonUpload": "⚠️ Upload anyway",
+  "overwriteDangerButtonDownload": "⚠️ Download anyway",
+  "overwriteIdenticalSummary": "{count, plural, one{✓ 1 identical} other{✓ {count} identical}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "list": { "type": "String" }
+    }
+  },
+  "overwriteUploadToOwner": "Upload to {email}'s Drive",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "overwriteUploadBoth": "Upload to both Drives",
+  "overwriteConfirmTitleBoth": "Confirm both uploads?",
+  "overwriteConfirmBodyBoth": "You'll lose {delta} in {targets}. This action can't be undone.",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "targets": { "type": "String" }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} and {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": { "type": "String" },
+      "second": { "type": "String" }
+    }
+  },
+  "sharedTargetOwnDrive": "your Drive",
+  "sharedStatusLocalAhead": "You're ahead in {targets}",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": { "type": "String" }
+    }
+  },
   "versionMismatch": "Different versions: local {local} · Drive {drive}…",
   "@versionMismatch": {
     "placeholders": {

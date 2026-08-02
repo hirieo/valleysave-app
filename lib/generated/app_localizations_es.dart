@@ -2110,4 +2110,26 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hostSwapErrValidation =>
       'La verificación de la partida nueva falló, así que se descartó. La original está intacta.';
+
+  @override
+  String get makeHostDeleteOriginalTitle =>
+      '¿Borrar la partida original de este equipo?';
+
+  @override
+  String get makeHostDeleteOriginalBody =>
+      'La nueva partida ya está lista. Sube la original a tu Drive como respaldo (podrás redescargarla luego) o borra solo la copia local.';
+
+  @override
+  String get makeHostDeleteOriginalNoBackupBody =>
+      'Sin conexión con Drive: no quedará ningún respaldo. Solo se borrará la copia local de este equipo.';
+
+  @override
+  String get makeHostDeleteOriginalUploadBody =>
+      'La partida original se subirá primero a tu Drive como respaldo y luego se borrará la copia local de este equipo.';
+
+  @override
+  String get makeHostDeleteWithoutUpload => 'Borrar sin subir';
+
+  @override
+  String get makeHostUploadAndDelete => 'Subir y borrar';
 }

@@ -397,5 +397,565 @@
   "hostSwapErrInvalid": "Este save tem uma estrutura inesperada. Nada foi alterado.",
   "hostSwapErrNoSpace": "Não há espaço livre na fazenda para reposicionar objetos. Nada foi alterado.",
   "hostSwapErrWrite": "Não foi possível gravar o novo save (disco/permissões). Nada foi alterado.",
-  "hostSwapErrValidation": "A verificação do novo save falhou e foi descartado. O original está intacto."
+  "hostSwapErrValidation": "A verificação do novo save falhou e foi descartado. O original está intacto.",
+  "disconnectButtonEmail": "Desconectar de {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAsPrefix": "Conectado como",
+  "hiwConnectTitle": "Conectar sua conta",
+  "hiwConnectDesc": "ValleySave usa sua conta do Google para guardar seus saves em uma pasta privada do ValleySave no seu próprio Drive.",
+  "hiwConnectStepGoogle": "Conta do\nGoogle",
+  "hiwConnectStepDrive": "Pasta ValleySave\ncriada",
+  "hiwConnectStepReady": "Pronto para\nsincronizar",
+  "hiwConnectTipOwnership": "Somente você pode editar ou deletar suas cópias no Drive — o ValleySave só lê e grava dentro da própria pasta.",
+  "overwriteWhatChanges": "O que muda",
+  "overwriteTagOverwritten": "SERÁ SOBRESCRITO",
+  "overwriteNewCopyTag": "NOVO",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 dia e {time}} other{{days} dias e {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictAhead": "Você está {delta} à frente. É seguro.",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 O dinheiro atual caiu, mas o progresso geral avança — provavelmente você gastou em algo. Não é uma perda real.",
+  "overwriteVerdictNegligible": "Diferença mínima ({delta}). Qualquer uma das duas cópias serve.",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ Você vai perder {delta} de progresso em {target}. Revise antes de continuar.",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmTitleUpload": "Confirma o envio?",
+  "overwriteConfirmTitleDownload": "Confirma o download?",
+  "overwriteConfirmBody": "Você vai perder {delta} em {target}. Esta ação não pode ser desfeita.",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmButtonUpload": "Confirmar envio",
+  "overwriteConfirmButtonDownload": "Confirmar download",
+  "overwriteDangerButtonUpload": "⚠️ Enviar mesmo assim",
+  "overwriteDangerButtonDownload": "⚠️ Baixar mesmo assim",
+  "overwriteIdenticalSummary": "{count, plural, one{✓ 1 idêntico} other{✓ {count} idênticos}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadToOwner": "Enviar para o Drive de {email}",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadBoth": "Enviar para os dois Drives",
+  "overwriteConfirmTitleBoth": "Confirma os dois envios?",
+  "overwriteConfirmBodyBoth": "Você vai perder {delta} em {targets}. Esta ação não pode ser desfeita.",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} e {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedTargetOwnDrive": "seu Drive",
+  "sharedStatusLocalAhead": "Você está à frente em {targets}",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "snackReplacePrepareFailed": "Não foi possível preparar o save. Nada foi alterado no disco",
+  "snackReplaceValidationFailed": "O save baixado parece inválido ou incompleto. Nada foi alterado no disco",
+  "snackReplaceBackupFailed": "Não foi possível criar um backup de segurança. Nada foi alterado no disco",
+  "snackReplaceSwapFailed": "A troca falhou, mas o save original foi restaurado a partir do backup",
+  "snackReplaceBusy": "Já existe uma operação em andamento para este save",
+  "snackUploadIncomplete": "O save local está incompleto ou corrompido. Nada foi enviado",
+  "snackDownloadIncomplete": "Não é possível baixar: falta conteúdo no Drive",
+  "cardIncomplete": "Incompleto no Drive",
+  "autoRefreshTitle": "Atualização automática",
+  "autoRefreshSubtitle": "Verifica mudanças no Drive a cada 30s",
+  "autoSyncSnack": "{farmName} sincronizado automaticamente",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncTooltipOn": "Auto-sync ativado — sincroniza sozinho quando é seguro",
+  "autoSyncTooltipOff": "Auto-sync desativado — toque para ativar",
+  "autoSyncExplainTitle": "Auto-sync",
+  "autoSyncExplainBody": "A partir de agora, {farmName} será enviado ou baixado sozinho quando for seguro, sem pedir sua confirmação.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncExplainSafe": "Só age quando você está claramente à frente e nada se perde.",
+  "autoSyncExplainDanger": "Se houvesse risco de perder progresso, ele nunca age sozinho: você continuará decidindo com o diálogo de sempre.",
+  "autoSyncExplainMissing": "Se faltar uma das duas cópias, ele não a cria sozinho: enviar ou baixar pela primeira vez é você quem decide.",
+  "autoSyncExplainDontShowAgain": "Não mostrar este aviso novamente",
+  "autoSyncExplainConfirm": "Entendi, ativar",
+  "hiwAutoSyncTitle": "Sincronizar sozinho",
+  "hiwAutoSyncDesc": "Cada save tem um chip AUTO no seu cartão. Ao ativá-lo, esse save é enviado ou baixado sozinho quando o app detecta uma mudança — sem precisar entrar para confirmar.",
+  "hiwAutoSyncTipSafe": "Só sincroniza sozinho quando você está claramente à frente e nada se perde.",
+  "hiwAutoSyncTipDanger": "Se houvesse risco de perder progresso, ele nunca faz sozinho: continua perguntando com a comparação de sempre.",
+  "hiwAutoSyncTipPerSave": "É ativado save por save, não de uma vez: você pode ter no seu e não em um compartilhado.",
+  "hiwAutoSyncTipMissing": "Só mantém sincronizadas duas cópias que já existem. Se faltar uma, o primeiro envio ou download é com você.",
+  "hiwAutoSyncTipRefresh": "Em Configurações você pode desativar completamente a verificação automática de mudanças.",
+  "hiwCompatIncomplete": "Se você ver \"Incompleto no Drive\" em um save, falta algum arquivo necessário na nuvem — não é possível baixá-lo até que seja enviado corretamente novamente de outro dispositivo.",
+  "hiwShareTitle": "Compartilhar com outros",
+  "hiwShareDesc": "Compartilhe um save com outro jogador por e-mail. Ele o verá em Compartilhadas comigo no próprio dispositivo.",
+  "hiwShareStepYourSave": "Seu\nsave",
+  "hiwShareStepShare": "Compartilhar por\ne-mail",
+  "hiwShareStepFriend": "Compartilhadas\ncomigo",
+  "hiwShareTipRoles": "Dois papéis: Somente leitura permite ver e baixar. Permitir sincronizar permite sobrescrever sua cópia no Drive. Em nenhum caso podem deletá-la — só você, o dono, pode deletar seu save.",
+  "hiwShareTipDisconnect": "Desconectar só interrompe a sincronização do lado dele — o compartilhamento continua ativo até você realmente sair dele em Gerenciar compartilhadas.",
+  "hiwHostSwapTitle": "Troca de anfitrião",
+  "hiwHostSwapDesc": "Muda qual farmhand é o anfitrião do save, substituindo-o no lugar — mesmo slot de save, mesmas permissões de compartilhamento.",
+  "hiwHostSwapStepPick": "Escolher\nfarmhand",
+  "hiwHostSwapStepConfirm": "Confirmar",
+  "hiwHostSwapStepDone": "Save novo\ncriado",
+  "hiwHostSwapTipMove": "Alguns objetos da fazenda podem ser realocados para abrir espaço para a casa — nada é apagado.",
+  "hiwHostSwapTipHouse": "A casa do novo anfitrião vai parecer a casa grande padrão do jogo — a estética de cabana não é suportada sem mods.",
+  "hiwBackupsTitle": "Backups",
+  "hiwBackupsDesc": "Um backup é uma foto de um save que você pode restaurar mais tarde. Crie um manualmente quando quiser, ou deixe o ValleySave criar um automaticamente antes de sobrescrever um save (ao baixar, importar, restaurar ou trocar de anfitrião).",
+  "hiwBackupsStepSave": "Seu\nsave",
+  "hiwBackupsStepSnapshot": "Backup\ncriado",
+  "hiwBackupsStepStore": "Local e/ou\nDrive",
+  "hiwBackupsTipRestore": "Restaurar sobrescreve seu save atual com essa versão anterior — não pode ser desfeito.",
+  "hiwBackupsTipDelete": "Deletar um backup o apaga em todos os lugares onde existir (este dispositivo e Drive, se foi enviado) — não pode ser desfeito.",
+  "hiwBackupsTipExport": "Você também pode Exportar um save como zip para guardar onde quiser, e Importá-lo de volta mais tarde — uma alternativa manual e portátil aos backups integrados.",
+  "hiwBackupsTipRetention": "O ValleySave mantém os 5 backups automáticos mais recentes de cada save; os que você cria manualmente nunca são apagados sozinhos.",
+  "hiwBackupsTipRestoreBridge": "No modo Ponte (Android sem root/Shizuku), restaurar um backup pede que você extraia o .zip manualmente na pasta do Stardew — igual ao baixar.",
+  "hiwLaunchTipLinux": "No Linux, se o jogo não for detectado automaticamente, configure o caminho do executável em Configurações → Jogo.",
+  "hiwSaveLocationsTitle": "Onde vivem seus saves",
+  "hiwSaveLocationsDesc": "O ValleySave lê e grava diretamente na pasta de saves do jogo em cada plataforma.",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\\\StardewValley\\\\Saves",
+  "hiwSaveLocationAndroid": "Android: pasta protegida, acessada via Shizuku ou a Ponte",
+  "hiwSaveLocationLinux": "Linux: ~/.config/StardewValley/Saves (ou ~/snap/steam/common/.config/StardewValley/Saves se o Steam estiver instalado via snap)",
+  "exportAction": "Exportar",
+  "exportSuccess": "Save exportado.",
+  "exportError": "Não foi possível exportar o save: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importAction": "Importar save",
+  "importSuccess": "Save de {playerName} importado.",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+  "importErrInvalidZip": "Este arquivo não é um zip válido.",
+  "importErrUnsafePath": "Este arquivo tem uma estrutura insegura e foi rejeitado.",
+  "importErrTooLarge": "Este arquivo é grande demais para ser importado.",
+  "importErrNotASave": "Este arquivo não contém um save reconhecível.",
+  "importErrWrite": "Não foi possível gravar o save importado (disco/permissões).",
+  "importErrBackupFailed": "Não foi possível criar um backup de segurança. Nada foi importado.",
+  "importConflictTitle": "Já existe um save com este nome",
+  "importConflictBody": "Importar substituirá a cópia local existente. Isso não pode ser desfeito.",
+  "importConflictConfirm": "Sobrescrever",
+  "shareAction": "Compartilhar",
+  "shareUploadFirstCta": "Enviar primeiro",
+  "shareDialogTitle": "Compartilhar save",
+  "shareEmailPlaceholder": "nome@exemplo.com",
+  "shareInfoNote": "Compartilhar dá acesso apenas para ver e baixar. Só você pode editar ou deletar sua cópia no Drive.",
+  "shareRoleReader": "Somente leitura",
+  "shareRoleWriter": "Permitir sincronizar",
+  "shareInfoNoteCoop": "Somente leitura permite ver e baixar. Permitir sincronizar permite sobrescrever sua cópia no Drive — nunca poderão deletá-la.",
+  "shareConfirmButton": "Compartilhar",
+  "shareSuccess": "Compartilhado com {email}.",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "manageAccessTitle": "Pessoas com acesso",
+  "manageAccessEmpty": "Ninguém mais tem acesso ainda.",
+  "manageAccessRoleLabel": "Acesso",
+  "manageAccessRevoke": "Revogar",
+  "manageAccessRevokeConfirm": "Remover o acesso de {email}? Qualquer cópia local que já tenha sido baixada continua sendo dele.",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "driveOnlyControlsYourCopy": "Compartilhar controla sua cópia no Drive. Se alguém a baixar, essa cópia é dele.",
+  "driveOnlyControlsYourCopyCoop": "Sincronizar controla sua cópia no Drive — pode ser sobrescrita, mas nunca deletada, por quem você autorizar a sincronizar.",
+  "sharedWithMeTitle": "Compartilhadas comigo",
+  "sharedWithMeEmpty": "Nada compartilhado com você ainda.",
+  "sharedWithMeAdd": "Adicionar save compartilhado",
+  "sharedWithMeOwnedBy": "Compartilhado por {email}",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRoleSync": "Sincroniza",
+  "sharedWithMeRoleRead": "Somente leitura",
+  "sharedWithMeSync": "Sincronizar",
+  "sharedWithMeDownload": "Baixar",
+  "sharedWithMeRemove": "Desconectar",
+  "sharedWithMeRemoveConfirm": "Você deixará de sincronizar com o Drive de {email}, mas pode adicioná-lo de volta quando quiser — continua compartilhado. Sua cópia local fica como um save coop normal.",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedLeaveConfirm": "Você perderá o acesso a este save de verdade. Não poderá adicioná-lo de volta a não ser que {email} compartilhe com você novamente. Sua cópia local fica como um save coop normal.",
+  "sharedManageButton": "Gerenciar",
+  "sharedManageDialogTitle": "Gerenciar compartilhadas",
+  "sharedManageDialogHint": "Aqui você pode sair de verdade de um save compartilhado.",
+  "sharedLeaveButton": "Sair do compartilhado",
+  "sharedLeaveSuccess": "Você saiu do compartilhado de {email}.",
+  "sharedWithMeSyncConfirm": "Sobrescrever a cópia de {email} no Drive com seu save local?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedAccessReadOnly": "{email} colocou seu acesso em modo somente leitura — você pode ver e baixar, mas não sincronizar para o Drive dele.",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRevoked": "Você não tem mais acesso",
+  "sharedRevokedDialogBody": "{email} parou de compartilhar {farmName} com você. Sua cópia local e a do seu Drive continuam como estão, agora em Meus saves.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedRevokedAccept": "Aceitar",
+  "sharedSelfCleanupTitle": "Registro corrigido",
+  "sharedSelfCleanupBody": "{farmName} apareceu como compartilhado com você por engano — na verdade é seu. Foi corrigido, agora está em Meus saves.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeUploadOwn": "Enviar para meu Drive",
+  "sharedDownloadOwn": "Baixar do meu Drive",
+  "sharedStatusOwnDriveAhead": "Seu Drive está à frente — baixe",
+  "sharedSyncBoth": "Enviar para os dois Drives",
+  "sharedSideMyDrive": "MEU DRIVE",
+  "sharedSideOwnerDrive": "DRIVE EM {email}",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedSideDate": "Dia {day} · Ano {year}",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "Sincronizado com o dono · sem cópia no seu Drive",
+  "sharedStatusAheadNoOwnDrive": "Você está à frente · sem cópia no seu Drive",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} está à frente · sem cópia no seu Drive",
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedStatusAllSynced": "Sincronizado (local + os dois Drives)",
+  "sharedStatusAheadBoth": "Você está à frente nos dois Drives",
+  "sharedStatusMixed": "Dessincronizado — verifique cada Drive",
+  "sharedStatusFullySynced": "Totalmente sincronizado",
+  "sharedStatusSyncedOwn": "Meu Drive sincronizado",
+  "sharedStatusSyncedOwner": "Drive compartilhado sincronizado",
+  "sharedStatusNotCloud": "Somente neste dispositivo",
+  "sharedStatusOwnerAhead": "Drive em {email} está à frente",
+  "sharedStatusBothAhead": "Os dois Drives estão à frente",
+  "sharedStatusLocalMissing": "Não está neste dispositivo",
+  "sharedStatusOwnerUnavailable": "Não foi possível verificar o Drive em {email}",
+  "sharedStatusWorking": "Sincronizando…",
+  "sharedSideUnavailable": "Não foi possível verificar",
+  "sharedSyncChooseTitle": "Onde você quer sincronizar?",
+  "sharedSyncChooseBody": "Escolha quais cópias na nuvem você quer atualizar com o save deste dispositivo.",
+  "sharedSyncTargetOwn": "Meu Drive",
+  "sharedSyncTargetOwner": "Drive em {email}",
+  "sharedSyncTargetBoth": "Os dois Drives",
+  "sharedDownloadChooseTitle": "Qual cópia você quer baixar?",
+  "sharedDownloadChooseBody": "Há mais de uma cópia à frente. Escolha qual você quer trazer para este dispositivo.",
+  "sharedDownloadSourceOwn": "Do meu Drive",
+  "sharedDownloadSourceOwner": "Do Drive em {email}",
+  "sharedWithMePickerTitle": "Adicionar save compartilhado",
+  "sharedPickerEmptyHint": "Aqui aparece o que outro jogador compartilhar com você pelo Drive.",
+  "sharedPickerAddButton": "Adicionar",
+  "sharedOriginBadge": "Compartilhado",
+  "sharedOriginFrom": "de {email}",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupDialogTitle": "Backup criado",
+  "swapBackupDialogBody": "A versão anterior foi salva como zip. O que você quer fazer com ela?",
+  "swapBackupUpload": "Enviar para o Drive",
+  "swapBackupLocalOnly": "Manter neste dispositivo",
+  "swapBackupDeleteNow": "Deletar agora",
+  "swapBackupUploadOk": "Backup enviado para o Drive.",
+  "swapBackupUploadErr": "Não foi possível enviar o backup: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupLocalOnlySnack": "Backup salvo neste dispositivo.",
+  "backupsAction": "Backups",
+  "backupsScreenTitle": "Backups de {farmName}",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsEmpty": "Nenhum backup ainda.",
+  "backupsRestore": "Restaurar",
+  "backupsRestoreConfirmTitle": "Restaurar este backup?",
+  "backupsRestoreConfirmBody": "Isso sobrescreve seu save atual com esta versão anterior. Não pode ser desfeito.",
+  "backupsDelete": "Deletar",
+  "backupsDeleteConfirmTitle": "Deletar este backup?",
+  "backupsDeleteConfirmBody": "Será apagado em todos os lugares onde existir (este dispositivo e Drive, se foi enviado). Não pode ser desfeito.",
+  "backupsRestoreOk": "Backup restaurado.",
+  "backupsRestoreManualTitle": "Restaurar manualmente",
+  "backupsRestoreManualBody": "No modo Ponte, o ValleySave não consegue gravar na pasta do jogo automaticamente. Extraia você mesmo o .zip deste backup na pasta Saves do Stardew Valley, ou mude para o modo Root/Shizuku em Configurações para restaurar automaticamente.",
+  "backupsRestoreErr": "Não foi possível restaurar o backup: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDeleteErr": "Não foi possível deletar o backup: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCreate": "Criar backup local",
+  "backupsCreateLocalHint": "Os backups são criados primeiro neste dispositivo. Depois você pode enviá-los para o Drive.",
+  "backupsCreateOk": "Backup criado.",
+  "backupsCreateErr": "Não foi possível criar o backup: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDownload": "Baixar",
+  "backupsDownloadOk": "Backup baixado neste dispositivo.",
+  "backupsDownloadErr": "Não foi possível baixar o backup: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCopyOwn": "Copiar para meu Drive",
+  "backupsUploadOwn": "Para meu Drive",
+  "backupsUploadShared": "Para o Drive compartilhado",
+  "backupsUploadOk": "Backup enviado.",
+  "backupsUploadErr": "Não foi possível enviar o backup: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsLocationLocal": "Este dispositivo",
+  "backupsLocationOwnDrive": "Meu Drive",
+  "backupsLocationSharedDrive": "Drive compartilhado",
+  "backupsDeleteChooseBody": "Escolha exatamente onde deletá-lo. Só aparecem os lugares onde este backup existe.",
+  "backupsDeleteLocalOnly": "Somente deste dispositivo",
+  "backupsDeleteOwnOnly": "Somente do meu Drive",
+  "backupsDeleteSharedOnly": "Somente do Drive compartilhado",
+  "backupsDeleteAll": "De todas as cópias",
+  "deleteUnifiedTitle": "Deletar {farmName}?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChooseLocationBody": "Escolha de onde. A cópia deste dispositivo é apagada para sempre; a do Drive vai para a Lixeira (30 dias).",
+  "deleteDriveContextTitle": "Deletar {farmName} do Drive?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteDriveContextBody": "A cópia do Drive vai para a Lixeira, onde você pode recuperá-la por 30 dias.",
+  "deleteDriveLocalKept": "A cópia deste dispositivo permanecerá sem alterações.",
+  "deleteLocalContextTitle": "Deletar {farmName} deste dispositivo?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalContextBody": "A cópia deste dispositivo será apagada para sempre.",
+  "deleteLocalDriveCurrent": "Sua cópia no Drive está atualizada ({date}) e continuará disponível.",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveAhead": "Sua cópia no Drive é mais recente ({date}) e continuará disponível.",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveOlder": "Sua cópia no Drive é anterior ({driveDate}); este dispositivo está em {localDate}.",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalBackupAvailable": "Há {count} backups locais disponíveis caso você precise de uma cópia anterior.",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteLocalNoRecovery": "Não há uma cópia no Drive nem um backup local para recuperar este jogo.",
+  "deleteOptionLocalOnly": "Somente deste dispositivo",
+  "deleteOptionDriveOnly": "Somente do Drive",
+  "deleteOptionBoth": "De ambas as cópias (dispositivo + Drive)",
+  "viewPlayersHint": "Ver jogadores",
+  "snackDeletedBoth": "\"{saveName}\" deletado deste dispositivo e movido para a Lixeira do Drive.",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  }
 }

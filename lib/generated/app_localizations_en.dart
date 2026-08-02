@@ -2101,4 +2101,26 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get hostSwapErrValidation =>
       'Verification of the new save failed, so it was discarded. The original is intact.';
+
+  @override
+  String get makeHostDeleteOriginalTitle =>
+      'Delete the original save on this device?';
+
+  @override
+  String get makeHostDeleteOriginalBody =>
+      'The new save is ready. Upload the original to your Drive as a backup (you\'ll be able to redownload it later) or just delete the local copy.';
+
+  @override
+  String get makeHostDeleteOriginalNoBackupBody =>
+      'No connection to Drive: no backup will remain. Only the local copy on this device will be deleted.';
+
+  @override
+  String get makeHostDeleteOriginalUploadBody =>
+      'The original save will be uploaded to your Drive as a backup first, then the local copy on this device will be deleted.';
+
+  @override
+  String get makeHostDeleteWithoutUpload => 'Delete without uploading';
+
+  @override
+  String get makeHostUploadAndDelete => 'Upload and delete';
 }

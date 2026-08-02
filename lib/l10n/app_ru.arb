@@ -488,5 +488,565 @@
   "hostSwapErrInvalid": "У этого сохранения неожиданная структура. Ничего не изменено.",
   "hostSwapErrNoSpace": "На ферме нет свободного места для перемещения объектов. Ничего не изменено.",
   "hostSwapErrWrite": "Не удалось записать новое сохранение (диск/права доступа). Ничего не изменено.",
-  "hostSwapErrValidation": "Проверка нового сохранения не удалась, оно было отменено. Оригинал не повреждён."
+  "hostSwapErrValidation": "Проверка нового сохранения не удалась, оно было отменено. Оригинал не повреждён.",
+  "disconnectButtonEmail": "Отключиться от {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAsPrefix": "Подключено как",
+  "hiwConnectTitle": "Подключите свой аккаунт",
+  "hiwConnectDesc": "ValleySave использует ваш аккаунт Google для хранения сохранений в приватной папке ValleySave на вашем собственном Drive.",
+  "hiwConnectStepGoogle": "Аккаунт\nGoogle",
+  "hiwConnectStepDrive": "Папка ValleySave\nсоздана",
+  "hiwConnectStepReady": "Готово к\nсинхронизации",
+  "hiwConnectTipOwnership": "Только вы можете редактировать или удалять свои копии на Drive — ValleySave только читает и записывает в пределах своей собственной папки.",
+  "overwriteWhatChanges": "Что изменится",
+  "overwriteTagOverwritten": "БУДЕТ ПЕРЕЗАПИСАНО",
+  "overwriteNewCopyTag": "НОВОЕ",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 день и {time}} few{{days} дня и {time}} many{{days} дней и {time}} other{{days} дня и {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictAhead": "Вы впереди на {delta}. Это безопасно.",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 Текущие деньги уменьшились, но общий прогресс продвигается вперёд — вероятно, вы потратили их на что-то. Это не настоящая потеря.",
+  "overwriteVerdictNegligible": "Минимальная разница ({delta}). Подойдёт любая из двух копий.",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ Вы потеряете {delta} прогресса в {target}. Проверьте перед тем, как продолжить.",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmTitleUpload": "Подтвердить загрузку?",
+  "overwriteConfirmTitleDownload": "Подтвердить скачивание?",
+  "overwriteConfirmBody": "Вы потеряете {delta} в {target}. Это действие нельзя отменить.",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmButtonUpload": "Подтвердить загрузку",
+  "overwriteConfirmButtonDownload": "Подтвердить скачивание",
+  "overwriteDangerButtonUpload": "⚠️ Всё равно загрузить",
+  "overwriteDangerButtonDownload": "⚠️ Всё равно скачать",
+  "overwriteIdenticalSummary": "{count, plural, one{✓ 1 одинаковое} few{✓ {count} одинаковых} many{✓ {count} одинаковых} other{✓ {count} одинаковых}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadToOwner": "Загрузить на Drive {email}",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadBoth": "Загрузить на оба Drive",
+  "overwriteConfirmTitleBoth": "Подтвердить обе загрузки?",
+  "overwriteConfirmBodyBoth": "Вы потеряете {delta} в {targets}. Это действие нельзя отменить.",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} и {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedTargetOwnDrive": "ваш Drive",
+  "sharedStatusLocalAhead": "Вы впереди в {targets}",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "snackReplacePrepareFailed": "Не удалось подготовить сохранение. На диске ничего не изменилось",
+  "snackReplaceValidationFailed": "Скачанное сохранение выглядит недействительным или неполным. На диске ничего не изменилось",
+  "snackReplaceBackupFailed": "Не удалось создать резервную копию. На диске ничего не изменилось",
+  "snackReplaceSwapFailed": "Замена не удалась, но исходное сохранение было восстановлено из резервной копии",
+  "snackReplaceBusy": "Для этого сохранения уже выполняется другая операция",
+  "snackUploadIncomplete": "Локальное сохранение неполное или повреждено. Ничего не загружено",
+  "snackDownloadIncomplete": "Невозможно скачать: не хватает содержимого на Drive",
+  "cardIncomplete": "Неполное на Drive",
+  "autoRefreshTitle": "Автообновление",
+  "autoRefreshSubtitle": "Проверяет изменения на Drive каждые 30с",
+  "autoSyncSnack": "{farmName} синхронизировано автоматически",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncTooltipOn": "Автосинхронизация включена — синхронизируется сама, когда это безопасно",
+  "autoSyncTooltipOff": "Автосинхронизация выключена — нажмите, чтобы включить",
+  "autoSyncExplainTitle": "Auto-sync",
+  "autoSyncExplainBody": "Теперь {farmName} будет загружаться или скачиваться сама, когда это безопасно, без запроса подтверждения.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncExplainSafe": "Действует только тогда, когда вы явно впереди и ничего не теряется.",
+  "autoSyncExplainDanger": "Если был бы риск потерять прогресс, она никогда не действует сама: вы по-прежнему будете решать через обычный диалог.",
+  "autoSyncExplainMissing": "Если одной из двух копий не хватает, она не создаёт её сама: первую загрузку или скачивание вы решаете сами.",
+  "autoSyncExplainDontShowAgain": "Больше не показывать это предупреждение",
+  "autoSyncExplainConfirm": "Понятно, включить",
+  "hiwAutoSyncTitle": "Синхронизация сама по себе",
+  "hiwAutoSyncDesc": "У каждого сохранения на карточке есть значок AUTO. Включите его — и это сохранение будет загружаться или скачиваться само, как только приложение заметит изменение, без необходимости открывать и подтверждать.",
+  "hiwAutoSyncTipSafe": "Синхронизируется сама только тогда, когда вы явно впереди и ничего не теряется.",
+  "hiwAutoSyncTipDanger": "Если был бы риск потерять прогресс, она никогда не делает это сама: по-прежнему спрашивает вас с обычным сравнением.",
+  "hiwAutoSyncTipPerSave": "Включается для каждого сохранения отдельно, а не сразу для всех: можно включить для своего и выключить для общего.",
+  "hiwAutoSyncTipMissing": "Поддерживает синхронизацию только двух уже существующих копий. Если одной не хватает, первую загрузку или скачивание делаете вы.",
+  "hiwAutoSyncTipRefresh": "В Параметрах можно полностью отключить автоматическую проверку изменений.",
+  "hiwCompatIncomplete": "Если вы видите «Неполное на Drive» у сохранения, ему не хватает нужного файла в облаке — его нельзя скачать, пока оно не будет корректно загружено заново с другого устройства.",
+  "hiwShareTitle": "Поделиться с другими",
+  "hiwShareDesc": "Поделитесь сохранением с другим игроком по email. Он увидит его в разделе Общие со мной на своём устройстве.",
+  "hiwShareStepYourSave": "Ваше\nсохранение",
+  "hiwShareStepShare": "Поделиться по\nemail",
+  "hiwShareStepFriend": "Общие\nсо мной",
+  "hiwShareTipRoles": "Две роли: Только чтение позволяет просматривать и скачивать. Разрешить синхронизацию позволяет перезаписывать вашу копию на Drive. В любом случае удалить её они не могут — только вы, владелец, можете удалить своё сохранение.",
+  "hiwShareTipDisconnect": "Отключение просто останавливает синхронизацию с его стороны — общий доступ остаётся активным, пока вы не покинете его по-настоящему в разделе Управление общими.",
+  "hiwHostSwapTitle": "Смена хозяина",
+  "hiwHostSwapDesc": "Меняет, какой фермер является хозяином сохранения, заменяя его на месте — тот же слот сохранения, те же права доступа.",
+  "hiwHostSwapStepPick": "Выбрать\nфермера",
+  "hiwHostSwapStepConfirm": "Подтвердить",
+  "hiwHostSwapStepDone": "Новое сохранение\nсоздано",
+  "hiwHostSwapTipMove": "Некоторые объекты фермы могут быть перемещены, чтобы освободить место для дома — ничего не удаляется.",
+  "hiwHostSwapTipHouse": "Дом нового хозяина будет выглядеть как стандартный большой дом игры — внешний вид хижины не поддерживается без модов.",
+  "hiwBackupsTitle": "Резервные копии",
+  "hiwBackupsDesc": "Резервная копия — это снимок сохранения, который можно восстановить позже. Создавайте её вручную в любой момент или позвольте ValleySave создавать её автоматически перед перезаписью сохранения (при скачивании, импорте, восстановлении или смене хозяина).",
+  "hiwBackupsStepSave": "Ваше\nсохранение",
+  "hiwBackupsStepSnapshot": "Резервная копия\nсоздана",
+  "hiwBackupsStepStore": "Локально и/или\nDrive",
+  "hiwBackupsTipRestore": "Восстановление перезаписывает текущее сохранение этой более ранней версией — отменить нельзя.",
+  "hiwBackupsTipDelete": "Удаление резервной копии убирает её везде, где она существует (это устройство и Drive, если загружена) — отменить нельзя.",
+  "hiwBackupsTipExport": "Вы также можете Экспортировать сохранение в zip-файл, чтобы хранить где угодно, а потом Импортировать его обратно — полностью ручная и переносимая альтернатива встроенным резервным копиям.",
+  "hiwBackupsTipRetention": "ValleySave хранит 5 самых последних автоматических резервных копий для каждого сохранения; те, что вы создаёте вручную, никогда не удаляются сами.",
+  "hiwBackupsTipRestoreBridge": "В режиме Моста (Android без root/Shizuku) восстановление резервной копии попросит вас вручную извлечь .zip в папку Stardew — так же, как при скачивании.",
+  "hiwLaunchTipLinux": "В Linux, если игра не определяется автоматически, укажите путь к исполняемому файлу в Параметры → Игра.",
+  "hiwSaveLocationsTitle": "Где хранятся ваши сохранения",
+  "hiwSaveLocationsDesc": "ValleySave читает и записывает напрямую в папку сохранений игры на каждой платформе.",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\\\StardewValley\\\\Saves",
+  "hiwSaveLocationAndroid": "Android: защищённая папка, доступ через Shizuku или Мост",
+  "hiwSaveLocationLinux": "Linux: ~/.config/StardewValley/Saves (или ~/snap/steam/common/.config/StardewValley/Saves, если Steam установлен через snap)",
+  "exportAction": "Экспортировать",
+  "exportSuccess": "Сохранение экспортировано.",
+  "exportError": "Не удалось экспортировать сохранение: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importAction": "Импортировать сохранение",
+  "importSuccess": "Сохранение {playerName} импортировано.",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+  "importErrInvalidZip": "Этот файл не является допустимым zip-архивом.",
+  "importErrUnsafePath": "У этого файла небезопасная структура, он был отклонён.",
+  "importErrTooLarge": "Этот файл слишком большой для импорта.",
+  "importErrNotASave": "Этот файл не содержит распознаваемого сохранения.",
+  "importErrWrite": "Не удалось записать импортированное сохранение (диск/права доступа).",
+  "importErrBackupFailed": "Не удалось создать резервную копию. Ничего не импортировано.",
+  "importConflictTitle": "Сохранение с таким именем уже существует",
+  "importConflictBody": "Импорт заменит существующую локальную копию. Отменить это нельзя.",
+  "importConflictConfirm": "Перезаписать",
+  "shareAction": "Поделиться",
+  "shareUploadFirstCta": "Сначала загрузить",
+  "shareDialogTitle": "Поделиться сохранением",
+  "shareEmailPlaceholder": "имя@пример.com",
+  "shareInfoNote": "Общий доступ даёт право только просматривать и скачивать. Только вы можете редактировать или удалять свою копию на Drive.",
+  "shareRoleReader": "Только чтение",
+  "shareRoleWriter": "Разрешить синхронизацию",
+  "shareInfoNoteCoop": "Только чтение позволяет просматривать и скачивать. Разрешить синхронизацию позволяет перезаписывать вашу копию на Drive — удалить её они никогда не смогут.",
+  "shareConfirmButton": "Поделиться",
+  "shareSuccess": "Доступ предоставлен {email}.",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "manageAccessTitle": "Люди с доступом",
+  "manageAccessEmpty": "Больше ни у кого пока нет доступа.",
+  "manageAccessRoleLabel": "Доступ",
+  "manageAccessRevoke": "Отозвать",
+  "manageAccessRevokeConfirm": "Убрать доступ у {email}? Любая уже скачанная локальная копия остаётся у него.",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "driveOnlyControlsYourCopy": "Общий доступ управляет только вашей копией на Drive. Если кто-то её скачает, эта копия становится его.",
+  "driveOnlyControlsYourCopyCoop": "Синхронизация управляет вашей копией на Drive — те, кому вы разрешили синхронизацию, могут её перезаписать, но никогда не могут удалить.",
+  "sharedWithMeTitle": "Общие со мной",
+  "sharedWithMeEmpty": "Пока ничего не предоставлено вам в общий доступ.",
+  "sharedWithMeAdd": "Добавить общее сохранение",
+  "sharedWithMeOwnedBy": "Предоставлено {email}",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRoleSync": "Синхронизирует",
+  "sharedWithMeRoleRead": "Только чтение",
+  "sharedWithMeSync": "Синхронизировать",
+  "sharedWithMeDownload": "Скачать",
+  "sharedWithMeRemove": "Отключить",
+  "sharedWithMeRemoveConfirm": "Вы перестанете синхронизироваться с Drive {email}, но можете добавить его снова в любой момент — общий доступ сохраняется. Ваша локальная копия остаётся обычным кооп-сохранением.",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedLeaveConfirm": "Вы по-настоящему потеряете доступ к этому сохранению. Вы не сможете добавить его снова, если {email} не предоставит доступ ещё раз. Ваша локальная копия остаётся обычным кооп-сохранением.",
+  "sharedManageButton": "Управление",
+  "sharedManageDialogTitle": "Управление общими сохранениями",
+  "sharedManageDialogHint": "Здесь вы можете по-настоящему покинуть общее сохранение.",
+  "sharedLeaveButton": "Покинуть общее сохранение",
+  "sharedLeaveSuccess": "Вы покинули общее сохранение {email}.",
+  "sharedWithMeSyncConfirm": "Перезаписать копию {email} на Drive вашим локальным сохранением?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedAccessReadOnly": "{email} установил(а) для вас доступ только для чтения — вы можете просматривать и скачивать, но не синхронизировать на его Drive.",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRevoked": "У вас больше нет доступа",
+  "sharedRevokedDialogBody": "{email} перестал(а) делиться с вами {farmName}. Ваша локальная копия и копия на вашем Drive остаются как есть, теперь в разделе Мои сохранения.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedRevokedAccept": "Принять",
+  "sharedSelfCleanupTitle": "Запись исправлена",
+  "sharedSelfCleanupBody": "{farmName} по ошибке отображалось как предоставленное вам — на самом деле оно ваше. Это исправлено, теперь оно в разделе Мои сохранения.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeUploadOwn": "Загрузить на мой Drive",
+  "sharedDownloadOwn": "Скачать с моего Drive",
+  "sharedStatusOwnDriveAhead": "Ваш Drive впереди — скачайте его",
+  "sharedSyncBoth": "Загрузить на оба Drive",
+  "sharedSideMyDrive": "МОЙ DRIVE",
+  "sharedSideOwnerDrive": "DRIVE У {email}",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedSideDate": "День {day} · Год {year}",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "Синхронизировано с владельцем · нет копии на вашем Drive",
+  "sharedStatusAheadNoOwnDrive": "Вы впереди · нет копии на вашем Drive",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} впереди · нет копии на вашем Drive",
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedStatusAllSynced": "Синхронизировано (локально + оба Drive)",
+  "sharedStatusAheadBoth": "Вы впереди на обоих Drive",
+  "sharedStatusMixed": "Рассинхронизировано — проверьте каждый Drive",
+  "sharedStatusFullySynced": "Полностью синхронизировано",
+  "sharedStatusSyncedOwn": "Мой Drive синхронизирован",
+  "sharedStatusSyncedOwner": "Общий Drive синхронизирован",
+  "sharedStatusNotCloud": "Только на этом устройстве",
+  "sharedStatusOwnerAhead": "Drive у {email} впереди",
+  "sharedStatusBothAhead": "Оба Drive впереди",
+  "sharedStatusLocalMissing": "Нет на этом устройстве",
+  "sharedStatusOwnerUnavailable": "Не удалось проверить Drive у {email}",
+  "sharedStatusWorking": "Синхронизация…",
+  "sharedSideUnavailable": "Не удалось проверить",
+  "sharedSyncChooseTitle": "Где вы хотите синхронизировать?",
+  "sharedSyncChooseBody": "Выберите, какие облачные копии обновить сохранением с этого устройства.",
+  "sharedSyncTargetOwn": "Мой Drive",
+  "sharedSyncTargetOwner": "Drive у {email}",
+  "sharedSyncTargetBoth": "Оба Drive",
+  "sharedDownloadChooseTitle": "Какую копию вы хотите скачать?",
+  "sharedDownloadChooseBody": "Впереди больше одной копии. Выберите, какую перенести на это устройство.",
+  "sharedDownloadSourceOwn": "С моего Drive",
+  "sharedDownloadSourceOwner": "С Drive у {email}",
+  "sharedWithMePickerTitle": "Добавить общее сохранение",
+  "sharedPickerEmptyHint": "Здесь появляется то, чем с вами поделился другой игрок через Drive.",
+  "sharedPickerAddButton": "Добавить",
+  "sharedOriginBadge": "Общее",
+  "sharedOriginFrom": "от {email}",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupDialogTitle": "Резервная копия создана",
+  "swapBackupDialogBody": "Предыдущая версия была сохранена как zip-файл. Что вы хотите с ней сделать?",
+  "swapBackupUpload": "Загрузить на Drive",
+  "swapBackupLocalOnly": "Оставить на этом устройстве",
+  "swapBackupDeleteNow": "Удалить сейчас",
+  "swapBackupUploadOk": "Резервная копия загружена на Drive.",
+  "swapBackupUploadErr": "Не удалось загрузить резервную копию: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupLocalOnlySnack": "Резервная копия сохранена на этом устройстве.",
+  "backupsAction": "Резервные копии",
+  "backupsScreenTitle": "Резервные копии {farmName}",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsEmpty": "Резервных копий пока нет.",
+  "backupsRestore": "Восстановить",
+  "backupsRestoreConfirmTitle": "Восстановить эту резервную копию?",
+  "backupsRestoreConfirmBody": "Это перезапишет текущее сохранение этой более ранней версией. Отменить нельзя.",
+  "backupsDelete": "Удалить",
+  "backupsDeleteConfirmTitle": "Удалить эту резервную копию?",
+  "backupsDeleteConfirmBody": "Она будет удалена везде, где существует (это устройство и Drive, если загружена). Отменить нельзя.",
+  "backupsRestoreOk": "Резервная копия восстановлена.",
+  "backupsRestoreManualTitle": "Восстановить вручную",
+  "backupsRestoreManualBody": "В режиме моста ValleySave не может автоматически записывать в папку игры. Извлеките zip-файл этой резервной копии в папку Saves Stardew Valley самостоятельно или переключитесь на режим Root/Shizuku в Параметрах для автоматического восстановления.",
+  "backupsRestoreErr": "Не удалось восстановить резервную копию: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDeleteErr": "Не удалось удалить резервную копию: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCreate": "Создать локальную резервную копию",
+  "backupsCreateLocalHint": "Резервные копии сначала создаются на этом устройстве. Позже вы сможете загрузить их на Drive.",
+  "backupsCreateOk": "Резервная копия создана.",
+  "backupsCreateErr": "Не удалось создать резервную копию: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDownload": "Скачать",
+  "backupsDownloadOk": "Резервная копия скачана на это устройство.",
+  "backupsDownloadErr": "Не удалось скачать резервную копию: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCopyOwn": "Скопировать на мой Drive",
+  "backupsUploadOwn": "На мой Drive",
+  "backupsUploadShared": "На общий Drive",
+  "backupsUploadOk": "Резервная копия загружена.",
+  "backupsUploadErr": "Не удалось загрузить резервную копию: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsLocationLocal": "Это устройство",
+  "backupsLocationOwnDrive": "Мой Drive",
+  "backupsLocationSharedDrive": "Общий Drive",
+  "backupsDeleteChooseBody": "Выберите, откуда именно её удалить. Показаны только места, где эта резервная копия существует.",
+  "backupsDeleteLocalOnly": "Только с этого устройства",
+  "backupsDeleteOwnOnly": "Только с моего Drive",
+  "backupsDeleteSharedOnly": "Только с общего Drive",
+  "backupsDeleteAll": "Со всех копий",
+  "deleteUnifiedTitle": "Удалить {farmName}?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChooseLocationBody": "Выберите откуда. Копия на этом устройстве удаляется навсегда; копия на Drive перемещается в корзину (30 дней).",
+  "deleteDriveContextTitle": "Удалить {farmName} с Drive?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteDriveContextBody": "Копия на Drive переместится в корзину, где её можно восстановить в течение 30 дней.",
+  "deleteDriveLocalKept": "Копия на этом устройстве останется без изменений.",
+  "deleteLocalContextTitle": "Удалить {farmName} с этого устройства?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalContextBody": "Копия на этом устройстве будет удалена навсегда.",
+  "deleteLocalDriveCurrent": "Ваша копия на Drive актуальна ({date}) и останется доступной.",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveAhead": "Ваша копия на Drive новее ({date}) и останется доступной.",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveOlder": "Ваша копия на Drive старее ({driveDate}); это устройство на {localDate}.",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalBackupAvailable": "Доступно {count} локальных резервных копий на случай, если вам понадобится более ранняя копия.",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteLocalNoRecovery": "Нет ни копии на Drive, ни локальной резервной копии, из которой можно восстановить эту игру.",
+  "deleteOptionLocalOnly": "Только с этого устройства",
+  "deleteOptionDriveOnly": "Только с Drive",
+  "deleteOptionBoth": "Из обеих копий (устройство + Drive)",
+  "viewPlayersHint": "Посмотреть игроков",
+  "snackDeletedBoth": "\"{saveName}\" удалено с этого устройства и перемещено в корзину Drive.",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  }
 }

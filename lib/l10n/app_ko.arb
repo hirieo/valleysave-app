@@ -544,5 +544,458 @@
   "hostSwapErrInvalid": "이 세이브 파일의 구조가 예상과 다릅니다. 아무것도 변경되지 않았습니다.",
   "hostSwapErrNoSpace": "오브젝트를 재배치할 여유 공간이 농장에 없습니다. 아무것도 변경되지 않았습니다.",
   "hostSwapErrWrite": "새 세이브 파일을 쓸 수 없습니다(디스크/권한). 아무것도 변경되지 않았습니다.",
-  "hostSwapErrValidation": "새 세이브 파일 검증에 실패하여 폐기되었습니다. 원본은 그대로입니다."
+  "hostSwapErrValidation": "새 세이브 파일 검증에 실패하여 폐기되었습니다. 원본은 그대로입니다.",
+  "disconnectButtonEmail": "{email}에서 연결 해제",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "connectedAsPrefix": "연결된 계정",
+  "hiwConnectTitle": "계정 연결하기",
+  "hiwConnectDesc": "ValleySave는 회원님의 Google 계정을 사용하여 세이브를 회원님 자신의 Drive에 있는 비공개 ValleySave 폴더에 저장합니다.",
+  "hiwConnectStepGoogle": "Google\n계정",
+  "hiwConnectStepDrive": "ValleySave 폴더\n생성됨",
+  "hiwConnectStepReady": "동기화\n준비 완료",
+  "hiwConnectTipOwnership": "Drive에 있는 사본을 수정하거나 삭제할 수 있는 사람은 오직 회원님뿐입니다 — ValleySave는 자신의 폴더 안에서만 읽고 씁니다.",
+  "overwriteWhatChanges": "무엇이 변경되나요",
+  "overwriteTagOverwritten": "덮어쓰기됨",
+  "overwriteNewCopyTag": "신규",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days}일과 {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "overwriteVerdictAhead": "{delta} 앞서 있습니다. 안전합니다.",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 현재 소지금은 줄었지만 전체 진행 상황은 앞으로 나아가고 있습니다 — 아마 무언가에 사용하신 것 같습니다. 실제 손실이 아닙니다.",
+  "overwriteVerdictNegligible": "차이가 미미합니다 ({delta}). 두 사본 중 어느 쪽을 선택해도 괜찮습니다.",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ {target}에서 {delta}만큼의 진행 상황을 잃게 됩니다. 계속하기 전에 다시 확인하세요.",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmTitleUpload": "업로드를 확정하시겠습니까?",
+  "overwriteConfirmTitleDownload": "다운로드를 확정하시겠습니까?",
+  "overwriteConfirmBody": "{target}에서 {delta}만큼 잃게 됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmButtonUpload": "업로드 확정",
+  "overwriteConfirmButtonDownload": "다운로드 확정",
+  "overwriteDangerButtonUpload": "⚠️ 그래도 업로드",
+  "overwriteDangerButtonDownload": "⚠️ 그래도 다운로드",
+  "overwriteIdenticalSummary": "{count, plural, other{✓ {count}개 동일}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "list": { "type": "String" }
+    }
+  },
+  "overwriteUploadToOwner": "{email}의 Drive에 업로드",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "overwriteUploadBoth": "두 Drive 모두에 업로드",
+  "overwriteConfirmTitleBoth": "두 건의 업로드를 확정하시겠습니까?",
+  "overwriteConfirmBodyBoth": "{targets}에서 {delta}만큼 잃게 됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "targets": { "type": "String" }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first}와(과) {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": { "type": "String" },
+      "second": { "type": "String" }
+    }
+  },
+  "sharedTargetOwnDrive": "회원님의 Drive",
+  "sharedStatusLocalAhead": "{targets}에서 앞서 있습니다",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": { "type": "String" }
+    }
+  },
+  "snackReplacePrepareFailed": "세이브를 준비하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다",
+  "snackReplaceValidationFailed": "다운로드한 세이브가 유효하지 않거나 불완전한 것 같습니다. 디스크에는 아무것도 변경되지 않았습니다",
+  "snackReplaceBackupFailed": "백업을 생성하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다",
+  "snackReplaceSwapFailed": "교체에 실패했지만 원본 세이브는 백업에서 복원되었습니다",
+  "snackReplaceBusy": "이 세이브에 대한 작업이 이미 진행 중입니다",
+  "snackUploadIncomplete": "로컬 세이브가 불완전하거나 손상되었습니다. 아무것도 업로드되지 않았습니다",
+  "snackDownloadIncomplete": "다운로드할 수 없습니다: Drive에 콘텐츠가 부족합니다",
+  "cardIncomplete": "Drive에서 불완전함",
+  "autoRefreshTitle": "자동 새로고침",
+  "autoRefreshSubtitle": "30초마다 Drive의 변경 사항을 확인합니다",
+  "autoSyncSnack": "{farmName}이(가) 자동으로 동기화되었습니다",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncTooltipOn": "자동 동기화 켜짐 — 안전할 때 자동으로 동기화됩니다",
+  "autoSyncTooltipOff": "자동 동기화 꺼짐 — 탭하여 켜기",
+  "autoSyncExplainTitle": "자동 동기화",
+  "autoSyncExplainBody": "지금부터 {farmName}은(는) 안전할 때 확인을 요청하지 않고 자동으로 업로드되거나 다운로드됩니다.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncExplainSafe": "명백히 앞서 있고 아무것도 잃지 않을 때만 작동합니다.",
+  "autoSyncExplainDanger": "진행 상황을 잃을 위험이 있다면 절대 자동으로 작동하지 않습니다 — 지금처럼 늘 사용하던 대화상자로 회원님이 직접 결정합니다.",
+  "autoSyncExplainMissing": "두 사본 중 하나가 없으면 자동으로 만들지 않습니다 — 첫 업로드나 다운로드는 회원님이 직접 결정합니다.",
+  "autoSyncExplainDontShowAgain": "이 알림 다시 표시하지 않기",
+  "autoSyncExplainConfirm": "확인했습니다, 켜기",
+  "hiwAutoSyncTitle": "스스로 동기화",
+  "hiwAutoSyncDesc": "각 세이브 카드에는 AUTO 칩이 있습니다. 활성화하면 앱이 변경을 감지했을 때 해당 세이브가 자동으로 업로드되거나 다운로드됩니다 — 직접 열어서 확인할 필요가 없습니다.",
+  "hiwAutoSyncTipSafe": "명백히 앞서 있고 아무것도 잃지 않을 때만 스스로 동기화됩니다.",
+  "hiwAutoSyncTipDanger": "진행 상황을 잃을 위험이 있다면 절대 스스로 하지 않습니다 — 지금처럼 늘 사용하던 비교 화면으로 계속 물어봅니다.",
+  "hiwAutoSyncTipPerSave": "한 번에 전체가 아니라 세이브별로 개별 설정합니다 — 내 세이브에서는 켜고 공유 세이브에서는 꺼둘 수 있습니다.",
+  "hiwAutoSyncTipMissing": "이미 존재하는 두 사본만 동기화된 상태로 유지합니다. 하나가 없으면 첫 업로드나 다운로드는 회원님이 직접 합니다.",
+  "hiwAutoSyncTipRefresh": "설정에서 변경 사항의 자동 확인을 완전히 끌 수 있습니다.",
+  "hiwCompatIncomplete": "세이브에 \"Drive에서 불완전함\"이 표시되면 클라우드에 필요한 파일이 없다는 뜻입니다 — 다른 기기에서 다시 올바르게 업로드되기 전까지는 다운로드할 수 없습니다.",
+  "hiwShareTitle": "다른 사람과 공유",
+  "hiwShareDesc": "이메일로 다른 플레이어와 세이브를 공유하세요. 상대방은 자신의 기기에서 '나와 공유됨'에서 볼 수 있습니다.",
+  "hiwShareStepYourSave": "회원님의\n세이브",
+  "hiwShareStepShare": "이메일로\n공유",
+  "hiwShareStepFriend": "나와\n공유됨",
+  "hiwShareTipRoles": "역할은 두 가지입니다. '읽기 전용'은 보기와 다운로드만 허용합니다. '동기화 허용'은 회원님의 Drive 사본을 덮어쓸 수 있게 합니다. 어떤 경우에도 삭제는 할 수 없습니다 — 소유자인 회원님만 세이브를 삭제할 수 있습니다.",
+  "hiwShareTipDisconnect": "'연결 해제'는 상대방 쪽의 동기화만 중단시킵니다 — 공유 관리에서 정말로 나가기 전까지는 공유 자체가 계속 유지됩니다.",
+  "hiwHostSwapTitle": "호스트 교체",
+  "hiwHostSwapDesc": "어떤 팜핸드가 세이브의 호스트가 될지 변경하며, 그 자리에서 교체합니다 — 동일한 세이브 슬롯, 동일한 공유 권한이 유지됩니다.",
+  "hiwHostSwapStepPick": "팜핸드\n선택",
+  "hiwHostSwapStepConfirm": "확정",
+  "hiwHostSwapStepDone": "새 세이브\n생성됨",
+  "hiwHostSwapTipMove": "집을 위한 공간을 확보하기 위해 농장의 일부 오브젝트가 재배치될 수 있습니다 — 아무것도 삭제되지 않습니다.",
+  "hiwHostSwapTipHouse": "새 호스트의 집은 게임의 기본 큰 집처럼 보입니다 — 오두막 외관은 모드 없이는 지원되지 않습니다.",
+  "hiwBackupsTitle": "백업",
+  "hiwBackupsDesc": "백업은 나중에 복원할 수 있는 세이브의 스냅샷입니다. 언제든 직접 만들거나, 세이브를 덮어쓰기 전(다운로드, 가져오기, 복원, 호스트 교체 시)에 ValleySave가 자동으로 만들도록 할 수 있습니다.",
+  "hiwBackupsStepSave": "회원님의\n세이브",
+  "hiwBackupsStepSnapshot": "백업\n생성됨",
+  "hiwBackupsStepStore": "로컬 및/또는\nDrive",
+  "hiwBackupsTipRestore": "복원하면 현재 세이브가 이전 버전으로 덮어써집니다 — 되돌릴 수 없습니다.",
+  "hiwBackupsTipDelete": "백업을 삭제하면 존재하는 모든 위치(이 기기, 업로드했다면 Drive)에서 삭제됩니다 — 되돌릴 수 없습니다.",
+  "hiwBackupsTipExport": "세이브를 zip으로 내보내 원하는 곳에 보관하고, 나중에 다시 가져올 수도 있습니다 — 내장 백업의 수동적이고 이동 가능한 대안입니다.",
+  "hiwBackupsTipRetention": "ValleySave는 각 세이브에 대해 가장 최근 자동 백업 5개를 보관합니다. 직접 만든 백업은 자동으로 삭제되지 않습니다.",
+  "hiwBackupsTipRestoreBridge": "브리지 모드(루트/Shizuku 없는 Android)에서는 백업을 복원할 때 Stardew 폴더에 .zip을 직접 압축 해제하라는 요청을 받습니다 — 다운로드할 때와 동일합니다.",
+  "hiwLaunchTipLinux": "Linux에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.",
+  "hiwSaveLocationsTitle": "세이브가 저장되는 위치",
+  "hiwSaveLocationsDesc": "ValleySave는 각 플랫폼에서 게임의 세이브 폴더에 직접 읽고 씁니다.",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\StardewValley\\Saves",
+  "hiwSaveLocationAndroid": "Android: 보호된 폴더이며 Shizuku 또는 Bridge를 통해 접근합니다",
+  "hiwSaveLocationLinux": "Linux: ~/.config/StardewValley/Saves (Steam을 snap으로 설치한 경우 ~/snap/steam/common/.config/StardewValley/Saves)",
+  "exportAction": "내보내기",
+  "exportSuccess": "세이브를 내보냈습니다.",
+  "exportError": "세이브를 내보내지 못했습니다: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "importAction": "세이브 가져오기",
+  "importSuccess": "{playerName}님의 세이브를 가져왔습니다.",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "importErrInvalidZip": "이 파일은 유효한 zip 파일이 아닙니다.",
+  "importErrUnsafePath": "이 파일은 안전하지 않은 구조로 되어 있어 거부되었습니다.",
+  "importErrTooLarge": "이 파일은 너무 커서 가져올 수 없습니다.",
+  "importErrNotASave": "이 파일에는 인식할 수 있는 세이브가 들어 있지 않습니다.",
+  "importErrWrite": "가져온 세이브를 쓸 수 없었습니다(디스크/권한).",
+  "importErrBackupFailed": "백업을 생성하지 못했습니다. 아무것도 가져오지 않았습니다.",
+  "importConflictTitle": "이 이름의 세이브가 이미 있습니다",
+  "importConflictBody": "가져오기를 하면 기존 로컬 사본이 교체됩니다. 되돌릴 수 없습니다.",
+  "importConflictConfirm": "덮어쓰기",
+  "shareAction": "공유",
+  "shareUploadFirstCta": "먼저 업로드",
+  "shareDialogTitle": "세이브 공유",
+  "shareEmailPlaceholder": "name@example.com",
+  "shareInfoNote": "공유하면 보기 및 다운로드 권한이 부여됩니다. Drive의 사본을 수정하거나 삭제할 수 있는 사람은 회원님뿐입니다.",
+  "shareRoleReader": "읽기 전용",
+  "shareRoleWriter": "동기화 허용",
+  "shareInfoNoteCoop": "'읽기 전용'은 보기와 다운로드를 허용합니다. '동기화 허용'은 Drive의 사본을 덮어쓸 수 있게 합니다 — 절대 삭제할 수는 없습니다.",
+  "shareConfirmButton": "공유하기",
+  "shareSuccess": "{email}님과 공유했습니다.",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "manageAccessTitle": "접근 권한이 있는 사람",
+  "manageAccessEmpty": "아직 다른 사람에게 접근 권한이 없습니다.",
+  "manageAccessRoleLabel": "접근 권한",
+  "manageAccessRevoke": "취소",
+  "manageAccessRevokeConfirm": "{email}님의 접근 권한을 제거할까요? 이미 다운로드한 로컬 사본은 계속 그 사람의 것으로 남습니다.",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "driveOnlyControlsYourCopy": "공유는 Drive에 있는 회원님의 사본을 제어합니다. 누군가 다운로드하면 그 사본은 그 사람의 것이 됩니다.",
+  "driveOnlyControlsYourCopyCoop": "동기화는 Drive에 있는 회원님의 사본을 제어합니다 — 허용한 사람이 덮어쓸 수는 있지만 절대 삭제할 수는 없습니다.",
+  "sharedWithMeTitle": "나와 공유됨",
+  "sharedWithMeEmpty": "아직 회원님과 공유된 것이 없습니다.",
+  "sharedWithMeAdd": "공유 세이브 추가",
+  "sharedWithMeOwnedBy": "{email}님이 공유함",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedWithMeRoleSync": "동기화",
+  "sharedWithMeRoleRead": "읽기 전용",
+  "sharedWithMeSync": "동기화하기",
+  "sharedWithMeDownload": "다운로드",
+  "sharedWithMeRemove": "목록에서 제거",
+  "sharedWithMeRemoveConfirm": "{email}님의 Drive와는 더 이상 동기화되지 않지만 언제든 다시 추가할 수 있습니다 — 공유 자체는 계속 유지됩니다. 로컬 사본은 일반적인 코옵 세이브로 그대로 남습니다.",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedLeaveConfirm": "이 세이브에 대한 접근 권한을 완전히 잃게 됩니다. {email}님이 다시 공유해 주지 않는 한 다시 추가할 수 없습니다. 로컬 사본은 일반적인 코옵 세이브로 그대로 남습니다.",
+  "sharedManageButton": "관리",
+  "sharedManageDialogTitle": "공유 세이브 관리",
+  "sharedManageDialogHint": "여기서 공유 세이브에서 정말로 나갈 수 있습니다.",
+  "sharedLeaveButton": "공유에서 나가기",
+  "sharedLeaveSuccess": "{email}님의 공유에서 나갔습니다.",
+  "sharedWithMeSyncConfirm": "{email}님의 Drive 사본을 회원님의 로컬 세이브로 덮어쓸까요?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedAccessReadOnly": "{email}님이 회원님의 접근 권한을 읽기 전용으로 설정했습니다 — 보기와 다운로드는 가능하지만 그 사람의 Drive로 동기화할 수는 없습니다.",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedWithMeRevoked": "더 이상 접근 권한이 없습니다",
+  "sharedRevokedDialogBody": "{email}님이 {farmName}에 대한 공유를 중단했습니다. 로컬 사본과 회원님의 Drive 사본은 그대로 남으며, 이제 '내 세이브'에 표시됩니다.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "sharedRevokedAccept": "확인",
+  "sharedSelfCleanupTitle": "기록이 수정되었습니다",
+  "sharedSelfCleanupBody": "{farmName}이(가) 실수로 회원님과 공유된 것처럼 표시되었습니다 — 실제로는 회원님의 것입니다. 수정되어 이제 '내 세이브'에 있습니다.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "sharedWithMeUploadOwn": "내 Drive에 업로드",
+  "sharedDownloadOwn": "내 Drive에서 다운로드",
+  "sharedStatusOwnDriveAhead": "회원님의 Drive가 앞서 있습니다 — 다운로드하세요",
+  "sharedSyncBoth": "두 Drive 모두에 업로드",
+  "sharedSideMyDrive": "내 DRIVE",
+  "sharedSideOwnerDrive": "{email}의 DRIVE",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedSideDate": "{day}일 · {year}년",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": { "type": "int" },
+      "year": { "type": "int" }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "소유자와 동기화됨 · 회원님의 Drive에 사본 없음",
+  "sharedStatusAheadNoOwnDrive": "앞서 있습니다 · 회원님의 Drive에 사본 없음",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email}님이 앞서 있습니다 · 회원님의 Drive에 사본 없음",
+  "sharedStatusAllSynced": "동기화됨(로컬 + 두 Drive 모두)",
+  "sharedStatusAheadBoth": "두 Drive 모두에서 앞서 있습니다",
+  "sharedStatusMixed": "동기화가 어긋났습니다 — 각 Drive를 확인하세요",
+  "sharedStatusFullySynced": "완전히 동기화됨",
+  "sharedStatusSyncedOwn": "내 Drive 동기화됨",
+  "sharedStatusSyncedOwner": "공유 Drive 동기화됨",
+  "sharedStatusNotCloud": "이 기기에만 있음",
+  "sharedStatusOwnerAhead": "{email}의 Drive가 앞서 있습니다",
+  "sharedStatusBothAhead": "두 Drive 모두 앞서 있습니다",
+  "sharedStatusLocalMissing": "이 기기에 없음",
+  "sharedStatusOwnerUnavailable": "{email}의 Drive를 확인할 수 없었습니다",
+  "sharedStatusWorking": "동기화 중…",
+  "sharedSideUnavailable": "확인할 수 없음",
+  "sharedSyncChooseTitle": "어디에 동기화하시겠습니까?",
+  "sharedSyncChooseBody": "이 기기의 세이브로 업데이트할 클라우드 사본을 선택하세요.",
+  "sharedSyncTargetOwn": "내 Drive",
+  "sharedSyncTargetOwner": "{email}의 Drive",
+  "sharedSyncTargetBoth": "두 Drive 모두",
+  "sharedDownloadChooseTitle": "어떤 사본을 다운로드하시겠습니까?",
+  "sharedDownloadChooseBody": "앞서 있는 사본이 하나 이상 있습니다. 이 기기로 가져올 사본을 선택하세요.",
+  "sharedDownloadSourceOwn": "내 Drive에서",
+  "sharedDownloadSourceOwner": "{email}의 Drive에서",
+  "sharedWithMePickerTitle": "공유 세이브 추가",
+  "sharedPickerEmptyHint": "다른 플레이어가 Drive에서 공유한 항목이 여기에 표시됩니다.",
+  "sharedPickerAddButton": "추가",
+  "sharedOriginBadge": "공유됨",
+  "sharedOriginFrom": "{email}님으로부터",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "swapBackupDialogTitle": "백업이 생성되었습니다",
+  "swapBackupDialogBody": "이전 버전은 zip으로 저장되었습니다. 어떻게 하시겠습니까?",
+  "swapBackupUpload": "Drive에 업로드",
+  "swapBackupLocalOnly": "이 기기에만 보관",
+  "swapBackupDeleteNow": "지금 삭제",
+  "swapBackupUploadOk": "백업이 Drive에 업로드되었습니다.",
+  "swapBackupUploadErr": "백업을 업로드하지 못했습니다: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "swapBackupLocalOnlySnack": "백업이 이 기기에 저장되었습니다.",
+  "backupsAction": "백업",
+  "backupsScreenTitle": "{farmName}의 백업",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "backupsEmpty": "아직 백업이 없습니다.",
+  "backupsRestore": "복원",
+  "backupsRestoreConfirmTitle": "이 백업을 복원하시겠습니까?",
+  "backupsRestoreConfirmBody": "현재 세이브가 이 이전 버전으로 덮어써집니다. 되돌릴 수 없습니다.",
+  "backupsDelete": "삭제",
+  "backupsDeleteConfirmTitle": "이 백업을 삭제하시겠습니까?",
+  "backupsDeleteConfirmBody": "존재하는 모든 위치(이 기기, 업로드했다면 Drive)에서 삭제됩니다. 되돌릴 수 없습니다.",
+  "backupsRestoreOk": "백업이 복원되었습니다.",
+  "backupsRestoreManualTitle": "수동으로 복원",
+  "backupsRestoreManualBody": "브리지 모드에서는 ValleySave가 게임 폴더에 자동으로 쓸 수 없습니다. 이 백업의 .zip 파일을 Stardew Valley의 Saves 폴더에 직접 압축 해제하거나, 설정에서 Root/Shizuku 모드로 전환하여 자동으로 복원하세요.",
+  "backupsRestoreErr": "백업을 복원하지 못했습니다: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsDeleteErr": "백업을 삭제하지 못했습니다: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsCreate": "로컬 백업 생성",
+  "backupsCreateLocalHint": "백업은 먼저 이 기기에 생성됩니다. 이후 Drive에 업로드할 수 있습니다.",
+  "backupsCreateOk": "백업이 생성되었습니다.",
+  "backupsCreateErr": "백업을 생성하지 못했습니다: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsDownload": "다운로드",
+  "backupsDownloadOk": "백업이 이 기기에 다운로드되었습니다.",
+  "backupsDownloadErr": "백업을 다운로드하지 못했습니다: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsCopyOwn": "내 Drive에 복사",
+  "backupsUploadOwn": "내 Drive로",
+  "backupsUploadShared": "공유 Drive로",
+  "backupsUploadOk": "백업이 업로드되었습니다.",
+  "backupsUploadErr": "백업을 업로드하지 못했습니다: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsLocationLocal": "이 기기",
+  "backupsLocationOwnDrive": "내 Drive",
+  "backupsLocationSharedDrive": "공유 Drive",
+  "backupsDeleteChooseBody": "정확히 어디서 삭제할지 선택하세요. 이 백업이 존재하는 위치만 표시됩니다.",
+  "backupsDeleteLocalOnly": "이 기기에서만",
+  "backupsDeleteOwnOnly": "내 Drive에서만",
+  "backupsDeleteSharedOnly": "공유 Drive에서만",
+  "backupsDeleteAll": "모든 사본에서",
+  "deleteUnifiedTitle": "{farmName}을(를) 삭제하시겠습니까?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteChooseLocationBody": "삭제할 위치를 선택하세요. 이 기기의 사본은 영구적으로 삭제됩니다. Drive의 사본은 휴지통으로 이동합니다(30일).",
+  "deleteDriveContextTitle": "{farmName}을(를) Drive에서 삭제하시겠습니까?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteDriveContextBody": "Drive 사본은 휴지통으로 이동하며, 30일 동안 복원할 수 있습니다.",
+  "deleteDriveLocalKept": "이 기기의 사본은 변경 없이 그대로 유지됩니다.",
+  "deleteLocalContextTitle": "{farmName}을(를) 이 기기에서 삭제하시겠습니까?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteLocalContextBody": "이 기기의 사본이 영구적으로 삭제됩니다.",
+  "deleteLocalDriveCurrent": "회원님의 Drive 사본은 최신 상태이며({date}) 계속 이용할 수 있습니다.",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "deleteLocalDriveAhead": "회원님의 Drive 사본이 더 최신이며({date}) 계속 이용할 수 있습니다.",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "deleteLocalDriveOlder": "회원님의 Drive 사본은 더 오래되었으며({driveDate}), 이 기기는 {localDate} 기준입니다.",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": { "type": "String" },
+      "localDate": { "type": "String" }
+    }
+  },
+  "deleteLocalBackupAvailable": "이전 사본이 필요할 경우를 대비해 로컬 백업 {count}개를 이용할 수 있습니다.",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "deleteLocalNoRecovery": "이 세이브를 복구할 수 있는 Drive 사본이나 로컬 백업이 없습니다.",
+  "deleteOptionLocalOnly": "이 기기에서만",
+  "deleteOptionDriveOnly": "Drive에서만",
+  "deleteOptionBoth": "두 사본 모두에서(기기 + Drive)",
+  "viewPlayersHint": "플레이어 보기",
+  "snackDeletedBoth": "\"{saveName}\"이(가) 이 기기에서 삭제되고 Drive 휴지통으로 이동되었습니다.",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  }
 }

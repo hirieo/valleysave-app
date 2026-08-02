@@ -544,5 +544,458 @@
   "hostSwapErrInvalid": "このセーブデータは予期しない構造をしています。何も変更されていません。",
   "hostSwapErrNoSpace": "農場にオブジェクトを移動する空きスペースがありません。何も変更されていません。",
   "hostSwapErrWrite": "新しいセーブデータを書き込めませんでした（ディスク／権限）。何も変更されていません。",
-  "hostSwapErrValidation": "新しいセーブデータの検証に失敗したため、破棄されました。元のデータは無事です。"
+  "hostSwapErrValidation": "新しいセーブデータの検証に失敗したため、破棄されました。元のデータは無事です。",
+  "disconnectButtonEmail": "{email}から切断",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "connectedAsPrefix": "接続アカウント",
+  "hiwConnectTitle": "アカウントを接続",
+  "hiwConnectDesc": "ValleySaveはあなたのGoogleアカウントを使い、あなた自身のDrive内にあるValleySave専用の非公開フォルダにセーブを保存します。",
+  "hiwConnectStepGoogle": "Google\nアカウント",
+  "hiwConnectStepDrive": "ValleySaveフォルダ\n作成完了",
+  "hiwConnectStepReady": "同期の\n準備完了",
+  "hiwConnectTipOwnership": "Drive上のコピーを編集・削除できるのはあなただけです。ValleySaveは自身のフォルダ内でのみ読み書きを行います。",
+  "overwriteWhatChanges": "変更される内容",
+  "overwriteTagOverwritten": "上書きされます",
+  "overwriteNewCopyTag": "新規",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days}日と{time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "overwriteVerdictAhead": "{delta}進んでいます。安全です。",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 所持金は減っていますが、全体の進行状況は進んでいます — 何かに使った可能性が高いです。実質的な損失ではありません。",
+  "overwriteVerdictNegligible": "差はごくわずかです（{delta}）。どちらのコピーでも問題ありません。",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ {target}の進行状況を{delta}失うことになります。続行する前によく確認してください。",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmTitleUpload": "アップロードを確定しますか?",
+  "overwriteConfirmTitleDownload": "ダウンロードを確定しますか?",
+  "overwriteConfirmBody": "{target}で{delta}を失うことになります。この操作は取り消せません。",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmButtonUpload": "アップロードを確定",
+  "overwriteConfirmButtonDownload": "ダウンロードを確定",
+  "overwriteDangerButtonUpload": "⚠️ それでもアップロードする",
+  "overwriteDangerButtonDownload": "⚠️ それでもダウンロードする",
+  "overwriteIdenticalSummary": "{count, plural, other{✓ {count}件が同一}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "list": { "type": "String" }
+    }
+  },
+  "overwriteUploadToOwner": "{email}のDriveにアップロード",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "overwriteUploadBoth": "両方のDriveにアップロード",
+  "overwriteConfirmTitleBoth": "2件のアップロードを確定しますか?",
+  "overwriteConfirmBodyBoth": "{targets}で{delta}を失うことになります。この操作は取り消せません。",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "targets": { "type": "String" }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first}と{second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": { "type": "String" },
+      "second": { "type": "String" }
+    }
+  },
+  "sharedTargetOwnDrive": "あなたのDrive",
+  "sharedStatusLocalAhead": "{targets}で先に進んでいます",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": { "type": "String" }
+    }
+  },
+  "snackReplacePrepareFailed": "セーブの準備に失敗しました。ディスク上には何も変更されていません",
+  "snackReplaceValidationFailed": "ダウンロードしたセーブは無効か不完全なようです。ディスク上には何も変更されていません",
+  "snackReplaceBackupFailed": "バックアップの作成に失敗しました。ディスク上には何も変更されていません",
+  "snackReplaceSwapFailed": "入れ替えに失敗しましたが、元のセーブはバックアップから復元されました",
+  "snackReplaceBusy": "このセーブに対する処理がすでに進行中です",
+  "snackUploadIncomplete": "ローカルのセーブが不完全か破損しています。何もアップロードされませんでした",
+  "snackDownloadIncomplete": "ダウンロードできません: Drive上のコンテンツが不足しています",
+  "cardIncomplete": "Drive上で不完全",
+  "autoRefreshTitle": "自動更新",
+  "autoRefreshSubtitle": "30秒ごとにDriveの変更を確認します",
+  "autoSyncSnack": "{farmName}を自動的に同期しました",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncTooltipOn": "自動同期オン — 安全なときに自動で同期します",
+  "autoSyncTooltipOff": "自動同期オフ — タップして有効にします",
+  "autoSyncExplainTitle": "自動同期",
+  "autoSyncExplainBody": "これ以降、{farmName}は安全な場合に確認なしで自動的にアップロードまたはダウンロードされます。",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncExplainSafe": "明らかに先に進んでいて、何も失われない場合にのみ動作します。",
+  "autoSyncExplainDanger": "進行状況を失うリスクがある場合は、決して自動では動作しません。これまで通り、あなた自身がいつものダイアログで判断します。",
+  "autoSyncExplainMissing": "どちらか一方のコピーが存在しない場合、自動では作成されません。最初のアップロードまたはダウンロードはあなたが決めます。",
+  "autoSyncExplainDontShowAgain": "この通知を今後表示しない",
+  "autoSyncExplainConfirm": "了解、有効にする",
+  "hiwAutoSyncTitle": "自動で同期",
+  "hiwAutoSyncDesc": "各セーブのカードにはAUTOチップがあります。有効にすると、アプリが変更を検知した際にそのセーブが自動的にアップロードまたはダウンロードされます — 確認のために開く必要はありません。",
+  "hiwAutoSyncTipSafe": "明らかに先に進んでいて、何も失われない場合にのみ自動で同期します。",
+  "hiwAutoSyncTipDanger": "進行状況を失うリスクがある場合は、決して自動では行いません。これまで通り、いつもの比較画面で確認を求めます。",
+  "hiwAutoSyncTipPerSave": "一括ではなく、セーブごとに個別に有効化できます。自分のセーブでは有効にし、共有セーブでは無効のままにすることも可能です。",
+  "hiwAutoSyncTipMissing": "すでに存在する2つのコピーの同期を保つだけです。どちらかが存在しない場合、最初のアップロードまたはダウンロードはあなたが行います。",
+  "hiwAutoSyncTipRefresh": "設定で変更の自動確認を完全にオフにすることもできます。",
+  "hiwCompatIncomplete": "セーブに「Drive上で不完全」と表示されている場合、クラウドに必要なファイルが不足しています — 別のデバイスから正しく再アップロードされるまでダウンロードできません。",
+  "hiwShareTitle": "他の人と共有",
+  "hiwShareDesc": "メールで他のプレイヤーとセーブを共有できます。相手は自分のデバイスの「共有されたセーブ」にそれを見つけられます。",
+  "hiwShareStepYourSave": "あなたの\nセーブ",
+  "hiwShareStepShare": "メールで\n共有",
+  "hiwShareStepFriend": "共有された\nセーブ",
+  "hiwShareTipRoles": "2つの役割があります。「閲覧のみ」は表示とダウンロードのみ許可します。「同期を許可」はあなたのDrive上のコピーの上書きを許可します。いずれの場合も削除はできません — 削除できるのは所有者であるあなただけです。",
+  "hiwShareTipDisconnect": "「切断」は相手側の同期を止めるだけです — 共有自体は「共有の管理」から本当に退出するまで有効なままです。",
+  "hiwHostSwapTitle": "ホスト変更",
+  "hiwHostSwapDesc": "どのファームハンドをホストにするかを変更し、その場でセーブを置き換えます — 同じセーブスロット、同じ共有権限を維持します。",
+  "hiwHostSwapStepPick": "ファームハンドを\n選択",
+  "hiwHostSwapStepConfirm": "確定",
+  "hiwHostSwapStepDone": "新しいセーブ\n作成完了",
+  "hiwHostSwapTipMove": "家のためのスペースを確保するために、農場の一部のオブジェクトが移動する場合があります — 何も削除されません。",
+  "hiwHostSwapTipHouse": "新しいホストの家はゲームのデフォルトの大きな家として表示されます — コテージの見た目はMODなしではサポートされません。",
+  "hiwBackupsTitle": "バックアップ",
+  "hiwBackupsDesc": "バックアップとは、後で復元できるセーブのスナップショットです。いつでも手動で作成するか、セーブを上書きする前（ダウンロード時、インポート時、復元時、ホスト変更時）にValleySaveが自動的に作成するようにできます。",
+  "hiwBackupsStepSave": "あなたの\nセーブ",
+  "hiwBackupsStepSnapshot": "バックアップ\n作成完了",
+  "hiwBackupsStepStore": "端末内や\nDriveに保存",
+  "hiwBackupsTipRestore": "復元すると、現在のセーブがその過去のバージョンで上書きされます — 取り消せません。",
+  "hiwBackupsTipDelete": "バックアップを削除すると、存在するすべての場所（この端末、アップロード済みの場合はDrive）から削除されます — 取り消せません。",
+  "hiwBackupsTipExport": "セーブをzipとしてエクスポートし、好きな場所に保存して、後でインポートし直すこともできます — 内蔵バックアップの手動・持ち運び可能な代替手段です。",
+  "hiwBackupsTipRetention": "ValleySaveは各セーブについて直近5件の自動バックアップを保持します。手動で作成したものは自動的に削除されることはありません。",
+  "hiwBackupsTipRestoreBridge": "ブリッジモード（rootやShizukuを使わないAndroid）では、バックアップの復元時にStardewフォルダへ.zipを手動で展開するよう求められます — ダウンロード時と同様です。",
+  "hiwLaunchTipLinux": "Linuxでゲームが自動検出されない場合は、設定 → ゲームで実行ファイルのパスを設定してください。",
+  "hiwSaveLocationsTitle": "セーブの保存場所",
+  "hiwSaveLocationsDesc": "ValleySaveは各プラットフォームのゲームのセーブフォルダに直接読み書きします。",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\StardewValley\\Saves",
+  "hiwSaveLocationAndroid": "Android: 保護されたフォルダで、ShizukuまたはBridge経由でアクセスします",
+  "hiwSaveLocationLinux": "Linux: ~/.config/StardewValley/Saves（SteamをSnap経由でインストールしている場合は ~/snap/steam/common/.config/StardewValley/Saves）",
+  "exportAction": "エクスポート",
+  "exportSuccess": "セーブをエクスポートしました。",
+  "exportError": "セーブをエクスポートできませんでした: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "importAction": "セーブをインポート",
+  "importSuccess": "{playerName}のセーブをインポートしました。",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "importErrInvalidZip": "このファイルは有効なzipではありません。",
+  "importErrUnsafePath": "このファイルは安全でない構造のため拒否されました。",
+  "importErrTooLarge": "このファイルは大きすぎてインポートできません。",
+  "importErrNotASave": "このファイルには認識可能なセーブが含まれていません。",
+  "importErrWrite": "インポートしたセーブを書き込めませんでした（ディスク／権限）。",
+  "importErrBackupFailed": "バックアップの作成に失敗しました。何もインポートされませんでした。",
+  "importConflictTitle": "この名前のセーブはすでに存在します",
+  "importConflictBody": "インポートすると既存のローカルコピーが置き換えられます。取り消せません。",
+  "importConflictConfirm": "上書き",
+  "shareAction": "共有",
+  "shareUploadFirstCta": "先にアップロード",
+  "shareDialogTitle": "セーブを共有",
+  "shareEmailPlaceholder": "name@example.com",
+  "shareInfoNote": "共有すると閲覧とダウンロードのアクセス権が付与されます。Drive上のコピーを編集・削除できるのはあなただけです。",
+  "shareRoleReader": "閲覧のみ",
+  "shareRoleWriter": "同期を許可",
+  "shareInfoNoteCoop": "「閲覧のみ」は表示とダウンロードを許可します。「同期を許可」はDrive上のコピーの上書きを許可します — 削除することは決してできません。",
+  "shareConfirmButton": "共有する",
+  "shareSuccess": "{email}と共有しました。",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "manageAccessTitle": "アクセス権を持つ人",
+  "manageAccessEmpty": "まだ他に誰もアクセス権を持っていません。",
+  "manageAccessRoleLabel": "アクセス",
+  "manageAccessRevoke": "取り消す",
+  "manageAccessRevokeConfirm": "{email}のアクセスを削除しますか? すでにダウンロード済みのローカルコピーは引き続き相手のものです。",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "driveOnlyControlsYourCopy": "共有はDrive上のあなたのコピーを制御します。誰かがそれをダウンロードすると、そのコピーはその人のものになります。",
+  "driveOnlyControlsYourCopyCoop": "同期はDrive上のあなたのコピーを制御します — 許可した相手が上書きすることはできますが、削除することは決してできません。",
+  "sharedWithMeTitle": "共有されたセーブ",
+  "sharedWithMeEmpty": "まだ何も共有されていません。",
+  "sharedWithMeAdd": "共有セーブを追加",
+  "sharedWithMeOwnedBy": "{email}が共有",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedWithMeRoleSync": "同期",
+  "sharedWithMeRoleRead": "閲覧のみ",
+  "sharedWithMeSync": "同期する",
+  "sharedWithMeDownload": "ダウンロード",
+  "sharedWithMeRemove": "リストから削除",
+  "sharedWithMeRemoveConfirm": "{email}のDriveとの同期は行われなくなりますが、いつでも再度追加できます — 共有自体は継続されます。ローカルのコピーは通常のコープセーブとしてそのまま残ります。",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedLeaveConfirm": "このセーブへのアクセスを完全に失います。{email}が再度共有してくれない限り、再び追加することはできません。ローカルのコピーは通常のコープセーブとしてそのまま残ります。",
+  "sharedManageButton": "管理",
+  "sharedManageDialogTitle": "共有セーブを管理",
+  "sharedManageDialogHint": "ここから共有セーブを完全に退出できます。",
+  "sharedLeaveButton": "共有から退出",
+  "sharedLeaveSuccess": "{email}の共有から退出しました。",
+  "sharedWithMeSyncConfirm": "Drive上の{email}のコピーをローカルのセーブで上書きしますか?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedAccessReadOnly": "{email}によってあなたのアクセスは閲覧のみに設定されました — 表示とダウンロードはできますが、相手のDriveへの同期はできません。",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedWithMeRevoked": "アクセス権がなくなりました",
+  "sharedRevokedDialogBody": "{email}が{farmName}の共有を停止しました。ローカルおよびあなたのDrive上のコピーはそのまま残り、今後は「マイセーブ」に表示されます。",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "sharedRevokedAccept": "OK",
+  "sharedSelfCleanupTitle": "記録を修正しました",
+  "sharedSelfCleanupBody": "{farmName}が誤ってあなたと共有されているように表示されていました — 実際にはあなたのものです。修正済みで、現在は「マイセーブ」に表示されています。",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "sharedWithMeUploadOwn": "自分のDriveにアップロード",
+  "sharedDownloadOwn": "自分のDriveからダウンロード",
+  "sharedStatusOwnDriveAhead": "あなたのDriveが先に進んでいます — ダウンロードしましょう",
+  "sharedSyncBoth": "両方のDriveにアップロード",
+  "sharedSideMyDrive": "自分のDRIVE",
+  "sharedSideOwnerDrive": "{email}のDRIVE",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedSideDate": "Day {day} · Year {year}",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": { "type": "int" },
+      "year": { "type": "int" }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "所有者と同期済み · あなたのDriveにコピーなし",
+  "sharedStatusAheadNoOwnDrive": "先に進んでいます · あなたのDriveにコピーなし",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email}が先に進んでいます · あなたのDriveにコピーなし",
+  "sharedStatusAllSynced": "同期済み（端末 + 両方のDrive）",
+  "sharedStatusAheadBoth": "両方のDriveで先に進んでいます",
+  "sharedStatusMixed": "同期がずれています — 各Driveを確認してください",
+  "sharedStatusFullySynced": "完全に同期済み",
+  "sharedStatusSyncedOwn": "自分のDriveと同期済み",
+  "sharedStatusSyncedOwner": "共有先と同期済み",
+  "sharedStatusNotCloud": "この端末のみ",
+  "sharedStatusOwnerAhead": "{email}のDriveが先に進んでいます",
+  "sharedStatusBothAhead": "両方のDriveが先に進んでいます",
+  "sharedStatusLocalMissing": "この端末にはありません",
+  "sharedStatusOwnerUnavailable": "{email}のDriveを確認できませんでした",
+  "sharedStatusWorking": "同期中…",
+  "sharedSideUnavailable": "確認できませんでした",
+  "sharedSyncChooseTitle": "どこに同期しますか?",
+  "sharedSyncChooseBody": "この端末のセーブでどのクラウドコピーを更新するか選んでください。",
+  "sharedSyncTargetOwn": "自分のDrive",
+  "sharedSyncTargetOwner": "{email}のDrive",
+  "sharedSyncTargetBoth": "両方のDrive",
+  "sharedDownloadChooseTitle": "どのコピーをダウンロードしますか?",
+  "sharedDownloadChooseBody": "先に進んでいるコピーが複数あります。この端末に取り込むものを選んでください。",
+  "sharedDownloadSourceOwn": "自分のDriveから",
+  "sharedDownloadSourceOwner": "{email}のDriveから",
+  "sharedWithMePickerTitle": "共有セーブを追加",
+  "sharedPickerEmptyHint": "他のプレイヤーがDriveから共有した内容がここに表示されます。",
+  "sharedPickerAddButton": "追加",
+  "sharedOriginBadge": "共有",
+  "sharedOriginFrom": "{email}から",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "swapBackupDialogTitle": "バックアップを作成しました",
+  "swapBackupDialogBody": "以前のバージョンはzipとして保存されました。どうしますか?",
+  "swapBackupUpload": "Driveにアップロード",
+  "swapBackupLocalOnly": "この端末に保存しておく",
+  "swapBackupDeleteNow": "今すぐ削除",
+  "swapBackupUploadOk": "バックアップをDriveにアップロードしました。",
+  "swapBackupUploadErr": "バックアップをアップロードできませんでした: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "swapBackupLocalOnlySnack": "バックアップをこの端末に保存しました。",
+  "backupsAction": "バックアップ",
+  "backupsScreenTitle": "{farmName}のバックアップ",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "backupsEmpty": "まだバックアップがありません。",
+  "backupsRestore": "復元",
+  "backupsRestoreConfirmTitle": "このバックアップを復元しますか?",
+  "backupsRestoreConfirmBody": "現在のセーブがこの過去のバージョンで上書きされます。取り消せません。",
+  "backupsDelete": "削除",
+  "backupsDeleteConfirmTitle": "このバックアップを削除しますか?",
+  "backupsDeleteConfirmBody": "存在するすべての場所（この端末、アップロード済みの場合はDrive）から削除されます。取り消せません。",
+  "backupsRestoreOk": "バックアップを復元しました。",
+  "backupsRestoreManualTitle": "手動で復元",
+  "backupsRestoreManualBody": "ブリッジモードでは、ValleySaveはゲームフォルダに自動で書き込むことができません。このバックアップの.zipをStardew ValleyのSavesフォルダに自分で展開するか、設定でRoot/Shizukuモードに切り替えて自動復元してください。",
+  "backupsRestoreErr": "バックアップを復元できませんでした: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsDeleteErr": "バックアップを削除できませんでした: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsCreate": "ローカルバックアップを作成",
+  "backupsCreateLocalHint": "バックアップはまずこの端末に作成されます。その後Driveにアップロードできます。",
+  "backupsCreateOk": "バックアップを作成しました。",
+  "backupsCreateErr": "バックアップを作成できませんでした: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsDownload": "ダウンロード",
+  "backupsDownloadOk": "バックアップをこの端末にダウンロードしました。",
+  "backupsDownloadErr": "バックアップをダウンロードできませんでした: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsCopyOwn": "自分のDriveにコピー",
+  "backupsUploadOwn": "自分のDriveへ",
+  "backupsUploadShared": "共有Driveへ",
+  "backupsUploadOk": "バックアップをアップロードしました。",
+  "backupsUploadErr": "バックアップをアップロードできませんでした: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsLocationLocal": "この端末",
+  "backupsLocationOwnDrive": "自分のDrive",
+  "backupsLocationSharedDrive": "共有Drive",
+  "backupsDeleteChooseBody": "削除する場所を正確に選んでください。このバックアップが存在する場所のみ表示されます。",
+  "backupsDeleteLocalOnly": "この端末からのみ",
+  "backupsDeleteOwnOnly": "自分のDriveからのみ",
+  "backupsDeleteSharedOnly": "共有Driveからのみ",
+  "backupsDeleteAll": "すべてのコピーから",
+  "deleteUnifiedTitle": "{farmName}を削除しますか?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteChooseLocationBody": "削除元を選んでください。この端末のコピーは完全に削除されます。Driveのコピーはゴミ箱に移動します（30日間）。",
+  "deleteDriveContextTitle": "{farmName}をDriveから削除しますか?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteDriveContextBody": "Driveのコピーはゴミ箱に移動し、30日間は復元できます。",
+  "deleteDriveLocalKept": "この端末のコピーは変更されずそのまま残ります。",
+  "deleteLocalContextTitle": "{farmName}をこの端末から削除しますか?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteLocalContextBody": "この端末のコピーは完全に削除されます。",
+  "deleteLocalDriveCurrent": "あなたのDriveのコピーは最新です（{date}）。引き続き利用できます。",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "deleteLocalDriveAhead": "あなたのDriveのコピーはより新しく（{date}）、引き続き利用できます。",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "deleteLocalDriveOlder": "あなたのDriveのコピーは古く（{driveDate}）、この端末は{localDate}時点です。",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": { "type": "String" },
+      "localDate": { "type": "String" }
+    }
+  },
+  "deleteLocalBackupAvailable": "以前のコピーが必要な場合に備えて、{count}件のローカルバックアップが利用可能です。",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "deleteLocalNoRecovery": "このセーブを復元できるDriveのコピーもローカルのバックアップもありません。",
+  "deleteOptionLocalOnly": "この端末からのみ",
+  "deleteOptionDriveOnly": "自分のDriveからのみ",
+  "deleteOptionBoth": "両方のコピーから（端末 + Drive）",
+  "viewPlayersHint": "プレイヤーを表示",
+  "snackDeletedBoth": "「{saveName}」をこの端末から削除し、Driveのゴミ箱に移動しました。",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  }
 }

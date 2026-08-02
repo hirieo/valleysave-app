@@ -507,5 +507,576 @@
   "hostSwapErrInvalid": "此存檔的結構異常，未做任何變更。",
   "hostSwapErrNoSpace": "農場沒有可用空間來重新放置物體，未做任何變更。",
   "hostSwapErrWrite": "無法寫入新存檔（磁碟/權限問題），未做任何變更。",
-  "hostSwapErrValidation": "新存檔的驗證失敗，已被捨棄。原始存檔完好無損。"
+  "hostSwapErrValidation": "新存檔的驗證失敗，已被捨棄。原始存檔完好無損。",
+  "disconnectButtonEmail": "中斷與 {email} 的連線",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAsPrefix": "已連線為",
+  "hiwConnectTitle": "連接你的帳號",
+  "hiwConnectDesc": "ValleySave 使用你的 Google 帳號，將存檔保存在你自己 Drive 中的 ValleySave 專屬資料夾裡。",
+  "hiwConnectStepGoogle": "Google\n帳號",
+  "hiwConnectStepDrive": "ValleySave 資料夾\n已建立",
+  "hiwConnectStepReady": "準備好\n同步了",
+  "hiwConnectTipOwnership": "只有你能編輯或刪除 Drive 中的副本——ValleySave 只在自己的資料夾內讀寫。",
+  "overwriteWhatChanges": "有什麼變化",
+  "overwriteTagOverwritten": "將被覆蓋",
+  "overwriteNewCopyTag": "新",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days} 天又 {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictAhead": "你領先 {delta}。可以放心。",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 目前金錢變少了，但整體進度在前進——你可能是把錢花在了某樣東西上。這不是真正的損失。",
+  "overwriteVerdictNegligible": "差異極小（{delta}）。兩個副本用哪個都可以。",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ 你將遺失 {target} 中 {delta} 的進度。繼續前請先檢查。",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmTitleUpload": "確認上傳嗎？",
+  "overwriteConfirmTitleDownload": "確認下載嗎？",
+  "overwriteConfirmBody": "你將遺失 {target} 中的 {delta}。此操作無法復原。",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmButtonUpload": "確認上傳",
+  "overwriteConfirmButtonDownload": "確認下載",
+  "overwriteDangerButtonUpload": "⚠️ 仍然上傳",
+  "overwriteDangerButtonDownload": "⚠️ 仍然下載",
+  "overwriteIdenticalSummary": "{count, plural, other{✓ 相同 {count} 個}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadToOwner": "上傳到 {email} 的 Drive",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadBoth": "上傳到兩個 Drive",
+  "overwriteConfirmTitleBoth": "確認這兩次上傳嗎？",
+  "overwriteConfirmBodyBoth": "你將遺失 {targets} 中的 {delta}。此操作無法復原。",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} 和 {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedTargetOwnDrive": "你的 Drive",
+  "sharedStatusLocalAhead": "你在 {targets} 領先",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "snackReplacePrepareFailed": "無法準備存檔。磁碟上未做任何修改",
+  "snackReplaceValidationFailed": "下載的存檔似乎無效或不完整。磁碟上未做任何修改",
+  "snackReplaceBackupFailed": "無法建立備份。磁碟上未做任何修改",
+  "snackReplaceSwapFailed": "交換失敗，但原始存檔已從備份中復原",
+  "snackReplaceBusy": "此存檔已有正在進行的操作",
+  "snackUploadIncomplete": "本機存檔不完整或已損壞。未上傳任何內容",
+  "snackDownloadIncomplete": "無法下載：Drive 上缺少內容",
+  "cardIncomplete": "Drive 上不完整",
+  "autoRefreshTitle": "自動重新整理",
+  "autoRefreshSubtitle": "每 30 秒檢查一次 Drive 的變化",
+  "autoSyncSnack": "{farmName} 已自動同步",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncTooltipOn": "自動同步已開啟——安全時會自動同步",
+  "autoSyncTooltipOff": "自動同步已關閉——點擊開啟",
+  "autoSyncExplainTitle": "自動同步",
+  "autoSyncExplainBody": "從現在起，{farmName} 會在安全的情況下自動上傳或下載，不再向你確認。",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncExplainSafe": "只有在你明顯領先且不會遺失任何內容時才會執行。",
+  "autoSyncExplainDanger": "如果有遺失進度的風險，它絕不會自動執行：你仍然可以透過常規對話方塊自己決定。",
+  "autoSyncExplainMissing": "如果缺少其中一個副本，它不會自動建立：第一次上傳或下載由你決定。",
+  "autoSyncExplainDontShowAgain": "不再顯示此提示",
+  "autoSyncExplainConfirm": "明白了，開啟",
+  "hiwAutoSyncTitle": "自動同步",
+  "hiwAutoSyncDesc": "每個存檔卡片上都有一個 AUTO 標籤。開啟後，一旦應用程式偵測到變化，該存檔就會自動上傳或下載——你不需要進入確認。",
+  "hiwAutoSyncTipSafe": "只有在你明顯領先且不會遺失任何內容時，它才會自動同步。",
+  "hiwAutoSyncTipDanger": "如果有遺失進度的風險，它絕不會自動執行：仍會像往常一樣透過比較介面向你確認。",
+  "hiwAutoSyncTipPerSave": "逐個存檔單獨開啟，不是一次性全部開啟：你可以只在自己的存檔上開啟，共用存檔上不開啟。",
+  "hiwAutoSyncTipMissing": "它只保持已存在的兩個副本同步。如果缺少一個，第一次上傳或下載需要你自己完成。",
+  "hiwAutoSyncTipRefresh": "你可以在設定中完全關閉自動檢查變化的功能。",
+  "hiwCompatIncomplete": "如果你在某個存檔上看到「Drive 上不完整」，表示雲端缺少必要的檔案——在從其他裝置重新正確上傳之前無法下載。",
+  "hiwShareTitle": "與他人共用",
+  "hiwShareDesc": "透過電子郵件與其他玩家共用存檔。對方會在自己裝置的「與我共用」中看到它。",
+  "hiwShareStepYourSave": "你的\n存檔",
+  "hiwShareStepShare": "透過電子郵件\n共用",
+  "hiwShareStepFriend": "與我\n共用的",
+  "hiwShareTipRoles": "兩種角色：唯讀權限可以檢視和下載。允許同步權限可以覆蓋你 Drive 上的副本。無論哪種角色都不能刪除它——只有你這個擁有者才能刪除你的存檔。",
+  "hiwShareTipDisconnect": "中斷連線只會停止對方那一側的同步——共用關係仍然有效，直到你在「管理共用」中真正退出為止。",
+  "hiwHostSwapTitle": "更換房主",
+  "hiwHostSwapDesc": "更改哪個農場幫工是存檔的房主，原地替換——相同的存檔槽，相同的共用權限。",
+  "hiwHostSwapStepPick": "選擇\n農場幫工",
+  "hiwHostSwapStepConfirm": "確認",
+  "hiwHostSwapStepDone": "新存檔\n已建立",
+  "hiwHostSwapTipMove": "農場中的一些物件可能會被重新放置以給房子騰出空間——不會刪除任何東西。",
+  "hiwHostSwapTipHouse": "新房主的房子外觀會是遊戲預設的大房子——如果沒有模組，小屋外觀不受支援。",
+  "hiwBackupsTitle": "備份",
+  "hiwBackupsDesc": "備份是存檔在某一時刻的快照，之後可以復原。你可以隨時手動建立，也可以讓 ValleySave 在覆蓋存檔之前（下載、匯入、復原或更換房主時）自動建立。",
+  "hiwBackupsStepSave": "你的\n存檔",
+  "hiwBackupsStepSnapshot": "備份\n已建立",
+  "hiwBackupsStepStore": "本機和/或\nDrive",
+  "hiwBackupsTipRestore": "恢復會用之前的版本覆蓋你目前的存檔——此操作無法復原。",
+  "hiwBackupsTipDelete": "刪除備份會將其從存在的所有位置移除（本機裝置和 Drive，如果已上傳）——此操作無法復原。",
+  "hiwBackupsTipExport": "你還可以將存檔匯出為 zip 檔案，保存到任何地方，之後再匯入回來——這是內建備份之外的一種手動、可攜式的替代方案。",
+  "hiwBackupsTipRetention": "ValleySave 為每個存檔保留最近的 5 個自動備份；你手動建立的備份永遠不會被自動刪除。",
+  "hiwBackupsTipRestoreBridge": "在橋接模式下（Android 無 root/Shizuku），復原備份需要你手動將 .zip 解壓縮到 Stardew 資料夾——和下載時一樣。",
+  "hiwLaunchTipLinux": "在 Linux 上，如果未能自動偵測到遊戲，請在設定 → 遊戲中設定可執行檔路徑。",
+  "hiwSaveLocationsTitle": "存檔保存在哪裡",
+  "hiwSaveLocationsDesc": "ValleySave 會直接在每個平台的遊戲存檔資料夾中讀寫。",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\StardewValley\\Saves",
+  "hiwSaveLocationAndroid": "Android：受保護的資料夾，需透過 Shizuku 或橋接模式存取",
+  "hiwSaveLocationLinux": "Linux：~/.config/StardewValley/Saves（如果透過 snap 安裝了 Steam，則為 ~/snap/steam/common/.config/StardewValley/Saves）",
+  "exportAction": "匯出",
+  "exportSuccess": "存檔已匯出。",
+  "exportError": "無法匯出存檔：{error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importAction": "匯入存檔",
+  "importSuccess": "已匯入 {playerName} 的存檔。",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+  "importErrInvalidZip": "此檔案不是有效的 zip 檔案。",
+  "importErrUnsafePath": "此檔案的結構不安全，已被拒絕。",
+  "importErrTooLarge": "此檔案過大，無法匯入。",
+  "importErrNotASave": "此檔案不包含可識別的存檔。",
+  "importErrWrite": "無法寫入匯入的存檔（磁碟/權限問題）。",
+  "importErrBackupFailed": "無法建立備份。未匯入任何內容。",
+  "importConflictTitle": "已存在同名存檔",
+  "importConflictBody": "匯入將取代現有的本機副本。此操作無法復原。",
+  "importConflictConfirm": "覆蓋",
+  "shareAction": "共用",
+  "shareUploadFirstCta": "先上傳",
+  "shareDialogTitle": "共用存檔",
+  "shareEmailPlaceholder": "name@example.com",
+  "shareInfoNote": "共用只提供檢視和下載權限。只有你能編輯或刪除 Drive 中的副本。",
+  "shareRoleReader": "唯讀",
+  "shareRoleWriter": "允許同步",
+  "shareInfoNoteCoop": "唯讀權限允許檢視和下載。允許同步權限允許覆蓋你 Drive 上的副本——但永遠無法刪除它。",
+  "shareConfirmButton": "共用",
+  "shareSuccess": "已與 {email} 共用。",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "manageAccessTitle": "有權存取的人",
+  "manageAccessEmpty": "目前還沒有其他人可以存取。",
+  "manageAccessRoleLabel": "存取權限",
+  "manageAccessRevoke": "撤銷",
+  "manageAccessRevokeConfirm": "要取消 {email} 的存取權限嗎？已經下載的任何本機副本仍然歸他們所有。",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "driveOnlyControlsYourCopy": "共用只控制你在 Drive 上的副本。如果有人下載了它，那份副本就是他們的了。",
+  "driveOnlyControlsYourCopyCoop": "同步只控制你在 Drive 上的副本——你授權的人可以覆蓋它，但永遠無法刪除。",
+  "sharedWithMeTitle": "與我共用的",
+  "sharedWithMeEmpty": "目前還沒有人與你共用任何內容。",
+  "sharedWithMeAdd": "新增共用存檔",
+  "sharedWithMeOwnedBy": "由 {email} 共用",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRoleSync": "同步",
+  "sharedWithMeRoleRead": "唯讀",
+  "sharedWithMeSync": "同步",
+  "sharedWithMeDownload": "下載",
+  "sharedWithMeRemove": "中斷連線",
+  "sharedWithMeRemoveConfirm": "你將不再與 {email} 的 Drive 同步，但可以隨時重新新增——它仍然是共用的。你的本機副本會變成一個普通的合作存檔。",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedLeaveConfirm": "你將真正失去對此存檔的存取權限。除非 {email} 再次與你共用，否則你無法重新新增它。你的本機副本會變成一個普通的合作存檔。",
+  "sharedManageButton": "管理",
+  "sharedManageDialogTitle": "管理共用",
+  "sharedManageDialogHint": "在這裡你可以真正退出一個共用存檔。",
+  "sharedLeaveButton": "退出共用",
+  "sharedLeaveSuccess": "你已退出 {email} 的共用。",
+  "sharedWithMeSyncConfirm": "要用你的本機存檔覆蓋 {email} 在 Drive 上的副本嗎？",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedAccessReadOnly": "{email} 已將你設為唯讀模式——你可以檢視和下載，但無法同步到他們的 Drive。",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRevoked": "你已不再擁有存取權限",
+  "sharedRevokedDialogBody": "{email} 已停止與你共用 {farmName}。你的本機副本和 Drive 副本保持不變，現在會出現在「我的存檔」中。",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedRevokedAccept": "確定",
+  "sharedSelfCleanupTitle": "記錄已修正",
+  "sharedSelfCleanupBody": "{farmName} 曾被錯誤地顯示為與你共用——實際上它是你自己的。現在已修正，它在「我的存檔」中。",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeUploadOwn": "上傳到我的 Drive",
+  "sharedDownloadOwn": "從我的 Drive 下載",
+  "sharedStatusOwnDriveAhead": "你的 Drive 領先——下載它",
+  "sharedSyncBoth": "上傳到兩個 Drive",
+  "sharedSideMyDrive": "我的 DRIVE",
+  "sharedSideOwnerDrive": "{email} 的 DRIVE",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedSideDate": "第 {day} 天 · 第 {year} 年",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "已與擁有者同步 · 你的 Drive 中無副本",
+  "sharedStatusAheadNoOwnDrive": "你領先 · 你的 Drive 中無副本",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} 領先 · 你的 Drive 中無副本",
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedStatusAllSynced": "已同步（本機 + 兩個 Drive）",
+  "sharedStatusAheadBoth": "你在兩個 Drive 上都領先",
+  "sharedStatusMixed": "未同步——請檢查各個 Drive",
+  "sharedStatusFullySynced": "完全同步",
+  "sharedStatusSyncedOwn": "我的 Drive 已同步",
+  "sharedStatusSyncedOwner": "共用 Drive 已同步",
+  "sharedStatusNotCloud": "僅在本機裝置",
+  "sharedStatusOwnerAhead": "{email} 的 Drive 領先",
+  "sharedStatusBothAhead": "兩個 Drive 都領先",
+  "sharedStatusLocalMissing": "不在此裝置上",
+  "sharedStatusOwnerUnavailable": "無法檢查 {email} 的 Drive",
+  "sharedStatusWorking": "正在同步…",
+  "sharedSideUnavailable": "無法檢查",
+  "sharedSyncChooseTitle": "你想同步到哪裡？",
+  "sharedSyncChooseBody": "選擇你想用本機裝置的存檔更新哪些雲端副本。",
+  "sharedSyncTargetOwn": "我的 Drive",
+  "sharedSyncTargetOwner": "{email} 的 Drive",
+  "sharedSyncTargetBoth": "兩個 Drive",
+  "sharedDownloadChooseTitle": "你想下載哪個副本？",
+  "sharedDownloadChooseBody": "有多個副本領先。請選擇你想要下載到本機裝置的那個。",
+  "sharedDownloadSourceOwn": "來自我的 Drive",
+  "sharedDownloadSourceOwner": "來自 {email} 的 Drive",
+  "sharedWithMePickerTitle": "新增共用存檔",
+  "sharedPickerEmptyHint": "其他玩家從 Drive 與你共用的內容會顯示在這裡。",
+  "sharedPickerAddButton": "新增",
+  "sharedOriginBadge": "共用",
+  "sharedOriginFrom": "來自 {email}",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupDialogTitle": "備份已建立",
+  "swapBackupDialogBody": "之前的版本已保存為 zip 檔案。你想如何處理它？",
+  "swapBackupUpload": "上傳到 Drive",
+  "swapBackupLocalOnly": "保留在本機裝置",
+  "swapBackupDeleteNow": "立即刪除",
+  "swapBackupUploadOk": "備份已上傳到 Drive。",
+  "swapBackupUploadErr": "無法上傳備份：{error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupLocalOnlySnack": "備份已保存在本機裝置。",
+  "backupsAction": "備份",
+  "backupsScreenTitle": "{farmName} 的備份",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsEmpty": "暫無備份。",
+  "backupsRestore": "恢復",
+  "backupsRestoreConfirmTitle": "要恢復此備份嗎？",
+  "backupsRestoreConfirmBody": "這會用此前的版本覆蓋你目前的存檔。此操作無法復原。",
+  "backupsDelete": "刪除",
+  "backupsDeleteConfirmTitle": "要刪除此備份嗎？",
+  "backupsDeleteConfirmBody": "將從存在的所有位置刪除（本機裝置和 Drive，如果已上傳）。此操作無法復原。",
+  "backupsRestoreOk": "備份已恢復。",
+  "backupsRestoreManualTitle": "手動恢復",
+  "backupsRestoreManualBody": "在橋接模式下，ValleySave 無法自動寫入遊戲資料夾。請自行將此備份的 .zip 解壓縮到 Stardew Valley 的 Saves 資料夾，或在設定中切換到 Root/Shizuku 模式以自動復原。",
+  "backupsRestoreErr": "無法恢復備份：{error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDeleteErr": "無法刪除備份：{error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCreate": "建立本機備份",
+  "backupsCreateLocalHint": "備份會先在本機裝置上建立。之後你可以將它們上傳到 Drive。",
+  "backupsCreateOk": "備份已建立。",
+  "backupsCreateErr": "無法建立備份：{error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDownload": "下載",
+  "backupsDownloadOk": "備份已下載到本機裝置。",
+  "backupsDownloadErr": "無法下載備份：{error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCopyOwn": "複製到我的 Drive",
+  "backupsUploadOwn": "到我的 Drive",
+  "backupsUploadShared": "到共用 Drive",
+  "backupsUploadOk": "備份已上傳。",
+  "backupsUploadErr": "無法上傳備份：{error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsLocationLocal": "本機裝置",
+  "backupsLocationOwnDrive": "我的 Drive",
+  "backupsLocationSharedDrive": "共用 Drive",
+  "backupsDeleteChooseBody": "請選擇要從哪裡刪除它。只會顯示存在此備份的位置。",
+  "backupsDeleteLocalOnly": "僅從本機裝置",
+  "backupsDeleteOwnOnly": "僅從我的 Drive",
+  "backupsDeleteSharedOnly": "僅從共用 Drive",
+  "backupsDeleteAll": "從所有副本",
+  "deleteUnifiedTitle": "要刪除 {farmName} 嗎？",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChooseLocationBody": "選擇從哪裡刪除。本機裝置的副本將被永久刪除；Drive 上的副本會進入垃圾桶（30 天）。",
+  "deleteDriveContextTitle": "要從 Drive 中刪除 {farmName} 嗎？",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteDriveContextBody": "Drive 上的副本將進入垃圾桶，你可以在 30 天內復原它。",
+  "deleteDriveLocalKept": "本機裝置的副本將保持不變。",
+  "deleteLocalContextTitle": "要從本機裝置中刪除 {farmName} 嗎？",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalContextBody": "本機裝置的副本將被永久刪除。",
+  "deleteLocalDriveCurrent": "你的 Drive 副本是最新的（{date}），仍將可用。",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveAhead": "你的 Drive 副本更新（{date}），仍將可用。",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveOlder": "你的 Drive 副本較舊（{driveDate}）；本機裝置的進度是 {localDate}。",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalBackupAvailable": "有 {count} 個本機備份可用，以防你需要之前的版本。",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteLocalNoRecovery": "沒有 Drive 副本，也沒有本機備份可以復原此存檔。",
+  "deleteOptionLocalOnly": "僅從本機裝置",
+  "deleteOptionDriveOnly": "僅從我的 Drive",
+  "deleteOptionBoth": "從兩份副本",
+  "viewPlayersHint": "檢視玩家",
+  "snackDeletedBoth": "\"{saveName}\" 已從本機裝置刪除，並移至 Drive 垃圾桶。",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "hiwLaunchTitle": "啟動遊戲",
+  "hiwLaunchDesc": "在「我的存檔」上方列點擊 ▶ 按鈕，可直接從應用程式啟動 Stardew Valley。",
+  "hiwLaunchTipAndroid": "在 Android 上，若已安裝遊戲則直接啟動。",
+  "hiwLaunchTipWindows": "在 Windows 上，若未自動偵測到遊戲，請在設定 → 遊戲中設定可執行檔路徑。",
+  "settingsGameSection": "遊戲",
+  "settingsGameExePath": "Stardew Valley 可執行檔",
+  "settingsGameExeBrowse": "瀏覽…",
+  "settingsGameExeNotFound": "未自動找到",
+  "settingsGameExeSaved": "路徑已儲存",
+  "snackLaunchError": "無法開啟遊戲",
+  "tooltipLaunchGame": "開始遊戲"
 }

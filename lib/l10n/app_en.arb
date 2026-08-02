@@ -975,5 +975,11 @@
   "hostSwapErrInvalid": "This save has an unexpected structure. Nothing was changed.",
   "hostSwapErrNoSpace": "No safe position with an accessible door, mailbox, and path was found. Nothing was changed.",
   "hostSwapErrWrite": "Could not write the new save (disk/permissions). Nothing was changed.",
-  "hostSwapErrValidation": "Verification of the new save failed, so it was discarded. The original is intact."
+  "hostSwapErrValidation": "Verification of the new save failed, so it was discarded. The original is intact.",
+  "makeHostDeleteOriginalTitle": "Delete the original save on this device?",
+  "makeHostDeleteOriginalBody": "The new save is ready. Upload the original to your Drive as a backup (you'll be able to redownload it later) or just delete the local copy.",
+  "makeHostDeleteOriginalNoBackupBody": "No connection to Drive: no backup will remain. Only the local copy on this device will be deleted.",
+  "makeHostDeleteOriginalUploadBody": "The original save will be uploaded to your Drive as a backup first, then the local copy on this device will be deleted.",
+  "makeHostDeleteWithoutUpload": "Delete without uploading",
+  "makeHostUploadAndDelete": "Upload and delete"
 }

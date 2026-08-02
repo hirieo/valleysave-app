@@ -258,6 +258,85 @@
   "previewDriveLabel": "EN DRIVE",
   "previewFromDrive": "DESDE DRIVE",
   "previewFromDevice": "DESDE ESTE EQUIPO",
+  "overwriteWhatChanges": "Qué cambia",
+  "overwriteTagOverwritten": "SE SOBRESCRIBE",
+  "overwriteNewCopyTag": "NUEVO",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 día y {time}} other{{days} días y {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "overwriteVerdictAhead": "Vas {delta} por delante. Es seguro.",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 El dinero actual bajó, pero el progreso general avanza — probablemente te lo gastaste en algo. No es una pérdida real.",
+  "overwriteVerdictNegligible": "Diferencia mínima ({delta}). Cualquiera de las dos copias sirve.",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ Vas a perder {delta} de progreso en {target}. Revísalo antes de continuar.",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmTitleUpload": "¿Confirmas la subida?",
+  "overwriteConfirmTitleDownload": "¿Confirmas la descarga?",
+  "overwriteConfirmBody": "Vas a perder {delta} en {target}. Esta acción no se puede deshacer.",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmButtonUpload": "Confirmar subida",
+  "overwriteConfirmButtonDownload": "Confirmar descarga",
+  "overwriteDangerButtonUpload": "⚠️ Subir de todas formas",
+  "overwriteDangerButtonDownload": "⚠️ Descargar de todas formas",
+  "overwriteIdenticalSummary": "{count, plural, one{✓ 1 idéntico} other{✓ {count} idénticos}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "list": { "type": "String" }
+    }
+  },
+  "overwriteUploadToOwner": "Subir al Drive de {email}",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "overwriteUploadBoth": "Subir a los dos Drive",
+  "overwriteConfirmTitleBoth": "¿Confirmas las dos subidas?",
+  "overwriteConfirmBodyBoth": "Vas a perder {delta} en {targets}. Esta acción no se puede deshacer.",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "targets": { "type": "String" }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} y {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": { "type": "String" },
+      "second": { "type": "String" }
+    }
+  },
+  "sharedTargetOwnDrive": "tu Drive",
+  "sharedStatusLocalAhead": "Vas por delante en {targets}",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": { "type": "String" }
+    }
+  },
   "versionMismatch": "Versiones distintas: local {local} · Drive {drive}…",
   "snackPathCopied": "Ruta copiada",
   "snackDestCopied": "Ruta de destino copiada",
@@ -270,6 +349,35 @@
   "snackUploadIncomplete": "La partida local está incompleta o dañada. No se subió nada",
   "snackDownloadIncomplete": "No se puede descargar: le falta contenido en Drive",
   "cardIncomplete": "Incompleta en Drive",
+  "autoRefreshTitle": "Auto-actualizar",
+  "autoRefreshSubtitle": "Comprueba cambios en Drive cada 30s",
+  "autoSyncSnack": "{farmName} sincronizada automáticamente",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncTooltipOn": "Auto-sync activado — se sincroniza sola cuando es seguro",
+  "autoSyncTooltipOff": "Auto-sync desactivado — toca para activarlo",
+  "autoSyncExplainTitle": "Auto-sync",
+  "autoSyncExplainBody": "A partir de ahora, {farmName} se subirá o bajará sola cuando sea seguro, sin pedirte confirmación.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncExplainSafe": "Solo actúa cuando vas claramente por delante y no se pierde nada.",
+  "autoSyncExplainDanger": "Si hubiera riesgo de perder progreso, nunca actúa sola: seguirás decidiendo tú con el diálogo de siempre.",
+  "autoSyncExplainMissing": "Si falta una de las dos copias, no la crea sola: subir o bajar la primera vez lo decides tú.",
+  "autoSyncExplainDontShowAgain": "No volver a mostrar este aviso",
+  "autoSyncExplainConfirm": "Entendido, activar",
+  "hiwAutoSyncTitle": "Sincronizar sola",
+  "hiwAutoSyncDesc": "Cada partida tiene un chip AUTO en su tarjeta. Al activarlo, esa partida se sube o se baja sola cuando la app detecta un cambio — sin que tengas que entrar a confirmarlo.",
+  "hiwAutoSyncTipSafe": "Solo se sincroniza sola cuando vas claramente por delante y no se pierde nada.",
+  "hiwAutoSyncTipDanger": "Si hubiera riesgo de perder progreso, nunca lo hace sola: te lo sigue preguntando con la comparación de siempre.",
+  "hiwAutoSyncTipPerSave": "Se activa partida por partida, no de golpe: puedes tenerlo en la tuya y no en una compartida.",
+  "hiwAutoSyncTipMissing": "Solo mantiene sincronizadas dos copias que ya existen. Si falta una, la primera subida o bajada la haces tú.",
+  "hiwAutoSyncTipRefresh": "En Ajustes puedes apagar del todo la comprobación automática de cambios.",
   "snackSessionExpired": "La sesión de Drive ha caducado. Vuelve a conectar",
   "snackUploadError": "Error al subir: {error}",
   "snackDownloadError": "Error al descargar: {error}",
@@ -586,7 +694,7 @@
   "sharedWithMeUploadOwn": "Subir a mi Drive",
   "sharedDownloadOwn": "Bajar de mi Drive",
   "sharedStatusOwnDriveAhead": "Tu Drive va por delante — bájalo",
-  "sharedSyncBoth": "Sincronizar ambos",
+  "sharedSyncBoth": "Subir a los dos Drive",
   "sharedSideMyDrive": "MI DRIVE",
   "sharedSideOwnerDrive": "DRIVE EN {email}",
   "@sharedSideOwnerDrive": {

@@ -633,7 +633,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sharedStatusOwnDriveAhead => 'Tu Drive va por delante — bájalo';
 
   @override
-  String get sharedSyncBoth => 'Sincronizar ambos';
+  String get sharedSyncBoth => 'Subir a los dos Drive';
 
   @override
   String get sharedSideMyDrive => 'MI DRIVE';
@@ -1373,6 +1373,109 @@ class AppLocalizationsEs extends AppLocalizations {
   String get previewFromDevice => 'DESDE ESTE EQUIPO';
 
   @override
+  String get overwriteWhatChanges => 'Qué cambia';
+
+  @override
+  String get overwriteTagOverwritten => 'SE SOBRESCRIBE';
+
+  @override
+  String get overwriteNewCopyTag => 'NUEVO';
+
+  @override
+  String overwriteDeltaPhrase(int days, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days días y $time',
+      one: '1 día y $time',
+      zero: '$time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overwriteVerdictAhead(String delta) {
+    return 'Vas $delta por delante. Es seguro.';
+  }
+
+  @override
+  String get overwriteVerdictMoneySpent =>
+      '💰 El dinero actual bajó, pero el progreso general avanza — probablemente te lo gastaste en algo. No es una pérdida real.';
+
+  @override
+  String overwriteVerdictNegligible(String delta) {
+    return 'Diferencia mínima ($delta). Cualquiera de las dos copias sirve.';
+  }
+
+  @override
+  String overwriteVerdictDanger(String delta, String target) {
+    return '⚠️ Vas a perder $delta de progreso en $target. Revísalo antes de continuar.';
+  }
+
+  @override
+  String get overwriteConfirmTitleUpload => '¿Confirmas la subida?';
+
+  @override
+  String get overwriteConfirmTitleDownload => '¿Confirmas la descarga?';
+
+  @override
+  String overwriteConfirmBody(String delta, String target) {
+    return 'Vas a perder $delta en $target. Esta acción no se puede deshacer.';
+  }
+
+  @override
+  String get overwriteConfirmButtonUpload => 'Confirmar subida';
+
+  @override
+  String get overwriteConfirmButtonDownload => 'Confirmar descarga';
+
+  @override
+  String get overwriteDangerButtonUpload => '⚠️ Subir de todas formas';
+
+  @override
+  String get overwriteDangerButtonDownload => '⚠️ Descargar de todas formas';
+
+  @override
+  String overwriteIdenticalSummary(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '✓ $count idénticos',
+      one: '✓ 1 idéntico',
+    );
+    return '$_temp0 — $list';
+  }
+
+  @override
+  String overwriteUploadToOwner(String email) {
+    return 'Subir al Drive de $email';
+  }
+
+  @override
+  String get overwriteUploadBoth => 'Subir a los dos Drive';
+
+  @override
+  String get overwriteConfirmTitleBoth => '¿Confirmas las dos subidas?';
+
+  @override
+  String overwriteConfirmBodyBoth(String delta, String targets) {
+    return 'Vas a perder $delta en $targets. Esta acción no se puede deshacer.';
+  }
+
+  @override
+  String overwriteBothDestinationsLabel(String first, String second) {
+    return '$first y $second';
+  }
+
+  @override
+  String get sharedTargetOwnDrive => 'tu Drive';
+
+  @override
+  String sharedStatusLocalAhead(String targets) {
+    return 'Vas por delante en $targets';
+  }
+
+  @override
   String versionMismatch(String local, String drive) {
     return 'Versiones distintas: local $local · Drive $drive…';
   }
@@ -1416,6 +1519,78 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cardIncomplete => 'Incompleta en Drive';
+
+  @override
+  String get autoRefreshTitle => 'Auto-actualizar';
+
+  @override
+  String get autoRefreshSubtitle => 'Comprueba cambios en Drive cada 30s';
+
+  @override
+  String autoSyncSnack(String farmName) {
+    return '$farmName sincronizada automáticamente';
+  }
+
+  @override
+  String get autoSyncTooltipOn =>
+      'Auto-sync activado — se sincroniza sola cuando es seguro';
+
+  @override
+  String get autoSyncTooltipOff =>
+      'Auto-sync desactivado — toca para activarlo';
+
+  @override
+  String get autoSyncExplainTitle => 'Auto-sync';
+
+  @override
+  String autoSyncExplainBody(String farmName) {
+    return 'A partir de ahora, $farmName se subirá o bajará sola cuando sea seguro, sin pedirte confirmación.';
+  }
+
+  @override
+  String get autoSyncExplainSafe =>
+      'Solo actúa cuando vas claramente por delante y no se pierde nada.';
+
+  @override
+  String get autoSyncExplainDanger =>
+      'Si hubiera riesgo de perder progreso, nunca actúa sola: seguirás decidiendo tú con el diálogo de siempre.';
+
+  @override
+  String get autoSyncExplainMissing =>
+      'Si falta una de las dos copias, no la crea sola: subir o bajar la primera vez lo decides tú.';
+
+  @override
+  String get autoSyncExplainDontShowAgain => 'No volver a mostrar este aviso';
+
+  @override
+  String get autoSyncExplainConfirm => 'Entendido, activar';
+
+  @override
+  String get hiwAutoSyncTitle => 'Sincronizar sola';
+
+  @override
+  String get hiwAutoSyncDesc =>
+      'Cada partida tiene un chip AUTO en su tarjeta. Al activarlo, esa partida se sube o se baja sola cuando la app detecta un cambio — sin que tengas que entrar a confirmarlo.';
+
+  @override
+  String get hiwAutoSyncTipSafe =>
+      'Solo se sincroniza sola cuando vas claramente por delante y no se pierde nada.';
+
+  @override
+  String get hiwAutoSyncTipDanger =>
+      'Si hubiera riesgo de perder progreso, nunca lo hace sola: te lo sigue preguntando con la comparación de siempre.';
+
+  @override
+  String get hiwAutoSyncTipPerSave =>
+      'Se activa partida por partida, no de golpe: puedes tenerlo en la tuya y no en una compartida.';
+
+  @override
+  String get hiwAutoSyncTipMissing =>
+      'Solo mantiene sincronizadas dos copias que ya existen. Si falta una, la primera subida o bajada la haces tú.';
+
+  @override
+  String get hiwAutoSyncTipRefresh =>
+      'En Ajustes puedes apagar del todo la comprobación automática de cambios.';
 
   @override
   String get snackSessionExpired =>

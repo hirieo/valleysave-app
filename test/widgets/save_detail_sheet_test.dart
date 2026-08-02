@@ -453,11 +453,14 @@ void main() {
 
     expect(find.text('Desconectar'), findsNothing);
     expect(find.byIcon(Icons.sync_disabled_rounded), findsOneWidget);
-    final statusCenter = tester.getCenter(find.text('Totalmente sincronizado'));
-    final disconnectCenter = tester.getCenter(
-      find.byKey(const ValueKey('shared-disconnect-action')),
+    // 2026-07-30 (feedback en vivo): el estado pasó a su propia fila (arriba
+    // de los botones) para que el texto largo nunca se recorte al convivir
+    // con hasta 2 botones de dirección — ya no comparten fila con la
+    // gestión, así que dejan de estar alineados verticalmente por diseño.
+    expect(
+      tester.getRect(find.byKey(const ValueKey('shared-disconnect-action'))).width,
+      lessThan(50),
     );
-    expect((statusCenter.dy - disconnectCenter.dy).abs(), lessThan(20));
     await tester.tap(find.byKey(const ValueKey('shared-disconnect-action')));
     await tester.tap(find.byKey(const ValueKey('shared-manage-copies-action')));
     expect(disconnects, 1);
@@ -576,6 +579,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     var syncs = 0;
+    var uploads = 0;
     final local = _save(players: [ana, bruno], dayOfMonth: 5);
     final cloud = _save(players: [ana, bruno], dayOfMonth: 4);
     await tester.pumpWidget(
@@ -595,6 +599,7 @@ void main() {
                 localMatch: local,
               ),
               onSyncRequested: () => syncs++,
+              onUploadToOwnDrive: () => uploads++,
               onRemove: () {},
               onManageCopies: () {},
               onBackups: () {},
@@ -606,14 +611,200 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Solo en este equipo'), findsOneWidget);
-    expect(find.text('Sincronizar'), findsOneWidget);
+    // D6 (spec 008): el Drive del dueño SÍ tiene copia (atrasada) — ya no es
+    // "Solo en este equipo", nombra el sitio atrasado.
+    expect(
+      find.text('Vas por delante en Drive en owner@gmail.com'),
+      findsOneWidget,
+    );
+    // D1+D2 (spec 008): Mi Drive (sin copia) y el Drive del dueño (atrasado)
+    // son los DOS destinos válidos — el botón del footer abre el selector,
+    // por eso queda con el texto genérico en vez de un nombre concreto.
+    expect(find.text('Subir'), findsOneWidget);
     expect(find.text('Backups'), findsNothing);
     expect(find.text('HACER ANFITRIÓN'), findsNothing);
-    expect(find.text('Subir a mi Drive'), findsNothing);
-    await tester.tap(find.text('Sincronizar'));
+    await tester.tap(find.text('Subir'));
     expect(syncs, 1);
+
+    // D1+D2 (T817, G4): la cara local del detalle SIEMPRE ofrece una acción
+    // de subida cuando hay copia local y al menos un Drive con copia — antes
+    // se escondía por completo en este estado (bug corregido por esta spec).
+    await tester.tap(find.text('EN ESTE DISPOSITIVO'));
+    await tester.pumpAndSettle();
+    expect(find.text('Subir a mi Drive').hitTestable(), findsOneWidget);
+    await tester.tap(find.text('Subir a mi Drive').hitTestable());
+    expect(uploads, 1);
   });
+
+  testWidgets(
+    'footer: caso mixto (Mi Drive sin copia + Drive dueño por delante) '
+    'ofrece las dos direcciones (G5)',
+    (tester) async {
+      tester.view.physicalSize = const Size(900, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final local = _save(players: [ana, bruno], dayOfMonth: 10);
+      final ownerCloud = _save(players: [ana, bruno], dayOfMonth: 15);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SharedSaveCard(
+                entry: SharedSaveEntry(
+                  folderId: 'owner-folder',
+                  folderName: local.folderName,
+                  ownerEmail: 'owner@gmail.com',
+                  myRole: 'writer',
+                  driveStats: ownerCloud,
+                  localMatch: local,
+                ),
+                onSyncRequested: () {},
+                onDownloadRequested: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // T816 (G5): antes `!state.needsDownload` mataba la subida en cuanto
+      // había algo que bajar — con Mi Drive sin copia (pide subida) y el
+      // Drive del dueño por delante (pide bajada) a la vez, ahora salen
+      // las DOS, recomendada (bajada) rellena y la contraria en contorno.
+      expect(find.text('Subir a mi Drive').hitTestable(), findsOneWidget);
+      expect(find.text('Descargar').hitTestable(), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'detalle: local por detrás de los dos Drives SIEMPRE ofrece subida (G4)',
+    (tester) async {
+      tester.view.physicalSize = const Size(900, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      var syncedBoth = 0;
+      final local = _save(players: [ana, bruno], dayOfMonth: 4);
+      final ownCloud = _save(players: [ana, bruno], dayOfMonth: 10);
+      final ownerCloud = _save(players: [ana, bruno], dayOfMonth: 12);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SharedSaveCard(
+                entry: SharedSaveEntry(
+                  folderId: 'owner-folder',
+                  folderName: local.folderName,
+                  ownerEmail: 'owner@gmail.com',
+                  myRole: 'writer',
+                  driveStats: ownerCloud,
+                  localMatch: local,
+                  ownDriveStats: ownCloud,
+                  ownDriveFolderId: 'own-folder',
+                ),
+                onSyncBoth: () => syncedBoth++,
+                onDownload: () {},
+                onDownloadFromOwnDrive: () {},
+                onDownloadRequested: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // bothDrivesAhead: el footer no ofrece subida (`uploadTargets` vacío,
+      // los dos Drives van por delante) — solo bajada. G4 es específica de
+      // la hoja de detalle.
+      expect(find.text('Subir a mi Drive'), findsNothing);
+
+      // T817 (G4): con copia local y al menos un Drive con copia, la cara
+      // local del detalle SIEMPRE ofrece una acción de subida — antes se
+      // escondía por completo (`localAction == null`) en este estado.
+      await tester.tap(find.text('EN ESTE DISPOSITIVO'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Subir a los dos Drive').hitTestable(),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Subir a los dos Drive').hitTestable());
+      expect(syncedBoth, 1);
+    },
+  );
+
+  testWidgets(
+    'rol lector: cero acciones que escriban en el Drive del dueño (G8)',
+    (tester) async {
+      tester.view.physicalSize = const Size(900, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      var ownerUploads = 0;
+      var ownUploads = 0;
+      final local = _save(players: [ana, bruno], dayOfMonth: 4);
+      final ownerCloud = _save(players: [ana, bruno], dayOfMonth: 10);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SharedSaveCard(
+                entry: SharedSaveEntry(
+                  folderId: 'owner-folder',
+                  folderName: local.folderName,
+                  ownerEmail: 'owner@gmail.com',
+                  myRole: 'reader',
+                  driveStats: ownerCloud,
+                  localMatch: local,
+                ),
+                // Callbacks del lado del dueño SÍ se pasan (como en
+                // producción) para probar que, aun estando disponibles,
+                // nunca se ofrecen ni se invocan con rol lector.
+                onSync: () => ownerUploads++,
+                onSyncBoth: () => ownerUploads++,
+                onUploadToOwnDrive: () => ownUploads++,
+                onSyncRequested: () => ownUploads++,
+                onDownloadRequested: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // Footer: nunca "Subir al Drive de owner@gmail.com" ni "Subir a los
+      // dos Drive" — solo lectura no escribe en el Drive ajeno.
+      expect(find.text('Subir al Drive de owner@gmail.com'), findsNothing);
+      expect(find.text('Subir a los dos Drive'), findsNothing);
+      // Mi Drive sí es escribible (es TUYO, no del dueño) — el botón de
+      // subida que aparece es siempre hacia tu propio Drive.
+      expect(find.text('Subir a mi Drive').hitTestable(), findsOneWidget);
+
+      await tester.tap(find.text('EN ESTE DISPOSITIVO'));
+      await tester.pumpAndSettle();
+      expect(find.text('Subir a mi Drive').hitTestable(), findsOneWidget);
+      expect(
+        find.text('Subir al Drive de owner@gmail.com'),
+        findsNothing,
+      );
+      expect(find.text('Subir a los dos Drive'), findsNothing);
+      await tester.tap(find.text('Subir a mi Drive').hitTestable());
+      expect(ownUploads, 1);
+      expect(ownerUploads, 0);
+    },
+  );
 
   testWidgets('detalle individual ofrece Backups con contador cero', (
     tester,

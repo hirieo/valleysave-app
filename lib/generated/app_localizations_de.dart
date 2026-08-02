@@ -333,11 +333,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String disconnectButtonEmail(String email) {
-    return 'Disconnect from $email';
+    return 'Von $email trennen';
   }
 
   @override
-  String get connectedAsPrefix => 'Connected as';
+  String get connectedAsPrefix => 'Verbunden als';
 
   @override
   String get languageTileLabel => 'Sprache';
@@ -429,549 +429,554 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardCloseBarrier => 'Schließen';
 
   @override
-  String get exportAction => 'Export';
+  String get exportAction => 'Exportieren';
 
   @override
-  String get exportSuccess => 'Save exported.';
+  String get exportSuccess => 'Speicherstand exportiert.';
 
   @override
   String exportError(String error) {
-    return 'Couldn\'t export the save: $error';
+    return 'Der Speicherstand konnte nicht exportiert werden: $error';
   }
 
   @override
-  String get importAction => 'Import save';
+  String get importAction => 'Speicherstand importieren';
 
   @override
   String importSuccess(String playerName) {
-    return '$playerName\'s save imported.';
+    return 'Speicherstand von $playerName importiert.';
   }
 
   @override
-  String get importErrInvalidZip => 'This isn\'t a valid zip file.';
+  String get importErrInvalidZip => 'Diese Datei ist keine gültige Zip-Datei.';
 
   @override
   String get importErrUnsafePath =>
-      'This file has an unsafe structure and was rejected.';
+      'Diese Datei hat eine unsichere Struktur und wurde abgelehnt.';
 
   @override
-  String get importErrTooLarge => 'This file is too large to import.';
+  String get importErrTooLarge =>
+      'Diese Datei ist zu groß, um importiert zu werden.';
 
   @override
   String get importErrNotASave =>
-      'This file doesn\'t contain a recognizable save.';
+      'Diese Datei enthält keinen erkennbaren Speicherstand.';
 
   @override
   String get importErrWrite =>
-      'Couldn\'t write the imported save (disk/permissions).';
+      'Der importierte Speicherstand konnte nicht geschrieben werden (Speicher/Berechtigungen).';
 
   @override
   String get importErrBackupFailed =>
-      'Couldn\'t create a safety backup. Nothing was imported.';
+      'Es konnte keine Sicherung erstellt werden. Es wurde nichts importiert.';
 
   @override
-  String get importConflictTitle => 'A save with this name already exists';
+  String get importConflictTitle =>
+      'Es gibt bereits einen Speicherstand mit diesem Namen';
 
   @override
   String get importConflictBody =>
-      'Importing will replace the existing local copy. This can\'t be undone.';
+      'Der Import ersetzt die vorhandene lokale Kopie. Kann nicht rückgängig gemacht werden.';
 
   @override
-  String get importConflictConfirm => 'Overwrite';
+  String get importConflictConfirm => 'Überschreiben';
 
   @override
-  String get shareAction => 'Share';
+  String get shareAction => 'Teilen';
 
   @override
-  String get shareUploadFirstCta => 'Upload first';
+  String get shareUploadFirstCta => 'Zuerst hochladen';
 
   @override
-  String get shareDialogTitle => 'Share save';
+  String get shareDialogTitle => 'Speicherstand teilen';
 
   @override
-  String get shareEmailPlaceholder => 'name@example.com';
+  String get shareEmailPlaceholder => 'name@beispiel.de';
 
   @override
   String get shareInfoNote =>
-      'Sharing gives view-and-download access only. Only you can edit or delete your copy in Drive.';
+      'Teilen gewährt Zugriff zum Ansehen und Herunterladen. Nur Sie können Ihre Kopie auf Drive bearbeiten oder löschen.';
 
   @override
-  String get shareRoleReader => 'Read only';
+  String get shareRoleReader => 'Nur lesen';
 
   @override
-  String get shareRoleWriter => 'Allow sync';
+  String get shareRoleWriter => 'Synchronisieren erlauben';
 
   @override
   String get shareInfoNoteCoop =>
-      'Read only lets them view and download. Allow sync lets them overwrite your copy in Drive — they can never delete it.';
+      'Nur lesen erlaubt Ansehen und Herunterladen. Synchronisieren erlauben erlaubt das Überschreiben Ihrer Kopie auf Drive — löschen können sie sie nie.';
 
   @override
-  String get shareConfirmButton => 'Share';
+  String get shareConfirmButton => 'Teilen';
 
   @override
   String shareSuccess(String email) {
-    return 'Shared with $email.';
+    return 'Mit $email geteilt.';
   }
 
   @override
-  String get manageAccessTitle => 'People with access';
+  String get manageAccessTitle => 'Personen mit Zugriff';
 
   @override
-  String get manageAccessEmpty => 'Nobody else has access yet.';
+  String get manageAccessEmpty => 'Noch niemand sonst hat Zugriff.';
 
   @override
-  String get manageAccessRoleLabel => 'Access';
+  String get manageAccessRoleLabel => 'Zugriff';
 
   @override
-  String get manageAccessRevoke => 'Revoke';
+  String get manageAccessRevoke => 'Widerrufen';
 
   @override
   String manageAccessRevokeConfirm(String email) {
-    return 'Remove $email\'s access? Any local copy they already downloaded is theirs to keep.';
+    return 'Zugriff für $email entfernen? Jede bereits heruntergeladene lokale Kopie bleibt seine/ihre.';
   }
 
   @override
   String get driveOnlyControlsYourCopy =>
-      'Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.';
+      'Teilen steuert Ihre Kopie auf Drive. Wenn jemand sie herunterlädt, gehört diese Kopie ihm.';
 
   @override
   String get driveOnlyControlsYourCopyCoop =>
-      'Sync controls your copy in Drive — it can be overwritten, but never deleted, by people you allow to sync.';
+      'Synchronisieren steuert Ihre Kopie auf Drive — sie kann von den von Ihnen autorisierten Personen überschrieben, aber nie gelöscht werden.';
 
   @override
-  String get sharedWithMeTitle => 'Shared with me';
+  String get sharedWithMeTitle => 'Mit mir geteilt';
 
   @override
-  String get sharedWithMeEmpty => 'Nothing shared with you yet.';
+  String get sharedWithMeEmpty => 'Noch nichts mit Ihnen geteilt.';
 
   @override
-  String get sharedWithMeAdd => 'Add shared save';
+  String get sharedWithMeAdd => 'Geteilten Speicherstand hinzufügen';
 
   @override
   String sharedWithMeOwnedBy(String email) {
-    return 'Shared by $email';
+    return 'Geteilt von $email';
   }
 
   @override
-  String get sharedWithMeRoleSync => 'Sync';
+  String get sharedWithMeRoleSync => 'Synchronisiert';
 
   @override
-  String get sharedWithMeRoleRead => 'Read only';
+  String get sharedWithMeRoleRead => 'Nur lesen';
 
   @override
-  String get sharedWithMeSync => 'Sync';
+  String get sharedWithMeSync => 'Synchronisieren';
 
   @override
-  String get sharedWithMeDownload => 'Download';
+  String get sharedWithMeDownload => 'Herunterladen';
 
   @override
-  String get sharedWithMeRemove => 'Remove from list';
+  String get sharedWithMeRemove => 'Trennen';
 
   @override
   String sharedWithMeRemoveConfirm(String email) {
-    return 'You\'ll stop syncing with $email\'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.';
+    return 'Sie synchronisieren nicht mehr mit dem Drive von $email, können sie aber jederzeit wieder hinzufügen — sie bleibt geteilt. Ihre lokale Kopie bleibt ein normaler Koop-Speicherstand.';
   }
 
   @override
   String sharedLeaveConfirm(Object email) {
-    return 'You\'ll lose access to this save for real. You won\'t be able to add it back unless $email shares it with you again. Your local copy remains a normal coop save.';
+    return 'Sie verlieren wirklich den Zugriff auf diesen Speicherstand. Sie können ihn nicht erneut hinzufügen, es sei denn, $email teilt ihn wieder mit Ihnen. Ihre lokale Kopie bleibt ein normaler Koop-Speicherstand.';
   }
 
   @override
-  String get sharedManageButton => 'Manage';
+  String get sharedManageButton => 'Verwalten';
 
   @override
-  String get sharedManageDialogTitle => 'Manage shared saves';
+  String get sharedManageDialogTitle => 'Freigaben verwalten';
 
   @override
   String get sharedManageDialogHint =>
-      'Here you can really leave a shared save.';
+      'Hier können Sie einen geteilten Speicherstand wirklich verlassen.';
 
   @override
-  String get sharedLeaveButton => 'Leave shared save';
+  String get sharedLeaveButton => 'Freigabe verlassen';
 
   @override
   String sharedLeaveSuccess(Object email) {
-    return 'You left $email\'s shared save.';
+    return 'Sie haben die Freigabe von $email verlassen.';
   }
 
   @override
   String sharedWithMeSyncConfirm(String email) {
-    return 'Overwrite $email\'s copy in Drive with your local save?';
+    return 'Die Kopie von $email auf Drive mit Ihrem lokalen Speicherstand überschreiben?';
   }
 
   @override
   String sharedAccessReadOnly(String email) {
-    return '$email set your access to read-only — you can view and download, but not sync to their Drive.';
+    return '$email hat Sie auf Nur-lesen gesetzt — Sie können ansehen und herunterladen, aber nicht mit seinem/ihrem Drive synchronisieren.';
   }
 
   @override
-  String get sharedWithMeRevoked => 'You no longer have access';
+  String get sharedWithMeRevoked => 'Sie haben keinen Zugriff mehr';
 
   @override
   String sharedRevokedDialogBody(String email, String farmName) {
-    return '$email stopped sharing $farmName with you. Your local copy and the one on your Drive stay as they are, now under My saves.';
+    return '$email teilt $farmName nicht mehr mit Ihnen. Ihre lokale Kopie und die auf Ihrem Drive bleiben unverändert, jetzt unter Meine Speicherstände.';
   }
 
   @override
-  String get sharedRevokedAccept => 'Accept';
+  String get sharedRevokedAccept => 'Akzeptieren';
 
   @override
-  String get sharedSelfCleanupTitle => 'Record fixed';
+  String get sharedSelfCleanupTitle => 'Eintrag korrigiert';
 
   @override
   String sharedSelfCleanupBody(String farmName) {
-    return '$farmName showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.';
+    return '$farmName wurde fälschlicherweise als mit Ihnen geteilt angezeigt — tatsächlich gehört er Ihnen. Dies wurde korrigiert, er befindet sich jetzt unter Meine Speicherstände.';
   }
 
   @override
-  String get sharedWithMeUploadOwn => 'Upload to my Drive';
+  String get sharedWithMeUploadOwn => 'Auf mein Drive hochladen';
 
   @override
-  String get sharedDownloadOwn => 'Download from my Drive';
+  String get sharedDownloadOwn => 'Von meinem Drive herunterladen';
 
   @override
-  String get sharedStatusOwnDriveAhead => 'Your Drive is ahead — bring it down';
+  String get sharedStatusOwnDriveAhead =>
+      'Ihr Drive ist voraus — laden Sie ihn herunter';
 
   @override
-  String get sharedSyncBoth => 'Upload to both Drives';
+  String get sharedSyncBoth => 'Auf beide Drives hochladen';
 
   @override
-  String get sharedSideMyDrive => 'MY DRIVE';
+  String get sharedSideMyDrive => 'MEIN DRIVE';
 
   @override
   String sharedSideOwnerDrive(String email) {
-    return '$email\'s DRIVE';
+    return 'DRIVE VON $email';
   }
 
   @override
   String sharedSideDate(int day, int year) {
-    return 'Day $day · Year $year';
+    return 'Tag $day · Jahr $year';
   }
 
   @override
   String get sharedStatusSyncedNoOwnDrive =>
-      'Synced with the owner · no copy in your Drive';
+      'Mit dem Eigentümer synchronisiert · keine Kopie auf Ihrem Drive';
 
   @override
   String get sharedStatusAheadNoOwnDrive =>
-      'You\'re ahead · no copy in your Drive';
+      'Sie sind voraus · keine Kopie auf Ihrem Drive';
 
   @override
   String sharedStatusOwnerAheadNoOwnDrive(String email) {
-    return '$email is ahead · no copy in your Drive';
+    return '$email ist voraus · keine Kopie auf Ihrem Drive';
   }
 
   @override
-  String get sharedStatusAllSynced => 'Synced (local + both Drives)';
+  String get sharedStatusAllSynced => 'Synchronisiert (lokal + beide Drives)';
 
   @override
-  String get sharedStatusAheadBoth => 'You\'re ahead on both Drives';
+  String get sharedStatusAheadBoth => 'Sie sind bei beiden Drives voraus';
 
   @override
-  String get sharedStatusMixed => 'Out of sync — check each Drive';
+  String get sharedStatusMixed => 'Nicht synchron — jedes Drive überprüfen';
 
   @override
-  String get sharedStatusFullySynced => 'Fully synchronized';
+  String get sharedStatusFullySynced => 'Vollständig synchronisiert';
 
   @override
-  String get sharedStatusSyncedOwn => 'My Drive synchronized';
+  String get sharedStatusSyncedOwn => 'Mein Drive synchronisiert';
 
   @override
-  String get sharedStatusSyncedOwner => 'Shared Drive synchronized';
+  String get sharedStatusSyncedOwner => 'Geteiltes Drive synchronisiert';
 
   @override
-  String get sharedStatusNotCloud => 'Only on this device';
+  String get sharedStatusNotCloud => 'Nur auf diesem Gerät';
 
   @override
   String sharedStatusOwnerAhead(Object email) {
-    return 'Drive at $email is ahead';
+    return 'Drive von $email ist voraus';
   }
 
   @override
-  String get sharedStatusBothAhead => 'Both Drives are ahead';
+  String get sharedStatusBothAhead => 'Beide Drives sind voraus';
 
   @override
-  String get sharedStatusLocalMissing => 'Not on this device';
+  String get sharedStatusLocalMissing => 'Nicht auf diesem Gerät';
 
   @override
   String sharedStatusOwnerUnavailable(Object email) {
-    return 'Could not check Drive at $email';
+    return 'Drive von $email konnte nicht überprüft werden';
   }
 
   @override
-  String get sharedStatusWorking => 'Synchronizing…';
+  String get sharedStatusWorking => 'Synchronisiert wird…';
 
   @override
-  String get sharedSideUnavailable => 'Could not check';
+  String get sharedSideUnavailable => 'Konnte nicht überprüft werden';
 
   @override
-  String get sharedSyncChooseTitle => 'Where do you want to synchronize?';
+  String get sharedSyncChooseTitle => 'Wo möchten Sie synchronisieren?';
 
   @override
   String get sharedSyncChooseBody =>
-      'Choose which cloud copies to update from this device.';
+      'Wählen Sie, welche Cloud-Kopien Sie mit dem Speicherstand dieses Geräts aktualisieren möchten.';
 
   @override
-  String get sharedSyncTargetOwn => 'My Drive';
+  String get sharedSyncTargetOwn => 'Mein Drive';
 
   @override
   String sharedSyncTargetOwner(Object email) {
-    return 'Drive at $email';
+    return 'Drive von $email';
   }
 
   @override
-  String get sharedSyncTargetBoth => 'Both Drives';
+  String get sharedSyncTargetBoth => 'Beide Drives';
 
   @override
-  String get sharedDownloadChooseTitle => 'Which copy do you want to download?';
+  String get sharedDownloadChooseTitle =>
+      'Welche Kopie möchten Sie herunterladen?';
 
   @override
   String get sharedDownloadChooseBody =>
-      'More than one copy is ahead. Choose which one to bring to this device.';
+      'Es gibt mehr als eine Kopie, die voraus ist. Wählen Sie, welche Sie auf dieses Gerät holen möchten.';
 
   @override
-  String get sharedDownloadSourceOwn => 'From My Drive';
+  String get sharedDownloadSourceOwn => 'Von meinem Drive';
 
   @override
   String sharedDownloadSourceOwner(Object email) {
-    return 'From Drive at $email';
+    return 'Von Drive bei $email';
   }
 
   @override
-  String get sharedWithMePickerTitle => 'Add shared save';
+  String get sharedWithMePickerTitle => 'Geteilten Speicherstand hinzufügen';
 
   @override
   String get sharedPickerEmptyHint =>
-      'Folders another player shares with you from Drive show up here.';
+      'Hier erscheint, was ein anderer Spieler mit Ihnen über Drive teilt.';
 
   @override
-  String get sharedPickerAddButton => 'Add';
+  String get sharedPickerAddButton => 'Hinzufügen';
 
   @override
-  String get sharedOriginBadge => 'Shared';
+  String get sharedOriginBadge => 'Geteilt';
 
   @override
   String sharedOriginFrom(String email) {
-    return 'from $email';
+    return 'von $email';
   }
 
   @override
-  String get swapBackupDialogTitle => 'Backup created';
+  String get swapBackupDialogTitle => 'Sicherung erstellt';
 
   @override
   String get swapBackupDialogBody =>
-      'The previous version was saved as a zip. What do you want to do with it?';
+      'Die vorherige Version wurde als Zip gespeichert. Was möchten Sie damit tun?';
 
   @override
-  String get swapBackupUpload => 'Upload to Drive';
+  String get swapBackupUpload => 'Auf Drive hochladen';
 
   @override
-  String get swapBackupLocalOnly => 'Keep on this device';
+  String get swapBackupLocalOnly => 'Auf diesem Gerät behalten';
 
   @override
-  String get swapBackupDeleteNow => 'Delete now';
+  String get swapBackupDeleteNow => 'Jetzt löschen';
 
   @override
-  String get swapBackupUploadOk => 'Backup uploaded to Drive.';
+  String get swapBackupUploadOk => 'Sicherung auf Drive hochgeladen.';
 
   @override
   String swapBackupUploadErr(String error) {
-    return 'Couldn\'t upload the backup: $error';
+    return 'Die Sicherung konnte nicht hochgeladen werden: $error';
   }
 
   @override
-  String get swapBackupLocalOnlySnack => 'Backup saved on this device.';
+  String get swapBackupLocalOnlySnack =>
+      'Sicherung auf diesem Gerät gespeichert.';
 
   @override
-  String get backupsAction => 'Backups';
+  String get backupsAction => 'Sicherungen';
 
   @override
   String backupsScreenTitle(String farmName) {
-    return 'Backups of $farmName';
+    return 'Sicherungen von $farmName';
   }
 
   @override
-  String get backupsEmpty => 'No backups yet.';
+  String get backupsEmpty => 'Noch keine Sicherungen.';
 
   @override
-  String get backupsRestore => 'Restore';
+  String get backupsRestore => 'Wiederherstellen';
 
   @override
-  String get backupsRestoreConfirmTitle => 'Restore this backup?';
+  String get backupsRestoreConfirmTitle => 'Diese Sicherung wiederherstellen?';
 
   @override
   String get backupsRestoreConfirmBody =>
-      'This overwrites your current save with this earlier version. This can\'t be undone.';
+      'Dies überschreibt Ihren aktuellen Speicherstand mit dieser früheren Version. Kann nicht rückgängig gemacht werden.';
 
   @override
-  String get backupsDelete => 'Delete';
+  String get backupsDelete => 'Löschen';
 
   @override
-  String get backupsDeleteConfirmTitle => 'Delete this backup?';
+  String get backupsDeleteConfirmTitle => 'Diese Sicherung löschen?';
 
   @override
   String get backupsDeleteConfirmBody =>
-      'Deletes it everywhere it exists (this device and Drive, if uploaded). This can\'t be undone.';
+      'Wird an allen Orten gelöscht, an denen sie existiert (dieses Gerät und Drive, falls hochgeladen). Kann nicht rückgängig gemacht werden.';
 
   @override
-  String get backupsRestoreOk => 'Backup restored.';
+  String get backupsRestoreOk => 'Sicherung wiederhergestellt.';
 
   @override
-  String get backupsRestoreManualTitle => 'Restore manually';
+  String get backupsRestoreManualTitle => 'Manuell wiederherstellen';
 
   @override
   String get backupsRestoreManualBody =>
-      'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.';
+      'Im Brücken-Modus kann ValleySave nicht automatisch in den Spielordner schreiben. Entpacken Sie die .zip-Datei dieser Sicherung selbst in den Saves-Ordner von Stardew Valley, oder wechseln Sie in den Einstellungen zum Root-/Shizuku-Modus, um automatisch wiederherzustellen.';
 
   @override
   String backupsRestoreErr(String error) {
-    return 'Couldn\'t restore the backup: $error';
+    return 'Die Sicherung konnte nicht wiederhergestellt werden: $error';
   }
 
   @override
   String backupsDeleteErr(String error) {
-    return 'Couldn\'t delete the backup: $error';
+    return 'Die Sicherung konnte nicht gelöscht werden: $error';
   }
 
   @override
-  String get backupsCreate => 'Create local backup';
+  String get backupsCreate => 'Lokale Sicherung erstellen';
 
   @override
   String get backupsCreateLocalHint =>
-      'Backups are created on this device first. You can upload them to Drive afterwards.';
+      'Sicherungen werden zunächst auf diesem Gerät erstellt. Danach können Sie sie auf Drive hochladen.';
 
   @override
-  String get backupsCreateOk => 'Backup created.';
+  String get backupsCreateOk => 'Sicherung erstellt.';
 
   @override
   String backupsCreateErr(String error) {
-    return 'Couldn\'t create the backup: $error';
+    return 'Die Sicherung konnte nicht erstellt werden: $error';
   }
 
   @override
-  String get backupsDownload => 'Download';
+  String get backupsDownload => 'Herunterladen';
 
   @override
-  String get backupsDownloadOk => 'Backup downloaded to this device.';
+  String get backupsDownloadOk => 'Sicherung auf dieses Gerät heruntergeladen.';
 
   @override
   String backupsDownloadErr(String error) {
-    return 'Couldn\'t download the backup: $error';
+    return 'Die Sicherung konnte nicht heruntergeladen werden: $error';
   }
 
   @override
-  String get backupsCopyOwn => 'Copy to my Drive';
+  String get backupsCopyOwn => 'Auf mein Drive kopieren';
 
   @override
-  String get backupsUploadOwn => 'To my Drive';
+  String get backupsUploadOwn => 'Auf mein Drive';
 
   @override
-  String get backupsUploadShared => 'To shared Drive';
+  String get backupsUploadShared => 'Auf das geteilte Drive';
 
   @override
-  String get backupsUploadOk => 'Backup uploaded.';
+  String get backupsUploadOk => 'Sicherung hochgeladen.';
 
   @override
   String backupsUploadErr(String error) {
-    return 'Couldn\'t upload the backup: $error';
+    return 'Die Sicherung konnte nicht hochgeladen werden: $error';
   }
 
   @override
-  String get backupsLocationLocal => 'This device';
+  String get backupsLocationLocal => 'Dieses Gerät';
 
   @override
-  String get backupsLocationOwnDrive => 'My Drive';
+  String get backupsLocationOwnDrive => 'Mein Drive';
 
   @override
-  String get backupsLocationSharedDrive => 'Shared Drive';
+  String get backupsLocationSharedDrive => 'Geteiltes Drive';
 
   @override
   String get backupsDeleteChooseBody =>
-      'Choose exactly where to delete it. Only locations where this backup exists are shown.';
+      'Wählen Sie genau, wo sie gelöscht werden soll. Es werden nur die Orte angezeigt, an denen diese Sicherung existiert.';
 
   @override
-  String get backupsDeleteLocalOnly => 'Only from this device';
+  String get backupsDeleteLocalOnly => 'Nur von diesem Gerät';
 
   @override
-  String get backupsDeleteOwnOnly => 'Only from my Drive';
+  String get backupsDeleteOwnOnly => 'Nur von meinem Drive';
 
   @override
-  String get backupsDeleteSharedOnly => 'Only from shared Drive';
+  String get backupsDeleteSharedOnly => 'Nur vom geteilten Drive';
 
   @override
-  String get backupsDeleteAll => 'From all copies';
+  String get backupsDeleteAll => 'Von allen Kopien';
 
   @override
   String deleteUnifiedTitle(String farmName) {
-    return 'Delete $farmName?';
+    return '$farmName löschen?';
   }
 
   @override
   String get deleteChooseLocationBody =>
-      'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).';
+      'Wählen Sie, von wo. Die Kopie auf diesem Gerät wird für immer gelöscht; die auf Drive wandert in den Papierkorb (30 Tage).';
 
   @override
   String deleteDriveContextTitle(String farmName) {
-    return 'Delete $farmName from Drive?';
+    return '$farmName von Drive löschen?';
   }
 
   @override
   String get deleteDriveContextBody =>
-      'The Drive copy will move to Trash, where it can be recovered for 30 days.';
+      'Die Kopie auf Drive wandert in den Papierkorb, wo Sie sie 30 Tage lang wiederherstellen können.';
 
   @override
   String get deleteDriveLocalKept =>
-      'The copy on this device will remain unchanged.';
+      'Die Kopie auf diesem Gerät bleibt unverändert.';
 
   @override
   String deleteLocalContextTitle(String farmName) {
-    return 'Delete $farmName from this device?';
+    return '$farmName von diesem Gerät löschen?';
   }
 
   @override
   String get deleteLocalContextBody =>
-      'The copy on this device will be deleted permanently.';
+      'Die Kopie auf diesem Gerät wird für immer gelöscht.';
 
   @override
   String deleteLocalDriveCurrent(String date) {
-    return 'Your Drive copy is up to date ($date) and will remain available.';
+    return 'Ihre Kopie auf Drive ist aktuell ($date) und bleibt verfügbar.';
   }
 
   @override
   String deleteLocalDriveAhead(String date) {
-    return 'Your Drive copy is newer ($date) and will remain available.';
+    return 'Ihre Kopie auf Drive ist neuer ($date) und bleibt verfügbar.';
   }
 
   @override
   String deleteLocalDriveOlder(String driveDate, String localDate) {
-    return 'Your Drive copy is older ($driveDate); this device is at $localDate.';
+    return 'Ihre Kopie auf Drive ist älter ($driveDate); dieses Gerät befindet sich bei $localDate.';
   }
 
   @override
   String deleteLocalBackupAvailable(int count) {
-    return 'There are $count local backups available if you need an earlier copy.';
+    return 'Es sind $count lokale Sicherungen verfügbar, falls Sie eine frühere Kopie benötigen.';
   }
 
   @override
   String get deleteLocalNoRecovery =>
-      'There is no Drive copy or local backup to recover this game from.';
+      'Es gibt weder eine Kopie auf Drive noch eine lokale Sicherung, aus der dieser Speicherstand wiederhergestellt werden könnte.';
 
   @override
-  String get deleteOptionLocalOnly => 'Only from this device';
+  String get deleteOptionLocalOnly => 'Nur von diesem Gerät';
 
   @override
-  String get deleteOptionDriveOnly => 'Only from Drive';
+  String get deleteOptionDriveOnly => 'Nur von meinem Drive';
 
   @override
-  String get deleteOptionBoth => 'From both (device + Drive)';
+  String get deleteOptionBoth => 'Von beiden Kopien';
 
   @override
-  String get viewPlayersHint => 'View players';
+  String get viewPlayersHint => 'Spieler ansehen';
 
   @override
   String snackDeletedBoth(String saveName) {
-    return '\"$saveName\" deleted from this device and moved to Drive Trash.';
+    return '\"$saveName\" von diesem Gerät gelöscht und in den Drive-Papierkorb verschoben.';
   }
 
   @override
@@ -1051,24 +1056,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get hiwTitle => 'So funktioniert es';
 
   @override
-  String get hiwConnectTitle => 'Connect your account';
+  String get hiwConnectTitle => 'Ihr Konto verbinden';
 
   @override
   String get hiwConnectDesc =>
-      'ValleySave uses your Google account to store your saves in a private ValleySave folder on your own Drive.';
+      'ValleySave verwendet Ihr Google-Konto, um Ihre Speicherstände in einem privaten ValleySave-Ordner auf Ihrem eigenen Drive zu speichern.';
 
   @override
-  String get hiwConnectStepGoogle => 'Google\naccount';
+  String get hiwConnectStepGoogle => 'Google-\nKonto';
 
   @override
-  String get hiwConnectStepDrive => 'ValleySave\nfolder created';
+  String get hiwConnectStepDrive => 'ValleySave-Ordner\nerstellt';
 
   @override
-  String get hiwConnectStepReady => 'Ready to\nsync';
+  String get hiwConnectStepReady => 'Bereit zum\nSynchronisieren';
 
   @override
   String get hiwConnectTipOwnership =>
-      'Only you can edit or delete your copies on Drive — ValleySave only reads and writes inside its own folder.';
+      'Nur Sie können Ihre Kopien auf Drive bearbeiten oder löschen — ValleySave liest und schreibt nur innerhalb seines eigenen Ordners.';
 
   @override
   String get hiwSyncTitle => 'Wie die Synchronisierung funktioniert';
@@ -1377,21 +1382,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get previewFromDevice => 'VON DIESEM GERÄT';
 
   @override
-  String get overwriteWhatChanges => 'What changes';
+  String get overwriteWhatChanges => 'Was sich ändert';
 
   @override
-  String get overwriteTagOverwritten => 'WILL BE OVERWRITTEN';
+  String get overwriteTagOverwritten => 'WIRD ÜBERSCHRIEBEN';
 
   @override
-  String get overwriteNewCopyTag => 'NEW';
+  String get overwriteNewCopyTag => 'NEU';
 
   @override
   String overwriteDeltaPhrase(int days, String time) {
     String _temp0 = intl.Intl.pluralLogic(
       days,
       locale: localeName,
-      other: '$days days and $time',
-      one: '1 day and $time',
+      other: '$days Tage und $time',
+      one: '1 Tag und $time',
       zero: '$time',
     );
     return '$_temp0';
@@ -1399,84 +1404,84 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String overwriteVerdictAhead(String delta) {
-    return 'You\'re $delta ahead. It\'s safe.';
+    return 'Sie sind $delta voraus. Es ist sicher.';
   }
 
   @override
   String get overwriteVerdictMoneySpent =>
-      '💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That\'s not a real loss.';
+      '💰 Das aktuelle Geld ist gesunken, aber der Gesamtfortschritt geht voran — Sie haben es wahrscheinlich für etwas ausgegeben. Das ist kein echter Verlust.';
 
   @override
   String overwriteVerdictNegligible(String delta) {
-    return 'Minimal difference ($delta). Either copy works fine.';
+    return 'Minimaler Unterschied ($delta). Beide Kopien funktionieren.';
   }
 
   @override
   String overwriteVerdictDanger(String delta, String target) {
-    return '⚠️ You\'re about to lose $delta of progress on $target. Double-check before continuing.';
+    return '⚠️ Sie verlieren $delta an Fortschritt bei $target. Überprüfen Sie es, bevor Sie fortfahren.';
   }
 
   @override
-  String get overwriteConfirmTitleUpload => 'Confirm the upload?';
+  String get overwriteConfirmTitleUpload => 'Upload bestätigen?';
 
   @override
-  String get overwriteConfirmTitleDownload => 'Confirm the download?';
+  String get overwriteConfirmTitleDownload => 'Download bestätigen?';
 
   @override
   String overwriteConfirmBody(String delta, String target) {
-    return 'You\'re about to lose $delta on $target. This action can\'t be undone.';
+    return 'Sie verlieren $delta bei $target. Diese Aktion kann nicht rückgängig gemacht werden.';
   }
 
   @override
-  String get overwriteConfirmButtonUpload => 'Confirm upload';
+  String get overwriteConfirmButtonUpload => 'Upload bestätigen';
 
   @override
-  String get overwriteConfirmButtonDownload => 'Confirm download';
+  String get overwriteConfirmButtonDownload => 'Download bestätigen';
 
   @override
-  String get overwriteDangerButtonUpload => '⚠️ Upload anyway';
+  String get overwriteDangerButtonUpload => '⚠️ Trotzdem hochladen';
 
   @override
-  String get overwriteDangerButtonDownload => '⚠️ Download anyway';
+  String get overwriteDangerButtonDownload => '⚠️ Trotzdem herunterladen';
 
   @override
   String overwriteIdenticalSummary(int count, String list) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '✓ $count identical',
-      one: '✓ 1 identical',
+      other: '✓ $count identisch',
+      one: '✓ 1 identisch',
     );
     return '$_temp0 — $list';
   }
 
   @override
   String overwriteUploadToOwner(String email) {
-    return 'Upload to $email\'s Drive';
+    return 'Auf Drive von $email hochladen';
   }
 
   @override
-  String get overwriteUploadBoth => 'Upload to both Drives';
+  String get overwriteUploadBoth => 'Auf beide Drives hochladen';
 
   @override
-  String get overwriteConfirmTitleBoth => 'Confirm both uploads?';
+  String get overwriteConfirmTitleBoth => 'Beide Uploads bestätigen?';
 
   @override
   String overwriteConfirmBodyBoth(String delta, String targets) {
-    return 'You\'ll lose $delta in $targets. This action can\'t be undone.';
+    return 'Sie verlieren $delta bei $targets. Diese Aktion kann nicht rückgängig gemacht werden.';
   }
 
   @override
   String overwriteBothDestinationsLabel(String first, String second) {
-    return '$first and $second';
+    return '$first und $second';
   }
 
   @override
-  String get sharedTargetOwnDrive => 'your Drive';
+  String get sharedTargetOwnDrive => 'Ihr Drive';
 
   @override
   String sharedStatusLocalAhead(String targets) {
-    return 'You\'re ahead in $targets';
+    return 'Sie sind bei $targets voraus';
   }
 
   @override
@@ -1495,104 +1500,107 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get snackReplacePrepareFailed =>
-      'Could not prepare the save. Nothing on disk was changed';
+      'Der Speicherstand konnte nicht vorbereitet werden. Es wurde nichts auf der Festplatte geändert';
 
   @override
   String get snackReplaceValidationFailed =>
-      'The downloaded save looks invalid or incomplete. Nothing on disk was changed';
+      'Der heruntergeladene Speicherstand scheint ungültig oder unvollständig zu sein. Es wurde nichts auf der Festplatte geändert';
 
   @override
   String get snackReplaceBackupFailed =>
-      'Could not create a safety backup. Nothing on disk was changed';
+      'Es konnte keine Sicherung erstellt werden. Es wurde nichts auf der Festplatte geändert';
 
   @override
   String get snackReplaceSwapFailed =>
-      'The swap failed, but the original save was restored from backup';
+      'Der Austausch ist fehlgeschlagen, aber der ursprüngliche Speicherstand wurde aus der Sicherung wiederhergestellt';
 
   @override
   String get snackReplaceBusy =>
-      'There\'s already an operation in progress for this save';
+      'Für diesen Speicherstand läuft bereits ein Vorgang';
 
   @override
   String get snackUploadIncomplete =>
-      'The local save is incomplete or corrupted. Nothing was uploaded';
+      'Der lokale Speicherstand ist unvollständig oder beschädigt. Es wurde nichts hochgeladen';
 
   @override
   String get snackDownloadIncomplete =>
-      'Can\'t download: this save is missing content on Drive';
+      'Herunterladen nicht möglich: Auf Drive fehlt Inhalt';
 
   @override
-  String get cardIncomplete => 'Incomplete on Drive';
+  String get cardIncomplete => 'Unvollständig auf Drive';
 
   @override
-  String get autoRefreshTitle => 'Auto-refresh';
+  String get autoRefreshTitle => 'Auto-Aktualisierung';
 
   @override
-  String get autoRefreshSubtitle => 'Checks for Drive changes every 30s';
+  String get autoRefreshSubtitle => 'Prüft alle 30 s auf Änderungen auf Drive';
 
   @override
   String autoSyncSnack(String farmName) {
-    return '$farmName synced automatically';
+    return '$farmName wurde automatisch synchronisiert';
   }
 
   @override
-  String get autoSyncTooltipOn => 'Auto-sync on — syncs itself when it\'s safe';
+  String get autoSyncTooltipOn =>
+      'Auto-Sync aktiviert — synchronisiert sich selbst, wenn es sicher ist';
 
   @override
-  String get autoSyncTooltipOff => 'Auto-sync off — tap to turn it on';
+  String get autoSyncTooltipOff =>
+      'Auto-Sync deaktiviert — tippen, um es zu aktivieren';
 
   @override
-  String get autoSyncExplainTitle => 'Auto-sync';
+  String get autoSyncExplainTitle => 'Auto-Sync';
 
   @override
   String autoSyncExplainBody(String farmName) {
-    return 'From now on, $farmName will upload or download itself when it\'s safe, without asking you to confirm.';
+    return 'Ab jetzt wird $farmName von selbst hoch- oder heruntergeladen, wenn es sicher ist, ohne dass Sie bestätigen müssen.';
   }
 
   @override
   String get autoSyncExplainSafe =>
-      'It only acts when you\'re clearly ahead and nothing gets lost.';
+      'Es handelt nur, wenn Sie eindeutig voraus sind und nichts verloren geht.';
 
   @override
   String get autoSyncExplainDanger =>
-      'If there were any risk of losing progress, it never acts on its own: you\'ll still decide with the usual dialog.';
+      'Bestünde ein Risiko, Fortschritt zu verlieren, handelt es nie von selbst: Sie entscheiden weiterhin über den gewohnten Dialog.';
 
   @override
   String get autoSyncExplainMissing =>
-      'If one of the two copies is missing, it won\'t create it: the first upload or download is your call.';
+      'Fehlt eine der beiden Kopien, wird sie nicht von selbst erstellt: Das erste Hoch- oder Herunterladen entscheiden Sie.';
 
   @override
-  String get autoSyncExplainDontShowAgain => 'Don\'t show this again';
+  String get autoSyncExplainDontShowAgain =>
+      'Diesen Hinweis nicht mehr anzeigen';
 
   @override
-  String get autoSyncExplainConfirm => 'Got it, turn on';
+  String get autoSyncExplainConfirm => 'Verstanden, aktivieren';
 
   @override
-  String get hiwAutoSyncTitle => 'Sync by itself';
+  String get hiwAutoSyncTitle => 'Selbstständig synchronisieren';
 
   @override
   String get hiwAutoSyncDesc =>
-      'Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.';
+      'Jeder Speicherstand hat ein AUTO-Chip auf seiner Karte. Wenn Sie es aktivieren, wird dieser Speicherstand von selbst hoch- oder heruntergeladen, sobald die App eine Änderung erkennt — ohne dass Sie es bestätigen müssen.';
 
   @override
   String get hiwAutoSyncTipSafe =>
-      'It only syncs itself when you\'re clearly ahead and nothing gets lost.';
+      'Es synchronisiert sich nur von selbst, wenn Sie eindeutig voraus sind und nichts verloren geht.';
 
   @override
   String get hiwAutoSyncTipDanger =>
-      'If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.';
+      'Bestünde ein Risiko, Fortschritt zu verlieren, macht es das nie von selbst: Es fragt weiterhin mit dem gewohnten Vergleich nach.';
 
   @override
   String get hiwAutoSyncTipPerSave =>
-      'You turn it on save by save, not all at once: you can have it on yours and off on a shared one.';
+      'Es wird pro Speicherstand aktiviert, nicht auf einmal: Sie können es bei Ihrem eigenen aktivieren und bei einem geteilten nicht.';
 
   @override
   String get hiwAutoSyncTipMissing =>
-      'It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.';
+      'Es hält nur zwei bereits existierende Kopien synchron. Fehlt eine, führen Sie das erste Hoch- oder Herunterladen selbst durch.';
 
   @override
   String get hiwAutoSyncTipRefresh =>
-      'In Settings you can turn off automatic change checking entirely.';
+      'In den Einstellungen können Sie die automatische Änderungsprüfung ganz ausschalten.';
 
   @override
   String get snackSessionExpired =>
@@ -1663,91 +1671,91 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get hiwCompatIncomplete =>
-      'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.';
+      'Wenn Sie bei einem Speicherstand \"Unvollständig auf Drive\" sehen, fehlt ihm eine notwendige Datei in der Cloud — er kann erst heruntergeladen werden, wenn er von einem anderen Gerät aus richtig erneut hochgeladen wurde.';
 
   @override
-  String get hiwShareTitle => 'Share with others';
+  String get hiwShareTitle => 'Mit anderen teilen';
 
   @override
   String get hiwShareDesc =>
-      'Share a save with another player by email. They\'ll see it under Shared with me on their own device.';
+      'Teilen Sie einen Speicherstand per E-Mail mit einem anderen Spieler. Er wird ihn unter Mit mir geteilt auf seinem eigenen Gerät sehen.';
 
   @override
-  String get hiwShareStepYourSave => 'Your\nsave';
+  String get hiwShareStepYourSave => 'Ihr\nSpeicherstand';
 
   @override
-  String get hiwShareStepShare => 'Share by\nemail';
+  String get hiwShareStepShare => 'Per E-Mail\nteilen';
 
   @override
-  String get hiwShareStepFriend => 'Shared\nwith me';
+  String get hiwShareStepFriend => 'Mit mir\ngeteilt';
 
   @override
   String get hiwShareTipRoles =>
-      'Two roles: Read-only lets them view and download. Allow sync lets them overwrite your copy on Drive. Either way they can never delete it — only you, the owner, can delete your save.';
+      'Zwei Rollen: Nur lesen erlaubt Ansehen und Herunterladen. Synchronisieren erlauben erlaubt das Überschreiben Ihrer Kopie auf Drive. In keinem Fall können sie sie löschen — nur Sie als Eigentümer können Ihren Speicherstand löschen.';
 
   @override
   String get hiwShareTipDisconnect =>
-      'Disconnecting just stops syncing on their end — the share stays active until you leave it for real from Manage shares.';
+      'Trennen stoppt die Synchronisierung nur auf ihrer Seite — die Freigabe bleibt aktiv, bis Sie sie über Freigaben verwalten wirklich verlassen.';
 
   @override
-  String get hiwHostSwapTitle => 'Host swap';
+  String get hiwHostSwapTitle => 'Gastgeberwechsel';
 
   @override
   String get hiwHostSwapDesc =>
-      'Change which farmhand hosts the save, replacing it in place — same save slot, same sharing permissions.';
+      'Ändert, welcher Farmhand der Gastgeber des Speicherstands ist, indem er direkt ersetzt wird — gleicher Speicherplatz, gleiche Freigabeberechtigungen.';
 
   @override
-  String get hiwHostSwapStepPick => 'Pick a\nfarmhand';
+  String get hiwHostSwapStepPick => 'Farmhand\nwählen';
 
   @override
-  String get hiwHostSwapStepConfirm => 'Confirm';
+  String get hiwHostSwapStepConfirm => 'Bestätigen';
 
   @override
-  String get hiwHostSwapStepDone => 'New save\ncreated';
+  String get hiwHostSwapStepDone => 'Neuer Speicherstand\nerstellt';
 
   @override
   String get hiwHostSwapTipMove =>
-      'Some farm objects may be relocated to make room for the house — nothing is deleted.';
+      'Einige Objekte auf dem Hof können verschoben werden, um Platz für das Haus zu schaffen — nichts wird gelöscht.';
 
   @override
   String get hiwHostSwapTipHouse =>
-      'The new host\'s house will look like the game\'s default big house — cabin styling isn\'t supported without mods.';
+      'Das Haus des neuen Gastgebers sieht aus wie das standardmäßige große Bauernhaus des Spiels — die Hütten-Optik wird ohne Mods nicht unterstützt.';
 
   @override
-  String get hiwBackupsTitle => 'Backups';
+  String get hiwBackupsTitle => 'Sicherungen';
 
   @override
   String get hiwBackupsDesc =>
-      'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).';
+      'Eine Sicherung ist eine Momentaufnahme eines Speicherstands, die Sie später wiederherstellen können. Erstellen Sie sie manuell, wann immer Sie möchten, oder lassen Sie ValleySave automatisch eine erstellen, bevor ein Speicherstand überschrieben wird (beim Herunterladen, Importieren, Wiederherstellen oder Gastgeberwechsel).';
 
   @override
-  String get hiwBackupsStepSave => 'Your\nsave';
+  String get hiwBackupsStepSave => 'Ihr\nSpeicherstand';
 
   @override
-  String get hiwBackupsStepSnapshot => 'Backup\nsnapshot';
+  String get hiwBackupsStepSnapshot => 'Sicherung\nerstellt';
 
   @override
-  String get hiwBackupsStepStore => 'Local and/or\nDrive';
+  String get hiwBackupsStepStore => 'Lokal und/oder\nDrive';
 
   @override
   String get hiwBackupsTipRestore =>
-      'Restoring overwrites your current save with that earlier version — this can\'t be undone.';
+      'Wiederherstellen überschreibt Ihren aktuellen Speicherstand mit dieser früheren Version — kann nicht rückgängig gemacht werden.';
 
   @override
   String get hiwBackupsTipDelete =>
-      'Deleting a backup removes it everywhere it exists (this device and Drive, if uploaded) — this can\'t be undone.';
+      'Das Löschen einer Sicherung entfernt sie an allen Orten, an denen sie existiert (dieses Gerät und Drive, falls hochgeladen) — kann nicht rückgängig gemacht werden.';
 
   @override
   String get hiwBackupsTipExport =>
-      'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.';
+      'Sie können einen Speicherstand auch als Zip Exportieren, um ihn zu speichern, wo Sie möchten, und ihn später wieder Importieren — eine manuelle, portable Alternative zu den integrierten Sicherungen.';
 
   @override
   String get hiwBackupsTipRetention =>
-      'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.';
+      'ValleySave behält die 5 neuesten automatischen Sicherungen jedes Speicherstands; die, die Sie manuell erstellen, werden nie von selbst gelöscht.';
 
   @override
   String get hiwBackupsTipRestoreBridge =>
-      'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.';
+      'Im Brücken-Modus (Android ohne Root/Shizuku) müssen Sie beim Wiederherstellen einer Sicherung die .zip-Datei manuell in den Stardew-Ordner entpacken — genau wie beim Herunterladen.';
 
   @override
   String get hiwComparePrimary => 'Gesamtspielzeit';
@@ -2017,14 +2025,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get hiwLaunchTipLinux =>
-      'On Linux, if the game isn’t detected automatically, set the executable path in Settings → Game.';
+      'Unter Linux, wenn das Spiel nicht automatisch erkannt wird, legen Sie den Pfad der ausführbaren Datei unter Einstellungen → Spiel fest.';
 
   @override
-  String get hiwSaveLocationsTitle => 'Where your saves live';
+  String get hiwSaveLocationsTitle => 'Wo Ihre Speicherstände liegen';
 
   @override
   String get hiwSaveLocationsDesc =>
-      'ValleySave reads and writes directly to the game\'s save folder on each platform.';
+      'ValleySave liest und schreibt direkt im Speicherordner des Spiels auf jeder Plattform.';
 
   @override
   String get hiwSaveLocationWindows =>
@@ -2032,11 +2040,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get hiwSaveLocationAndroid =>
-      'Android: protected folder, accessed via Shizuku or the Bridge';
+      'Android: geschützter Ordner, Zugriff über Shizuku oder die Brücke';
 
   @override
   String get hiwSaveLocationLinux =>
-      'Linux: ~/.config/StardewValley/Saves (or ~/snap/steam/common/.config/StardewValley/Saves if Steam is installed via snap)';
+      'Linux: ~/.config/StardewValley/Saves (oder ~/snap/steam/common/.config/StardewValley/Saves, wenn Steam über Snap installiert ist)';
 
   @override
   String get settingsGameSection => 'Spiel';
@@ -2114,4 +2122,26 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get hostSwapErrValidation =>
       'Die Überprüfung des neuen Spielstands ist fehlgeschlagen, er wurde verworfen. Das Original ist unversehrt.';
+
+  @override
+  String get makeHostDeleteOriginalTitle =>
+      'Original-Spielstand von diesem Gerät löschen?';
+
+  @override
+  String get makeHostDeleteOriginalBody =>
+      'Der neue Spielstand ist bereit. Sichere das Original zuerst in deinem Drive (du kannst es später erneut herunterladen) oder lösche einfach die lokale Kopie.';
+
+  @override
+  String get makeHostDeleteOriginalNoBackupBody =>
+      'Keine Drive-Verbindung: Es bleibt keine Sicherung übrig. Nur die lokale Kopie auf diesem Gerät wird gelöscht.';
+
+  @override
+  String get makeHostDeleteOriginalUploadBody =>
+      'Der Original-Spielstand wird zuerst als Sicherung in dein Drive hochgeladen, dann wird die lokale Kopie auf diesem Gerät gelöscht.';
+
+  @override
+  String get makeHostDeleteWithoutUpload => 'Ohne Hochladen löschen';
+
+  @override
+  String get makeHostUploadAndDelete => 'Hochladen und löschen';
 }

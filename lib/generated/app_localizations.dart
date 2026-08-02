@@ -3684,6 +3684,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verification of the new save failed, so it was discarded. The original is intact.'**
   String get hostSwapErrValidation;
+
+  /// No description provided for @makeHostDeleteOriginalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the original save on this device?'**
+  String get makeHostDeleteOriginalTitle;
+
+  /// No description provided for @makeHostDeleteOriginalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The new save is ready. Upload the original to your Drive as a backup (you\'ll be able to redownload it later) or just delete the local copy.'**
+  String get makeHostDeleteOriginalBody;
+
+  /// No description provided for @makeHostDeleteOriginalNoBackupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to Drive: no backup will remain. Only the local copy on this device will be deleted.'**
+  String get makeHostDeleteOriginalNoBackupBody;
+
+  /// No description provided for @makeHostDeleteOriginalUploadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The original save will be uploaded to your Drive as a backup first, then the local copy on this device will be deleted.'**
+  String get makeHostDeleteOriginalUploadBody;
+
+  /// No description provided for @makeHostDeleteWithoutUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete without uploading'**
+  String get makeHostDeleteWithoutUpload;
+
+  /// No description provided for @makeHostUploadAndDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload and delete'**
+  String get makeHostUploadAndDelete;
 }
 
 class _AppLocalizationsDelegate

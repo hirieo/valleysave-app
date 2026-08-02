@@ -518,5 +518,458 @@
   "hostSwapErrInvalid": "เซฟนี้มีโครงสร้างที่ไม่คาดคิด ไม่มีการเปลี่ยนแปลงใดๆ",
   "hostSwapErrNoSpace": "ไม่มีพื้นที่ว่างในฟาร์มสำหรับย้ายวัตถุ ไม่มีการเปลี่ยนแปลงใดๆ",
   "hostSwapErrWrite": "ไม่สามารถเขียนเซฟใหม่ได้ (ดิสก์/สิทธิ์การเข้าถึง) ไม่มีการเปลี่ยนแปลงใดๆ",
-  "hostSwapErrValidation": "การตรวจสอบเซฟใหม่ล้มเหลว จึงถูกยกเลิก ต้นฉบับยังคงสมบูรณ์"
+  "hostSwapErrValidation": "การตรวจสอบเซฟใหม่ล้มเหลว จึงถูกยกเลิก ต้นฉบับยังคงสมบูรณ์",
+  "disconnectButtonEmail": "ตัดการเชื่อมต่อจาก {email}",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "connectedAsPrefix": "บัญชีที่เชื่อมต่อ",
+  "hiwConnectTitle": "เชื่อมต่อบัญชีของคุณ",
+  "hiwConnectDesc": "ValleySave ใช้บัญชี Google ของคุณเพื่อเก็บเซฟไว้ในโฟลเดอร์ ValleySave ส่วนตัวบน Drive ของคุณเอง",
+  "hiwConnectStepGoogle": "บัญชี\nGoogle",
+  "hiwConnectStepDrive": "โฟลเดอร์ ValleySave\nถูกสร้างแล้ว",
+  "hiwConnectStepReady": "พร้อม\nซิงโครไนซ์",
+  "hiwConnectTipOwnership": "มีเพียงคุณเท่านั้นที่แก้ไขหรือลบสำเนาบน Drive ได้ — ValleySave จะอ่านและเขียนเฉพาะภายในโฟลเดอร์ของตัวเองเท่านั้น",
+  "overwriteWhatChanges": "สิ่งที่จะเปลี่ยนแปลง",
+  "overwriteTagOverwritten": "จะถูกเขียนทับ",
+  "overwriteNewCopyTag": "ใหม่",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days} วันและ {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "overwriteVerdictAhead": "คุณล้ำหน้าอยู่ {delta} ปลอดภัยดี",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 เงินปัจจุบันลดลง แต่ความคืบหน้าโดยรวมยังก้าวไปข้างหน้า — คุณอาจใช้จ่ายไปกับอะไรบางอย่าง ไม่ใช่การสูญเสียที่แท้จริง",
+  "overwriteVerdictNegligible": "แตกต่างกันเพียงเล็กน้อย ({delta}) ใช้สำเนาไหนก็ได้",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": { "type": "String" }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ คุณกำลังจะสูญเสียความคืบหน้า {delta} ใน {target} ตรวจสอบให้ดีก่อนดำเนินการต่อ",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmTitleUpload": "ยืนยันการอัปโหลดหรือไม่?",
+  "overwriteConfirmTitleDownload": "ยืนยันการดาวน์โหลดหรือไม่?",
+  "overwriteConfirmBody": "คุณกำลังจะสูญเสีย {delta} ใน {target} การกระทำนี้ไม่สามารถย้อนกลับได้",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "overwriteConfirmButtonUpload": "ยืนยันการอัปโหลด",
+  "overwriteConfirmButtonDownload": "ยืนยันการดาวน์โหลด",
+  "overwriteDangerButtonUpload": "⚠️ อัปโหลดต่อไป",
+  "overwriteDangerButtonDownload": "⚠️ ดาวน์โหลดต่อไป",
+  "overwriteIdenticalSummary": "{count, plural, other{✓ เหมือนกัน {count} รายการ}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "list": { "type": "String" }
+    }
+  },
+  "overwriteUploadToOwner": "อัปโหลดไปยัง Drive ของ {email}",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "overwriteUploadBoth": "อัปโหลดไปยัง Drive ทั้งสอง",
+  "overwriteConfirmTitleBoth": "ยืนยันการอัปโหลดทั้งสองรายการหรือไม่?",
+  "overwriteConfirmBodyBoth": "คุณจะสูญเสีย {delta} ใน {targets} การกระทำนี้ไม่สามารถย้อนกลับได้",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": { "type": "String" },
+      "targets": { "type": "String" }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} และ {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": { "type": "String" },
+      "second": { "type": "String" }
+    }
+  },
+  "sharedTargetOwnDrive": "Drive ของคุณ",
+  "sharedStatusLocalAhead": "คุณล้ำหน้าอยู่ใน {targets}",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": { "type": "String" }
+    }
+  },
+  "snackReplacePrepareFailed": "ไม่สามารถเตรียมเซฟได้ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์",
+  "snackReplaceValidationFailed": "เซฟที่ดาวน์โหลดมาดูเหมือนจะไม่ถูกต้องหรือไม่สมบูรณ์ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์",
+  "snackReplaceBackupFailed": "ไม่สามารถสร้างข้อมูลสำรองได้ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์",
+  "snackReplaceSwapFailed": "การสลับล้มเหลว แต่เซฟต้นฉบับถูกคืนค่าจากข้อมูลสำรองแล้ว",
+  "snackReplaceBusy": "มีการดำเนินการกับเซฟนี้อยู่แล้ว",
+  "snackUploadIncomplete": "เซฟในเครื่องนี้ไม่สมบูรณ์หรือเสียหาย ไม่มีการอัปโหลดใดๆ",
+  "snackDownloadIncomplete": "ไม่สามารถดาวน์โหลดได้ ขาดเนื้อหาบน Drive",
+  "cardIncomplete": "ไม่สมบูรณ์บน Drive",
+  "autoRefreshTitle": "รีเฟรชอัตโนมัติ",
+  "autoRefreshSubtitle": "ตรวจสอบการเปลี่ยนแปลงบน Drive ทุก 30 วินาที",
+  "autoSyncSnack": "ซิงโครไนซ์ {farmName} โดยอัตโนมัติแล้ว",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncTooltipOn": "เปิดใช้งานซิงค์อัตโนมัติ — จะซิงโครไนซ์ให้เองเมื่อปลอดภัย",
+  "autoSyncTooltipOff": "ปิดใช้งานซิงค์อัตโนมัติ — แตะเพื่อเปิด",
+  "autoSyncExplainTitle": "ซิงค์อัตโนมัติ",
+  "autoSyncExplainBody": "ตั้งแต่นี้ไป {farmName} จะอัปโหลดหรือดาวน์โหลดเองเมื่อปลอดภัย โดยไม่ต้องขอให้คุณยืนยัน",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncExplainSafe": "จะทำงานก็ต่อเมื่อคุณล้ำหน้าอย่างชัดเจนและไม่มีอะไรสูญหาย",
+  "autoSyncExplainDanger": "หากมีความเสี่ยงที่จะสูญเสียความคืบหน้า จะไม่ทำงานเองเด็ดขาด คุณยังคงเป็นผู้ตัดสินใจผ่านกล่องโต้ตอบแบบเดิม",
+  "autoSyncExplainMissing": "หากขาดสำเนาใดสำเนาหนึ่ง จะไม่สร้างให้เอง การอัปโหลดหรือดาวน์โหลดครั้งแรกคุณเป็นผู้ตัดสินใจ",
+  "autoSyncExplainDontShowAgain": "ไม่ต้องแสดงข้อความนี้อีก",
+  "autoSyncExplainConfirm": "เข้าใจแล้ว เปิดใช้งาน",
+  "hiwAutoSyncTitle": "ซิงโครไนซ์ด้วยตัวเอง",
+  "hiwAutoSyncDesc": "เซฟแต่ละอันมีชิป AUTO อยู่บนการ์ด เมื่อเปิดใช้งาน เซฟนั้นจะอัปโหลดหรือดาวน์โหลดเองเมื่อแอปตรวจพบการเปลี่ยนแปลง — โดยไม่ต้องเข้าไปยืนยัน",
+  "hiwAutoSyncTipSafe": "จะซิงโครไนซ์เองก็ต่อเมื่อคุณล้ำหน้าอย่างชัดเจนและไม่มีอะไรสูญหาย",
+  "hiwAutoSyncTipDanger": "หากมีความเสี่ยงที่จะสูญเสียความคืบหน้า จะไม่ทำเองเด็ดขาด ยังคงถามคุณผ่านหน้าจอเปรียบเทียบแบบเดิม",
+  "hiwAutoSyncTipPerSave": "เปิดใช้งานทีละเซฟ ไม่ใช่เปิดพร้อมกันทั้งหมด คุณสามารถเปิดไว้ในเซฟของคุณแต่ปิดไว้ในเซฟที่แชร์ได้",
+  "hiwAutoSyncTipMissing": "จะรักษาสำเนาสองชุดที่มีอยู่แล้วให้ซิงค์กันเท่านั้น หากขาดชุดใดชุดหนึ่ง การอัปโหลดหรือดาวน์โหลดครั้งแรกคุณต้องทำเอง",
+  "hiwAutoSyncTipRefresh": "ในการตั้งค่า คุณสามารถปิดการตรวจสอบการเปลี่ยนแปลงอัตโนมัติทั้งหมดได้",
+  "hiwCompatIncomplete": "หากคุณเห็นข้อความ \"ไม่สมบูรณ์บน Drive\" ในเซฟใด แสดงว่าขาดไฟล์ที่จำเป็นบนคลาวด์ — จะดาวน์โหลดไม่ได้จนกว่าจะมีการอัปโหลดใหม่อย่างถูกต้องจากอุปกรณ์อื่น",
+  "hiwShareTitle": "แชร์กับผู้อื่น",
+  "hiwShareDesc": "แชร์เซฟกับผู้เล่นคนอื่นทางอีเมล พวกเขาจะเห็นมันใน \"แชร์กับฉัน\" บนอุปกรณ์ของตัวเอง",
+  "hiwShareStepYourSave": "เซฟ\nของคุณ",
+  "hiwShareStepShare": "แชร์ทาง\nอีเมล",
+  "hiwShareStepFriend": "แชร์\nกับฉัน",
+  "hiwShareTipRoles": "มีสองบทบาท: อ่านอย่างเดียว อนุญาตให้ดูและดาวน์โหลดได้ อนุญาตให้ซิงโครไนซ์ อนุญาตให้เขียนทับสำเนาของคุณบน Drive ได้ ไม่ว่ากรณีใดก็ตาม พวกเขาไม่สามารถลบมันได้ — มีเพียงคุณ เจ้าของ เท่านั้นที่ลบเซฟของคุณได้",
+  "hiwShareTipDisconnect": "การตัดการเชื่อมต่อจะหยุดแค่การซิงโครไนซ์ฝั่งของพวกเขาเท่านั้น — การแชร์ยังคงทำงานอยู่จนกว่าคุณจะออกจริงจาก \"จัดการการแชร์\"",
+  "hiwHostSwapTitle": "การเปลี่ยนเจ้าของบ้าน",
+  "hiwHostSwapDesc": "เปลี่ยนว่าฟาร์มแฮนด์คนใดเป็นเจ้าของบ้านของเซฟ โดยแทนที่ในตำแหน่งเดิม — สล็อตเซฟเดิม สิทธิ์การแชร์เดิม",
+  "hiwHostSwapStepPick": "เลือก\nฟาร์มแฮนด์",
+  "hiwHostSwapStepConfirm": "ยืนยัน",
+  "hiwHostSwapStepDone": "สร้างเซฟใหม่\nเรียบร้อย",
+  "hiwHostSwapTipMove": "วัตถุบางอย่างในฟาร์มอาจถูกย้ายที่เพื่อเปิดพื้นที่ให้บ้าน — จะไม่มีการลบสิ่งใดออก",
+  "hiwHostSwapTipHouse": "บ้านของเจ้าของบ้านคนใหม่จะมีลักษณะเหมือนบ้านหลังใหญ่เริ่มต้นของเกม — รูปลักษณ์กระท่อมไม่รองรับหากไม่มีม็อด",
+  "hiwBackupsTitle": "ข้อมูลสำรอง",
+  "hiwBackupsDesc": "ข้อมูลสำรองคือภาพรวมของเซฟที่คุณสามารถคืนค่าได้ในภายหลัง สร้างด้วยตนเองได้ทุกเมื่อ หรือปล่อยให้ ValleySave สร้างให้อัตโนมัติก่อนเขียนทับเซฟ (ตอนดาวน์โหลด นำเข้า คืนค่า หรือเปลี่ยนเจ้าของบ้าน)",
+  "hiwBackupsStepSave": "เซฟ\nของคุณ",
+  "hiwBackupsStepSnapshot": "สร้าง\nข้อมูลสำรอง",
+  "hiwBackupsStepStore": "เครื่องนี้และ/หรือ\nDrive",
+  "hiwBackupsTipRestore": "การคืนค่าจะเขียนทับเซฟปัจจุบันของคุณด้วยเวอร์ชันก่อนหน้านั้น — ย้อนกลับไม่ได้",
+  "hiwBackupsTipDelete": "การลบข้อมูลสำรองจะลบออกจากทุกที่ที่มันอยู่ (เครื่องนี้และ Drive หากอัปโหลดไว้) — ย้อนกลับไม่ได้",
+  "hiwBackupsTipExport": "คุณยังสามารถส่งออกเซฟเป็นไฟล์ zip เพื่อเก็บไว้ที่ไหนก็ได้ และนำเข้ากลับมาในภายหลัง — เป็นทางเลือกแบบแมนนวลและพกพาได้แทนข้อมูลสำรองในตัว",
+  "hiwBackupsTipRetention": "ValleySave จะเก็บข้อมูลสำรองอัตโนมัติล่าสุด 5 ชุดต่อเซฟหนึ่งอัน ส่วนที่คุณสร้างด้วยตนเองจะไม่ถูกลบไปเอง",
+  "hiwBackupsTipRestoreBridge": "ในโหมด Bridge (Android ที่ไม่มี root/Shizuku) การคืนค่าข้อมูลสำรองจะขอให้คุณแตกไฟล์ .zip ด้วยตนเองลงในโฟลเดอร์ Stardew — เหมือนกับตอนดาวน์โหลด",
+  "hiwLaunchTipLinux": "บน Linux หากไม่พบเกมโดยอัตโนมัติ ให้ตั้งค่าพาธไฟล์ปฏิบัติการใน การตั้งค่า → เกม",
+  "hiwSaveLocationsTitle": "เซฟของคุณอยู่ที่ไหน",
+  "hiwSaveLocationsDesc": "ValleySave อ่านและเขียนไปยังโฟลเดอร์เซฟของเกมโดยตรงในแต่ละแพลตฟอร์ม",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\StardewValley\\Saves",
+  "hiwSaveLocationAndroid": "Android: โฟลเดอร์ที่ได้รับการป้องกัน เข้าถึงผ่าน Shizuku หรือ Bridge",
+  "hiwSaveLocationLinux": "Linux: ~/.config/StardewValley/Saves (หรือ ~/snap/steam/common/.config/StardewValley/Saves หากติดตั้ง Steam ผ่าน snap)",
+  "exportAction": "ส่งออก",
+  "exportSuccess": "ส่งออกเซฟแล้ว",
+  "exportError": "ไม่สามารถส่งออกเซฟได้: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "importAction": "นำเข้าเซฟ",
+  "importSuccess": "นำเข้าเซฟของ {playerName} แล้ว",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": { "type": "String" }
+    }
+  },
+  "importErrInvalidZip": "ไฟล์นี้ไม่ใช่ zip ที่ถูกต้อง",
+  "importErrUnsafePath": "ไฟล์นี้มีโครงสร้างที่ไม่ปลอดภัยและถูกปฏิเสธ",
+  "importErrTooLarge": "ไฟล์นี้มีขนาดใหญ่เกินกว่าจะนำเข้าได้",
+  "importErrNotASave": "ไฟล์นี้ไม่มีเซฟที่รู้จักอยู่ภายใน",
+  "importErrWrite": "ไม่สามารถเขียนเซฟที่นำเข้าได้ (ดิสก์/สิทธิ์การเข้าถึง)",
+  "importErrBackupFailed": "ไม่สามารถสร้างข้อมูลสำรองได้ ไม่มีการนำเข้าใดๆ",
+  "importConflictTitle": "มีเซฟชื่อนี้อยู่แล้ว",
+  "importConflictBody": "การนำเข้าจะแทนที่สำเนาในเครื่องที่มีอยู่ ย้อนกลับไม่ได้",
+  "importConflictConfirm": "เขียนทับ",
+  "shareAction": "แชร์",
+  "shareUploadFirstCta": "อัปโหลดก่อน",
+  "shareDialogTitle": "แชร์เซฟ",
+  "shareEmailPlaceholder": "name@example.com",
+  "shareInfoNote": "การแชร์จะให้สิทธิ์ดูและดาวน์โหลดเท่านั้น มีเพียงคุณเท่านั้นที่แก้ไขหรือลบสำเนาบน Drive ได้",
+  "shareRoleReader": "อ่านอย่างเดียว",
+  "shareRoleWriter": "อนุญาตให้ซิงโครไนซ์",
+  "shareInfoNoteCoop": "อ่านอย่างเดียว อนุญาตให้ดูและดาวน์โหลด อนุญาตให้ซิงโครไนซ์ อนุญาตให้เขียนทับสำเนาของคุณบน Drive ได้ — แต่จะไม่สามารถลบมันได้เลย",
+  "shareConfirmButton": "แชร์",
+  "shareSuccess": "แชร์กับ {email} แล้ว",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "manageAccessTitle": "ผู้ที่มีสิทธิ์เข้าถึง",
+  "manageAccessEmpty": "ยังไม่มีใครมีสิทธิ์เข้าถึง",
+  "manageAccessRoleLabel": "สิทธิ์การเข้าถึง",
+  "manageAccessRevoke": "เพิกถอน",
+  "manageAccessRevokeConfirm": "ต้องการเอาสิทธิ์การเข้าถึงของ {email} ออกหรือไม่? สำเนาในเครื่องที่พวกเขาดาวน์โหลดไปแล้วยังคงเป็นของพวกเขาต่อไป",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "driveOnlyControlsYourCopy": "การแชร์ควบคุมเฉพาะสำเนาของคุณบน Drive หากใครดาวน์โหลดไป สำเนานั้นจะเป็นของพวกเขา",
+  "driveOnlyControlsYourCopyCoop": "การซิงโครไนซ์ควบคุมสำเนาของคุณบน Drive — ผู้ที่คุณอนุญาตสามารถเขียนทับได้ แต่ไม่สามารถลบได้เลย",
+  "sharedWithMeTitle": "แชร์กับฉัน",
+  "sharedWithMeEmpty": "ยังไม่มีอะไรถูกแชร์กับคุณ",
+  "sharedWithMeAdd": "เพิ่มเซฟที่แชร์",
+  "sharedWithMeOwnedBy": "แชร์โดย {email}",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedWithMeRoleSync": "ซิงโครไนซ์",
+  "sharedWithMeRoleRead": "อ่านอย่างเดียว",
+  "sharedWithMeSync": "ซิงโครไนซ์",
+  "sharedWithMeDownload": "ดาวน์โหลด",
+  "sharedWithMeRemove": "นำออกจากรายการ",
+  "sharedWithMeRemoveConfirm": "คุณจะไม่ซิงโครไนซ์กับ Drive ของ {email} อีกต่อไป แต่สามารถเพิ่มกลับมาได้ทุกเมื่อ — การแชร์ยังคงอยู่ สำเนาในเครื่องของคุณจะยังคงเป็นเซฟโคออปทั่วไป",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedLeaveConfirm": "คุณจะสูญเสียสิทธิ์เข้าถึงเซฟนี้อย่างแท้จริง คุณจะเพิ่มกลับมาไม่ได้เว้นแต่ {email} จะแชร์กับคุณอีกครั้ง สำเนาในเครื่องของคุณจะยังคงเป็นเซฟโคออปทั่วไป",
+  "sharedManageButton": "จัดการ",
+  "sharedManageDialogTitle": "จัดการเซฟที่แชร์",
+  "sharedManageDialogHint": "ที่นี่คุณสามารถออกจากเซฟที่แชร์ได้อย่างแท้จริง",
+  "sharedLeaveButton": "ออกจากการแชร์",
+  "sharedLeaveSuccess": "คุณออกจากการแชร์ของ {email} แล้ว",
+  "sharedWithMeSyncConfirm": "ต้องการเขียนทับสำเนาของ {email} บน Drive ด้วยเซฟในเครื่องของคุณหรือไม่?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedAccessReadOnly": "{email} ได้ตั้งค่าการเข้าถึงของคุณเป็นแบบอ่านอย่างเดียว — คุณดูและดาวน์โหลดได้ แต่ซิงโครไนซ์ไปยัง Drive ของพวกเขาไม่ได้",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedWithMeRevoked": "คุณไม่มีสิทธิ์เข้าถึงแล้ว",
+  "sharedRevokedDialogBody": "{email} หยุดแชร์ {farmName} กับคุณแล้ว สำเนาในเครื่องและบน Drive ของคุณยังคงอยู่เหมือนเดิม ตอนนี้อยู่ใน \"เซฟของฉัน\"",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": { "type": "String" },
+      "farmName": { "type": "String" }
+    }
+  },
+  "sharedRevokedAccept": "ตกลง",
+  "sharedSelfCleanupTitle": "แก้ไขข้อมูลแล้ว",
+  "sharedSelfCleanupBody": "{farmName} ปรากฏว่าถูกแชร์กับคุณโดยผิดพลาด — แต่จริงๆ แล้วเป็นของคุณ ได้รับการแก้ไขแล้ว ตอนนี้อยู่ใน \"เซฟของฉัน\"",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "sharedWithMeUploadOwn": "อัปโหลดไปยัง Drive ของฉัน",
+  "sharedDownloadOwn": "ดาวน์โหลดจาก Drive ของฉัน",
+  "sharedStatusOwnDriveAhead": "Drive ของคุณล้ำหน้าอยู่ — ดาวน์โหลดเลย",
+  "sharedSyncBoth": "อัปโหลดไปยัง Drive ทั้งสอง",
+  "sharedSideMyDrive": "DRIVE ของฉัน",
+  "sharedSideOwnerDrive": "DRIVE ของ {email}",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "sharedSideDate": "วัน {day} · ปี {year}",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": { "type": "int" },
+      "year": { "type": "int" }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "ซิงโครไนซ์กับเจ้าของแล้ว · ไม่มีสำเนาบน Drive ของคุณ",
+  "sharedStatusAheadNoOwnDrive": "คุณล้ำหน้าอยู่ · ไม่มีสำเนาบน Drive ของคุณ",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} ล้ำหน้าอยู่ · ไม่มีสำเนาบน Drive ของคุณ",
+  "sharedStatusAllSynced": "ซิงโครไนซ์แล้ว (เครื่องนี้ + Drive ทั้งสอง)",
+  "sharedStatusAheadBoth": "คุณล้ำหน้าอยู่ใน Drive ทั้งสอง",
+  "sharedStatusMixed": "ไม่ซิงค์กัน — ตรวจสอบ Drive แต่ละอัน",
+  "sharedStatusFullySynced": "ซิงโครไนซ์สมบูรณ์แล้ว",
+  "sharedStatusSyncedOwn": "ซิงโครไนซ์แล้วกับ Drive ของฉัน",
+  "sharedStatusSyncedOwner": "ซิงโครไนซ์แล้วกับ Drive ที่แชร์",
+  "sharedStatusNotCloud": "อยู่ในเครื่องนี้เท่านั้น",
+  "sharedStatusOwnerAhead": "Drive ของ {email} ล้ำหน้าอยู่",
+  "sharedStatusBothAhead": "Drive ทั้งสองล้ำหน้าอยู่",
+  "sharedStatusLocalMissing": "ไม่มีอยู่ในอุปกรณ์นี้",
+  "sharedStatusOwnerUnavailable": "ไม่สามารถตรวจสอบ Drive ของ {email} ได้",
+  "sharedStatusWorking": "กำลังซิงโครไนซ์…",
+  "sharedSideUnavailable": "ไม่สามารถตรวจสอบได้",
+  "sharedSyncChooseTitle": "คุณต้องการซิงโครไนซ์ที่ไหน?",
+  "sharedSyncChooseBody": "เลือกว่าจะอัปเดตสำเนาบนคลาวด์ใดด้วยเซฟจากอุปกรณ์นี้",
+  "sharedSyncTargetOwn": "Drive ของฉัน",
+  "sharedSyncTargetOwner": "Drive ของ {email}",
+  "sharedSyncTargetBoth": "Drive ทั้งสอง",
+  "sharedDownloadChooseTitle": "คุณต้องการดาวน์โหลดสำเนาไหน?",
+  "sharedDownloadChooseBody": "มีสำเนาที่ล้ำหน้ามากกว่าหนึ่งชุด เลือกว่าจะนำอันไหนมาไว้ในอุปกรณ์นี้",
+  "sharedDownloadSourceOwn": "จาก Drive ของฉัน",
+  "sharedDownloadSourceOwner": "จาก Drive ของ {email}",
+  "sharedWithMePickerTitle": "เพิ่มเซฟที่แชร์",
+  "sharedPickerEmptyHint": "สิ่งที่ผู้เล่นคนอื่นแชร์กับคุณจาก Drive จะปรากฏที่นี่",
+  "sharedPickerAddButton": "เพิ่ม",
+  "sharedOriginBadge": "แชร์แล้ว",
+  "sharedOriginFrom": "จาก {email}",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "swapBackupDialogTitle": "สร้างข้อมูลสำรองแล้ว",
+  "swapBackupDialogBody": "เวอร์ชันก่อนหน้าถูกบันทึกเป็นไฟล์ zip แล้ว คุณต้องการทำอย่างไรกับมัน?",
+  "swapBackupUpload": "อัปโหลดไปยัง Drive",
+  "swapBackupLocalOnly": "เก็บไว้ในเครื่องนี้",
+  "swapBackupDeleteNow": "ลบเลย",
+  "swapBackupUploadOk": "อัปโหลดข้อมูลสำรองไปยัง Drive แล้ว",
+  "swapBackupUploadErr": "ไม่สามารถอัปโหลดข้อมูลสำรองได้: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "swapBackupLocalOnlySnack": "บันทึกข้อมูลสำรองไว้ในเครื่องนี้แล้ว",
+  "backupsAction": "ข้อมูลสำรอง",
+  "backupsScreenTitle": "ข้อมูลสำรองของ {farmName}",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "backupsEmpty": "ยังไม่มีข้อมูลสำรอง",
+  "backupsRestore": "คืนค่า",
+  "backupsRestoreConfirmTitle": "คืนค่าข้อมูลสำรองนี้หรือไม่?",
+  "backupsRestoreConfirmBody": "การกระทำนี้จะเขียนทับเซฟปัจจุบันของคุณด้วยเวอร์ชันก่อนหน้านี้ ย้อนกลับไม่ได้",
+  "backupsDelete": "ลบ",
+  "backupsDeleteConfirmTitle": "ลบข้อมูลสำรองนี้หรือไม่?",
+  "backupsDeleteConfirmBody": "จะถูกลบออกจากทุกที่ที่มันอยู่ (เครื่องนี้และ Drive หากอัปโหลดไว้) ย้อนกลับไม่ได้",
+  "backupsRestoreOk": "คืนค่าข้อมูลสำรองแล้ว",
+  "backupsRestoreManualTitle": "คืนค่าด้วยตนเอง",
+  "backupsRestoreManualBody": "ในโหมด Bridge ValleySave ไม่สามารถเขียนลงในโฟลเดอร์เกมได้โดยอัตโนมัติ ให้แตกไฟล์ .zip ของข้อมูลสำรองนี้ด้วยตนเองลงในโฟลเดอร์ Saves ของ Stardew Valley หรือเปลี่ยนไปใช้โหมด Root/Shizuku ในการตั้งค่าเพื่อคืนค่าโดยอัตโนมัติ",
+  "backupsRestoreErr": "ไม่สามารถคืนค่าข้อมูลสำรองได้: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsDeleteErr": "ไม่สามารถลบข้อมูลสำรองได้: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsCreate": "สร้างข้อมูลสำรองในเครื่อง",
+  "backupsCreateLocalHint": "ข้อมูลสำรองจะถูกสร้างในเครื่องนี้ก่อน หลังจากนั้นคุณสามารถอัปโหลดไปยัง Drive ได้",
+  "backupsCreateOk": "สร้างข้อมูลสำรองแล้ว",
+  "backupsCreateErr": "ไม่สามารถสร้างข้อมูลสำรองได้: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsDownload": "ดาวน์โหลด",
+  "backupsDownloadOk": "ดาวน์โหลดข้อมูลสำรองมาที่เครื่องนี้แล้ว",
+  "backupsDownloadErr": "ไม่สามารถดาวน์โหลดข้อมูลสำรองได้: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsCopyOwn": "คัดลอกไปยัง Drive ของฉัน",
+  "backupsUploadOwn": "ไปยัง Drive ของฉัน",
+  "backupsUploadShared": "ไปยัง Drive ที่แชร์",
+  "backupsUploadOk": "อัปโหลดข้อมูลสำรองแล้ว",
+  "backupsUploadErr": "ไม่สามารถอัปโหลดข้อมูลสำรองได้: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "backupsLocationLocal": "เครื่องนี้",
+  "backupsLocationOwnDrive": "Drive ของฉัน",
+  "backupsLocationSharedDrive": "Drive ที่แชร์",
+  "backupsDeleteChooseBody": "เลือกตำแหน่งที่ต้องการลบให้ชัดเจน จะแสดงเฉพาะตำแหน่งที่มีข้อมูลสำรองนี้อยู่เท่านั้น",
+  "backupsDeleteLocalOnly": "จากเครื่องนี้เท่านั้น",
+  "backupsDeleteOwnOnly": "จาก Drive ของฉันเท่านั้น",
+  "backupsDeleteSharedOnly": "จาก Drive ที่แชร์เท่านั้น",
+  "backupsDeleteAll": "จากสำเนาทั้งหมด",
+  "deleteUnifiedTitle": "ลบ {farmName} หรือไม่?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteChooseLocationBody": "เลือกว่าจะลบจากที่ไหน สำเนาในเครื่องนี้จะถูกลบอย่างถาวร ส่วนสำเนาบน Drive จะย้ายไปที่ถังขยะ (30 วัน)",
+  "deleteDriveContextTitle": "ลบ {farmName} ออกจาก Drive หรือไม่?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteDriveContextBody": "สำเนาบน Drive จะถูกย้ายไปที่ถังขยะ ซึ่งคุณสามารถกู้คืนได้ภายใน 30 วัน",
+  "deleteDriveLocalKept": "สำเนาในเครื่องนี้จะยังคงอยู่โดยไม่มีการเปลี่ยนแปลง",
+  "deleteLocalContextTitle": "ลบ {farmName} ออกจากเครื่องนี้หรือไม่?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "deleteLocalContextBody": "สำเนาในเครื่องนี้จะถูกลบอย่างถาวร",
+  "deleteLocalDriveCurrent": "สำเนาบน Drive ของคุณเป็นปัจจุบัน ({date}) และจะยังคงพร้อมใช้งาน",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "deleteLocalDriveAhead": "สำเนาบน Drive ของคุณใหม่กว่า ({date}) และจะยังคงพร้อมใช้งาน",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "deleteLocalDriveOlder": "สำเนาบน Drive ของคุณเก่ากว่า ({driveDate}); เครื่องนี้อยู่ที่ {localDate}",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": { "type": "String" },
+      "localDate": { "type": "String" }
+    }
+  },
+  "deleteLocalBackupAvailable": "มีข้อมูลสำรองในเครื่อง {count} ชุดพร้อมใช้งาน เผื่อคุณต้องการสำเนาก่อนหน้า",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "deleteLocalNoRecovery": "ไม่มีสำเนาบน Drive หรือข้อมูลสำรองในเครื่องที่จะกู้คืนเซฟนี้ได้",
+  "deleteOptionLocalOnly": "จากเครื่องนี้เท่านั้น",
+  "deleteOptionDriveOnly": "จาก Drive เท่านั้น",
+  "deleteOptionBoth": "จากทั้งสองสำเนา (เครื่อง + Drive)",
+  "viewPlayersHint": "ดูผู้เล่น",
+  "snackDeletedBoth": "\"{saveName}\" ถูกลบออกจากเครื่องนี้และย้ายไปที่ถังขยะของ Drive แล้ว",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": { "type": "String" }
+    }
+  }
 }

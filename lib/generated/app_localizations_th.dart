@@ -324,11 +324,11 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String disconnectButtonEmail(String email) {
-    return 'Disconnect from $email';
+    return 'ตัดการเชื่อมต่อจาก $email';
   }
 
   @override
-  String get connectedAsPrefix => 'Connected as';
+  String get connectedAsPrefix => 'บัญชีที่เชื่อมต่อ';
 
   @override
   String get languageTileLabel => 'ภาษา';
@@ -420,549 +420,549 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cardCloseBarrier => 'ปิด';
 
   @override
-  String get exportAction => 'Export';
+  String get exportAction => 'ส่งออก';
 
   @override
-  String get exportSuccess => 'Save exported.';
+  String get exportSuccess => 'ส่งออกเซฟแล้ว';
 
   @override
   String exportError(String error) {
-    return 'Couldn\'t export the save: $error';
+    return 'ไม่สามารถส่งออกเซฟได้: $error';
   }
 
   @override
-  String get importAction => 'Import save';
+  String get importAction => 'นำเข้าเซฟ';
 
   @override
   String importSuccess(String playerName) {
-    return '$playerName\'s save imported.';
+    return 'นำเข้าเซฟของ $playerName แล้ว';
   }
 
   @override
-  String get importErrInvalidZip => 'This isn\'t a valid zip file.';
+  String get importErrInvalidZip => 'ไฟล์นี้ไม่ใช่ zip ที่ถูกต้อง';
 
   @override
   String get importErrUnsafePath =>
-      'This file has an unsafe structure and was rejected.';
+      'ไฟล์นี้มีโครงสร้างที่ไม่ปลอดภัยและถูกปฏิเสธ';
 
   @override
-  String get importErrTooLarge => 'This file is too large to import.';
+  String get importErrTooLarge => 'ไฟล์นี้มีขนาดใหญ่เกินกว่าจะนำเข้าได้';
 
   @override
-  String get importErrNotASave =>
-      'This file doesn\'t contain a recognizable save.';
+  String get importErrNotASave => 'ไฟล์นี้ไม่มีเซฟที่รู้จักอยู่ภายใน';
 
   @override
   String get importErrWrite =>
-      'Couldn\'t write the imported save (disk/permissions).';
+      'ไม่สามารถเขียนเซฟที่นำเข้าได้ (ดิสก์/สิทธิ์การเข้าถึง)';
 
   @override
   String get importErrBackupFailed =>
-      'Couldn\'t create a safety backup. Nothing was imported.';
+      'ไม่สามารถสร้างข้อมูลสำรองได้ ไม่มีการนำเข้าใดๆ';
 
   @override
-  String get importConflictTitle => 'A save with this name already exists';
+  String get importConflictTitle => 'มีเซฟชื่อนี้อยู่แล้ว';
 
   @override
   String get importConflictBody =>
-      'Importing will replace the existing local copy. This can\'t be undone.';
+      'การนำเข้าจะแทนที่สำเนาในเครื่องที่มีอยู่ ย้อนกลับไม่ได้';
 
   @override
-  String get importConflictConfirm => 'Overwrite';
+  String get importConflictConfirm => 'เขียนทับ';
 
   @override
-  String get shareAction => 'Share';
+  String get shareAction => 'แชร์';
 
   @override
-  String get shareUploadFirstCta => 'Upload first';
+  String get shareUploadFirstCta => 'อัปโหลดก่อน';
 
   @override
-  String get shareDialogTitle => 'Share save';
+  String get shareDialogTitle => 'แชร์เซฟ';
 
   @override
   String get shareEmailPlaceholder => 'name@example.com';
 
   @override
   String get shareInfoNote =>
-      'Sharing gives view-and-download access only. Only you can edit or delete your copy in Drive.';
+      'การแชร์จะให้สิทธิ์ดูและดาวน์โหลดเท่านั้น มีเพียงคุณเท่านั้นที่แก้ไขหรือลบสำเนาบน Drive ได้';
 
   @override
-  String get shareRoleReader => 'Read only';
+  String get shareRoleReader => 'อ่านอย่างเดียว';
 
   @override
-  String get shareRoleWriter => 'Allow sync';
+  String get shareRoleWriter => 'อนุญาตให้ซิงโครไนซ์';
 
   @override
   String get shareInfoNoteCoop =>
-      'Read only lets them view and download. Allow sync lets them overwrite your copy in Drive — they can never delete it.';
+      'อ่านอย่างเดียว อนุญาตให้ดูและดาวน์โหลด อนุญาตให้ซิงโครไนซ์ อนุญาตให้เขียนทับสำเนาของคุณบน Drive ได้ — แต่จะไม่สามารถลบมันได้เลย';
 
   @override
-  String get shareConfirmButton => 'Share';
+  String get shareConfirmButton => 'แชร์';
 
   @override
   String shareSuccess(String email) {
-    return 'Shared with $email.';
+    return 'แชร์กับ $email แล้ว';
   }
 
   @override
-  String get manageAccessTitle => 'People with access';
+  String get manageAccessTitle => 'ผู้ที่มีสิทธิ์เข้าถึง';
 
   @override
-  String get manageAccessEmpty => 'Nobody else has access yet.';
+  String get manageAccessEmpty => 'ยังไม่มีใครมีสิทธิ์เข้าถึง';
 
   @override
-  String get manageAccessRoleLabel => 'Access';
+  String get manageAccessRoleLabel => 'สิทธิ์การเข้าถึง';
 
   @override
-  String get manageAccessRevoke => 'Revoke';
+  String get manageAccessRevoke => 'เพิกถอน';
 
   @override
   String manageAccessRevokeConfirm(String email) {
-    return 'Remove $email\'s access? Any local copy they already downloaded is theirs to keep.';
+    return 'ต้องการเอาสิทธิ์การเข้าถึงของ $email ออกหรือไม่? สำเนาในเครื่องที่พวกเขาดาวน์โหลดไปแล้วยังคงเป็นของพวกเขาต่อไป';
   }
 
   @override
   String get driveOnlyControlsYourCopy =>
-      'Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.';
+      'การแชร์ควบคุมเฉพาะสำเนาของคุณบน Drive หากใครดาวน์โหลดไป สำเนานั้นจะเป็นของพวกเขา';
 
   @override
   String get driveOnlyControlsYourCopyCoop =>
-      'Sync controls your copy in Drive — it can be overwritten, but never deleted, by people you allow to sync.';
+      'การซิงโครไนซ์ควบคุมสำเนาของคุณบน Drive — ผู้ที่คุณอนุญาตสามารถเขียนทับได้ แต่ไม่สามารถลบได้เลย';
 
   @override
-  String get sharedWithMeTitle => 'Shared with me';
+  String get sharedWithMeTitle => 'แชร์กับฉัน';
 
   @override
-  String get sharedWithMeEmpty => 'Nothing shared with you yet.';
+  String get sharedWithMeEmpty => 'ยังไม่มีอะไรถูกแชร์กับคุณ';
 
   @override
-  String get sharedWithMeAdd => 'Add shared save';
+  String get sharedWithMeAdd => 'เพิ่มเซฟที่แชร์';
 
   @override
   String sharedWithMeOwnedBy(String email) {
-    return 'Shared by $email';
+    return 'แชร์โดย $email';
   }
 
   @override
-  String get sharedWithMeRoleSync => 'Sync';
+  String get sharedWithMeRoleSync => 'ซิงโครไนซ์';
 
   @override
-  String get sharedWithMeRoleRead => 'Read only';
+  String get sharedWithMeRoleRead => 'อ่านอย่างเดียว';
 
   @override
-  String get sharedWithMeSync => 'Sync';
+  String get sharedWithMeSync => 'ซิงโครไนซ์';
 
   @override
-  String get sharedWithMeDownload => 'Download';
+  String get sharedWithMeDownload => 'ดาวน์โหลด';
 
   @override
-  String get sharedWithMeRemove => 'Remove from list';
+  String get sharedWithMeRemove => 'นำออกจากรายการ';
 
   @override
   String sharedWithMeRemoveConfirm(String email) {
-    return 'You\'ll stop syncing with $email\'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.';
+    return 'คุณจะไม่ซิงโครไนซ์กับ Drive ของ $email อีกต่อไป แต่สามารถเพิ่มกลับมาได้ทุกเมื่อ — การแชร์ยังคงอยู่ สำเนาในเครื่องของคุณจะยังคงเป็นเซฟโคออปทั่วไป';
   }
 
   @override
   String sharedLeaveConfirm(Object email) {
-    return 'You\'ll lose access to this save for real. You won\'t be able to add it back unless $email shares it with you again. Your local copy remains a normal coop save.';
+    return 'คุณจะสูญเสียสิทธิ์เข้าถึงเซฟนี้อย่างแท้จริง คุณจะเพิ่มกลับมาไม่ได้เว้นแต่ $email จะแชร์กับคุณอีกครั้ง สำเนาในเครื่องของคุณจะยังคงเป็นเซฟโคออปทั่วไป';
   }
 
   @override
-  String get sharedManageButton => 'Manage';
+  String get sharedManageButton => 'จัดการ';
 
   @override
-  String get sharedManageDialogTitle => 'Manage shared saves';
+  String get sharedManageDialogTitle => 'จัดการเซฟที่แชร์';
 
   @override
   String get sharedManageDialogHint =>
-      'Here you can really leave a shared save.';
+      'ที่นี่คุณสามารถออกจากเซฟที่แชร์ได้อย่างแท้จริง';
 
   @override
-  String get sharedLeaveButton => 'Leave shared save';
+  String get sharedLeaveButton => 'ออกจากการแชร์';
 
   @override
   String sharedLeaveSuccess(Object email) {
-    return 'You left $email\'s shared save.';
+    return 'คุณออกจากการแชร์ของ $email แล้ว';
   }
 
   @override
   String sharedWithMeSyncConfirm(String email) {
-    return 'Overwrite $email\'s copy in Drive with your local save?';
+    return 'ต้องการเขียนทับสำเนาของ $email บน Drive ด้วยเซฟในเครื่องของคุณหรือไม่?';
   }
 
   @override
   String sharedAccessReadOnly(String email) {
-    return '$email set your access to read-only — you can view and download, but not sync to their Drive.';
+    return '$email ได้ตั้งค่าการเข้าถึงของคุณเป็นแบบอ่านอย่างเดียว — คุณดูและดาวน์โหลดได้ แต่ซิงโครไนซ์ไปยัง Drive ของพวกเขาไม่ได้';
   }
 
   @override
-  String get sharedWithMeRevoked => 'You no longer have access';
+  String get sharedWithMeRevoked => 'คุณไม่มีสิทธิ์เข้าถึงแล้ว';
 
   @override
   String sharedRevokedDialogBody(String email, String farmName) {
-    return '$email stopped sharing $farmName with you. Your local copy and the one on your Drive stay as they are, now under My saves.';
+    return '$email หยุดแชร์ $farmName กับคุณแล้ว สำเนาในเครื่องและบน Drive ของคุณยังคงอยู่เหมือนเดิม ตอนนี้อยู่ใน \"เซฟของฉัน\"';
   }
 
   @override
-  String get sharedRevokedAccept => 'Accept';
+  String get sharedRevokedAccept => 'ตกลง';
 
   @override
-  String get sharedSelfCleanupTitle => 'Record fixed';
+  String get sharedSelfCleanupTitle => 'แก้ไขข้อมูลแล้ว';
 
   @override
   String sharedSelfCleanupBody(String farmName) {
-    return '$farmName showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.';
+    return '$farmName ปรากฏว่าถูกแชร์กับคุณโดยผิดพลาด — แต่จริงๆ แล้วเป็นของคุณ ได้รับการแก้ไขแล้ว ตอนนี้อยู่ใน \"เซฟของฉัน\"';
   }
 
   @override
-  String get sharedWithMeUploadOwn => 'Upload to my Drive';
+  String get sharedWithMeUploadOwn => 'อัปโหลดไปยัง Drive ของฉัน';
 
   @override
-  String get sharedDownloadOwn => 'Download from my Drive';
+  String get sharedDownloadOwn => 'ดาวน์โหลดจาก Drive ของฉัน';
 
   @override
-  String get sharedStatusOwnDriveAhead => 'Your Drive is ahead — bring it down';
+  String get sharedStatusOwnDriveAhead =>
+      'Drive ของคุณล้ำหน้าอยู่ — ดาวน์โหลดเลย';
 
   @override
-  String get sharedSyncBoth => 'Upload to both Drives';
+  String get sharedSyncBoth => 'อัปโหลดไปยัง Drive ทั้งสอง';
 
   @override
-  String get sharedSideMyDrive => 'MY DRIVE';
+  String get sharedSideMyDrive => 'DRIVE ของฉัน';
 
   @override
   String sharedSideOwnerDrive(String email) {
-    return '$email\'s DRIVE';
+    return 'DRIVE ของ $email';
   }
 
   @override
   String sharedSideDate(int day, int year) {
-    return 'Day $day · Year $year';
+    return 'วัน $day · ปี $year';
   }
 
   @override
   String get sharedStatusSyncedNoOwnDrive =>
-      'Synced with the owner · no copy in your Drive';
+      'ซิงโครไนซ์กับเจ้าของแล้ว · ไม่มีสำเนาบน Drive ของคุณ';
 
   @override
   String get sharedStatusAheadNoOwnDrive =>
-      'You\'re ahead · no copy in your Drive';
+      'คุณล้ำหน้าอยู่ · ไม่มีสำเนาบน Drive ของคุณ';
 
   @override
   String sharedStatusOwnerAheadNoOwnDrive(String email) {
-    return '$email is ahead · no copy in your Drive';
+    return '$email ล้ำหน้าอยู่ · ไม่มีสำเนาบน Drive ของคุณ';
   }
 
   @override
-  String get sharedStatusAllSynced => 'Synced (local + both Drives)';
+  String get sharedStatusAllSynced =>
+      'ซิงโครไนซ์แล้ว (เครื่องนี้ + Drive ทั้งสอง)';
 
   @override
-  String get sharedStatusAheadBoth => 'You\'re ahead on both Drives';
+  String get sharedStatusAheadBoth => 'คุณล้ำหน้าอยู่ใน Drive ทั้งสอง';
 
   @override
-  String get sharedStatusMixed => 'Out of sync — check each Drive';
+  String get sharedStatusMixed => 'ไม่ซิงค์กัน — ตรวจสอบ Drive แต่ละอัน';
 
   @override
-  String get sharedStatusFullySynced => 'Fully synchronized';
+  String get sharedStatusFullySynced => 'ซิงโครไนซ์สมบูรณ์แล้ว';
 
   @override
-  String get sharedStatusSyncedOwn => 'My Drive synchronized';
+  String get sharedStatusSyncedOwn => 'ซิงโครไนซ์แล้วกับ Drive ของฉัน';
 
   @override
-  String get sharedStatusSyncedOwner => 'Shared Drive synchronized';
+  String get sharedStatusSyncedOwner => 'ซิงโครไนซ์แล้วกับ Drive ที่แชร์';
 
   @override
-  String get sharedStatusNotCloud => 'Only on this device';
+  String get sharedStatusNotCloud => 'อยู่ในเครื่องนี้เท่านั้น';
 
   @override
   String sharedStatusOwnerAhead(Object email) {
-    return 'Drive at $email is ahead';
+    return 'Drive ของ $email ล้ำหน้าอยู่';
   }
 
   @override
-  String get sharedStatusBothAhead => 'Both Drives are ahead';
+  String get sharedStatusBothAhead => 'Drive ทั้งสองล้ำหน้าอยู่';
 
   @override
-  String get sharedStatusLocalMissing => 'Not on this device';
+  String get sharedStatusLocalMissing => 'ไม่มีอยู่ในอุปกรณ์นี้';
 
   @override
   String sharedStatusOwnerUnavailable(Object email) {
-    return 'Could not check Drive at $email';
+    return 'ไม่สามารถตรวจสอบ Drive ของ $email ได้';
   }
 
   @override
-  String get sharedStatusWorking => 'Synchronizing…';
+  String get sharedStatusWorking => 'กำลังซิงโครไนซ์…';
 
   @override
-  String get sharedSideUnavailable => 'Could not check';
+  String get sharedSideUnavailable => 'ไม่สามารถตรวจสอบได้';
 
   @override
-  String get sharedSyncChooseTitle => 'Where do you want to synchronize?';
+  String get sharedSyncChooseTitle => 'คุณต้องการซิงโครไนซ์ที่ไหน?';
 
   @override
   String get sharedSyncChooseBody =>
-      'Choose which cloud copies to update from this device.';
+      'เลือกว่าจะอัปเดตสำเนาบนคลาวด์ใดด้วยเซฟจากอุปกรณ์นี้';
 
   @override
-  String get sharedSyncTargetOwn => 'My Drive';
+  String get sharedSyncTargetOwn => 'Drive ของฉัน';
 
   @override
   String sharedSyncTargetOwner(Object email) {
-    return 'Drive at $email';
+    return 'Drive ของ $email';
   }
 
   @override
-  String get sharedSyncTargetBoth => 'Both Drives';
+  String get sharedSyncTargetBoth => 'Drive ทั้งสอง';
 
   @override
-  String get sharedDownloadChooseTitle => 'Which copy do you want to download?';
+  String get sharedDownloadChooseTitle => 'คุณต้องการดาวน์โหลดสำเนาไหน?';
 
   @override
   String get sharedDownloadChooseBody =>
-      'More than one copy is ahead. Choose which one to bring to this device.';
+      'มีสำเนาที่ล้ำหน้ามากกว่าหนึ่งชุด เลือกว่าจะนำอันไหนมาไว้ในอุปกรณ์นี้';
 
   @override
-  String get sharedDownloadSourceOwn => 'From My Drive';
+  String get sharedDownloadSourceOwn => 'จาก Drive ของฉัน';
 
   @override
   String sharedDownloadSourceOwner(Object email) {
-    return 'From Drive at $email';
+    return 'จาก Drive ของ $email';
   }
 
   @override
-  String get sharedWithMePickerTitle => 'Add shared save';
+  String get sharedWithMePickerTitle => 'เพิ่มเซฟที่แชร์';
 
   @override
   String get sharedPickerEmptyHint =>
-      'Folders another player shares with you from Drive show up here.';
+      'สิ่งที่ผู้เล่นคนอื่นแชร์กับคุณจาก Drive จะปรากฏที่นี่';
 
   @override
-  String get sharedPickerAddButton => 'Add';
+  String get sharedPickerAddButton => 'เพิ่ม';
 
   @override
-  String get sharedOriginBadge => 'Shared';
+  String get sharedOriginBadge => 'แชร์แล้ว';
 
   @override
   String sharedOriginFrom(String email) {
-    return 'from $email';
+    return 'จาก $email';
   }
 
   @override
-  String get swapBackupDialogTitle => 'Backup created';
+  String get swapBackupDialogTitle => 'สร้างข้อมูลสำรองแล้ว';
 
   @override
   String get swapBackupDialogBody =>
-      'The previous version was saved as a zip. What do you want to do with it?';
+      'เวอร์ชันก่อนหน้าถูกบันทึกเป็นไฟล์ zip แล้ว คุณต้องการทำอย่างไรกับมัน?';
 
   @override
-  String get swapBackupUpload => 'Upload to Drive';
+  String get swapBackupUpload => 'อัปโหลดไปยัง Drive';
 
   @override
-  String get swapBackupLocalOnly => 'Keep on this device';
+  String get swapBackupLocalOnly => 'เก็บไว้ในเครื่องนี้';
 
   @override
-  String get swapBackupDeleteNow => 'Delete now';
+  String get swapBackupDeleteNow => 'ลบเลย';
 
   @override
-  String get swapBackupUploadOk => 'Backup uploaded to Drive.';
+  String get swapBackupUploadOk => 'อัปโหลดข้อมูลสำรองไปยัง Drive แล้ว';
 
   @override
   String swapBackupUploadErr(String error) {
-    return 'Couldn\'t upload the backup: $error';
+    return 'ไม่สามารถอัปโหลดข้อมูลสำรองได้: $error';
   }
 
   @override
-  String get swapBackupLocalOnlySnack => 'Backup saved on this device.';
+  String get swapBackupLocalOnlySnack => 'บันทึกข้อมูลสำรองไว้ในเครื่องนี้แล้ว';
 
   @override
-  String get backupsAction => 'Backups';
+  String get backupsAction => 'ข้อมูลสำรอง';
 
   @override
   String backupsScreenTitle(String farmName) {
-    return 'Backups of $farmName';
+    return 'ข้อมูลสำรองของ $farmName';
   }
 
   @override
-  String get backupsEmpty => 'No backups yet.';
+  String get backupsEmpty => 'ยังไม่มีข้อมูลสำรอง';
 
   @override
-  String get backupsRestore => 'Restore';
+  String get backupsRestore => 'คืนค่า';
 
   @override
-  String get backupsRestoreConfirmTitle => 'Restore this backup?';
+  String get backupsRestoreConfirmTitle => 'คืนค่าข้อมูลสำรองนี้หรือไม่?';
 
   @override
   String get backupsRestoreConfirmBody =>
-      'This overwrites your current save with this earlier version. This can\'t be undone.';
+      'การกระทำนี้จะเขียนทับเซฟปัจจุบันของคุณด้วยเวอร์ชันก่อนหน้านี้ ย้อนกลับไม่ได้';
 
   @override
-  String get backupsDelete => 'Delete';
+  String get backupsDelete => 'ลบ';
 
   @override
-  String get backupsDeleteConfirmTitle => 'Delete this backup?';
+  String get backupsDeleteConfirmTitle => 'ลบข้อมูลสำรองนี้หรือไม่?';
 
   @override
   String get backupsDeleteConfirmBody =>
-      'Deletes it everywhere it exists (this device and Drive, if uploaded). This can\'t be undone.';
+      'จะถูกลบออกจากทุกที่ที่มันอยู่ (เครื่องนี้และ Drive หากอัปโหลดไว้) ย้อนกลับไม่ได้';
 
   @override
-  String get backupsRestoreOk => 'Backup restored.';
+  String get backupsRestoreOk => 'คืนค่าข้อมูลสำรองแล้ว';
 
   @override
-  String get backupsRestoreManualTitle => 'Restore manually';
+  String get backupsRestoreManualTitle => 'คืนค่าด้วยตนเอง';
 
   @override
   String get backupsRestoreManualBody =>
-      'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.';
+      'ในโหมด Bridge ValleySave ไม่สามารถเขียนลงในโฟลเดอร์เกมได้โดยอัตโนมัติ ให้แตกไฟล์ .zip ของข้อมูลสำรองนี้ด้วยตนเองลงในโฟลเดอร์ Saves ของ Stardew Valley หรือเปลี่ยนไปใช้โหมด Root/Shizuku ในการตั้งค่าเพื่อคืนค่าโดยอัตโนมัติ';
 
   @override
   String backupsRestoreErr(String error) {
-    return 'Couldn\'t restore the backup: $error';
+    return 'ไม่สามารถคืนค่าข้อมูลสำรองได้: $error';
   }
 
   @override
   String backupsDeleteErr(String error) {
-    return 'Couldn\'t delete the backup: $error';
+    return 'ไม่สามารถลบข้อมูลสำรองได้: $error';
   }
 
   @override
-  String get backupsCreate => 'Create local backup';
+  String get backupsCreate => 'สร้างข้อมูลสำรองในเครื่อง';
 
   @override
   String get backupsCreateLocalHint =>
-      'Backups are created on this device first. You can upload them to Drive afterwards.';
+      'ข้อมูลสำรองจะถูกสร้างในเครื่องนี้ก่อน หลังจากนั้นคุณสามารถอัปโหลดไปยัง Drive ได้';
 
   @override
-  String get backupsCreateOk => 'Backup created.';
+  String get backupsCreateOk => 'สร้างข้อมูลสำรองแล้ว';
 
   @override
   String backupsCreateErr(String error) {
-    return 'Couldn\'t create the backup: $error';
+    return 'ไม่สามารถสร้างข้อมูลสำรองได้: $error';
   }
 
   @override
-  String get backupsDownload => 'Download';
+  String get backupsDownload => 'ดาวน์โหลด';
 
   @override
-  String get backupsDownloadOk => 'Backup downloaded to this device.';
+  String get backupsDownloadOk => 'ดาวน์โหลดข้อมูลสำรองมาที่เครื่องนี้แล้ว';
 
   @override
   String backupsDownloadErr(String error) {
-    return 'Couldn\'t download the backup: $error';
+    return 'ไม่สามารถดาวน์โหลดข้อมูลสำรองได้: $error';
   }
 
   @override
-  String get backupsCopyOwn => 'Copy to my Drive';
+  String get backupsCopyOwn => 'คัดลอกไปยัง Drive ของฉัน';
 
   @override
-  String get backupsUploadOwn => 'To my Drive';
+  String get backupsUploadOwn => 'ไปยัง Drive ของฉัน';
 
   @override
-  String get backupsUploadShared => 'To shared Drive';
+  String get backupsUploadShared => 'ไปยัง Drive ที่แชร์';
 
   @override
-  String get backupsUploadOk => 'Backup uploaded.';
+  String get backupsUploadOk => 'อัปโหลดข้อมูลสำรองแล้ว';
 
   @override
   String backupsUploadErr(String error) {
-    return 'Couldn\'t upload the backup: $error';
+    return 'ไม่สามารถอัปโหลดข้อมูลสำรองได้: $error';
   }
 
   @override
-  String get backupsLocationLocal => 'This device';
+  String get backupsLocationLocal => 'เครื่องนี้';
 
   @override
-  String get backupsLocationOwnDrive => 'My Drive';
+  String get backupsLocationOwnDrive => 'Drive ของฉัน';
 
   @override
-  String get backupsLocationSharedDrive => 'Shared Drive';
+  String get backupsLocationSharedDrive => 'Drive ที่แชร์';
 
   @override
   String get backupsDeleteChooseBody =>
-      'Choose exactly where to delete it. Only locations where this backup exists are shown.';
+      'เลือกตำแหน่งที่ต้องการลบให้ชัดเจน จะแสดงเฉพาะตำแหน่งที่มีข้อมูลสำรองนี้อยู่เท่านั้น';
 
   @override
-  String get backupsDeleteLocalOnly => 'Only from this device';
+  String get backupsDeleteLocalOnly => 'จากเครื่องนี้เท่านั้น';
 
   @override
-  String get backupsDeleteOwnOnly => 'Only from my Drive';
+  String get backupsDeleteOwnOnly => 'จาก Drive ของฉันเท่านั้น';
 
   @override
-  String get backupsDeleteSharedOnly => 'Only from shared Drive';
+  String get backupsDeleteSharedOnly => 'จาก Drive ที่แชร์เท่านั้น';
 
   @override
-  String get backupsDeleteAll => 'From all copies';
+  String get backupsDeleteAll => 'จากสำเนาทั้งหมด';
 
   @override
   String deleteUnifiedTitle(String farmName) {
-    return 'Delete $farmName?';
+    return 'ลบ $farmName หรือไม่?';
   }
 
   @override
   String get deleteChooseLocationBody =>
-      'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).';
+      'เลือกว่าจะลบจากที่ไหน สำเนาในเครื่องนี้จะถูกลบอย่างถาวร ส่วนสำเนาบน Drive จะย้ายไปที่ถังขยะ (30 วัน)';
 
   @override
   String deleteDriveContextTitle(String farmName) {
-    return 'Delete $farmName from Drive?';
+    return 'ลบ $farmName ออกจาก Drive หรือไม่?';
   }
 
   @override
   String get deleteDriveContextBody =>
-      'The Drive copy will move to Trash, where it can be recovered for 30 days.';
+      'สำเนาบน Drive จะถูกย้ายไปที่ถังขยะ ซึ่งคุณสามารถกู้คืนได้ภายใน 30 วัน';
 
   @override
   String get deleteDriveLocalKept =>
-      'The copy on this device will remain unchanged.';
+      'สำเนาในเครื่องนี้จะยังคงอยู่โดยไม่มีการเปลี่ยนแปลง';
 
   @override
   String deleteLocalContextTitle(String farmName) {
-    return 'Delete $farmName from this device?';
+    return 'ลบ $farmName ออกจากเครื่องนี้หรือไม่?';
   }
 
   @override
-  String get deleteLocalContextBody =>
-      'The copy on this device will be deleted permanently.';
+  String get deleteLocalContextBody => 'สำเนาในเครื่องนี้จะถูกลบอย่างถาวร';
 
   @override
   String deleteLocalDriveCurrent(String date) {
-    return 'Your Drive copy is up to date ($date) and will remain available.';
+    return 'สำเนาบน Drive ของคุณเป็นปัจจุบัน ($date) และจะยังคงพร้อมใช้งาน';
   }
 
   @override
   String deleteLocalDriveAhead(String date) {
-    return 'Your Drive copy is newer ($date) and will remain available.';
+    return 'สำเนาบน Drive ของคุณใหม่กว่า ($date) และจะยังคงพร้อมใช้งาน';
   }
 
   @override
   String deleteLocalDriveOlder(String driveDate, String localDate) {
-    return 'Your Drive copy is older ($driveDate); this device is at $localDate.';
+    return 'สำเนาบน Drive ของคุณเก่ากว่า ($driveDate); เครื่องนี้อยู่ที่ $localDate';
   }
 
   @override
   String deleteLocalBackupAvailable(int count) {
-    return 'There are $count local backups available if you need an earlier copy.';
+    return 'มีข้อมูลสำรองในเครื่อง $count ชุดพร้อมใช้งาน เผื่อคุณต้องการสำเนาก่อนหน้า';
   }
 
   @override
   String get deleteLocalNoRecovery =>
-      'There is no Drive copy or local backup to recover this game from.';
+      'ไม่มีสำเนาบน Drive หรือข้อมูลสำรองในเครื่องที่จะกู้คืนเซฟนี้ได้';
 
   @override
-  String get deleteOptionLocalOnly => 'Only from this device';
+  String get deleteOptionLocalOnly => 'จากเครื่องนี้เท่านั้น';
 
   @override
-  String get deleteOptionDriveOnly => 'Only from Drive';
+  String get deleteOptionDriveOnly => 'จาก Drive เท่านั้น';
 
   @override
-  String get deleteOptionBoth => 'From both (device + Drive)';
+  String get deleteOptionBoth => 'จากทั้งสองสำเนา (เครื่อง + Drive)';
 
   @override
-  String get viewPlayersHint => 'View players';
+  String get viewPlayersHint => 'ดูผู้เล่น';
 
   @override
   String snackDeletedBoth(String saveName) {
-    return '\"$saveName\" deleted from this device and moved to Drive Trash.';
+    return '\"$saveName\" ถูกลบออกจากเครื่องนี้และย้ายไปที่ถังขยะของ Drive แล้ว';
   }
 
   @override
@@ -1042,24 +1042,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get hiwTitle => 'วิธีการทำงาน';
 
   @override
-  String get hiwConnectTitle => 'Connect your account';
+  String get hiwConnectTitle => 'เชื่อมต่อบัญชีของคุณ';
 
   @override
   String get hiwConnectDesc =>
-      'ValleySave uses your Google account to store your saves in a private ValleySave folder on your own Drive.';
+      'ValleySave ใช้บัญชี Google ของคุณเพื่อเก็บเซฟไว้ในโฟลเดอร์ ValleySave ส่วนตัวบน Drive ของคุณเอง';
 
   @override
-  String get hiwConnectStepGoogle => 'Google\naccount';
+  String get hiwConnectStepGoogle => 'บัญชี\nGoogle';
 
   @override
-  String get hiwConnectStepDrive => 'ValleySave\nfolder created';
+  String get hiwConnectStepDrive => 'โฟลเดอร์ ValleySave\nถูกสร้างแล้ว';
 
   @override
-  String get hiwConnectStepReady => 'Ready to\nsync';
+  String get hiwConnectStepReady => 'พร้อม\nซิงโครไนซ์';
 
   @override
   String get hiwConnectTipOwnership =>
-      'Only you can edit or delete your copies on Drive — ValleySave only reads and writes inside its own folder.';
+      'มีเพียงคุณเท่านั้นที่แก้ไขหรือลบสำเนาบน Drive ได้ — ValleySave จะอ่านและเขียนเฉพาะภายในโฟลเดอร์ของตัวเองเท่านั้น';
 
   @override
   String get hiwSyncTitle => 'วิธีการซิงโครไนซ์';
@@ -1367,21 +1367,20 @@ class AppLocalizationsTh extends AppLocalizations {
   String get previewFromDevice => 'จากอุปกรณ์นี้';
 
   @override
-  String get overwriteWhatChanges => 'What changes';
+  String get overwriteWhatChanges => 'สิ่งที่จะเปลี่ยนแปลง';
 
   @override
-  String get overwriteTagOverwritten => 'WILL BE OVERWRITTEN';
+  String get overwriteTagOverwritten => 'จะถูกเขียนทับ';
 
   @override
-  String get overwriteNewCopyTag => 'NEW';
+  String get overwriteNewCopyTag => 'ใหม่';
 
   @override
   String overwriteDeltaPhrase(int days, String time) {
     String _temp0 = intl.Intl.pluralLogic(
       days,
       locale: localeName,
-      other: '$days days and $time',
-      one: '1 day and $time',
+      other: '$days วันและ $time',
       zero: '$time',
     );
     return '$_temp0';
@@ -1389,84 +1388,84 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String overwriteVerdictAhead(String delta) {
-    return 'You\'re $delta ahead. It\'s safe.';
+    return 'คุณล้ำหน้าอยู่ $delta ปลอดภัยดี';
   }
 
   @override
   String get overwriteVerdictMoneySpent =>
-      '💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That\'s not a real loss.';
+      '💰 เงินปัจจุบันลดลง แต่ความคืบหน้าโดยรวมยังก้าวไปข้างหน้า — คุณอาจใช้จ่ายไปกับอะไรบางอย่าง ไม่ใช่การสูญเสียที่แท้จริง';
 
   @override
   String overwriteVerdictNegligible(String delta) {
-    return 'Minimal difference ($delta). Either copy works fine.';
+    return 'แตกต่างกันเพียงเล็กน้อย ($delta) ใช้สำเนาไหนก็ได้';
   }
 
   @override
   String overwriteVerdictDanger(String delta, String target) {
-    return '⚠️ You\'re about to lose $delta of progress on $target. Double-check before continuing.';
+    return '⚠️ คุณกำลังจะสูญเสียความคืบหน้า $delta ใน $target ตรวจสอบให้ดีก่อนดำเนินการต่อ';
   }
 
   @override
-  String get overwriteConfirmTitleUpload => 'Confirm the upload?';
+  String get overwriteConfirmTitleUpload => 'ยืนยันการอัปโหลดหรือไม่?';
 
   @override
-  String get overwriteConfirmTitleDownload => 'Confirm the download?';
+  String get overwriteConfirmTitleDownload => 'ยืนยันการดาวน์โหลดหรือไม่?';
 
   @override
   String overwriteConfirmBody(String delta, String target) {
-    return 'You\'re about to lose $delta on $target. This action can\'t be undone.';
+    return 'คุณกำลังจะสูญเสีย $delta ใน $target การกระทำนี้ไม่สามารถย้อนกลับได้';
   }
 
   @override
-  String get overwriteConfirmButtonUpload => 'Confirm upload';
+  String get overwriteConfirmButtonUpload => 'ยืนยันการอัปโหลด';
 
   @override
-  String get overwriteConfirmButtonDownload => 'Confirm download';
+  String get overwriteConfirmButtonDownload => 'ยืนยันการดาวน์โหลด';
 
   @override
-  String get overwriteDangerButtonUpload => '⚠️ Upload anyway';
+  String get overwriteDangerButtonUpload => '⚠️ อัปโหลดต่อไป';
 
   @override
-  String get overwriteDangerButtonDownload => '⚠️ Download anyway';
+  String get overwriteDangerButtonDownload => '⚠️ ดาวน์โหลดต่อไป';
 
   @override
   String overwriteIdenticalSummary(int count, String list) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '✓ $count identical',
-      one: '✓ 1 identical',
+      other: '✓ เหมือนกัน $count รายการ',
     );
     return '$_temp0 — $list';
   }
 
   @override
   String overwriteUploadToOwner(String email) {
-    return 'Upload to $email\'s Drive';
+    return 'อัปโหลดไปยัง Drive ของ $email';
   }
 
   @override
-  String get overwriteUploadBoth => 'Upload to both Drives';
+  String get overwriteUploadBoth => 'อัปโหลดไปยัง Drive ทั้งสอง';
 
   @override
-  String get overwriteConfirmTitleBoth => 'Confirm both uploads?';
+  String get overwriteConfirmTitleBoth =>
+      'ยืนยันการอัปโหลดทั้งสองรายการหรือไม่?';
 
   @override
   String overwriteConfirmBodyBoth(String delta, String targets) {
-    return 'You\'ll lose $delta in $targets. This action can\'t be undone.';
+    return 'คุณจะสูญเสีย $delta ใน $targets การกระทำนี้ไม่สามารถย้อนกลับได้';
   }
 
   @override
   String overwriteBothDestinationsLabel(String first, String second) {
-    return '$first and $second';
+    return '$first และ $second';
   }
 
   @override
-  String get sharedTargetOwnDrive => 'your Drive';
+  String get sharedTargetOwnDrive => 'Drive ของคุณ';
 
   @override
   String sharedStatusLocalAhead(String targets) {
-    return 'You\'re ahead in $targets';
+    return 'คุณล้ำหน้าอยู่ใน $targets';
   }
 
   @override
@@ -1485,104 +1484,105 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get snackReplacePrepareFailed =>
-      'Could not prepare the save. Nothing on disk was changed';
+      'ไม่สามารถเตรียมเซฟได้ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์';
 
   @override
   String get snackReplaceValidationFailed =>
-      'The downloaded save looks invalid or incomplete. Nothing on disk was changed';
+      'เซฟที่ดาวน์โหลดมาดูเหมือนจะไม่ถูกต้องหรือไม่สมบูรณ์ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์';
 
   @override
   String get snackReplaceBackupFailed =>
-      'Could not create a safety backup. Nothing on disk was changed';
+      'ไม่สามารถสร้างข้อมูลสำรองได้ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์';
 
   @override
   String get snackReplaceSwapFailed =>
-      'The swap failed, but the original save was restored from backup';
+      'การสลับล้มเหลว แต่เซฟต้นฉบับถูกคืนค่าจากข้อมูลสำรองแล้ว';
 
   @override
-  String get snackReplaceBusy =>
-      'There\'s already an operation in progress for this save';
+  String get snackReplaceBusy => 'มีการดำเนินการกับเซฟนี้อยู่แล้ว';
 
   @override
   String get snackUploadIncomplete =>
-      'The local save is incomplete or corrupted. Nothing was uploaded';
+      'เซฟในเครื่องนี้ไม่สมบูรณ์หรือเสียหาย ไม่มีการอัปโหลดใดๆ';
 
   @override
   String get snackDownloadIncomplete =>
-      'Can\'t download: this save is missing content on Drive';
+      'ไม่สามารถดาวน์โหลดได้ ขาดเนื้อหาบน Drive';
 
   @override
-  String get cardIncomplete => 'Incomplete on Drive';
+  String get cardIncomplete => 'ไม่สมบูรณ์บน Drive';
 
   @override
-  String get autoRefreshTitle => 'Auto-refresh';
+  String get autoRefreshTitle => 'รีเฟรชอัตโนมัติ';
 
   @override
-  String get autoRefreshSubtitle => 'Checks for Drive changes every 30s';
+  String get autoRefreshSubtitle =>
+      'ตรวจสอบการเปลี่ยนแปลงบน Drive ทุก 30 วินาที';
 
   @override
   String autoSyncSnack(String farmName) {
-    return '$farmName synced automatically';
+    return 'ซิงโครไนซ์ $farmName โดยอัตโนมัติแล้ว';
   }
 
   @override
-  String get autoSyncTooltipOn => 'Auto-sync on — syncs itself when it\'s safe';
+  String get autoSyncTooltipOn =>
+      'เปิดใช้งานซิงค์อัตโนมัติ — จะซิงโครไนซ์ให้เองเมื่อปลอดภัย';
 
   @override
-  String get autoSyncTooltipOff => 'Auto-sync off — tap to turn it on';
+  String get autoSyncTooltipOff => 'ปิดใช้งานซิงค์อัตโนมัติ — แตะเพื่อเปิด';
 
   @override
-  String get autoSyncExplainTitle => 'Auto-sync';
+  String get autoSyncExplainTitle => 'ซิงค์อัตโนมัติ';
 
   @override
   String autoSyncExplainBody(String farmName) {
-    return 'From now on, $farmName will upload or download itself when it\'s safe, without asking you to confirm.';
+    return 'ตั้งแต่นี้ไป $farmName จะอัปโหลดหรือดาวน์โหลดเองเมื่อปลอดภัย โดยไม่ต้องขอให้คุณยืนยัน';
   }
 
   @override
   String get autoSyncExplainSafe =>
-      'It only acts when you\'re clearly ahead and nothing gets lost.';
+      'จะทำงานก็ต่อเมื่อคุณล้ำหน้าอย่างชัดเจนและไม่มีอะไรสูญหาย';
 
   @override
   String get autoSyncExplainDanger =>
-      'If there were any risk of losing progress, it never acts on its own: you\'ll still decide with the usual dialog.';
+      'หากมีความเสี่ยงที่จะสูญเสียความคืบหน้า จะไม่ทำงานเองเด็ดขาด คุณยังคงเป็นผู้ตัดสินใจผ่านกล่องโต้ตอบแบบเดิม';
 
   @override
   String get autoSyncExplainMissing =>
-      'If one of the two copies is missing, it won\'t create it: the first upload or download is your call.';
+      'หากขาดสำเนาใดสำเนาหนึ่ง จะไม่สร้างให้เอง การอัปโหลดหรือดาวน์โหลดครั้งแรกคุณเป็นผู้ตัดสินใจ';
 
   @override
-  String get autoSyncExplainDontShowAgain => 'Don\'t show this again';
+  String get autoSyncExplainDontShowAgain => 'ไม่ต้องแสดงข้อความนี้อีก';
 
   @override
-  String get autoSyncExplainConfirm => 'Got it, turn on';
+  String get autoSyncExplainConfirm => 'เข้าใจแล้ว เปิดใช้งาน';
 
   @override
-  String get hiwAutoSyncTitle => 'Sync by itself';
+  String get hiwAutoSyncTitle => 'ซิงโครไนซ์ด้วยตัวเอง';
 
   @override
   String get hiwAutoSyncDesc =>
-      'Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.';
+      'เซฟแต่ละอันมีชิป AUTO อยู่บนการ์ด เมื่อเปิดใช้งาน เซฟนั้นจะอัปโหลดหรือดาวน์โหลดเองเมื่อแอปตรวจพบการเปลี่ยนแปลง — โดยไม่ต้องเข้าไปยืนยัน';
 
   @override
   String get hiwAutoSyncTipSafe =>
-      'It only syncs itself when you\'re clearly ahead and nothing gets lost.';
+      'จะซิงโครไนซ์เองก็ต่อเมื่อคุณล้ำหน้าอย่างชัดเจนและไม่มีอะไรสูญหาย';
 
   @override
   String get hiwAutoSyncTipDanger =>
-      'If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.';
+      'หากมีความเสี่ยงที่จะสูญเสียความคืบหน้า จะไม่ทำเองเด็ดขาด ยังคงถามคุณผ่านหน้าจอเปรียบเทียบแบบเดิม';
 
   @override
   String get hiwAutoSyncTipPerSave =>
-      'You turn it on save by save, not all at once: you can have it on yours and off on a shared one.';
+      'เปิดใช้งานทีละเซฟ ไม่ใช่เปิดพร้อมกันทั้งหมด คุณสามารถเปิดไว้ในเซฟของคุณแต่ปิดไว้ในเซฟที่แชร์ได้';
 
   @override
   String get hiwAutoSyncTipMissing =>
-      'It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.';
+      'จะรักษาสำเนาสองชุดที่มีอยู่แล้วให้ซิงค์กันเท่านั้น หากขาดชุดใดชุดหนึ่ง การอัปโหลดหรือดาวน์โหลดครั้งแรกคุณต้องทำเอง';
 
   @override
   String get hiwAutoSyncTipRefresh =>
-      'In Settings you can turn off automatic change checking entirely.';
+      'ในการตั้งค่า คุณสามารถปิดการตรวจสอบการเปลี่ยนแปลงอัตโนมัติทั้งหมดได้';
 
   @override
   String get snackSessionExpired =>
@@ -1653,91 +1653,91 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hiwCompatIncomplete =>
-      'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.';
+      'หากคุณเห็นข้อความ \"ไม่สมบูรณ์บน Drive\" ในเซฟใด แสดงว่าขาดไฟล์ที่จำเป็นบนคลาวด์ — จะดาวน์โหลดไม่ได้จนกว่าจะมีการอัปโหลดใหม่อย่างถูกต้องจากอุปกรณ์อื่น';
 
   @override
-  String get hiwShareTitle => 'Share with others';
+  String get hiwShareTitle => 'แชร์กับผู้อื่น';
 
   @override
   String get hiwShareDesc =>
-      'Share a save with another player by email. They\'ll see it under Shared with me on their own device.';
+      'แชร์เซฟกับผู้เล่นคนอื่นทางอีเมล พวกเขาจะเห็นมันใน \"แชร์กับฉัน\" บนอุปกรณ์ของตัวเอง';
 
   @override
-  String get hiwShareStepYourSave => 'Your\nsave';
+  String get hiwShareStepYourSave => 'เซฟ\nของคุณ';
 
   @override
-  String get hiwShareStepShare => 'Share by\nemail';
+  String get hiwShareStepShare => 'แชร์ทาง\nอีเมล';
 
   @override
-  String get hiwShareStepFriend => 'Shared\nwith me';
+  String get hiwShareStepFriend => 'แชร์\nกับฉัน';
 
   @override
   String get hiwShareTipRoles =>
-      'Two roles: Read-only lets them view and download. Allow sync lets them overwrite your copy on Drive. Either way they can never delete it — only you, the owner, can delete your save.';
+      'มีสองบทบาท: อ่านอย่างเดียว อนุญาตให้ดูและดาวน์โหลดได้ อนุญาตให้ซิงโครไนซ์ อนุญาตให้เขียนทับสำเนาของคุณบน Drive ได้ ไม่ว่ากรณีใดก็ตาม พวกเขาไม่สามารถลบมันได้ — มีเพียงคุณ เจ้าของ เท่านั้นที่ลบเซฟของคุณได้';
 
   @override
   String get hiwShareTipDisconnect =>
-      'Disconnecting just stops syncing on their end — the share stays active until you leave it for real from Manage shares.';
+      'การตัดการเชื่อมต่อจะหยุดแค่การซิงโครไนซ์ฝั่งของพวกเขาเท่านั้น — การแชร์ยังคงทำงานอยู่จนกว่าคุณจะออกจริงจาก \"จัดการการแชร์\"';
 
   @override
-  String get hiwHostSwapTitle => 'Host swap';
+  String get hiwHostSwapTitle => 'การเปลี่ยนเจ้าของบ้าน';
 
   @override
   String get hiwHostSwapDesc =>
-      'Change which farmhand hosts the save, replacing it in place — same save slot, same sharing permissions.';
+      'เปลี่ยนว่าฟาร์มแฮนด์คนใดเป็นเจ้าของบ้านของเซฟ โดยแทนที่ในตำแหน่งเดิม — สล็อตเซฟเดิม สิทธิ์การแชร์เดิม';
 
   @override
-  String get hiwHostSwapStepPick => 'Pick a\nfarmhand';
+  String get hiwHostSwapStepPick => 'เลือก\nฟาร์มแฮนด์';
 
   @override
-  String get hiwHostSwapStepConfirm => 'Confirm';
+  String get hiwHostSwapStepConfirm => 'ยืนยัน';
 
   @override
-  String get hiwHostSwapStepDone => 'New save\ncreated';
+  String get hiwHostSwapStepDone => 'สร้างเซฟใหม่\nเรียบร้อย';
 
   @override
   String get hiwHostSwapTipMove =>
-      'Some farm objects may be relocated to make room for the house — nothing is deleted.';
+      'วัตถุบางอย่างในฟาร์มอาจถูกย้ายที่เพื่อเปิดพื้นที่ให้บ้าน — จะไม่มีการลบสิ่งใดออก';
 
   @override
   String get hiwHostSwapTipHouse =>
-      'The new host\'s house will look like the game\'s default big house — cabin styling isn\'t supported without mods.';
+      'บ้านของเจ้าของบ้านคนใหม่จะมีลักษณะเหมือนบ้านหลังใหญ่เริ่มต้นของเกม — รูปลักษณ์กระท่อมไม่รองรับหากไม่มีม็อด';
 
   @override
-  String get hiwBackupsTitle => 'Backups';
+  String get hiwBackupsTitle => 'ข้อมูลสำรอง';
 
   @override
   String get hiwBackupsDesc =>
-      'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).';
+      'ข้อมูลสำรองคือภาพรวมของเซฟที่คุณสามารถคืนค่าได้ในภายหลัง สร้างด้วยตนเองได้ทุกเมื่อ หรือปล่อยให้ ValleySave สร้างให้อัตโนมัติก่อนเขียนทับเซฟ (ตอนดาวน์โหลด นำเข้า คืนค่า หรือเปลี่ยนเจ้าของบ้าน)';
 
   @override
-  String get hiwBackupsStepSave => 'Your\nsave';
+  String get hiwBackupsStepSave => 'เซฟ\nของคุณ';
 
   @override
-  String get hiwBackupsStepSnapshot => 'Backup\nsnapshot';
+  String get hiwBackupsStepSnapshot => 'สร้าง\nข้อมูลสำรอง';
 
   @override
-  String get hiwBackupsStepStore => 'Local and/or\nDrive';
+  String get hiwBackupsStepStore => 'เครื่องนี้และ/หรือ\nDrive';
 
   @override
   String get hiwBackupsTipRestore =>
-      'Restoring overwrites your current save with that earlier version — this can\'t be undone.';
+      'การคืนค่าจะเขียนทับเซฟปัจจุบันของคุณด้วยเวอร์ชันก่อนหน้านั้น — ย้อนกลับไม่ได้';
 
   @override
   String get hiwBackupsTipDelete =>
-      'Deleting a backup removes it everywhere it exists (this device and Drive, if uploaded) — this can\'t be undone.';
+      'การลบข้อมูลสำรองจะลบออกจากทุกที่ที่มันอยู่ (เครื่องนี้และ Drive หากอัปโหลดไว้) — ย้อนกลับไม่ได้';
 
   @override
   String get hiwBackupsTipExport =>
-      'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.';
+      'คุณยังสามารถส่งออกเซฟเป็นไฟล์ zip เพื่อเก็บไว้ที่ไหนก็ได้ และนำเข้ากลับมาในภายหลัง — เป็นทางเลือกแบบแมนนวลและพกพาได้แทนข้อมูลสำรองในตัว';
 
   @override
   String get hiwBackupsTipRetention =>
-      'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.';
+      'ValleySave จะเก็บข้อมูลสำรองอัตโนมัติล่าสุด 5 ชุดต่อเซฟหนึ่งอัน ส่วนที่คุณสร้างด้วยตนเองจะไม่ถูกลบไปเอง';
 
   @override
   String get hiwBackupsTipRestoreBridge =>
-      'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.';
+      'ในโหมด Bridge (Android ที่ไม่มี root/Shizuku) การคืนค่าข้อมูลสำรองจะขอให้คุณแตกไฟล์ .zip ด้วยตนเองลงในโฟลเดอร์ Stardew — เหมือนกับตอนดาวน์โหลด';
 
   @override
   String get hiwComparePrimary => 'เวลาเล่นทั้งหมด';
@@ -2003,14 +2003,14 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hiwLaunchTipLinux =>
-      'On Linux, if the game isn’t detected automatically, set the executable path in Settings → Game.';
+      'บน Linux หากไม่พบเกมโดยอัตโนมัติ ให้ตั้งค่าพาธไฟล์ปฏิบัติการใน การตั้งค่า → เกม';
 
   @override
-  String get hiwSaveLocationsTitle => 'Where your saves live';
+  String get hiwSaveLocationsTitle => 'เซฟของคุณอยู่ที่ไหน';
 
   @override
   String get hiwSaveLocationsDesc =>
-      'ValleySave reads and writes directly to the game\'s save folder on each platform.';
+      'ValleySave อ่านและเขียนไปยังโฟลเดอร์เซฟของเกมโดยตรงในแต่ละแพลตฟอร์ม';
 
   @override
   String get hiwSaveLocationWindows =>
@@ -2018,11 +2018,11 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hiwSaveLocationAndroid =>
-      'Android: protected folder, accessed via Shizuku or the Bridge';
+      'Android: โฟลเดอร์ที่ได้รับการป้องกัน เข้าถึงผ่าน Shizuku หรือ Bridge';
 
   @override
   String get hiwSaveLocationLinux =>
-      'Linux: ~/.config/StardewValley/Saves (or ~/snap/steam/common/.config/StardewValley/Saves if Steam is installed via snap)';
+      'Linux: ~/.config/StardewValley/Saves (หรือ ~/snap/steam/common/.config/StardewValley/Saves หากติดตั้ง Steam ผ่าน snap)';
 
   @override
   String get settingsGameSection => 'เกม';
@@ -2098,4 +2098,26 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get hostSwapErrValidation =>
       'การตรวจสอบเซฟใหม่ล้มเหลว จึงถูกยกเลิก ต้นฉบับยังคงสมบูรณ์';
+
+  @override
+  String get makeHostDeleteOriginalTitle =>
+      'ลบเซฟต้นฉบับออกจากเครื่องนี้หรือไม่?';
+
+  @override
+  String get makeHostDeleteOriginalBody =>
+      'เซฟใหม่พร้อมแล้ว สำรองต้นฉบับไปยัง Drive ของคุณก่อน (คุณดาวน์โหลดใหม่ได้ภายหลัง) หรือจะลบเฉพาะสำเนาในเครื่องก็ได้';
+
+  @override
+  String get makeHostDeleteOriginalNoBackupBody =>
+      'ไม่มีการเชื่อมต่อ Drive: จะไม่มีข้อมูลสำรองเหลืออยู่ จะลบเฉพาะสำเนาในเครื่องนี้เท่านั้น';
+
+  @override
+  String get makeHostDeleteOriginalUploadBody =>
+      'เซฟต้นฉบับจะถูกอัปโหลดไปยัง Drive ของคุณเป็นข้อมูลสำรองก่อน จากนั้นจะลบสำเนาในเครื่องนี้';
+
+  @override
+  String get makeHostDeleteWithoutUpload => 'ลบโดยไม่อัปโหลด';
+
+  @override
+  String get makeHostUploadAndDelete => 'อัปโหลดและลบ';
 }

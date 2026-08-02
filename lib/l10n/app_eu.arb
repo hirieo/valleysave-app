@@ -544,5 +544,565 @@
   "hostSwapErrInvalid": "Partida honek ustekabeko egitura du. Ez da ezer aldatu.",
   "hostSwapErrNoSpace": "Ez dago leku librerik baserrian objektuak lekuz aldatzeko. Ez da ezer aldatu.",
   "hostSwapErrWrite": "Ezin izan da partida berria idatzi (diskoa/baimenak). Ez da ezer aldatu.",
-  "hostSwapErrValidation": "Partida berriaren egiaztapenak huts egin du eta baztertu egin da. Jatorrizkoa osorik dago."
+  "hostSwapErrValidation": "Partida berriaren egiaztapenak huts egin du eta baztertu egin da. Jatorrizkoa osorik dago.",
+  "disconnectButtonEmail": "Deskonektatu {email}(e)tik",
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAsPrefix": "Honela konektatuta:",
+  "hiwConnectTitle": "Konektatu zure kontua",
+  "hiwConnectDesc": "ValleySave-k zure Google kontua erabiltzen du zure gordetzeak zure Drive-eko ValleySave karpeta pribatuan gordetzeko.",
+  "hiwConnectStepGoogle": "Google\nkontua",
+  "hiwConnectStepDrive": "ValleySave karpeta\nsortuta",
+  "hiwConnectStepReady": "Prest\nsinkronizatzeko",
+  "hiwConnectTipOwnership": "Zuk bakarrik editatu edo ezaba ditzakezu Drive-ko zure kopiak — ValleySave-k bere karpetaren barruan bakarrik irakurri eta idazten du.",
+  "overwriteWhatChanges": "Zer aldatzen den",
+  "overwriteTagOverwritten": "GAINIDATZIKO DA",
+  "overwriteNewCopyTag": "BERRIA",
+  "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{egun 1 eta {time}} other{{days} egun eta {time}}}",
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictAhead": "{delta} aurretik zoaz. Segurua da.",
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictMoneySpent": "💰 Uneko dirua jaitsi da, baina aurrerapen orokorra aurrera doa — ziurrenik zerbaitetan gastatu duzu. Ez da benetako galera.",
+  "overwriteVerdictNegligible": "Aldaketa minimoa ({delta}). Bi kopiek balio dute.",
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteVerdictDanger": "⚠️ {delta} aurrerapen galduko duzu {target}(e)n. Aztertu jarraitu aurretik.",
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmTitleUpload": "Igoera baieztatu?",
+  "overwriteConfirmTitleDownload": "Deskarga baieztatu?",
+  "overwriteConfirmBody": "{delta} galduko duzu {target}(e)n. Ekintza hau ezin da desegin.",
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteConfirmButtonUpload": "Igoera baieztatu",
+  "overwriteConfirmButtonDownload": "Deskarga baieztatu",
+  "overwriteDangerButtonUpload": "⚠️ Igo dena den",
+  "overwriteDangerButtonDownload": "⚠️ Deskargatu dena den",
+  "overwriteIdenticalSummary": "{count, plural, one{✓ 1 berdina} other{✓ {count} berdinak}} — {list}",
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadToOwner": "Igo {email}(r)en Drive-ra",
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteUploadBoth": "Igo bi Drive-etara",
+  "overwriteConfirmTitleBoth": "Bi igoerak baieztatu?",
+  "overwriteConfirmBodyBoth": "{delta} galduko duzu {targets}(e)n. Ekintza hau ezin da desegin.",
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "overwriteBothDestinationsLabel": "{first} eta {second}",
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedTargetOwnDrive": "zure Drive-a",
+  "sharedStatusLocalAhead": "{targets}(e)n aurretik zoaz",
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
+  "snackReplacePrepareFailed": "Ezin izan da gordetzea prestatu. Ez da ezer aldatu diskoan",
+  "snackReplaceValidationFailed": "Deskargatutako gordetzea baliogabea edo osatugabea dirudi. Ez da ezer aldatu diskoan",
+  "snackReplaceBackupFailed": "Ezin izan da babeskopia sortu. Ez da ezer aldatu diskoan",
+  "snackReplaceSwapFailed": "Trukeak huts egin du, baina jatorrizko gordetzea babeskopiatik leheneratu da",
+  "snackReplaceBusy": "Dagoeneko eragiketa bat martxan dago gordetze honentzat",
+  "snackUploadIncomplete": "Gordetze lokala osatugabea edo hondatuta dago. Ez da ezer igo",
+  "snackDownloadIncomplete": "Ezin da deskargatu: Drive-en edukia falta zaio",
+  "cardIncomplete": "Osatu gabea Drive-n",
+  "autoRefreshTitle": "Berritze automatikoa",
+  "autoRefreshSubtitle": "Drive-eko aldaketak egiaztatzen ditu 30 segundotik behin",
+  "autoSyncSnack": "{farmName} automatikoki sinkronizatu da",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncTooltipOn": "Sinkronizazio automatikoa piztuta — bakarrik sinkronizatzen da segurua denean",
+  "autoSyncTooltipOff": "Sinkronizazio automatikoa itzalita — sakatu pizteko",
+  "autoSyncExplainTitle": "Sinkronizazio automatikoa",
+  "autoSyncExplainBody": "Hemendik aurrera, {farmName} bere kabuz igo edo deskargatuko da segurua denean, zuri berrespenik eskatu gabe.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "autoSyncExplainSafe": "Argi eta garbi aurretik zoazenean eta ezer galtzen ez denean bakarrik jarduten du.",
+  "autoSyncExplainDanger": "Aurrerapena galtzeko arriskurik balego, inoiz ez du bere kabuz jarduten: zuk erabakiko duzu beti ohiko elkarrizketa-koadroaren bidez.",
+  "autoSyncExplainMissing": "Bi kopietako bat falta bada, ez du bere kabuz sortzen: lehen igoera edo deskarga zuk erabakitzen duzu.",
+  "autoSyncExplainDontShowAgain": "Ez erakutsi abisu hau berriro",
+  "autoSyncExplainConfirm": "Ulertuta, aktibatu",
+  "hiwAutoSyncTitle": "Bere kabuz sinkronizatu",
+  "hiwAutoSyncDesc": "Gordetze bakoitzak AUTO txartel bat du bere kartan. Piztutakoan, gordetze hori bere kabuz igo edo deskargatuko da aplikazioak aldaketa bat detektatzen duenean — sartu eta berresteko beharrik gabe.",
+  "hiwAutoSyncTipSafe": "Argi eta garbi aurretik zoazenean eta ezer galtzen ez denean bakarrik sinkronizatzen da bere kabuz.",
+  "hiwAutoSyncTipDanger": "Aurrerapena galtzeko arriskurik balego, inoiz ez du bere kabuz egiten: ohiko konparaketaren bidez galdetzen jarraituko dizu.",
+  "hiwAutoSyncTipPerSave": "Gordetzez gordetze aktibatzen da, ez guztiak batera: zeurean piztuta eta partekatutako batean itzalita eduki dezakezu.",
+  "hiwAutoSyncTipMissing": "Dagoeneko dauden bi kopiak sinkronizatuta mantentzen ditu bakarrik. Bat falta bada, lehen igoera edo deskarga zuk egiten duzu.",
+  "hiwAutoSyncTipRefresh": "Ezarpenetan aldaketen egiaztapen automatikoa erabat itzali dezakezu.",
+  "hiwCompatIncomplete": "Gordetze batean \"Osatu gabea Drive-n\" ikusten baduzu, hodeian beharrezko fitxategiren bat falta zaio — ezin da deskargatu beste gailu batetik ondo berriro igo arte.",
+  "hiwShareTitle": "Besteekin partekatu",
+  "hiwShareDesc": "Partekatu gordetze bat beste jokalari batekin emailez. Bere gailuan Nirekin partekatuak atalean ikusiko du.",
+  "hiwShareStepYourSave": "Zure\ngordetzea",
+  "hiwShareStepShare": "Partekatu\nemailez",
+  "hiwShareStepFriend": "Nirekin\npartekatuak",
+  "hiwShareTipRoles": "Bi rol daude: Irakurtzeko soilik aukerak ikusi eta deskargatzeko aukera ematen du. Sinkronizatzea baimentzeak zure Drive-ko kopia gainidazteko aukera ematen du. Inoiz ere ezin dute ezabatu — zuk, jabeak, bakarrik ezaba dezakezu zure gordetzea.",
+  "hiwShareTipDisconnect": "Deskonektatzeak bere aldeko sinkronizazioa gelditzen du soilik — partekatzeak aktibo jarraitzen du benetan Partekatuak kudeatu ataletik uzten duzun arte.",
+  "hiwHostSwapTitle": "Ostalari aldaketa",
+  "hiwHostSwapDesc": "Aldatu zein farmhand den gordetzearen ostalaria, tokian bertan ordeztuz — gorde-toki bera, partekatze-baimen berak.",
+  "hiwHostSwapStepPick": "Aukeratu\nfarmhand-a",
+  "hiwHostSwapStepConfirm": "Berretsi",
+  "hiwHostSwapStepDone": "Gordetze berria\nsortuta",
+  "hiwHostSwapTipMove": "Baserriko objektu batzuk lekuz alda daitezke etxeari tokia egiteko — ezer ez da ezabatzen.",
+  "hiwHostSwapTipHouse": "Ostalari berriaren etxea jokoaren lehenetsitako etxe handia bezala ikusiko da — etxolaren itxura ez da onartzen modrik gabe.",
+  "hiwBackupsTitle": "Babeskopiak",
+  "hiwBackupsDesc": "Babeskopia bat gero leheneratu dezakezun gordetze baten argazkia da. Sortu eskuz nahi duzunean, edo utzi ValleySave-ri automatikoki sortzen gordetze bat gainidatzi aurretik (deskargatzean, inportatzean, leheneratzean edo ostalaria aldatzean).",
+  "hiwBackupsStepSave": "Zure\ngordetzea",
+  "hiwBackupsStepSnapshot": "Babeskopia\nsortuta",
+  "hiwBackupsStepStore": "Lokala eta/edo\nDrive",
+  "hiwBackupsTipRestore": "Leheneratzeak zure uneko gordetzea aurreko bertsio horrekin gainidazten du — ezin da desegin.",
+  "hiwBackupsTipDelete": "Babeskopia bat ezabatzeak existitzen den leku guztietatik kentzen du (gailu hau eta Drive, igo bada) — ezin da desegin.",
+  "hiwBackupsTipExport": "Gordetze bat Zip gisa Esportatu ere badezakezu nahi duzun tokian gordetzeko, eta gero berriro Inportatu — barneko babeskopien eskuzko eta eramangarria den alternatiba bat.",
+  "hiwBackupsTipRetention": "ValleySave-k gordetze bakoitzeko azken 5 babeskopia automatikoak gordetzen ditu; eskuz sortzen dituzunak inoiz ez dira bakarrik ezabatzen.",
+  "hiwBackupsTipRestoreBridge": "Zubi moduan (Android root/Shizuku gabe), babeskopia bat leheneratzeak .zip-a eskuz Stardew karpetan ateratzeko eskatzen dizu — deskargatzean bezala.",
+  "hiwLaunchTipLinux": "Linux-en, jokoa automatikoki detektatzen ez bada, konfiguratu exekutagarriaren bidea Ezarpenak → Jokoa atalean.",
+  "hiwSaveLocationsTitle": "Non bizi diren zure gordetzeak",
+  "hiwSaveLocationsDesc": "ValleySave-k zuzenean irakurtzen eta idazten du jokoaren gordetze-karpetan plataforma bakoitzean.",
+  "hiwSaveLocationWindows": "Windows: %AppData%\\StardewValley\\Saves",
+  "hiwSaveLocationAndroid": "Android: babestutako karpeta, Shizuku edo Zubiaren bidez atzitzen da",
+  "hiwSaveLocationLinux": "Linux: ~/.config/StardewValley/Saves (edo ~/snap/steam/common/.config/StardewValley/Saves Steam snap bidez instalatuta badago)",
+  "exportAction": "Esportatu",
+  "exportSuccess": "Gordetzea esportatu da.",
+  "exportError": "Ezin izan da gordetzea esportatu: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importAction": "Inportatu gordetzea",
+  "importSuccess": "{playerName}(r)en gordetzea inportatu da.",
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+  "importErrInvalidZip": "Fitxategi hau ez da zip fitxategi baliozkoa.",
+  "importErrUnsafePath": "Fitxategi honek egitura ez-segurua du eta ezetsi egin da.",
+  "importErrTooLarge": "Fitxategi hau handiegia da inportatzeko.",
+  "importErrNotASave": "Fitxategi honek ez du gordetze ezagungarririk.",
+  "importErrWrite": "Ezin izan da inportatutako gordetzea idatzi (diskoa/baimenak).",
+  "importErrBackupFailed": "Ezin izan da babeskopia sortu. Ez da ezer inportatu.",
+  "importConflictTitle": "Dagoeneko badago izen hori duen gordetze bat",
+  "importConflictBody": "Inportatzeak dagoen kopia lokala ordeztuko du. Ezin da desegin.",
+  "importConflictConfirm": "Gainidatzi",
+  "shareAction": "Partekatu",
+  "shareUploadFirstCta": "Igo lehenengo",
+  "shareDialogTitle": "Partekatu gordetzea",
+  "shareEmailPlaceholder": "izena@adibidea.com",
+  "shareInfoNote": "Partekatzeak ikusi eta deskargatzeko sarbidea ematen du. Zuk bakarrik editatu edo ezaba dezakezu zure Drive-ko kopia.",
+  "shareRoleReader": "Irakurtzeko soilik",
+  "shareRoleWriter": "Sinkronizatzea baimendu",
+  "shareInfoNoteCoop": "Irakurtzeko soilik aukerak ikusi eta deskargatzeko aukera ematen du. Sinkronizatzea baimentzeak zure Drive-ko kopia gainidazteko aukera ematen du — inoiz ez dute ezabatuko.",
+  "shareConfirmButton": "Partekatu",
+  "shareSuccess": "{email}(r)ekin partekatuta.",
+  "@shareSuccess": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "manageAccessTitle": "Sarbidea duten pertsonak",
+  "manageAccessEmpty": "Oraindik inork ez du sarbiderik.",
+  "manageAccessRoleLabel": "Sarbidea",
+  "manageAccessRevoke": "Kendu",
+  "manageAccessRevokeConfirm": "{email}(r)i sarbidea kendu? Dagoeneko deskargatu duen kopia lokal oro berea izaten jarraituko du.",
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "driveOnlyControlsYourCopy": "Partekatzeak zure Drive-ko kopia kontrolatzen du soilik. Norbaitek deskargatzen badu, kopia hori berea da.",
+  "driveOnlyControlsYourCopyCoop": "Sinkronizatzeak zure Drive-ko kopia kontrolatzen du — baimentzen duzunak gainidatz dezake, baina inoiz ez ezabatu.",
+  "sharedWithMeTitle": "Nirekin partekatuak",
+  "sharedWithMeEmpty": "Oraindik ez dute ezer partekatu zurekin.",
+  "sharedWithMeAdd": "Gehitu partekatutako gordetzea",
+  "sharedWithMeOwnedBy": "{email}(e)k partekatuta",
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRoleSync": "Sinkronizatzen du",
+  "sharedWithMeRoleRead": "Irakurtzeko soilik",
+  "sharedWithMeSync": "Sinkronizatu",
+  "sharedWithMeDownload": "Deskargatu",
+  "sharedWithMeRemove": "Deskonektatu",
+  "sharedWithMeRemoveConfirm": "Ez zara gehiago {email}(r)en Drive-rekin sinkronizatuko, baina nahi duzunean berriro gehitu dezakezu — partekatuta jarraitzen du. Zure kopia lokala coop gordetze arrunt gisa geratuko da.",
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedLeaveConfirm": "Benetan galduko duzu gordetze honetarako sarbidea. Ezin izango duzu berriro gehitu, {email}(e)k berriro zurekin partekatzen ez badu. Zure kopia lokala coop gordetze arrunt gisa geratuko da.",
+  "sharedManageButton": "Kudeatu",
+  "sharedManageDialogTitle": "Partekatuak kudeatu",
+  "sharedManageDialogHint": "Hemen partekatutako gordetze batetik benetan atera zaitezke.",
+  "sharedLeaveButton": "Partekatzetik atera",
+  "sharedLeaveSuccess": "{email}(r)en partekatzetik atera zara.",
+  "sharedWithMeSyncConfirm": "{email}(r)en Drive-ko kopia zure gordetze lokalarekin gainidatzi?",
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedAccessReadOnly": "{email}(e)k irakurtzeko soilik moduan jarri zaitu — ikusi eta deskargatu dezakezu, baina ezin duzu bere Drive-ra sinkronizatu.",
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeRevoked": "Jada ez duzu sarbiderik",
+  "sharedRevokedDialogBody": "{email}(e)k {farmName} zurekin partekatzeari utzi dio. Zure kopia lokala eta Drive-koa horrela geratzen dira, orain Nire gordetzeak atalean.",
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedRevokedAccept": "Ados",
+  "sharedSelfCleanupTitle": "Erregistroa zuzenduta",
+  "sharedSelfCleanupBody": "{farmName} zurekin partekatuta agertu zen okerreko batez — benetan zurea da. Zuzendu da, orain Nire gordetzeak atalean dago.",
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedWithMeUploadOwn": "Igo nire Drive-ra",
+  "sharedDownloadOwn": "Deskargatu nire Drive-tik",
+  "sharedStatusOwnDriveAhead": "Zure Drive-a aurretik doa — deskargatu",
+  "sharedSyncBoth": "Igo bi Drive-etara",
+  "sharedSideMyDrive": "NIRE DRIVE",
+  "sharedSideOwnerDrive": "{email}(r)en DRIVE-A",
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedSideDate": "{day} eguna · {year} urtea",
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "sharedStatusSyncedNoOwnDrive": "Jabearekin sinkronizatuta · zure Drive-n kopiarik gabe",
+  "sharedStatusAheadNoOwnDrive": "Aurretik zoaz · zure Drive-n kopiarik gabe",
+  "sharedStatusOwnerAheadNoOwnDrive": "{email} aurretik doa · zure Drive-n kopiarik gabe",
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedStatusAllSynced": "Sinkronizatuta (lokala + bi Drive-ak)",
+  "sharedStatusAheadBoth": "Bi Drive-etan aurretik zoaz",
+  "sharedStatusMixed": "Sinkronizatu gabe — egiaztatu Drive bakoitza",
+  "sharedStatusFullySynced": "Erabat sinkronizatuta",
+  "sharedStatusSyncedOwn": "Nire Drive-a sinkronizatuta",
+  "sharedStatusSyncedOwner": "Partekatutako Drive-a sinkronizatuta",
+  "sharedStatusNotCloud": "Gailu honetan bakarrik",
+  "sharedStatusOwnerAhead": "{email}(r)en Drive-a aurretik doa",
+  "sharedStatusBothAhead": "Bi Drive-ak aurretik doaz",
+  "sharedStatusLocalMissing": "Ez dago gailu honetan",
+  "sharedStatusOwnerUnavailable": "Ezin izan da {email}(r)en Drive-a egiaztatu",
+  "sharedStatusWorking": "Sinkronizatzen…",
+  "sharedSideUnavailable": "Ezin izan da egiaztatu",
+  "sharedSyncChooseTitle": "Non sinkronizatu nahi duzu?",
+  "sharedSyncChooseBody": "Aukeratu zein hodei-kopia eguneratu nahi dituzun gailu honetako gordetzearekin.",
+  "sharedSyncTargetOwn": "Nire Drive-a",
+  "sharedSyncTargetOwner": "{email}(r)en Drive-a",
+  "sharedSyncTargetBoth": "Bi Drive-ak",
+  "sharedDownloadChooseTitle": "Zein kopia deskargatu nahi duzu?",
+  "sharedDownloadChooseBody": "Kopia bat baino gehiago dago aurretik. Aukeratu zein ekarri nahi duzun gailu honetara.",
+  "sharedDownloadSourceOwn": "Nire Drive-tik",
+  "sharedDownloadSourceOwner": "{email}(r)en Drive-tik",
+  "sharedWithMePickerTitle": "Gehitu partekatutako gordetzea",
+  "sharedPickerEmptyHint": "Beste jokalari batek Drive-tik zurekin partekatzen duena hemen agertzen da.",
+  "sharedPickerAddButton": "Gehitu",
+  "sharedOriginBadge": "Partekatua",
+  "sharedOriginFrom": "{email}(r)engandik",
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupDialogTitle": "Babeskopia sortuta",
+  "swapBackupDialogBody": "Aurreko bertsioa zip gisa gorde da. Zer egin nahi duzu horrekin?",
+  "swapBackupUpload": "Igo Drive-ra",
+  "swapBackupLocalOnly": "Mantendu gailu honetan",
+  "swapBackupDeleteNow": "Ezabatu orain",
+  "swapBackupUploadOk": "Babeskopia Drive-ra igo da.",
+  "swapBackupUploadErr": "Ezin izan da babeskopia igo: {error}",
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBackupLocalOnlySnack": "Babeskopia gailu honetan gorde da.",
+  "backupsAction": "Babeskopiak",
+  "backupsScreenTitle": "{farmName}(r)en babeskopiak",
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsEmpty": "Oraindik babeskopiarik ez.",
+  "backupsRestore": "Leheneratu",
+  "backupsRestoreConfirmTitle": "Babeskopia hau leheneratu?",
+  "backupsRestoreConfirmBody": "Honek zure uneko gordetzea aurreko bertsio honekin gainidazten du. Ezin da desegin.",
+  "backupsDelete": "Ezabatu",
+  "backupsDeleteConfirmTitle": "Babeskopia hau ezabatu?",
+  "backupsDeleteConfirmBody": "Existitzen den leku guztietatik ezabatuko da (gailu hau eta Drive, igo bada). Ezin da desegin.",
+  "backupsRestoreOk": "Babeskopia leheneratu da.",
+  "backupsRestoreManualTitle": "Eskuz leheneratu",
+  "backupsRestoreManualBody": "Zubi moduan, ValleySave-k ezin du automatikoki idatzi jokoaren karpetan. Atera zeuk babeskopia honen .zip-a Stardew Valley-ren Saves karpetan, edo aldatu Root/Shizuku modura Ezarpenetan automatikoki leheneratzeko.",
+  "backupsRestoreErr": "Ezin izan da babeskopia leheneratu: {error}",
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDeleteErr": "Ezin izan da babeskopia ezabatu: {error}",
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCreate": "Sortu babeskopia lokala",
+  "backupsCreateLocalHint": "Babeskopiak lehenengo gailu honetan sortzen dira. Ondoren Drive-ra igo ditzakezu.",
+  "backupsCreateOk": "Babeskopia sortu da.",
+  "backupsCreateErr": "Ezin izan da babeskopia sortu: {error}",
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsDownload": "Deskargatu",
+  "backupsDownloadOk": "Babeskopia gailu honetara deskargatu da.",
+  "backupsDownloadErr": "Ezin izan da babeskopia deskargatu: {error}",
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsCopyOwn": "Kopiatu nire Drive-ra",
+  "backupsUploadOwn": "Nire Drive-ra",
+  "backupsUploadShared": "Partekatutako Drive-ra",
+  "backupsUploadOk": "Babeskopia igo da.",
+  "backupsUploadErr": "Ezin izan da babeskopia igo: {error}",
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsLocationLocal": "Gailu hau",
+  "backupsLocationOwnDrive": "Nire Drive-a",
+  "backupsLocationSharedDrive": "Partekatutako Drive-a",
+  "backupsDeleteChooseBody": "Aukeratu zehazki non ezabatu. Babeskopia hau dagoen lekuak bakarrik agertzen dira.",
+  "backupsDeleteLocalOnly": "Gailu honetatik bakarrik",
+  "backupsDeleteOwnOnly": "Nire Drive-tik bakarrik",
+  "backupsDeleteSharedOnly": "Partekatutako Drive-tik bakarrik",
+  "backupsDeleteAll": "Kopia guztietatik",
+  "deleteUnifiedTitle": "{farmName} ezabatu?",
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChooseLocationBody": "Aukeratu nondik. Gailu honetako kopia betirako ezabatuko da; Drive-koa Zaborrera mugituko da (30 egun).",
+  "deleteDriveContextTitle": "{farmName} Drive-tik ezabatu?",
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteDriveContextBody": "Drive-ko kopia Zaborrera mugituko da, eta 30 egunean leheneratu ahal izango duzu.",
+  "deleteDriveLocalKept": "Gailu honetako kopiak aldaketarik gabe jarraituko du.",
+  "deleteLocalContextTitle": "{farmName} gailu honetatik ezabatu?",
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalContextBody": "Gailu honetako kopia betirako ezabatuko da.",
+  "deleteLocalDriveCurrent": "Zure Drive-ko kopia eguneratuta dago ({date}) eta erabilgarri jarraituko du.",
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveAhead": "Zure Drive-ko kopia berriagoa da ({date}) eta erabilgarri jarraituko du.",
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalDriveOlder": "Zure Drive-ko kopia zaharragoa da ({driveDate}); gailu hau {localDate}(e)an dago.",
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteLocalBackupAvailable": "{count} babeskopia lokal daude eskuragarri aurreko kopia bat behar izanez gero.",
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteLocalNoRecovery": "Ez dago Drive-n kopiarik ezta babeskopia lokalik ere gordetze hau berreskuratzeko.",
+  "deleteOptionLocalOnly": "Gailu honetatik bakarrik",
+  "deleteOptionDriveOnly": "Nire Drive-tik bakarrik",
+  "deleteOptionBoth": "Bi kopietatik",
+  "viewPlayersHint": "Ikusi jokalariak",
+  "snackDeletedBoth": "\"{saveName}\" gailu honetatik ezabatu da eta Drive Zaborrera mugitu da.",
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  }
 }

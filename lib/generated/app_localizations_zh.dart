@@ -320,11 +320,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String disconnectButtonEmail(String email) {
-    return 'Disconnect from $email';
+    return '断开与 $email 的连接';
   }
 
   @override
-  String get connectedAsPrefix => 'Connected as';
+  String get connectedAsPrefix => '已连接为';
 
   @override
   String get languageTileLabel => '语言';
@@ -416,549 +416,529 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cardCloseBarrier => '关闭';
 
   @override
-  String get exportAction => 'Export';
+  String get exportAction => '导出';
 
   @override
-  String get exportSuccess => 'Save exported.';
+  String get exportSuccess => '存档已导出。';
 
   @override
   String exportError(String error) {
-    return 'Couldn\'t export the save: $error';
+    return '无法导出存档：$error';
   }
 
   @override
-  String get importAction => 'Import save';
+  String get importAction => '导入存档';
 
   @override
   String importSuccess(String playerName) {
-    return '$playerName\'s save imported.';
+    return '已导入 $playerName 的存档。';
   }
 
   @override
-  String get importErrInvalidZip => 'This isn\'t a valid zip file.';
+  String get importErrInvalidZip => '此文件不是有效的 zip 文件。';
 
   @override
-  String get importErrUnsafePath =>
-      'This file has an unsafe structure and was rejected.';
+  String get importErrUnsafePath => '此文件的结构不安全，已被拒绝。';
 
   @override
-  String get importErrTooLarge => 'This file is too large to import.';
+  String get importErrTooLarge => '此文件过大，无法导入。';
 
   @override
-  String get importErrNotASave =>
-      'This file doesn\'t contain a recognizable save.';
+  String get importErrNotASave => '此文件不包含可识别的存档。';
 
   @override
-  String get importErrWrite =>
-      'Couldn\'t write the imported save (disk/permissions).';
+  String get importErrWrite => '无法写入导入的存档（磁盘/权限问题）。';
 
   @override
-  String get importErrBackupFailed =>
-      'Couldn\'t create a safety backup. Nothing was imported.';
+  String get importErrBackupFailed => '无法创建备份。未导入任何内容。';
 
   @override
-  String get importConflictTitle => 'A save with this name already exists';
+  String get importConflictTitle => '已存在同名存档';
 
   @override
-  String get importConflictBody =>
-      'Importing will replace the existing local copy. This can\'t be undone.';
+  String get importConflictBody => '导入将替换现有的本地副本。此操作无法撤销。';
 
   @override
-  String get importConflictConfirm => 'Overwrite';
+  String get importConflictConfirm => '覆盖';
 
   @override
-  String get shareAction => 'Share';
+  String get shareAction => '共享';
 
   @override
-  String get shareUploadFirstCta => 'Upload first';
+  String get shareUploadFirstCta => '先上传';
 
   @override
-  String get shareDialogTitle => 'Share save';
+  String get shareDialogTitle => '共享存档';
 
   @override
   String get shareEmailPlaceholder => 'name@example.com';
 
   @override
-  String get shareInfoNote =>
-      'Sharing gives view-and-download access only. Only you can edit or delete your copy in Drive.';
+  String get shareInfoNote => '共享只提供查看和下载权限。只有你能编辑或删除 Drive 中的副本。';
 
   @override
-  String get shareRoleReader => 'Read only';
+  String get shareRoleReader => '只读';
 
   @override
-  String get shareRoleWriter => 'Allow sync';
+  String get shareRoleWriter => '允许同步';
 
   @override
   String get shareInfoNoteCoop =>
-      'Read only lets them view and download. Allow sync lets them overwrite your copy in Drive — they can never delete it.';
+      '只读权限允许查看和下载。允许同步权限允许覆盖你 Drive 上的副本——但永远无法删除它。';
 
   @override
-  String get shareConfirmButton => 'Share';
+  String get shareConfirmButton => '共享';
 
   @override
   String shareSuccess(String email) {
-    return 'Shared with $email.';
+    return '已与 $email 共享。';
   }
 
   @override
-  String get manageAccessTitle => 'People with access';
+  String get manageAccessTitle => '有权访问的人';
 
   @override
-  String get manageAccessEmpty => 'Nobody else has access yet.';
+  String get manageAccessEmpty => '目前还没有其他人可以访问。';
 
   @override
-  String get manageAccessRoleLabel => 'Access';
+  String get manageAccessRoleLabel => '访问权限';
 
   @override
-  String get manageAccessRevoke => 'Revoke';
+  String get manageAccessRevoke => '撤销';
 
   @override
   String manageAccessRevokeConfirm(String email) {
-    return 'Remove $email\'s access? Any local copy they already downloaded is theirs to keep.';
+    return '要取消 $email 的访问权限吗？已经下载的任何本地副本仍然归他们所有。';
   }
 
   @override
   String get driveOnlyControlsYourCopy =>
-      'Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.';
+      '共享只控制你在 Drive 上的副本。如果有人下载了它，那份副本就是他们的了。';
 
   @override
   String get driveOnlyControlsYourCopyCoop =>
-      'Sync controls your copy in Drive — it can be overwritten, but never deleted, by people you allow to sync.';
+      '同步只控制你在 Drive 上的副本——你授权的人可以覆盖它，但永远无法删除。';
 
   @override
-  String get sharedWithMeTitle => 'Shared with me';
+  String get sharedWithMeTitle => '与我共享的';
 
   @override
-  String get sharedWithMeEmpty => 'Nothing shared with you yet.';
+  String get sharedWithMeEmpty => '目前还没有人与你共享任何内容。';
 
   @override
-  String get sharedWithMeAdd => 'Add shared save';
+  String get sharedWithMeAdd => '添加共享存档';
 
   @override
   String sharedWithMeOwnedBy(String email) {
-    return 'Shared by $email';
+    return '由 $email 共享';
   }
 
   @override
-  String get sharedWithMeRoleSync => 'Sync';
+  String get sharedWithMeRoleSync => '同步';
 
   @override
-  String get sharedWithMeRoleRead => 'Read only';
+  String get sharedWithMeRoleRead => '只读';
 
   @override
-  String get sharedWithMeSync => 'Sync';
+  String get sharedWithMeSync => '同步';
 
   @override
-  String get sharedWithMeDownload => 'Download';
+  String get sharedWithMeDownload => '下载';
 
   @override
-  String get sharedWithMeRemove => 'Remove from list';
+  String get sharedWithMeRemove => '断开连接';
 
   @override
   String sharedWithMeRemoveConfirm(String email) {
-    return 'You\'ll stop syncing with $email\'s Drive, but you can add it back anytime — it stays shared. Your local copy remains a normal coop save.';
+    return '你将不再与 $email 的 Drive 同步，但可以随时重新添加——它仍然是共享的。你的本地副本会变成一个普通的合作存档。';
   }
 
   @override
   String sharedLeaveConfirm(Object email) {
-    return 'You\'ll lose access to this save for real. You won\'t be able to add it back unless $email shares it with you again. Your local copy remains a normal coop save.';
+    return '你将真正失去对此存档的访问权限。除非 $email 再次与你共享，否则你无法重新添加它。你的本地副本会变成一个普通的合作存档。';
   }
 
   @override
-  String get sharedManageButton => 'Manage';
+  String get sharedManageButton => '管理';
 
   @override
-  String get sharedManageDialogTitle => 'Manage shared saves';
+  String get sharedManageDialogTitle => '管理共享';
 
   @override
-  String get sharedManageDialogHint =>
-      'Here you can really leave a shared save.';
+  String get sharedManageDialogHint => '在这里你可以真正退出一个共享存档。';
 
   @override
-  String get sharedLeaveButton => 'Leave shared save';
+  String get sharedLeaveButton => '退出共享';
 
   @override
   String sharedLeaveSuccess(Object email) {
-    return 'You left $email\'s shared save.';
+    return '你已退出 $email 的共享。';
   }
 
   @override
   String sharedWithMeSyncConfirm(String email) {
-    return 'Overwrite $email\'s copy in Drive with your local save?';
+    return '要用你的本地存档覆盖 $email 在 Drive 上的副本吗？';
   }
 
   @override
   String sharedAccessReadOnly(String email) {
-    return '$email set your access to read-only — you can view and download, but not sync to their Drive.';
+    return '$email 已将你设为只读模式——你可以查看和下载，但无法同步到他们的 Drive。';
   }
 
   @override
-  String get sharedWithMeRevoked => 'You no longer have access';
+  String get sharedWithMeRevoked => '你已不再拥有访问权限';
 
   @override
   String sharedRevokedDialogBody(String email, String farmName) {
-    return '$email stopped sharing $farmName with you. Your local copy and the one on your Drive stay as they are, now under My saves.';
+    return '$email 已停止与你共享 $farmName。你的本地副本和 Drive 副本保持不变，现在会出现在\"我的存档\"中。';
   }
 
   @override
-  String get sharedRevokedAccept => 'Accept';
+  String get sharedRevokedAccept => '确定';
 
   @override
-  String get sharedSelfCleanupTitle => 'Record fixed';
+  String get sharedSelfCleanupTitle => '记录已修正';
 
   @override
   String sharedSelfCleanupBody(String farmName) {
-    return '$farmName showed up as shared with you by mistake — it\'s actually yours. It\'s been fixed, now it\'s under My saves.';
+    return '$farmName 曾被错误地显示为与你共享——实际上它是你自己的。现在已修正，它在\"我的存档\"中。';
   }
 
   @override
-  String get sharedWithMeUploadOwn => 'Upload to my Drive';
+  String get sharedWithMeUploadOwn => '上传到我的 Drive';
 
   @override
-  String get sharedDownloadOwn => 'Download from my Drive';
+  String get sharedDownloadOwn => '从我的 Drive 下载';
 
   @override
-  String get sharedStatusOwnDriveAhead => 'Your Drive is ahead — bring it down';
+  String get sharedStatusOwnDriveAhead => '你的 Drive 领先——下载它';
 
   @override
-  String get sharedSyncBoth => 'Upload to both Drives';
+  String get sharedSyncBoth => '上传到两个 Drive';
 
   @override
-  String get sharedSideMyDrive => 'MY DRIVE';
+  String get sharedSideMyDrive => '我的 DRIVE';
 
   @override
   String sharedSideOwnerDrive(String email) {
-    return '$email\'s DRIVE';
+    return '$email 的 DRIVE';
   }
 
   @override
   String sharedSideDate(int day, int year) {
-    return 'Day $day · Year $year';
+    return '第 $day 天 · 第 $year 年';
   }
 
   @override
-  String get sharedStatusSyncedNoOwnDrive =>
-      'Synced with the owner · no copy in your Drive';
+  String get sharedStatusSyncedNoOwnDrive => '已与所有者同步 · 你的 Drive 中无副本';
 
   @override
-  String get sharedStatusAheadNoOwnDrive =>
-      'You\'re ahead · no copy in your Drive';
+  String get sharedStatusAheadNoOwnDrive => '你领先 · 你的 Drive 中无副本';
 
   @override
   String sharedStatusOwnerAheadNoOwnDrive(String email) {
-    return '$email is ahead · no copy in your Drive';
+    return '$email 领先 · 你的 Drive 中无副本';
   }
 
   @override
-  String get sharedStatusAllSynced => 'Synced (local + both Drives)';
+  String get sharedStatusAllSynced => '已同步（本地 + 两个 Drive）';
 
   @override
-  String get sharedStatusAheadBoth => 'You\'re ahead on both Drives';
+  String get sharedStatusAheadBoth => '你在两个 Drive 上都领先';
 
   @override
-  String get sharedStatusMixed => 'Out of sync — check each Drive';
+  String get sharedStatusMixed => '未同步——请检查各个 Drive';
 
   @override
-  String get sharedStatusFullySynced => 'Fully synchronized';
+  String get sharedStatusFullySynced => '完全同步';
 
   @override
-  String get sharedStatusSyncedOwn => 'My Drive synchronized';
+  String get sharedStatusSyncedOwn => '我的 Drive 已同步';
 
   @override
-  String get sharedStatusSyncedOwner => 'Shared Drive synchronized';
+  String get sharedStatusSyncedOwner => '共享 Drive 已同步';
 
   @override
-  String get sharedStatusNotCloud => 'Only on this device';
+  String get sharedStatusNotCloud => '仅在本设备';
 
   @override
   String sharedStatusOwnerAhead(Object email) {
-    return 'Drive at $email is ahead';
+    return '$email 的 Drive 领先';
   }
 
   @override
-  String get sharedStatusBothAhead => 'Both Drives are ahead';
+  String get sharedStatusBothAhead => '两个 Drive 都领先';
 
   @override
-  String get sharedStatusLocalMissing => 'Not on this device';
+  String get sharedStatusLocalMissing => '不在此设备上';
 
   @override
   String sharedStatusOwnerUnavailable(Object email) {
-    return 'Could not check Drive at $email';
+    return '无法检查 $email 的 Drive';
   }
 
   @override
-  String get sharedStatusWorking => 'Synchronizing…';
+  String get sharedStatusWorking => '正在同步…';
 
   @override
-  String get sharedSideUnavailable => 'Could not check';
+  String get sharedSideUnavailable => '无法检查';
 
   @override
-  String get sharedSyncChooseTitle => 'Where do you want to synchronize?';
+  String get sharedSyncChooseTitle => '你想同步到哪里？';
 
   @override
-  String get sharedSyncChooseBody =>
-      'Choose which cloud copies to update from this device.';
+  String get sharedSyncChooseBody => '选择你想用本设备的存档更新哪些云端副本。';
 
   @override
-  String get sharedSyncTargetOwn => 'My Drive';
+  String get sharedSyncTargetOwn => '我的 Drive';
 
   @override
   String sharedSyncTargetOwner(Object email) {
-    return 'Drive at $email';
+    return '$email 的 Drive';
   }
 
   @override
-  String get sharedSyncTargetBoth => 'Both Drives';
+  String get sharedSyncTargetBoth => '两个 Drive';
 
   @override
-  String get sharedDownloadChooseTitle => 'Which copy do you want to download?';
+  String get sharedDownloadChooseTitle => '你想下载哪个副本？';
 
   @override
-  String get sharedDownloadChooseBody =>
-      'More than one copy is ahead. Choose which one to bring to this device.';
+  String get sharedDownloadChooseBody => '有多个副本领先。请选择你想要下载到本设备的那个。';
 
   @override
-  String get sharedDownloadSourceOwn => 'From My Drive';
+  String get sharedDownloadSourceOwn => '来自我的 Drive';
 
   @override
   String sharedDownloadSourceOwner(Object email) {
-    return 'From Drive at $email';
+    return '来自 $email 的 Drive';
   }
 
   @override
-  String get sharedWithMePickerTitle => 'Add shared save';
+  String get sharedWithMePickerTitle => '添加共享存档';
 
   @override
-  String get sharedPickerEmptyHint =>
-      'Folders another player shares with you from Drive show up here.';
+  String get sharedPickerEmptyHint => '其他玩家从 Drive 与你共享的内容会显示在这里。';
 
   @override
-  String get sharedPickerAddButton => 'Add';
+  String get sharedPickerAddButton => '添加';
 
   @override
-  String get sharedOriginBadge => 'Shared';
+  String get sharedOriginBadge => '共享';
 
   @override
   String sharedOriginFrom(String email) {
-    return 'from $email';
+    return '来自 $email';
   }
 
   @override
-  String get swapBackupDialogTitle => 'Backup created';
+  String get swapBackupDialogTitle => '备份已创建';
 
   @override
-  String get swapBackupDialogBody =>
-      'The previous version was saved as a zip. What do you want to do with it?';
+  String get swapBackupDialogBody => '之前的版本已保存为 zip 文件。你想如何处理它？';
 
   @override
-  String get swapBackupUpload => 'Upload to Drive';
+  String get swapBackupUpload => '上传到 Drive';
 
   @override
-  String get swapBackupLocalOnly => 'Keep on this device';
+  String get swapBackupLocalOnly => '保留在本设备';
 
   @override
-  String get swapBackupDeleteNow => 'Delete now';
+  String get swapBackupDeleteNow => '立即删除';
 
   @override
-  String get swapBackupUploadOk => 'Backup uploaded to Drive.';
+  String get swapBackupUploadOk => '备份已上传到 Drive。';
 
   @override
   String swapBackupUploadErr(String error) {
-    return 'Couldn\'t upload the backup: $error';
+    return '无法上传备份：$error';
   }
 
   @override
-  String get swapBackupLocalOnlySnack => 'Backup saved on this device.';
+  String get swapBackupLocalOnlySnack => '备份已保存在本设备。';
 
   @override
-  String get backupsAction => 'Backups';
+  String get backupsAction => '备份';
 
   @override
   String backupsScreenTitle(String farmName) {
-    return 'Backups of $farmName';
+    return '$farmName 的备份';
   }
 
   @override
-  String get backupsEmpty => 'No backups yet.';
+  String get backupsEmpty => '暂无备份。';
 
   @override
-  String get backupsRestore => 'Restore';
+  String get backupsRestore => '恢复';
 
   @override
-  String get backupsRestoreConfirmTitle => 'Restore this backup?';
+  String get backupsRestoreConfirmTitle => '要恢复此备份吗？';
 
   @override
-  String get backupsRestoreConfirmBody =>
-      'This overwrites your current save with this earlier version. This can\'t be undone.';
+  String get backupsRestoreConfirmBody => '这会用此前的版本覆盖你当前的存档。此操作无法撤销。';
 
   @override
-  String get backupsDelete => 'Delete';
+  String get backupsDelete => '删除';
 
   @override
-  String get backupsDeleteConfirmTitle => 'Delete this backup?';
+  String get backupsDeleteConfirmTitle => '要删除此备份吗？';
 
   @override
   String get backupsDeleteConfirmBody =>
-      'Deletes it everywhere it exists (this device and Drive, if uploaded). This can\'t be undone.';
+      '将从存在的所有位置删除（本设备和 Drive，如果已上传）。此操作无法撤销。';
 
   @override
-  String get backupsRestoreOk => 'Backup restored.';
+  String get backupsRestoreOk => '备份已恢复。';
 
   @override
-  String get backupsRestoreManualTitle => 'Restore manually';
+  String get backupsRestoreManualTitle => '手动恢复';
 
   @override
   String get backupsRestoreManualBody =>
-      'In bridge mode, ValleySave can\'t write to the game folder automatically. Extract this backup\'s .zip into Stardew Valley\'s Saves folder yourself, or switch to Root/Shizuku mode in Settings for automatic restore.';
+      '在桥接模式下，ValleySave 无法自动写入游戏文件夹。请自行将此备份的 .zip 解压到 Stardew Valley 的 Saves 文件夹，或在设置中切换到 Root/Shizuku 模式以自动恢复。';
 
   @override
   String backupsRestoreErr(String error) {
-    return 'Couldn\'t restore the backup: $error';
+    return '无法恢复备份：$error';
   }
 
   @override
   String backupsDeleteErr(String error) {
-    return 'Couldn\'t delete the backup: $error';
+    return '无法删除备份：$error';
   }
 
   @override
-  String get backupsCreate => 'Create local backup';
+  String get backupsCreate => '创建本地备份';
 
   @override
-  String get backupsCreateLocalHint =>
-      'Backups are created on this device first. You can upload them to Drive afterwards.';
+  String get backupsCreateLocalHint => '备份会先在本设备上创建。之后你可以将它们上传到 Drive。';
 
   @override
-  String get backupsCreateOk => 'Backup created.';
+  String get backupsCreateOk => '备份已创建。';
 
   @override
   String backupsCreateErr(String error) {
-    return 'Couldn\'t create the backup: $error';
+    return '无法创建备份：$error';
   }
 
   @override
-  String get backupsDownload => 'Download';
+  String get backupsDownload => '下载';
 
   @override
-  String get backupsDownloadOk => 'Backup downloaded to this device.';
+  String get backupsDownloadOk => '备份已下载到本设备。';
 
   @override
   String backupsDownloadErr(String error) {
-    return 'Couldn\'t download the backup: $error';
+    return '无法下载备份：$error';
   }
 
   @override
-  String get backupsCopyOwn => 'Copy to my Drive';
+  String get backupsCopyOwn => '复制到我的 Drive';
 
   @override
-  String get backupsUploadOwn => 'To my Drive';
+  String get backupsUploadOwn => '到我的 Drive';
 
   @override
-  String get backupsUploadShared => 'To shared Drive';
+  String get backupsUploadShared => '到共享 Drive';
 
   @override
-  String get backupsUploadOk => 'Backup uploaded.';
+  String get backupsUploadOk => '备份已上传。';
 
   @override
   String backupsUploadErr(String error) {
-    return 'Couldn\'t upload the backup: $error';
+    return '无法上传备份：$error';
   }
 
   @override
-  String get backupsLocationLocal => 'This device';
+  String get backupsLocationLocal => '本设备';
 
   @override
-  String get backupsLocationOwnDrive => 'My Drive';
+  String get backupsLocationOwnDrive => '我的 Drive';
 
   @override
-  String get backupsLocationSharedDrive => 'Shared Drive';
+  String get backupsLocationSharedDrive => '共享 Drive';
 
   @override
-  String get backupsDeleteChooseBody =>
-      'Choose exactly where to delete it. Only locations where this backup exists are shown.';
+  String get backupsDeleteChooseBody => '请选择要从哪里删除它。只会显示存在此备份的位置。';
 
   @override
-  String get backupsDeleteLocalOnly => 'Only from this device';
+  String get backupsDeleteLocalOnly => '仅从本设备';
 
   @override
-  String get backupsDeleteOwnOnly => 'Only from my Drive';
+  String get backupsDeleteOwnOnly => '仅从我的 Drive';
 
   @override
-  String get backupsDeleteSharedOnly => 'Only from shared Drive';
+  String get backupsDeleteSharedOnly => '仅从共享 Drive';
 
   @override
-  String get backupsDeleteAll => 'From all copies';
+  String get backupsDeleteAll => '从所有副本';
 
   @override
   String deleteUnifiedTitle(String farmName) {
-    return 'Delete $farmName?';
+    return '要删除 $farmName 吗？';
   }
 
   @override
   String get deleteChooseLocationBody =>
-      'Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).';
+      '选择从哪里删除。本设备的副本将被永久删除；Drive 上的副本会进入回收站（30 天）。';
 
   @override
   String deleteDriveContextTitle(String farmName) {
-    return 'Delete $farmName from Drive?';
+    return '要从 Drive 中删除 $farmName 吗？';
   }
 
   @override
-  String get deleteDriveContextBody =>
-      'The Drive copy will move to Trash, where it can be recovered for 30 days.';
+  String get deleteDriveContextBody => 'Drive 上的副本将进入回收站，你可以在 30 天内恢复它。';
 
   @override
-  String get deleteDriveLocalKept =>
-      'The copy on this device will remain unchanged.';
+  String get deleteDriveLocalKept => '本设备的副本将保持不变。';
 
   @override
   String deleteLocalContextTitle(String farmName) {
-    return 'Delete $farmName from this device?';
+    return '要从本设备中删除 $farmName 吗？';
   }
 
   @override
-  String get deleteLocalContextBody =>
-      'The copy on this device will be deleted permanently.';
+  String get deleteLocalContextBody => '本设备的副本将被永久删除。';
 
   @override
   String deleteLocalDriveCurrent(String date) {
-    return 'Your Drive copy is up to date ($date) and will remain available.';
+    return '你的 Drive 副本是最新的（$date），仍将可用。';
   }
 
   @override
   String deleteLocalDriveAhead(String date) {
-    return 'Your Drive copy is newer ($date) and will remain available.';
+    return '你的 Drive 副本更新（$date），仍将可用。';
   }
 
   @override
   String deleteLocalDriveOlder(String driveDate, String localDate) {
-    return 'Your Drive copy is older ($driveDate); this device is at $localDate.';
+    return '你的 Drive 副本较旧（$driveDate）；本设备的进度是 $localDate。';
   }
 
   @override
   String deleteLocalBackupAvailable(int count) {
-    return 'There are $count local backups available if you need an earlier copy.';
+    return '有 $count 个本地备份可用，以防你需要之前的版本。';
   }
 
   @override
-  String get deleteLocalNoRecovery =>
-      'There is no Drive copy or local backup to recover this game from.';
+  String get deleteLocalNoRecovery => '没有 Drive 副本，也没有本地备份可以恢复此存档。';
 
   @override
-  String get deleteOptionLocalOnly => 'Only from this device';
+  String get deleteOptionLocalOnly => '仅从本设备';
 
   @override
-  String get deleteOptionDriveOnly => 'Only from Drive';
+  String get deleteOptionDriveOnly => '仅从我的 Drive';
 
   @override
-  String get deleteOptionBoth => 'From both (device + Drive)';
+  String get deleteOptionBoth => '从两份副本';
 
   @override
-  String get viewPlayersHint => 'View players';
+  String get viewPlayersHint => '查看玩家';
 
   @override
   String snackDeletedBoth(String saveName) {
-    return '\"$saveName\" deleted from this device and moved to Drive Trash.';
+    return '\"$saveName\" 已从本设备删除，并移至 Drive 回收站。';
   }
 
   @override
@@ -1038,24 +1018,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwTitle => '工作原理';
 
   @override
-  String get hiwConnectTitle => 'Connect your account';
+  String get hiwConnectTitle => '连接你的账号';
 
   @override
   String get hiwConnectDesc =>
-      'ValleySave uses your Google account to store your saves in a private ValleySave folder on your own Drive.';
+      'ValleySave 使用你的 Google 账号，把存档保存在你自己 Drive 中的 ValleySave 专属文件夹里。';
 
   @override
-  String get hiwConnectStepGoogle => 'Google\naccount';
+  String get hiwConnectStepGoogle => 'Google\n账号';
 
   @override
-  String get hiwConnectStepDrive => 'ValleySave\nfolder created';
+  String get hiwConnectStepDrive => 'ValleySave 文件夹\n已创建';
 
   @override
-  String get hiwConnectStepReady => 'Ready to\nsync';
+  String get hiwConnectStepReady => '准备好\n同步了';
 
   @override
   String get hiwConnectTipOwnership =>
-      'Only you can edit or delete your copies on Drive — ValleySave only reads and writes inside its own folder.';
+      '只有你能编辑或删除 Drive 中的副本——ValleySave 只在自己的文件夹内读写。';
 
   @override
   String get hiwSyncTitle => '同步原理';
@@ -1342,21 +1322,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get previewFromDevice => '来自此设备';
 
   @override
-  String get overwriteWhatChanges => 'What changes';
+  String get overwriteWhatChanges => '有什么变化';
 
   @override
-  String get overwriteTagOverwritten => 'WILL BE OVERWRITTEN';
+  String get overwriteTagOverwritten => '将被覆盖';
 
   @override
-  String get overwriteNewCopyTag => 'NEW';
+  String get overwriteNewCopyTag => '新';
 
   @override
   String overwriteDeltaPhrase(int days, String time) {
     String _temp0 = intl.Intl.pluralLogic(
       days,
       locale: localeName,
-      other: '$days days and $time',
-      one: '1 day and $time',
+      other: '$days 天又 $time',
       zero: '$time',
     );
     return '$_temp0';
@@ -1364,84 +1343,83 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String overwriteVerdictAhead(String delta) {
-    return 'You\'re $delta ahead. It\'s safe.';
+    return '你领先 $delta。可以放心。';
   }
 
   @override
   String get overwriteVerdictMoneySpent =>
-      '💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That\'s not a real loss.';
+      '💰 当前金钱变少了，但整体进度在前进——你可能是把钱花在了什么东西上。这不是真正的损失。';
 
   @override
   String overwriteVerdictNegligible(String delta) {
-    return 'Minimal difference ($delta). Either copy works fine.';
+    return '差异极小（$delta）。两个副本用哪个都可以。';
   }
 
   @override
   String overwriteVerdictDanger(String delta, String target) {
-    return '⚠️ You\'re about to lose $delta of progress on $target. Double-check before continuing.';
+    return '⚠️ 你将丢失 $target 中 $delta 的进度。继续前请先检查。';
   }
 
   @override
-  String get overwriteConfirmTitleUpload => 'Confirm the upload?';
+  String get overwriteConfirmTitleUpload => '确认上传吗？';
 
   @override
-  String get overwriteConfirmTitleDownload => 'Confirm the download?';
+  String get overwriteConfirmTitleDownload => '确认下载吗？';
 
   @override
   String overwriteConfirmBody(String delta, String target) {
-    return 'You\'re about to lose $delta on $target. This action can\'t be undone.';
+    return '你将丢失 $target 中的 $delta。此操作无法撤销。';
   }
 
   @override
-  String get overwriteConfirmButtonUpload => 'Confirm upload';
+  String get overwriteConfirmButtonUpload => '确认上传';
 
   @override
-  String get overwriteConfirmButtonDownload => 'Confirm download';
+  String get overwriteConfirmButtonDownload => '确认下载';
 
   @override
-  String get overwriteDangerButtonUpload => '⚠️ Upload anyway';
+  String get overwriteDangerButtonUpload => '⚠️ 仍然上传';
 
   @override
-  String get overwriteDangerButtonDownload => '⚠️ Download anyway';
+  String get overwriteDangerButtonDownload => '⚠️ 仍然下载';
 
   @override
   String overwriteIdenticalSummary(int count, String list) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '✓ $count identical',
-      one: '✓ 1 identical',
+      other: '✓ 相同 $count 个',
     );
     return '$_temp0 — $list';
   }
 
   @override
   String overwriteUploadToOwner(String email) {
-    return 'Upload to $email\'s Drive';
+    return '上传到 $email 的 Drive';
   }
 
   @override
-  String get overwriteUploadBoth => 'Upload to both Drives';
+  String get overwriteUploadBoth => '上传到两个 Drive';
 
   @override
-  String get overwriteConfirmTitleBoth => 'Confirm both uploads?';
+  String get overwriteConfirmTitleBoth => '确认这两次上传吗？';
 
   @override
   String overwriteConfirmBodyBoth(String delta, String targets) {
-    return 'You\'ll lose $delta in $targets. This action can\'t be undone.';
+    return '你将丢失 $targets 中的 $delta。此操作无法撤销。';
   }
 
   @override
   String overwriteBothDestinationsLabel(String first, String second) {
-    return '$first and $second';
+    return '$first 和 $second';
   }
 
   @override
-  String get sharedTargetOwnDrive => 'your Drive';
+  String get sharedTargetOwnDrive => '你的 Drive';
 
   @override
   String sharedStatusLocalAhead(String targets) {
-    return 'You\'re ahead in $targets';
+    return '你在 $targets 领先';
   }
 
   @override
@@ -1459,105 +1437,91 @@ class AppLocalizationsZh extends AppLocalizations {
   String get snackDownloaded => '存档已下载到游戏';
 
   @override
-  String get snackReplacePrepareFailed =>
-      'Could not prepare the save. Nothing on disk was changed';
+  String get snackReplacePrepareFailed => '无法准备存档。磁盘上未做任何修改';
 
   @override
-  String get snackReplaceValidationFailed =>
-      'The downloaded save looks invalid or incomplete. Nothing on disk was changed';
+  String get snackReplaceValidationFailed => '下载的存档似乎无效或不完整。磁盘上未做任何修改';
 
   @override
-  String get snackReplaceBackupFailed =>
-      'Could not create a safety backup. Nothing on disk was changed';
+  String get snackReplaceBackupFailed => '无法创建备份。磁盘上未做任何修改';
 
   @override
-  String get snackReplaceSwapFailed =>
-      'The swap failed, but the original save was restored from backup';
+  String get snackReplaceSwapFailed => '交换失败，但原始存档已从备份中恢复';
 
   @override
-  String get snackReplaceBusy =>
-      'There\'s already an operation in progress for this save';
+  String get snackReplaceBusy => '此存档已有正在进行的操作';
 
   @override
-  String get snackUploadIncomplete =>
-      'The local save is incomplete or corrupted. Nothing was uploaded';
+  String get snackUploadIncomplete => '本地存档不完整或已损坏。未上传任何内容';
 
   @override
-  String get snackDownloadIncomplete =>
-      'Can\'t download: this save is missing content on Drive';
+  String get snackDownloadIncomplete => '无法下载：Drive 上缺少内容';
 
   @override
-  String get cardIncomplete => 'Incomplete on Drive';
+  String get cardIncomplete => 'Drive 上不完整';
 
   @override
-  String get autoRefreshTitle => 'Auto-refresh';
+  String get autoRefreshTitle => '自动刷新';
 
   @override
-  String get autoRefreshSubtitle => 'Checks for Drive changes every 30s';
+  String get autoRefreshSubtitle => '每 30 秒检查一次 Drive 的变化';
 
   @override
   String autoSyncSnack(String farmName) {
-    return '$farmName synced automatically';
+    return '$farmName 已自动同步';
   }
 
   @override
-  String get autoSyncTooltipOn => 'Auto-sync on — syncs itself when it\'s safe';
+  String get autoSyncTooltipOn => '自动同步已开启——安全时会自动同步';
 
   @override
-  String get autoSyncTooltipOff => 'Auto-sync off — tap to turn it on';
+  String get autoSyncTooltipOff => '自动同步已关闭——点击开启';
 
   @override
-  String get autoSyncExplainTitle => 'Auto-sync';
+  String get autoSyncExplainTitle => '自动同步';
 
   @override
   String autoSyncExplainBody(String farmName) {
-    return 'From now on, $farmName will upload or download itself when it\'s safe, without asking you to confirm.';
+    return '从现在起，$farmName 会在安全的情况下自动上传或下载，不再向你确认。';
   }
 
   @override
-  String get autoSyncExplainSafe =>
-      'It only acts when you\'re clearly ahead and nothing gets lost.';
+  String get autoSyncExplainSafe => '只有在你明显领先且不会丢失任何内容时才会执行。';
 
   @override
-  String get autoSyncExplainDanger =>
-      'If there were any risk of losing progress, it never acts on its own: you\'ll still decide with the usual dialog.';
+  String get autoSyncExplainDanger => '如果有丢失进度的风险，它绝不会自动执行：你仍然可以通过常规对话框自己决定。';
 
   @override
-  String get autoSyncExplainMissing =>
-      'If one of the two copies is missing, it won\'t create it: the first upload or download is your call.';
+  String get autoSyncExplainMissing => '如果缺少其中一个副本，它不会自动创建：第一次上传或下载由你决定。';
 
   @override
-  String get autoSyncExplainDontShowAgain => 'Don\'t show this again';
+  String get autoSyncExplainDontShowAgain => '不再显示此提示';
 
   @override
-  String get autoSyncExplainConfirm => 'Got it, turn on';
+  String get autoSyncExplainConfirm => '明白了，开启';
 
   @override
-  String get hiwAutoSyncTitle => 'Sync by itself';
+  String get hiwAutoSyncTitle => '自动同步';
 
   @override
   String get hiwAutoSyncDesc =>
-      'Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.';
+      '每个存档卡片上都有一个 AUTO 标签。开启后，一旦应用检测到变化，该存档就会自动上传或下载——你不需要进入确认。';
 
   @override
-  String get hiwAutoSyncTipSafe =>
-      'It only syncs itself when you\'re clearly ahead and nothing gets lost.';
+  String get hiwAutoSyncTipSafe => '只有在你明显领先且不会丢失任何内容时，它才会自动同步。';
 
   @override
-  String get hiwAutoSyncTipDanger =>
-      'If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.';
+  String get hiwAutoSyncTipDanger => '如果有丢失进度的风险，它绝不会自动执行：仍会像往常一样通过比较界面向你确认。';
 
   @override
   String get hiwAutoSyncTipPerSave =>
-      'You turn it on save by save, not all at once: you can have it on yours and off on a shared one.';
+      '逐个存档单独开启，不是一次性全部开启：你可以只在自己的存档上开启，共享存档上不开启。';
 
   @override
-  String get hiwAutoSyncTipMissing =>
-      'It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.';
+  String get hiwAutoSyncTipMissing => '它只保持已存在的两个副本同步。如果缺少一个，第一次上传或下载需要你自己完成。';
 
   @override
-  String get hiwAutoSyncTipRefresh =>
-      'In Settings you can turn off automatic change checking entirely.';
+  String get hiwAutoSyncTipRefresh => '你可以在设置中完全关闭自动检查变化的功能。';
 
   @override
   String get snackSessionExpired => 'Drive 会话已过期。重新连接';
@@ -1623,91 +1587,86 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hiwCompatIncomplete =>
-      'If you see \"Incomplete on Drive\" on a save, it\'s missing a required file in the cloud — it can\'t be downloaded until it\'s uploaded properly again from another device.';
+      '如果你在某个存档上看到\"Drive 上不完整\"，说明云端缺少必要的文件——在从其他设备重新正确上传之前无法下载。';
 
   @override
-  String get hiwShareTitle => 'Share with others';
+  String get hiwShareTitle => '与他人共享';
 
   @override
-  String get hiwShareDesc =>
-      'Share a save with another player by email. They\'ll see it under Shared with me on their own device.';
+  String get hiwShareDesc => '通过邮箱与其他玩家共享存档。对方会在自己设备的\"与我共享\"中看到它。';
 
   @override
-  String get hiwShareStepYourSave => 'Your\nsave';
+  String get hiwShareStepYourSave => '你的\n存档';
 
   @override
-  String get hiwShareStepShare => 'Share by\nemail';
+  String get hiwShareStepShare => '通过邮箱\n共享';
 
   @override
-  String get hiwShareStepFriend => 'Shared\nwith me';
+  String get hiwShareStepFriend => '与我\n共享的';
 
   @override
   String get hiwShareTipRoles =>
-      'Two roles: Read-only lets them view and download. Allow sync lets them overwrite your copy on Drive. Either way they can never delete it — only you, the owner, can delete your save.';
+      '两种角色：只读权限可以查看和下载。允许同步权限可以覆盖你 Drive 上的副本。无论哪种角色都不能删除它——只有你这个所有者才能删除你的存档。';
 
   @override
   String get hiwShareTipDisconnect =>
-      'Disconnecting just stops syncing on their end — the share stays active until you leave it for real from Manage shares.';
+      '断开连接只会停止对方那一侧的同步——共享关系仍然有效，直到你在\"管理共享\"中真正退出为止。';
 
   @override
-  String get hiwHostSwapTitle => 'Host swap';
+  String get hiwHostSwapTitle => '更换房主';
 
   @override
-  String get hiwHostSwapDesc =>
-      'Change which farmhand hosts the save, replacing it in place — same save slot, same sharing permissions.';
+  String get hiwHostSwapDesc => '更改哪个农场帮工是存档的房主，原地替换——相同的存档槽，相同的共享权限。';
 
   @override
-  String get hiwHostSwapStepPick => 'Pick a\nfarmhand';
+  String get hiwHostSwapStepPick => '选择\n农场帮工';
 
   @override
-  String get hiwHostSwapStepConfirm => 'Confirm';
+  String get hiwHostSwapStepConfirm => '确认';
 
   @override
-  String get hiwHostSwapStepDone => 'New save\ncreated';
+  String get hiwHostSwapStepDone => '新存档\n已创建';
 
   @override
-  String get hiwHostSwapTipMove =>
-      'Some farm objects may be relocated to make room for the house — nothing is deleted.';
+  String get hiwHostSwapTipMove => '农场中的一些物体可能会被重新放置以给房子腾出空间——不会删除任何东西。';
 
   @override
-  String get hiwHostSwapTipHouse =>
-      'The new host\'s house will look like the game\'s default big house — cabin styling isn\'t supported without mods.';
+  String get hiwHostSwapTipHouse => '新房主的房子外观会是游戏默认的大房子——如果没有模组，小屋外观不受支持。';
 
   @override
-  String get hiwBackupsTitle => 'Backups';
+  String get hiwBackupsTitle => '备份';
 
   @override
   String get hiwBackupsDesc =>
-      'A backup is a snapshot of a save you can restore later. Create one manually anytime, or let ValleySave create one automatically before overwriting a save (downloading, importing, restoring, or a host swap).';
+      '备份是存档在某一时刻的快照，之后可以恢复。你可以随时手动创建，也可以让 ValleySave 在覆盖存档之前（下载、导入、恢复或更换房主时）自动创建。';
 
   @override
-  String get hiwBackupsStepSave => 'Your\nsave';
+  String get hiwBackupsStepSave => '你的\n存档';
 
   @override
-  String get hiwBackupsStepSnapshot => 'Backup\nsnapshot';
+  String get hiwBackupsStepSnapshot => '备份\n已创建';
 
   @override
-  String get hiwBackupsStepStore => 'Local and/or\nDrive';
+  String get hiwBackupsStepStore => '本地和/或\nDrive';
 
   @override
-  String get hiwBackupsTipRestore =>
-      'Restoring overwrites your current save with that earlier version — this can\'t be undone.';
+  String get hiwBackupsTipRestore => '恢复会用之前的版本覆盖你当前的存档——此操作无法撤销。';
 
   @override
   String get hiwBackupsTipDelete =>
-      'Deleting a backup removes it everywhere it exists (this device and Drive, if uploaded) — this can\'t be undone.';
+      '删除备份会将其从存在的所有位置移除（本设备和 Drive，如果已上传）——此操作无法撤销。';
 
   @override
   String get hiwBackupsTipExport =>
-      'You can also Export a save as a zip file to keep wherever you like, and Import it back later — a fully manual, portable alternative to the built-in backups.';
+      '你还可以将存档导出为 zip 文件，保存到任何地方，之后再导入回来——这是内置备份之外的一种手动、可移动的替代方案。';
 
   @override
   String get hiwBackupsTipRetention =>
-      'ValleySave keeps the 5 most recent automatic backups per save; the ones you create manually are never deleted on their own.';
+      'ValleySave 为每个存档保留最近的 5 个自动备份；你手动创建的备份永远不会被自动删除。';
 
   @override
   String get hiwBackupsTipRestoreBridge =>
-      'In Bridge mode (Android without root/Shizuku), restoring a backup asks you to extract the .zip by hand into Stardew\'s folder — same as downloading.';
+      '在桥接模式下（Android 无 root/Shizuku），恢复备份需要你手动将 .zip 解压到 Stardew 文件夹——和下载时一样。';
 
   @override
   String get hiwComparePrimary => '总游玩时间';
@@ -1964,27 +1923,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwLaunchTipAndroid => '在 Android 上，若已安装游戏则直接启动。';
 
   @override
-  String get hiwLaunchTipLinux =>
-      'On Linux, if the game isn’t detected automatically, set the executable path in Settings → Game.';
+  String get hiwLaunchTipLinux => '在 Linux 上，如果未能自动检测到游戏，请在设置 → 游戏中设置可执行文件路径。';
 
   @override
-  String get hiwSaveLocationsTitle => 'Where your saves live';
+  String get hiwSaveLocationsTitle => '存档保存在哪里';
 
   @override
-  String get hiwSaveLocationsDesc =>
-      'ValleySave reads and writes directly to the game\'s save folder on each platform.';
+  String get hiwSaveLocationsDesc => 'ValleySave 会直接在每个平台的游戏存档文件夹中读写。';
 
   @override
   String get hiwSaveLocationWindows =>
       'Windows: %AppData%\\StardewValley\\Saves';
 
   @override
-  String get hiwSaveLocationAndroid =>
-      'Android: protected folder, accessed via Shizuku or the Bridge';
+  String get hiwSaveLocationAndroid => 'Android：受保护的文件夹，需通过 Shizuku 或桥接模式访问';
 
   @override
   String get hiwSaveLocationLinux =>
-      'Linux: ~/.config/StardewValley/Saves (or ~/snap/steam/common/.config/StardewValley/Saves if Steam is installed via snap)';
+      'Linux：~/.config/StardewValley/Saves（如果通过 snap 安装了 Steam，则为 ~/snap/steam/common/.config/StardewValley/Saves）';
 
   @override
   String get settingsGameSection => '游戏';
@@ -2053,6 +2009,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hostSwapErrValidation => '新存档的验证失败，已被丢弃。原始存档完好无损。';
+
+  @override
+  String get makeHostDeleteOriginalTitle => '要从此设备删除原始存档吗？';
+
+  @override
+  String get makeHostDeleteOriginalBody =>
+      '新存档已就绪。可以先把原始存档备份到你的 Drive（之后可重新下载），或者只删除本地副本。';
+
+  @override
+  String get makeHostDeleteOriginalNoBackupBody =>
+      '未连接 Drive：不会保留任何备份。仅会删除本设备上的本地副本。';
+
+  @override
+  String get makeHostDeleteOriginalUploadBody =>
+      '原始存档会先上传到你的 Drive 作为备份，然后再删除本设备上的本地副本。';
+
+  @override
+  String get makeHostDeleteWithoutUpload => '不上传直接删除';
+
+  @override
+  String get makeHostUploadAndDelete => '上传并删除';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -2370,6 +2347,14 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get disconnectButton => '斷開 Drive 連接';
 
   @override
+  String disconnectButtonEmail(String email) {
+    return '中斷與 $email 的連線';
+  }
+
+  @override
+  String get connectedAsPrefix => '已連線為';
+
+  @override
   String get languageTileLabel => '語言';
 
   @override
@@ -2459,6 +2444,532 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get cardCloseBarrier => '關閉';
 
   @override
+  String get exportAction => '匯出';
+
+  @override
+  String get exportSuccess => '存檔已匯出。';
+
+  @override
+  String exportError(String error) {
+    return '無法匯出存檔：$error';
+  }
+
+  @override
+  String get importAction => '匯入存檔';
+
+  @override
+  String importSuccess(String playerName) {
+    return '已匯入 $playerName 的存檔。';
+  }
+
+  @override
+  String get importErrInvalidZip => '此檔案不是有效的 zip 檔案。';
+
+  @override
+  String get importErrUnsafePath => '此檔案的結構不安全，已被拒絕。';
+
+  @override
+  String get importErrTooLarge => '此檔案過大，無法匯入。';
+
+  @override
+  String get importErrNotASave => '此檔案不包含可識別的存檔。';
+
+  @override
+  String get importErrWrite => '無法寫入匯入的存檔（磁碟/權限問題）。';
+
+  @override
+  String get importErrBackupFailed => '無法建立備份。未匯入任何內容。';
+
+  @override
+  String get importConflictTitle => '已存在同名存檔';
+
+  @override
+  String get importConflictBody => '匯入將取代現有的本機副本。此操作無法復原。';
+
+  @override
+  String get importConflictConfirm => '覆蓋';
+
+  @override
+  String get shareAction => '共用';
+
+  @override
+  String get shareUploadFirstCta => '先上傳';
+
+  @override
+  String get shareDialogTitle => '共用存檔';
+
+  @override
+  String get shareEmailPlaceholder => 'name@example.com';
+
+  @override
+  String get shareInfoNote => '共用只提供檢視和下載權限。只有你能編輯或刪除 Drive 中的副本。';
+
+  @override
+  String get shareRoleReader => '唯讀';
+
+  @override
+  String get shareRoleWriter => '允許同步';
+
+  @override
+  String get shareInfoNoteCoop =>
+      '唯讀權限允許檢視和下載。允許同步權限允許覆蓋你 Drive 上的副本——但永遠無法刪除它。';
+
+  @override
+  String get shareConfirmButton => '共用';
+
+  @override
+  String shareSuccess(String email) {
+    return '已與 $email 共用。';
+  }
+
+  @override
+  String get manageAccessTitle => '有權存取的人';
+
+  @override
+  String get manageAccessEmpty => '目前還沒有其他人可以存取。';
+
+  @override
+  String get manageAccessRoleLabel => '存取權限';
+
+  @override
+  String get manageAccessRevoke => '撤銷';
+
+  @override
+  String manageAccessRevokeConfirm(String email) {
+    return '要取消 $email 的存取權限嗎？已經下載的任何本機副本仍然歸他們所有。';
+  }
+
+  @override
+  String get driveOnlyControlsYourCopy =>
+      '共用只控制你在 Drive 上的副本。如果有人下載了它，那份副本就是他們的了。';
+
+  @override
+  String get driveOnlyControlsYourCopyCoop =>
+      '同步只控制你在 Drive 上的副本——你授權的人可以覆蓋它，但永遠無法刪除。';
+
+  @override
+  String get sharedWithMeTitle => '與我共用的';
+
+  @override
+  String get sharedWithMeEmpty => '目前還沒有人與你共用任何內容。';
+
+  @override
+  String get sharedWithMeAdd => '新增共用存檔';
+
+  @override
+  String sharedWithMeOwnedBy(String email) {
+    return '由 $email 共用';
+  }
+
+  @override
+  String get sharedWithMeRoleSync => '同步';
+
+  @override
+  String get sharedWithMeRoleRead => '唯讀';
+
+  @override
+  String get sharedWithMeSync => '同步';
+
+  @override
+  String get sharedWithMeDownload => '下載';
+
+  @override
+  String get sharedWithMeRemove => '中斷連線';
+
+  @override
+  String sharedWithMeRemoveConfirm(String email) {
+    return '你將不再與 $email 的 Drive 同步，但可以隨時重新新增——它仍然是共用的。你的本機副本會變成一個普通的合作存檔。';
+  }
+
+  @override
+  String sharedLeaveConfirm(Object email) {
+    return '你將真正失去對此存檔的存取權限。除非 $email 再次與你共用，否則你無法重新新增它。你的本機副本會變成一個普通的合作存檔。';
+  }
+
+  @override
+  String get sharedManageButton => '管理';
+
+  @override
+  String get sharedManageDialogTitle => '管理共用';
+
+  @override
+  String get sharedManageDialogHint => '在這裡你可以真正退出一個共用存檔。';
+
+  @override
+  String get sharedLeaveButton => '退出共用';
+
+  @override
+  String sharedLeaveSuccess(Object email) {
+    return '你已退出 $email 的共用。';
+  }
+
+  @override
+  String sharedWithMeSyncConfirm(String email) {
+    return '要用你的本機存檔覆蓋 $email 在 Drive 上的副本嗎？';
+  }
+
+  @override
+  String sharedAccessReadOnly(String email) {
+    return '$email 已將你設為唯讀模式——你可以檢視和下載，但無法同步到他們的 Drive。';
+  }
+
+  @override
+  String get sharedWithMeRevoked => '你已不再擁有存取權限';
+
+  @override
+  String sharedRevokedDialogBody(String email, String farmName) {
+    return '$email 已停止與你共用 $farmName。你的本機副本和 Drive 副本保持不變，現在會出現在「我的存檔」中。';
+  }
+
+  @override
+  String get sharedRevokedAccept => '確定';
+
+  @override
+  String get sharedSelfCleanupTitle => '記錄已修正';
+
+  @override
+  String sharedSelfCleanupBody(String farmName) {
+    return '$farmName 曾被錯誤地顯示為與你共用——實際上它是你自己的。現在已修正，它在「我的存檔」中。';
+  }
+
+  @override
+  String get sharedWithMeUploadOwn => '上傳到我的 Drive';
+
+  @override
+  String get sharedDownloadOwn => '從我的 Drive 下載';
+
+  @override
+  String get sharedStatusOwnDriveAhead => '你的 Drive 領先——下載它';
+
+  @override
+  String get sharedSyncBoth => '上傳到兩個 Drive';
+
+  @override
+  String get sharedSideMyDrive => '我的 DRIVE';
+
+  @override
+  String sharedSideOwnerDrive(String email) {
+    return '$email 的 DRIVE';
+  }
+
+  @override
+  String sharedSideDate(int day, int year) {
+    return '第 $day 天 · 第 $year 年';
+  }
+
+  @override
+  String get sharedStatusSyncedNoOwnDrive => '已與擁有者同步 · 你的 Drive 中無副本';
+
+  @override
+  String get sharedStatusAheadNoOwnDrive => '你領先 · 你的 Drive 中無副本';
+
+  @override
+  String sharedStatusOwnerAheadNoOwnDrive(String email) {
+    return '$email 領先 · 你的 Drive 中無副本';
+  }
+
+  @override
+  String get sharedStatusAllSynced => '已同步（本機 + 兩個 Drive）';
+
+  @override
+  String get sharedStatusAheadBoth => '你在兩個 Drive 上都領先';
+
+  @override
+  String get sharedStatusMixed => '未同步——請檢查各個 Drive';
+
+  @override
+  String get sharedStatusFullySynced => '完全同步';
+
+  @override
+  String get sharedStatusSyncedOwn => '我的 Drive 已同步';
+
+  @override
+  String get sharedStatusSyncedOwner => '共用 Drive 已同步';
+
+  @override
+  String get sharedStatusNotCloud => '僅在本機裝置';
+
+  @override
+  String sharedStatusOwnerAhead(Object email) {
+    return '$email 的 Drive 領先';
+  }
+
+  @override
+  String get sharedStatusBothAhead => '兩個 Drive 都領先';
+
+  @override
+  String get sharedStatusLocalMissing => '不在此裝置上';
+
+  @override
+  String sharedStatusOwnerUnavailable(Object email) {
+    return '無法檢查 $email 的 Drive';
+  }
+
+  @override
+  String get sharedStatusWorking => '正在同步…';
+
+  @override
+  String get sharedSideUnavailable => '無法檢查';
+
+  @override
+  String get sharedSyncChooseTitle => '你想同步到哪裡？';
+
+  @override
+  String get sharedSyncChooseBody => '選擇你想用本機裝置的存檔更新哪些雲端副本。';
+
+  @override
+  String get sharedSyncTargetOwn => '我的 Drive';
+
+  @override
+  String sharedSyncTargetOwner(Object email) {
+    return '$email 的 Drive';
+  }
+
+  @override
+  String get sharedSyncTargetBoth => '兩個 Drive';
+
+  @override
+  String get sharedDownloadChooseTitle => '你想下載哪個副本？';
+
+  @override
+  String get sharedDownloadChooseBody => '有多個副本領先。請選擇你想要下載到本機裝置的那個。';
+
+  @override
+  String get sharedDownloadSourceOwn => '來自我的 Drive';
+
+  @override
+  String sharedDownloadSourceOwner(Object email) {
+    return '來自 $email 的 Drive';
+  }
+
+  @override
+  String get sharedWithMePickerTitle => '新增共用存檔';
+
+  @override
+  String get sharedPickerEmptyHint => '其他玩家從 Drive 與你共用的內容會顯示在這裡。';
+
+  @override
+  String get sharedPickerAddButton => '新增';
+
+  @override
+  String get sharedOriginBadge => '共用';
+
+  @override
+  String sharedOriginFrom(String email) {
+    return '來自 $email';
+  }
+
+  @override
+  String get swapBackupDialogTitle => '備份已建立';
+
+  @override
+  String get swapBackupDialogBody => '之前的版本已保存為 zip 檔案。你想如何處理它？';
+
+  @override
+  String get swapBackupUpload => '上傳到 Drive';
+
+  @override
+  String get swapBackupLocalOnly => '保留在本機裝置';
+
+  @override
+  String get swapBackupDeleteNow => '立即刪除';
+
+  @override
+  String get swapBackupUploadOk => '備份已上傳到 Drive。';
+
+  @override
+  String swapBackupUploadErr(String error) {
+    return '無法上傳備份：$error';
+  }
+
+  @override
+  String get swapBackupLocalOnlySnack => '備份已保存在本機裝置。';
+
+  @override
+  String get backupsAction => '備份';
+
+  @override
+  String backupsScreenTitle(String farmName) {
+    return '$farmName 的備份';
+  }
+
+  @override
+  String get backupsEmpty => '暫無備份。';
+
+  @override
+  String get backupsRestore => '恢復';
+
+  @override
+  String get backupsRestoreConfirmTitle => '要恢復此備份嗎？';
+
+  @override
+  String get backupsRestoreConfirmBody => '這會用此前的版本覆蓋你目前的存檔。此操作無法復原。';
+
+  @override
+  String get backupsDelete => '刪除';
+
+  @override
+  String get backupsDeleteConfirmTitle => '要刪除此備份嗎？';
+
+  @override
+  String get backupsDeleteConfirmBody =>
+      '將從存在的所有位置刪除（本機裝置和 Drive，如果已上傳）。此操作無法復原。';
+
+  @override
+  String get backupsRestoreOk => '備份已恢復。';
+
+  @override
+  String get backupsRestoreManualTitle => '手動恢復';
+
+  @override
+  String get backupsRestoreManualBody =>
+      '在橋接模式下，ValleySave 無法自動寫入遊戲資料夾。請自行將此備份的 .zip 解壓縮到 Stardew Valley 的 Saves 資料夾，或在設定中切換到 Root/Shizuku 模式以自動復原。';
+
+  @override
+  String backupsRestoreErr(String error) {
+    return '無法恢復備份：$error';
+  }
+
+  @override
+  String backupsDeleteErr(String error) {
+    return '無法刪除備份：$error';
+  }
+
+  @override
+  String get backupsCreate => '建立本機備份';
+
+  @override
+  String get backupsCreateLocalHint => '備份會先在本機裝置上建立。之後你可以將它們上傳到 Drive。';
+
+  @override
+  String get backupsCreateOk => '備份已建立。';
+
+  @override
+  String backupsCreateErr(String error) {
+    return '無法建立備份：$error';
+  }
+
+  @override
+  String get backupsDownload => '下載';
+
+  @override
+  String get backupsDownloadOk => '備份已下載到本機裝置。';
+
+  @override
+  String backupsDownloadErr(String error) {
+    return '無法下載備份：$error';
+  }
+
+  @override
+  String get backupsCopyOwn => '複製到我的 Drive';
+
+  @override
+  String get backupsUploadOwn => '到我的 Drive';
+
+  @override
+  String get backupsUploadShared => '到共用 Drive';
+
+  @override
+  String get backupsUploadOk => '備份已上傳。';
+
+  @override
+  String backupsUploadErr(String error) {
+    return '無法上傳備份：$error';
+  }
+
+  @override
+  String get backupsLocationLocal => '本機裝置';
+
+  @override
+  String get backupsLocationOwnDrive => '我的 Drive';
+
+  @override
+  String get backupsLocationSharedDrive => '共用 Drive';
+
+  @override
+  String get backupsDeleteChooseBody => '請選擇要從哪裡刪除它。只會顯示存在此備份的位置。';
+
+  @override
+  String get backupsDeleteLocalOnly => '僅從本機裝置';
+
+  @override
+  String get backupsDeleteOwnOnly => '僅從我的 Drive';
+
+  @override
+  String get backupsDeleteSharedOnly => '僅從共用 Drive';
+
+  @override
+  String get backupsDeleteAll => '從所有副本';
+
+  @override
+  String deleteUnifiedTitle(String farmName) {
+    return '要刪除 $farmName 嗎？';
+  }
+
+  @override
+  String get deleteChooseLocationBody =>
+      '選擇從哪裡刪除。本機裝置的副本將被永久刪除；Drive 上的副本會進入垃圾桶（30 天）。';
+
+  @override
+  String deleteDriveContextTitle(String farmName) {
+    return '要從 Drive 中刪除 $farmName 嗎？';
+  }
+
+  @override
+  String get deleteDriveContextBody => 'Drive 上的副本將進入垃圾桶，你可以在 30 天內復原它。';
+
+  @override
+  String get deleteDriveLocalKept => '本機裝置的副本將保持不變。';
+
+  @override
+  String deleteLocalContextTitle(String farmName) {
+    return '要從本機裝置中刪除 $farmName 嗎？';
+  }
+
+  @override
+  String get deleteLocalContextBody => '本機裝置的副本將被永久刪除。';
+
+  @override
+  String deleteLocalDriveCurrent(String date) {
+    return '你的 Drive 副本是最新的（$date），仍將可用。';
+  }
+
+  @override
+  String deleteLocalDriveAhead(String date) {
+    return '你的 Drive 副本更新（$date），仍將可用。';
+  }
+
+  @override
+  String deleteLocalDriveOlder(String driveDate, String localDate) {
+    return '你的 Drive 副本較舊（$driveDate）；本機裝置的進度是 $localDate。';
+  }
+
+  @override
+  String deleteLocalBackupAvailable(int count) {
+    return '有 $count 個本機備份可用，以防你需要之前的版本。';
+  }
+
+  @override
+  String get deleteLocalNoRecovery => '沒有 Drive 副本，也沒有本機備份可以復原此存檔。';
+
+  @override
+  String get deleteOptionLocalOnly => '僅從本機裝置';
+
+  @override
+  String get deleteOptionDriveOnly => '僅從我的 Drive';
+
+  @override
+  String get deleteOptionBoth => '從兩份副本';
+
+  @override
+  String get viewPlayersHint => '檢視玩家';
+
+  @override
+  String snackDeletedBoth(String saveName) {
+    return '\"$saveName\" 已從本機裝置刪除，並移至 Drive 垃圾桶。';
+  }
+
+  @override
   String statDayYear(int day, int year) {
     return '第 $day 天 · 第 $year 年';
   }
@@ -2533,6 +3044,26 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hiwTitle => '運作原理';
+
+  @override
+  String get hiwConnectTitle => '連接你的帳號';
+
+  @override
+  String get hiwConnectDesc =>
+      'ValleySave 使用你的 Google 帳號，將存檔保存在你自己 Drive 中的 ValleySave 專屬資料夾裡。';
+
+  @override
+  String get hiwConnectStepGoogle => 'Google\n帳號';
+
+  @override
+  String get hiwConnectStepDrive => 'ValleySave 資料夾\n已建立';
+
+  @override
+  String get hiwConnectStepReady => '準備好\n同步了';
+
+  @override
+  String get hiwConnectTipOwnership =>
+      '只有你能編輯或刪除 Drive 中的副本——ValleySave 只在自己的資料夾內讀寫。';
 
   @override
   String get hiwSyncTitle => '同步如何運作';
@@ -2818,6 +3349,107 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get previewFromDevice => '來自此設備';
 
   @override
+  String get overwriteWhatChanges => '有什麼變化';
+
+  @override
+  String get overwriteTagOverwritten => '將被覆蓋';
+
+  @override
+  String get overwriteNewCopyTag => '新';
+
+  @override
+  String overwriteDeltaPhrase(int days, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days 天又 $time',
+      zero: '$time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overwriteVerdictAhead(String delta) {
+    return '你領先 $delta。可以放心。';
+  }
+
+  @override
+  String get overwriteVerdictMoneySpent =>
+      '💰 目前金錢變少了，但整體進度在前進——你可能是把錢花在了某樣東西上。這不是真正的損失。';
+
+  @override
+  String overwriteVerdictNegligible(String delta) {
+    return '差異極小（$delta）。兩個副本用哪個都可以。';
+  }
+
+  @override
+  String overwriteVerdictDanger(String delta, String target) {
+    return '⚠️ 你將遺失 $target 中 $delta 的進度。繼續前請先檢查。';
+  }
+
+  @override
+  String get overwriteConfirmTitleUpload => '確認上傳嗎？';
+
+  @override
+  String get overwriteConfirmTitleDownload => '確認下載嗎？';
+
+  @override
+  String overwriteConfirmBody(String delta, String target) {
+    return '你將遺失 $target 中的 $delta。此操作無法復原。';
+  }
+
+  @override
+  String get overwriteConfirmButtonUpload => '確認上傳';
+
+  @override
+  String get overwriteConfirmButtonDownload => '確認下載';
+
+  @override
+  String get overwriteDangerButtonUpload => '⚠️ 仍然上傳';
+
+  @override
+  String get overwriteDangerButtonDownload => '⚠️ 仍然下載';
+
+  @override
+  String overwriteIdenticalSummary(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '✓ 相同 $count 個',
+    );
+    return '$_temp0 — $list';
+  }
+
+  @override
+  String overwriteUploadToOwner(String email) {
+    return '上傳到 $email 的 Drive';
+  }
+
+  @override
+  String get overwriteUploadBoth => '上傳到兩個 Drive';
+
+  @override
+  String get overwriteConfirmTitleBoth => '確認這兩次上傳嗎？';
+
+  @override
+  String overwriteConfirmBodyBoth(String delta, String targets) {
+    return '你將遺失 $targets 中的 $delta。此操作無法復原。';
+  }
+
+  @override
+  String overwriteBothDestinationsLabel(String first, String second) {
+    return '$first 和 $second';
+  }
+
+  @override
+  String get sharedTargetOwnDrive => '你的 Drive';
+
+  @override
+  String sharedStatusLocalAhead(String targets) {
+    return '你在 $targets 領先';
+  }
+
+  @override
   String versionMismatch(String local, String drive) {
     return '版本不同：本地 $local · Drive $drive…';
   }
@@ -2830,6 +3462,93 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get snackDownloaded => '存檔已下載到遊戲';
+
+  @override
+  String get snackReplacePrepareFailed => '無法準備存檔。磁碟上未做任何修改';
+
+  @override
+  String get snackReplaceValidationFailed => '下載的存檔似乎無效或不完整。磁碟上未做任何修改';
+
+  @override
+  String get snackReplaceBackupFailed => '無法建立備份。磁碟上未做任何修改';
+
+  @override
+  String get snackReplaceSwapFailed => '交換失敗，但原始存檔已從備份中復原';
+
+  @override
+  String get snackReplaceBusy => '此存檔已有正在進行的操作';
+
+  @override
+  String get snackUploadIncomplete => '本機存檔不完整或已損壞。未上傳任何內容';
+
+  @override
+  String get snackDownloadIncomplete => '無法下載：Drive 上缺少內容';
+
+  @override
+  String get cardIncomplete => 'Drive 上不完整';
+
+  @override
+  String get autoRefreshTitle => '自動重新整理';
+
+  @override
+  String get autoRefreshSubtitle => '每 30 秒檢查一次 Drive 的變化';
+
+  @override
+  String autoSyncSnack(String farmName) {
+    return '$farmName 已自動同步';
+  }
+
+  @override
+  String get autoSyncTooltipOn => '自動同步已開啟——安全時會自動同步';
+
+  @override
+  String get autoSyncTooltipOff => '自動同步已關閉——點擊開啟';
+
+  @override
+  String get autoSyncExplainTitle => '自動同步';
+
+  @override
+  String autoSyncExplainBody(String farmName) {
+    return '從現在起，$farmName 會在安全的情況下自動上傳或下載，不再向你確認。';
+  }
+
+  @override
+  String get autoSyncExplainSafe => '只有在你明顯領先且不會遺失任何內容時才會執行。';
+
+  @override
+  String get autoSyncExplainDanger => '如果有遺失進度的風險，它絕不會自動執行：你仍然可以透過常規對話方塊自己決定。';
+
+  @override
+  String get autoSyncExplainMissing => '如果缺少其中一個副本，它不會自動建立：第一次上傳或下載由你決定。';
+
+  @override
+  String get autoSyncExplainDontShowAgain => '不再顯示此提示';
+
+  @override
+  String get autoSyncExplainConfirm => '明白了，開啟';
+
+  @override
+  String get hiwAutoSyncTitle => '自動同步';
+
+  @override
+  String get hiwAutoSyncDesc =>
+      '每個存檔卡片上都有一個 AUTO 標籤。開啟後，一旦應用程式偵測到變化，該存檔就會自動上傳或下載——你不需要進入確認。';
+
+  @override
+  String get hiwAutoSyncTipSafe => '只有在你明顯領先且不會遺失任何內容時，它才會自動同步。';
+
+  @override
+  String get hiwAutoSyncTipDanger => '如果有遺失進度的風險，它絕不會自動執行：仍會像往常一樣透過比較介面向你確認。';
+
+  @override
+  String get hiwAutoSyncTipPerSave =>
+      '逐個存檔單獨開啟，不是一次性全部開啟：你可以只在自己的存檔上開啟，共用存檔上不開啟。';
+
+  @override
+  String get hiwAutoSyncTipMissing => '它只保持已存在的兩個副本同步。如果缺少一個，第一次上傳或下載需要你自己完成。';
+
+  @override
+  String get hiwAutoSyncTipRefresh => '你可以在設定中完全關閉自動檢查變化的功能。';
 
   @override
   String get snackSessionExpired => 'Drive 會話已過期。重新連接';
@@ -2891,6 +3610,89 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get hiwCompatMods =>
       'SMAPI mod 會向存檔添加額外數據。如果您在未安裝這些 mod 的設備上加載已修改的存檔，遊戲可能會崩潰或丟失 mod 數據。\n\n在 Android 上，也可以安裝 SMAPI 來使用 mod。';
+
+  @override
+  String get hiwCompatIncomplete =>
+      '如果你在某個存檔上看到「Drive 上不完整」，表示雲端缺少必要的檔案——在從其他裝置重新正確上傳之前無法下載。';
+
+  @override
+  String get hiwShareTitle => '與他人共用';
+
+  @override
+  String get hiwShareDesc => '透過電子郵件與其他玩家共用存檔。對方會在自己裝置的「與我共用」中看到它。';
+
+  @override
+  String get hiwShareStepYourSave => '你的\n存檔';
+
+  @override
+  String get hiwShareStepShare => '透過電子郵件\n共用';
+
+  @override
+  String get hiwShareStepFriend => '與我\n共用的';
+
+  @override
+  String get hiwShareTipRoles =>
+      '兩種角色：唯讀權限可以檢視和下載。允許同步權限可以覆蓋你 Drive 上的副本。無論哪種角色都不能刪除它——只有你這個擁有者才能刪除你的存檔。';
+
+  @override
+  String get hiwShareTipDisconnect =>
+      '中斷連線只會停止對方那一側的同步——共用關係仍然有效，直到你在「管理共用」中真正退出為止。';
+
+  @override
+  String get hiwHostSwapTitle => '更換房主';
+
+  @override
+  String get hiwHostSwapDesc => '更改哪個農場幫工是存檔的房主，原地替換——相同的存檔槽，相同的共用權限。';
+
+  @override
+  String get hiwHostSwapStepPick => '選擇\n農場幫工';
+
+  @override
+  String get hiwHostSwapStepConfirm => '確認';
+
+  @override
+  String get hiwHostSwapStepDone => '新存檔\n已建立';
+
+  @override
+  String get hiwHostSwapTipMove => '農場中的一些物件可能會被重新放置以給房子騰出空間——不會刪除任何東西。';
+
+  @override
+  String get hiwHostSwapTipHouse => '新房主的房子外觀會是遊戲預設的大房子——如果沒有模組，小屋外觀不受支援。';
+
+  @override
+  String get hiwBackupsTitle => '備份';
+
+  @override
+  String get hiwBackupsDesc =>
+      '備份是存檔在某一時刻的快照，之後可以復原。你可以隨時手動建立，也可以讓 ValleySave 在覆蓋存檔之前（下載、匯入、復原或更換房主時）自動建立。';
+
+  @override
+  String get hiwBackupsStepSave => '你的\n存檔';
+
+  @override
+  String get hiwBackupsStepSnapshot => '備份\n已建立';
+
+  @override
+  String get hiwBackupsStepStore => '本機和/或\nDrive';
+
+  @override
+  String get hiwBackupsTipRestore => '恢復會用之前的版本覆蓋你目前的存檔——此操作無法復原。';
+
+  @override
+  String get hiwBackupsTipDelete =>
+      '刪除備份會將其從存在的所有位置移除（本機裝置和 Drive，如果已上傳）——此操作無法復原。';
+
+  @override
+  String get hiwBackupsTipExport =>
+      '你還可以將存檔匯出為 zip 檔案，保存到任何地方，之後再匯入回來——這是內建備份之外的一種手動、可攜式的替代方案。';
+
+  @override
+  String get hiwBackupsTipRetention =>
+      'ValleySave 為每個存檔保留最近的 5 個自動備份；你手動建立的備份永遠不會被自動刪除。';
+
+  @override
+  String get hiwBackupsTipRestoreBridge =>
+      '在橋接模式下（Android 無 root/Shizuku），復原備份需要你手動將 .zip 解壓縮到 Stardew 資料夾——和下載時一樣。';
 
   @override
   String get hiwComparePrimary => '總遊戲時間';
@@ -3131,6 +3933,59 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
+  String get tooltipLaunchGame => '開始遊戲';
+
+  @override
+  String get hiwLaunchTitle => '啟動遊戲';
+
+  @override
+  String get hiwLaunchDesc => '在「我的存檔」上方列點擊 ▶ 按鈕，可直接從應用程式啟動 Stardew Valley。';
+
+  @override
+  String get hiwLaunchTipWindows => '在 Windows 上，若未自動偵測到遊戲，請在設定 → 遊戲中設定可執行檔路徑。';
+
+  @override
+  String get hiwLaunchTipAndroid => '在 Android 上，若已安裝遊戲則直接啟動。';
+
+  @override
+  String get hiwLaunchTipLinux => '在 Linux 上，如果未能自動偵測到遊戲，請在設定 → 遊戲中設定可執行檔路徑。';
+
+  @override
+  String get hiwSaveLocationsTitle => '存檔保存在哪裡';
+
+  @override
+  String get hiwSaveLocationsDesc => 'ValleySave 會直接在每個平台的遊戲存檔資料夾中讀寫。';
+
+  @override
+  String get hiwSaveLocationWindows =>
+      'Windows: %AppData%\\StardewValley\\Saves';
+
+  @override
+  String get hiwSaveLocationAndroid => 'Android：受保護的資料夾，需透過 Shizuku 或橋接模式存取';
+
+  @override
+  String get hiwSaveLocationLinux =>
+      'Linux：~/.config/StardewValley/Saves（如果透過 snap 安裝了 Steam，則為 ~/snap/steam/common/.config/StardewValley/Saves）';
+
+  @override
+  String get settingsGameSection => '遊戲';
+
+  @override
+  String get settingsGameExePath => 'Stardew Valley 可執行檔';
+
+  @override
+  String get settingsGameExeNotFound => '未自動找到';
+
+  @override
+  String get settingsGameExeBrowse => '瀏覽…';
+
+  @override
+  String get settingsGameExeSaved => '路徑已儲存';
+
+  @override
+  String get snackLaunchError => '無法開啟遊戲';
+
+  @override
   String get makeHostAction => '設為房主';
 
   @override
@@ -3179,4 +4034,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hostSwapErrValidation => '新存檔的驗證失敗，已被捨棄。原始存檔完好無損。';
+
+  @override
+  String get makeHostDeleteOriginalTitle => '要從此裝置刪除原始存檔嗎？';
+
+  @override
+  String get makeHostDeleteOriginalBody =>
+      '新存檔已就緒。可以先把原始存檔備份到你的 Drive（之後可重新下載），或者只刪除本機副本。';
+
+  @override
+  String get makeHostDeleteOriginalNoBackupBody =>
+      '未連接 Drive：不會保留任何備份。僅會刪除本裝置上的本機副本。';
+
+  @override
+  String get makeHostDeleteOriginalUploadBody =>
+      '原始存檔會先上傳到你的 Drive 作為備份，然後再刪除本裝置上的本機副本。';
+
+  @override
+  String get makeHostDeleteWithoutUpload => '不上傳直接刪除';
+
+  @override
+  String get makeHostUploadAndDelete => '上傳並刪除';
 }

@@ -709,6 +709,35 @@
   "snackUploadIncomplete": "The local save is incomplete or corrupted. Nothing was uploaded",
   "snackDownloadIncomplete": "Can't download: this save is missing content on Drive",
   "cardIncomplete": "Incomplete on Drive",
+  "autoRefreshTitle": "Auto-refresh",
+  "autoRefreshSubtitle": "Checks for Drive changes every 30s",
+  "autoSyncSnack": "{farmName} synced automatically",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncTooltipOn": "Auto-sync on — syncs itself when it's safe",
+  "autoSyncTooltipOff": "Auto-sync off — tap to turn it on",
+  "autoSyncExplainTitle": "Auto-sync",
+  "autoSyncExplainBody": "From now on, {farmName} will upload or download itself when it's safe, without asking you to confirm.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncExplainSafe": "It only acts when you're clearly ahead and nothing gets lost.",
+  "autoSyncExplainDanger": "If there were any risk of losing progress, it never acts on its own: you'll still decide with the usual dialog.",
+  "autoSyncExplainMissing": "If one of the two copies is missing, it won't create it: the first upload or download is your call.",
+  "autoSyncExplainDontShowAgain": "Don't show this again",
+  "autoSyncExplainConfirm": "Got it, turn on",
+  "hiwAutoSyncTitle": "Sync by itself",
+  "hiwAutoSyncDesc": "Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.",
+  "hiwAutoSyncTipSafe": "It only syncs itself when you're clearly ahead and nothing gets lost.",
+  "hiwAutoSyncTipDanger": "If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.",
+  "hiwAutoSyncTipPerSave": "You turn it on save by save, not all at once: you can have it on yours and off on a shared one.",
+  "hiwAutoSyncTipMissing": "It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.",
+  "hiwAutoSyncTipRefresh": "In Settings you can turn off automatic change checking entirely.",
   "snackSessionExpired": "Drive session expired. Reconnect",
   "snackUploadError": "Upload error: {error}",
   "@snackUploadError": {

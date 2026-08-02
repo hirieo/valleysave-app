@@ -2719,6 +2719,120 @@ abstract class AppLocalizations {
   /// **'Incomplete on Drive'**
   String get cardIncomplete;
 
+  /// No description provided for @autoRefreshTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-refresh'**
+  String get autoRefreshTitle;
+
+  /// No description provided for @autoRefreshSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks for Drive changes every 30s'**
+  String get autoRefreshSubtitle;
+
+  /// No description provided for @autoSyncSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'{farmName} synced automatically'**
+  String autoSyncSnack(String farmName);
+
+  /// No description provided for @autoSyncTooltipOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-sync on — syncs itself when it\'s safe'**
+  String get autoSyncTooltipOn;
+
+  /// No description provided for @autoSyncTooltipOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-sync off — tap to turn it on'**
+  String get autoSyncTooltipOff;
+
+  /// No description provided for @autoSyncExplainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-sync'**
+  String get autoSyncExplainTitle;
+
+  /// No description provided for @autoSyncExplainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'From now on, {farmName} will upload or download itself when it\'s safe, without asking you to confirm.'**
+  String autoSyncExplainBody(String farmName);
+
+  /// No description provided for @autoSyncExplainSafe.
+  ///
+  /// In en, this message translates to:
+  /// **'It only acts when you\'re clearly ahead and nothing gets lost.'**
+  String get autoSyncExplainSafe;
+
+  /// No description provided for @autoSyncExplainDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'If there were any risk of losing progress, it never acts on its own: you\'ll still decide with the usual dialog.'**
+  String get autoSyncExplainDanger;
+
+  /// No description provided for @autoSyncExplainMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'If one of the two copies is missing, it won\'t create it: the first upload or download is your call.'**
+  String get autoSyncExplainMissing;
+
+  /// No description provided for @autoSyncExplainDontShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t show this again'**
+  String get autoSyncExplainDontShowAgain;
+
+  /// No description provided for @autoSyncExplainConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it, turn on'**
+  String get autoSyncExplainConfirm;
+
+  /// No description provided for @hiwAutoSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync by itself'**
+  String get hiwAutoSyncTitle;
+
+  /// No description provided for @hiwAutoSyncDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.'**
+  String get hiwAutoSyncDesc;
+
+  /// No description provided for @hiwAutoSyncTipSafe.
+  ///
+  /// In en, this message translates to:
+  /// **'It only syncs itself when you\'re clearly ahead and nothing gets lost.'**
+  String get hiwAutoSyncTipSafe;
+
+  /// No description provided for @hiwAutoSyncTipDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.'**
+  String get hiwAutoSyncTipDanger;
+
+  /// No description provided for @hiwAutoSyncTipPerSave.
+  ///
+  /// In en, this message translates to:
+  /// **'You turn it on save by save, not all at once: you can have it on yours and off on a shared one.'**
+  String get hiwAutoSyncTipPerSave;
+
+  /// No description provided for @hiwAutoSyncTipMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.'**
+  String get hiwAutoSyncTipMissing;
+
+  /// No description provided for @hiwAutoSyncTipRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'In Settings you can turn off automatic change checking entirely.'**
+  String get hiwAutoSyncTipRefresh;
+
   /// No description provided for @snackSessionExpired.
   ///
   /// In en, this message translates to:

@@ -20,10 +20,13 @@ import '../../core/models/season_state.dart';
 import '../../core/models/shared_save_entry.dart';
 import '../../core/models/shared_sync_state.dart';
 import '../../core/services/auth_service.dart';
+import '../../core/services/auto_refresh_prefs.dart';
+import '../../core/services/auto_sync_prefs.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/host_swap_service.dart';
+import '../../core/services/local_save_watcher.dart';
 import '../../core/services/save_replace_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
@@ -63,6 +66,12 @@ enum _BackupDeleteChoice { local, ownDrive, sharedDrive, all }
 enum _SharedSyncTarget { ownDrive, ownerDrive, both }
 
 enum _SharedDownloadSource { ownDrive, ownerDrive }
+
+/// spec 009 (Capa 2, D6): qué hacer, si acaso, para un destino concreto —
+/// `none` cubre tanto "está sincronizado" como "el veredicto no es verde"
+/// (G7): en ambos casos la Capa 2 no actúa, la card ya se actualizó por la
+/// Capa 1 (refresco pasivo) y el usuario decide a mano igual que hoy.
+enum _AutoSyncAction { none, upload, download }
 
 /// Rediseño del diálogo subir/bajar (2026-07-29): clasificación del veredicto
 /// que se muestra sobre el ledger de diferencias. `red` (peligro) dispara
@@ -123,6 +132,47 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // Cuenta Google conectada — subtítulo bajo el título de la cabecera.
   String? _connectedEmail;
 
+  // ── spec 009 — Capa 1: refresco pasivo (D1-D5) ──
+  static const _driveChangesPageTokenKey = 'drive_changes_page_token';
+  bool _autoRefreshEnabled = true; // default true (D4) hasta leer la pref
+  LocalSaveWatcher? _localWatcher;
+  Timer? _driveChangesTimer;
+
+  // ── spec 009 — Capa 2: auto-sync por partida (D6-D9) ──
+  Set<String> _autoSyncFolders = {};
+  bool _isAutoSyncEnabled(String folderName) =>
+      _autoSyncFolders.contains(folderName);
+  // Timer PROPIO (2026-08-02): antes el ciclo de auto-sync solo se disparaba
+  // dentro de `_pollDriveChanges`, que corta en seco si `_autoRefreshEnabled`
+  // (Capa 1, interruptor global) está apagado. Eso rompía la garantía D7
+  // ("independiente del refresco global") — con el refresco global apagado,
+  // el chip AUTO quedaba encendido en la UI pero nunca sincronizaba nada.
+  Timer? _autoSyncTimer;
+
+  /// Arranca/para el timer de Capa 2 según haya o no partidas con AUTO
+  /// encendido — nunca según `_autoRefreshEnabled`. Llamar tras cualquier
+  /// cambio a `_autoSyncFolders`.
+  void _syncAutoSyncTimerState() {
+    if (_autoSyncFolders.isEmpty) {
+      _autoSyncTimer?.cancel();
+      _autoSyncTimer = null;
+    } else {
+      _autoSyncTimer ??= Timer.periodic(
+        const Duration(seconds: 30),
+        (_) => _autoSyncTick(),
+      );
+    }
+  }
+
+  /// Un ciclo de Capa 2: refresca el estado (mismo criterio de espera que
+  /// `_pollDriveChanges`, G4) y evalúa/ejecuta el auto-sync sobre datos
+  /// frescos.
+  Future<void> _autoSyncTick() async {
+    if (!mounted || _busy.isNotEmpty) return;
+    await _load(silent: true);
+    if (mounted) await _runAutoSyncCycle();
+  }
+
   // ── Modo de acceso en Android ──
   static const _modePrefKey = 'android_access_mode';
   AndroidMode? _mode; // null = aún leyendo la preferencia
@@ -138,6 +188,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _init();
     _loadConnectedEmail();
+    _initAutoRefresh();
+    _loadAutoSyncPrefs();
   }
 
   Future<void> _loadConnectedEmail() async {
@@ -148,7 +200,290 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _stopAutoRefresh();
+    _autoSyncTimer?.cancel();
     super.dispose();
+  }
+
+  // ── spec 009 — Capa 1: watcher local + sondeo de Drive (T910-T916) ─────
+
+  /// T911/T913 — arranca (o no) según la pref persistida. Independiente del
+  /// resto de `_init()` (modo Android/Shizuku): el refresco pasivo no
+  /// depende de qué vía de acceso local se use.
+  Future<void> _initAutoRefresh() async {
+    final enabled = await AutoRefreshPrefs.isEnabled();
+    if (!mounted) return;
+    setState(() => _autoRefreshEnabled = enabled);
+    if (enabled) _startAutoRefresh();
+  }
+
+  /// T917 — carga inicial del conjunto de partidas con auto-sync activado.
+  Future<void> _loadAutoSyncPrefs() async {
+    final folders = await AutoSyncPrefs.loadAll();
+    if (!mounted) return;
+    setState(() => _autoSyncFolders = folders);
+    _syncAutoSyncTimerState();
+  }
+
+  /// T918/T919 — alterna el chip `⚡ AUTO` de UNA partida (por `folderName`),
+  /// nunca el interruptor global (D7 — capas independientes). Actualiza el
+  /// estado en memoria al instante (chip responde sin esperar disco) y
+  /// persiste en segundo plano.
+  Future<void> _toggleAutoSync(String folderName) async {
+    final enabled = !_isAutoSyncEnabled(folderName);
+    // Cada activación en cualquier partida → explicar antes de encender nada
+    // (2026-07-31, checkbox añadido 2026-08-01): el chip por sí solo no deja
+    // claro que la app va a subir/bajar SIN preguntar. Si cancela, no se
+    // activa. Apagar nunca pregunta (no hay riesgo en volver a manual). El
+    // aviso vuelve a salir cada vez salvo que el usuario marque "no volver
+    // a mostrar" (desmarcado por defecto).
+    if (enabled && !await AutoSyncPrefs.explainerDismissed(folderName)) {
+      if (!mounted) return;
+      final result = await _explainAutoSync(folderName);
+      if (result == null || !result.confirmed) return;
+      if (result.dontShowAgain) {
+        await AutoSyncPrefs.markExplainerDismissed(folderName);
+      }
+      if (!mounted) return;
+    }
+    setState(() {
+      if (enabled) {
+        _autoSyncFolders.add(folderName);
+      } else {
+        _autoSyncFolders.remove(folderName);
+      }
+    });
+    _syncAutoSyncTimerState();
+    await AutoSyncPrefs.setEnabled(folderName, enabled);
+  }
+
+  /// Diálogo de la PRIMERA activación de auto-sync (una sola vez en toda la
+  /// app, no por partida). Reutiliza `_glassDialogShell`/`_dialogBody`, cero
+  /// componentes nuevos. Mockup aprobado 2026-07-31.
+  Future<({bool confirmed, bool dontShowAgain})?> _explainAutoSync(
+    String folderName,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    const kAutoSync = Color(0xFF62B074);
+    final matches = _entries.where((e) => e.folderName == folderName);
+    final farmName = matches.isEmpty
+        ? folderName
+        : matches.first.primary.farmName;
+    // Desmarcado por defecto (decisión del usuario 2026-08-01): el aviso
+    // vuelve a salir cada vez que se activa AUTO salvo que el usuario marque
+    // explícitamente que ya lo tiene claro.
+    bool dontShowAgain = false;
+    return showDialog<({bool confirmed, bool dontShowAgain})>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: _glassDialogShell(
+            maxWidth: 380,
+            accent: kAutoSync,
+            child: _dialogBody(
+              title: Text(
+                l10n.autoSyncExplainTitle,
+                style: GoogleFonts.bodoniModa(
+                  color: AppColors.text,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.autoSyncExplainBody(farmName),
+                    style: GoogleFonts.firaCode(
+                      fontSize: 12,
+                      height: 1.55,
+                      color: Colors.white.withValues(alpha: 0.82),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  _infoBox(
+                    color: kAutoSync,
+                    icon: Icons.check_rounded,
+                    text: l10n.autoSyncExplainSafe,
+                  ),
+                  const SizedBox(height: 8),
+                  _infoBox(
+                    color: const Color(0xFFE0A850),
+                    icon: Icons.shield_outlined,
+                    text: l10n.autoSyncExplainDanger,
+                  ),
+                  const SizedBox(height: 8),
+                  // Decisión del usuario 2026-08-01: auto-sync NO crea la copia
+                  // que falta (solo mantiene sincronizadas dos que ya existen),
+                  // para que borrar siga significando borrar. Se dice aquí
+                  // explícitamente porque si no sorprende.
+                  _infoBox(
+                    color: Colors.white.withValues(alpha: 0.55),
+                    icon: Icons.info_outline_rounded,
+                    text: l10n.autoSyncExplainMissing,
+                  ),
+                  const SizedBox(height: 4),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => setDialogState(
+                      () => dontShowAgain = !dontShowAgain,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: dontShowAgain
+                                  ? kAutoSync
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: dontShowAgain
+                                    ? kAutoSync
+                                    : Colors.white.withValues(alpha: 0.35),
+                                width: 1.5,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: AnimatedScale(
+                              scale: dontShowAgain ? 1.0 : 0.6,
+                              duration: const Duration(milliseconds: 120),
+                              curve: Curves.easeOutBack,
+                              child: AnimatedOpacity(
+                                opacity: dontShowAgain ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 120),
+                                child: const Icon(
+                                  Icons.check_rounded,
+                                  size: 11,
+                                  color: Color(0xFF0A1E0F),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 9),
+                          Expanded(
+                            child: Text(
+                              l10n.autoSyncExplainDontShowAgain,
+                              style: GoogleFonts.firaCode(
+                                fontSize: 11.5,
+                                color: Colors.white.withValues(alpha: 0.72),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                ActionBtn(
+                  label: l10n.autoSyncExplainConfirm,
+                  color: kAutoSync,
+                  icon: Icons.autorenew_rounded,
+                  filled: true,
+                  onTap: () => Navigator.pop(
+                    ctx,
+                    (confirmed: true, dontShowAgain: dontShowAgain),
+                  ),
+                ),
+                ActionBtn(
+                  label: l10n.cancel,
+                  color: Colors.white.withValues(alpha: 0.55),
+                  filled: false,
+                  onTap: () => Navigator.pop(
+                    ctx,
+                    (confirmed: false, dontShowAgain: dontShowAgain),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _startAutoRefresh() {
+    _startLocalWatcher();
+    _startDriveChangesTimer();
+  }
+
+  void _stopAutoRefresh() {
+    _localWatcher?.stop();
+    _driveChangesTimer?.cancel();
+    _driveChangesTimer = null;
+  }
+
+  /// T910/T911 (D1) — solo aplica a escritorio: Android no tiene una carpeta
+  /// de Saves directa (accede vía Shizuku/root, sin ruta de archivos fija
+  /// que observar).
+  void _startLocalWatcher() {
+    final dir = SaveService.savesDirectory;
+    if (dir == null) return;
+    _localWatcher?.stop();
+    _localWatcher = LocalSaveWatcher(
+      path: dir,
+      onChange: () {
+        if (mounted) _load(silent: true);
+      },
+    )..start();
+  }
+
+  /// T913 (D2, G2) — el timer solo se crea si hay Drive conectado; el
+  /// interruptor global ya se comprobó en el caller (`_startAutoRefresh`/
+  /// `_setAutoRefreshEnabled`).
+  void _startDriveChangesTimer() {
+    _driveChangesTimer?.cancel();
+    _driveChangesTimer = null;
+    if (widget.drive == null) return;
+    _driveChangesTimer = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) => _pollDriveChanges(),
+    );
+  }
+
+  /// T913 (G2, G4, G5) — un ciclo de sondeo barato vía Changes API, Capa 1
+  /// (refresco pasivo). D5: si hubo CUALQUIER cambio, dispara
+  /// `_load(silent: true)` sin intentar averiguar cuál archivo cambió.
+  ///
+  /// NO dispara el auto-sync por partida (Capa 2) — ese tiene su propio
+  /// timer (`_autoSyncTimer`/`_autoSyncTick`), a propósito: esta función
+  /// corta en seco si `_autoRefreshEnabled` está apagado, y Capa 2 debe
+  /// seguir funcionando aunque el refresco global esté apagado (D7). Fusionar
+  /// ambos ciclos en uno reintrodujo ese acoplamiento (bug 2026-08-02: con el
+  /// refresco global apagado, el chip AUTO no sincronizaba nunca).
+  Future<void> _pollDriveChanges() async {
+    final drive = widget.drive;
+    if (!_autoRefreshEnabled || drive == null) return;
+    if (_busy.isNotEmpty) return; // G4 — no a mitad de una operación
+
+    final prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString(_driveChangesPageTokenKey);
+    try {
+      token ??= await drive.getStartPageToken();
+      final result = await drive.listChanges(token);
+      await prefs.setString(_driveChangesPageTokenKey, result.newPageToken);
+      if (result.changedFileIds.isNotEmpty && mounted) {
+        await _load(silent: true);
+      }
+    } catch (_) {
+      // G5 — fallo de red o token inválido/caducado: pedir uno nuevo y
+      // seguir en silencio, sin snack; no es una acción crítica, se
+      // reintenta en el siguiente ciclo de 30s.
+      try {
+        final fresh = await drive.getStartPageToken();
+        await prefs.setString(_driveChangesPageTokenKey, fresh);
+      } catch (_) {
+        // Sin red ahora mismo tampoco — se reintenta en 30s.
+      }
+    }
   }
 
   /// El título de la cabecera representa el bloque que está entrando bajo
@@ -173,10 +508,28 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed || !Platform.isAndroid) return;
-    // Submodo Shizuku: el usuario pudo activarlo fuera de la app.
-    if (_mode == AndroidMode.shizuku && !_shizukuReady) {
-      _checkShizuku();
+    if (state == AppLifecycleState.resumed) {
+      // Submodo Shizuku: el usuario pudo activarlo fuera de la app.
+      if (Platform.isAndroid && _mode == AndroidMode.shizuku && !_shizukuReady) {
+        _checkShizuku();
+      }
+      // spec 009 (T914, D3, G3): al volver a primer plano, reanuda el timer
+      // de Drive + un chequeo inmediato (cubre haber estado en segundo
+      // plano más de 30s sin sondear). El watcher local no se pausa nunca
+      // (D1 es instantáneo, sin coste de red).
+      if (_autoRefreshEnabled && widget.drive != null) {
+        _startDriveChangesTimer();
+        _pollDriveChanges();
+      }
+      return;
+    }
+    // Cualquier otro estado (paused/inactive/hidden/detached) en Android/
+    // iOS: pausar el timer de Drive — D3, en segundo plano no hay pantalla
+    // que actualizar. Desktop no tiene "segundo plano" real en el mismo
+    // sentido (ver spec.md, "Ciclo de vida") — se deja corriendo.
+    if (Platform.isAndroid || Platform.isIOS) {
+      _driveChangesTimer?.cancel();
+      _driveChangesTimer = null;
     }
   }
 
@@ -428,7 +781,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       setState(() {
         _entries = entries;
         _loading = false;
-        _staggerVersion++;
+        // Solo en cargas NO silenciosas (2026-08-02): esto cambia la `key`
+        // de cada card y fuerza a Flutter a recrearlas, repitiendo la
+        // animación de entrada. Un refresco silencioso (watcher local, Drive
+        // Changes, o el timer de auto-sync cada 30s) debe actualizar datos
+        // sin ningún parpadeo visual.
+        if (!silent) _staggerVersion++;
       });
       SeasonController.instance.setFromSaves(entries);
     }
@@ -1221,6 +1579,21 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
       }
     }
+    // T916 (D4, G6): el interruptor de auto-actualizar pudo cambiar en
+    // Ajustes — releer y aplicar en caliente (arranca o para watcher+timer),
+    // sin reiniciar la app.
+    await _syncAutoRefreshFromPrefs();
+  }
+
+  Future<void> _syncAutoRefreshFromPrefs() async {
+    final enabled = await AutoRefreshPrefs.isEnabled();
+    if (!mounted || enabled == _autoRefreshEnabled) return;
+    setState(() => _autoRefreshEnabled = enabled);
+    if (enabled) {
+      _startAutoRefresh();
+    } else {
+      _stopAutoRefresh();
+    }
   }
 
   Future<void> _handleLaunchGame() async {
@@ -1431,10 +1804,26 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       return;
     }
 
-    final name = drive.folderName;
     final confirmed = await _confirmDownload(entry);
     if (confirmed != true) return;
+    await _downloadNow(entry);
+  }
 
+  /// Ejecuta la descarga real, SIN confirmación — mismo papel que
+  /// `_uploadToOwnDrive` para subidas (G9): único punto de escritura local
+  /// para AMBAS direcciones de descarga (Mi Drive propia y, vía
+  /// `_handleDownloadShared`, el Drive del dueño). Lo llama `_handleDownload`
+  /// tras confirmar, y el auto-sync (T920, spec 009) cuando el ledger ya dio
+  /// `verdict == green`, saltándose `_confirmDownload` a propósito — el paso
+  /// de confirmación es precisamente lo que la Capa 2 se salta cuando es
+  /// seguro (D6).
+  Future<void> _downloadNow(SaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
+    final drive = entry.drive;
+    final folderId = entry.driveFolderId;
+    if (drive == null || folderId == null || widget.drive == null) return;
+
+    final name = drive.folderName;
     setState(() => _busy.add(name));
     try {
       if (Platform.isAndroid && _mode == AndroidMode.root) {
@@ -5231,6 +5620,269 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
+  // ── spec 009 — Capa 2: auto-sync por partida (T920-T922, D6-D9) ─────────
+  //
+  // Regla de riesgo (no negociable): esta sección NUNCA reimplementa la
+  // clasificación verde/ámbar/gris/rojo — siempre llama literalmente a
+  // `_computeOverwriteLedger` (arriba) y mira `.verdict`. Solo decide CUÁNDO
+  // llamar a los handlers de subida/bajada ya existentes, sin pasar por los
+  // diálogos de confirmación (`_confirmUpload`/`_confirmDownload`/
+  // `_confirmUploadToBoth`), que son manuales por diseño.
+
+  /// T920 — decide la partida PROPIA (no coop): dirección por `entry.status`
+  /// (mismo cálculo que ya usan las cards para mostrar el botón subir/bajar,
+  /// `SaveEntry.status`), verdict por `_computeOverwriteLedger` tal cual.
+  /// `localOnly`/`driveOnly` (falta un lado) se quedan en `none` a propósito
+  /// — sin las dos caras no hay ledger real que calcular, y D6 exige un
+  /// veredicto verde, no "no hay nada que perder".
+  /// Veredictos que el auto-sync considera "actuable" sin preguntar.
+  ///
+  /// Verde: vas por delante y no retrocede nada.
+  /// Ámbar: SOLO bajó el dinero actual — es decir, jugaste y gastaste. La
+  /// regla de peligro ya excluye el dinero actual a propósito, así que
+  /// bloquear ámbar era una contradicción: dejaba el auto-sync inútil en el
+  /// caso más común (bug real 2026-08-02, partida `Pleyades` con Mi Drive
+  /// clavado 18 días atrás porque el jugador había gastado dinero).
+  ///
+  /// Rojo se queda fuera a propósito: significa que algo DISTINTO del dinero
+  /// retrocedió aun yendo el día por delante — las dos copias divergieron —
+  /// y una subida sobrescribe Drive sin respaldo previo (a diferencia de las
+  /// bajadas, que sí pasan por el auto-backup de `SaveReplaceService`).
+  /// Gris queda fuera por inútil: no hay nada que copiar.
+  static bool _autoSyncActs(_OverwriteVerdict verdict) =>
+      verdict == _OverwriteVerdict.green || verdict == _OverwriteVerdict.amber;
+
+  _AutoSyncAction _decideOwnAutoSync(AppLocalizations l10n, SaveEntry entry) {
+    final local = entry.local;
+    final drive = entry.drive;
+    if (local == null || drive == null) return _AutoSyncAction.none;
+
+    switch (entry.status) {
+      case SaveSyncStatus.localAhead:
+        final ledger = _computeOverwriteLedger(
+          l10n,
+          current: drive,
+          result: local,
+          overwrittenSideLabel: l10n.previewDriveLabel,
+        );
+        return _autoSyncActs(ledger.verdict)
+            ? _AutoSyncAction.upload
+            : _AutoSyncAction.none;
+      case SaveSyncStatus.driveAhead:
+        if (!entry.driveComplete) return _AutoSyncAction.none; // FR-015
+        final ledger = _computeOverwriteLedger(
+          l10n,
+          current: local,
+          result: drive,
+          overwrittenSideLabel: l10n.previewLocalLabel,
+        );
+        return _autoSyncActs(ledger.verdict)
+            ? _AutoSyncAction.download
+            : _AutoSyncAction.none;
+      case SaveSyncStatus.synced:
+      case SaveSyncStatus.localOnly:
+      case SaveSyncStatus.driveOnly:
+        return _AutoSyncAction.none;
+    }
+  }
+
+  /// T922 — plan de una partida coop: qué hacer (si algo) en Mi Drive y en
+  /// el Drive del dueño, de forma INDEPENDIENTE. Reutiliza
+  /// `SharedSyncState.fromEntry` (spec 008) para la relación de cada lado —
+  /// mismo cálculo ya probado que usa el footer para decidir qué botón
+  /// mostrar, no una versión nueva.
+  ({_AutoSyncAction ownDrive, _AutoSyncAction ownerDrive}) _decideSharedAutoSync(
+    AppLocalizations l10n,
+    SharedSaveEntry entry,
+  ) {
+    final local = entry.localMatch;
+    if (local == null) {
+      return (ownDrive: _AutoSyncAction.none, ownerDrive: _AutoSyncAction.none);
+    }
+
+    final state = SharedSyncState.fromEntry(entry);
+
+    _AutoSyncAction forRelation(
+      SharedCopyRelation relation,
+      SaveFile? remote,
+      String remoteLabel,
+      bool remoteComplete,
+    ) {
+      if (remote == null) return _AutoSyncAction.none; // missing: sin ledger que calcular
+      switch (relation) {
+        case SharedCopyRelation.behind:
+          final ledger = _computeOverwriteLedger(
+            l10n,
+            current: remote,
+            result: local,
+            overwrittenSideLabel: remoteLabel,
+          );
+          return _autoSyncActs(ledger.verdict)
+              ? _AutoSyncAction.upload
+              : _AutoSyncAction.none;
+        case SharedCopyRelation.ahead:
+          if (!remoteComplete) return _AutoSyncAction.none; // FR-015
+          final ledger = _computeOverwriteLedger(
+            l10n,
+            current: local,
+            result: remote,
+            overwrittenSideLabel: l10n.previewLocalLabel,
+          );
+          return _autoSyncActs(ledger.verdict)
+              ? _AutoSyncAction.download
+              : _AutoSyncAction.none;
+        case SharedCopyRelation.synced:
+        case SharedCopyRelation.missing:
+        case SharedCopyRelation.unavailable:
+          return _AutoSyncAction.none;
+      }
+    }
+
+    final ownAction = forRelation(
+      state.ownDriveRelation,
+      entry.ownDriveStats,
+      l10n.sharedSideMyDrive,
+      entry.ownDriveComplete,
+    );
+    var ownerAction = forRelation(
+      state.ownerDriveRelation,
+      entry.driveStats,
+      l10n.sharedSideOwnerDrive(entry.ownerEmail),
+      entry.complete,
+    );
+    // Subir al Drive del dueño exige rol escritor y acceso no revocado
+    // (mismo gate que `uploadTargets` en `SharedSyncState`/`_handleSyncShared`)
+    // — bajar SÍ está permitido en modo lector, sin gate de rol (mismo
+    // criterio que `_handleDownloadShared`).
+    if (ownerAction == _AutoSyncAction.upload && !entry.canSync) {
+      ownerAction = _AutoSyncAction.none;
+    }
+    if (entry.revoked) ownerAction = _AutoSyncAction.none;
+
+    return (ownDrive: ownAction, ownerDrive: ownerAction);
+  }
+
+  /// T921 (G11) — snack breve SOLO si la partida quedó realmente
+  /// sincronizada tras la acción (comprobado contra `_entries`/
+  /// `_sharedEntries` YA refrescados por el `_load(silent: true)` interno de
+  /// cada handler). Evita anunciar éxito si el handler ya mostró su propio
+  /// snack de error (p. ej. `_uploadToOwnerDrive` ante
+  /// `SharedAccessRevokedException`) — no se toca la firma de esos handlers
+  /// (siguen siendo `Future<void>`, compartidos con el flujo manual) para no
+  /// arriesgar una regresión ahí; en su lugar se relee el estado ya cargado.
+  void _snackAutoSyncIfSynced(String folderName, String farmName) {
+    if (!mounted) return;
+    final own = _entries.where((e) => e.folderName == folderName);
+    final ownSynced = own.isNotEmpty && own.first.status == SaveSyncStatus.synced;
+
+    final shared = _sharedEntries.where((e) => e.folderName == folderName);
+    var sharedSynced = false;
+    if (shared.isNotEmpty) {
+      final state = SharedSyncState.fromEntry(shared.first);
+      sharedSynced =
+          state.ownDriveRelation == SharedCopyRelation.synced ||
+          state.ownerDriveRelation == SharedCopyRelation.synced;
+    }
+
+    if (ownSynced || sharedSynced) {
+      _snack(AppLocalizations.of(context)!.autoSyncSnack(farmName));
+    }
+  }
+
+  /// T920 (G10) — partida propia: decide y, si toca, actúa DIRECTAMENTE
+  /// sobre los handlers ya existentes (sin diálogo).
+  Future<void> _runOwnAutoSync(AppLocalizations l10n, SaveEntry entry) async {
+    final name = entry.folderName;
+    if (_busy.contains(name)) return; // G10
+    final action = _decideOwnAutoSync(l10n, entry);
+    switch (action) {
+      case _AutoSyncAction.upload:
+        await _uploadToOwnDrive(entry);
+      case _AutoSyncAction.download:
+        await _downloadNow(entry);
+      case _AutoSyncAction.none:
+        return;
+    }
+    _snackAutoSyncIfSynced(name, entry.primary.farmName);
+  }
+
+  /// T920/T922 (G7, G8, G10) — partida coop: hasta dos destinos
+  /// independientes. Si SOLO hay subidas elegibles (uno o los dos), se
+  /// disparan a la vez (mismo espíritu que `_confirmUploadToBoth` — leen el
+  /// mismo local, escriben en destinos distintos, sin conflicto). Una
+  /// bajada nunca se combina con nada más en el mismo ciclo: dos bajadas a
+  /// la vez escribirían el MISMO destino local desde dos orígenes remotos
+  /// distintos (no hay ni diálogo manual equivalente para ese caso — el
+  /// selector `_chooseSharedDownloadSource` existe precisamente porque bajar
+  /// siempre elige UN origen), y una subida+bajada simultánea leería y
+  /// escribiría el mismo local a la vez. ambos casos se dejan para decisión
+  /// manual — no es una omisión del spec, es la lectura conservadora de un
+  /// caso que el spec no cubre explícitamente (ver informe final).
+  Future<void> _runSharedAutoSync(
+    AppLocalizations l10n,
+    SharedSaveEntry entry,
+  ) async {
+    final name = entry.folderName;
+    if (_busy.contains(name)) return; // G10
+    final farmName =
+        entry.localMatch?.farmName ?? entry.driveStats?.farmName ?? name;
+    final plan = _decideSharedAutoSync(l10n, entry);
+
+    final downloadsFromOwn = plan.ownDrive == _AutoSyncAction.download;
+    final downloadsFromOwner = plan.ownerDrive == _AutoSyncAction.download;
+    final uploadsToOwn = plan.ownDrive == _AutoSyncAction.upload;
+    final uploadsToOwner = plan.ownerDrive == _AutoSyncAction.upload;
+    final downloadCount =
+        (downloadsFromOwn ? 1 : 0) + (downloadsFromOwner ? 1 : 0);
+    final uploadCount = (uploadsToOwn ? 1 : 0) + (uploadsToOwner ? 1 : 0);
+
+    // Dos bajadas a la vez escribirían el MISMO destino local desde dos
+    // orígenes remotos distintos: genuinamente ambiguo (por eso el flujo
+    // manual tiene `_chooseSharedDownloadSource`). Se deja para manual.
+    if (downloadCount > 1) return;
+
+    // Bajada + subida pendientes en el mismo ciclo (caso real 2026-08-02:
+    // Drive del dueño por delante y Mi Drive atrasado): NO se hacen a la vez
+    // —leerían y escribirían el mismo local—, pero tampoco se abandonan como
+    // antes, que dejaba la partida congelada para siempre. Se hace la bajada
+    // ahora y la subida sale sola en el ciclo siguiente (30s), ya calculada
+    // sobre el local actualizado.
+    if (downloadCount == 1) {
+      await _downloadNow(downloadsFromOwn ? entry.asOwnEntry : entry.asEntry);
+      _snackAutoSyncIfSynced(name, farmName);
+      return;
+    }
+
+    if (uploadCount == 0) return;
+    final futures = <Future<void>>[
+      if (uploadsToOwn) _uploadToOwnDrive(entry.asOwnEntry),
+      if (uploadsToOwner) _uploadToOwnerDrive(entry),
+    ];
+    await Future.wait(futures);
+    _snackAutoSyncIfSynced(name, farmName);
+  }
+
+  /// T913/T920 — punto de entrada del ciclo: reevalúa TODAS las partidas con
+  /// el chip activado sobre el estado YA cargado en `_entries`/
+  /// `_sharedEntries` (sin I/O extra más allá de la propia acción de
+  /// sincronizar). Copia las listas antes de recorrer: cada acción puede
+  /// disparar `_load(silent: true)` internamente y reemplazar
+  /// `_entries`/`_sharedEntries` a mitad de la vuelta.
+  Future<void> _runAutoSyncCycle() async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    for (final entry in List<SaveEntry>.from(_entries)) {
+      if (!mounted) return;
+      if (!_isAutoSyncEnabled(entry.folderName)) continue;
+      await _runOwnAutoSync(l10n, entry);
+    }
+    for (final entry in List<SharedSaveEntry>.from(_sharedEntries)) {
+      if (!mounted) return;
+      if (!_isAutoSyncEnabled(entry.folderName)) continue;
+      await _runSharedAutoSync(l10n, entry);
+    }
+  }
+
   OverlayEntry? _snackEntry;
 
   void _snack(String msg) {
@@ -5466,6 +6118,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                             : null,
                         backupCount:
                             _backupCounts[visibleEntries[i].folderName] ?? 0,
+                        autoSyncEnabled: _isAutoSyncEnabled(
+                          visibleEntries[i].folderName,
+                        ),
+                        onToggleAutoSync: () =>
+                            _toggleAutoSync(visibleEntries[i].folderName),
                       ),
                     ],
                   ),
@@ -5627,6 +6284,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     )
                   : null,
               backupCount: _backupCounts[e.folderName] ?? 0,
+              autoSyncEnabled: _isAutoSyncEnabled(e.folderName),
+              onToggleAutoSync: () => _toggleAutoSync(e.folderName),
               // Solo puede borrar TU copia local o TU Drive. El Drive del
               // dueño nunca se expone a estas callbacks.
               onDeleteLocal: e.localMatch != null

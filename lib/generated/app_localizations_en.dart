@@ -1516,6 +1516,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardIncomplete => 'Incomplete on Drive';
 
   @override
+  String get autoRefreshTitle => 'Auto-refresh';
+
+  @override
+  String get autoRefreshSubtitle => 'Checks for Drive changes every 30s';
+
+  @override
+  String autoSyncSnack(String farmName) {
+    return '$farmName synced automatically';
+  }
+
+  @override
+  String get autoSyncTooltipOn => 'Auto-sync on — syncs itself when it\'s safe';
+
+  @override
+  String get autoSyncTooltipOff => 'Auto-sync off — tap to turn it on';
+
+  @override
+  String get autoSyncExplainTitle => 'Auto-sync';
+
+  @override
+  String autoSyncExplainBody(String farmName) {
+    return 'From now on, $farmName will upload or download itself when it\'s safe, without asking you to confirm.';
+  }
+
+  @override
+  String get autoSyncExplainSafe =>
+      'It only acts when you\'re clearly ahead and nothing gets lost.';
+
+  @override
+  String get autoSyncExplainDanger =>
+      'If there were any risk of losing progress, it never acts on its own: you\'ll still decide with the usual dialog.';
+
+  @override
+  String get autoSyncExplainMissing =>
+      'If one of the two copies is missing, it won\'t create it: the first upload or download is your call.';
+
+  @override
+  String get autoSyncExplainDontShowAgain => 'Don\'t show this again';
+
+  @override
+  String get autoSyncExplainConfirm => 'Got it, turn on';
+
+  @override
+  String get hiwAutoSyncTitle => 'Sync by itself';
+
+  @override
+  String get hiwAutoSyncDesc =>
+      'Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.';
+
+  @override
+  String get hiwAutoSyncTipSafe =>
+      'It only syncs itself when you\'re clearly ahead and nothing gets lost.';
+
+  @override
+  String get hiwAutoSyncTipDanger =>
+      'If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.';
+
+  @override
+  String get hiwAutoSyncTipPerSave =>
+      'You turn it on save by save, not all at once: you can have it on yours and off on a shared one.';
+
+  @override
+  String get hiwAutoSyncTipMissing =>
+      'It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.';
+
+  @override
+  String get hiwAutoSyncTipRefresh =>
+      'In Settings you can turn off automatic change checking entirely.';
+
+  @override
   String get snackSessionExpired => 'Drive session expired. Reconnect';
 
   @override

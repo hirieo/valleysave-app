@@ -153,6 +153,55 @@ class DriveService {
     return _myEmail;
   }
 
+  // ── spec 009 (Capa 1, Fuente 2 — sondeo barato de Drive) ────────────────
+  //
+  // `changes.list` devuelve "qué cambió desde la última vez" con una sola
+  // llamada barata, cubriendo Mi Drive Y las compartidas a la vez (Drive
+  // reporta cambios de cualquier archivo visible para la cuenta, no solo el
+  // tuyo) — evita re-listar cada carpeta compartida en cada ciclo de 30s.
+  // Puramente de datos: no toca nada de `saves_screen.dart`, que decide
+  // cuándo llamar y qué hacer con el resultado (D5 — no se intenta mapear
+  // `fileId` ↔ carpeta, ni aquí ni en el caller).
+
+  /// Token de arranque para el primer ciclo de [listChanges] — se persiste en
+  /// `SharedPreferences` (el caller decide dónde) y no caduca.
+  Future<String> getStartPageToken() async {
+    final token = await _api.changes.getStartPageToken(supportsAllDrives: true);
+    return token.startPageToken ?? '';
+  }
+
+  /// Cambios desde [pageToken]. Pagina internamente hasta agotar
+  /// `nextPageToken` (un ciclo de 30s no debería acumular miles de cambios,
+  /// pero por si acaso) y devuelve tanto los `fileId` que cambiaron como el
+  /// `newPageToken` a persistir para el siguiente ciclo — se actualiza y
+  /// persiste cambie algo o no.
+  Future<({List<String> changedFileIds, String newPageToken})> listChanges(
+    String pageToken,
+  ) async {
+    var token = pageToken;
+    final changedFileIds = <String>[];
+    while (true) {
+      final page = await _api.changes.list(
+        token,
+        spaces: 'drive',
+        pageSize: 100,
+        $fields: 'changes(fileId),newStartPageToken,nextPageToken',
+      );
+      changedFileIds.addAll(
+        (page.changes ?? const []).map((c) => c.fileId).whereType<String>(),
+      );
+      final next = page.nextPageToken;
+      if (next != null && next.isNotEmpty) {
+        token = next;
+        continue;
+      }
+      return (
+        changedFileIds: changedFileIds,
+        newPageToken: page.newStartPageToken ?? token,
+      );
+    }
+  }
+
   /// Busca o crea la carpeta ValleySave/ en el Drive del usuario.
   Future<String> ensureFolder() async {
     if (_folderId != null) return _folderId!;

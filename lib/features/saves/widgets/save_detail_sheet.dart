@@ -118,6 +118,11 @@ void showSaveDetail(
   String? extraDriveTitle,
   Color? extraDriveColor,
   VoidCallback? onExtraDownload,
+  // spec 009 — el chip AUTO también aquí (feedback 2026-07-31): quien abre el
+  // detalle para decidir si sube/baja es justo quien quiere activarlo, sin
+  // tener que cerrar la hoja para tocarlo en la tarjeta.
+  bool autoSyncEnabled = false,
+  VoidCallback? onToggleAutoSync,
 }) {
   final l10n = AppLocalizations.of(context)!;
   final isMobile = Platform.isAndroid || Platform.isIOS;
@@ -211,6 +216,8 @@ void showSaveDetail(
         onPlayerIndexChanged: onPlayerIndexChanged,
         initialPlayerId: initialPlayerId,
         onPlayerIdChanged: onPlayerIdChanged,
+        autoSyncEnabled: autoSyncEnabled,
+        onToggleAutoSync: onToggleAutoSync,
       ),
     ),
   );
@@ -224,6 +231,8 @@ class _DetailSheet extends StatefulWidget {
     this.onPlayerIndexChanged,
     this.initialPlayerId,
     this.onPlayerIdChanged,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
   final List<_DetailSide> sides;
   final int initialPage;
@@ -231,6 +240,8 @@ class _DetailSheet extends StatefulWidget {
   final ValueChanged<int>? onPlayerIndexChanged;
   final String? initialPlayerId;
   final ValueChanged<String>? onPlayerIdChanged;
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
 
   @override
   State<_DetailSheet> createState() => _DetailSheetState();
@@ -246,6 +257,20 @@ class _DetailSheetState extends State<_DetailSheet>
   // aunque solo una esté visible en cada momento. Se siembra con lo que ya
   // estaba seleccionado en la tarjeta (y se propaga de vuelta al cambiar
   // aquí) para que abrir la OTRA cara no lo resetee (feedback 2026-07-12).
+  // Copia local del chip AUTO: la hoja es un diálogo, así que no se
+  // reconstruye cuando `saves_screen` actualiza su estado — sin esto el chip
+  // se quedaría con el valor de cuando se abrió.
+  bool _autoSync = false;
+
+  /// Alterna el chip DENTRO de la hoja: pinta al instante en local y propaga
+  /// al caller (que persiste y puede abrir el diálogo explicativo la primera
+  /// vez). Si el caller cancela ese diálogo, el chip local queda desfasado
+  /// hasta reabrir la hoja — aceptable frente a esperar un `await` que
+  /// bloquearía el repintado inmediato del toque.
+  void _toggleAutoSyncLocal() {
+    setState(() => _autoSync = !_autoSync);
+    widget.onToggleAutoSync?.call();
+  }
   late int _fallbackPlayerIndex = widget.initialPlayerIndex;
   late String? _selectedPlayerId =
       widget.initialPlayerId ??
@@ -254,6 +279,12 @@ class _DetailSheetState extends State<_DetailSheet>
         widget.initialPlayerIndex,
       );
   final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _autoSync = widget.autoSyncEnabled;
+  }
 
   // Entrada escalonada de los botones de acción: corre UNA vez al abrir la
   // hoja. Al completarse queda en 1.0, así los rebuilds por cambio de jugador
@@ -481,6 +512,11 @@ class _DetailSheetState extends State<_DetailSheet>
                                           1,
                                         ),
                                         fillAvailable: false,
+                                        autoSyncEnabled: _autoSync,
+                                        onToggleAutoSync:
+                                            widget.onToggleAutoSync == null
+                                            ? null
+                                            : _toggleAutoSyncLocal,
                                       ),
                                   ],
                                 ),
@@ -541,6 +577,11 @@ class _DetailSheetState extends State<_DetailSheet>
                                     onSelectPlayer: _selectPlayer,
                                     entrance: _entrance,
                                     fillAvailable: true,
+                                    autoSyncEnabled: _autoSync,
+                                    onToggleAutoSync:
+                                        widget.onToggleAutoSync == null
+                                        ? null
+                                        : _toggleAutoSyncLocal,
                                   ),
                                 ),
                               ),
@@ -568,6 +609,8 @@ class _DetailPage extends StatelessWidget {
     required this.onSelectPlayer,
     required this.entrance,
     required this.fillAvailable,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
   final _DetailSide side;
   final String? selectedPlayerId;
@@ -575,6 +618,8 @@ class _DetailPage extends StatelessWidget {
   final ValueChanged<int> onSelectPlayer;
   final Animation<double> entrance;
   final bool fillAvailable;
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
 
   @override
   Widget build(BuildContext context) {
@@ -602,15 +647,25 @@ class _DetailPage extends StatelessWidget {
                 children: [
                   Text(side.icon, style: const TextStyle(fontSize: 14)),
                   const SizedBox(width: 7),
-                  Text(
-                    side.title.toUpperCase(),
-                    style: GoogleFonts.firaCode(
-                      fontSize: 10,
-                      letterSpacing: 1.0,
-                      fontWeight: FontWeight.w700,
-                      color: side.color,
+                  Expanded(
+                    child: Text(
+                      side.title.toUpperCase(),
+                      style: GoogleFonts.firaCode(
+                        fontSize: 10,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w700,
+                        color: side.color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  if (onToggleAutoSync != null) ...[
+                    const SizedBox(width: 8),
+                    AutoSyncChip(
+                      enabled: autoSyncEnabled,
+                      onTap: onToggleAutoSync,
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 8),

@@ -623,7 +623,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sharedStatusOwnDriveAhead => 'Your Drive is ahead — bring it down';
 
   @override
-  String get sharedSyncBoth => 'Sync both';
+  String get sharedSyncBoth => 'Upload to both Drives';
 
   @override
   String get sharedSideMyDrive => 'MY DRIVE';
@@ -1355,6 +1355,109 @@ class AppLocalizationsJa extends AppLocalizations {
   String get previewFromDevice => 'このデバイス から';
 
   @override
+  String get overwriteWhatChanges => 'What changes';
+
+  @override
+  String get overwriteTagOverwritten => 'WILL BE OVERWRITTEN';
+
+  @override
+  String get overwriteNewCopyTag => 'NEW';
+
+  @override
+  String overwriteDeltaPhrase(int days, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days and $time',
+      one: '1 day and $time',
+      zero: '$time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String overwriteVerdictAhead(String delta) {
+    return 'You\'re $delta ahead. It\'s safe.';
+  }
+
+  @override
+  String get overwriteVerdictMoneySpent =>
+      '💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That\'s not a real loss.';
+
+  @override
+  String overwriteVerdictNegligible(String delta) {
+    return 'Minimal difference ($delta). Either copy works fine.';
+  }
+
+  @override
+  String overwriteVerdictDanger(String delta, String target) {
+    return '⚠️ You\'re about to lose $delta of progress on $target. Double-check before continuing.';
+  }
+
+  @override
+  String get overwriteConfirmTitleUpload => 'Confirm the upload?';
+
+  @override
+  String get overwriteConfirmTitleDownload => 'Confirm the download?';
+
+  @override
+  String overwriteConfirmBody(String delta, String target) {
+    return 'You\'re about to lose $delta on $target. This action can\'t be undone.';
+  }
+
+  @override
+  String get overwriteConfirmButtonUpload => 'Confirm upload';
+
+  @override
+  String get overwriteConfirmButtonDownload => 'Confirm download';
+
+  @override
+  String get overwriteDangerButtonUpload => '⚠️ Upload anyway';
+
+  @override
+  String get overwriteDangerButtonDownload => '⚠️ Download anyway';
+
+  @override
+  String overwriteIdenticalSummary(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '✓ $count identical',
+      one: '✓ 1 identical',
+    );
+    return '$_temp0 — $list';
+  }
+
+  @override
+  String overwriteUploadToOwner(String email) {
+    return 'Upload to $email\'s Drive';
+  }
+
+  @override
+  String get overwriteUploadBoth => 'Upload to both Drives';
+
+  @override
+  String get overwriteConfirmTitleBoth => 'Confirm both uploads?';
+
+  @override
+  String overwriteConfirmBodyBoth(String delta, String targets) {
+    return 'You\'ll lose $delta in $targets. This action can\'t be undone.';
+  }
+
+  @override
+  String overwriteBothDestinationsLabel(String first, String second) {
+    return '$first and $second';
+  }
+
+  @override
+  String get sharedTargetOwnDrive => 'your Drive';
+
+  @override
+  String sharedStatusLocalAhead(String targets) {
+    return 'You\'re ahead in $targets';
+  }
+
+  @override
   String versionMismatch(String local, String drive) {
     return '異なるバージョン: ローカル $local · Drive $drive…';
   }
@@ -1398,6 +1501,76 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get cardIncomplete => 'Incomplete on Drive';
+
+  @override
+  String get autoRefreshTitle => 'Auto-refresh';
+
+  @override
+  String get autoRefreshSubtitle => 'Checks for Drive changes every 30s';
+
+  @override
+  String autoSyncSnack(String farmName) {
+    return '$farmName synced automatically';
+  }
+
+  @override
+  String get autoSyncTooltipOn => 'Auto-sync on — syncs itself when it\'s safe';
+
+  @override
+  String get autoSyncTooltipOff => 'Auto-sync off — tap to turn it on';
+
+  @override
+  String get autoSyncExplainTitle => 'Auto-sync';
+
+  @override
+  String autoSyncExplainBody(String farmName) {
+    return 'From now on, $farmName will upload or download itself when it\'s safe, without asking you to confirm.';
+  }
+
+  @override
+  String get autoSyncExplainSafe =>
+      'It only acts when you\'re clearly ahead and nothing gets lost.';
+
+  @override
+  String get autoSyncExplainDanger =>
+      'If there were any risk of losing progress, it never acts on its own: you\'ll still decide with the usual dialog.';
+
+  @override
+  String get autoSyncExplainMissing =>
+      'If one of the two copies is missing, it won\'t create it: the first upload or download is your call.';
+
+  @override
+  String get autoSyncExplainDontShowAgain => 'Don\'t show this again';
+
+  @override
+  String get autoSyncExplainConfirm => 'Got it, turn on';
+
+  @override
+  String get hiwAutoSyncTitle => 'Sync by itself';
+
+  @override
+  String get hiwAutoSyncDesc =>
+      'Every save has an AUTO chip on its card. Turn it on and that save uploads or downloads itself whenever the app spots a change — no need to open it and confirm.';
+
+  @override
+  String get hiwAutoSyncTipSafe =>
+      'It only syncs itself when you\'re clearly ahead and nothing gets lost.';
+
+  @override
+  String get hiwAutoSyncTipDanger =>
+      'If there were any risk of losing progress, it never does it alone: it still asks you, with the usual comparison.';
+
+  @override
+  String get hiwAutoSyncTipPerSave =>
+      'You turn it on save by save, not all at once: you can have it on yours and off on a shared one.';
+
+  @override
+  String get hiwAutoSyncTipMissing =>
+      'It only keeps two existing copies in sync. If one is missing, the first upload or download is up to you.';
+
+  @override
+  String get hiwAutoSyncTipRefresh =>
+      'In Settings you can turn off automatic change checking entirely.';
 
   @override
   String get snackSessionExpired => 'Driveセッションが期限切れ。再接続してください';

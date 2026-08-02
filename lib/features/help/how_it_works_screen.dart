@@ -142,6 +142,8 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
                               const SizedBox(height: 12),
                               _sectionBackups(l10n),
                               const SizedBox(height: 12),
+                              _sectionAutoSync(l10n),
+                              const SizedBox(height: 12),
                               _sectionLaunchGame(l10n),
                               const SizedBox(height: 12),
                               _sectionSaveLocations(l10n),
@@ -781,6 +783,57 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
             icon: Icons.usb_rounded,
             color: teal,
             text: l10n.hiwBackupsTipRestoreBridge,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Section: auto-sync ───────────────────────────────────────────────────
+
+  /// spec 009 — el chip `AUTO` de cada tarjeta no puede explicarse solo (una
+  /// etiqueta de 4 letras y un tooltip que en móvil solo sale con pulsación
+  /// larga). Esta es la explicación de verdad, en la pantalla donde el
+  /// usuario ya viene a aprender qué hace cada cosa (feedback 2026-07-31).
+  Widget _sectionAutoSync(AppLocalizations l10n) {
+    const autoSync = Color(0xFF62B074);
+    return _infoCard(
+      icon: Icons.autorenew_rounded,
+      color: autoSync,
+      title: l10n.hiwAutoSyncTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.hiwAutoSyncDesc, style: _body()),
+          const SizedBox(height: 12),
+          _tip(
+            icon: Icons.check_circle_outline_rounded,
+            color: autoSync,
+            text: l10n.hiwAutoSyncTipSafe,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.shield_outlined,
+            color: const Color(0xFFE0A850),
+            text: l10n.hiwAutoSyncTipDanger,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.info_outline_rounded,
+            color: AppColors.textMuted,
+            text: l10n.hiwAutoSyncTipMissing,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.tune_rounded,
+            color: autoSync,
+            text: l10n.hiwAutoSyncTipPerSave,
+          ),
+          const SizedBox(height: 8),
+          _tip(
+            icon: Icons.settings_outlined,
+            color: autoSync,
+            text: l10n.hiwAutoSyncTipRefresh,
           ),
         ],
       ),

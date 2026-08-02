@@ -1,7 +1,7 @@
 name: valleysave
 description: "Sync Stardew Valley save files across devices via Google Drive."
 publish_to: 'none'
-version: 0.3.1+33
+version: 0.4.0+34
 
 environment:
   sdk: ^3.12.0
@@ -46,6 +46,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.3
+  # T822/T823 (spec 008): fake de `getApplicationDocumentsDirectory` para
+  # montar `SavesScreen` en test de widget (ver test/helpers/saves_screen_test_env.dart).
+  path_provider_platform_interface: ^2.1.2
 
 flutter_launcher_icons:
   android: true

@@ -113,6 +113,8 @@ class SaveCard extends StatefulWidget {
     this.footer,
     this.footerBuilder,
     this.sharedOwnerEmail,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
 
   final SaveEntry entry;
@@ -127,6 +129,11 @@ class SaveCard extends StatefulWidget {
   final VoidCallback? onShare; // F2 — solo cara Mi Drive
   final VoidCallback? onBackups; // spec 007 — solo cara local
   final int backupCount;
+
+  /// spec 009 (Capa 2, D7-D9): estado del chip `⚡ AUTO` de ESTA partida
+  /// (por `folderName`, independiente del interruptor global de refresco).
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
 
   /// US5 — no-null cuando este save (por `folderName`) proviene de un
   /// compartido de otra persona: pinta la píldora dorada COMPARTIDA + línea
@@ -208,6 +215,8 @@ class _SaveCardState extends State<SaveCard> {
               hostSelected: coop && base.players[idx].isHost,
               onSelectPlayer: _selectPlayer,
               sharedOwnerEmail: widget.sharedOwnerEmail,
+              autoSyncEnabled: widget.autoSyncEnabled,
+              onToggleAutoSync: widget.onToggleAutoSync,
             ),
             kDivider,
             // Los stats por-jugador se cruzan con un fundido al cambiar.
@@ -244,6 +253,8 @@ class _SaveCardState extends State<SaveCard> {
                 onShare: widget.onShare,
                 onBackups: widget.onBackups,
                 backupCount: widget.backupCount,
+                autoSyncEnabled: widget.autoSyncEnabled,
+                onToggleAutoSync: widget.onToggleAutoSync,
               ),
               kDivider,
               _Footer(
@@ -293,6 +304,8 @@ class _Header extends StatelessWidget {
     this.hostSelected = false,
     this.onSelectPlayer,
     this.sharedOwnerEmail,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
 
   final SaveFile save;
@@ -301,12 +314,18 @@ class _Header extends StatelessWidget {
   final bool hostSelected;
   final ValueChanged<int>? onSelectPlayer;
   final String? sharedOwnerEmail;
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
 
   bool get _coop => players.length > 1;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // spec 009 (D8): sin COOP/COMPARTIDA la píldora AUTO cabe en la misma
+    // fila que el nombre; con ellas, se baja a una segunda fila alineada a
+    // la derecha para no apretar la cabecera (ver mockup aprobado).
+    final showAutoInline = !_coop && sharedOwnerEmail == null;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
       child: Column(
@@ -338,6 +357,13 @@ class _Header extends StatelessWidget {
                       const SizedBox(width: 6),
                       SharedOriginBadge(label: l10n.sharedOriginBadge),
                     ],
+                    if (showAutoInline) ...[
+                      const SizedBox(width: 8),
+                      AutoSyncChip(
+                        enabled: autoSyncEnabled,
+                        onTap: onToggleAutoSync,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -355,6 +381,15 @@ class _Header extends StatelessWidget {
               ),
             ],
           ),
+          if (!showAutoInline) ...[
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AutoSyncChip(enabled: autoSyncEnabled, onTap: onToggleAutoSync),
+              ],
+            ),
+          ],
           if (sharedOwnerEmail != null) ...[
             const SizedBox(height: 5),
             Row(
@@ -507,6 +542,106 @@ class SharedOriginBadge extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Verde de la Capa 2 (spec 009, D8) — deliberadamente distinto del verde
+/// oliva `#97C459` de [CoopBadge], para no confundir "esto es coop" con
+/// "esto se sincroniza sola".
+const _kAutoSyncAccent = Color(0xFF62B074);
+
+/// Chip `⚡ AUTO` por partida (spec 009, D8/D9): tocable, alterna el
+/// auto-sync de ESTA partida (nunca el interruptor global de refresco,
+/// capas independientes — D7). Apagado = contorno tenue sin relleno;
+/// encendido = relleno verde `#62B074`. Convive con [CoopBadge]/
+/// [SharedOriginBadge], no las sustituye — mismo componente reutilizado por
+/// `save_card.dart` y `shared_save_card.dart` (T918/T919), nunca reinventado.
+class AutoSyncChip extends StatefulWidget {
+  const AutoSyncChip({super.key, required this.enabled, this.onTap});
+
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  @override
+  State<AutoSyncChip> createState() => _AutoSyncChipState();
+}
+
+class _AutoSyncChipState extends State<AutoSyncChip> {
+  // Vueltas acumuladas, nunca reiniciadas a 0: con AnimatedRotation, 0 y 1
+  // vuelta se ven idénticas en reposo, así que hay que sumar para que el
+  // giro se note cada vez que se activa (feedback 2026-08-01).
+  int _turns = 0;
+
+  @override
+  void didUpdateWidget(covariant AutoSyncChip oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.enabled && widget.enabled) {
+      setState(() => _turns += 1);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final enabled = widget.enabled;
+    final onTap = widget.onTap;
+    final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final color = enabled
+        ? _kAutoSyncAccent
+        : Colors.white.withValues(alpha: 0.45);
+    // Tooltip (2026-07-31): en escritorio aclara al pasar el ratón; en móvil
+    // Flutter lo muestra con pulsación larga. NO es la explicación principal
+    // (nadie descubre un long-press) — esa vive en "Cómo funciona" y en el
+    // diálogo de la primera activación.
+    return Tooltip(
+      message: enabled ? l10n.autoSyncTooltipOn : l10n.autoSyncTooltipOff,
+      child: PressableScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: enabled
+              ? _kAutoSyncAccent.withValues(alpha: 0.16)
+              : Colors.transparent,
+          border: Border.all(
+            color: enabled
+                ? _kAutoSyncAccent.withValues(alpha: 0.60)
+                : Colors.white.withValues(alpha: 0.22),
+          ),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Flechas circulares, no un rayo: un rayo se lee como
+            // "rápido/energía", no como "esto pasa solo" (feedback
+            // 2026-07-31, icono elegido sobre mockup).
+            // Giro de una vuelta solo al ENCENDER (no al apagar, no en bucle
+            // mientras está activo — leería como "cargando"). 700ms
+            // ease-in-out, aprobado sobre demo interactiva 2026-08-01.
+            AnimatedRotation(
+              turns: _turns.toDouble(),
+              duration: reduceMotion
+                  ? Duration.zero
+                  : const Duration(milliseconds: 700),
+              curve: Curves.easeInOut,
+              child: Icon(Icons.autorenew_rounded, size: 11, color: color),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              'AUTO',
+              style: GoogleFonts.firaCode(
+                fontSize: 8.5,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
       ),
     );
   }
@@ -1161,8 +1296,12 @@ class _PresenceRow extends StatelessWidget {
     this.onShare,
     this.onBackups,
     this.backupCount = 0,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
   final SaveEntry entry;
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
 
   /// Jugador seleccionado ahora mismo en la tarjeta — se pasa como valor
   /// inicial al abrir la hoja de detalle, y se actualiza si se cambia
@@ -1218,6 +1357,8 @@ class _PresenceRow extends StatelessWidget {
                 onShare: onShare,
                 onBackups: onBackups,
                 backupCount: backupCount,
+                autoSyncEnabled: autoSyncEnabled,
+                onToggleAutoSync: onToggleAutoSync,
               ),
             ),
             const SizedBox(width: 7),
@@ -1241,6 +1382,8 @@ class _PresenceRow extends StatelessWidget {
                 onShare: onShare,
                 onBackups: onBackups,
                 backupCount: backupCount,
+                autoSyncEnabled: autoSyncEnabled,
+                onToggleAutoSync: onToggleAutoSync,
               ),
             ),
           ],
@@ -1270,6 +1413,8 @@ class _SideTile extends StatefulWidget {
     this.onShare,
     this.onBackups,
     this.backupCount = 0,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
 
   final Color color;
@@ -1279,6 +1424,8 @@ class _SideTile extends StatefulWidget {
   final bool highlight;
   final SaveEntry entry;
   final bool isLocalSide;
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
   final String? selectedPlayerId;
   final ValueChanged<String>? onPlayerIdChanged;
   final VoidCallback? onUpload;
@@ -1404,6 +1551,8 @@ class _SideTileState extends State<_SideTile> {
           backupCount: widget.backupCount,
           initialPlayerId: widget.selectedPlayerId,
           onPlayerIdChanged: widget.onPlayerIdChanged,
+          autoSyncEnabled: widget.autoSyncEnabled,
+          onToggleAutoSync: widget.onToggleAutoSync,
         ),
         onTapDown: (_) => setState(() => _pressed = true),
         onTapUp: (_) => setState(() => _pressed = false),

@@ -8,6 +8,7 @@ import '../../generated/app_localizations.dart';
 
 import '../../core/models/season_settings.dart';
 import '../../core/models/season_state.dart';
+import '../../core/services/auto_refresh_prefs.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/locale_controller.dart';
@@ -73,6 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   String? _gameExePath;
   bool _gameExeTilePressed = false;
   bool _gameExeTileHovered = false;
+  bool _autoRefreshEnabled = true;
 
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
@@ -93,6 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     _load();
     _loadVersion();
     _loadConnectedEmail();
+    _loadAutoRefreshPref();
     _entranceCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
@@ -127,6 +130,20 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> _loadConnectedEmail() async {
     final email = await widget.drive?.myEmail();
     if (mounted && email != null) setState(() => _connectedEmail = email);
+  }
+
+  /// spec 009 (T915, D4) — interruptor global de auto-actualización. Vive en
+  /// `SharedPreferences` vía [AutoRefreshPrefs] (fuente única de la clave):
+  /// `saves_screen.dart` relee el valor al volver de Ajustes y arranca/para
+  /// el watcher local + el timer de Drive en caliente (T916).
+  Future<void> _loadAutoRefreshPref() async {
+    final enabled = await AutoRefreshPrefs.isEnabled();
+    if (mounted) setState(() => _autoRefreshEnabled = enabled);
+  }
+
+  Future<void> _setAutoRefreshEnabled(bool enabled) async {
+    setState(() => _autoRefreshEnabled = enabled);
+    await AutoRefreshPrefs.setEnabled(enabled);
   }
 
   Future<void> _checkUpdateFromSettings() async {
@@ -398,6 +415,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                               ),
                               const SizedBox(height: 12),
                               _versionTile(l10n),
+                              const SizedBox(height: 8),
+                              _autoRefreshTile(l10n),
                               const SizedBox(height: 8),
                               _updateTile(
                                 SeasonData
@@ -984,6 +1003,46 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
+  /// spec 009 (T915) — fila nueva entre "Versión instalada" y "Buscar
+  /// actualizaciones", fiel al mockup aprobado
+  /// (`mockups/settings-toggle-aprobado-2026-07-30.html`): mismo estilo de
+  /// tile que `_versionTile`/`_updateTile`, con el pill-switch nuevo dorado
+  /// (primer `Switch` del proyecto, ver `_AutoRefreshSwitch`).
+  Widget _autoRefreshTile(AppLocalizations l10n) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.autoRefreshTitle, style: AppTypography.bodyStrong()),
+                Text(
+                  l10n.autoRefreshSubtitle,
+                  style: AppTypography.mono(
+                    color: AppColors.textFaint,
+                    size: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          _AutoRefreshSwitch(
+            value: _autoRefreshEnabled,
+            onChanged: _setAutoRefreshEnabled,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _versionTile(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -1381,6 +1440,70 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         ),
       ),
+      ),
+    );
+  }
+}
+
+/// spec 009 (T915) — primer `Switch`/toggle del proyecto: no había
+/// precedente, así que se diseñó a propósito reutilizando la paleta
+/// existente (pill translúcida → relleno dorado `#E8B84A` cuando está ON,
+/// thumb con glow). Fiel al mockup aprobado
+/// (`mockups/settings-toggle-aprobado-2026-07-30.html`): pill 42×24, thumb
+/// 18×18 en posiciones 2/20.
+class _AutoRefreshSwitch extends StatelessWidget {
+  const _AutoRefreshSwitch({required this.value, required this.onChanged});
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  static const _gold = Color(0xFFE8B84A);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onChanged(!value),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          width: 42,
+          height: 24,
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: value
+                ? _gold.withValues(alpha: 0.28)
+                : Colors.white.withValues(alpha: 0.08),
+            border: Border.all(
+              color: value
+                  ? _gold.withValues(alpha: 0.65)
+                  : Colors.white.withValues(alpha: 0.16),
+            ),
+          ),
+          child: AnimatedAlign(
+            duration: const Duration(milliseconds: 200),
+            curve: const Cubic(0.23, 1, 0.32, 1),
+            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+            child: Container(
+              width: 18,
+              height: 18,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: value ? _gold : Colors.white.withValues(alpha: 0.55),
+                boxShadow: value
+                    ? [
+                        BoxShadow(
+                          color: _gold.withValues(alpha: 0.6),
+                          blurRadius: 6,
+                        ),
+                      ]
+                    : null,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

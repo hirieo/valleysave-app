@@ -1521,6 +1521,78 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardIncomplete => 'Incompleta en Drive';
 
   @override
+  String get autoRefreshTitle => 'Auto-actualizar';
+
+  @override
+  String get autoRefreshSubtitle => 'Comprueba cambios en Drive cada 30s';
+
+  @override
+  String autoSyncSnack(String farmName) {
+    return '$farmName sincronizada automáticamente';
+  }
+
+  @override
+  String get autoSyncTooltipOn =>
+      'Auto-sync activado — se sincroniza sola cuando es seguro';
+
+  @override
+  String get autoSyncTooltipOff =>
+      'Auto-sync desactivado — toca para activarlo';
+
+  @override
+  String get autoSyncExplainTitle => 'Auto-sync';
+
+  @override
+  String autoSyncExplainBody(String farmName) {
+    return 'A partir de ahora, $farmName se subirá o bajará sola cuando sea seguro, sin pedirte confirmación.';
+  }
+
+  @override
+  String get autoSyncExplainSafe =>
+      'Solo actúa cuando vas claramente por delante y no se pierde nada.';
+
+  @override
+  String get autoSyncExplainDanger =>
+      'Si hubiera riesgo de perder progreso, nunca actúa sola: seguirás decidiendo tú con el diálogo de siempre.';
+
+  @override
+  String get autoSyncExplainMissing =>
+      'Si falta una de las dos copias, no la crea sola: subir o bajar la primera vez lo decides tú.';
+
+  @override
+  String get autoSyncExplainDontShowAgain => 'No volver a mostrar este aviso';
+
+  @override
+  String get autoSyncExplainConfirm => 'Entendido, activar';
+
+  @override
+  String get hiwAutoSyncTitle => 'Sincronizar sola';
+
+  @override
+  String get hiwAutoSyncDesc =>
+      'Cada partida tiene un chip AUTO en su tarjeta. Al activarlo, esa partida se sube o se baja sola cuando la app detecta un cambio — sin que tengas que entrar a confirmarlo.';
+
+  @override
+  String get hiwAutoSyncTipSafe =>
+      'Solo se sincroniza sola cuando vas claramente por delante y no se pierde nada.';
+
+  @override
+  String get hiwAutoSyncTipDanger =>
+      'Si hubiera riesgo de perder progreso, nunca lo hace sola: te lo sigue preguntando con la comparación de siempre.';
+
+  @override
+  String get hiwAutoSyncTipPerSave =>
+      'Se activa partida por partida, no de golpe: puedes tenerlo en la tuya y no en una compartida.';
+
+  @override
+  String get hiwAutoSyncTipMissing =>
+      'Solo mantiene sincronizadas dos copias que ya existen. Si falta una, la primera subida o bajada la haces tú.';
+
+  @override
+  String get hiwAutoSyncTipRefresh =>
+      'En Ajustes puedes apagar del todo la comprobación automática de cambios.';
+
+  @override
   String get snackSessionExpired =>
       'La sesión de Drive ha caducado. Vuelve a conectar';
 

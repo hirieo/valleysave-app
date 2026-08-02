@@ -52,6 +52,8 @@ class SharedSaveCard extends StatelessWidget {
     this.onDeleteLocal,
     this.onDeleteFromOwnDrive,
     this.onManageCopies,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
 
   final SharedSaveEntry entry;
@@ -97,11 +99,19 @@ class SharedSaveCard extends StatelessWidget {
   final VoidCallback? onDeleteFromOwnDrive;
   final VoidCallback? onManageCopies;
 
+  /// spec 009 (T919): mismo chip `⚡ AUTO` que las partidas propias — la
+  /// cabecera ya es la misma (`SaveCard`/`_Header`), así que aquí solo hace
+  /// falta reenviar los dos parámetros, nunca reinventar el componente.
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
+
   @override
   Widget build(BuildContext context) {
     return SaveCard(
       entry: entry.asEntry,
       busy: busy,
+      autoSyncEnabled: autoSyncEnabled,
+      onToggleAutoSync: onToggleAutoSync,
       footerBuilder: (context, selectedPlayerId, onPlayerIdChanged) =>
           _SharedFooter(
             entry: entry,
@@ -123,6 +133,8 @@ class SharedSaveCard extends StatelessWidget {
             onDeleteLocal: onDeleteLocal,
             onDeleteFromOwnDrive: onDeleteFromOwnDrive,
             onManageCopies: onManageCopies,
+            autoSyncEnabled: autoSyncEnabled,
+            onToggleAutoSync: onToggleAutoSync,
           ),
     );
   }
@@ -149,10 +161,14 @@ class _SharedFooter extends StatelessWidget {
     this.onDeleteLocal,
     this.onDeleteFromOwnDrive,
     this.onManageCopies,
+    this.autoSyncEnabled = false,
+    this.onToggleAutoSync,
   });
 
   final SharedSaveEntry entry;
   final bool busy;
+  final bool autoSyncEnabled;
+  final VoidCallback? onToggleAutoSync;
   final String? selectedPlayerId;
   final ValueChanged<String> onPlayerIdChanged;
   final VoidCallback? onDownload;
@@ -250,6 +266,8 @@ class _SharedFooter extends StatelessWidget {
       removeLabel: l10n.sharedWithMeRemove,
       initialPlayerId: selectedPlayerId,
       onPlayerIdChanged: onPlayerIdChanged,
+      autoSyncEnabled: autoSyncEnabled,
+      onToggleAutoSync: onToggleAutoSync,
     );
   }
 

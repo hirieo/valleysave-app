@@ -349,6 +349,35 @@
   "snackUploadIncomplete": "La partida local está incompleta o dañada. No se subió nada",
   "snackDownloadIncomplete": "No se puede descargar: le falta contenido en Drive",
   "cardIncomplete": "Incompleta en Drive",
+  "autoRefreshTitle": "Auto-actualizar",
+  "autoRefreshSubtitle": "Comprueba cambios en Drive cada 30s",
+  "autoSyncSnack": "{farmName} sincronizada automáticamente",
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncTooltipOn": "Auto-sync activado — se sincroniza sola cuando es seguro",
+  "autoSyncTooltipOff": "Auto-sync desactivado — toca para activarlo",
+  "autoSyncExplainTitle": "Auto-sync",
+  "autoSyncExplainBody": "A partir de ahora, {farmName} se subirá o bajará sola cuando sea seguro, sin pedirte confirmación.",
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": { "type": "String" }
+    }
+  },
+  "autoSyncExplainSafe": "Solo actúa cuando vas claramente por delante y no se pierde nada.",
+  "autoSyncExplainDanger": "Si hubiera riesgo de perder progreso, nunca actúa sola: seguirás decidiendo tú con el diálogo de siempre.",
+  "autoSyncExplainMissing": "Si falta una de las dos copias, no la crea sola: subir o bajar la primera vez lo decides tú.",
+  "autoSyncExplainDontShowAgain": "No volver a mostrar este aviso",
+  "autoSyncExplainConfirm": "Entendido, activar",
+  "hiwAutoSyncTitle": "Sincronizar sola",
+  "hiwAutoSyncDesc": "Cada partida tiene un chip AUTO en su tarjeta. Al activarlo, esa partida se sube o se baja sola cuando la app detecta un cambio — sin que tengas que entrar a confirmarlo.",
+  "hiwAutoSyncTipSafe": "Solo se sincroniza sola cuando vas claramente por delante y no se pierde nada.",
+  "hiwAutoSyncTipDanger": "Si hubiera riesgo de perder progreso, nunca lo hace sola: te lo sigue preguntando con la comparación de siempre.",
+  "hiwAutoSyncTipPerSave": "Se activa partida por partida, no de golpe: puedes tenerlo en la tuya y no en una compartida.",
+  "hiwAutoSyncTipMissing": "Solo mantiene sincronizadas dos copias que ya existen. Si falta una, la primera subida o bajada la haces tú.",
+  "hiwAutoSyncTipRefresh": "En Ajustes puedes apagar del todo la comprobación automática de cambios.",
   "snackSessionExpired": "La sesión de Drive ha caducado. Vuelve a conectar",
   "snackUploadError": "Error al subir: {error}",
   "snackDownloadError": "Error al descargar: {error}",

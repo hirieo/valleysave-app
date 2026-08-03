@@ -61,7 +61,9 @@
   "updateVersionAvailable": "v{version} доступно",
   "@updateVersionAvailable": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "sectionMode": "Режим",
@@ -119,25 +121,33 @@
   "cardTimeMinutesAgo": "{minutes} мин назад",
   "@cardTimeMinutesAgo": {
     "placeholders": {
-      "minutes": { "type": "int" }
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "cardTimeHoursAgo": "{hours}ч назад",
   "@cardTimeHoursAgo": {
     "placeholders": {
-      "hours": { "type": "int" }
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "cardTimeDaysAgo": "{days}д назад",
   "@cardTimeDaysAgo": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "cardTimeMonthsAgo": "{months}мес назад",
   "@cardTimeMonthsAgo": {
     "placeholders": {
-      "months": { "type": "int" }
+      "months": {
+        "type": "int"
+      }
     }
   },
   "cardDetailLocalTitle": "На этом устройстве",
@@ -151,14 +161,20 @@
   "statDayYear": "День {day} · Год {year}",
   "@statDayYear": {
     "placeholders": {
-      "day": { "type": "int" },
-      "year": { "type": "int" }
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "statDayOnly": "День {day}",
   "@statDayOnly": {
     "placeholders": {
-      "day": { "type": "int" }
+      "day": {
+        "type": "int"
+      }
     }
   },
   "statPlaytime": "Время игры",
@@ -279,8 +295,12 @@
   "versionMismatch": "Разные версии: локальная {local} · Drive {drive}…",
   "@versionMismatch": {
     "placeholders": {
-      "local": { "type": "String" },
-      "drive": { "type": "String" }
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
     }
   },
   "snackPathCopied": "Путь скопирован",
@@ -290,31 +310,41 @@
   "snackUploadError": "Ошибка загрузки: {error}",
   "@snackUploadError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "snackDownloadError": "Ошибка скачивания: {error}",
   "@snackDownloadError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "snackDeleteError": "Ошибка удаления: {error}",
   "@snackDeleteError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "snackTrashed": "\"{saveName}\" перемещено в корзину Drive. У вас есть 30 дней для восстановления.",
   "@snackTrashed": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "snackDeletedLocal": "\"{saveName}\" удалено с этого устройства",
   "@snackDeletedLocal": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "snackShizukuRequired": "Активируйте Shizuku…",
@@ -340,7 +370,9 @@
   "snackDriveError": "Drive: {error}",
   "@snackDriveError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "dlgDeleteLocalWarning": "⚠️ Если вы не загрузили на Drive, файл будет потерян навсегда. Восстановление невозможно.",
@@ -351,7 +383,9 @@
   "dlgBridgeCopyDesc": "Сохранение готово. С помощью «Файлов» скопируйте папку \"{saveName}\" и вставьте её в папку Stardew.",
   "@dlgBridgeCopyDesc": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "labelFrom": "Откуда",
@@ -359,29 +393,45 @@
   "dlgDownloadNewDesc": "\"{saveName}\" (День {day}, {playtime}) будет скопировано на это устройство.",
   "@dlgDownloadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgDownloadOverwrite": "Это ПЕРЕЗАПИШЕТ ваше локальное сохранение \"{saveName}\".",
   "@dlgDownloadOverwrite": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadNewDesc": "\"{saveName}\" (День {day}, {playtime}) будет загружено на ваш Drive.",
   "@dlgUploadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadOverwriteDrive": "Это ПЕРЕЗАПИШЕТ версию Drive \"{saveName}\".",
   "@dlgUploadOverwriteDrive": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "pathLabelFromStardew": "Откуда (Stardew)",
@@ -427,8 +477,12 @@
   "saveDateLabel": "{season} · Год {year}",
   "@saveDateLabel": {
     "placeholders": {
-      "season": { "type": "String" },
-      "year": { "type": "int" }
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "petCat": "Кот",
@@ -440,7 +494,9 @@
   "houseLevelN": "Ур. {level}",
   "@houseLevelN": {
     "placeholders": {
-      "level": { "type": "int" }
+      "level": {
+        "type": "int"
+      }
     }
   },
   "tooltipLaunchGame": "Играть",
@@ -460,15 +516,21 @@
   "makeHostDialogIntro": "{playerName} станет хозяином фермы {farmName}.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "Создаётся новое сохранение. Затем вы решите, что делать с оригиналом.",
   "makeHostMoveCount": "{count, plural, one{На ферме будет перемещён {count} объект, чтобы освободить место для дома. Ничего не удаляется.} few{На ферме будут перемещены {count} объекта, чтобы освободить место для дома. Ничего не удаляется.} many{На ферме будет перемещено {count} объектов, чтобы освободить место для дома. Ничего не удаляется.} other{На ферме будет перемещено {count} объекта, чтобы освободить место для дома. Ничего не удаляется.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "Дом нового хозяина будет выглядеть как главный фермерский дом игры. Внешний вид хижины не поддерживается без модов.",
@@ -476,7 +538,9 @@
   "makeHostSuccess": "Новое сохранение создано: {playerName} теперь хозяин.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "Удалить оригинальное сохранение с этого устройства?",
@@ -1048,5 +1112,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "updateCheckFailed": "Не удалось проверить",
+  "updateCheckFailedRetry": "Нажмите, чтобы повторить"
 }

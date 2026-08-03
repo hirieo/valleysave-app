@@ -59,7 +59,13 @@
   "welcomeDriveConnected": "Drive conectado",
   "welcomeFooterTagline": "· Não comercial · Sempre grátis ·",
   "updateVersionAvailable": "v{version} disponível",
-  "@updateVersionAvailable": { "placeholders": { "version": { "type": "String" } } },
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "sectionMode": "Modo",
   "sectionSeason": "Estação",
   "sectionLanguage": "Idioma",
@@ -113,13 +119,37 @@
   "cardDriveOnly": "Somente Drive",
   "cardTimeNow": "agora",
   "cardTimeMinutesAgo": "há {minutes} min",
-  "@cardTimeMinutesAgo": { "placeholders": { "minutes": { "type": "int" } } },
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "cardTimeHoursAgo": "há {hours}h",
-  "@cardTimeHoursAgo": { "placeholders": { "hours": { "type": "int" } } },
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
   "cardTimeDaysAgo": "há {days}d",
-  "@cardTimeDaysAgo": { "placeholders": { "days": { "type": "int" } } },
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "cardTimeMonthsAgo": "há {months} mes",
-  "@cardTimeMonthsAgo": { "placeholders": { "months": { "type": "int" } } },
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
   "cardDetailLocalTitle": "Neste dispositivo",
   "cardDetailRemoteTitle": "No Drive",
   "cardDetailUpload": "Enviar para o Drive",
@@ -129,9 +159,24 @@
   "cardDetailDeleteRemote": "Deletar do Drive",
   "cardCloseBarrier": "Fechar",
   "statDayYear": "Dia {day} · Ano {year}",
-  "@statDayYear": { "placeholders": { "day": { "type": "int" }, "year": { "type": "int" } } },
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "statDayOnly": "Dia {day}",
-  "@statDayOnly": { "placeholders": { "day": { "type": "int" } } },
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
   "statPlaytime": "Tempo de jogo",
   "statMoney": "Moedas",
   "statTotal": "Total",
@@ -248,21 +293,60 @@
   "previewFromDrive": "DO DRIVE",
   "previewFromDevice": "DESTE DISPOSITIVO",
   "versionMismatch": "Versões diferentes: local {local} · Drive {drive}…",
-  "@versionMismatch": { "placeholders": { "local": { "type": "String" }, "drive": { "type": "String" } } },
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
   "snackPathCopied": "Caminho copiado",
   "snackDestCopied": "Caminho de destino copiado",
   "snackDownloaded": "Save baixado para o jogo",
   "snackSessionExpired": "Sessão do Drive expirada. Reconecte",
   "snackUploadError": "Erro ao enviar: {error}",
-  "@snackUploadError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "snackDownloadError": "Erro ao baixar: {error}",
-  "@snackDownloadError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "snackDeleteError": "Erro ao deletar: {error}",
-  "@snackDeleteError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "snackTrashed": "\"{saveName}\" movido para a Lixeira do Drive. Você tem 30 dias para restaurá-lo.",
-  "@snackTrashed": { "placeholders": { "saveName": { "type": "String" } } },
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "snackDeletedLocal": "\"{saveName}\" deletado deste dispositivo",
-  "@snackDeletedLocal": { "placeholders": { "saveName": { "type": "String" } } },
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "snackShizukuRequired": "Ative Shizuku…",
   "snackWriteError": "Não foi possível escrever no jogo. Alguns celulares bloqueiam /Android/data mesmo com Shizuku.",
   "snackPlatformNotSupported": "Esta plataforma ainda não suporta escrita de saves locais.",
@@ -284,24 +368,72 @@
   "hiwBridge2": "Enviar para o Drive: copie o save do Stardew para a pasta do ValleySave. ValleySave detecta e faz o envio.",
   "snackShizukuBattery": "Configurações → Apps → Shizuku → Bateria → Sem restrições.",
   "snackDriveError": "Drive: {error}",
-  "@snackDriveError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackDriveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "dlgDeleteLocalWarning": "⚠️ Se você não enviou para o Drive, será perdido para sempre. Sem recuperação.",
   "dlgDelete": "Deletar",
   "dlgDownloadButton": "Baixar",
   "dlgUploadButton": "Enviar",
   "dlgBridgeCopyTitle": "Copiar save para o jogo",
   "dlgBridgeCopyDesc": "Save pronto. Com o app Arquivos, copie a pasta \"{saveName}\" e cole na pasta do Stardew.",
-  "@dlgBridgeCopyDesc": { "placeholders": { "saveName": { "type": "String" } } },
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "labelFrom": "De",
   "labelTo": "Para",
   "dlgDownloadNewDesc": "\"{saveName}\" (Dia {day}, {playtime}) será copiado para este dispositivo.",
-  "@dlgDownloadNewDesc": { "placeholders": { "saveName": { "type": "String" }, "day": { "type": "int" }, "playtime": { "type": "String" } } },
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
   "dlgDownloadOverwrite": "Isso SOBRESCREVE seu save local de \"{saveName}\".",
-  "@dlgDownloadOverwrite": { "placeholders": { "saveName": { "type": "String" } } },
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "dlgUploadNewDesc": "\"{saveName}\" (Dia {day}, {playtime}) será enviado para o seu Drive.",
-  "@dlgUploadNewDesc": { "placeholders": { "saveName": { "type": "String" }, "day": { "type": "int" }, "playtime": { "type": "String" } } },
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
   "dlgUploadOverwriteDrive": "Isso SOBRESCREVE a versão do Drive de \"{saveName}\".",
-  "@dlgUploadOverwriteDrive": { "placeholders": { "saveName": { "type": "String" } } },
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "pathLabelFromStardew": "De (Stardew)",
   "pathLabelToValleySave": "Para (ValleySave)",
   "chooserDesc": "O Android protege a pasta do jogo. Escolha como dar acesso ao ValleySave — você pode mudar a qualquer momento.",
@@ -343,7 +475,16 @@
   "statusPending": "pendente",
   "latestBadge": "· SAVE MAIS RECENTE ·",
   "saveDateLabel": "{season} · Ano {year}",
-  "@saveDateLabel": { "placeholders": { "season": { "type": "String" }, "year": { "type": "int" } } },
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "petCat": "Gato",
   "petDog": "Cachorro",
   "houseBasic": "Casa básica",
@@ -351,7 +492,13 @@
   "houseBedroom": "Com quarto",
   "houseCellar": "Com adega",
   "houseLevelN": "Nv. {level}",
-  "@houseLevelN": { "placeholders": { "level": { "type": "int" } } },
+  "@houseLevelN": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "tooltipLaunchGame": "Jogar",
   "hiwLaunchTitle": "Abrir o jogo",
   "hiwLaunchDesc": "O botão ▶ na barra superior de Minhas partidas abre o Stardew Valley diretamente pelo app.",
@@ -369,15 +516,21 @@
   "makeHostDialogIntro": "{playerName} passará a ser o anfitrião de {farmName}.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "Um novo save é criado. Depois você decide o que fazer com o original.",
   "makeHostMoveCount": "{count, plural, one{1 objeto da fazenda será movido para abrir espaço para a casa. Nada é apagado.} other{{count} objetos da fazenda serão movidos para abrir espaço para a casa. Nada é apagado.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "A casa do novo anfitrião vai parecer a casa grande do jogo. A aparência de cabana não é suportada sem mods.",
@@ -385,7 +538,9 @@
   "makeHostSuccess": "Novo save criado: {playerName} agora é o anfitrião.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "Apagar o save original deste dispositivo?",
@@ -957,5 +1112,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "updateCheckFailed": "Não foi possível verificar",
+  "updateCheckFailedRetry": "Toque para tentar novamente"
 }

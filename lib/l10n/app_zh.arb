@@ -370,7 +370,9 @@
   "snackDriveError": "Drive：{error}",
   "@snackDriveError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "dlgDeleteLocalWarning": "⚠️ 如果您尚未上传到 Drive，它将永久丢失。无法恢复。",
@@ -381,7 +383,9 @@
   "dlgBridgeCopyDesc": "存档已准备好。使用您的文件应用，复制 \"{saveName}\" 文件夹并将其粘贴到 Stardew 文件夹中。",
   "@dlgBridgeCopyDesc": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "labelFrom": "来自",
@@ -389,29 +393,45 @@
   "dlgDownloadNewDesc": "\"{saveName}\"（第 {day} 天，{playtime}）将被复制到此设备。",
   "@dlgDownloadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgDownloadOverwrite": "这将覆盖您本地的 \"{saveName}\" 存档。",
   "@dlgDownloadOverwrite": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadNewDesc": "\"{saveName}\"（第 {day} 天，{playtime}）将被上传到您的 Drive。",
   "@dlgUploadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadOverwriteDrive": "这将覆盖 \"{saveName}\" 的 Drive 版本。",
   "@dlgUploadOverwriteDrive": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "pathLabelFromStardew": "来自 (Stardew)",
@@ -457,8 +477,12 @@
   "saveDateLabel": "{season} · 第 {year} 年",
   "@saveDateLabel": {
     "placeholders": {
-      "season": { "type": "String" },
-      "year": { "type": "int" }
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "petCat": "猫",
@@ -470,7 +494,9 @@
   "houseLevelN": "等级 {level}",
   "@houseLevelN": {
     "placeholders": {
-      "level": { "type": "int" }
+      "level": {
+        "type": "int"
+      }
     }
   },
   "tooltipLaunchGame": "开始游戏",
@@ -490,15 +516,21 @@
   "makeHostDialogIntro": "{playerName}将成为{farmName}的房主。",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "将创建一个新存档。之后由你决定如何处理原始存档。",
   "makeHostMoveCount": "{count, plural, other{农场中的{count}个物体将被移动以为房屋腾出空间。不会删除任何东西。}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "新房主的房子看起来会像游戏中的主农舍。没有模组的情况下不支持小屋外观。",
@@ -506,7 +538,9 @@
   "makeHostSuccess": "已创建新存档：{playerName}现在是房主。",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "要从此设备删除原始存档吗？",
@@ -1078,5 +1112,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "updateCheckFailed": "无法检查",
+  "updateCheckFailedRetry": "点击重试"
 }

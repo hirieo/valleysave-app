@@ -516,15 +516,21 @@
   "makeHostDialogIntro": "{playerName} стане господарем ферми {farmName}.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "Створюється нове збереження. Далі ви вирішите, що робити з оригіналом.",
   "makeHostMoveCount": "{count, plural, one{На фермі буде переміщено {count} об'єкт, щоб звільнити місце для будинку. Нічого не видаляється.} few{На фермі буде переміщено {count} об'єкти, щоб звільнити місце для будинку. Нічого не видаляється.} many{На фермі буде переміщено {count} об'єктів, щоб звільнити місце для будинку. Нічого не видаляється.} other{На фермі буде переміщено {count} об'єкта, щоб звільнити місце для будинку. Нічого не видаляється.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "Будинок нового господаря виглядатиме як великий фермерський будинок гри. Вигляд хатини не підтримується без модів.",
@@ -532,7 +538,9 @@
   "makeHostSuccess": "Нове збереження створено: {playerName} тепер господар.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "Видалити оригінальне збереження з цього пристрою?",
@@ -1104,5 +1112,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "updateCheckFailed": "Не вдалося перевірити",
+  "updateCheckFailedRetry": "Натисніть, щоб повторити"
 }

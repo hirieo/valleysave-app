@@ -59,7 +59,13 @@
   "welcomeDriveConnected": "Drive connecté",
   "welcomeFooterTagline": "· Non commercial · Gratuit pour toujours ·",
   "updateVersionAvailable": "v{version} disponible",
-  "@updateVersionAvailable": { "placeholders": { "version": { "type": "String" } } },
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "sectionMode": "Mode",
   "sectionSeason": "Saison",
   "sectionLanguage": "Langue",
@@ -113,13 +119,37 @@
   "cardDriveOnly": "Drive uniquement",
   "cardTimeNow": "maintenant",
   "cardTimeMinutesAgo": "il y a {minutes} min",
-  "@cardTimeMinutesAgo": { "placeholders": { "minutes": { "type": "int" } } },
+  "@cardTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "cardTimeHoursAgo": "il y a {hours}h",
-  "@cardTimeHoursAgo": { "placeholders": { "hours": { "type": "int" } } },
+  "@cardTimeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
   "cardTimeDaysAgo": "il y a {days}j",
-  "@cardTimeDaysAgo": { "placeholders": { "days": { "type": "int" } } },
+  "@cardTimeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "cardTimeMonthsAgo": "il y a {months} mois",
-  "@cardTimeMonthsAgo": { "placeholders": { "months": { "type": "int" } } },
+  "@cardTimeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
   "cardDetailLocalTitle": "Sur cet appareil",
   "cardDetailRemoteTitle": "Sur Drive",
   "cardDetailUpload": "Envoyer sur Drive",
@@ -129,9 +159,24 @@
   "cardDetailDeleteRemote": "Supprimer de Drive",
   "cardCloseBarrier": "Fermer",
   "statDayYear": "Jour {day} · Année {year}",
-  "@statDayYear": { "placeholders": { "day": { "type": "int" }, "year": { "type": "int" } } },
+  "@statDayYear": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "statDayOnly": "Jour {day}",
-  "@statDayOnly": { "placeholders": { "day": { "type": "int" } } },
+  "@statDayOnly": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
   "statPlaytime": "Temps de jeu",
   "statMoney": "Pièces",
   "statTotal": "Total",
@@ -248,21 +293,60 @@
   "previewFromDrive": "DEPUIS DRIVE",
   "previewFromDevice": "DEPUIS CET APPAREIL",
   "versionMismatch": "Versions différentes : local {local} · Drive {drive}…",
-  "@versionMismatch": { "placeholders": { "local": { "type": "String" }, "drive": { "type": "String" } } },
+  "@versionMismatch": {
+    "placeholders": {
+      "local": {
+        "type": "String"
+      },
+      "drive": {
+        "type": "String"
+      }
+    }
+  },
   "snackPathCopied": "Chemin copié",
   "snackDestCopied": "Chemin de destination copié",
   "snackDownloaded": "Sauvegarde téléchargée dans le jeu",
   "snackSessionExpired": "Session Drive expirée. Reconnectez-vous",
   "snackUploadError": "Erreur d'envoi : {error}",
-  "@snackUploadError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "snackDownloadError": "Erreur de téléchargement : {error}",
-  "@snackDownloadError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackDownloadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "snackDeleteError": "Erreur de suppression : {error}",
-  "@snackDeleteError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "snackTrashed": "\"{saveName}\" déplacé vers la Corbeille Drive. Vous avez 30 jours pour le restaurer.",
-  "@snackTrashed": { "placeholders": { "saveName": { "type": "String" } } },
+  "@snackTrashed": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "snackDeletedLocal": "\"{saveName}\" supprimé de cet appareil",
-  "@snackDeletedLocal": { "placeholders": { "saveName": { "type": "String" } } },
+  "@snackDeletedLocal": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "snackShizukuRequired": "Activez Shizuku…",
   "snackWriteError": "Impossible d'écrire dans le jeu. Certains téléphones bloquent /Android/data même avec Shizuku.",
   "snackPlatformNotSupported": "Cette plateforme ne prend pas encore en charge l'écriture de sauvegardes locales.",
@@ -284,24 +368,72 @@
   "hiwBridge2": "Envoyer sur Drive : copiez la sauvegarde de Stardew vers le dossier ValleySave. ValleySave la détecte et l'envoie.",
   "snackShizukuBattery": "Paramètres → Applications → Shizuku → Batterie → Sans restriction.",
   "snackDriveError": "Drive : {error}",
-  "@snackDriveError": { "placeholders": { "error": { "type": "String" } } },
+  "@snackDriveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "dlgDeleteLocalWarning": "⚠️ Si vous n'avez pas envoyé sur Drive, elle sera perdue définitivement. Aucune récupération possible.",
   "dlgDelete": "Supprimer",
   "dlgDownloadButton": "Télécharger",
   "dlgUploadButton": "Envoyer",
   "dlgBridgeCopyTitle": "Copier la sauvegarde dans le jeu",
   "dlgBridgeCopyDesc": "Sauvegarde prête. Avec votre application Fichiers, copiez le dossier \"{saveName}\" et collez-le dans le dossier Stardew.",
-  "@dlgBridgeCopyDesc": { "placeholders": { "saveName": { "type": "String" } } },
+  "@dlgBridgeCopyDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "labelFrom": "De",
   "labelTo": "À",
   "dlgDownloadNewDesc": "\"{saveName}\" (Jour {day}, {playtime}) sera copié sur cet appareil.",
-  "@dlgDownloadNewDesc": { "placeholders": { "saveName": { "type": "String" }, "day": { "type": "int" }, "playtime": { "type": "String" } } },
+  "@dlgDownloadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
   "dlgDownloadOverwrite": "Cela ÉCRASE votre sauvegarde locale de \"{saveName}\".",
-  "@dlgDownloadOverwrite": { "placeholders": { "saveName": { "type": "String" } } },
+  "@dlgDownloadOverwrite": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "dlgUploadNewDesc": "\"{saveName}\" (Jour {day}, {playtime}) sera envoyé sur votre Drive.",
-  "@dlgUploadNewDesc": { "placeholders": { "saveName": { "type": "String" }, "day": { "type": "int" }, "playtime": { "type": "String" } } },
+  "@dlgUploadNewDesc": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
+    }
+  },
   "dlgUploadOverwriteDrive": "Cela ÉCRASE la version Drive de \"{saveName}\".",
-  "@dlgUploadOverwriteDrive": { "placeholders": { "saveName": { "type": "String" } } },
+  "@dlgUploadOverwriteDrive": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
   "pathLabelFromStardew": "De (Stardew)",
   "pathLabelToValleySave": "À (ValleySave)",
   "chooserDesc": "Android protège le dossier du jeu. Choisissez comment donner l'accès à ValleySave — vous pouvez changer à tout moment.",
@@ -343,7 +475,16 @@
   "statusPending": "en attente",
   "latestBadge": "· DERNIÈRE SAUVEGARDE ·",
   "saveDateLabel": "{season} · Année {year}",
-  "@saveDateLabel": { "placeholders": { "season": { "type": "String" }, "year": { "type": "int" } } },
+  "@saveDateLabel": {
+    "placeholders": {
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "petCat": "Chat",
   "petDog": "Chien",
   "houseBasic": "Maison de base",
@@ -351,7 +492,13 @@
   "houseBedroom": "Avec chambre",
   "houseCellar": "Avec cave",
   "houseLevelN": "Nv. {level}",
-  "@houseLevelN": { "placeholders": { "level": { "type": "int" } } },
+  "@houseLevelN": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "tooltipLaunchGame": "Jouer",
   "hiwLaunchTitle": "Lancer le jeu",
   "hiwLaunchDesc": "Le bouton ▶ dans la barre supérieure de Mes sauvegardes ouvre Stardew Valley directement depuis l’app.",
@@ -369,15 +516,21 @@
   "makeHostDialogIntro": "{playerName} deviendra l'hôte de {farmName}.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "Une nouvelle sauvegarde est créée. Vous déciderez ensuite quoi faire de l'originale.",
   "makeHostMoveCount": "{count, plural, one{1 objet de la ferme sera déplacé pour faire de la place à la maison. Rien n'est supprimé.} other{{count} objets de la ferme seront déplacés pour faire de la place à la maison. Rien n'est supprimé.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "La maison du nouvel hôte ressemblera à la grande ferme du jeu. L'apparence de cabane n'est pas prise en charge sans mods.",
@@ -385,7 +538,9 @@
   "makeHostSuccess": "Nouvelle sauvegarde créée : {playerName} est maintenant l'hôte.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "Supprimer la sauvegarde d'origine de cet appareil ?",
@@ -399,7 +554,13 @@
   "hostSwapErrWrite": "Impossible d'écrire la nouvelle sauvegarde (disque/permissions). Rien n'a été modifié.",
   "hostSwapErrValidation": "La vérification de la nouvelle sauvegarde a échoué, elle a donc été supprimée. L'originale est intacte.",
   "disconnectButtonEmail": "Se déconnecter de {email}",
-  "@disconnectButtonEmail": { "placeholders": { "email": { "type": "String" } } },
+  "@disconnectButtonEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "connectedAsPrefix": "Connecté en tant que",
   "hiwConnectTitle": "Connecter votre compte",
   "hiwConnectDesc": "ValleySave utilise votre compte Google pour enregistrer vos sauvegardes dans un dossier ValleySave privé sur votre propre Drive.",
@@ -411,35 +572,113 @@
   "overwriteTagOverwritten": "SERA ÉCRASÉ",
   "overwriteNewCopyTag": "NOUVEAU",
   "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 jour et {time}} other{{days} jours et {time}}}",
-  "@overwriteDeltaPhrase": { "placeholders": { "days": { "type": "int" }, "time": { "type": "String" } } },
+  "@overwriteDeltaPhrase": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteVerdictAhead": "Vous avez {delta} d'avance. C'est sûr.",
-  "@overwriteVerdictAhead": { "placeholders": { "delta": { "type": "String" } } },
+  "@overwriteVerdictAhead": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteVerdictMoneySpent": "💰 L'argent actuel a baissé, mais la progression globale avance — vous l'avez probablement dépensé pour quelque chose. Ce n'est pas une vraie perte.",
   "overwriteVerdictNegligible": "Différence minime ({delta}). Les deux copies conviennent.",
-  "@overwriteVerdictNegligible": { "placeholders": { "delta": { "type": "String" } } },
+  "@overwriteVerdictNegligible": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteVerdictDanger": "⚠️ Vous allez perdre {delta} de progression sur {target}. Vérifiez avant de continuer.",
-  "@overwriteVerdictDanger": { "placeholders": { "delta": { "type": "String" }, "target": { "type": "String" } } },
+  "@overwriteVerdictDanger": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteConfirmTitleUpload": "Confirmer l'envoi ?",
   "overwriteConfirmTitleDownload": "Confirmer le téléchargement ?",
   "overwriteConfirmBody": "Vous allez perdre {delta} sur {target}. Cette action est irréversible.",
-  "@overwriteConfirmBody": { "placeholders": { "delta": { "type": "String" }, "target": { "type": "String" } } },
+  "@overwriteConfirmBody": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteConfirmButtonUpload": "Confirmer l'envoi",
   "overwriteConfirmButtonDownload": "Confirmer le téléchargement",
   "overwriteDangerButtonUpload": "⚠️ Envoyer quand même",
   "overwriteDangerButtonDownload": "⚠️ Télécharger quand même",
   "overwriteIdenticalSummary": "{count, plural, one{✓ 1 identique} other{✓ {count} identiques}} — {list}",
-  "@overwriteIdenticalSummary": { "placeholders": { "count": { "type": "int" }, "list": { "type": "String" } } },
+  "@overwriteIdenticalSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteUploadToOwner": "Envoyer vers le Drive de {email}",
-  "@overwriteUploadToOwner": { "placeholders": { "email": { "type": "String" } } },
+  "@overwriteUploadToOwner": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteUploadBoth": "Envoyer vers les deux Drives",
   "overwriteConfirmTitleBoth": "Confirmer les deux envois ?",
   "overwriteConfirmBodyBoth": "Vous allez perdre {delta} sur {targets}. Cette action est irréversible.",
-  "@overwriteConfirmBodyBoth": { "placeholders": { "delta": { "type": "String" }, "targets": { "type": "String" } } },
+  "@overwriteConfirmBodyBoth": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
   "overwriteBothDestinationsLabel": "{first} et {second}",
-  "@overwriteBothDestinationsLabel": { "placeholders": { "first": { "type": "String" }, "second": { "type": "String" } } },
+  "@overwriteBothDestinationsLabel": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
   "sharedTargetOwnDrive": "votre Drive",
   "sharedStatusLocalAhead": "Vous avez de l'avance sur {targets}",
-  "@sharedStatusLocalAhead": { "placeholders": { "targets": { "type": "String" } } },
+  "@sharedStatusLocalAhead": {
+    "placeholders": {
+      "targets": {
+        "type": "String"
+      }
+    }
+  },
   "snackReplacePrepareFailed": "Impossible de préparer la sauvegarde. Rien n'a été modifié sur le disque",
   "snackReplaceValidationFailed": "La sauvegarde téléchargée semble invalide ou incomplète. Rien n'a été modifié sur le disque",
   "snackReplaceBackupFailed": "Impossible de créer une sauvegarde de secours. Rien n'a été modifié sur le disque",
@@ -451,12 +690,24 @@
   "autoRefreshTitle": "Actualisation automatique",
   "autoRefreshSubtitle": "Vérifie les changements sur Drive toutes les 30 s",
   "autoSyncSnack": "{farmName} synchronisée automatiquement",
-  "@autoSyncSnack": { "placeholders": { "farmName": { "type": "String" } } },
+  "@autoSyncSnack": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "autoSyncTooltipOn": "Synchro auto activée — se synchronise seule quand c'est sûr",
   "autoSyncTooltipOff": "Synchro auto désactivée — touchez pour l'activer",
   "autoSyncExplainTitle": "Synchro auto",
   "autoSyncExplainBody": "À partir de maintenant, {farmName} sera envoyée ou téléchargée seule quand c'est sûr, sans vous demander de confirmation.",
-  "@autoSyncExplainBody": { "placeholders": { "farmName": { "type": "String" } } },
+  "@autoSyncExplainBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "autoSyncExplainSafe": "Elle n'agit que lorsque vous avez clairement de l'avance et que rien n'est perdu.",
   "autoSyncExplainDanger": "En cas de risque de perte de progression, elle n'agit jamais seule : vous continuerez à décider via la boîte de dialogue habituelle.",
   "autoSyncExplainMissing": "Si l'une des deux copies manque, elle ne la crée pas seule : le premier envoi ou téléchargement, c'est vous qui décidez.",
@@ -503,10 +754,22 @@
   "exportAction": "Exporter",
   "exportSuccess": "Sauvegarde exportée.",
   "exportError": "Impossible d'exporter la sauvegarde : {error}",
-  "@exportError": { "placeholders": { "error": { "type": "String" } } },
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "importAction": "Importer une sauvegarde",
   "importSuccess": "Sauvegarde de {playerName} importée.",
-  "@importSuccess": { "placeholders": { "playerName": { "type": "String" } } },
+  "@importSuccess": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
   "importErrInvalidZip": "Ce fichier n'est pas un zip valide.",
   "importErrUnsafePath": "Ce fichier a une structure non sécurisée et a été rejeté.",
   "importErrTooLarge": "Ce fichier est trop volumineux pour être importé.",
@@ -526,27 +789,51 @@
   "shareInfoNoteCoop": "Lecture seule permet de voir et de télécharger. Autoriser la synchronisation permet d'écraser votre copie sur Drive — ils ne pourront jamais la supprimer.",
   "shareConfirmButton": "Partager",
   "shareSuccess": "Partagé avec {email}.",
-  "@shareSuccess": { "placeholders": { "email": { "type": "String" } } },
+  "@shareSuccess": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "manageAccessTitle": "Personnes ayant accès",
   "manageAccessEmpty": "Personne d'autre n'a encore accès.",
   "manageAccessRoleLabel": "Accès",
   "manageAccessRevoke": "Révoquer",
   "manageAccessRevokeConfirm": "Retirer l'accès de {email} ? Toute copie locale déjà téléchargée reste la sienne.",
-  "@manageAccessRevokeConfirm": { "placeholders": { "email": { "type": "String" } } },
+  "@manageAccessRevokeConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "driveOnlyControlsYourCopy": "Le partage contrôle votre copie sur Drive. Si quelqu'un la télécharge, cette copie lui appartient.",
   "driveOnlyControlsYourCopyCoop": "La synchronisation contrôle votre copie sur Drive — elle peut être écrasée, mais jamais supprimée, par les personnes que vous autorisez.",
   "sharedWithMeTitle": "Partagées avec moi",
   "sharedWithMeEmpty": "Rien n'a encore été partagé avec vous.",
   "sharedWithMeAdd": "Ajouter une sauvegarde partagée",
   "sharedWithMeOwnedBy": "Partagée par {email}",
-  "@sharedWithMeOwnedBy": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedWithMeOwnedBy": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "sharedWithMeRoleSync": "Synchronise",
   "sharedWithMeRoleRead": "Lecture seule",
   "sharedWithMeSync": "Synchroniser",
   "sharedWithMeDownload": "Télécharger",
   "sharedWithMeRemove": "Se déconnecter",
   "sharedWithMeRemoveConfirm": "Vous ne synchroniserez plus avec le Drive de {email}, mais vous pouvez l'ajouter à nouveau quand vous voulez — elle reste partagée. Votre copie locale reste une sauvegarde coop normale.",
-  "@sharedWithMeRemoveConfirm": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedWithMeRemoveConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "sharedLeaveConfirm": "Vous perdrez vraiment l'accès à cette sauvegarde. Vous ne pourrez pas l'ajouter à nouveau sauf si {email} la repartage avec vous. Votre copie locale reste une sauvegarde coop normale.",
   "sharedManageButton": "Gérer",
   "sharedManageDialogTitle": "Gérer les partages",
@@ -554,29 +841,77 @@
   "sharedLeaveButton": "Quitter le partage",
   "sharedLeaveSuccess": "Vous avez quitté le partage de {email}.",
   "sharedWithMeSyncConfirm": "Écraser la copie de {email} sur Drive avec votre sauvegarde locale ?",
-  "@sharedWithMeSyncConfirm": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedWithMeSyncConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "sharedAccessReadOnly": "{email} vous a mis en lecture seule — vous pouvez voir et télécharger, mais pas synchroniser vers son Drive.",
-  "@sharedAccessReadOnly": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedAccessReadOnly": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "sharedWithMeRevoked": "Vous n'avez plus accès",
   "sharedRevokedDialogBody": "{email} a cessé de partager {farmName} avec vous. Votre copie locale et celle de votre Drive restent telles quelles, désormais dans Mes sauvegardes.",
-  "@sharedRevokedDialogBody": { "placeholders": { "email": { "type": "String" }, "farmName": { "type": "String" } } },
+  "@sharedRevokedDialogBody": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "sharedRevokedAccept": "Accepter",
   "sharedSelfCleanupTitle": "Enregistrement corrigé",
   "sharedSelfCleanupBody": "{farmName} apparaissait par erreur comme partagée avec vous — en réalité, elle est à vous. Cela a été corrigé, elle se trouve maintenant dans Mes sauvegardes.",
-  "@sharedSelfCleanupBody": { "placeholders": { "farmName": { "type": "String" } } },
+  "@sharedSelfCleanupBody": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "sharedWithMeUploadOwn": "Envoyer vers mon Drive",
   "sharedDownloadOwn": "Télécharger depuis mon Drive",
   "sharedStatusOwnDriveAhead": "Votre Drive a de l'avance — téléchargez-le",
   "sharedSyncBoth": "Envoyer vers les deux Drives",
   "sharedSideMyDrive": "MON DRIVE",
   "sharedSideOwnerDrive": "DRIVE DE {email}",
-  "@sharedSideOwnerDrive": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedSideOwnerDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "sharedSideDate": "Jour {day} · Année {year}",
-  "@sharedSideDate": { "placeholders": { "day": { "type": "int" }, "year": { "type": "int" } } },
+  "@sharedSideDate": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "sharedStatusSyncedNoOwnDrive": "Synchronisé avec le propriétaire · aucune copie sur votre Drive",
   "sharedStatusAheadNoOwnDrive": "Vous avez de l'avance · aucune copie sur votre Drive",
   "sharedStatusOwnerAheadNoOwnDrive": "{email} a de l'avance · aucune copie sur votre Drive",
-  "@sharedStatusOwnerAheadNoOwnDrive": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedStatusOwnerAheadNoOwnDrive": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "sharedStatusAllSynced": "Synchronisé (local + les deux Drives)",
   "sharedStatusAheadBoth": "Vous avez de l'avance sur les deux Drives",
   "sharedStatusMixed": "Désynchronisé — vérifiez chaque Drive",
@@ -604,7 +939,13 @@
   "sharedPickerAddButton": "Ajouter",
   "sharedOriginBadge": "Partagée",
   "sharedOriginFrom": "de {email}",
-  "@sharedOriginFrom": { "placeholders": { "email": { "type": "String" } } },
+  "@sharedOriginFrom": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "swapBackupDialogTitle": "Sauvegarde de secours créée",
   "swapBackupDialogBody": "La version précédente a été enregistrée en zip. Que voulez-vous en faire ?",
   "swapBackupUpload": "Envoyer vers Drive",
@@ -612,11 +953,23 @@
   "swapBackupDeleteNow": "Supprimer maintenant",
   "swapBackupUploadOk": "Sauvegarde de secours envoyée vers Drive.",
   "swapBackupUploadErr": "Impossible d'envoyer la sauvegarde de secours : {error}",
-  "@swapBackupUploadErr": { "placeholders": { "error": { "type": "String" } } },
+  "@swapBackupUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "swapBackupLocalOnlySnack": "Sauvegarde de secours enregistrée sur cet appareil.",
   "backupsAction": "Sauvegardes",
   "backupsScreenTitle": "Sauvegardes de secours de {farmName}",
-  "@backupsScreenTitle": { "placeholders": { "farmName": { "type": "String" } } },
+  "@backupsScreenTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "backupsEmpty": "Pas encore de sauvegardes de secours.",
   "backupsRestore": "Restaurer",
   "backupsRestoreConfirmTitle": "Restaurer cette sauvegarde de secours ?",
@@ -628,24 +981,54 @@
   "backupsRestoreManualTitle": "Restaurer manuellement",
   "backupsRestoreManualBody": "En mode Pont, ValleySave ne peut pas écrire automatiquement dans le dossier du jeu. Extrayez vous-même le .zip de cette sauvegarde de secours dans le dossier Saves de Stardew Valley, ou passez au mode Root/Shizuku dans les Paramètres pour restaurer automatiquement.",
   "backupsRestoreErr": "Impossible de restaurer la sauvegarde de secours : {error}",
-  "@backupsRestoreErr": { "placeholders": { "error": { "type": "String" } } },
+  "@backupsRestoreErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "backupsDeleteErr": "Impossible de supprimer la sauvegarde de secours : {error}",
-  "@backupsDeleteErr": { "placeholders": { "error": { "type": "String" } } },
+  "@backupsDeleteErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "backupsCreate": "Créer une sauvegarde de secours locale",
   "backupsCreateLocalHint": "Les sauvegardes de secours sont d'abord créées sur cet appareil. Vous pourrez ensuite les envoyer vers Drive.",
   "backupsCreateOk": "Sauvegarde de secours créée.",
   "backupsCreateErr": "Impossible de créer la sauvegarde de secours : {error}",
-  "@backupsCreateErr": { "placeholders": { "error": { "type": "String" } } },
+  "@backupsCreateErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "backupsDownload": "Télécharger",
   "backupsDownloadOk": "Sauvegarde de secours téléchargée sur cet appareil.",
   "backupsDownloadErr": "Impossible de télécharger la sauvegarde de secours : {error}",
-  "@backupsDownloadErr": { "placeholders": { "error": { "type": "String" } } },
+  "@backupsDownloadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "backupsCopyOwn": "Copier vers mon Drive",
   "backupsUploadOwn": "Vers mon Drive",
   "backupsUploadShared": "Vers le Drive partagé",
   "backupsUploadOk": "Sauvegarde de secours envoyée.",
   "backupsUploadErr": "Impossible d'envoyer la sauvegarde de secours : {error}",
-  "@backupsUploadErr": { "placeholders": { "error": { "type": "String" } } },
+  "@backupsUploadErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "backupsLocationLocal": "Cet appareil",
   "backupsLocationOwnDrive": "Mon Drive",
   "backupsLocationSharedDrive": "Drive partagé",
@@ -655,28 +1038,81 @@
   "backupsDeleteSharedOnly": "Uniquement du Drive partagé",
   "backupsDeleteAll": "De toutes les copies",
   "deleteUnifiedTitle": "Supprimer {farmName} ?",
-  "@deleteUnifiedTitle": { "placeholders": { "farmName": { "type": "String" } } },
+  "@deleteUnifiedTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteChooseLocationBody": "Choisissez d'où. La copie de cet appareil est supprimée pour toujours ; celle de Drive va à la Corbeille (30 jours).",
   "deleteDriveContextTitle": "Supprimer {farmName} de Drive ?",
-  "@deleteDriveContextTitle": { "placeholders": { "farmName": { "type": "String" } } },
+  "@deleteDriveContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteDriveContextBody": "La copie sur Drive ira à la Corbeille, où vous pourrez la récupérer pendant 30 jours.",
   "deleteDriveLocalKept": "La copie sur cet appareil restera inchangée.",
   "deleteLocalContextTitle": "Supprimer {farmName} de cet appareil ?",
-  "@deleteLocalContextTitle": { "placeholders": { "farmName": { "type": "String" } } },
+  "@deleteLocalContextTitle": {
+    "placeholders": {
+      "farmName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteLocalContextBody": "La copie sur cet appareil sera supprimée pour toujours.",
   "deleteLocalDriveCurrent": "Votre copie sur Drive est à jour ({date}) et restera disponible.",
-  "@deleteLocalDriveCurrent": { "placeholders": { "date": { "type": "String" } } },
+  "@deleteLocalDriveCurrent": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "deleteLocalDriveAhead": "Votre copie sur Drive est plus récente ({date}) et restera disponible.",
-  "@deleteLocalDriveAhead": { "placeholders": { "date": { "type": "String" } } },
+  "@deleteLocalDriveAhead": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "deleteLocalDriveOlder": "Votre copie sur Drive est antérieure ({driveDate}) ; cet appareil en est à {localDate}.",
-  "@deleteLocalDriveOlder": { "placeholders": { "driveDate": { "type": "String" }, "localDate": { "type": "String" } } },
+  "@deleteLocalDriveOlder": {
+    "placeholders": {
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
+    }
+  },
   "deleteLocalBackupAvailable": "Il y a {count} sauvegardes de secours locales disponibles au cas où vous auriez besoin d'une copie antérieure.",
-  "@deleteLocalBackupAvailable": { "placeholders": { "count": { "type": "int" } } },
+  "@deleteLocalBackupAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "deleteLocalNoRecovery": "Il n'y a ni copie sur Drive ni sauvegarde de secours locale permettant de récupérer cette sauvegarde.",
   "deleteOptionLocalOnly": "Uniquement de cet appareil",
   "deleteOptionDriveOnly": "Uniquement de Drive",
   "deleteOptionBoth": "Des deux copies (appareil + Drive)",
   "viewPlayersHint": "Voir les joueurs",
   "snackDeletedBoth": "\"{saveName}\" supprimée de cet appareil et déplacée vers la Corbeille Drive.",
-  "@snackDeletedBoth": { "placeholders": { "saveName": { "type": "String" } } }
+  "@snackDeletedBoth": {
+    "placeholders": {
+      "saveName": {
+        "type": "String"
+      }
+    }
+  },
+  "updateCheckFailed": "Vérification impossible",
+  "updateCheckFailedRetry": "Appuyez pour réessayer"
 }

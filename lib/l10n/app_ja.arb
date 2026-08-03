@@ -516,15 +516,21 @@
   "makeHostDialogIntro": "{playerName}が{farmName}のホストになります。",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "新しいセーブデータが作成されます。その後、元のデータをどうするか選べます。",
   "makeHostMoveCount": "{count, plural, other{家を建てるスペースを確保するため、農場のオブジェクトが{count}個移動します。何も削除されません。}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "新しいホストの家は、ゲームのメインの農場家に見えます。コテージの見た目はMODなしではサポートされません。",
@@ -532,7 +538,9 @@
   "makeHostSuccess": "新しいセーブデータを作成しました：{playerName}が新しいホストです。",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "この端末から元のセーブデータを削除しますか？",
@@ -548,7 +556,9 @@
   "disconnectButtonEmail": "{email}から切断",
   "@disconnectButtonEmail": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "connectedAsPrefix": "接続アカウント",
@@ -564,28 +574,40 @@
   "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days}日と{time}}}",
   "@overwriteDeltaPhrase": {
     "placeholders": {
-      "days": { "type": "int" },
-      "time": { "type": "String" }
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictAhead": "{delta}進んでいます。安全です。",
   "@overwriteVerdictAhead": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictMoneySpent": "💰 所持金は減っていますが、全体の進行状況は進んでいます — 何かに使った可能性が高いです。実質的な損失ではありません。",
   "overwriteVerdictNegligible": "差はごくわずかです（{delta}）。どちらのコピーでも問題ありません。",
   "@overwriteVerdictNegligible": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictDanger": "⚠️ {target}の進行状況を{delta}失うことになります。続行する前によく確認してください。",
   "@overwriteVerdictDanger": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmTitleUpload": "アップロードを確定しますか?",
@@ -593,8 +615,12 @@
   "overwriteConfirmBody": "{target}で{delta}を失うことになります。この操作は取り消せません。",
   "@overwriteConfirmBody": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmButtonUpload": "アップロードを確定",
@@ -604,14 +630,20 @@
   "overwriteIdenticalSummary": "{count, plural, other{✓ {count}件が同一}} — {list}",
   "@overwriteIdenticalSummary": {
     "placeholders": {
-      "count": { "type": "int" },
-      "list": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadToOwner": "{email}のDriveにアップロード",
   "@overwriteUploadToOwner": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadBoth": "両方のDriveにアップロード",
@@ -619,22 +651,32 @@
   "overwriteConfirmBodyBoth": "{targets}で{delta}を失うことになります。この操作は取り消せません。",
   "@overwriteConfirmBodyBoth": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "targets": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "overwriteBothDestinationsLabel": "{first}と{second}",
   "@overwriteBothDestinationsLabel": {
     "placeholders": {
-      "first": { "type": "String" },
-      "second": { "type": "String" }
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
     }
   },
   "sharedTargetOwnDrive": "あなたのDrive",
   "sharedStatusLocalAhead": "{targets}で先に進んでいます",
   "@sharedStatusLocalAhead": {
     "placeholders": {
-      "targets": { "type": "String" }
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "snackReplacePrepareFailed": "セーブの準備に失敗しました。ディスク上には何も変更されていません",
@@ -650,7 +692,9 @@
   "autoSyncSnack": "{farmName}を自動的に同期しました",
   "@autoSyncSnack": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncTooltipOn": "自動同期オン — 安全なときに自動で同期します",
@@ -659,7 +703,9 @@
   "autoSyncExplainBody": "これ以降、{farmName}は安全な場合に確認なしで自動的にアップロードまたはダウンロードされます。",
   "@autoSyncExplainBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncExplainSafe": "明らかに先に進んでいて、何も失われない場合にのみ動作します。",
@@ -710,14 +756,18 @@
   "exportError": "セーブをエクスポートできませんでした: {error}",
   "@exportError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "importAction": "セーブをインポート",
   "importSuccess": "{playerName}のセーブをインポートしました。",
   "@importSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "importErrInvalidZip": "このファイルは有効なzipではありません。",
@@ -741,7 +791,9 @@
   "shareSuccess": "{email}と共有しました。",
   "@shareSuccess": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "manageAccessTitle": "アクセス権を持つ人",
@@ -751,7 +803,9 @@
   "manageAccessRevokeConfirm": "{email}のアクセスを削除しますか? すでにダウンロード済みのローカルコピーは引き続き相手のものです。",
   "@manageAccessRevokeConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "driveOnlyControlsYourCopy": "共有はDrive上のあなたのコピーを制御します。誰かがそれをダウンロードすると、そのコピーはその人のものになります。",
@@ -762,7 +816,9 @@
   "sharedWithMeOwnedBy": "{email}が共有",
   "@sharedWithMeOwnedBy": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRoleSync": "同期",
@@ -773,7 +829,9 @@
   "sharedWithMeRemoveConfirm": "{email}のDriveとの同期は行われなくなりますが、いつでも再度追加できます — 共有自体は継続されます。ローカルのコピーは通常のコープセーブとしてそのまま残ります。",
   "@sharedWithMeRemoveConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedLeaveConfirm": "このセーブへのアクセスを完全に失います。{email}が再度共有してくれない限り、再び追加することはできません。ローカルのコピーは通常のコープセーブとしてそのまま残ります。",
@@ -785,21 +843,29 @@
   "sharedWithMeSyncConfirm": "Drive上の{email}のコピーをローカルのセーブで上書きしますか?",
   "@sharedWithMeSyncConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedAccessReadOnly": "{email}によってあなたのアクセスは閲覧のみに設定されました — 表示とダウンロードはできますが、相手のDriveへの同期はできません。",
   "@sharedAccessReadOnly": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRevoked": "アクセス権がなくなりました",
   "sharedRevokedDialogBody": "{email}が{farmName}の共有を停止しました。ローカルおよびあなたのDrive上のコピーはそのまま残り、今後は「マイセーブ」に表示されます。",
   "@sharedRevokedDialogBody": {
     "placeholders": {
-      "email": { "type": "String" },
-      "farmName": { "type": "String" }
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedRevokedAccept": "OK",
@@ -807,7 +873,9 @@
   "sharedSelfCleanupBody": "{farmName}が誤ってあなたと共有されているように表示されていました — 実際にはあなたのものです。修正済みで、現在は「マイセーブ」に表示されています。",
   "@sharedSelfCleanupBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeUploadOwn": "自分のDriveにアップロード",
@@ -818,14 +886,20 @@
   "sharedSideOwnerDrive": "{email}のDRIVE",
   "@sharedSideOwnerDrive": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedSideDate": "Day {day} · Year {year}",
   "@sharedSideDate": {
     "placeholders": {
-      "day": { "type": "int" },
-      "year": { "type": "int" }
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "sharedStatusSyncedNoOwnDrive": "所有者と同期済み · あなたのDriveにコピーなし",
@@ -860,7 +934,9 @@
   "sharedOriginFrom": "{email}から",
   "@sharedOriginFrom": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "swapBackupDialogTitle": "バックアップを作成しました",
@@ -872,7 +948,9 @@
   "swapBackupUploadErr": "バックアップをアップロードできませんでした: {error}",
   "@swapBackupUploadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "swapBackupLocalOnlySnack": "バックアップをこの端末に保存しました。",
@@ -880,7 +958,9 @@
   "backupsScreenTitle": "{farmName}のバックアップ",
   "@backupsScreenTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "backupsEmpty": "まだバックアップがありません。",
@@ -896,13 +976,17 @@
   "backupsRestoreErr": "バックアップを復元できませんでした: {error}",
   "@backupsRestoreErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDeleteErr": "バックアップを削除できませんでした: {error}",
   "@backupsDeleteErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCreate": "ローカルバックアップを作成",
@@ -911,7 +995,9 @@
   "backupsCreateErr": "バックアップを作成できませんでした: {error}",
   "@backupsCreateErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDownload": "ダウンロード",
@@ -919,7 +1005,9 @@
   "backupsDownloadErr": "バックアップをダウンロードできませんでした: {error}",
   "@backupsDownloadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCopyOwn": "自分のDriveにコピー",
@@ -929,7 +1017,9 @@
   "backupsUploadErr": "バックアップをアップロードできませんでした: {error}",
   "@backupsUploadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsLocationLocal": "この端末",
@@ -943,14 +1033,18 @@
   "deleteUnifiedTitle": "{farmName}を削除しますか?",
   "@deleteUnifiedTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteChooseLocationBody": "削除元を選んでください。この端末のコピーは完全に削除されます。Driveのコピーはゴミ箱に移動します（30日間）。",
   "deleteDriveContextTitle": "{farmName}をDriveから削除しますか?",
   "@deleteDriveContextTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteDriveContextBody": "Driveのコピーはゴミ箱に移動し、30日間は復元できます。",
@@ -958,33 +1052,45 @@
   "deleteLocalContextTitle": "{farmName}をこの端末から削除しますか?",
   "@deleteLocalContextTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalContextBody": "この端末のコピーは完全に削除されます。",
   "deleteLocalDriveCurrent": "あなたのDriveのコピーは最新です（{date}）。引き続き利用できます。",
   "@deleteLocalDriveCurrent": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveAhead": "あなたのDriveのコピーはより新しく（{date}）、引き続き利用できます。",
   "@deleteLocalDriveAhead": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveOlder": "あなたのDriveのコピーは古く（{driveDate}）、この端末は{localDate}時点です。",
   "@deleteLocalDriveOlder": {
     "placeholders": {
-      "driveDate": { "type": "String" },
-      "localDate": { "type": "String" }
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalBackupAvailable": "以前のコピーが必要な場合に備えて、{count}件のローカルバックアップが利用可能です。",
   "@deleteLocalBackupAvailable": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "deleteLocalNoRecovery": "このセーブを復元できるDriveのコピーもローカルのバックアップもありません。",
@@ -995,7 +1101,11 @@
   "snackDeletedBoth": "「{saveName}」をこの端末から削除し、Driveのゴミ箱に移動しました。",
   "@snackDeletedBoth": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "updateCheckFailed": "確認できませんでした",
+  "updateCheckFailedRetry": "タップして再試行"
 }

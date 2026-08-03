@@ -104,14 +104,18 @@
   "disconnectBody": "This will sign {email} out. Your saves on Drive won't be deleted, you can reconnect anytime.",
   "@disconnectBody": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "disconnectButton": "Disconnect Drive",
   "disconnectButtonEmail": "Disconnect from {email}",
   "@disconnectButtonEmail": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "connectedAsPrefix": "Connected as",
@@ -175,14 +179,18 @@
   "exportError": "Couldn't export the save: {error}",
   "@exportError": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "importAction": "Import save",
   "importSuccess": "{playerName}'s save imported.",
   "@importSuccess": {
     "placeholders": {
-      "playerName": {"type": "String"}
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "importErrInvalidZip": "This isn't a valid zip file.",
@@ -206,7 +214,9 @@
   "shareSuccess": "Shared with {email}.",
   "@shareSuccess": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "manageAccessTitle": "People with access",
@@ -216,7 +226,9 @@
   "manageAccessRevokeConfirm": "Remove {email}'s access? Any local copy they already downloaded is theirs to keep.",
   "@manageAccessRevokeConfirm": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "driveOnlyControlsYourCopy": "Sharing controls your copy in Drive. If someone downloads it, that copy is theirs.",
@@ -227,7 +239,9 @@
   "sharedWithMeOwnedBy": "Shared by {email}",
   "@sharedWithMeOwnedBy": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRoleSync": "Sync",
@@ -244,27 +258,37 @@
   "sharedLeaveSuccess": "You left {email}'s shared save.",
   "@sharedWithMeRemoveConfirm": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeSyncConfirm": "Overwrite {email}'s copy in Drive with your local save?",
   "@sharedWithMeSyncConfirm": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedAccessReadOnly": "{email} set your access to read-only — you can view and download, but not sync to their Drive.",
   "@sharedAccessReadOnly": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRevoked": "You no longer have access",
   "sharedRevokedDialogBody": "{email} stopped sharing {farmName} with you. Your local copy and the one on your Drive stay as they are, now under My saves.",
   "@sharedRevokedDialogBody": {
     "placeholders": {
-      "email": {"type": "String"},
-      "farmName": {"type": "String"}
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedRevokedAccept": "Accept",
@@ -272,7 +296,9 @@
   "sharedSelfCleanupBody": "{farmName} showed up as shared with you by mistake — it's actually yours. It's been fixed, now it's under My saves.",
   "@sharedSelfCleanupBody": {
     "placeholders": {
-      "farmName": {"type": "String"}
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeUploadOwn": "Upload to my Drive",
@@ -283,14 +309,20 @@
   "sharedSideOwnerDrive": "{email}'s DRIVE",
   "@sharedSideOwnerDrive": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedSideDate": "Day {day} · Year {year}",
   "@sharedSideDate": {
     "placeholders": {
-      "day": {"type": "int"},
-      "year": {"type": "int"}
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "sharedStatusSyncedNoOwnDrive": "Synced with the owner · no copy in your Drive",
@@ -298,7 +330,9 @@
   "sharedStatusOwnerAheadNoOwnDrive": "{email} is ahead · no copy in your Drive",
   "@sharedStatusOwnerAheadNoOwnDrive": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedStatusAllSynced": "Synced (local + both Drives)",
@@ -330,7 +364,9 @@
   "sharedOriginFrom": "from {email}",
   "@sharedOriginFrom": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "swapBackupDialogTitle": "Backup created",
@@ -342,7 +378,9 @@
   "swapBackupUploadErr": "Couldn't upload the backup: {error}",
   "@swapBackupUploadErr": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "swapBackupLocalOnlySnack": "Backup saved on this device.",
@@ -350,7 +388,9 @@
   "backupsScreenTitle": "Backups of {farmName}",
   "@backupsScreenTitle": {
     "placeholders": {
-      "farmName": {"type": "String"}
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "backupsEmpty": "No backups yet.",
@@ -366,13 +406,17 @@
   "backupsRestoreErr": "Couldn't restore the backup: {error}",
   "@backupsRestoreErr": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDeleteErr": "Couldn't delete the backup: {error}",
   "@backupsDeleteErr": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCreate": "Create local backup",
@@ -381,7 +425,9 @@
   "backupsCreateErr": "Couldn't create the backup: {error}",
   "@backupsCreateErr": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDownload": "Download",
@@ -389,7 +435,9 @@
   "backupsDownloadErr": "Couldn't download the backup: {error}",
   "@backupsDownloadErr": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCopyOwn": "Copy to my Drive",
@@ -399,7 +447,9 @@
   "backupsUploadErr": "Couldn't upload the backup: {error}",
   "@backupsUploadErr": {
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsLocationLocal": "This device",
@@ -413,14 +463,18 @@
   "deleteUnifiedTitle": "Delete {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {
-      "farmName": {"type": "String"}
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteChooseLocationBody": "Choose where. Your device copy is deleted forever; the Drive copy goes to Trash (30 days).",
   "deleteDriveContextTitle": "Delete {farmName} from Drive?",
   "@deleteDriveContextTitle": {
     "placeholders": {
-      "farmName": {"type": "String"}
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteDriveContextBody": "The Drive copy will move to Trash, where it can be recovered for 30 days.",
@@ -428,33 +482,45 @@
   "deleteLocalContextTitle": "Delete {farmName} from this device?",
   "@deleteLocalContextTitle": {
     "placeholders": {
-      "farmName": {"type": "String"}
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalContextBody": "The copy on this device will be deleted permanently.",
   "deleteLocalDriveCurrent": "Your Drive copy is up to date ({date}) and will remain available.",
   "@deleteLocalDriveCurrent": {
     "placeholders": {
-      "date": {"type": "String"}
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveAhead": "Your Drive copy is newer ({date}) and will remain available.",
   "@deleteLocalDriveAhead": {
     "placeholders": {
-      "date": {"type": "String"}
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveOlder": "Your Drive copy is older ({driveDate}); this device is at {localDate}.",
   "@deleteLocalDriveOlder": {
     "placeholders": {
-      "driveDate": {"type": "String"},
-      "localDate": {"type": "String"}
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalBackupAvailable": "There are {count} local backups available if you need an earlier copy.",
   "@deleteLocalBackupAvailable": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "deleteLocalNoRecovery": "There is no Drive copy or local backup to recover this game from.",
@@ -465,7 +531,9 @@
   "snackDeletedBoth": "\"{saveName}\" deleted from this device and moved to Drive Trash.",
   "@snackDeletedBoth": {
     "placeholders": {
-      "saveName": {"type": "String"}
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "statDayYear": "Day {day} · Year {year}",
@@ -614,28 +682,40 @@
   "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 day and {time}} other{{days} days and {time}}}",
   "@overwriteDeltaPhrase": {
     "placeholders": {
-      "days": { "type": "int" },
-      "time": { "type": "String" }
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictAhead": "You're {delta} ahead. It's safe.",
   "@overwriteVerdictAhead": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictMoneySpent": "💰 Current money went down, but overall progress is moving forward — you probably spent it on something. That's not a real loss.",
   "overwriteVerdictNegligible": "Minimal difference ({delta}). Either copy works fine.",
   "@overwriteVerdictNegligible": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictDanger": "⚠️ You're about to lose {delta} of progress on {target}. Double-check before continuing.",
   "@overwriteVerdictDanger": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmTitleUpload": "Confirm the upload?",
@@ -643,8 +723,12 @@
   "overwriteConfirmBody": "You're about to lose {delta} on {target}. This action can't be undone.",
   "@overwriteConfirmBody": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmButtonUpload": "Confirm upload",
@@ -654,14 +738,20 @@
   "overwriteIdenticalSummary": "{count, plural, one{✓ 1 identical} other{✓ {count} identical}} — {list}",
   "@overwriteIdenticalSummary": {
     "placeholders": {
-      "count": { "type": "int" },
-      "list": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadToOwner": "Upload to {email}'s Drive",
   "@overwriteUploadToOwner": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadBoth": "Upload to both Drives",
@@ -669,22 +759,32 @@
   "overwriteConfirmBodyBoth": "You'll lose {delta} in {targets}. This action can't be undone.",
   "@overwriteConfirmBodyBoth": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "targets": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "overwriteBothDestinationsLabel": "{first} and {second}",
   "@overwriteBothDestinationsLabel": {
     "placeholders": {
-      "first": { "type": "String" },
-      "second": { "type": "String" }
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
     }
   },
   "sharedTargetOwnDrive": "your Drive",
   "sharedStatusLocalAhead": "You're ahead in {targets}",
   "@sharedStatusLocalAhead": {
     "placeholders": {
-      "targets": { "type": "String" }
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "versionMismatch": "Different versions: local {local} · Drive {drive}…",
@@ -714,7 +814,9 @@
   "autoSyncSnack": "{farmName} synced automatically",
   "@autoSyncSnack": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncTooltipOn": "Auto-sync on — syncs itself when it's safe",
@@ -723,7 +825,9 @@
   "autoSyncExplainBody": "From now on, {farmName} will upload or download itself when it's safe, without asking you to confirm.",
   "@autoSyncExplainBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncExplainSafe": "It only acts when you're clearly ahead and nothing gets lost.",
@@ -827,7 +931,9 @@
   "snackDriveError": "Drive: {error}",
   "@snackDriveError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "dlgDeleteLocalWarning": "⚠️ If you haven't uploaded to Drive, it will be lost forever. No recovery.",
@@ -838,7 +944,9 @@
   "dlgBridgeCopyDesc": "Save is ready. With your Files app, copy the \"{saveName}\" folder and paste it into the Stardew folder.",
   "@dlgBridgeCopyDesc": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "labelFrom": "From",
@@ -846,29 +954,45 @@
   "dlgDownloadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) will be copied to this device.",
   "@dlgDownloadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgDownloadOverwrite": "This OVERWRITES your local save of \"{saveName}\".",
   "@dlgDownloadOverwrite": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadNewDesc": "\"{saveName}\" (Day {day}, {playtime}) will be uploaded to your Drive.",
   "@dlgUploadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadOverwriteDrive": "This OVERWRITES the Drive version of \"{saveName}\".",
   "@dlgUploadOverwriteDrive": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "pathLabelFromStardew": "From (Stardew)",
@@ -914,8 +1038,12 @@
   "saveDateLabel": "{season} · Year {year}",
   "@saveDateLabel": {
     "placeholders": {
-      "season": { "type": "String" },
-      "year": { "type": "int" }
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "petCat": "Cat",
@@ -927,7 +1055,9 @@
   "houseLevelN": "Lv. {level}",
   "@houseLevelN": {
     "placeholders": {
-      "level": { "type": "int" }
+      "level": {
+        "type": "int"
+      }
     }
   },
   "tooltipLaunchGame": "Play",
@@ -953,15 +1083,21 @@
   "makeHostDialogIntro": "{playerName} will become the host of {farmName}.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "A new save is created. You'll decide what to do with the original next.",
   "makeHostMoveCount": "{count, plural, one{1 farm object will be moved to make room for the house. Nothing is deleted.} other{{count} farm objects will be moved to make room for the house. Nothing is deleted.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "The new host's home will look like the game's main farmhouse. Cabin looks aren't supported without mods.",
@@ -969,7 +1105,9 @@
   "makeHostSuccess": "New save created: {playerName} is now the host.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "hostSwapErrInvalid": "This save has an unexpected structure. Nothing was changed.",
@@ -981,5 +1119,7 @@
   "makeHostDeleteOriginalNoBackupBody": "No connection to Drive: no backup will remain. Only the local copy on this device will be deleted.",
   "makeHostDeleteOriginalUploadBody": "The original save will be uploaded to your Drive as a backup first, then the local copy on this device will be deleted.",
   "makeHostDeleteWithoutUpload": "Delete without uploading",
-  "makeHostUploadAndDelete": "Upload and delete"
+  "makeHostUploadAndDelete": "Upload and delete",
+  "updateCheckFailed": "Could not check",
+  "updateCheckFailedRetry": "Tap to retry"
 }

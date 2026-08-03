@@ -2073,4 +2073,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => '업로드 후 삭제';
+
+  @override
+  String get updateCheckFailed => '확인할 수 없습니다';
+
+  @override
+  String get updateCheckFailedRetry => '다시 시도하려면 탭하세요';
 }

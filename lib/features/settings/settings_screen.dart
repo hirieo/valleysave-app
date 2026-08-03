@@ -26,7 +26,19 @@ import '../saves/save_card.dart' show ActionBtn;
 import '../saves/widgets/seasonal_loader.dart';
 import 'widgets/language_dialog.dart';
 
-enum _UpdateState { idle, checking, upToDate, available, downloading, error }
+enum _UpdateState {
+  idle,
+  checking,
+  upToDate,
+  available,
+  downloading,
+  error,
+
+  /// La comprobación no se pudo hacer (sin red, timeout, 403 por límite de la
+  /// API de GitHub). Estado separado de [upToDate] a propósito (2026-08-02):
+  /// antes un fallo se pintaba como "Al día", ocultando el problema.
+  checkFailed,
+}
 
 const _kLangs = [
   (null, '🌐', 'Auto · sistema'),
@@ -67,6 +79,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   _UpdateState _updateState = _UpdateState.idle;
   String _appVersion = '';
   UpdateInfo? _updateInfo;
+  /// Motivo técnico cuando `_updateState == _UpdateState.checkFailed`.
+  String? _checkFailureReason;
   double _downloadProgress = 0;
   final _progressNotifier = ValueNotifier<double>(0);
   bool _updateTilePressed = false;
@@ -149,12 +163,17 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> _checkUpdateFromSettings() async {
     if (_updateState == _UpdateState.checking) return;
     setState(() => _updateState = _UpdateState.checking);
-    final info = await UpdateService.checkForUpdate();
+    final result = await UpdateService.checkForUpdate();
     if (!mounted) return;
-    if (info != null) {
+    if (result.hasUpdate) {
       setState(() {
         _updateState = _UpdateState.available;
-        _updateInfo = info;
+        _updateInfo = result.info;
+      });
+    } else if (result.failed) {
+      setState(() {
+        _updateState = _UpdateState.checkFailed;
+        _checkFailureReason = result.failureReason;
       });
     } else {
       setState(() => _updateState = _UpdateState.upToDate);
@@ -1208,11 +1227,45 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
           ],
         );
+      // Mismo estilo que `error` (ámbar en vez de rojo: no se ha roto nada,
+      // solo no se pudo preguntar). Vuelve a ser pulsable para reintentar.
+      case _UpdateState.checkFailed:
+        content = Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.updateCheckFailed,
+                    style: AppTypography.bodyStrong(
+                      color: const Color(0xFFE0A850),
+                    ),
+                  ),
+                  Text(
+                    _checkFailureReason ?? l10n.updateCheckFailedRetry,
+                    style: AppTypography.mono(
+                      color: AppColors.textFaint,
+                      size: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Icon(
+              Icons.cloud_off_rounded,
+              size: 16,
+              color: Color(0xFFE0A850),
+            ),
+          ],
+        );
     }
 
     final isTappable =
         _updateState == _UpdateState.idle ||
-        _updateState == _UpdateState.available;
+        _updateState == _UpdateState.available ||
+        _updateState == _UpdateState.checkFailed;
 
     return MouseRegion(
       cursor: isTappable ? SystemMouseCursors.click : MouseCursor.defer,
@@ -1221,7 +1274,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: GestureDetector(
       onTap: _updateState == _UpdateState.available
           ? _startInstall
-          : _updateState == _UpdateState.idle
+          : (_updateState == _UpdateState.idle ||
+                _updateState == _UpdateState.checkFailed)
           ? _checkUpdateFromSettings
           : null,
       onTapDown: isTappable

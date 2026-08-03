@@ -2068,4 +2068,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'アップロードして削除';
+
+  @override
+  String get updateCheckFailed => '確認できませんでした';
+
+  @override
+  String get updateCheckFailedRetry => 'タップして再試行';
 }

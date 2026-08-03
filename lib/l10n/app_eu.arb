@@ -516,15 +516,21 @@
   "makeHostDialogIntro": "{playerName} {farmName} baserriko ostalari izango da.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "Partida berri bat sortzen da. Gero erabakiko duzu jatorrizkoarekin zer egin.",
   "makeHostMoveCount": "{count, plural, one{Baserriko objektu 1 lekuz aldatuko da etxeari tokia egiteko. Ezer ez da ezabatzen.} other{Baserriko {count} objektu lekuz aldatuko dira etxeari tokia egiteko. Ezer ez da ezabatzen.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "Ostalari berriaren etxea jokoaren baserri handi bezala ikusiko da. Etxolaren itxura ez da onartzen modrik gabe.",
@@ -532,7 +538,9 @@
   "makeHostSuccess": "Partida berria sortu da: {playerName} da orain ostalaria.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "Jatorrizko partida gailu honetatik ezabatu?",
@@ -1104,5 +1112,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "updateCheckFailed": "Ezin izan da egiaztatu",
+  "updateCheckFailedRetry": "Sakatu berriro saiatzeko"
 }

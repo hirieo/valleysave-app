@@ -2140,4 +2140,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'Carica ed elimina';
+
+  @override
+  String get updateCheckFailed => 'Controllo non riuscito';
+
+  @override
+  String get updateCheckFailedRetry => 'Tocca per riprovare';
 }

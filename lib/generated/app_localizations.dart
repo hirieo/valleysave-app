@@ -3720,6 +3720,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload and delete'**
   String get makeHostUploadAndDelete;
+
+  /// No description provided for @updateCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check'**
+  String get updateCheckFailed;
+
+  /// No description provided for @updateCheckFailedRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to retry'**
+  String get updateCheckFailedRetry;
 }
 
 class _AppLocalizationsDelegate

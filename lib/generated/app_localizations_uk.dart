@@ -2146,4 +2146,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'Завантажити та видалити';
+
+  @override
+  String get updateCheckFailed => 'Не вдалося перевірити';
+
+  @override
+  String get updateCheckFailedRetry => 'Натисніть, щоб повторити';
 }

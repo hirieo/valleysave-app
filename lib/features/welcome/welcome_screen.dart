@@ -198,8 +198,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   Future<void> _checkUpdate() async {
-    final info = await UpdateService.checkForUpdate();
-    if (mounted && info != null) setState(() => _updateInfo = info);
+    // Comprobación de fondo al arrancar: si falla, se calla (el chip
+    // simplemente no aparece). El aviso explícito de "no se pudo comprobar"
+    // vive en Ajustes, donde el usuario lo ha pedido a mano.
+    final result = await UpdateService.checkForUpdate();
+    if (mounted && result.hasUpdate) {
+      setState(() => _updateInfo = result.info);
+    }
   }
 
   Future<void> _startInstall() async {

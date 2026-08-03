@@ -516,15 +516,21 @@
   "makeHostDialogIntro": "{playerName}님이 {farmName}의 호스트가 됩니다.",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "새 세이브 파일이 생성됩니다. 이후 원본을 어떻게 할지 직접 결정합니다.",
   "makeHostMoveCount": "{count, plural, other{집을 지을 공간을 확보하기 위해 농장의 오브젝트 {count}개가 이동합니다. 아무것도 삭제되지 않습니다.}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "새 호스트의 집은 게임의 메인 농장 주택처럼 보입니다. 오두막 외관은 모드 없이는 지원되지 않습니다.",
@@ -532,7 +538,9 @@
   "makeHostSuccess": "새 세이브 파일 생성됨: 이제 {playerName}님이 호스트입니다.",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "이 기기에서 원본 세이브 파일을 삭제할까요?",
@@ -548,7 +556,9 @@
   "disconnectButtonEmail": "{email}에서 연결 해제",
   "@disconnectButtonEmail": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "connectedAsPrefix": "연결된 계정",
@@ -564,28 +574,40 @@
   "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days}일과 {time}}}",
   "@overwriteDeltaPhrase": {
     "placeholders": {
-      "days": { "type": "int" },
-      "time": { "type": "String" }
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictAhead": "{delta} 앞서 있습니다. 안전합니다.",
   "@overwriteVerdictAhead": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictMoneySpent": "💰 현재 소지금은 줄었지만 전체 진행 상황은 앞으로 나아가고 있습니다 — 아마 무언가에 사용하신 것 같습니다. 실제 손실이 아닙니다.",
   "overwriteVerdictNegligible": "차이가 미미합니다 ({delta}). 두 사본 중 어느 쪽을 선택해도 괜찮습니다.",
   "@overwriteVerdictNegligible": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictDanger": "⚠️ {target}에서 {delta}만큼의 진행 상황을 잃게 됩니다. 계속하기 전에 다시 확인하세요.",
   "@overwriteVerdictDanger": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmTitleUpload": "업로드를 확정하시겠습니까?",
@@ -593,8 +615,12 @@
   "overwriteConfirmBody": "{target}에서 {delta}만큼 잃게 됩니다. 이 작업은 되돌릴 수 없습니다.",
   "@overwriteConfirmBody": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmButtonUpload": "업로드 확정",
@@ -604,14 +630,20 @@
   "overwriteIdenticalSummary": "{count, plural, other{✓ {count}개 동일}} — {list}",
   "@overwriteIdenticalSummary": {
     "placeholders": {
-      "count": { "type": "int" },
-      "list": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadToOwner": "{email}의 Drive에 업로드",
   "@overwriteUploadToOwner": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadBoth": "두 Drive 모두에 업로드",
@@ -619,22 +651,32 @@
   "overwriteConfirmBodyBoth": "{targets}에서 {delta}만큼 잃게 됩니다. 이 작업은 되돌릴 수 없습니다.",
   "@overwriteConfirmBodyBoth": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "targets": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "overwriteBothDestinationsLabel": "{first}와(과) {second}",
   "@overwriteBothDestinationsLabel": {
     "placeholders": {
-      "first": { "type": "String" },
-      "second": { "type": "String" }
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
     }
   },
   "sharedTargetOwnDrive": "회원님의 Drive",
   "sharedStatusLocalAhead": "{targets}에서 앞서 있습니다",
   "@sharedStatusLocalAhead": {
     "placeholders": {
-      "targets": { "type": "String" }
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "snackReplacePrepareFailed": "세이브를 준비하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다",
@@ -650,7 +692,9 @@
   "autoSyncSnack": "{farmName}이(가) 자동으로 동기화되었습니다",
   "@autoSyncSnack": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncTooltipOn": "자동 동기화 켜짐 — 안전할 때 자동으로 동기화됩니다",
@@ -659,7 +703,9 @@
   "autoSyncExplainBody": "지금부터 {farmName}은(는) 안전할 때 확인을 요청하지 않고 자동으로 업로드되거나 다운로드됩니다.",
   "@autoSyncExplainBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncExplainSafe": "명백히 앞서 있고 아무것도 잃지 않을 때만 작동합니다.",
@@ -710,14 +756,18 @@
   "exportError": "세이브를 내보내지 못했습니다: {error}",
   "@exportError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "importAction": "세이브 가져오기",
   "importSuccess": "{playerName}님의 세이브를 가져왔습니다.",
   "@importSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "importErrInvalidZip": "이 파일은 유효한 zip 파일이 아닙니다.",
@@ -741,7 +791,9 @@
   "shareSuccess": "{email}님과 공유했습니다.",
   "@shareSuccess": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "manageAccessTitle": "접근 권한이 있는 사람",
@@ -751,7 +803,9 @@
   "manageAccessRevokeConfirm": "{email}님의 접근 권한을 제거할까요? 이미 다운로드한 로컬 사본은 계속 그 사람의 것으로 남습니다.",
   "@manageAccessRevokeConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "driveOnlyControlsYourCopy": "공유는 Drive에 있는 회원님의 사본을 제어합니다. 누군가 다운로드하면 그 사본은 그 사람의 것이 됩니다.",
@@ -762,7 +816,9 @@
   "sharedWithMeOwnedBy": "{email}님이 공유함",
   "@sharedWithMeOwnedBy": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRoleSync": "동기화",
@@ -773,7 +829,9 @@
   "sharedWithMeRemoveConfirm": "{email}님의 Drive와는 더 이상 동기화되지 않지만 언제든 다시 추가할 수 있습니다 — 공유 자체는 계속 유지됩니다. 로컬 사본은 일반적인 코옵 세이브로 그대로 남습니다.",
   "@sharedWithMeRemoveConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedLeaveConfirm": "이 세이브에 대한 접근 권한을 완전히 잃게 됩니다. {email}님이 다시 공유해 주지 않는 한 다시 추가할 수 없습니다. 로컬 사본은 일반적인 코옵 세이브로 그대로 남습니다.",
@@ -785,21 +843,29 @@
   "sharedWithMeSyncConfirm": "{email}님의 Drive 사본을 회원님의 로컬 세이브로 덮어쓸까요?",
   "@sharedWithMeSyncConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedAccessReadOnly": "{email}님이 회원님의 접근 권한을 읽기 전용으로 설정했습니다 — 보기와 다운로드는 가능하지만 그 사람의 Drive로 동기화할 수는 없습니다.",
   "@sharedAccessReadOnly": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRevoked": "더 이상 접근 권한이 없습니다",
   "sharedRevokedDialogBody": "{email}님이 {farmName}에 대한 공유를 중단했습니다. 로컬 사본과 회원님의 Drive 사본은 그대로 남으며, 이제 '내 세이브'에 표시됩니다.",
   "@sharedRevokedDialogBody": {
     "placeholders": {
-      "email": { "type": "String" },
-      "farmName": { "type": "String" }
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedRevokedAccept": "확인",
@@ -807,7 +873,9 @@
   "sharedSelfCleanupBody": "{farmName}이(가) 실수로 회원님과 공유된 것처럼 표시되었습니다 — 실제로는 회원님의 것입니다. 수정되어 이제 '내 세이브'에 있습니다.",
   "@sharedSelfCleanupBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeUploadOwn": "내 Drive에 업로드",
@@ -818,14 +886,20 @@
   "sharedSideOwnerDrive": "{email}의 DRIVE",
   "@sharedSideOwnerDrive": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedSideDate": "{day}일 · {year}년",
   "@sharedSideDate": {
     "placeholders": {
-      "day": { "type": "int" },
-      "year": { "type": "int" }
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "sharedStatusSyncedNoOwnDrive": "소유자와 동기화됨 · 회원님의 Drive에 사본 없음",
@@ -860,7 +934,9 @@
   "sharedOriginFrom": "{email}님으로부터",
   "@sharedOriginFrom": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "swapBackupDialogTitle": "백업이 생성되었습니다",
@@ -872,7 +948,9 @@
   "swapBackupUploadErr": "백업을 업로드하지 못했습니다: {error}",
   "@swapBackupUploadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "swapBackupLocalOnlySnack": "백업이 이 기기에 저장되었습니다.",
@@ -880,7 +958,9 @@
   "backupsScreenTitle": "{farmName}의 백업",
   "@backupsScreenTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "backupsEmpty": "아직 백업이 없습니다.",
@@ -896,13 +976,17 @@
   "backupsRestoreErr": "백업을 복원하지 못했습니다: {error}",
   "@backupsRestoreErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDeleteErr": "백업을 삭제하지 못했습니다: {error}",
   "@backupsDeleteErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCreate": "로컬 백업 생성",
@@ -911,7 +995,9 @@
   "backupsCreateErr": "백업을 생성하지 못했습니다: {error}",
   "@backupsCreateErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDownload": "다운로드",
@@ -919,7 +1005,9 @@
   "backupsDownloadErr": "백업을 다운로드하지 못했습니다: {error}",
   "@backupsDownloadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCopyOwn": "내 Drive에 복사",
@@ -929,7 +1017,9 @@
   "backupsUploadErr": "백업을 업로드하지 못했습니다: {error}",
   "@backupsUploadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsLocationLocal": "이 기기",
@@ -943,14 +1033,18 @@
   "deleteUnifiedTitle": "{farmName}을(를) 삭제하시겠습니까?",
   "@deleteUnifiedTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteChooseLocationBody": "삭제할 위치를 선택하세요. 이 기기의 사본은 영구적으로 삭제됩니다. Drive의 사본은 휴지통으로 이동합니다(30일).",
   "deleteDriveContextTitle": "{farmName}을(를) Drive에서 삭제하시겠습니까?",
   "@deleteDriveContextTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteDriveContextBody": "Drive 사본은 휴지통으로 이동하며, 30일 동안 복원할 수 있습니다.",
@@ -958,33 +1052,45 @@
   "deleteLocalContextTitle": "{farmName}을(를) 이 기기에서 삭제하시겠습니까?",
   "@deleteLocalContextTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalContextBody": "이 기기의 사본이 영구적으로 삭제됩니다.",
   "deleteLocalDriveCurrent": "회원님의 Drive 사본은 최신 상태이며({date}) 계속 이용할 수 있습니다.",
   "@deleteLocalDriveCurrent": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveAhead": "회원님의 Drive 사본이 더 최신이며({date}) 계속 이용할 수 있습니다.",
   "@deleteLocalDriveAhead": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveOlder": "회원님의 Drive 사본은 더 오래되었으며({driveDate}), 이 기기는 {localDate} 기준입니다.",
   "@deleteLocalDriveOlder": {
     "placeholders": {
-      "driveDate": { "type": "String" },
-      "localDate": { "type": "String" }
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalBackupAvailable": "이전 사본이 필요할 경우를 대비해 로컬 백업 {count}개를 이용할 수 있습니다.",
   "@deleteLocalBackupAvailable": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "deleteLocalNoRecovery": "이 세이브를 복구할 수 있는 Drive 사본이나 로컬 백업이 없습니다.",
@@ -995,7 +1101,11 @@
   "snackDeletedBoth": "\"{saveName}\"이(가) 이 기기에서 삭제되고 Drive 휴지통으로 이동되었습니다.",
   "@snackDeletedBoth": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "updateCheckFailed": "확인할 수 없습니다",
+  "updateCheckFailedRetry": "다시 시도하려면 탭하세요"
 }

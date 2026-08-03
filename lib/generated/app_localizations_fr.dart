@@ -2148,4 +2148,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'Téléverser et supprimer';
+
+  @override
+  String get updateCheckFailed => 'Vérification impossible';
+
+  @override
+  String get updateCheckFailedRetry => 'Appuyez pour réessayer';
 }

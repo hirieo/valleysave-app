@@ -97,14 +97,18 @@
   "disconnectBody": "Se cerrará la sesión de {email}. Tus saves en Drive no se borran, puedes reconectar cuando quieras.",
   "@disconnectBody": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "disconnectButton": "Desconectar Drive",
   "disconnectButtonEmail": "Desconectar de {email}",
   "@disconnectButtonEmail": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "connectedAsPrefix": "Conectado en",
@@ -264,28 +268,40 @@
   "overwriteDeltaPhrase": "{days, plural, =0{{time}} one{1 día y {time}} other{{days} días y {time}}}",
   "@overwriteDeltaPhrase": {
     "placeholders": {
-      "days": { "type": "int" },
-      "time": { "type": "String" }
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictAhead": "Vas {delta} por delante. Es seguro.",
   "@overwriteVerdictAhead": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictMoneySpent": "💰 El dinero actual bajó, pero el progreso general avanza — probablemente te lo gastaste en algo. No es una pérdida real.",
   "overwriteVerdictNegligible": "Diferencia mínima ({delta}). Cualquiera de las dos copias sirve.",
   "@overwriteVerdictNegligible": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictDanger": "⚠️ Vas a perder {delta} de progreso en {target}. Revísalo antes de continuar.",
   "@overwriteVerdictDanger": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmTitleUpload": "¿Confirmas la subida?",
@@ -293,8 +309,12 @@
   "overwriteConfirmBody": "Vas a perder {delta} en {target}. Esta acción no se puede deshacer.",
   "@overwriteConfirmBody": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmButtonUpload": "Confirmar subida",
@@ -304,14 +324,20 @@
   "overwriteIdenticalSummary": "{count, plural, one{✓ 1 idéntico} other{✓ {count} idénticos}} — {list}",
   "@overwriteIdenticalSummary": {
     "placeholders": {
-      "count": { "type": "int" },
-      "list": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadToOwner": "Subir al Drive de {email}",
   "@overwriteUploadToOwner": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadBoth": "Subir a los dos Drive",
@@ -319,22 +345,32 @@
   "overwriteConfirmBodyBoth": "Vas a perder {delta} en {targets}. Esta acción no se puede deshacer.",
   "@overwriteConfirmBodyBoth": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "targets": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "overwriteBothDestinationsLabel": "{first} y {second}",
   "@overwriteBothDestinationsLabel": {
     "placeholders": {
-      "first": { "type": "String" },
-      "second": { "type": "String" }
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
     }
   },
   "sharedTargetOwnDrive": "tu Drive",
   "sharedStatusLocalAhead": "Vas por delante en {targets}",
   "@sharedStatusLocalAhead": {
     "placeholders": {
-      "targets": { "type": "String" }
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "versionMismatch": "Versiones distintas: local {local} · Drive {drive}…",
@@ -354,7 +390,9 @@
   "autoSyncSnack": "{farmName} sincronizada automáticamente",
   "@autoSyncSnack": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncTooltipOn": "Auto-sync activado — se sincroniza sola cuando es seguro",
@@ -363,7 +401,9 @@
   "autoSyncExplainBody": "A partir de ahora, {farmName} se subirá o bajará sola cuando sea seguro, sin pedirte confirmación.",
   "@autoSyncExplainBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncExplainSafe": "Solo actúa cuando vas claramente por delante y no se pierde nada.",
@@ -672,15 +712,21 @@
   "sharedAccessReadOnly": "{email} te ha puesto en modo solo lectura — puedes ver y descargar, pero no sincronizar hacia su Drive.",
   "@sharedAccessReadOnly": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRevoked": "Ya no tienes acceso",
   "sharedRevokedDialogBody": "{email} ha dejado de compartir {farmName} contigo. Tu copia local y la de tu Drive se quedan tal cual, ahora en Mis partidas.",
   "@sharedRevokedDialogBody": {
     "placeholders": {
-      "email": {"type": "String"},
-      "farmName": {"type": "String"}
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedRevokedAccept": "Aceptar",
@@ -688,7 +734,9 @@
   "sharedSelfCleanupBody": "{farmName} apareció como compartida contigo por error — en realidad es tuya. Se ha corregido, ahora está en Mis partidas.",
   "@sharedSelfCleanupBody": {
     "placeholders": {
-      "farmName": {"type": "String"}
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeUploadOwn": "Subir a mi Drive",
@@ -699,14 +747,20 @@
   "sharedSideOwnerDrive": "DRIVE EN {email}",
   "@sharedSideOwnerDrive": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedSideDate": "Día {day} · Año {year}",
   "@sharedSideDate": {
     "placeholders": {
-      "day": {"type": "int"},
-      "year": {"type": "int"}
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "sharedStatusSyncedNoOwnDrive": "Sincronizado con el dueño · sin copia en tu Drive",
@@ -714,7 +768,9 @@
   "sharedStatusOwnerAheadNoOwnDrive": "{email} va por delante · sin copia en tu Drive",
   "@sharedStatusOwnerAheadNoOwnDrive": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedStatusAllSynced": "Sincronizado (local + los dos Drive)",
@@ -802,5 +858,7 @@
   "deleteOptionDriveOnly": "Solo de mi Drive",
   "deleteOptionBoth": "De ambas copias",
   "viewPlayersHint": "Ver jugadores",
-  "snackDeletedBoth": "\"{saveName}\" eliminada de este equipo y movida a la papelera de Drive."
+  "snackDeletedBoth": "\"{saveName}\" eliminada de este equipo y movida a la papelera de Drive.",
+  "updateCheckFailed": "No se pudo comprobar",
+  "updateCheckFailedRetry": "Toca para reintentar"
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -20,13 +21,39 @@ class UpdateInfo {
   final String? linuxUrl;
 }
 
+/// Resultado de comprobar actualizaciones. Los tres casos son DISTINTOS y
+/// deben mostrarse distinto (2026-08-02): antes `checkForUpdate` devolvía
+/// `UpdateInfo?` y cualquier fallo (sin red, timeout, 403 por límite de
+/// peticiones de la API de GitHub) caía en `catch (_) { return null; }`, que
+/// la UI pintaba como "Al día" — un fallo silencioso indistinguible de "no
+/// hay nada nuevo", que además hacía imposible diagnosticarlo.
+class UpdateCheckResult {
+  const UpdateCheckResult.available(this.info)
+      : failureReason = null;
+  const UpdateCheckResult.upToDate()
+      : info = null,
+        failureReason = null;
+  const UpdateCheckResult.failed(this.failureReason) : info = null;
+
+  final UpdateInfo? info;
+
+  /// Motivo técnico del fallo, para enseñarlo junto al aviso. `null` cuando la
+  /// comprobación sí se pudo hacer.
+  final String? failureReason;
+
+  bool get hasUpdate => info != null;
+  bool get failed => failureReason != null;
+}
+
 class UpdateService {
   static const _owner  = 'hirieo';
   static const _repo   = 'valleysave-app';
   static const _apiUrl = 'https://api.github.com/repos/$_owner/$_repo/releases/latest';
 
-  /// Returns [UpdateInfo] if a newer version exists, null otherwise.
-  static Future<UpdateInfo?> checkForUpdate() async {
+  /// Comprueba si hay una versión más reciente publicada. Ver
+  /// [UpdateCheckResult]: distingue "hay actualización" de "estás al día" y de
+  /// "no se pudo comprobar".
+  static Future<UpdateCheckResult> checkForUpdate() async {
     try {
       final info = await PackageInfo.fromPlatform();
       final res = await http.get(
@@ -34,21 +61,38 @@ class UpdateService {
         headers: {'Accept': 'application/vnd.github+json'},
       ).timeout(const Duration(seconds: 8));
 
-      if (res.statusCode != 200) return null;
+      if (res.statusCode != 200) {
+        // 403 casi siempre = límite de peticiones de la API pública de GitHub
+        // (60/hora POR IP, y una IP de salida de VPN la comparten cientos de
+        // personas, así que con VPN se agota constantemente).
+        final extra = res.statusCode == 403
+            ? ' (límite de peticiones de GitHub; si usas VPN, prueba sin ella)'
+            : '';
+        return UpdateCheckResult.failed('HTTP ${res.statusCode}$extra');
+      }
 
       final data = json.decode(res.body) as Map<String, dynamic>;
       final tag  = (data['tag_name'] as String? ?? '').replaceFirst('v', '');
-      if (tag.isEmpty || !isNewer(tag, info.version)) return null;
+      if (tag.isEmpty) {
+        return const UpdateCheckResult.failed('respuesta sin tag_name');
+      }
+      if (!isNewer(tag, info.version)) return const UpdateCheckResult.upToDate();
 
       final urls = selectAssetUrls(data['assets'] as List<dynamic>? ?? []);
-      return UpdateInfo(
-        version: tag,
-        windowsUrl: urls.windows,
-        androidUrl: urls.android,
-        linuxUrl: urls.linux,
+      return UpdateCheckResult.available(
+        UpdateInfo(
+          version: tag,
+          windowsUrl: urls.windows,
+          androidUrl: urls.android,
+          linuxUrl: urls.linux,
+        ),
       );
-    } catch (_) {
-      return null;
+    } on TimeoutException {
+      return const UpdateCheckResult.failed('sin respuesta (8 s)');
+    } on SocketException catch (e) {
+      return UpdateCheckResult.failed('sin conexión (${e.osError?.message ?? e.message})');
+    } catch (e) {
+      return UpdateCheckResult.failed(e.toString());
     }
   }
 

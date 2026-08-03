@@ -2030,6 +2030,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => '上传并删除';
+
+  @override
+  String get updateCheckFailed => '无法检查';
+
+  @override
+  String get updateCheckFailedRetry => '点击重试';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4055,4 +4061,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get makeHostUploadAndDelete => '上傳並刪除';
+
+  @override
+  String get updateCheckFailed => '無法檢查';
+
+  @override
+  String get updateCheckFailedRetry => '點擊重試';
 }

@@ -2131,4 +2131,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'Enviar e apagar';
+
+  @override
+  String get updateCheckFailed => 'Não foi possível verificar';
+
+  @override
+  String get updateCheckFailedRetry => 'Toque para tentar novamente';
 }

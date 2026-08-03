@@ -370,7 +370,9 @@
   "snackDriveError": "Drive: {error}",
   "@snackDriveError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "dlgDeleteLocalWarning": "⚠️ หากคุณไม่ได้อัปโหลดไปยัง Drive มันจะหายไปตลอดไป ไม่มีการกู้คืน",
@@ -381,7 +383,9 @@
   "dlgBridgeCopyDesc": "บันทึกพร้อมแล้ว ด้วยแอป Files ของคุณ ให้คัดลอกโฟลเดอร์ \"{saveName}\" และวางลงในโฟลเดอร์ Stardew",
   "@dlgBridgeCopyDesc": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "labelFrom": "จาก",
@@ -389,29 +393,45 @@
   "dlgDownloadNewDesc": "\"{saveName}\" (วัน {day}, {playtime}) จะถูกคัดลอกไปยังอุปกรณ์นี้",
   "@dlgDownloadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgDownloadOverwrite": "นี่จะเขียนทับบันทึกตัวเก็บไว้ข้างหน้าของ \"{saveName}\"",
   "@dlgDownloadOverwrite": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadNewDesc": "\"{saveName}\" (วัน {day}, {playtime}) จะถูกอัปโหลดไปยัง Drive ของคุณ",
   "@dlgUploadNewDesc": {
     "placeholders": {
-      "saveName": { "type": "String" },
-      "day": { "type": "int" },
-      "playtime": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "playtime": {
+        "type": "String"
+      }
     }
   },
   "dlgUploadOverwriteDrive": "นี่จะเขียนทับเวอร์ชัน Drive ของ \"{saveName}\"",
   "@dlgUploadOverwriteDrive": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
   },
   "pathLabelFromStardew": "จาก (Stardew)",
@@ -457,8 +477,12 @@
   "saveDateLabel": "{season} · ปี {year}",
   "@saveDateLabel": {
     "placeholders": {
-      "season": { "type": "String" },
-      "year": { "type": "int" }
+      "season": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "petCat": "แมว",
@@ -470,7 +494,9 @@
   "houseLevelN": "ระดับ {level}",
   "@houseLevelN": {
     "placeholders": {
-      "level": { "type": "int" }
+      "level": {
+        "type": "int"
+      }
     }
   },
   "tooltipLaunchGame": "เล่น",
@@ -490,15 +516,21 @@
   "makeHostDialogIntro": "{playerName} จะกลายเป็นเจ้าของบ้านของ {farmName}",
   "@makeHostDialogIntro": {
     "placeholders": {
-      "playerName": { "type": "String" },
-      "farmName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "makeHostNewCopyNote": "จะสร้างเซฟใหม่ขึ้นมา จากนั้นคุณจะเลือกเองว่าจะทำอย่างไรกับต้นฉบับ",
   "makeHostMoveCount": "{count, plural, other{วัตถุในฟาร์ม {count} ชิ้นจะถูกย้ายเพื่อเปิดพื้นที่ให้บ้าน จะไม่มีการลบสิ่งใดออก}}",
   "@makeHostMoveCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "makeHostHouseWarning": "บ้านของเจ้าของบ้านคนใหม่จะมีลักษณะเหมือนบ้านฟาร์มหลักของเกม รูปลักษณ์กระท่อมไม่รองรับหากไม่มีม็อด",
@@ -506,7 +538,9 @@
   "makeHostSuccess": "สร้างเซฟใหม่แล้ว: {playerName} เป็นเจ้าของบ้านคนใหม่แล้ว",
   "@makeHostSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "makeHostDeleteOriginalTitle": "ลบเซฟต้นฉบับออกจากเครื่องนี้หรือไม่?",
@@ -522,7 +556,9 @@
   "disconnectButtonEmail": "ตัดการเชื่อมต่อจาก {email}",
   "@disconnectButtonEmail": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "connectedAsPrefix": "บัญชีที่เชื่อมต่อ",
@@ -538,28 +574,40 @@
   "overwriteDeltaPhrase": "{days, plural, =0{{time}} other{{days} วันและ {time}}}",
   "@overwriteDeltaPhrase": {
     "placeholders": {
-      "days": { "type": "int" },
-      "time": { "type": "String" }
+      "days": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictAhead": "คุณล้ำหน้าอยู่ {delta} ปลอดภัยดี",
   "@overwriteVerdictAhead": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictMoneySpent": "💰 เงินปัจจุบันลดลง แต่ความคืบหน้าโดยรวมยังก้าวไปข้างหน้า — คุณอาจใช้จ่ายไปกับอะไรบางอย่าง ไม่ใช่การสูญเสียที่แท้จริง",
   "overwriteVerdictNegligible": "แตกต่างกันเพียงเล็กน้อย ({delta}) ใช้สำเนาไหนก็ได้",
   "@overwriteVerdictNegligible": {
     "placeholders": {
-      "delta": { "type": "String" }
+      "delta": {
+        "type": "String"
+      }
     }
   },
   "overwriteVerdictDanger": "⚠️ คุณกำลังจะสูญเสียความคืบหน้า {delta} ใน {target} ตรวจสอบให้ดีก่อนดำเนินการต่อ",
   "@overwriteVerdictDanger": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmTitleUpload": "ยืนยันการอัปโหลดหรือไม่?",
@@ -567,8 +615,12 @@
   "overwriteConfirmBody": "คุณกำลังจะสูญเสีย {delta} ใน {target} การกระทำนี้ไม่สามารถย้อนกลับได้",
   "@overwriteConfirmBody": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "target": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
     }
   },
   "overwriteConfirmButtonUpload": "ยืนยันการอัปโหลด",
@@ -578,14 +630,20 @@
   "overwriteIdenticalSummary": "{count, plural, other{✓ เหมือนกัน {count} รายการ}} — {list}",
   "@overwriteIdenticalSummary": {
     "placeholders": {
-      "count": { "type": "int" },
-      "list": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadToOwner": "อัปโหลดไปยัง Drive ของ {email}",
   "@overwriteUploadToOwner": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "overwriteUploadBoth": "อัปโหลดไปยัง Drive ทั้งสอง",
@@ -593,22 +651,32 @@
   "overwriteConfirmBodyBoth": "คุณจะสูญเสีย {delta} ใน {targets} การกระทำนี้ไม่สามารถย้อนกลับได้",
   "@overwriteConfirmBodyBoth": {
     "placeholders": {
-      "delta": { "type": "String" },
-      "targets": { "type": "String" }
+      "delta": {
+        "type": "String"
+      },
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "overwriteBothDestinationsLabel": "{first} และ {second}",
   "@overwriteBothDestinationsLabel": {
     "placeholders": {
-      "first": { "type": "String" },
-      "second": { "type": "String" }
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
     }
   },
   "sharedTargetOwnDrive": "Drive ของคุณ",
   "sharedStatusLocalAhead": "คุณล้ำหน้าอยู่ใน {targets}",
   "@sharedStatusLocalAhead": {
     "placeholders": {
-      "targets": { "type": "String" }
+      "targets": {
+        "type": "String"
+      }
     }
   },
   "snackReplacePrepareFailed": "ไม่สามารถเตรียมเซฟได้ ไม่มีการเปลี่ยนแปลงใดๆ บนดิสก์",
@@ -624,7 +692,9 @@
   "autoSyncSnack": "ซิงโครไนซ์ {farmName} โดยอัตโนมัติแล้ว",
   "@autoSyncSnack": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncTooltipOn": "เปิดใช้งานซิงค์อัตโนมัติ — จะซิงโครไนซ์ให้เองเมื่อปลอดภัย",
@@ -633,7 +703,9 @@
   "autoSyncExplainBody": "ตั้งแต่นี้ไป {farmName} จะอัปโหลดหรือดาวน์โหลดเองเมื่อปลอดภัย โดยไม่ต้องขอให้คุณยืนยัน",
   "@autoSyncExplainBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "autoSyncExplainSafe": "จะทำงานก็ต่อเมื่อคุณล้ำหน้าอย่างชัดเจนและไม่มีอะไรสูญหาย",
@@ -684,14 +756,18 @@
   "exportError": "ไม่สามารถส่งออกเซฟได้: {error}",
   "@exportError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "importAction": "นำเข้าเซฟ",
   "importSuccess": "นำเข้าเซฟของ {playerName} แล้ว",
   "@importSuccess": {
     "placeholders": {
-      "playerName": { "type": "String" }
+      "playerName": {
+        "type": "String"
+      }
     }
   },
   "importErrInvalidZip": "ไฟล์นี้ไม่ใช่ zip ที่ถูกต้อง",
@@ -715,7 +791,9 @@
   "shareSuccess": "แชร์กับ {email} แล้ว",
   "@shareSuccess": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "manageAccessTitle": "ผู้ที่มีสิทธิ์เข้าถึง",
@@ -725,7 +803,9 @@
   "manageAccessRevokeConfirm": "ต้องการเอาสิทธิ์การเข้าถึงของ {email} ออกหรือไม่? สำเนาในเครื่องที่พวกเขาดาวน์โหลดไปแล้วยังคงเป็นของพวกเขาต่อไป",
   "@manageAccessRevokeConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "driveOnlyControlsYourCopy": "การแชร์ควบคุมเฉพาะสำเนาของคุณบน Drive หากใครดาวน์โหลดไป สำเนานั้นจะเป็นของพวกเขา",
@@ -736,7 +816,9 @@
   "sharedWithMeOwnedBy": "แชร์โดย {email}",
   "@sharedWithMeOwnedBy": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRoleSync": "ซิงโครไนซ์",
@@ -747,7 +829,9 @@
   "sharedWithMeRemoveConfirm": "คุณจะไม่ซิงโครไนซ์กับ Drive ของ {email} อีกต่อไป แต่สามารถเพิ่มกลับมาได้ทุกเมื่อ — การแชร์ยังคงอยู่ สำเนาในเครื่องของคุณจะยังคงเป็นเซฟโคออปทั่วไป",
   "@sharedWithMeRemoveConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedLeaveConfirm": "คุณจะสูญเสียสิทธิ์เข้าถึงเซฟนี้อย่างแท้จริง คุณจะเพิ่มกลับมาไม่ได้เว้นแต่ {email} จะแชร์กับคุณอีกครั้ง สำเนาในเครื่องของคุณจะยังคงเป็นเซฟโคออปทั่วไป",
@@ -759,21 +843,29 @@
   "sharedWithMeSyncConfirm": "ต้องการเขียนทับสำเนาของ {email} บน Drive ด้วยเซฟในเครื่องของคุณหรือไม่?",
   "@sharedWithMeSyncConfirm": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedAccessReadOnly": "{email} ได้ตั้งค่าการเข้าถึงของคุณเป็นแบบอ่านอย่างเดียว — คุณดูและดาวน์โหลดได้ แต่ซิงโครไนซ์ไปยัง Drive ของพวกเขาไม่ได้",
   "@sharedAccessReadOnly": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeRevoked": "คุณไม่มีสิทธิ์เข้าถึงแล้ว",
   "sharedRevokedDialogBody": "{email} หยุดแชร์ {farmName} กับคุณแล้ว สำเนาในเครื่องและบน Drive ของคุณยังคงอยู่เหมือนเดิม ตอนนี้อยู่ใน \"เซฟของฉัน\"",
   "@sharedRevokedDialogBody": {
     "placeholders": {
-      "email": { "type": "String" },
-      "farmName": { "type": "String" }
+      "email": {
+        "type": "String"
+      },
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedRevokedAccept": "ตกลง",
@@ -781,7 +873,9 @@
   "sharedSelfCleanupBody": "{farmName} ปรากฏว่าถูกแชร์กับคุณโดยผิดพลาด — แต่จริงๆ แล้วเป็นของคุณ ได้รับการแก้ไขแล้ว ตอนนี้อยู่ใน \"เซฟของฉัน\"",
   "@sharedSelfCleanupBody": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "sharedWithMeUploadOwn": "อัปโหลดไปยัง Drive ของฉัน",
@@ -792,14 +886,20 @@
   "sharedSideOwnerDrive": "DRIVE ของ {email}",
   "@sharedSideOwnerDrive": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "sharedSideDate": "วัน {day} · ปี {year}",
   "@sharedSideDate": {
     "placeholders": {
-      "day": { "type": "int" },
-      "year": { "type": "int" }
+      "day": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
     }
   },
   "sharedStatusSyncedNoOwnDrive": "ซิงโครไนซ์กับเจ้าของแล้ว · ไม่มีสำเนาบน Drive ของคุณ",
@@ -834,7 +934,9 @@
   "sharedOriginFrom": "จาก {email}",
   "@sharedOriginFrom": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "swapBackupDialogTitle": "สร้างข้อมูลสำรองแล้ว",
@@ -846,7 +948,9 @@
   "swapBackupUploadErr": "ไม่สามารถอัปโหลดข้อมูลสำรองได้: {error}",
   "@swapBackupUploadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "swapBackupLocalOnlySnack": "บันทึกข้อมูลสำรองไว้ในเครื่องนี้แล้ว",
@@ -854,7 +958,9 @@
   "backupsScreenTitle": "ข้อมูลสำรองของ {farmName}",
   "@backupsScreenTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "backupsEmpty": "ยังไม่มีข้อมูลสำรอง",
@@ -870,13 +976,17 @@
   "backupsRestoreErr": "ไม่สามารถคืนค่าข้อมูลสำรองได้: {error}",
   "@backupsRestoreErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDeleteErr": "ไม่สามารถลบข้อมูลสำรองได้: {error}",
   "@backupsDeleteErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCreate": "สร้างข้อมูลสำรองในเครื่อง",
@@ -885,7 +995,9 @@
   "backupsCreateErr": "ไม่สามารถสร้างข้อมูลสำรองได้: {error}",
   "@backupsCreateErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsDownload": "ดาวน์โหลด",
@@ -893,7 +1005,9 @@
   "backupsDownloadErr": "ไม่สามารถดาวน์โหลดข้อมูลสำรองได้: {error}",
   "@backupsDownloadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsCopyOwn": "คัดลอกไปยัง Drive ของฉัน",
@@ -903,7 +1017,9 @@
   "backupsUploadErr": "ไม่สามารถอัปโหลดข้อมูลสำรองได้: {error}",
   "@backupsUploadErr": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "backupsLocationLocal": "เครื่องนี้",
@@ -917,14 +1033,18 @@
   "deleteUnifiedTitle": "ลบ {farmName} หรือไม่?",
   "@deleteUnifiedTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteChooseLocationBody": "เลือกว่าจะลบจากที่ไหน สำเนาในเครื่องนี้จะถูกลบอย่างถาวร ส่วนสำเนาบน Drive จะย้ายไปที่ถังขยะ (30 วัน)",
   "deleteDriveContextTitle": "ลบ {farmName} ออกจาก Drive หรือไม่?",
   "@deleteDriveContextTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteDriveContextBody": "สำเนาบน Drive จะถูกย้ายไปที่ถังขยะ ซึ่งคุณสามารถกู้คืนได้ภายใน 30 วัน",
@@ -932,33 +1052,45 @@
   "deleteLocalContextTitle": "ลบ {farmName} ออกจากเครื่องนี้หรือไม่?",
   "@deleteLocalContextTitle": {
     "placeholders": {
-      "farmName": { "type": "String" }
+      "farmName": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalContextBody": "สำเนาในเครื่องนี้จะถูกลบอย่างถาวร",
   "deleteLocalDriveCurrent": "สำเนาบน Drive ของคุณเป็นปัจจุบัน ({date}) และจะยังคงพร้อมใช้งาน",
   "@deleteLocalDriveCurrent": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveAhead": "สำเนาบน Drive ของคุณใหม่กว่า ({date}) และจะยังคงพร้อมใช้งาน",
   "@deleteLocalDriveAhead": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalDriveOlder": "สำเนาบน Drive ของคุณเก่ากว่า ({driveDate}); เครื่องนี้อยู่ที่ {localDate}",
   "@deleteLocalDriveOlder": {
     "placeholders": {
-      "driveDate": { "type": "String" },
-      "localDate": { "type": "String" }
+      "driveDate": {
+        "type": "String"
+      },
+      "localDate": {
+        "type": "String"
+      }
     }
   },
   "deleteLocalBackupAvailable": "มีข้อมูลสำรองในเครื่อง {count} ชุดพร้อมใช้งาน เผื่อคุณต้องการสำเนาก่อนหน้า",
   "@deleteLocalBackupAvailable": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "deleteLocalNoRecovery": "ไม่มีสำเนาบน Drive หรือข้อมูลสำรองในเครื่องที่จะกู้คืนเซฟนี้ได้",
@@ -969,7 +1101,11 @@
   "snackDeletedBoth": "\"{saveName}\" ถูกลบออกจากเครื่องนี้และย้ายไปที่ถังขยะของ Drive แล้ว",
   "@snackDeletedBoth": {
     "placeholders": {
-      "saveName": { "type": "String" }
+      "saveName": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "updateCheckFailed": "ตรวจสอบไม่ได้",
+  "updateCheckFailedRetry": "แตะเพื่อลองอีกครั้ง"
 }

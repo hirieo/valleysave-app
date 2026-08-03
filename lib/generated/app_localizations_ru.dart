@@ -2147,4 +2147,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'Загрузить и удалить';
+
+  @override
+  String get updateCheckFailed => 'Не удалось проверить';
+
+  @override
+  String get updateCheckFailedRetry => 'Нажмите, чтобы повторить';
 }

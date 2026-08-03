@@ -2139,4 +2139,10 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'Igo eta ezabatu';
+
+  @override
+  String get updateCheckFailed => 'Ezin izan da egiaztatu';
+
+  @override
+  String get updateCheckFailedRetry => 'Sakatu berriro saiatzeko';
 }

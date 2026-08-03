@@ -2120,4 +2120,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get makeHostUploadAndDelete => 'อัปโหลดและลบ';
+
+  @override
+  String get updateCheckFailed => 'ตรวจสอบไม่ได้';
+
+  @override
+  String get updateCheckFailedRetry => 'แตะเพื่อลองอีกครั้ง';
 }

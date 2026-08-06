@@ -12,7 +12,7 @@ No third-party servers. No subscriptions. No tracking. Your saves never leave yo
 [![Downloads](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![License: Polyform NC](https://img.shields.io/badge/License-Polyform%20NC-orange)](./LICENSE)
 ![Platforms](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Buy%20me%20a%20coffee-29ABE0?logo=ko-fi&logoColor=white)](https://ko-fi.com/hirieo)
 
 🇬🇧 English · [🇪🇸 Español](docs/readme/README.es.md) · [🇫🇷 Français](docs/readme/README.fr.md) · [🇩🇪 Deutsch](docs/readme/README.de.md) · [🇮🇹 Italiano](docs/readme/README.it.md) · [🇵🇹 Português](docs/readme/README.pt.md) · [Euskera](docs/readme/README.eu.md) · [🇷🇺 Русский](docs/readme/README.ru.md) · [🇺🇦 Українська](docs/readme/README.uk.md) · [🇯🇵 日本語](docs/readme/README.ja.md) · [🇰🇷 한국어](docs/readme/README.ko.md) · [🇨🇳 中文](docs/readme/README.zh.md) · [🇹🇼 中文（繁體）](docs/readme/README.zh-Hant.md) · [🇹🇭 ไทย](docs/readme/README.th.md)
 

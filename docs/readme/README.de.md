@@ -12,7 +12,7 @@ Keine Drittanbieter-Server. Keine Abos. Kein Tracking. Deine Spielstände verlas
 [![Downloads](https://img.shields.io/github/downloads/hirieo/valleysave-app/total?color=blue)](https://github.com/hirieo/valleysave-app/releases)
 [![Lizenz: Polyform NC](https://img.shields.io/badge/Lizenz-Polyform%20NC-orange)](../../LICENSE)
 ![Plattformen](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-lightgrey)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hirieo)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Spendier%20mir%20einen%20Kaffee-29ABE0?logo=ko-fi&logoColor=white)](https://ko-fi.com/hirieo)
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · 🇩🇪 Deutsch · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 

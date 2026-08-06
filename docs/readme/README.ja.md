@@ -16,6 +16,8 @@
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · 🇯🇵 日本語 · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="ValleySaveのメイン画面：Stardew Valleyのセーブデータのプレイ時間、スキル、このデバイスとGoogle Drive間の同期状態を表示" width="820">
+
 </div>
 
 ---

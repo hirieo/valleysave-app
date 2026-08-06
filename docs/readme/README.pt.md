@@ -16,6 +16,8 @@ Sem servidores de terceiros. Sem subscrições. Sem rastreio. Os teus saves nunc
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · 🇵🇹 Português · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="Ecrã principal do ValleySave: uma partida de Stardew Valley com tempo de jogo, habilidades e estado de sincronização entre este dispositivo e o Google Drive" width="820">
+
 </div>
 
 ---

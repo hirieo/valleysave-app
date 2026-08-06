@@ -16,6 +16,8 @@ Sin servidores de terceros. Sin suscripciones. Sin rastreo. Tus partidas nunca s
 
 [🇬🇧 English](../../README.md) · 🇪🇸 Español · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="Pantalla principal de ValleySave: una partida de Stardew Valley con tiempo jugado, habilidades y estado de sincronización entre este dispositivo y Google Drive" width="820">
+
 </div>
 
 ---

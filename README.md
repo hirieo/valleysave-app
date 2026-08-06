@@ -16,6 +16,8 @@ No third-party servers. No subscriptions. No tracking. Your saves never leave yo
 
 🇬🇧 English · [🇪🇸 Español](docs/readme/README.es.md) · [🇫🇷 Français](docs/readme/README.fr.md) · [🇩🇪 Deutsch](docs/readme/README.de.md) · [🇮🇹 Italiano](docs/readme/README.it.md) · [🇵🇹 Português](docs/readme/README.pt.md) · [Euskera](docs/readme/README.eu.md) · [🇷🇺 Русский](docs/readme/README.ru.md) · [🇺🇦 Українська](docs/readme/README.uk.md) · [🇯🇵 日本語](docs/readme/README.ja.md) · [🇰🇷 한국어](docs/readme/README.ko.md) · [🇨🇳 中文](docs/readme/README.zh.md) · [🇹🇼 中文（繁體）](docs/readme/README.zh-Hant.md) · [🇹🇭 ไทย](docs/readme/README.th.md)
 
+<img src="docs/screenshots/valleysave-saves-screen.png" alt="ValleySave main screen: a Stardew Valley farm save showing playtime, skills and sync status between this device and Google Drive" width="820">
+
 </div>
 
 ---

@@ -16,6 +16,8 @@
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · 🇨🇳 中文 · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="ValleySave 主界面：显示 Stardew Valley 存档的游戏时长、技能，以及本设备与 Google Drive 之间的同步状态" width="820">
+
 </div>
 
 ---

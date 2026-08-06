@@ -16,6 +16,8 @@ Pas de serveurs tiers. Pas d'abonnement. Pas de pistage. Vos sauvegardes ne quit
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · 🇫🇷 Français · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="Écran principal de ValleySave : une sauvegarde de ferme Stardew Valley avec temps de jeu, compétences et état de synchronisation entre cet appareil et Google Drive" width="820">
+
 </div>
 
 ---

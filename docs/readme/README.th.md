@@ -16,6 +16,8 @@
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · [Euskera](README.eu.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · 🇹🇭 ไทย
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="หน้าจอหลักของ ValleySave: เซฟฟาร์ม Stardew Valley แสดงเวลาเล่น ทักษะ และสถานะการซิงค์ระหว่างอุปกรณ์นี้กับ Google Drive" width="820">
+
 </div>
 
 ---

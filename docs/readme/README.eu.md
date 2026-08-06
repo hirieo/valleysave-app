@@ -16,6 +16,8 @@ Hirugarrenen zerbitzurik gabe. Harpidetzarik gabe. Jarraipenik gabe. Zure partid
 
 [🇬🇧 English](../../README.md) · [🇪🇸 Español](README.es.md) · [🇫🇷 Français](README.fr.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇵🇹 Português](README.pt.md) · Euskera · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇨🇳 中文](README.zh.md) · [🇹🇼 中文（繁體）](README.zh-Hant.md) · [🇹🇭 ไทย](README.th.md)
 
+<img src="../screenshots/valleysave-saves-screen.png" alt="ValleySave-en pantaila nagusia: Stardew Valley partida bat, jolas-denbora, gaitasunak eta gailu honen eta Google Drive-en arteko sinkronizazio-egoerarekin" width="820">
+
 </div>
 
 ---

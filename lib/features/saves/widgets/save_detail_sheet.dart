@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import '../../../core/models/player_stats.dart';
 import '../../../core/models/save_entry.dart';
 import '../../../core/models/save_file.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart';
 
 enum SaveDetailLocation { local, drive, extraDrive }
@@ -247,12 +249,23 @@ class _DetailSheet extends StatefulWidget {
   State<_DetailSheet> createState() => _DetailSheetState();
 }
 
+/// ←/→ como intención, no como tecla atada a un nodo concreto. Antes las
+/// flechas vivían en el `onKeyEvent` de un `Focus` invisible que además
+/// robaba el foco inicial: con mando eso dejaba la hoja sin anillo visible y
+/// con la A muerta al abrir. Ahora las gestiona un `Shortcuts` en la raíz de
+/// la hoja, así siguen funcionando sea cual sea el botón enfocado.
+class _PrevSideIntent extends Intent {
+  const _PrevSideIntent();
+}
+
+class _NextSideIntent extends Intent {
+  const _NextSideIntent();
+}
+
 class _DetailSheetState extends State<_DetailSheet>
     with SingleTickerProviderStateMixin {
   late int _index = widget.initialPage;
   int _direction = 1;
-  bool _leftPressed = false;
-  bool _rightPressed = false;
   // Compartido entre local y Drive: cambiar de jugador mueve las dos caras
   // aunque solo una esté visible en cada momento. Se siembra con lo que ya
   // estaba seleccionado en la tarjeta (y se propaga de vuelta al cambiar
@@ -271,6 +284,7 @@ class _DetailSheetState extends State<_DetailSheet>
     setState(() => _autoSync = !_autoSync);
     widget.onToggleAutoSync?.call();
   }
+
   late int _fallbackPlayerIndex = widget.initialPlayerIndex;
   late String? _selectedPlayerId =
       widget.initialPlayerId ??
@@ -278,12 +292,42 @@ class _DetailSheetState extends State<_DetailSheet>
         widget.sides[widget.initialPage].save,
         widget.initialPlayerIndex,
       );
-  final _focusNode = FocusNode();
+  final _focusNode = FocusNode(debugLabel: 'DetailSheetAnchor');
+  bool _handedOffFocus = false;
 
   @override
   void initState() {
     super.initState();
     _autoSync = widget.autoSyncEnabled;
+    // El nodo propio toma el foco inicial (`autofocus` en build) solo para
+    // que el árbol de la hoja lo tenga SIEMPRE dentro: si lo retuviera el
+    // scope de la ruta, que está por ENCIMA, los eventos de tecla nunca
+    // bajarían hasta el `Shortcuts` de aquí y las flechas dejarían de
+    // funcionar. Acto seguido se lo cede al primer control real.
+    //
+    // La cesión va en un listener, NO en un post-frame: `autofocus` se
+    // resuelve en `FocusManager.applyFocusChangesIfNeeded()`, que corre
+    // DESPUÉS del primer post-frame — un `nextFocus()` ahí lo pisaba el
+    // autofocus y el foco se quedaba en este nodo invisible (con la A
+    // muerta). Verificado con el test G4, que fallaba con la versión de
+    // post-frame. Reaccionar al evento de "he recibido el foco" no depende
+    // del orden de los frames.
+    _focusNode.addListener(_handOffFocusOnce);
+  }
+
+  /// Cede el foco al primer control enfocable de la hoja — la flecha ‹ (o ›
+  /// si ‹ está deshabilitada en la primera cara). Inofensivo: solo cambia de
+  /// cara. El botón de borrar es el último de la fila, nunca el primero.
+  /// Corre una sola vez: después, mover el foco es cosa del usuario.
+  void _handOffFocusOnce() {
+    if (_handedOffFocus || !_focusNode.hasPrimaryFocus) return;
+    _handedOffFocus = true;
+    _focusNode.removeListener(_handOffFocusOnce);
+    // Fuera del propio callback de foco: mover el foco desde dentro de una
+    // notificación de foco es reentrante.
+    scheduleMicrotask(() {
+      if (mounted) _focusNode.nextFocus();
+    });
   }
 
   // Entrada escalonada de los botones de acción: corre UNA vez al abrir la
@@ -297,6 +341,7 @@ class _DetailSheetState extends State<_DetailSheet>
   @override
   void dispose() {
     _entrance.dispose();
+    _focusNode.removeListener(_handOffFocusOnce);
     _focusNode.dispose();
     super.dispose();
   }
@@ -333,57 +378,33 @@ class _DetailSheetState extends State<_DetailSheet>
     Key? key,
     required bool enabled,
     required Color color,
-    required bool pressed,
     required VoidCallback onTap,
-    required ValueChanged<bool> onPressChange,
   }) {
-    return StatefulBuilder(
+    return PressableScale(
       key: key,
-      builder: (_, setHover) {
-        bool hovered = false;
-        return MouseRegion(
-          cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
-          onEnter: enabled ? (_) => setHover(() => hovered = true) : null,
-          onExit: enabled ? (_) => setHover(() => hovered = false) : null,
-          child: GestureDetector(
-            onTap: enabled ? onTap : null,
-            onTapDown: enabled ? (_) => onPressChange(true) : null,
-            onTapUp: (_) => onPressChange(false),
-            onTapCancel: () => onPressChange(false),
-            child: AnimatedScale(
-              scale: (enabled && pressed) ? 0.88 : (enabled && hovered ? 1.10 : 1.0),
-              duration: (enabled && pressed)
-                  ? const Duration(milliseconds: 100)
-                  : const Duration(milliseconds: 200),
-              curve: const Cubic(0.23, 1, 0.32, 1),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 140),
-                curve: Curves.easeOut,
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: enabled
-                      ? color.withValues(alpha: hovered ? 0.22 : 0.14)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: enabled
-                        ? color.withValues(alpha: hovered ? 0.60 : 0.40)
-                        : Colors.white.withValues(alpha: 0.10),
-                  ),
-                ),
-                child: Icon(
-                  icon,
-                  size: 16,
-                  color: enabled
-                      ? color.withValues(alpha: 0.90)
-                      : Colors.white.withValues(alpha: 0.20),
-                ),
-              ),
-            ),
+      onTap: enabled ? onTap : null,
+      pressedScale: 0.88,
+      child: Container(
+        width: 28,
+        height: 28,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: enabled ? color.withValues(alpha: 0.14) : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: enabled
+                ? color.withValues(alpha: 0.40)
+                : Colors.white.withValues(alpha: 0.10),
           ),
-        );
-      },
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: enabled
+              ? color.withValues(alpha: 0.90)
+              : Colors.white.withValues(alpha: 0.20),
+        ),
+      ),
     );
   }
 
@@ -393,205 +414,212 @@ class _DetailSheetState extends State<_DetailSheet>
     final active = sides[_index];
     final maxH = MediaQuery.of(context).size.height * 0.90;
 
-    return Focus(
-      focusNode: _focusNode,
-      autofocus: true,
-      onKeyEvent: (_, event) {
-        if (event is! KeyDownEvent) return KeyEventResult.ignored;
-        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          _navigate(-1);
-          return KeyEventResult.handled;
-        }
-        if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          _navigate(1);
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+    return Shortcuts(
+      shortcuts: const <ShortcutActivator, Intent>{
+        SingleActivator(LogicalKeyboardKey.arrowLeft): _PrevSideIntent(),
+        SingleActivator(LogicalKeyboardKey.arrowRight): _NextSideIntent(),
       },
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 420, maxHeight: maxH),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: Container(
-            key: const ValueKey('save-detail-sheet'),
-            decoration: BoxDecoration(
-              color: Color.alphaBlend(
-                active.color.withValues(alpha: 0.06),
-                const Color(0xFF0B0B0D),
-              ),
-              border: Border.all(
-                color: active.color.withValues(alpha: 0.55),
-                width: 1.5,
-              ),
-            ),
-            child: SafeArea(
-              top: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 7),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.20),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          _PrevSideIntent: CallbackAction<_PrevSideIntent>(
+            onInvoke: (_) {
+              _navigate(-1);
+              return null;
+            },
+          ),
+          _NextSideIntent: CallbackAction<_NextSideIntent>(
+            onInvoke: (_) {
+              _navigate(1);
+              return null;
+            },
+          ),
+        },
+        child: Focus(
+          focusNode: _focusNode,
+          autofocus: true,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 420, maxHeight: maxH),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(18),
+              child: Container(
+                key: const ValueKey('save-detail-sheet'),
+                decoration: BoxDecoration(
+                  color: Color.alphaBlend(
+                    active.color.withValues(alpha: 0.06),
+                    const Color(0xFF0B0B0D),
                   ),
-                  const SizedBox(height: 8),
-                  if (sides.length > 1) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _navArrow(
-                          Icons.chevron_left_rounded,
-                          key: const ValueKey('save-detail-nav-left'),
-                          enabled: _index > 0,
-                          color: sides[0].color,
-                          pressed: _leftPressed,
-                          onTap: () => _navigate(-1),
-                          onPressChange: (v) =>
-                              setState(() => _leftPressed = v),
+                  border: Border.all(
+                    color: active.color.withValues(alpha: 0.55),
+                    width: 1.5,
+                  ),
+                ),
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 7),
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.20),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
-                        const SizedBox(width: 12),
-                        ...List.generate(sides.length, (i) {
-                          final on = i == _index;
-                          final c = sides[i].color;
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.easeOut,
-                            margin: const EdgeInsets.symmetric(horizontal: 3),
-                            width: on ? 18 : 6,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: on ? c : c.withValues(alpha: 0.35),
-                              borderRadius: BorderRadius.circular(3),
+                      ),
+                      const SizedBox(height: 8),
+                      if (sides.length > 1) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _navArrow(
+                              Icons.chevron_left_rounded,
+                              key: const ValueKey('save-detail-nav-left'),
+                              enabled: _index > 0,
+                              color: sides[0].color,
+                              onTap: () => _navigate(-1),
                             ),
-                          );
-                        }),
-                        const SizedBox(width: 12),
-                        _navArrow(
-                          Icons.chevron_right_rounded,
-                          key: const ValueKey('save-detail-nav-right'),
-                          enabled: _index < sides.length - 1,
-                          color: sides[sides.length - 1].color,
-                          pressed: _rightPressed,
-                          onTap: () => _navigate(1),
-                          onPressChange: (v) =>
-                              setState(() => _rightPressed = v),
+                            const SizedBox(width: 12),
+                            ...List.generate(sides.length, (i) {
+                              final on = i == _index;
+                              final c = sides[i].color;
+                              return AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeOut,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 3,
+                                ),
+                                width: on ? 18 : 6,
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  color: on ? c : c.withValues(alpha: 0.35),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              );
+                            }),
+                            const SizedBox(width: 12),
+                            _navArrow(
+                              Icons.chevron_right_rounded,
+                              key: const ValueKey('save-detail-nav-right'),
+                              enabled: _index < sides.length - 1,
+                              color: sides[sides.length - 1].color,
+                              onTap: () => _navigate(1),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 4),
                       ],
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: SingleChildScrollView(
-                      child: Stack(
-                        children: [
-                          // El IndexedStack invisible mide TODAS las caras.
-                          // Así la hoja usa la altura natural de la más alta
-                          // de esta partida, no un 90 % fijo de la ventana.
-                          ExcludeSemantics(
-                            child: IgnorePointer(
-                              child: Opacity(
-                                opacity: 0,
-                                child: IndexedStack(
-                                  index: 0,
-                                  children: [
-                                    for (final side in sides)
-                                      _DetailPage(
-                                        side: side,
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: SingleChildScrollView(
+                          child: Stack(
+                            children: [
+                              // El IndexedStack invisible mide TODAS las caras.
+                              // Así la hoja usa la altura natural de la más alta
+                              // de esta partida, no un 90 % fijo de la ventana.
+                              ExcludeSemantics(
+                                child: IgnorePointer(
+                                  child: Opacity(
+                                    opacity: 0,
+                                    child: IndexedStack(
+                                      index: 0,
+                                      children: [
+                                        for (final side in sides)
+                                          _DetailPage(
+                                            side: side,
+                                            selectedPlayerId: _selectedPlayerId,
+                                            fallbackPlayerIndex:
+                                                _fallbackPlayerIndex,
+                                            onSelectPlayer: _selectPlayer,
+                                            entrance:
+                                                const AlwaysStoppedAnimation(1),
+                                            fillAvailable: false,
+                                            autoSyncEnabled: _autoSync,
+                                            onToggleAutoSync:
+                                                widget.onToggleAutoSync == null
+                                                ? null
+                                                : _toggleAutoSyncLocal,
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned.fill(
+                                child: GestureDetector(
+                                  onHorizontalDragEnd: (details) {
+                                    final v = details.primaryVelocity ?? 0;
+                                    if (v < -100 && _index < sides.length - 1) {
+                                      _navigate(1);
+                                    } else if (v > 100 && _index > 0) {
+                                      _navigate(-1);
+                                    }
+                                  },
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 260),
+                                    transitionBuilder: (child, animation) {
+                                      const curve = Cubic(0.23, 1, 0.32, 1);
+                                      final isNew =
+                                          child.key == ValueKey(_index);
+                                      final dir = _direction.toDouble();
+                                      return FadeTransition(
+                                        opacity: CurvedAnimation(
+                                          parent: animation,
+                                          curve: curve,
+                                        ),
+                                        child: SlideTransition(
+                                          position:
+                                              Tween<Offset>(
+                                                begin: isNew
+                                                    ? Offset(dir * 0.08, 0)
+                                                    : Offset(-dir * 0.08, 0),
+                                                end: Offset.zero,
+                                              ).animate(
+                                                CurvedAnimation(
+                                                  parent: animation,
+                                                  curve: curve,
+                                                ),
+                                              ),
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                    layoutBuilder: (current, previous) => Stack(
+                                      fit: StackFit.expand,
+                                      alignment: Alignment.topCenter,
+                                      children: [...previous, ?current],
+                                    ),
+                                    child: KeyedSubtree(
+                                      key: ValueKey(
+                                        'save-detail-${active.location.name}',
+                                      ),
+                                      child: _DetailPage(
+                                        side: active,
                                         selectedPlayerId: _selectedPlayerId,
                                         fallbackPlayerIndex:
                                             _fallbackPlayerIndex,
                                         onSelectPlayer: _selectPlayer,
-                                        entrance: const AlwaysStoppedAnimation(
-                                          1,
-                                        ),
-                                        fillAvailable: false,
+                                        entrance: _entrance,
+                                        fillAvailable: true,
                                         autoSyncEnabled: _autoSync,
                                         onToggleAutoSync:
                                             widget.onToggleAutoSync == null
                                             ? null
                                             : _toggleAutoSyncLocal,
                                       ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned.fill(
-                            child: GestureDetector(
-                              onHorizontalDragEnd: (details) {
-                                final v = details.primaryVelocity ?? 0;
-                                if (v < -100 && _index < sides.length - 1) {
-                                  _navigate(1);
-                                } else if (v > 100 && _index > 0) {
-                                  _navigate(-1);
-                                }
-                              },
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 260),
-                                transitionBuilder: (child, animation) {
-                                  const curve = Cubic(0.23, 1, 0.32, 1);
-                                  final isNew = child.key == ValueKey(_index);
-                                  final dir = _direction.toDouble();
-                                  return FadeTransition(
-                                    opacity: CurvedAnimation(
-                                      parent: animation,
-                                      curve: curve,
                                     ),
-                                    child: SlideTransition(
-                                      position:
-                                          Tween<Offset>(
-                                            begin: isNew
-                                                ? Offset(dir * 0.08, 0)
-                                                : Offset(-dir * 0.08, 0),
-                                            end: Offset.zero,
-                                          ).animate(
-                                            CurvedAnimation(
-                                              parent: animation,
-                                              curve: curve,
-                                            ),
-                                          ),
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                                layoutBuilder: (current, previous) => Stack(
-                                  fit: StackFit.expand,
-                                  alignment: Alignment.topCenter,
-                                  children: [...previous, ?current],
-                                ),
-                                child: KeyedSubtree(
-                                  key: ValueKey(
-                                    'save-detail-${active.location.name}',
-                                  ),
-                                  child: _DetailPage(
-                                    side: active,
-                                    selectedPlayerId: _selectedPlayerId,
-                                    fallbackPlayerIndex: _fallbackPlayerIndex,
-                                    onSelectPlayer: _selectPlayer,
-                                    entrance: _entrance,
-                                    fillAvailable: true,
-                                    autoSyncEnabled: _autoSync,
-                                    onToggleAutoSync:
-                                        widget.onToggleAutoSync == null
-                                        ? null
-                                        : _toggleAutoSyncLocal,
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -845,7 +873,7 @@ class _DetailPage extends StatelessWidget {
       children.add(
         _stagger(
           staggerIndex++,
-          _Pressable(
+          PressableScale(
             onTap: () {
               Navigator.pop(context);
               side.onAction!.call();
@@ -978,7 +1006,7 @@ class _DestructiveAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Pressable(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         width: double.infinity,
@@ -1039,7 +1067,7 @@ class _SecondaryAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = accentColor;
-    return _Pressable(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 4),
@@ -1112,39 +1140,6 @@ class _SecondaryAction extends StatelessWidget {
   }
 }
 
-/// Envoltorio de feedback al pulsar: `scale(0.97)` en 140ms con la curva de
-/// la app (Emil — botones deben "sentirse" al presionar).
-class _Pressable extends StatefulWidget {
-  const _Pressable({required this.onTap, required this.child});
-  final VoidCallback onTap;
-  final Widget child;
-
-  @override
-  State<_Pressable> createState() => _PressableState();
-}
-
-class _PressableState extends State<_Pressable> {
-  bool _pressed = false;
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) => setState(() => _pressed = false),
-        onTapCancel: () => setState(() => _pressed = false),
-        child: AnimatedScale(
-          scale: _pressed ? 0.97 : (_hovered ? 1.02 : 1.0),
-          duration: const Duration(milliseconds: 140),
-          curve: const Cubic(0.23, 1, 0.32, 1),
-          child: widget.child,
-        ),
-      ),
-    );
-  }
-}
+// `_Pressable` local (idéntico a `PressableScale`, que ya trae foco de
+// teclado/mando) se eliminó 2026-08 — los 3 usos de abajo pasan a usar
+// directamente `PressableScale`.

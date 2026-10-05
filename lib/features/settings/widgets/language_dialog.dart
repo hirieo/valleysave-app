@@ -97,6 +97,7 @@ class _LanguageDialogState extends State<LanguageDialog>
                     ),
                     const Spacer(),
                     PressableScale(
+                      autofocus: true,
                       onTap: () => Navigator.pop(context),
                       semanticLabel: widget.l10n.cancel,
                       child: Icon(
@@ -225,9 +226,6 @@ class _LangRow extends StatefulWidget {
 }
 
 class _LangRowState extends State<_LangRow> {
-  bool _pressed = false;
-  bool _hovered = false;
-
   @override
   Widget build(BuildContext context) {
     final start = (widget.staggerIndex * 0.06).clamp(0.0, 0.9);
@@ -246,22 +244,10 @@ class _LangRowState extends State<_LangRow> {
           child: child,
         ),
       ),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => setState(() => _hovered = true),
-        onExit: (_) => setState(() => _hovered = false),
-        child: GestureDetector(
+      child: PressableScale(
+        pressedScale: 0.985,
         onTap: widget.onTap,
-        onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) => setState(() => _pressed = false),
-        onTapCancel: () => setState(() => _pressed = false),
-        child: AnimatedScale(
-          scale: _pressed ? 0.985 : (_hovered ? 1.01 : 1.0),
-          duration: _pressed
-              ? const Duration(milliseconds: 80)
-              : const Duration(milliseconds: 200),
-          curve: const Cubic(0.23, 1, 0.32, 1),
-          child: AnimatedContainer(
+        child: AnimatedContainer(
             duration: const Duration(milliseconds: 160),
             curve: Curves.easeOut,
             margin: const EdgeInsets.symmetric(vertical: 2),
@@ -269,10 +255,6 @@ class _LangRowState extends State<_LangRow> {
             decoration: BoxDecoration(
               color: widget.selected
                   ? widget.accent.withValues(alpha: 0.10)
-                  : _pressed
-                  ? Colors.white.withValues(alpha: 0.04)
-                  : _hovered
-                  ? Colors.white.withValues(alpha: 0.03)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
@@ -319,8 +301,6 @@ class _LangRowState extends State<_LangRow> {
                 ),
               ],
             ),
-          ),
-        ),
         ),
       ),
     );

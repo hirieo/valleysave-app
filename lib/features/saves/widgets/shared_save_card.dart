@@ -8,6 +8,7 @@ import '../../../core/models/save_file.dart';
 import '../../../core/models/shared_save_entry.dart';
 import '../../../core/models/shared_sync_state.dart';
 import '../../../core/services/season_controller.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../shared/widgets/save_busy_indicator.dart';
 import '../../../shared/widgets/pressable_scale.dart';
@@ -776,42 +777,47 @@ class _FooterAction extends StatefulWidget {
 }
 
 class _FooterActionState extends State<_FooterAction> {
-  bool _pressed = false;
-  bool _hovered = false;
+  bool _focused = false;
+  final _focusNode = FocusNode(debugLabel: 'FooterAction');
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final enabled = widget.onTap != null;
-    return MouseRegion(
-      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
-      onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
-      onExit: enabled ? (_) => setState(() => _hovered = false) : null,
-      child: GestureDetector(
-      onTap: enabled ? widget.onTap : null,
-      onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.96 : 1.0,
-        duration: const Duration(milliseconds: 140),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
+    return PressableScale(
+      focusNode: _focusNode,
+      onFocusHighlightChanged: (v) => setState(() => _focused = v),
+      onTap: widget.onTap,
+      pressedScale: 0.96,
+      child: Container(
           padding: widget.iconOnly
               ? const EdgeInsets.all(9)
               : const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: widget.color.withValues(
-              alpha: widget.filled
-                  ? (_hovered ? 0.24 : 0.16)
-                  : (_hovered ? 0.08 : 0.0),
+              alpha: widget.filled ? 0.16 : 0.0,
             ),
             border: Border.all(
-              color: widget.color.withValues(alpha: _hovered ? 0.75 : 0.5),
+              color: _focused
+                  ? AppColors.accent
+                  : widget.color.withValues(alpha: 0.5),
+              width: _focused ? 1.6 : 1.0,
             ),
             borderRadius: BorderRadius.circular(10),
+            boxShadow: _focused
+                ? [
+                    BoxShadow(
+                      color: AppColors.accentGlow,
+                      blurRadius: 10,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : null,
           ),
           child: widget.iconOnly
               ? Icon(widget.icon, size: 14, color: widget.color)
@@ -830,8 +836,6 @@ class _FooterActionState extends State<_FooterAction> {
                     ),
                   ],
                 ),
-        ),
-      ),
       ),
     );
   }

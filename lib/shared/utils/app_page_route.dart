@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppPageRoute<T> extends PageRouteBuilder<T> {
-  AppPageRoute({required WidgetBuilder builder, super.settings})
+  AppPageRoute({required this.builder, super.settings})
       : super(
           pageBuilder: (context, animation, secondaryAnimation) =>
               builder(context),
@@ -21,4 +21,10 @@ class AppPageRoute<T> extends PageRouteBuilder<T> {
             );
           },
         );
+
+  /// Guardado (no solo pasado al `pageBuilder`) para que `GamepadService`
+  /// pueda reabrir la MISMA pantalla si el mando la cierra con LT y luego
+  /// la reabre con RT — sin esto, una vez hecho pop no hay forma de saber
+  /// cómo reconstruirla.
+  final WidgetBuilder builder;
 }

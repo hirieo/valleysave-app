@@ -41,6 +41,7 @@ import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
 import 'save_card.dart';
 import 'widgets/backup_action_button.dart';
+import 'widgets/card_focus_frame.dart';
 import 'widgets/latest_badge.dart';
 import 'widgets/shared_folder_picker_screen.dart';
 import 'widgets/saves_top_bar.dart';
@@ -117,6 +118,40 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   bool _refreshing = false;
   bool _gameCanLaunch = false;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
+
+  // ── Selección de partida a dos niveles (2026-08-15) ──
+  // Nivel 1 (recuadro entero) / nivel 2 (dentro, A/B) — ver
+  // `CardFocusFrame`. Registro por `folderName`, para que arriba/abajo en
+  // nivel 1 pueda pedir el foco de la tarjeta anterior/siguiente por orden
+  // de lista, sin depender de geometría.
+  final Map<String, FocusNode> _cardLevel1Nodes = {};
+
+  void _registerCardLevel1Node(String cardId, FocusNode node) {
+    _cardLevel1Nodes[cardId] = node;
+  }
+
+  void _unregisterCardLevel1Node(String cardId) {
+    _cardLevel1Nodes.remove(cardId);
+  }
+
+  bool _canMoveCardSelection(
+    List<SaveEntry> entries,
+    int currentIndex,
+    int delta,
+  ) {
+    final target = currentIndex + delta;
+    return target >= 0 && target < entries.length;
+  }
+
+  void _moveCardSelection(
+    List<SaveEntry> entries,
+    int currentIndex,
+    int delta,
+  ) {
+    final target = currentIndex + delta;
+    if (target < 0 || target >= entries.length) return;
+    _cardLevel1Nodes[entries[target].folderName]?.requestFocus();
+  }
 
   // ── US5 — Compartidas conmigo (independiente de _entries/_loading) ──
   List<SharedSaveEntry> _sharedEntries = [];
@@ -328,6 +363,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   const SizedBox(height: 4),
                   InkWell(
                     borderRadius: BorderRadius.circular(8),
+                    // `InkWell` ya trae foco de teclado/mando de serie —
+                    // solo le faltaba un color de foco visible sobre este
+                    // fondo oscuro (el de Material por defecto casi no se ve).
+                    focusColor: AppColors.accent.withValues(alpha: 0.15),
                     onTap: () => setDialogState(
                       () => dontShowAgain = !dontShowAgain,
                     ),
@@ -395,6 +434,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 ),
                 ActionBtn(
                   label: l10n.cancel,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: 0.55),
                   filled: false,
                   onTap: () => Navigator.pop(
@@ -978,6 +1018,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             actions: [
               ActionBtn(
                 label: l10n.sharedRevokedAccept,
+                autofocus: true,
                 color: const Color(0xFFE0B850),
                 filled: true,
                 onTap: () => Navigator.pop(ctx),
@@ -1255,6 +1296,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   actions: [
                     ActionBtn(
                       label: l10n.cancel,
+                      autofocus: true,
                       color: Colors.white.withValues(alpha: 0.55),
                       filled: false,
                       onTap: () => Navigator.pop(dialogContext),
@@ -1390,6 +1432,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -1439,6 +1482,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -1549,6 +1593,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             actions: [
               ActionBtn(
                 label: l10n.cardCloseBarrier,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx),
@@ -1646,6 +1691,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             actions: [
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx),
@@ -2371,6 +2417,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   onTap: () =>
                       Navigator.pop(ctx, (controller.text.trim(), role)),
                 ),
+                // SIN `autofocus` a propósito: este diálogo es el único con
+                // un `TextField(autofocus: true)` (el email). Dos autofocus en
+                // el mismo scope se pelean por el foco, y aquí escribir es el
+                // objetivo. Compartir tampoco es destructivo — se revoca.
                 ActionBtn(
                   label: l10n.cancel,
                   color: Colors.white.withValues(alpha: 0.55),
@@ -2587,6 +2637,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               actions: [
                 ActionBtn(
                   label: l10n.cardCloseBarrier,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: 0.55),
                   filled: false,
                   onTap: () => Navigator.pop(ctx),
@@ -2795,6 +2846,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 width: double.infinity,
                 child: ActionBtn(
                   label: l10n.sharedRevokedAccept,
+                  autofocus: true,
                   color: AppColors.statusErr,
                   icon: Icons.check_rounded,
                   filled: true,
@@ -2981,6 +3033,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 width: double.infinity,
                 child: ActionBtn(
                   label: l10n.cancel,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: 0.55),
                   filled: false,
                   onTap: () => Navigator.pop(ctx, false),
@@ -3069,6 +3122,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 width: double.infinity,
                 child: ActionBtn(
                   label: l10n.swapBackupLocalOnly,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: 0.65),
                   icon: Icons.laptop_mac_rounded,
                   filled: false,
@@ -3298,6 +3352,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 actions: [
                   ActionBtn(
                     label: l10n.cardCloseBarrier,
+                    autofocus: true,
                     color: Colors.white.withValues(alpha: 0.55),
                     filled: false,
                     onTap: () => Navigator.pop(ctx),
@@ -3864,6 +3919,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 width: double.infinity,
                 child: ActionBtn(
                   label: l10n.cancel,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: .55),
                   filled: false,
                   onTap: () => Navigator.pop(ctx),
@@ -3923,6 +3979,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 width: double.infinity,
                 child: ActionBtn(
                   label: l10n.cancel,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: 0.55),
                   filled: false,
                   onTap: () => Navigator.pop(ctx, false),
@@ -4093,6 +4150,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 width: double.infinity,
                 child: ActionBtn(
                   label: l10n.cancel,
+                  autofocus: true,
                   color: Colors.white.withValues(alpha: 0.55),
                   filled: false,
                   onTap: () => Navigator.pop(ctx),
@@ -4143,6 +4201,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -4361,6 +4420,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   ),
                   ActionBtn(
                     label: l10n.cancel,
+                    autofocus: true,
                     color: Colors.white.withValues(alpha: 0.55),
                     filled: false,
                     onTap: () => Navigator.pop(ctx, false),
@@ -4531,6 +4591,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   ),
                   ActionBtn(
                     label: l10n.cancel,
+                    autofocus: true,
                     color: Colors.white.withValues(alpha: 0.55),
                     filled: false,
                     onTap: () => Navigator.pop(ctx, false),
@@ -4998,6 +5059,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -5054,6 +5116,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -5406,6 +5469,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -5927,11 +5991,41 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     });
   }
 
+  // TEMPORAL — ver comentario en el `onKeyEvent` de abajo. Quitar junto con
+  // esa llamada tras diagnosticar el bug real de navegación en la barra.
+  void _debugLogFocus(String label) {
+    try {
+      final f = primaryFocus;
+      final line =
+          '${DateTime.now().toIso8601String()} $label -> '
+          'debugLabel=${f?.debugLabel} rect=${f?.rect} '
+          'hasPrimaryFocus=${f?.hasPrimaryFocus}\n';
+      File(
+        '${Directory.systemTemp.path}\\valleysave_debug.log',
+      ).writeAsStringSync(line, mode: FileMode.append, flush: true);
+    } catch (_) {
+      // El log de depuración nunca debe romper la app real.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Focus(
       autofocus: true,
       onKeyEvent: (_, event) {
+        // TEMPORAL — depurar por qué flecha derecha no mueve el foco entre
+        // los iconos de la barra en la app real (2026-08-17). Quitar tras
+        // diagnosticar. No usa consola: exe release no tiene una.
+        if (event is KeyDownEvent &&
+            (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+                event.logicalKey == LogicalKeyboardKey.arrowRight ||
+                event.logicalKey == LogicalKeyboardKey.arrowUp ||
+                event.logicalKey == LogicalKeyboardKey.arrowDown)) {
+          _debugLogFocus('ANTES ${event.logicalKey.debugName}');
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _debugLogFocus('DESPUES ${event.logicalKey.debugName}');
+          });
+        }
         if (event is KeyDownEvent &&
             event.logicalKey == LogicalKeyboardKey.f5) {
           _refresh();
@@ -6039,6 +6133,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         backgroundColor: AppColors.surface,
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          // Navegación por teclado/mando (2026-08): `focusInDirection` solo
+          // puede saltar a una card que YA esté construida — con la lazy
+          // list normal (cacheExtent por defecto, ~250px) el foco se
+          // quedaba atascado nada más salir de lo visible. 2000px cubre
+          // cómodamente varias partidas de sobra en ambas direcciones sin
+          // llegar a construir listas enteras de golpe.
+          // Su reemplazo (`scrollCacheExtent`/`ScrollCacheExtent`) no está
+          // exportado públicamente todavía en este SDK (v3.41 recién marcó
+          // `cacheExtent` obsoleto) — sigue siendo el único funcional.
+          // ignore: deprecated_member_use
+          cacheExtent: 2000,
           itemCount: itemCount,
           separatorBuilder: (context, index) => const SizedBox(height: 14),
           itemBuilder: (_, i) {
@@ -6072,7 +6177,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                         LatestBadge(
                           color: visibleEntries[0].primary.seasonColor,
                         ),
-                      SaveCard(
+                      CardFocusFrame(
+                        cardId: visibleEntries[i].folderName,
+                        registerNode: _registerCardLevel1Node,
+                        unregisterNode: _unregisterCardLevel1Node,
+                        canMoveSelection: (delta) =>
+                            _canMoveCardSelection(visibleEntries, i, delta),
+                        onMoveSelection: (delta) =>
+                            _moveCardSelection(visibleEntries, i, delta),
+                        child: SaveCard(
                         entry: visibleEntries[i],
                         busy: _busy.contains(visibleEntries[i].folderName),
                         onUpload: () => _handleUpload(visibleEntries[i]),
@@ -6123,6 +6236,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                         ),
                         onToggleAutoSync: () =>
                             _toggleAutoSync(visibleEntries[i].folderName),
+                        ),
                       ),
                     ],
                   ),
@@ -6414,21 +6528,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     // Mismo lenguaje que _modeTile de Opciones: transparente sobre el canvas,
     // tinte de estación; el recomendado destacado, el otro tenue pero acorde.
     final season = _seasonAccent;
-    bool pressed = false;
-    return StatefulBuilder(
-      builder: (_, setState) => Listener(
-        onPointerDown: (_) => setState(() => pressed = true),
-        onPointerUp: (_) => setState(() => pressed = false),
-        onPointerCancel: (_) => setState(() => pressed = false),
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedScale(
-            scale: pressed ? 0.97 : 1.0,
-            duration: pressed
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            child: Container(
+    return PressableScale(
+      onTap: onTap,
+      child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: recommended
@@ -6510,9 +6612,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -6520,54 +6619,38 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Widget _howItWorksLink() {
     final accent =
         SeasonData.data[SeasonController.instance.season.value]!.accentColor;
-    bool pressed = false;
-    return StatefulBuilder(
-      builder: (_, setState) => Listener(
-        onPointerDown: (_) => setState(() => pressed = true),
-        onPointerUp: (_) => setState(() => pressed = false),
-        onPointerCancel: (_) => setState(() => pressed = false),
-        child: GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            AppPageRoute(
-              builder: (_) =>
-                  const HowItWorksScreen(scrollToSection: 'shizuku'),
+    return PressableScale(
+      onTap: () => Navigator.push(
+        context,
+        AppPageRoute(
+          builder: (_) => const HowItWorksScreen(scrollToSection: 'shizuku'),
+        ),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.32),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: accent.withValues(alpha: 0.70)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.help_outline_rounded,
+              size: 15,
+              color: Colors.white.withValues(alpha: 0.90),
             ),
-          ),
-          child: AnimatedScale(
-            scale: pressed ? 0.97 : 1.0,
-            duration: pressed
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.32),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: accent.withValues(alpha: 0.70)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.help_outline_rounded,
-                    size: 15,
-                    color: Colors.white.withValues(alpha: 0.90),
-                  ),
-                  const SizedBox(width: 7),
-                  Text(
-                    AppLocalizations.of(context)!.howItWorks,
-                    style: GoogleFonts.firaCode(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white.withValues(alpha: 0.90),
-                    ),
-                  ),
-                ],
+            const SizedBox(width: 7),
+            Text(
+              AppLocalizations.of(context)!.howItWorks,
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withValues(alpha: 0.90),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -6833,43 +6916,24 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// Botón compacto (p. ej. "conceder") para integrar dentro de una fila.
   Widget _miniGateButton(String label, VoidCallback onTap, Color tone) {
-    bool pressed = false;
-    bool hovered = false;
-    return StatefulBuilder(
-      builder: (_, setState) => MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => setState(() => hovered = true),
-        onExit: (_) => setState(() => hovered = false),
-        child: GestureDetector(
-        onTap: onTap,
-        onTapDown: (_) => setState(() => pressed = true),
-        onTapUp: (_) => setState(() => pressed = false),
-        onTapCancel: () => setState(() => pressed = false),
-        child: AnimatedScale(
-          scale: pressed ? 0.94 : (hovered ? 1.04 : 1.0),
-          duration: pressed
-              ? const Duration(milliseconds: 100)
-              : const Duration(milliseconds: 200),
-          curve: const Cubic(0.23, 1, 0.32, 1),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 140),
-            curve: Curves.easeOut,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: BoxDecoration(
-              color: tone.withValues(alpha: hovered ? 0.26 : 0.18),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: tone.withValues(alpha: hovered ? 0.65 : 0.45)),
-            ),
-            child: Text(
-              label,
-              style: GoogleFonts.firaCode(
-                fontSize: 10.5,
-                fontWeight: FontWeight.w700,
-                color: tone,
-              ),
-            ),
-          ),
+    return PressableScale(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 140),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: tone.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: tone.withValues(alpha: 0.45)),
         ),
+        child: Text(
+          label,
+          style: GoogleFonts.firaCode(
+            fontSize: 10.5,
+            fontWeight: FontWeight.w700,
+            color: tone,
+          ),
         ),
       ),
     );
@@ -6935,46 +6999,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _smallButton(String label, VoidCallback onTap, {IconData? icon}) {
     final tone = _seasonAccent;
-    bool pressed = false;
-    return StatefulBuilder(
-      builder: (_, setState) => Listener(
-        onPointerDown: (_) => setState(() => pressed = true),
-        onPointerUp: (_) => setState(() => pressed = false),
-        onPointerCancel: (_) => setState(() => pressed = false),
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedScale(
-            scale: pressed ? 0.95 : 1.0,
-            duration: pressed
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: tone.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: tone.withValues(alpha: 0.40)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: 13, color: tone),
-                    const SizedBox(width: 5),
-                  ],
-                  Text(
-                    label,
-                    style: GoogleFonts.firaCode(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: tone,
-                    ),
-                  ),
-                ],
+    return PressableScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: tone.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: tone.withValues(alpha: 0.40)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 13, color: tone),
+              const SizedBox(width: 5),
+            ],
+            Text(
+              label,
+              style: GoogleFonts.firaCode(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: tone,
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -6982,42 +7031,25 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Widget _gateButton(String label, VoidCallback onTap, {required bool filled}) {
     final tone = _seasonAccent;
-    bool pressed = false;
-    return StatefulBuilder(
-      builder: (_, setState) => Listener(
-        onPointerDown: (_) => setState(() => pressed = true),
-        onPointerUp: (_) => setState(() => pressed = false),
-        onPointerCancel: (_) => setState(() => pressed = false),
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedScale(
-            scale: pressed ? 0.97 : 1.0,
-            duration: pressed
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: filled
-                    ? tone.withValues(alpha: 0.14)
-                    : Colors.transparent,
-                border: Border.all(
-                  color: tone.withValues(alpha: filled ? 0.55 : 0.28),
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                label,
-                style: GoogleFonts.firaCode(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: filled ? tone : AppColors.textFaint,
-                ),
-              ),
-            ),
+    return PressableScale(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: filled ? tone.withValues(alpha: 0.14) : Colors.transparent,
+          border: Border.all(
+            color: tone.withValues(alpha: filled ? 0.55 : 0.28),
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.firaCode(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: filled ? tone : AppColors.textFaint,
           ),
         ),
       ),

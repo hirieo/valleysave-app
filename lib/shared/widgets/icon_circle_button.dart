@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
+import '../../core/services/gamepad_service.dart';
+import '../../core/theme/app_colors.dart';
+
 class IconCircleButton extends StatefulWidget {
   const IconCircleButton({
     super.key,
@@ -9,12 +12,19 @@ class IconCircleButton extends StatefulWidget {
     this.spinning = false,
     this.tooltip,
     this.color,
+    this.gamepadKey,
   });
   final IconData icon;
   final VoidCallback onTap;
   final bool spinning;
   final String? tooltip;
   final Color? color;
+
+  /// Nombre estable para que LB/RB/View/Start puedan enfocar o activar este
+  /// botón directamente desde `GamepadService`, sin depender del foco
+  /// actual — ver `GamepadService.kTopbar*`. `null` = no se registra, sigue
+  /// siendo alcanzable con D-pad/stick como cualquier otro control.
+  final String? gamepadKey;
 
   @override
   State<IconCircleButton> createState() => _IconCircleButtonState();
@@ -24,7 +34,11 @@ class _IconCircleButtonState extends State<IconCircleButton>
     with SingleTickerProviderStateMixin {
   bool _pressed = false;
   bool _hovered = false;
+  bool _focused = false;
   late final AnimationController _spin;
+  late final _focusNode = FocusNode(
+    debugLabel: 'IconCircleButton${widget.gamepadKey != null ? ':${widget.gamepadKey}' : ''}',
+  );
 
   @override
   void initState() {
@@ -34,6 +48,7 @@ class _IconCircleButtonState extends State<IconCircleButton>
       duration: const Duration(milliseconds: 700),
     );
     if (widget.spinning) _spin.repeat();
+    _registerGamepadTarget();
   }
 
   @override
@@ -45,11 +60,29 @@ class _IconCircleButtonState extends State<IconCircleButton>
       _spin.stop();
       _spin.value = 0;
     }
+    if (old.gamepadKey != null && old.gamepadKey != widget.gamepadKey) {
+      GamepadService.instance.unregisterTarget(old.gamepadKey!);
+    }
+    _registerGamepadTarget();
+  }
+
+  void _registerGamepadTarget() {
+    final key = widget.gamepadKey;
+    if (key == null) return;
+    GamepadService.instance.registerTarget(
+      key,
+      focusNode: _focusNode,
+      onTap: widget.onTap,
+    );
   }
 
   @override
   void dispose() {
     _spin.dispose();
+    _focusNode.dispose();
+    if (widget.gamepadKey != null) {
+      GamepadService.instance.unregisterTarget(widget.gamepadKey!);
+    }
     super.dispose();
   }
 
@@ -65,10 +98,16 @@ class _IconCircleButtonState extends State<IconCircleButton>
         ? widget.color!
         : Colors.white.withValues(alpha: 0.88);
 
-    Widget button = MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+    Widget button = FocusableActionDetector(
+      focusNode: _focusNode,
+      onShowFocusHighlight: (v) => setState(() => _focused = v),
+      onShowHoverHighlight: (v) => setState(() => _hovered = v),
+      mouseCursor: SystemMouseCursors.click,
+      actions: {
+        ActivateIntent: CallbackAction<ActivateIntent>(
+          onInvoke: (_) => widget.onTap(),
+        ),
+      },
       child: GestureDetector(
         onTap: widget.onTap,
         onTapDown: (_) => setState(() => _pressed = true),
@@ -90,7 +129,19 @@ class _IconCircleButtonState extends State<IconCircleButton>
                   ? baseColor.withValues(alpha: 0.08)
                   : Colors.transparent,
               shape: BoxShape.circle,
-              border: Border.all(color: borderColor, width: 1.0),
+              border: Border.all(
+                color: _focused ? AppColors.accent : borderColor,
+                width: _focused ? 1.6 : 1.0,
+              ),
+              boxShadow: _focused
+                  ? [
+                      BoxShadow(
+                        color: AppColors.accentGlow,
+                        blurRadius: 12,
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : null,
             ),
             child: AnimatedBuilder(
               animation: _spin,

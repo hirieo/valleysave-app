@@ -8,6 +8,7 @@ import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/icon_circle_button.dart';
+import '../../shared/widgets/pressable_scale.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../onboarding/privacy_screen.dart';
 
@@ -23,10 +24,6 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
     with SingleTickerProviderStateMixin {
   final _shizukuKey = GlobalKey();
   late ScrollController _scrollController;
-  bool _privacyPressed = false;
-  bool _privacyHovered = false;
-  bool _copyPressed = false;
-  bool _copyHovered = false;
 
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
@@ -1229,27 +1226,13 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
               ],
             ),
           ),
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            onEnter: (_) => setState(() => _copyHovered = true),
-            onExit: (_) => setState(() => _copyHovered = false),
-            child: GestureDetector(
+          PressableScale(
             onTap: () => Clipboard.setData(ClipboardData(text: path)),
-            onTapDown: (_) => setState(() => _copyPressed = true),
-            onTapUp: (_) => setState(() => _copyPressed = false),
-            onTapCancel: () => setState(() => _copyPressed = false),
-            child: AnimatedScale(
-              scale: _copyPressed ? 0.88 : (_copyHovered ? 1.12 : 1.0),
-              duration: _copyPressed
-                  ? const Duration(milliseconds: 100)
-                  : const Duration(milliseconds: 200),
-              curve: const Cubic(0.23, 1, 0.32, 1),
-              child: Icon(
-                Icons.copy_rounded,
-                size: 15,
-                color: _copyHovered ? AppColors.textMuted : AppColors.textFaint,
-              ),
-            ),
+            pressedScale: 0.88,
+            child: Icon(
+              Icons.copy_rounded,
+              size: 15,
+              color: AppColors.textFaint,
             ),
           ),
         ],
@@ -1258,63 +1241,44 @@ class _HowItWorksScreenState extends State<HowItWorksScreen>
   }
 
   Widget _privacyLink(BuildContext context, Color accent, AppLocalizations l10n) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _privacyHovered = true),
-      onExit: (_) => setState(() => _privacyHovered = false),
-      child: GestureDetector(
+    return PressableScale(
       onTap: () => Navigator.push(
         context,
         AppPageRoute(
           builder: (_) => const PrivacyScreen(viewOnly: true),
         ),
       ),
-      onTapDown: (_) => setState(() => _privacyPressed = true),
-      onTapUp: (_) => setState(() => _privacyPressed = false),
-      onTapCancel: () => setState(() => _privacyPressed = false),
-      child: AnimatedScale(
-        scale: _privacyPressed ? 0.97 : (_privacyHovered ? 1.015 : 1.0),
-        duration: _privacyPressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: accent.withValues(alpha: _privacyHovered ? 0.13 : 0.08),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: accent.withValues(alpha: _privacyHovered ? 0.55 : 0.40),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: accent.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: accent.withValues(alpha: 0.40)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.shield_outlined,
+              size: 15,
+              color: accent,
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.shield_outlined,
-                size: 15,
+            const SizedBox(width: 8),
+            Text(
+              l10n.hiwPrivacyLink,
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
                 color: accent,
               ),
-              const SizedBox(width: 8),
-              Text(
-                l10n.hiwPrivacyLink,
-                style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  color: accent,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 15,
-                color: accent.withValues(alpha: 0.55),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 15,
+              color: accent.withValues(alpha: 0.55),
+            ),
+          ],
         ),
-      ),
       ),
     );
   }

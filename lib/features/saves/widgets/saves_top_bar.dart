@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/services/gamepad_service.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../shared/widgets/icon_circle_button.dart';
 
@@ -45,7 +46,11 @@ class SavesTopBar extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              IconCircleButton(icon: Icons.arrow_back_rounded, onTap: onBack),
+              IconCircleButton(
+                icon: Icons.arrow_back_rounded,
+                onTap: onBack,
+                gamepadKey: GamepadService.kTopbarBack,
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -123,6 +128,7 @@ class SavesTopBar extends StatelessWidget {
                     icon: Icons.play_arrow_rounded,
                     onTap: onLaunch,
                     tooltip: l10n.tooltipLaunchGame,
+                    gamepadKey: GamepadService.kTopbarLaunch,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -139,7 +145,11 @@ class SavesTopBar extends StatelessWidget {
                 spinning: refreshing,
               ),
               const SizedBox(width: 8),
-              IconCircleButton(icon: Icons.settings_rounded, onTap: onSettings),
+              IconCircleButton(
+                icon: Icons.settings_rounded,
+                onTap: onSettings,
+                gamepadKey: GamepadService.kTopbarSettings,
+              ),
             ],
           ),
         ),

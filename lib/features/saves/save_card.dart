@@ -8,6 +8,7 @@ import '../../generated/app_localizations.dart';
 import '../../core/models/player_stats.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
+import '../../core/services/gamepad_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/save_busy_indicator.dart';
@@ -573,6 +574,8 @@ class _AutoSyncChipState extends State<AutoSyncChip> {
   // vuelta se ven idénticas en reposo, así que hay que sumar para que el
   // giro se note cada vez que se activa (feedback 2026-08-01).
   int _turns = 0;
+  bool _focused = false;
+  final _focusNode = FocusNode(debugLabel: 'AutoSyncChip');
 
   @override
   void didUpdateWidget(covariant AutoSyncChip oldWidget) {
@@ -580,6 +583,12 @@ class _AutoSyncChipState extends State<AutoSyncChip> {
     if (!oldWidget.enabled && widget.enabled) {
       setState(() => _turns += 1);
     }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -597,6 +606,15 @@ class _AutoSyncChipState extends State<AutoSyncChip> {
     // diálogo de la primera activación.
     return Tooltip(
       message: enabled ? l10n.autoSyncTooltipOn : l10n.autoSyncTooltipOff,
+      child: FocusableActionDetector(
+      focusNode: _focusNode,
+      onShowFocusHighlight: (v) => setState(() => _focused = v),
+      actions: {
+        if (onTap != null)
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) => onTap(),
+          ),
+      },
       child: PressableScale(
       onTap: onTap,
       child: Container(
@@ -606,11 +624,23 @@ class _AutoSyncChipState extends State<AutoSyncChip> {
               ? _kAutoSyncAccent.withValues(alpha: 0.16)
               : Colors.transparent,
           border: Border.all(
-            color: enabled
-                ? _kAutoSyncAccent.withValues(alpha: 0.60)
-                : Colors.white.withValues(alpha: 0.22),
+            color: _focused
+                ? AppColors.accent
+                : enabled
+                    ? _kAutoSyncAccent.withValues(alpha: 0.60)
+                    : Colors.white.withValues(alpha: 0.22),
+            width: _focused ? 1.6 : 1.0,
           ),
           borderRadius: BorderRadius.circular(999),
+          boxShadow: _focused
+              ? [
+                  BoxShadow(
+                    color: AppColors.accentGlow,
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ]
+              : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -641,6 +671,7 @@ class _AutoSyncChipState extends State<AutoSyncChip> {
             ),
           ],
         ),
+      ),
       ),
       ),
     );
@@ -1445,6 +1476,57 @@ class _SideTile extends StatefulWidget {
 class _SideTileState extends State<_SideTile> {
   bool _pressed = false;
   bool _hovered = false;
+  // Distinto de `_hovered`: esto es SOLO teclado/mando (Tab, D-pad, stick),
+  // nunca ratón — mockup aprobado 2026-08 (anillo dorado + brillo, distinto
+  // del simple "ratón encima" que ya existía).
+  bool _focused = false;
+  final _focusNode = FocusNode(debugLabel: 'SaveCard side tile');
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onFocusHighlight(bool focused) {
+    setState(() => _focused = focused);
+    if (!focused) return;
+    // Centra la card en la lista al enfocarla con teclado/mando — feedback
+    // en vivo 2026-08: sin esto, moverse "baja del todo" fuera de la vista
+    // en vez de seguir el foco. `addPostFrameCallback` porque el context
+    // recién montado/reenfocado aún no tiene garantizado el layout listo.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _focusNode.context;
+      if (ctx == null || !ctx.mounted) return;
+      Scrollable.ensureVisible(
+        ctx,
+        alignment: 0.5,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  void _openDetail() {
+    showSaveDetail(
+      context,
+      entry: widget.entry,
+      startOnLocal: widget.isLocalSide,
+      onUpload: widget.onUpload,
+      onDownload: widget.onDownload,
+      onDeleteFromDrive: widget.onDeleteFromDrive,
+      onDeleteLocal: widget.onDeleteLocal,
+      onMakeHost: widget.onMakeHost,
+      onExport: widget.onExport,
+      onShare: widget.onShare,
+      onBackups: widget.onBackups,
+      backupCount: widget.backupCount,
+      initialPlayerId: widget.selectedPlayerId,
+      onPlayerIdChanged: widget.onPlayerIdChanged,
+      autoSyncEnabled: widget.autoSyncEnabled,
+      onToggleAutoSync: widget.onToggleAutoSync,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1461,12 +1543,23 @@ class _SideTileState extends State<_SideTile> {
             ? widget.color.withValues(alpha: _hovered ? 0.13 : 0.08)
             : Colors.white.withValues(alpha: 0.02),
         border: Border.all(
-          color: base.withValues(
-            alpha: widget.highlight ? 0.9 : (_hovered ? 0.55 : 0.36),
-          ),
-          width: widget.highlight ? 1.4 : 1,
+          color: _focused
+              ? AppColors.accent
+              : base.withValues(
+                  alpha: widget.highlight ? 0.9 : (_hovered ? 0.55 : 0.36),
+                ),
+          width: _focused ? 1.6 : (widget.highlight ? 1.4 : 1),
         ),
         borderRadius: BorderRadius.circular(8),
+        boxShadow: _focused
+            ? [
+                BoxShadow(
+                  color: AppColors.accentGlow,
+                  blurRadius: 14,
+                  spreadRadius: 1,
+                ),
+              ]
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1530,42 +1623,95 @@ class _SideTileState extends State<_SideTile> {
     );
 
     if (!present) return content;
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+    return FocusableActionDetector(
+      focusNode: _focusNode,
+      onShowFocusHighlight: _onFocusHighlight,
+      onShowHoverHighlight: (v) => setState(() => _hovered = v),
+      mouseCursor: SystemMouseCursors.click,
+      actions: {
+        ActivateIntent: CallbackAction<ActivateIntent>(
+          onInvoke: (_) => _openDetail(),
+        ),
+      },
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => showSaveDetail(
-          context,
-          entry: widget.entry,
-          startOnLocal: widget.isLocalSide,
-          onUpload: widget.onUpload,
-          onDownload: widget.onDownload,
-          onDeleteFromDrive: widget.onDeleteFromDrive,
-          onDeleteLocal: widget.onDeleteLocal,
-          onMakeHost: widget.onMakeHost,
-          onExport: widget.onExport,
-          onShare: widget.onShare,
-          onBackups: widget.onBackups,
-          backupCount: widget.backupCount,
-          initialPlayerId: widget.selectedPlayerId,
-          onPlayerIdChanged: widget.onPlayerIdChanged,
-          autoSyncEnabled: widget.autoSyncEnabled,
-          onToggleAutoSync: widget.onToggleAutoSync,
-        ),
+        onTap: _openDetail,
         onTapDown: (_) => setState(() => _pressed = true),
         onTapUp: (_) => setState(() => _pressed = false),
         onTapCancel: () => setState(() => _pressed = false),
-        child: AnimatedScale(
-          scale: _pressed ? 0.97 : (_hovered ? 1.02 : 1.0),
-          duration: _pressed
-              ? const Duration(milliseconds: 100)
-              : const Duration(milliseconds: 200),
-          curve: const Cubic(0.23, 1, 0.32, 1),
-          child: content,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            AnimatedScale(
+              scale: _pressed ? 0.97 : (_hovered ? 1.02 : 1.0),
+              duration: _pressed
+                  ? const Duration(milliseconds: 100)
+                  : const Duration(milliseconds: 200),
+              curve: const Cubic(0.23, 1, 0.32, 1),
+              child: content,
+            ),
+            // Glifo de "aceptar" — solo con foco de teclado/mando Y mando
+            // conectado (con teclado a secas, Enter ya es universal, no
+            // hace falta pista). Punto neutro por defecto; si se reconoce
+            // la marca por el nombre del mando, cambia al glifo real — ver
+            // GamepadService._brandFromName, nunca al revés.
+            if (_focused)
+              Positioned(
+                top: -10,
+                right: 12,
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: GamepadService.instance.active,
+                  builder: (context, gamepadActive, _) {
+                    if (!gamepadActive) return const SizedBox.shrink();
+                    return ValueListenableBuilder<GamepadBrand>(
+                      valueListenable: GamepadService.instance.brand,
+                      builder: (context, brand, _) => _GamepadGlyph(brand: brand),
+                    );
+                  },
+                ),
+              ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+/// Punto/glifo flotante del mockup aprobado — sin texto a propósito (no
+/// necesita traducirse a los 14 idiomas). Neutro por defecto; solo cambia de
+/// forma cuando el nombre del mando confirma una marca conocida.
+class _GamepadGlyph extends StatelessWidget {
+  const _GamepadGlyph({required this.brand});
+  final GamepadBrand brand;
+
+  @override
+  Widget build(BuildContext context) {
+    final (Color bg, String? label) = switch (brand) {
+      GamepadBrand.xbox => (const Color(0xFF107C10), 'A'),
+      GamepadBrand.playStation => (const Color(0xFF0070CC), '✕'),
+      GamepadBrand.nintendo => (const Color(0xFFE60012), 'A'),
+      GamepadBrand.neutral => (AppColors.accent, null),
+    };
+    return Container(
+      width: label == null ? 12 : 16,
+      height: label == null ? 12 : 16,
+      decoration: BoxDecoration(
+        color: bg,
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.bg, width: 1.5),
+      ),
+      alignment: Alignment.center,
+      child: label == null
+          ? null
+          : Text(
+              label,
+              style: TextStyle(
+                fontSize: 8,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                height: 1,
+              ),
+            ),
     );
   }
 }
@@ -1836,6 +1982,7 @@ class ActionBtn extends StatefulWidget {
     this.iconOnly = false,
     this.iconSize = 15,
     this.onTap,
+    this.autofocus = false,
   });
 
   final String label;
@@ -1846,6 +1993,19 @@ class ActionBtn extends StatefulWidget {
   final double iconSize;
   final VoidCallback? onTap;
 
+  /// Foco inicial al abrir un diálogo (mando/teclado). Se marca SIEMPRE en la
+  /// opción que NO hace daño — Cancelar, Cerrar, "mantener" — nunca en la
+  /// destructiva, aunque sea la principal.
+  ///
+  /// Sin esto, `showDialog` deja el scope sin hijo enfocado: la primera
+  /// pulsación del D-pad se gasta en entrar y aterriza por geometría en el
+  /// botón de ARRIBA, que en estos diálogos es justo el destructivo
+  /// (`Borrar`/`Confirmar` van sobre `Cancelar` por jerarquía visual). Con
+  /// mando eso son dos pulsaciones a ciegas hasta destruir algo. Decisión
+  /// del usuario 2026-08-14, opción 1 de 3: el peor caso pasa a ser una
+  /// pulsación de más, en vez de un borrado no querido.
+  final bool autofocus;
+
   @override
   State<ActionBtn> createState() => _ActionBtnState();
 }
@@ -1853,15 +2013,32 @@ class ActionBtn extends StatefulWidget {
 class _ActionBtnState extends State<ActionBtn> {
   bool _pressed = false;
   bool _hovered = false;
+  bool _focused = false;
+  final _focusNode = FocusNode(debugLabel: 'ActionBtn');
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final enabled = widget.onTap != null;
     final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-    return MouseRegion(
-      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
-      onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
-      onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+    return FocusableActionDetector(
+      focusNode: _focusNode,
+      autofocus: widget.autofocus,
+      enabled: enabled,
+      onShowFocusHighlight: (v) => setState(() => _focused = v),
+      onShowHoverHighlight: (v) => setState(() => _hovered = v),
+      mouseCursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      actions: {
+        if (widget.onTap != null)
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) => widget.onTap!(),
+          ),
+      },
       child: GestureDetector(
       onTap: widget.onTap,
       onTapDown: widget.onTap != null
@@ -1893,9 +2070,21 @@ class _ActionBtnState extends State<ActionBtn> {
                   : (_hovered ? 0.08 : 0.0),
             ),
             border: Border.all(
-              color: widget.color.withValues(alpha: _hovered ? 0.75 : 0.50),
+              color: _focused
+                  ? AppColors.accent
+                  : widget.color.withValues(alpha: _hovered ? 0.75 : 0.50),
+              width: _focused ? 1.6 : 1.0,
             ),
             borderRadius: BorderRadius.circular(8),
+            boxShadow: _focused
+                ? [
+                    BoxShadow(
+                      color: AppColors.accentGlow,
+                      blurRadius: 10,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : null,
           ),
           child: widget.iconOnly
               ? Icon(widget.icon, size: widget.iconSize, color: widget.color)

@@ -83,24 +83,12 @@ class _SettingsScreenState extends State<SettingsScreen>
   String? _checkFailureReason;
   double _downloadProgress = 0;
   final _progressNotifier = ValueNotifier<double>(0);
-  bool _updateTilePressed = false;
-  bool _updateTileHovered = false;
   String? _gameExePath;
-  bool _gameExeTilePressed = false;
-  bool _gameExeTileHovered = false;
   bool _autoRefreshEnabled = true;
 
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
-  bool _disconnectPressed = false;
-  bool _disconnectHovered = false;
-  bool _langTilePressed = false;
-  bool _langTileHovered = false;
   bool _modeDropdownOpen = false;
-  bool _ddTrigPressed = false;
-  bool _ddTrigHovered = false;
-  SeasonState? _pressedSeason;
-  SeasonState? _hoveredSeason;
   String? _connectedEmail;
 
   @override
@@ -279,6 +267,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               ActionBtn(
                 label: l10n.cancel,
+                autofocus: true,
                 color: Colors.white.withValues(alpha: 0.55),
                 filled: false,
                 onTap: () => Navigator.pop(ctx, false),
@@ -473,64 +462,45 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _changeAccessTile(Color accent, AppLocalizations l10n) {
-    bool pressed = false;
-    bool hovered = false;
-    return StatefulBuilder(
-      builder: (_, ss) => MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => ss(() => hovered = true),
-        onExit: (_) => ss(() => hovered = false),
-        child: GestureDetector(
-        onTap: () => Navigator.pop(context, 'change_mode'),
-        onTapDown: (_) => ss(() => pressed = true),
-        onTapUp: (_) => ss(() => pressed = false),
-        onTapCancel: () => ss(() => pressed = false),
-        child: AnimatedScale(
-          scale: pressed ? 0.97 : (hovered ? 1.015 : 1.0),
-          duration: pressed
-              ? const Duration(milliseconds: 100)
-              : const Duration(milliseconds: 200),
-          curve: const Cubic(0.23, 1, 0.32, 1),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 140),
-            curve: Curves.easeOut,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: hovered ? 0.55 : 0.45),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: hovered ? 0.18 : 0.10),
+    // Foco de teclado/mando (2026-08): reescrito sobre `PressableScale`, que
+    // ya lo lleva incorporado — el oscurecido extra al pasar el ratón se
+    // simplifica a su valor fijo, el halo de foco de `PressableScale` ya
+    // da suficiente feedback sin necesitar ese matiz por hover.
+    return PressableScale(
+      onTap: () => Navigator.pop(context, 'change_mode'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ROOT / SHIZUKU',
+                    style: AppTypography.mono(
+                      color: AppColors.textFaint,
+                      size: 9,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    l10n.bridgeChangeMode,
+                    style: AppTypography.bodyStrong(color: AppColors.text),
+                  ),
+                ],
               ),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ROOT / SHIZUKU',
-                        style: AppTypography.mono(
-                          color: AppColors.textFaint,
-                          size: 9,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        l10n.bridgeChangeMode,
-                        style: AppTypography.bodyStrong(color: AppColors.text),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.white.withValues(alpha: 0.40),
-                ),
-              ],
+            Icon(
+              Icons.chevron_right_rounded,
+              color: Colors.white.withValues(alpha: 0.40),
             ),
-          ),
-        ),
+          ],
         ),
       ),
     );
@@ -547,29 +517,16 @@ class _SettingsScreenState extends State<SettingsScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onEnter: (_) => setState(() => _ddTrigHovered = true),
-          onExit: (_) => setState(() => _ddTrigHovered = false),
-          child: GestureDetector(
+        PressableScale(
           onTap: () => setState(() => _modeDropdownOpen = !_modeDropdownOpen),
-          onTapDown: (_) => setState(() => _ddTrigPressed = true),
-          onTapUp: (_) => setState(() => _ddTrigPressed = false),
-          onTapCancel: () => setState(() => _ddTrigPressed = false),
-          child: AnimatedScale(
-            scale: _ddTrigPressed ? 0.97 : (_ddTrigHovered ? 1.015 : 1.0),
-            duration: _ddTrigPressed
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            child: AnimatedContainer(
+          child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOut,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: _modeDropdownOpen
                     ? Colors.black.withValues(alpha: 0.70)
-                    : Colors.black.withValues(alpha: _ddTrigHovered ? 0.55 : 0.45),
+                    : Colors.black.withValues(alpha: 0.45),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(12),
                   topRight: const Radius.circular(12),
@@ -579,7 +536,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 border: Border.all(
                   color: _modeDropdownOpen
                       ? accent.withValues(alpha: 0.45)
-                      : Colors.white.withValues(alpha: _ddTrigHovered ? 0.18 : 0.10),
+                      : Colors.white.withValues(alpha: 0.10),
                 ),
               ),
               child: Row(
@@ -618,8 +575,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ],
               ),
             ),
-          ),
-          ),
         ),
         AnimatedSize(
           duration: const Duration(milliseconds: 420),
@@ -821,24 +776,10 @@ class _SettingsScreenState extends State<SettingsScreen>
         final (s, emoji, label) = entry;
         final selected = _settings.fixedSeason == s;
         final accent = SeasonData.data[s]!.accentColor;
-        final hovered = _hoveredSeason == s;
-        return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onEnter: (_) => setState(() => _hoveredSeason = s),
-          onExit: (_) => setState(() => _hoveredSeason = null),
-          child: GestureDetector(
+        return PressableScale(
           onTap: () =>
               _save(SeasonSettings(mode: SeasonMode.fixed, fixedSeason: s)),
-          onTapDown: (_) => setState(() => _pressedSeason = s),
-          onTapUp: (_) => setState(() => _pressedSeason = null),
-          onTapCancel: () => setState(() => _pressedSeason = null),
-          child: AnimatedScale(
-            scale: _pressedSeason == s ? 0.95 : (hovered ? 1.03 : 1.0),
-            duration: _pressedSeason == s
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            child: AnimatedContainer(
+          child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeOut,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -848,12 +789,12 @@ class _SettingsScreenState extends State<SettingsScreen>
                         accent.withValues(alpha: 0.20),
                         const Color(0xFF040405),
                       ).withValues(alpha: 0.70)
-                    : Colors.black.withValues(alpha: hovered ? 0.55 : 0.45),
+                    : Colors.black.withValues(alpha: 0.45),
                 borderRadius: BorderRadius.circular(999),
                 border: Border.all(
                   color: selected
                       ? accent.withValues(alpha: 0.75)
-                      : Colors.white.withValues(alpha: hovered ? 0.18 : 0.10),
+                      : Colors.white.withValues(alpha: 0.10),
                 ),
               ),
               child: Text(
@@ -862,8 +803,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                   color: selected ? accent : AppColors.textMuted,
                 ),
               ),
-            ),
-          ),
           ),
         );
       }).toList(),
@@ -933,11 +872,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Widget _gameTile(Color accent, AppLocalizations l10n) {
     final hasPath = _gameExePath != null;
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _gameExeTileHovered = true),
-      onExit: (_) => setState(() => _gameExeTileHovered = false),
-      child: GestureDetector(
+    return PressableScale(
       onTap: () async {
         final picked = Platform.isWindows
             ? await GameLaunchService.instance.pickExePathWindows()
@@ -953,24 +888,15 @@ class _SettingsScreenState extends State<SettingsScreen>
           );
         }
       },
-      onTapDown: (_) => setState(() => _gameExeTilePressed = true),
-      onTapUp: (_) => setState(() => _gameExeTilePressed = false),
-      onTapCancel: () => setState(() => _gameExeTilePressed = false),
-      child: AnimatedScale(
-        scale: _gameExeTilePressed ? 0.97 : (_gameExeTileHovered ? 1.015 : 1.0),
-        duration: _gameExeTilePressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
+      child: AnimatedContainer(
           duration: const Duration(milliseconds: 140),
           curve: Curves.easeOut,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: _gameExeTileHovered ? 0.55 : 0.45),
+            color: Colors.black.withValues(alpha: 0.45),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withValues(alpha: _gameExeTileHovered ? 0.18 : 0.10),
+              color: Colors.white.withValues(alpha: 0.10),
             ),
           ),
           child: Row(
@@ -1016,8 +942,6 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             ],
           ),
-        ),
-      ),
       ),
     );
   }
@@ -1262,38 +1186,14 @@ class _SettingsScreenState extends State<SettingsScreen>
         );
     }
 
-    final isTappable =
-        _updateState == _UpdateState.idle ||
-        _updateState == _UpdateState.available ||
-        _updateState == _UpdateState.checkFailed;
-
-    return MouseRegion(
-      cursor: isTappable ? SystemMouseCursors.click : MouseCursor.defer,
-      onEnter: isTappable ? (_) => setState(() => _updateTileHovered = true) : null,
-      onExit: isTappable ? (_) => setState(() => _updateTileHovered = false) : null,
-      child: GestureDetector(
+    return PressableScale(
       onTap: _updateState == _UpdateState.available
           ? _startInstall
           : (_updateState == _UpdateState.idle ||
                 _updateState == _UpdateState.checkFailed)
           ? _checkUpdateFromSettings
           : null,
-      onTapDown: isTappable
-          ? (_) => setState(() => _updateTilePressed = true)
-          : null,
-      onTapUp: isTappable
-          ? (_) => setState(() => _updateTilePressed = false)
-          : null,
-      onTapCancel: isTappable
-          ? () => setState(() => _updateTilePressed = false)
-          : null,
-      child: AnimatedScale(
-        scale: _updateTilePressed ? 0.97 : (_updateTileHovered ? 1.015 : 1.0),
-        duration: _updateTilePressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
+      child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
           padding: const EdgeInsets.all(16),
@@ -1301,19 +1201,17 @@ class _SettingsScreenState extends State<SettingsScreen>
             color: _updateState == _UpdateState.available
                 ? Color.alphaBlend(
                     accent.withValues(alpha: 0.06),
-                    Colors.black.withValues(alpha: _updateTileHovered ? 0.55 : 0.45),
+                    Colors.black.withValues(alpha: 0.45),
                   )
-                : Colors.black.withValues(alpha: _updateTileHovered ? 0.55 : 0.45),
+                : Colors.black.withValues(alpha: 0.45),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: _updateState == _UpdateState.available
                   ? accent.withValues(alpha: 0.38)
-                  : Colors.white.withValues(alpha: _updateTileHovered ? 0.18 : 0.10),
+                  : Colors.white.withValues(alpha: 0.10),
             ),
           ),
           child: content,
-        ),
-      ),
       ),
     );
   }
@@ -1340,30 +1238,17 @@ class _SettingsScreenState extends State<SettingsScreen>
     final (flag, label) = _langLabel(current, l10n);
     final accent =
         SeasonData.data[SeasonController.instance.season.value]!.accentColor;
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _langTileHovered = true),
-      onExit: (_) => setState(() => _langTileHovered = false),
-      child: GestureDetector(
+    return PressableScale(
       onTap: () => _openLanguageDialog(context, l10n),
-      onTapDown: (_) => setState(() => _langTilePressed = true),
-      onTapUp: (_) => setState(() => _langTilePressed = false),
-      onTapCancel: () => setState(() => _langTilePressed = false),
-      child: AnimatedScale(
-        scale: _langTilePressed ? 0.97 : (_langTileHovered ? 1.015 : 1.0),
-        duration: _langTilePressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
+      child: AnimatedContainer(
           duration: const Duration(milliseconds: 140),
           curve: Curves.easeOut,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: _langTileHovered ? 0.55 : 0.45),
+            color: Colors.black.withValues(alpha: 0.45),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withValues(alpha: _langTileHovered ? 0.18 : 0.10),
+              color: Colors.white.withValues(alpha: 0.10),
             ),
           ),
           child: Row(
@@ -1404,8 +1289,6 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             ],
           ),
-        ),
-      ),
       ),
     );
   }
@@ -1445,29 +1328,14 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _disconnectButton(AppLocalizations l10n) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _disconnectHovered = true),
-      onExit: (_) => setState(() => _disconnectHovered = false),
-      child: GestureDetector(
+    return PressableScale(
       onTap: _showDisconnectDialog,
-      onTapDown: (_) => setState(() => _disconnectPressed = true),
-      onTapUp: (_) => setState(() => _disconnectPressed = false),
-      onTapCancel: () => setState(() => _disconnectPressed = false),
-      child: AnimatedScale(
-        scale: _disconnectPressed ? 0.97 : (_disconnectHovered ? 1.015 : 1.0),
-        duration: _disconnectPressed
-            ? const Duration(milliseconds: 100)
-            : const Duration(milliseconds: 200),
-        curve: const Cubic(0.23, 1, 0.32, 1),
-        child: AnimatedContainer(
+      child: AnimatedContainer(
           duration: const Duration(milliseconds: 140),
           curve: Curves.easeOut,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(
-              0xFFC84632,
-            ).withValues(alpha: _disconnectHovered ? 0.20 : 0.14),
+            color: const Color(0xFFC84632).withValues(alpha: 0.14),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: const Color(0xFFC84632), width: 1.5),
           ),
@@ -1492,8 +1360,6 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             ],
           ),
-        ),
-      ),
       ),
     );
   }
@@ -1515,11 +1381,9 @@ class _AutoRefreshSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return PressableScale(
       onTap: () => onChanged(!value),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: AnimatedContainer(
+      child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
           width: 42,
@@ -1557,7 +1421,6 @@ class _AutoRefreshSwitch extends StatelessWidget {
               ),
             ),
           ),
-        ),
       ),
     );
   }

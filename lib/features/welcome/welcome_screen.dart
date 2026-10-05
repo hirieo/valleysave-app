@@ -12,6 +12,7 @@ import '../../core/theme/app_typography.dart';
 import '../../shared/utils/app_page_route.dart';
 import '../../shared/widgets/icon_circle_button.dart';
 import '../../shared/widgets/ghost_button.dart';
+import '../../shared/widgets/pressable_scale.dart';
 import '../../shared/widgets/primary_button.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../help/how_it_works_screen.dart';
@@ -35,7 +36,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   bool _authLoading = false;
   bool _authConnected = false;
   UpdateInfo? _updateInfo;
-  bool _updateChipPressed = false;
   bool _updateDownloading = false;
   double _downloadProgress = 0;
   final _progressNotifier = ValueNotifier<double>(0);
@@ -285,31 +285,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       );
     }
 
-    return Listener(
-      onPointerDown: canTap ? (_) => setState(() => _updateChipPressed = true) : null,
-      onPointerUp: (_) => setState(() => _updateChipPressed = false),
-      onPointerCancel: (_) => setState(() => _updateChipPressed = false),
-      child: GestureDetector(
-        onTap: canTap ? _startInstall : null,
-        child: AnimatedScale(
-          scale: _updateChipPressed ? 0.97 : 1.0,
-          duration: _updateChipPressed
-              ? const Duration(milliseconds: 100)
-              : const Duration(milliseconds: 200),
-          curve: const Cubic(0.23, 1, 0.32, 1),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.42),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: accent.withValues(alpha: 0.48),
-                width: 1.5,
-              ),
-            ),
-            child: chipContent,
+    return PressableScale(
+      onTap: canTap ? _startInstall : null,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.42),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: accent.withValues(alpha: 0.48),
+            width: 1.5,
           ),
         ),
+        child: chipContent,
       ),
     );
   }

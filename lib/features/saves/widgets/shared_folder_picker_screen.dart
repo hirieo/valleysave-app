@@ -105,6 +105,7 @@ class _SharedFolderPickerDialogState extends State<_SharedFolderPickerDialog> {
             Align(
               alignment: Alignment.centerRight,
               child: PressableScale(
+                autofocus: true,
                 onTap: () => Navigator.of(context).pop(),
                 child: Container(
                   padding: const EdgeInsets.symmetric(

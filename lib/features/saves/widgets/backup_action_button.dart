@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/services/season_controller.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/save_busy_indicator.dart';
 
 /// Acción de backup con feedback inmediato y protección contra doble toque.
@@ -34,6 +35,14 @@ class _BackupActionButtonState extends State<BackupActionButton> {
   bool _pressed = false;
   bool _busy = false;
   bool _hovered = false;
+  bool _focused = false;
+  final _focusNode = FocusNode(debugLabel: 'BackupActionButton');
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   Future<void> _run() async {
     if (_busy || widget.onPressed == null) return;
@@ -69,10 +78,18 @@ class _BackupActionButtonState extends State<BackupActionButton> {
       button: true,
       enabled: enabled,
       label: widget.label,
-      child: MouseRegion(
-        cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
-        onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
-        onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+      child: FocusableActionDetector(
+        focusNode: _focusNode,
+        enabled: enabled,
+        onShowFocusHighlight: (v) => setState(() => _focused = v),
+        onShowHoverHighlight: (v) => setState(() => _hovered = v),
+        mouseCursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+        actions: {
+          if (enabled)
+            ActivateIntent: CallbackAction<ActivateIntent>(
+              onInvoke: (_) => _run(),
+            ),
+        },
         child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: enabled ? _run : null,
@@ -98,11 +115,23 @@ class _BackupActionButtonState extends State<BackupActionButton> {
             decoration: BoxDecoration(
               color: color.withValues(alpha: backgroundAlpha),
               border: Border.all(
-                color: color.withValues(
-                  alpha: enabled ? (_hovered ? .85 : .66) : .28,
-                ),
+                color: _focused
+                    ? AppColors.accent
+                    : color.withValues(
+                        alpha: enabled ? (_hovered ? .85 : .66) : .28,
+                      ),
+                width: _focused ? 1.6 : 1.0,
               ),
               borderRadius: BorderRadius.circular(9),
+              boxShadow: _focused
+                  ? [
+                      BoxShadow(
+                        color: AppColors.accentGlow,
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : null,
             ),
             child: widget.iconOnly
                 ? Center(child: _iconOrProgress())

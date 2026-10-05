@@ -14,15 +14,27 @@ void main() {
       expect(VanillaFarmSurfaceRepository.forWhichFarm(999), isNull);
     });
 
-    test('loads Meadowlands from its official textual save identifier', () {
+    test('maps Meadowlands to its textual save identifier', () {
+      expect(
+        VanillaFarmSurfaceRepository.whichFarmFromSaveValue('MeadowlandsFarm'),
+        7,
+      );
+      expect(
+        VanillaFarmSurfaceRepository.saveValueForWhichFarm(7),
+        'MeadowlandsFarm',
+      );
       expect(
         VanillaFarmSurfaceRepository.forSaveValue('MeadowlandsFarm')?.name,
         'Farm_Ranching',
       );
       expect(
-        VanillaFarmSurfaceRepository.forSaveValue('7')?.name,
-        'Farm_Ranching',
+        VanillaFarmSurfaceRepository.forWhichFarm(7)!.anchors,
+        contains(const TilePoint(71, 6)),
+        reason: 'WarpTotemEntry must remain clear after a farm conversion',
       );
+      // Accept the incorrect numeric form so ValleySave can normalize saves
+      // produced by older builds instead of treating them as custom farms.
+      expect(VanillaFarmSurfaceRepository.whichFarmFromSaveValue('7'), 7);
     });
 
     test('Riverland exposes bounds, water, fishing and walkability', () {

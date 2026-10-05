@@ -94,6 +94,8 @@ class FarmSurface {
 class VanillaFarmSurfaceRepository {
   VanillaFarmSurfaceRepository._();
 
+  static const meadowlandsSaveId = 'MeadowlandsFarm';
+
   static final Map<int, FarmSurface> _surfaces = {
     for (final entry in vanillaFarmSurfaceData.entries)
       entry.key: FarmSurface.fromData(entry.value),
@@ -101,14 +103,23 @@ class VanillaFarmSurfaceRepository {
 
   static FarmSurface? forWhichFarm(int whichFarm) => _surfaces[whichFarm];
 
-  /// Meadowlands is an official farm from `Data/AdditionalFarms`, so Stardew
-  /// serializes its textual ID instead of a number.
-  static FarmSurface? forSaveValue(String? value) {
+  /// Stardew stores the seven original farm types as numbers, but
+  /// Meadowlands is defined in `Data/AdditionalFarms` and is serialized using
+  /// its textual ID. Some editors write `7`; accept it when reading so those
+  /// saves can be repaired, but always emit [meadowlandsSaveId].
+  static int? whichFarmFromSaveValue(String? value) {
     final normalized = value?.trim();
     if (normalized == null || normalized.isEmpty) return null;
-    final whichFarm = normalized == 'MeadowlandsFarm'
-        ? 7
-        : int.tryParse(normalized);
+    if (normalized == meadowlandsSaveId) return 7;
+    final numeric = int.tryParse(normalized);
+    return numeric != null && _surfaces.containsKey(numeric) ? numeric : null;
+  }
+
+  static String saveValueForWhichFarm(int whichFarm) =>
+      whichFarm == 7 ? meadowlandsSaveId : whichFarm.toString();
+
+  static FarmSurface? forSaveValue(String? value) {
+    final whichFarm = whichFarmFromSaveValue(value);
     return whichFarm == null ? null : forWhichFarm(whichFarm);
   }
 }

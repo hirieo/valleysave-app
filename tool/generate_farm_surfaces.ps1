@@ -59,21 +59,38 @@ function Set-Bit {
 
 function Get-WarpAnchors {
   param($Map, [int] $Width, [int] $Height)
-  $raw = "$($Map.Properties['Warp'])".Trim()
-  if ([string]::IsNullOrWhiteSpace($raw)) { return @() }
-  $parts = $raw -split '\s+'
   $anchors = [System.Collections.Generic.HashSet[int]]::new()
-  for ($i = 0; $i + 4 -lt $parts.Length; $i += 5) {
-    $x = [int]$parts[$i]
-    $y = [int]$parts[$i + 1]
-    if ($x -eq -1) { $x = 0 }
-    if ($x -eq $Width) { $x = $Width - 1 }
-    if ($y -eq -1) { $y = 0 }
-    if ($y -eq $Height) { $y = $Height - 1 }
-    if ($x -ge 0 -and $x -lt $Width -and $y -ge 0 -and $y -lt $Height) {
-      [void]$anchors.Add($y * $Width + $x)
+
+  $raw = "$($Map.Properties['Warp'])".Trim()
+  if (-not [string]::IsNullOrWhiteSpace($raw)) {
+    $parts = $raw -split '\s+'
+    for ($i = 0; $i + 4 -lt $parts.Length; $i += 5) {
+      $x = [int]$parts[$i]
+      $y = [int]$parts[$i + 1]
+      if ($x -eq -1) { $x = 0 }
+      if ($x -eq $Width) { $x = $Width - 1 }
+      if ($y -eq -1) { $y = 0 }
+      if ($y -eq $Height) { $y = $Height - 1 }
+      if ($x -ge 0 -and $x -lt $Width -and $y -ge 0 -and $y -lt $Height) {
+        [void]$anchors.Add($y * $Width + $x)
+      }
     }
   }
+
+  # `WarpTotemEntry` is an arrival point, not a map Warp. Dynamic content
+  # copied from another farm must not be allowed to trap the player there.
+  $totemRaw = "$($Map.Properties['WarpTotemEntry'])".Trim()
+  if (-not [string]::IsNullOrWhiteSpace($totemRaw)) {
+    $totemParts = $totemRaw -split '\s+'
+    if ($totemParts.Length -ge 2) {
+      $x = [int]$totemParts[0]
+      $y = [int]$totemParts[1]
+      if ($x -ge 0 -and $x -lt $Width -and $y -ge 0 -and $y -lt $Height) {
+        [void]$anchors.Add($y * $Width + $x)
+      }
+    }
+  }
+
   return @($anchors | Sort-Object)
 }
 

@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shizuku_api/shizuku_api.dart';
 
 import 'android_protected_commands.dart';
+import 'saves_folder_scan.dart';
 import 'stardew_paths.dart';
 
 final _rng = Random();
@@ -82,9 +83,15 @@ class ShizukuService {
   /// Devuelve la ruta de la copia, o null si falló.
   Future<String?> pullSavesAsRoot() async {
     try {
+      await AndroidSavesPath.instance.ensureLoaded();
+      final savesPath = AndroidSavesPath.instance.current;
+      if (!isValidSavesPath(savesPath)) return null;
       final dst = await _freshDir('game_in');
-      final ok =
-          (await _native.invokeMethod<bool>('pullSavesAsRoot', {'dst': dst.path})) ?? false;
+      final ok = (await _native.invokeMethod<bool>('pullSavesAsRoot', {
+            'dst': dst.path,
+            'savesPath': savesPath,
+          })) ??
+          false;
       if (!ok) return null;
       final empty = await dst.list().isEmpty;
       return empty ? null : dst.path;
@@ -103,6 +110,7 @@ class ShizukuService {
   /// pero SIN verificar hasta ahora en un dispositivo rooteado real).
   Future<bool> pushSaveAsRoot(String src, String name) async {
     if (!_isSafeSaveName(name)) return false;
+    await AndroidSavesPath.instance.ensureLoaded();
     final script = AndroidProtectedCommands.replace(
       src: src,
       folderName: name,
@@ -123,11 +131,61 @@ class ShizukuService {
   /// Elimina un save de la carpeta del juego usando su.
   Future<bool> deleteLocalAsRoot(String name) async {
     if (!_isSafeSaveName(name)) return false;
+    await AndroidSavesPath.instance.ensureLoaded();
+    final savesPath = AndroidSavesPath.instance.current;
+    if (!isValidSavesPath(savesPath)) return false;
     try {
-      return (await _native.invokeMethod<bool>('deleteLocalAsRoot', {'name': name})) ?? false;
+      return (await _native.invokeMethod<bool>('deleteLocalAsRoot', {
+            'name': name,
+            'savesPath': savesPath,
+          })) ??
+          false;
     } catch (_) {
       return false;
     }
+  }
+
+  /// Ejecuta un comando de SOLO LECTURA (ls / test) y devuelve su stdout, o
+  /// null si falla. [root] = vía `su` (canal nativo); si no, shell de
+  /// Shizuku. El comando lo construyen `saves_folder_scan.dart` con rutas ya
+  /// validadas y entrecomilladas — nunca texto libre del usuario.
+  Future<String?> runReadOnly(String command, {required bool root}) async {
+    try {
+      if (root) {
+        return await _native.invokeMethod<String>(
+          'runRootCommand',
+          {'command': command},
+        );
+      }
+      return await _api.runCommand(command);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Carpetas de saves candidatas (con nº de saves). Lista vacía si no hay
+  /// ninguna o si el modo no puede ver otros almacenamientos (Shizuku corre
+  /// como UID 2000, que en muchos dispositivos NO lista /storage/emulated/N
+  /// de otros usuarios: simplemente no aparecerán).
+  Future<List<SavesCandidate>> detectSavesFolders({required bool root}) async {
+    final out = await runReadOnly(detectScript(root: root), root: root);
+    return out == null ? const [] : parseDetectOutput(out);
+  }
+
+  /// Subcarpetas de [dir] (nombres seguros) o null si falla/ruta inválida.
+  Future<List<String>?> listSubdirs(String dir, {required bool root}) async {
+    final cmd = listDirCommand(dir, _shellQuote);
+    if (cmd == null) return null;
+    final out = await runReadOnly(cmd, root: root);
+    return out == null ? null : parseLsDirs(out, dir);
+  }
+
+  /// Nº de saves en [dir] (`null` = no existe / no legible).
+  Future<int?> countSavesIn(String dir, {required bool root}) async {
+    final script = verifyScript(dir, _shellQuote);
+    if (script == null) return null;
+    final out = await runReadOnly(script, root: root);
+    return out == null ? null : parseVerifyOutput(out);
   }
 
   /// ¿El usuario ya concedió permiso a ValleySave dentro de Shizuku?
@@ -148,10 +206,13 @@ class ShizukuService {
   /// Copia los saves del juego a una carpeta nuestra legible.
   /// Devuelve su ruta, o null si el juego no tiene saves / falló la copia.
   Future<String?> pullSaves() async {
+    await AndroidSavesPath.instance.ensureLoaded();
+    final savesPath = AndroidSavesPath.instance.current;
+    if (!isValidSavesPath(savesPath)) return null;
     final dst = await _freshDir('game_in');
     // -p preserva mtime → la comparación local vs Drive sigue siendo válida.
     // Rutas propias de la app, pero se escapan igual por uniformidad.
-    await _api.runCommand('cp -rfp ${_shellQuote('$gameSavesPath/.')} ${_shellQuote('${dst.path}/')}');
+    await _api.runCommand('cp -rfp ${_shellQuote('$savesPath/.')} ${_shellQuote('${dst.path}/')}');
     // Verificación robusta vía File API: ¿llegó algo? (no parseamos stdout)
     final empty = await dst.list().isEmpty;
     return empty ? null : dst.path;
@@ -181,6 +242,7 @@ class ShizukuService {
     if (!_isSafeSaveName(folderName)) return false;
     final ext = await getExternalStorageDirectory();
     final src = '${ext!.path}/game_out/$folderName';
+    await AndroidSavesPath.instance.ensureLoaded();
     final script = AndroidProtectedCommands.replace(
       src: src,
       folderName: folderName,
@@ -202,7 +264,10 @@ class ShizukuService {
   /// de `folderPath`, que en este modo es justo la copia puente).
   Future<bool> deleteLocalViaShizuku(String folderName) async {
     if (!_isSafeSaveName(folderName)) return false;
-    final path = '$gameSavesPath/$folderName';
+    await AndroidSavesPath.instance.ensureLoaded();
+    final base = AndroidSavesPath.instance.current;
+    if (!isValidSavesPath(base)) return false;
+    final path = '$base/$folderName';
     await _api.runCommand('rm -rf ${_shellQuote(path)}');
     // Verificación: tras un borrado real, listar esa ruta debe fallar.
     final check = await _api.runCommand('ls -d ${_shellQuote(path)}') ?? '';

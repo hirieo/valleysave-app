@@ -2074,4 +2074,62 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'タップして再試行';
+
+  @override
+  String get savesFolderTitle => 'セーブフォルダ';
+
+  @override
+  String get savesFolderCurrent => '現在のフォルダ';
+
+  @override
+  String get savesFolderDetected => '検出されたフォルダ';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'セーブ数: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => 'フォルダを自動検出できませんでした。';
+
+  @override
+  String get savesFolderBrowse => 'フォルダを参照…';
+
+  @override
+  String get savesFolderReset => '初期設定に戻す';
+
+  @override
+  String get savesFolderUse => 'このフォルダを使う';
+
+  @override
+  String get savesFolderVerify => '確認';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'このフォルダにセーブが $count 件見つかりました。';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty => 'このフォルダにセーブはありません。それでも使用できます。';
+
+  @override
+  String get savesFolderVerifyMissing => 'フォルダが見つからないか、読み取れません。';
+
+  @override
+  String get savesFolderLooksLike => 'セーブフォルダ';
+
+  @override
+  String get savesFolderNoSubfolders => 'ここにサブフォルダはありません。';
+
+  @override
+  String get savesFolderListError => 'このフォルダを読み取れませんでした。';
+
+  @override
+  String get savesFolderDetecting => 'フォルダを検索中…';
+
+  @override
+  String get savesFolderDefaultTag => '初期値';
+
+  @override
+  String get savesFolderParent => '上のフォルダ';
 }

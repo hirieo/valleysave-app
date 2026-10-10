@@ -2145,4 +2145,65 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Sakatu berriro saiatzeko';
+
+  @override
+  String get savesFolderTitle => 'Gordetako karpeta';
+
+  @override
+  String get savesFolderCurrent => 'Uneko karpeta';
+
+  @override
+  String get savesFolderDetected => 'Detektatutako karpetak';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Gordetakoak: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected =>
+      'Ez da karpetarik automatikoki detektatu.';
+
+  @override
+  String get savesFolderBrowse => 'Arakatu karpetak…';
+
+  @override
+  String get savesFolderReset => 'Berrezarri lehenetsia';
+
+  @override
+  String get savesFolderUse => 'Erabili karpeta hau';
+
+  @override
+  String get savesFolderVerify => 'Egiaztatu';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return '$count gordetako aurkitu dira karpeta honetan.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'Karpeta honetan ez dago gordetakorik. Hala ere erabil dezakezu.';
+
+  @override
+  String get savesFolderVerifyMissing =>
+      'Karpeta ez da aurkitu edo ezin da irakurri.';
+
+  @override
+  String get savesFolderLooksLike => 'Gordetako karpeta';
+
+  @override
+  String get savesFolderNoSubfolders => 'Ez dago azpikarpetarik hemen.';
+
+  @override
+  String get savesFolderListError => 'Ezin izan da karpeta hau irakurri.';
+
+  @override
+  String get savesFolderDetecting => 'Karpetak bilatzen…';
+
+  @override
+  String get savesFolderDefaultTag => 'Lehenetsia';
+
+  @override
+  String get savesFolderParent => 'Goiko karpeta';
 }

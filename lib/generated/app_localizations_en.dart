@@ -2129,4 +2129,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Tap to retry';
+
+  @override
+  String get savesFolderTitle => 'Saves folder';
+
+  @override
+  String get savesFolderCurrent => 'Current folder';
+
+  @override
+  String get savesFolderDetected => 'Detected folders';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Saves: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => 'No folders detected automatically.';
+
+  @override
+  String get savesFolderBrowse => 'Browse folders…';
+
+  @override
+  String get savesFolderReset => 'Restore default';
+
+  @override
+  String get savesFolderUse => 'Use this folder';
+
+  @override
+  String get savesFolderVerify => 'Verify';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'Found $count saves in this folder.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'No saves in this folder. You can still use it.';
+
+  @override
+  String get savesFolderVerifyMissing => 'Folder not found or not readable.';
+
+  @override
+  String get savesFolderLooksLike => 'Saves folder';
+
+  @override
+  String get savesFolderNoSubfolders => 'No subfolders here.';
+
+  @override
+  String get savesFolderListError => 'Could not read this folder.';
+
+  @override
+  String get savesFolderDetecting => 'Looking for folders…';
+
+  @override
+  String get savesFolderDefaultTag => 'Default';
+
+  @override
+  String get savesFolderParent => 'Parent folder';
 }

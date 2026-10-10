@@ -2150,4 +2150,65 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Zum Wiederholen tippen';
+
+  @override
+  String get savesFolderTitle => 'Speicherstand-Ordner';
+
+  @override
+  String get savesFolderCurrent => 'Aktueller Ordner';
+
+  @override
+  String get savesFolderDetected => 'Erkannte Ordner';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Spielstände: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => 'Kein Ordner automatisch erkannt.';
+
+  @override
+  String get savesFolderBrowse => 'Ordner durchsuchen…';
+
+  @override
+  String get savesFolderReset => 'Standard wiederherstellen';
+
+  @override
+  String get savesFolderUse => 'Diesen Ordner verwenden';
+
+  @override
+  String get savesFolderVerify => 'Prüfen';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return '$count Spielstände in diesem Ordner gefunden.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'Keine Spielstände in diesem Ordner. Du kannst ihn trotzdem verwenden.';
+
+  @override
+  String get savesFolderVerifyMissing =>
+      'Ordner nicht gefunden oder nicht lesbar.';
+
+  @override
+  String get savesFolderLooksLike => 'Spielstand-Ordner';
+
+  @override
+  String get savesFolderNoSubfolders => 'Hier gibt es keine Unterordner.';
+
+  @override
+  String get savesFolderListError =>
+      'Dieser Ordner konnte nicht gelesen werden.';
+
+  @override
+  String get savesFolderDetecting => 'Suche Ordner…';
+
+  @override
+  String get savesFolderDefaultTag => 'Standard';
+
+  @override
+  String get savesFolderParent => 'Übergeordneter Ordner';
 }

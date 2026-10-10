@@ -2079,4 +2079,62 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => '다시 시도하려면 탭하세요';
+
+  @override
+  String get savesFolderTitle => '저장 폴더';
+
+  @override
+  String get savesFolderCurrent => '현재 폴더';
+
+  @override
+  String get savesFolderDetected => '감지된 폴더';
+
+  @override
+  String savesFolderCount(int count) {
+    return '저장 수: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => '자동으로 감지된 폴더가 없습니다.';
+
+  @override
+  String get savesFolderBrowse => '폴더 찾아보기…';
+
+  @override
+  String get savesFolderReset => '기본값 복원';
+
+  @override
+  String get savesFolderUse => '이 폴더 사용';
+
+  @override
+  String get savesFolderVerify => '확인';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return '이 폴더에서 저장 $count개를 찾았습니다.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty => '이 폴더에 저장이 없습니다. 그래도 사용할 수 있습니다.';
+
+  @override
+  String get savesFolderVerifyMissing => '폴더를 찾을 수 없거나 읽을 수 없습니다.';
+
+  @override
+  String get savesFolderLooksLike => '저장 폴더';
+
+  @override
+  String get savesFolderNoSubfolders => '여기에는 하위 폴더가 없습니다.';
+
+  @override
+  String get savesFolderListError => '이 폴더를 읽을 수 없습니다.';
+
+  @override
+  String get savesFolderDetecting => '폴더 검색 중…';
+
+  @override
+  String get savesFolderDefaultTag => '기본값';
+
+  @override
+  String get savesFolderParent => '상위 폴더';
 }

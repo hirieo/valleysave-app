@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "无法检查",
-  "updateCheckFailedRetry": "点击重试"
+  "updateCheckFailedRetry": "点击重试",
+  "savesFolderTitle": "存档文件夹",
+  "savesFolderCurrent": "当前文件夹",
+  "savesFolderDetected": "检测到的文件夹",
+  "savesFolderCount": "存档数：{count}",
+  "savesFolderNoneDetected": "未能自动检测到文件夹。",
+  "savesFolderBrowse": "浏览文件夹…",
+  "savesFolderReset": "恢复默认",
+  "savesFolderUse": "使用此文件夹",
+  "savesFolderVerify": "验证",
+  "savesFolderVerifyOk": "在此文件夹中找到 {count} 个存档。",
+  "savesFolderVerifyEmpty": "此文件夹中没有存档，但仍可使用。",
+  "savesFolderVerifyMissing": "未找到文件夹或无法读取。",
+  "savesFolderLooksLike": "存档文件夹",
+  "savesFolderNoSubfolders": "这里没有子文件夹。",
+  "savesFolderListError": "无法读取此文件夹。",
+  "savesFolderDetecting": "正在查找文件夹…",
+  "savesFolderDefaultTag": "默认",
+  "savesFolderParent": "上级文件夹"
 }

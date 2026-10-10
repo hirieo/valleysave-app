@@ -226,6 +226,7 @@ class UpdateService {
         r"$ErrorActionPreference = 'Stop'",
         '\$log = "$logPath"',
         'try {',
+        '  "Inicio actualizacion" | Out-File -FilePath \$log -Encoding utf8',
         '  Wait-Process -Id $pid -Timeout 30 -ErrorAction SilentlyContinue',
         '  \$done = \$false',
         '  for (\$i = 0; \$i -lt 15; \$i++) {',
@@ -244,10 +245,15 @@ class UpdateService {
         '}',
       ].join('\r\n'));
 
+      // NO usar ProcessStartMode.detached/detachedWithStdio en Windows: el
+      // proceso se crea (devuelve PID) pero PowerShell muere sin ejecutar ni
+      // una línea — el zip se descargaba y la app se cerraba sin actualizar
+      // (bug real 2026-10-08, reproducido 2026-10-10: ni siquiera arranca el
+      // motor de PowerShell). En modo normal el hijo sobrevive al exit(0).
       await Process.start(
         'powershell',
-        ['-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', ps1Path],
-        mode: ProcessStartMode.detached,
+        ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+         '-WindowStyle', 'Hidden', '-File', ps1Path],
       );
 
       exit(0);

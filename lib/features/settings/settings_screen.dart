@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../generated/app_localizations.dart';
 
@@ -14,6 +15,8 @@ import '../../core/services/game_launch_service.dart';
 import '../../core/services/locale_controller.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
+import '../../core/services/shizuku_service.dart';
+import '../../core/services/stardew_paths.dart';
 import '../../core/services/update_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -25,6 +28,7 @@ import '../../shared/widgets/valley_canvas_widget.dart';
 import '../saves/save_card.dart' show ActionBtn;
 import '../saves/widgets/seasonal_loader.dart';
 import 'widgets/language_dialog.dart';
+import 'widgets/saves_folder_dialog.dart';
 
 enum _UpdateState {
   idle,
@@ -84,6 +88,11 @@ class _SettingsScreenState extends State<SettingsScreen>
   double _downloadProgress = 0;
   final _progressNotifier = ValueNotifier<double>(0);
   String? _gameExePath;
+
+  // Android: carpeta de saves configurable. Solo se muestra con acceso
+  // Shizuku/root ya configurado y operativo (`_androidAccess` != null).
+  String? _androidAccess; // 'root' | 'shizuku' | null
+  String _savesPath = defaultGameSavesPath;
   bool _autoRefreshEnabled = true;
 
   late final AnimationController _entranceCtrl;
@@ -215,6 +224,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       await GameLaunchService.instance.init();
     }
+    if (Platform.isAndroid) await _loadAndroidAccess();
     if (mounted) {
       setState(() {
         _settings = s;
@@ -224,6 +234,31 @@ class _SettingsScreenState extends State<SettingsScreen>
         }
       });
     }
+  }
+
+  /// Mismo pref que `saves_screen.dart` (`android_access_mode`). Root se da
+  /// por operativo si es el modo guardado (igual que allí, sin lanzar `su`
+  /// de nuevo); Shizuku solo si el servicio corre y el permiso está
+  /// concedido.
+  Future<void> _loadAndroidAccess() async {
+    String? access;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getString('android_access_mode');
+      if (saved == 'root') {
+        access = 'root';
+      } else if (saved == 'shizuku') {
+        final svc = ShizukuService.instance;
+        if (await svc.isRunning() && await svc.hasPermission()) {
+          access = 'shizuku';
+        }
+      }
+      await AndroidSavesPath.instance.reload();
+    } catch (_) {
+      access = null;
+    }
+    _androidAccess = access;
+    _savesPath = AndroidSavesPath.instance.current;
   }
 
   Future<void> _save(SeasonSettings s) async {
@@ -415,6 +450,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                                 ),
                                 const SizedBox(height: 12),
                                 _changeAccessTile(accent, l10n),
+                                if (_androidAccess != null) ...[
+                                  const SizedBox(height: 8),
+                                  _savesFolderTile(accent, l10n),
+                                ],
                               ],
                               const SizedBox(height: 32),
                               Text(
@@ -457,6 +496,65 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _savesFolderTile(Color accent, AppLocalizations l10n) {
+    return PressableScale(
+      onTap: () async {
+        await showDialog<bool>(
+          context: context,
+          builder: (_) => SavesFolderDialog(
+            root: _androidAccess == 'root',
+            accent: accent,
+          ),
+        );
+        if (!mounted) return;
+        setState(() => _savesPath = AndroidSavesPath.instance.current);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.savesFolderTitle, style: AppTypography.bodyStrong()),
+                  const SizedBox(height: 2),
+                  Text(
+                    _savesPath,
+                    style: AppTypography.mono(
+                      color: AppColors.statusOk,
+                      size: 10,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: accent.withValues(alpha: 0.35)),
+              ),
+              child: Text(
+                l10n.settingsGameExeBrowse,
+                style: AppTypography.mono(color: accent, size: 11),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

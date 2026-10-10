@@ -2126,4 +2126,62 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'แตะเพื่อลองอีกครั้ง';
+
+  @override
+  String get savesFolderTitle => 'โฟลเดอร์เซฟ';
+
+  @override
+  String get savesFolderCurrent => 'โฟลเดอร์ปัจจุบัน';
+
+  @override
+  String get savesFolderDetected => 'โฟลเดอร์ที่ตรวจพบ';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'จำนวนเซฟ: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => 'ตรวจไม่พบโฟลเดอร์โดยอัตโนมัติ';
+
+  @override
+  String get savesFolderBrowse => 'เรียกดูโฟลเดอร์…';
+
+  @override
+  String get savesFolderReset => 'คืนค่าเริ่มต้น';
+
+  @override
+  String get savesFolderUse => 'ใช้โฟลเดอร์นี้';
+
+  @override
+  String get savesFolderVerify => 'ตรวจสอบ';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'พบเซฟ $count รายการในโฟลเดอร์นี้';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty => 'ไม่มีเซฟในโฟลเดอร์นี้ แต่ยังใช้งานได้';
+
+  @override
+  String get savesFolderVerifyMissing => 'ไม่พบโฟลเดอร์หรืออ่านไม่ได้';
+
+  @override
+  String get savesFolderLooksLike => 'โฟลเดอร์เซฟ';
+
+  @override
+  String get savesFolderNoSubfolders => 'ไม่มีโฟลเดอร์ย่อยที่นี่';
+
+  @override
+  String get savesFolderListError => 'อ่านโฟลเดอร์นี้ไม่ได้';
+
+  @override
+  String get savesFolderDetecting => 'กำลังค้นหาโฟลเดอร์…';
+
+  @override
+  String get savesFolderDefaultTag => 'ค่าเริ่มต้น';
+
+  @override
+  String get savesFolderParent => 'โฟลเดอร์ระดับบน';
 }

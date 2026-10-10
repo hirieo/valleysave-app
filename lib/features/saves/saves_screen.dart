@@ -31,6 +31,7 @@ import '../../core/services/save_replace_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
+import '../../core/services/stardew_paths.dart';
 import '../../core/services/transfer_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/utils/app_page_route.dart';
@@ -1606,6 +1607,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _openSettings() async {
+    final savesPathBefore = AndroidSavesPath.instance.current;
     final result = await Navigator.push<String?>(
       context,
       AppPageRoute(
@@ -1623,6 +1625,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       if (mounted) {
         setState(() => _gameCanLaunch = GameLaunchService.instance.canLaunch);
       }
+    }
+    // La carpeta de saves de Android pudo cambiar en Ajustes → recargar la
+    // lista con la carpeta nueva.
+    if (Platform.isAndroid &&
+        result == null &&
+        AndroidSavesPath.instance.current != savesPathBefore) {
+      await _load();
+      if (!mounted) return;
     }
     // T916 (D4, G6): el interruptor de auto-actualizar pudo cambiar en
     // Ajustes — releer y aplicar en caliente (arranca o para watcher+timer),

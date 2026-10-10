@@ -2036,6 +2036,64 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => '点击重试';
+
+  @override
+  String get savesFolderTitle => '存档文件夹';
+
+  @override
+  String get savesFolderCurrent => '当前文件夹';
+
+  @override
+  String get savesFolderDetected => '检测到的文件夹';
+
+  @override
+  String savesFolderCount(int count) {
+    return '存档数：$count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => '未能自动检测到文件夹。';
+
+  @override
+  String get savesFolderBrowse => '浏览文件夹…';
+
+  @override
+  String get savesFolderReset => '恢复默认';
+
+  @override
+  String get savesFolderUse => '使用此文件夹';
+
+  @override
+  String get savesFolderVerify => '验证';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return '在此文件夹中找到 $count 个存档。';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty => '此文件夹中没有存档，但仍可使用。';
+
+  @override
+  String get savesFolderVerifyMissing => '未找到文件夹或无法读取。';
+
+  @override
+  String get savesFolderLooksLike => '存档文件夹';
+
+  @override
+  String get savesFolderNoSubfolders => '这里没有子文件夹。';
+
+  @override
+  String get savesFolderListError => '无法读取此文件夹。';
+
+  @override
+  String get savesFolderDetecting => '正在查找文件夹…';
+
+  @override
+  String get savesFolderDefaultTag => '默认';
+
+  @override
+  String get savesFolderParent => '上级文件夹';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4067,4 +4125,62 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get updateCheckFailedRetry => '點擊重試';
+
+  @override
+  String get savesFolderTitle => '存檔資料夾';
+
+  @override
+  String get savesFolderCurrent => '目前資料夾';
+
+  @override
+  String get savesFolderDetected => '偵測到的資料夾';
+
+  @override
+  String savesFolderCount(int count) {
+    return '存檔數：$count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => '未能自動偵測到資料夾。';
+
+  @override
+  String get savesFolderBrowse => '瀏覽資料夾…';
+
+  @override
+  String get savesFolderReset => '還原預設值';
+
+  @override
+  String get savesFolderUse => '使用此資料夾';
+
+  @override
+  String get savesFolderVerify => '驗證';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return '在此資料夾中找到 $count 個存檔。';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty => '此資料夾中沒有存檔，但仍可使用。';
+
+  @override
+  String get savesFolderVerifyMissing => '找不到資料夾或無法讀取。';
+
+  @override
+  String get savesFolderLooksLike => '存檔資料夾';
+
+  @override
+  String get savesFolderNoSubfolders => '這裡沒有子資料夾。';
+
+  @override
+  String get savesFolderListError => '無法讀取此資料夾。';
+
+  @override
+  String get savesFolderDetecting => '正在尋找資料夾…';
+
+  @override
+  String get savesFolderDefaultTag => '預設';
+
+  @override
+  String get savesFolderParent => '上層資料夾';
 }

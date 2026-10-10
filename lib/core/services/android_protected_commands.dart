@@ -25,16 +25,20 @@ class AndroidProtectedCommands {
   /// `null` si [folderName] o [transactionId] no son seguros para
   /// interpolar en shell (traversal, metacaracteres) — el rechazo ocurre
   /// ANTES de construir cualquier comando, nunca llega a interpolarse.
-  /// [baseDir] es la carpeta protegida real (`gameSavesPath`) en producción;
+  /// [baseDir] es la carpeta protegida real (`AndroidSavesPath.current`) en producción;
   /// solo se sobreescribe en tests, para poder ejecutar el script contra un
   /// directorio temporal real en vez de la ruta de Android.
   static String? replace({
     required String src,
     required String folderName,
     required String transactionId,
-    String baseDir = gameSavesPath,
+    String? baseDir,
   }) {
     if (!_isSafeName(folderName) || !_isSafeName(transactionId)) return null;
+    // Ruta de saves configurable (AndroidSavesPath, ya validada al cargar);
+    // se revalida aquí porque va a un shell root.
+    baseDir ??= AndroidSavesPath.instance.current;
+    if (!isValidSavesPath(baseDir)) return null;
 
     final dest = '$baseDir/$folderName';
     final tmp = '$baseDir/.vs_tmp_$transactionId';

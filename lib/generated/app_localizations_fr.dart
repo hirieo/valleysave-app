@@ -2154,4 +2154,64 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Appuyez pour réessayer';
+
+  @override
+  String get savesFolderTitle => 'Dossier des sauvegardes';
+
+  @override
+  String get savesFolderCurrent => 'Dossier actuel';
+
+  @override
+  String get savesFolderDetected => 'Dossiers détectés';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Sauvegardes : $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected =>
+      'Aucun dossier détecté automatiquement.';
+
+  @override
+  String get savesFolderBrowse => 'Parcourir les dossiers…';
+
+  @override
+  String get savesFolderReset => 'Rétablir la valeur par défaut';
+
+  @override
+  String get savesFolderUse => 'Utiliser ce dossier';
+
+  @override
+  String get savesFolderVerify => 'Vérifier';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return '$count sauvegardes trouvées dans ce dossier.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'Aucune sauvegarde dans ce dossier. Vous pouvez quand même l\'utiliser.';
+
+  @override
+  String get savesFolderVerifyMissing => 'Dossier introuvable ou illisible.';
+
+  @override
+  String get savesFolderLooksLike => 'Dossier des sauvegardes';
+
+  @override
+  String get savesFolderNoSubfolders => 'Aucun sous-dossier ici.';
+
+  @override
+  String get savesFolderListError => 'Impossible de lire ce dossier.';
+
+  @override
+  String get savesFolderDetecting => 'Recherche des dossiers…';
+
+  @override
+  String get savesFolderDefaultTag => 'Par défaut';
+
+  @override
+  String get savesFolderParent => 'Dossier parent';
 }

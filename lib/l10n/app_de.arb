@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Prüfung fehlgeschlagen",
-  "updateCheckFailedRetry": "Zum Wiederholen tippen"
+  "updateCheckFailedRetry": "Zum Wiederholen tippen",
+  "savesFolderTitle": "Speicherstand-Ordner",
+  "savesFolderCurrent": "Aktueller Ordner",
+  "savesFolderDetected": "Erkannte Ordner",
+  "savesFolderCount": "Spielstände: {count}",
+  "savesFolderNoneDetected": "Kein Ordner automatisch erkannt.",
+  "savesFolderBrowse": "Ordner durchsuchen…",
+  "savesFolderReset": "Standard wiederherstellen",
+  "savesFolderUse": "Diesen Ordner verwenden",
+  "savesFolderVerify": "Prüfen",
+  "savesFolderVerifyOk": "{count} Spielstände in diesem Ordner gefunden.",
+  "savesFolderVerifyEmpty": "Keine Spielstände in diesem Ordner. Du kannst ihn trotzdem verwenden.",
+  "savesFolderVerifyMissing": "Ordner nicht gefunden oder nicht lesbar.",
+  "savesFolderLooksLike": "Spielstand-Ordner",
+  "savesFolderNoSubfolders": "Hier gibt es keine Unterordner.",
+  "savesFolderListError": "Dieser Ordner konnte nicht gelesen werden.",
+  "savesFolderDetecting": "Suche Ordner…",
+  "savesFolderDefaultTag": "Standard",
+  "savesFolderParent": "Übergeordneter Ordner"
 }

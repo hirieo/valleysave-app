@@ -2152,4 +2152,64 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Натисніть, щоб повторити';
+
+  @override
+  String get savesFolderTitle => 'Папка збережень';
+
+  @override
+  String get savesFolderCurrent => 'Поточна папка';
+
+  @override
+  String get savesFolderDetected => 'Знайдені папки';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Збережень: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => 'Папки автоматично не знайдено.';
+
+  @override
+  String get savesFolderBrowse => 'Огляд папок…';
+
+  @override
+  String get savesFolderReset => 'Повернути типове значення';
+
+  @override
+  String get savesFolderUse => 'Використати цю папку';
+
+  @override
+  String get savesFolderVerify => 'Перевірити';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'У цій папці знайдено збережень: $count.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'У цій папці немає збережень. Її все одно можна використати.';
+
+  @override
+  String get savesFolderVerifyMissing =>
+      'Папку не знайдено або її неможливо прочитати.';
+
+  @override
+  String get savesFolderLooksLike => 'Папка збережень';
+
+  @override
+  String get savesFolderNoSubfolders => 'Тут немає вкладених папок.';
+
+  @override
+  String get savesFolderListError => 'Не вдалося прочитати цю папку.';
+
+  @override
+  String get savesFolderDetecting => 'Пошук папок…';
+
+  @override
+  String get savesFolderDefaultTag => 'Типово';
+
+  @override
+  String get savesFolderParent => 'Батьківська папка';
 }

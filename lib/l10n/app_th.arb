@@ -1107,5 +1107,23 @@
     }
   },
   "updateCheckFailed": "ตรวจสอบไม่ได้",
-  "updateCheckFailedRetry": "แตะเพื่อลองอีกครั้ง"
+  "updateCheckFailedRetry": "แตะเพื่อลองอีกครั้ง",
+  "savesFolderTitle": "โฟลเดอร์เซฟ",
+  "savesFolderCurrent": "โฟลเดอร์ปัจจุบัน",
+  "savesFolderDetected": "โฟลเดอร์ที่ตรวจพบ",
+  "savesFolderCount": "จำนวนเซฟ: {count}",
+  "savesFolderNoneDetected": "ตรวจไม่พบโฟลเดอร์โดยอัตโนมัติ",
+  "savesFolderBrowse": "เรียกดูโฟลเดอร์…",
+  "savesFolderReset": "คืนค่าเริ่มต้น",
+  "savesFolderUse": "ใช้โฟลเดอร์นี้",
+  "savesFolderVerify": "ตรวจสอบ",
+  "savesFolderVerifyOk": "พบเซฟ {count} รายการในโฟลเดอร์นี้",
+  "savesFolderVerifyEmpty": "ไม่มีเซฟในโฟลเดอร์นี้ แต่ยังใช้งานได้",
+  "savesFolderVerifyMissing": "ไม่พบโฟลเดอร์หรืออ่านไม่ได้",
+  "savesFolderLooksLike": "โฟลเดอร์เซฟ",
+  "savesFolderNoSubfolders": "ไม่มีโฟลเดอร์ย่อยที่นี่",
+  "savesFolderListError": "อ่านโฟลเดอร์นี้ไม่ได้",
+  "savesFolderDetecting": "กำลังค้นหาโฟลเดอร์…",
+  "savesFolderDefaultTag": "ค่าเริ่มต้น",
+  "savesFolderParent": "โฟลเดอร์ระดับบน"
 }

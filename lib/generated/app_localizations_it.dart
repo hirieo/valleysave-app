@@ -2146,4 +2146,64 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Tocca per riprovare';
+
+  @override
+  String get savesFolderTitle => 'Cartella dei salvataggi';
+
+  @override
+  String get savesFolderCurrent => 'Cartella attuale';
+
+  @override
+  String get savesFolderDetected => 'Cartelle rilevate';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Salvataggi: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected =>
+      'Nessuna cartella rilevata automaticamente.';
+
+  @override
+  String get savesFolderBrowse => 'Sfoglia cartelle…';
+
+  @override
+  String get savesFolderReset => 'Ripristina predefinito';
+
+  @override
+  String get savesFolderUse => 'Usa questa cartella';
+
+  @override
+  String get savesFolderVerify => 'Verifica';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'Trovati $count salvataggi in questa cartella.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'Nessun salvataggio in questa cartella. Puoi usarla comunque.';
+
+  @override
+  String get savesFolderVerifyMissing => 'Cartella non trovata o illeggibile.';
+
+  @override
+  String get savesFolderLooksLike => 'Cartella dei salvataggi';
+
+  @override
+  String get savesFolderNoSubfolders => 'Nessuna sottocartella qui.';
+
+  @override
+  String get savesFolderListError => 'Impossibile leggere questa cartella.';
+
+  @override
+  String get savesFolderDetecting => 'Ricerca delle cartelle…';
+
+  @override
+  String get savesFolderDefaultTag => 'Predefinita';
+
+  @override
+  String get savesFolderParent => 'Cartella superiore';
 }

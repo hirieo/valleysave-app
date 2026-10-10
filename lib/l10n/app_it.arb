@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Controllo non riuscito",
-  "updateCheckFailedRetry": "Tocca per riprovare"
+  "updateCheckFailedRetry": "Tocca per riprovare",
+  "savesFolderTitle": "Cartella dei salvataggi",
+  "savesFolderCurrent": "Cartella attuale",
+  "savesFolderDetected": "Cartelle rilevate",
+  "savesFolderCount": "Salvataggi: {count}",
+  "savesFolderNoneDetected": "Nessuna cartella rilevata automaticamente.",
+  "savesFolderBrowse": "Sfoglia cartelle…",
+  "savesFolderReset": "Ripristina predefinito",
+  "savesFolderUse": "Usa questa cartella",
+  "savesFolderVerify": "Verifica",
+  "savesFolderVerifyOk": "Trovati {count} salvataggi in questa cartella.",
+  "savesFolderVerifyEmpty": "Nessun salvataggio in questa cartella. Puoi usarla comunque.",
+  "savesFolderVerifyMissing": "Cartella non trovata o illeggibile.",
+  "savesFolderLooksLike": "Cartella dei salvataggi",
+  "savesFolderNoSubfolders": "Nessuna sottocartella qui.",
+  "savesFolderListError": "Impossibile leggere questa cartella.",
+  "savesFolderDetecting": "Ricerca delle cartelle…",
+  "savesFolderDefaultTag": "Predefinita",
+  "savesFolderParent": "Cartella superiore"
 }

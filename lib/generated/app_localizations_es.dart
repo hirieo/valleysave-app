@@ -2138,4 +2138,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Toca para reintentar';
+
+  @override
+  String get savesFolderTitle => 'Carpeta de saves';
+
+  @override
+  String get savesFolderCurrent => 'Carpeta actual';
+
+  @override
+  String get savesFolderDetected => 'Carpetas detectadas';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Saves: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected =>
+      'No se detectó ninguna carpeta automáticamente.';
+
+  @override
+  String get savesFolderBrowse => 'Explorar carpetas…';
+
+  @override
+  String get savesFolderReset => 'Restaurar valor por defecto';
+
+  @override
+  String get savesFolderUse => 'Usar esta carpeta';
+
+  @override
+  String get savesFolderVerify => 'Verificar';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'Se encontraron $count saves en esta carpeta.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'No hay saves en esta carpeta. Aun así puedes usarla.';
+
+  @override
+  String get savesFolderVerifyMissing => 'Carpeta no encontrada o ilegible.';
+
+  @override
+  String get savesFolderLooksLike => 'Carpeta de saves';
+
+  @override
+  String get savesFolderNoSubfolders => 'No hay subcarpetas aquí.';
+
+  @override
+  String get savesFolderListError => 'No se pudo leer esta carpeta.';
+
+  @override
+  String get savesFolderDetecting => 'Buscando carpetas…';
+
+  @override
+  String get savesFolderDefaultTag => 'Por defecto';
+
+  @override
+  String get savesFolderParent => 'Carpeta superior';
 }

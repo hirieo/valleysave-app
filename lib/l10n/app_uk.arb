@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Не вдалося перевірити",
-  "updateCheckFailedRetry": "Натисніть, щоб повторити"
+  "updateCheckFailedRetry": "Натисніть, щоб повторити",
+  "savesFolderTitle": "Папка збережень",
+  "savesFolderCurrent": "Поточна папка",
+  "savesFolderDetected": "Знайдені папки",
+  "savesFolderCount": "Збережень: {count}",
+  "savesFolderNoneDetected": "Папки автоматично не знайдено.",
+  "savesFolderBrowse": "Огляд папок…",
+  "savesFolderReset": "Повернути типове значення",
+  "savesFolderUse": "Використати цю папку",
+  "savesFolderVerify": "Перевірити",
+  "savesFolderVerifyOk": "У цій папці знайдено збережень: {count}.",
+  "savesFolderVerifyEmpty": "У цій папці немає збережень. Її все одно можна використати.",
+  "savesFolderVerifyMissing": "Папку не знайдено або її неможливо прочитати.",
+  "savesFolderLooksLike": "Папка збережень",
+  "savesFolderNoSubfolders": "Тут немає вкладених папок.",
+  "savesFolderListError": "Не вдалося прочитати цю папку.",
+  "savesFolderDetecting": "Пошук папок…",
+  "savesFolderDefaultTag": "Типово",
+  "savesFolderParent": "Батьківська папка"
 }

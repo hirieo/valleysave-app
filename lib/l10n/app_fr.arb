@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Vérification impossible",
-  "updateCheckFailedRetry": "Appuyez pour réessayer"
+  "updateCheckFailedRetry": "Appuyez pour réessayer",
+  "savesFolderTitle": "Dossier des sauvegardes",
+  "savesFolderCurrent": "Dossier actuel",
+  "savesFolderDetected": "Dossiers détectés",
+  "savesFolderCount": "Sauvegardes : {count}",
+  "savesFolderNoneDetected": "Aucun dossier détecté automatiquement.",
+  "savesFolderBrowse": "Parcourir les dossiers…",
+  "savesFolderReset": "Rétablir la valeur par défaut",
+  "savesFolderUse": "Utiliser ce dossier",
+  "savesFolderVerify": "Vérifier",
+  "savesFolderVerifyOk": "{count} sauvegardes trouvées dans ce dossier.",
+  "savesFolderVerifyEmpty": "Aucune sauvegarde dans ce dossier. Vous pouvez quand même l'utiliser.",
+  "savesFolderVerifyMissing": "Dossier introuvable ou illisible.",
+  "savesFolderLooksLike": "Dossier des sauvegardes",
+  "savesFolderNoSubfolders": "Aucun sous-dossier ici.",
+  "savesFolderListError": "Impossible de lire ce dossier.",
+  "savesFolderDetecting": "Recherche des dossiers…",
+  "savesFolderDefaultTag": "Par défaut",
+  "savesFolderParent": "Dossier parent"
 }

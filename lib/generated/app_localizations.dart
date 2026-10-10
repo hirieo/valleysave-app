@@ -3732,6 +3732,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to retry'**
   String get updateCheckFailedRetry;
+
+  /// No description provided for @savesFolderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves folder'**
+  String get savesFolderTitle;
+
+  /// No description provided for @savesFolderCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current folder'**
+  String get savesFolderCurrent;
+
+  /// No description provided for @savesFolderDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected folders'**
+  String get savesFolderDetected;
+
+  /// No description provided for @savesFolderCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves: {count}'**
+  String savesFolderCount(int count);
+
+  /// No description provided for @savesFolderNoneDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'No folders detected automatically.'**
+  String get savesFolderNoneDetected;
+
+  /// No description provided for @savesFolderBrowse.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse folders…'**
+  String get savesFolderBrowse;
+
+  /// No description provided for @savesFolderReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore default'**
+  String get savesFolderReset;
+
+  /// No description provided for @savesFolderUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this folder'**
+  String get savesFolderUse;
+
+  /// No description provided for @savesFolderVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get savesFolderVerify;
+
+  /// No description provided for @savesFolderVerifyOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Found {count} saves in this folder.'**
+  String savesFolderVerifyOk(int count);
+
+  /// No description provided for @savesFolderVerifyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saves in this folder. You can still use it.'**
+  String get savesFolderVerifyEmpty;
+
+  /// No description provided for @savesFolderVerifyMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder not found or not readable.'**
+  String get savesFolderVerifyMissing;
+
+  /// No description provided for @savesFolderLooksLike.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves folder'**
+  String get savesFolderLooksLike;
+
+  /// No description provided for @savesFolderNoSubfolders.
+  ///
+  /// In en, this message translates to:
+  /// **'No subfolders here.'**
+  String get savesFolderNoSubfolders;
+
+  /// No description provided for @savesFolderListError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read this folder.'**
+  String get savesFolderListError;
+
+  /// No description provided for @savesFolderDetecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for folders…'**
+  String get savesFolderDetecting;
+
+  /// No description provided for @savesFolderDefaultTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get savesFolderDefaultTag;
+
+  /// No description provided for @savesFolderParent.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent folder'**
+  String get savesFolderParent;
 }
 
 class _AppLocalizationsDelegate

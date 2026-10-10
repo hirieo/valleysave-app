@@ -23,8 +23,6 @@ class MainActivity : FlutterActivity() {
     private val mainHandler = Handler(Looper.getMainLooper())
 
     companion object {
-        private const val SAVES_PATH =
-            "/storage/emulated/0/Android/data/com.chucklefish.stardewvalley/files/Saves"
         private const val ROOT_TIMEOUT_MS = 15_000L
     }
 
@@ -103,8 +101,12 @@ class MainActivity : FlutterActivity() {
                     "pullSavesAsRoot" -> {
                         val dst = call.argument<String>("dst")
                         if (dst == null) { result.error("NO_DST", null, null); return@setMethodCallHandler }
+                        val savesPath = call.argument<String>("savesPath")
+                        if (savesPath == null || !isSafeSavesPath(savesPath)) {
+                            result.error("BAD_ARGS", null, null); return@setMethodCallHandler
+                        }
                         Thread {
-                            val ok = runSu("cp -rfp ${shellQuote("$SAVES_PATH/.")} ${shellQuote("$dst/")}")
+                            val ok = runSu("cp -rfp ${shellQuote("$savesPath/.")} ${shellQuote("$dst/")}")
                             mainHandler.post { result.success(ok) }
                         }.start()
                     }
@@ -127,12 +129,28 @@ class MainActivity : FlutterActivity() {
                     }
                     "deleteLocalAsRoot" -> {
                         val name = call.argument<String>("name")
-                        if (name == null || !isSafeSaveName(name)) {
+                        val savesPath = call.argument<String>("savesPath")
+                        if (name == null || !isSafeSaveName(name) ||
+                            savesPath == null || !isSafeSavesPath(savesPath)
+                        ) {
                             result.error("BAD_ARGS", null, null); return@setMethodCallHandler
                         }
                         Thread {
-                            val ok = runSu("rm -rf ${shellQuote("$SAVES_PATH/$name")}")
+                            val ok = runSu("rm -rf ${shellQuote("$savesPath/$name")}")
                             mainHandler.post { result.success(ok) }
+                        }.start()
+                    }
+                    "runRootCommand" -> {
+                        // Solo lectura (ls / test) para detectar y explorar la
+                        // carpeta de saves. El comando lo construye Dart
+                        // (saves_folder_scan.dart) con rutas ya validadas.
+                        val command = call.argument<String>("command")
+                        if (command == null || command.length > 4096 || command.contains('\u0000')) {
+                            result.error("BAD_ARGS", null, null); return@setMethodCallHandler
+                        }
+                        Thread {
+                            val out = runSuOutput(command)
+                            mainHandler.post { result.success(out) }
                         }.start()
                     }
                     else -> result.notImplemented()
@@ -169,6 +187,12 @@ class MainActivity : FlutterActivity() {
     private fun isSafeSaveName(name: String): Boolean =
         name.matches(Regex("^[A-Za-z0-9_.-]{1,160}$")) && name != "." && name != ".."
 
+    /** Misma regla que `isValidSavesPath` en Dart (stardew_paths.dart):
+     *  absoluta, sin segmentos `..`, solo `[A-Za-z0-9_./ -]`, 1..512 tras `/`. */
+    private fun isSafeSavesPath(path: String): Boolean =
+        path.matches(Regex("^/[A-Za-z0-9_./ -]{1,512}$")) &&
+            !path.split("/").contains("..")
+
     /** Comillas simples POSIX con escape de comillas internas (`'` →
      *  `'\''`) — a diferencia de las comillas dobles usadas antes aquí,
      *  bloquea también `$()`, backticks y `\`, no solo word-splitting/
@@ -186,6 +210,18 @@ class MainActivity : FlutterActivity() {
         if (waiter.isAlive) { proc.destroyForcibly(); false }
         else proc.exitValue() == 0
     } catch (_: Exception) { false }
+
+    /** Como [runSu] pero devuelve stdout (null si falla o agota el timeout). */
+    private fun runSuOutput(cmd: String): String? = try {
+        val proc = Runtime.getRuntime().exec(arrayOf("su", "-c", cmd))
+        var text: String? = null
+        val reader = Thread {
+            try { text = proc.inputStream.bufferedReader().readText() } catch (_: Exception) {}
+        }
+        reader.start()
+        reader.join(ROOT_TIMEOUT_MS)
+        if (reader.isAlive) { proc.destroyForcibly(); null } else { proc.waitFor(); text }
+    } catch (_: Exception) { null }
 
     private fun isShizukuAlive(): Boolean = try {
         binderAlive || Shizuku.pingBinder()

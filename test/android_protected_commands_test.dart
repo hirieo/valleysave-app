@@ -32,8 +32,8 @@ void main() {
     ]) {
       expect(command, contains('"phase":"$phase"'));
     }
-    expect(command, contains('$gameSavesPath/.vs_tmp_tx_1'));
-    expect(command, contains('$gameSavesPath/.vs_rollback_tx_1'));
+    expect(command, contains('$defaultGameSavesPath/.vs_tmp_tx_1'));
+    expect(command, contains('$defaultGameSavesPath/.vs_rollback_tx_1'));
     expect(command, contains('trap rollback EXIT'));
     expect(command, contains("stage'\\''s copy"));
   });
@@ -67,7 +67,7 @@ void main() {
       transactionId: 'tx_2',
     )!;
 
-    expect(command, contains("mv '$gameSavesPath/.vs_rollback_tx_2'"));
+    expect(command, contains("mv '$defaultGameSavesPath/.vs_rollback_tx_2'"));
     expect(
       command.indexOf('trap rollback EXIT'),
       lessThan(command.indexOf('"phase":"preparing"')),
@@ -83,12 +83,12 @@ void main() {
     expect(
       command,
       contains(
-        'if [ ! -s "$gameSavesPath/.vs_tmp_tx_2/Farm_1" ]; then exit 1; fi',
+        'if [ ! -s "$defaultGameSavesPath/.vs_tmp_tx_2/Farm_1" ]; then exit 1; fi',
       ),
     );
     expect(
       command,
-      contains('if [ ! -s "$gameSavesPath/Farm_1/Farm_1" ]; then exit 1; fi'),
+      contains('if [ ! -s "$defaultGameSavesPath/Farm_1/Farm_1" ]; then exit 1; fi'),
     );
   });
 
@@ -100,11 +100,11 @@ void main() {
     )!;
     final moving = command.indexOf('"phase":"movingOriginal"');
     final moveOriginal = command.indexOf(
-      "mv '$gameSavesPath/Farm_1' '$gameSavesPath/.vs_rollback_tx_3'",
+      "mv '$defaultGameSavesPath/Farm_1' '$defaultGameSavesPath/.vs_rollback_tx_3'",
     );
     final originalMoved = command.indexOf('"phase":"originalMoved"');
     final publish = command.indexOf(
-      "mv '$gameSavesPath/.vs_tmp_tx_3' '$gameSavesPath/Farm_1'",
+      "mv '$defaultGameSavesPath/.vs_tmp_tx_3' '$defaultGameSavesPath/Farm_1'",
     );
     final published = command.indexOf('"phase":"replacementPublished"');
     expect(moving, lessThan(moveOriginal));

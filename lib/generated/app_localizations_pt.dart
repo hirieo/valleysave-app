@@ -2137,4 +2137,64 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Toque para tentar novamente';
+
+  @override
+  String get savesFolderTitle => 'Pasta de saves';
+
+  @override
+  String get savesFolderCurrent => 'Pasta atual';
+
+  @override
+  String get savesFolderDetected => 'Pastas detetadas';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Saves: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected =>
+      'Nenhuma pasta detetada automaticamente.';
+
+  @override
+  String get savesFolderBrowse => 'Explorar pastas…';
+
+  @override
+  String get savesFolderReset => 'Repor predefinição';
+
+  @override
+  String get savesFolderUse => 'Usar esta pasta';
+
+  @override
+  String get savesFolderVerify => 'Verificar';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'Encontrados $count saves nesta pasta.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'Não há saves nesta pasta. Ainda assim, podes usá-la.';
+
+  @override
+  String get savesFolderVerifyMissing => 'Pasta não encontrada ou ilegível.';
+
+  @override
+  String get savesFolderLooksLike => 'Pasta de saves';
+
+  @override
+  String get savesFolderNoSubfolders => 'Não há subpastas aqui.';
+
+  @override
+  String get savesFolderListError => 'Não foi possível ler esta pasta.';
+
+  @override
+  String get savesFolderDetecting => 'A procurar pastas…';
+
+  @override
+  String get savesFolderDefaultTag => 'Predefinida';
+
+  @override
+  String get savesFolderParent => 'Pasta superior';
 }

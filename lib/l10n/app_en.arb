@@ -1121,5 +1121,37 @@
   "makeHostDeleteWithoutUpload": "Delete without uploading",
   "makeHostUploadAndDelete": "Upload and delete",
   "updateCheckFailed": "Could not check",
-  "updateCheckFailedRetry": "Tap to retry"
+  "updateCheckFailedRetry": "Tap to retry",
+  "savesFolderTitle": "Saves folder",
+  "savesFolderCurrent": "Current folder",
+  "savesFolderDetected": "Detected folders",
+  "savesFolderCount": "Saves: {count}",
+  "@savesFolderCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "savesFolderNoneDetected": "No folders detected automatically.",
+  "savesFolderBrowse": "Browse folders…",
+  "savesFolderReset": "Restore default",
+  "savesFolderUse": "Use this folder",
+  "savesFolderVerify": "Verify",
+  "savesFolderVerifyOk": "Found {count} saves in this folder.",
+  "@savesFolderVerifyOk": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "savesFolderVerifyEmpty": "No saves in this folder. You can still use it.",
+  "savesFolderVerifyMissing": "Folder not found or not readable.",
+  "savesFolderLooksLike": "Saves folder",
+  "savesFolderNoSubfolders": "No subfolders here.",
+  "savesFolderListError": "Could not read this folder.",
+  "savesFolderDetecting": "Looking for folders…",
+  "savesFolderDefaultTag": "Default",
+  "savesFolderParent": "Parent folder"
 }

@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Não foi possível verificar",
-  "updateCheckFailedRetry": "Toque para tentar novamente"
+  "updateCheckFailedRetry": "Toque para tentar novamente",
+  "savesFolderTitle": "Pasta de saves",
+  "savesFolderCurrent": "Pasta atual",
+  "savesFolderDetected": "Pastas detetadas",
+  "savesFolderCount": "Saves: {count}",
+  "savesFolderNoneDetected": "Nenhuma pasta detetada automaticamente.",
+  "savesFolderBrowse": "Explorar pastas…",
+  "savesFolderReset": "Repor predefinição",
+  "savesFolderUse": "Usar esta pasta",
+  "savesFolderVerify": "Verificar",
+  "savesFolderVerifyOk": "Encontrados {count} saves nesta pasta.",
+  "savesFolderVerifyEmpty": "Não há saves nesta pasta. Ainda assim, podes usá-la.",
+  "savesFolderVerifyMissing": "Pasta não encontrada ou ilegível.",
+  "savesFolderLooksLike": "Pasta de saves",
+  "savesFolderNoSubfolders": "Não há subpastas aqui.",
+  "savesFolderListError": "Não foi possível ler esta pasta.",
+  "savesFolderDetecting": "A procurar pastas…",
+  "savesFolderDefaultTag": "Predefinida",
+  "savesFolderParent": "Pasta superior"
 }

@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Не удалось проверить",
-  "updateCheckFailedRetry": "Нажмите, чтобы повторить"
+  "updateCheckFailedRetry": "Нажмите, чтобы повторить",
+  "savesFolderTitle": "Папка сохранений",
+  "savesFolderCurrent": "Текущая папка",
+  "savesFolderDetected": "Найденные папки",
+  "savesFolderCount": "Сохранений: {count}",
+  "savesFolderNoneDetected": "Папки автоматически не найдены.",
+  "savesFolderBrowse": "Обзор папок…",
+  "savesFolderReset": "Вернуть по умолчанию",
+  "savesFolderUse": "Использовать эту папку",
+  "savesFolderVerify": "Проверить",
+  "savesFolderVerifyOk": "В этой папке найдено сохранений: {count}.",
+  "savesFolderVerifyEmpty": "В этой папке нет сохранений. Её всё равно можно использовать.",
+  "savesFolderVerifyMissing": "Папка не найдена или недоступна для чтения.",
+  "savesFolderLooksLike": "Папка сохранений",
+  "savesFolderNoSubfolders": "Здесь нет вложенных папок.",
+  "savesFolderListError": "Не удалось прочитать эту папку.",
+  "savesFolderDetecting": "Поиск папок…",
+  "savesFolderDefaultTag": "По умолчанию",
+  "savesFolderParent": "Родительская папка"
 }

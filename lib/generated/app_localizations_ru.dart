@@ -2153,4 +2153,64 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get updateCheckFailedRetry => 'Нажмите, чтобы повторить';
+
+  @override
+  String get savesFolderTitle => 'Папка сохранений';
+
+  @override
+  String get savesFolderCurrent => 'Текущая папка';
+
+  @override
+  String get savesFolderDetected => 'Найденные папки';
+
+  @override
+  String savesFolderCount(int count) {
+    return 'Сохранений: $count';
+  }
+
+  @override
+  String get savesFolderNoneDetected => 'Папки автоматически не найдены.';
+
+  @override
+  String get savesFolderBrowse => 'Обзор папок…';
+
+  @override
+  String get savesFolderReset => 'Вернуть по умолчанию';
+
+  @override
+  String get savesFolderUse => 'Использовать эту папку';
+
+  @override
+  String get savesFolderVerify => 'Проверить';
+
+  @override
+  String savesFolderVerifyOk(int count) {
+    return 'В этой папке найдено сохранений: $count.';
+  }
+
+  @override
+  String get savesFolderVerifyEmpty =>
+      'В этой папке нет сохранений. Её всё равно можно использовать.';
+
+  @override
+  String get savesFolderVerifyMissing =>
+      'Папка не найдена или недоступна для чтения.';
+
+  @override
+  String get savesFolderLooksLike => 'Папка сохранений';
+
+  @override
+  String get savesFolderNoSubfolders => 'Здесь нет вложенных папок.';
+
+  @override
+  String get savesFolderListError => 'Не удалось прочитать эту папку.';
+
+  @override
+  String get savesFolderDetecting => 'Поиск папок…';
+
+  @override
+  String get savesFolderDefaultTag => 'По умолчанию';
+
+  @override
+  String get savesFolderParent => 'Родительская папка';
 }

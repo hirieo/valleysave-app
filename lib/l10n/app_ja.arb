@@ -1107,5 +1107,23 @@
     }
   },
   "updateCheckFailed": "確認できませんでした",
-  "updateCheckFailedRetry": "タップして再試行"
+  "updateCheckFailedRetry": "タップして再試行",
+  "savesFolderTitle": "セーブフォルダ",
+  "savesFolderCurrent": "現在のフォルダ",
+  "savesFolderDetected": "検出されたフォルダ",
+  "savesFolderCount": "セーブ数: {count}",
+  "savesFolderNoneDetected": "フォルダを自動検出できませんでした。",
+  "savesFolderBrowse": "フォルダを参照…",
+  "savesFolderReset": "初期設定に戻す",
+  "savesFolderUse": "このフォルダを使う",
+  "savesFolderVerify": "確認",
+  "savesFolderVerifyOk": "このフォルダにセーブが {count} 件見つかりました。",
+  "savesFolderVerifyEmpty": "このフォルダにセーブはありません。それでも使用できます。",
+  "savesFolderVerifyMissing": "フォルダが見つからないか、読み取れません。",
+  "savesFolderLooksLike": "セーブフォルダ",
+  "savesFolderNoSubfolders": "ここにサブフォルダはありません。",
+  "savesFolderListError": "このフォルダを読み取れませんでした。",
+  "savesFolderDetecting": "フォルダを検索中…",
+  "savesFolderDefaultTag": "初期値",
+  "savesFolderParent": "上のフォルダ"
 }

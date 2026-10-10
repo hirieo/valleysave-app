@@ -1114,5 +1114,23 @@
     }
   },
   "updateCheckFailed": "Ezin izan da egiaztatu",
-  "updateCheckFailedRetry": "Sakatu berriro saiatzeko"
+  "updateCheckFailedRetry": "Sakatu berriro saiatzeko",
+  "savesFolderTitle": "Gordetako karpeta",
+  "savesFolderCurrent": "Uneko karpeta",
+  "savesFolderDetected": "Detektatutako karpetak",
+  "savesFolderCount": "Gordetakoak: {count}",
+  "savesFolderNoneDetected": "Ez da karpetarik automatikoki detektatu.",
+  "savesFolderBrowse": "Arakatu karpetak…",
+  "savesFolderReset": "Berrezarri lehenetsia",
+  "savesFolderUse": "Erabili karpeta hau",
+  "savesFolderVerify": "Egiaztatu",
+  "savesFolderVerifyOk": "{count} gordetako aurkitu dira karpeta honetan.",
+  "savesFolderVerifyEmpty": "Karpeta honetan ez dago gordetakorik. Hala ere erabil dezakezu.",
+  "savesFolderVerifyMissing": "Karpeta ez da aurkitu edo ezin da irakurri.",
+  "savesFolderLooksLike": "Gordetako karpeta",
+  "savesFolderNoSubfolders": "Ez dago azpikarpetarik hemen.",
+  "savesFolderListError": "Ezin izan da karpeta hau irakurri.",
+  "savesFolderDetecting": "Karpetak bilatzen…",
+  "savesFolderDefaultTag": "Lehenetsia",
+  "savesFolderParent": "Goiko karpeta"
 }

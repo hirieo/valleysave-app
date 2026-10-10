@@ -1,7 +1,7 @@
 name: valleysave
 description: "Sync Stardew Valley save files across devices via Google Drive."
 publish_to: 'none'
-version: 0.4.1+35
+version: 0.4.2+36
 
 environment:
   sdk: ^3.12.0

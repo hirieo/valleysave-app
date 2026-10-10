@@ -33,7 +33,7 @@ enum ReplaceError {
   /// cargable (corrupción a nivel de filesystem durante el rename, muy
   /// rara). El servicio ya revirtió al original desde el rollback — el
   /// caller nunca ve un save a medias (integrado de la implementación
-  /// paralela de Codex, 2026-07-18).
+  /// alternativa, 2026-07-18).
   postValidationFailed,
 
   /// Ya hay una operación en curso sobre el mismo `folderName`.
@@ -81,7 +81,7 @@ class SaveReplaceService {
   /// forzar de forma determinista y multiplataforma el punto exacto en el
   /// que falla el segundo rename, sin la técnica `chmod` (POSIX-only, no
   /// funciona en Windows). Solo para tests (integrado de la implementación
-  /// paralela de Codex, 2026-07-18 — antes ese camino de rollback no tenía
+  /// alternativa, 2026-07-18 — antes ese camino de rollback no tenía
   /// ninguna cobertura en Windows).
   @visibleForTesting
   factory SaveReplaceService.withRename(
@@ -130,7 +130,7 @@ class SaveReplaceService {
     // Clave por RUTA ABSOLUTA, no solo `folderName` — dos partidas con el
     // mismo nombre en raíces `savesDir` distintas (p. ej. dos discos, o un
     // futuro caso con más de una raíz activa por proceso) son operaciones
-    // independientes y no deben bloquearse entre sí (hallazgo de Codex,
+    // independientes y no deben bloquearse entre sí (revisión,
     // 2026-07-18 — antes esto era un supuesto implícito, nunca garantizado).
     final targetKey =
         '${Directory(savesDir).absolute.path}${Platform.pathSeparator}$folderName';
@@ -184,7 +184,7 @@ class SaveReplaceService {
       //    permanente de `HostSwapService`), se reutiliza tal cual y NO se
       //    crea un auto-backup: así ese respaldo del caller conserva su
       //    propio nombre/permanencia y nunca lo poda la retención automática
-      //    (integrado de Codex, 2026-07-18).
+      //    (revisión, 2026-07-18).
       final destination = Directory('$savesDir$sep$folderName');
       final destinationExists = await destination.exists();
       BackupEntry? autoBackup;
@@ -256,7 +256,7 @@ class SaveReplaceService {
       //     siendo un save cargable, y volver a pasar el [validate] del
       //     caller (que puede detectar algo que solo se manifiesta ya en el
       //     sitio final). Si algo falla, se revierte desde el rollback — el
-      //     original nunca se pierde (integrado de Codex, 2026-07-18).
+      //     original nunca se pierde (revisión, 2026-07-18).
       if (!await _isValidSaveDir(destination, folderName) ||
           (validate != null && !await validate(destination))) {
         await _safeDelete(destination);
@@ -269,7 +269,7 @@ class SaveReplaceService {
             // rollbackRoot y se conserva para que `sweepOrphans` lo restaure
             // en el próximo arranque. Borrarlo incondicionalmente aquí
             // destruiría la última copia válida (bug crítico de pérdida de
-            // datos detectado por Codex, 2026-07-18 — el camino `swapFailed`
+            // datos detectado en revisión, 2026-07-18 — el camino `swapFailed`
             // de arriba ya lo hacía bien, este 5b se había quedado atrás).
             await _safeDelete(rollbackRoot);
           } catch (_) {
@@ -295,11 +295,11 @@ class SaveReplaceService {
 
   /// Un directorio es un save cargable si tiene `SaveGameInfo` (XML
   /// parseable) y el archivo principal existe y NO está vacío. El rechazo de
-  /// 0 bytes se integró de la implementación paralela de Codex (2026-07-18):
+  /// 0 bytes se integró de una implementación alternativa (2026-07-18):
   /// antes un archivo principal truncado a 0 bytes que "existía" pasaba la
   /// validación.
   ///
-  /// A DIFERENCIA de Codex, NO se valida el contenido de los `_old`: son la
+  /// A DIFERENCIA de esa implementación, NO se valida el contenido de los `_old`: son la
   /// red de seguridad del propio juego (la versión anterior del save), no
   /// archivos esenciales. Rechazar un save principal perfectamente válido
   /// porque su `_old` compañero esté corrupto castigaría al usuario por un
@@ -331,7 +331,7 @@ class SaveReplaceService {
   ///   staging — nunca se codifica folderName en el nombre de la carpeta
   ///   temporal, ver [replaceSaveFolder]). La decisión NO se basa solo en si
   ///   `<savesDir>/<folderName>` existe, sino en si es un save VÁLIDO
-  ///   (hallazgo cruzado con Codex, 2026-07-18 — antes "destino existe" se
+  ///   (revisión cruzada, 2026-07-18 — antes "destino existe" se
   ///   trataba como "destino bueno", perdiendo un rollback sano si el
   ///   proceso moría justo tras el segundo rename pero antes de validar):
   ///   destino ausente → se restaura el rollback tal cual, sea válido o no
@@ -387,7 +387,7 @@ class SaveReplaceService {
         // rename pero antes de la validación post-swap puede dejar un
         // destino corrupto con un rollback perfectamente válido al lado.
         // Tratar "destino existe" como "destino bueno" perdería ese rollback
-        // (hallazgo cruzado con la implementación paralela de Codex,
+        // (hallazgo cruzado con una implementación alternativa,
         // 2026-07-18 — el mismo patrón de bug que arregló en su propia
         // recuperación, aquí en `sweepOrphans` en vez de en `replaceSaveFolder`).
         if (await _isValidSaveDir(destination, folderName)) {
@@ -437,7 +437,7 @@ class SaveReplaceService {
         // recuperable — no hay base para decidir cuál conservar. Se deja
         // todo tal cual para inspección manual: ningún rollback se elimina
         // sin demostrar que hay otra copia válida o que quedó archivado en
-        // un backup verificado (regla acordada con Codex, 2026-07-18).
+        // un backup verificado (regla acordada en revisión, 2026-07-18).
       }
     }
   }

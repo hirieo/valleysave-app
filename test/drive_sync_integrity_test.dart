@@ -703,7 +703,7 @@ void main() {
     test(
       'manifest PRESENTE pero corrupto → CorruptManifestException (NO sirve el plano obsoleto)',
       () async {
-        // Corrección tras comparar con Codex (2026-07-18): un save migrado a
+        // Corrección tras revisión cruzada (2026-07-18): un save migrado a
         // generaciones deja archivos planos viejos en el nivel superior; si
         // el manifiesto se corrompe, servirlos silenciosamente mostraría una
         // partida obsoleta. La presencia del manifiesto obliga a error.

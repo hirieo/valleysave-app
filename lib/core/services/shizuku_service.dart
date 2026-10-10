@@ -278,7 +278,7 @@ class ShizukuService {
 /// Nombres de save aceptados en cualquier comando shell root — mismo criterio
 /// que el formato real de Stardew (`<Nombre>_<uniqueID>`, alfanumérico +
 /// `_.-`). Rechaza traversal (`.`/`..`, `/`) y metacaracteres de shell antes
-/// de que lleguen a `su` (integrado de la implementación paralela de Codex,
+/// de que lleguen a `su` (integrado de una implementación alternativa,
 /// 2026-07-18 — nuestro código anterior los interpolaba crudos). Android-only,
 /// no ejercitado por la suite de escritorio.
 bool _isSafeSaveName(String value) =>

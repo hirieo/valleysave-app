@@ -179,11 +179,11 @@ class MainActivity : FlutterActivity() {
 
     /** Nombres de save aceptados en cualquier comando shell root — mismo
      *  criterio que el lado Dart (`shizuku_service.dart`, `_isSafeSaveName`)
-     *  y que la implementación paralela de Codex: alfanumérico + `_.-`,
+     *  y que la implementación alternativa: alfanumérico + `_.-`,
      *  nunca `.`/`..`. Defensa en profundidad — el lado Dart ya valida antes
      *  de invocar el canal, pero este método no debe confiar en que ningún
-     *  caller futuro mantenga esa garantía (2026-07-18, tras confirmar con
-     *  Codex que su propio `deleteLocalAsRoot` carecía de este guard). */
+     *  caller futuro mantenga esa garantía (2026-07-18, tras confirmar en
+     *  revisión que un `deleteLocalAsRoot` alternativo carecía de este guard). */
     private fun isSafeSaveName(name: String): Boolean =
         name.matches(Regex("^[A-Za-z0-9_.-]{1,160}$")) && name != "." && name != ".."
 
@@ -196,7 +196,7 @@ class MainActivity : FlutterActivity() {
     /** Comillas simples POSIX con escape de comillas internas (`'` →
      *  `'\''`) — a diferencia de las comillas dobles usadas antes aquí,
      *  bloquea también `$()`, backticks y `\`, no solo word-splitting/
-     *  globbing (2026-07-18, tras el hallazgo cruzado con Codex: comillas
+     *  globbing (2026-07-18, tras el revisión cruzada: comillas
      *  dobles no son suficientes para neutralizar un nombre hostil). */
     private fun shellQuote(value: String): String =
         "'" + value.replace("'", "'\\''") + "'"

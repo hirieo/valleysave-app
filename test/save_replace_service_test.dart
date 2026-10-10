@@ -208,7 +208,7 @@ void main() {
     });
 
     test('archivo principal de 0 bytes → validationFailed, destino intacto', () async {
-      // Endurecimiento integrado de Codex (2026-07-18): un main truncado a 0
+      // Endurecimiento de revisión (2026-07-18): un main truncado a 0
       // bytes que "existe" ya no cuela.
       await _writeSave(Directory(savesDir), folderName, money: '500');
       final before = await _snapshot(Directory(savesDir));
@@ -266,7 +266,7 @@ void main() {
     test(
       'post-validación falla Y la restauración TAMBIÉN falla → el original NO se pierde',
       () async {
-        // Bug crítico de pérdida de datos detectado por Codex (2026-07-18):
+        // Bug crítico de pérdida de datos detectado en revisión (2026-07-18):
         // si tras un fallo de post-validación el rename de restauración del
         // rollback también falla, el rollback (única copia válida del
         // original) NO debe borrarse — se conserva para que sweepOrphans lo
@@ -407,7 +407,7 @@ void main() {
     test(
       'dos raíces distintas con el MISMO folderName no se bloquean entre sí',
       () async {
-        // Mutex por ruta absoluta, no solo folderName (integrado de Codex,
+        // Mutex por ruta absoluta, no solo folderName (revisión,
         // 2026-07-18): dos savesDir distintos (p. ej. dos discos) con una
         // partida del mismo nombre son operaciones independientes.
         final otherSavesDir = Directory(
@@ -450,7 +450,7 @@ void main() {
       () async {
         // Rename inyectado en vez de la técnica `chmod` (POSIX-only, se
         // saltaba entero en Windows — integrado de la implementación
-        // paralela de Codex, 2026-07-18): falla exactamente la 2ª llamada de
+        // alternativa, 2026-07-18): falla exactamente la 2ª llamada de
         // rename de la transacción (destino → rollback = 1ª, real; staging →
         // destino = 2ª, forzada a fallar; rollback → destino en la
         // reversión = 3ª, real) — determinista y multiplataforma.
@@ -561,7 +561,7 @@ void main() {
       () async {
         // El destino "existe" pero está corrupto (p. ej. crash justo tras el
         // segundo rename, antes de la validación post-swap) — hallazgo
-        // cruzado con Codex, 2026-07-18: antes esto se trataba como "destino
+        // cruzado en revisión, 2026-07-18: antes esto se trataba como "destino
         // bueno" y se perdía el rollback sano.
         final brokenDestination = Directory(
           '$savesDir${Platform.pathSeparator}$folderName',

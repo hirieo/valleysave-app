@@ -82,20 +82,11 @@ plan/
 # Credenciales OAuth — nunca al repo
 .credenciales/
 
-# Claude Code — configuración interna
-.claude/
-.agents/
-.Codex/
-.codex/
-.specify/
+# Documentación interna de desarrollo
 specs/
 .metadata
-CLAUDE.md
-AGENTS.md
-PROMPT.md
-.claudeignore
 
-# Investigación y planes auxiliares de agentes; no forman parte del producto.
+# Investigación y planes auxiliares; no forman parte del producto.
 docs/host-swap-research/
 docs/plan-compartir-saves-coop.md
 

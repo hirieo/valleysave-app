@@ -84,7 +84,7 @@ class UploadIncompleteSaveException implements Exception {
 /// superior (si quedaron de antes de migrar) son una versión OBSOLETA —
 /// servirlos silenciosamente mostraría o descargaría una partida vieja sin
 /// avisar. Solo la AUSENCIA de manifiesto habilita el formato plano legítimo
-/// (hallazgo de la implementación paralela de Codex, 2026-07-18: antes ambos
+/// (hallazgo de una implementación alternativa, 2026-07-18: antes ambos
 /// casos caían al plano por igual).
 class CorruptManifestException implements Exception {
   const CorruptManifestException(this.folderId);
@@ -100,7 +100,7 @@ class CorruptManifestException implements Exception {
 /// de "Compartidas conmigo" por un simple 429/cuota durante un intento de
 /// sincronizar o subir un backup (2026-07-15, corrección: mi primera versión
 /// asumía permiso denegado por defecto salvo que reconociera cuota, más
-/// arriesgado; alineado con la solución independiente de Codex sobre el
+/// arriesgado; alineado con una solución independiente sobre el
 /// mismo diagnóstico).
 const _confirmedPermissionReasons = {
   'insufficientfilepermissions',
@@ -492,8 +492,8 @@ class DriveService {
     await _syncPlayersJson(saveFolderId, players);
   }
 
-  /// Saneado no destructivo del par `_old` ANTES de subir (integrado de
-  /// Codex, 2026-07-19, versión adaptada): un `_old` corrupto no invalida el
+  /// Saneado no destructivo del par `_old` ANTES de subir (revisión
+  /// 2026-07-19, versión adaptada): un `_old` corrupto no invalida el
   /// save principal (ver [SaveReplaceService._isValidSaveDir]), pero
   /// publicarlo tal cual en la generación nueva propaga esa corrupción a
   /// cualquier otro dispositivo que lo descargue después. Si el par no está
@@ -522,7 +522,7 @@ class DriveService {
     String generationName,
   ) async {
     // `schema` versiona el formato del manifiesto para poder evolucionarlo
-    // sin romper lectores antiguos (integrado de Codex, 2026-07-18).
+    // sin romper lectores antiguos (revisión, 2026-07-18).
     final json = jsonEncode({'schema': 1, 'activeGeneration': generationName});
     final bytes = utf8.encode(json);
     final media = drive.Media(Stream.fromIterable([bytes]), bytes.length);
@@ -824,7 +824,7 @@ class DriveService {
 
   /// Resuelve la carpeta real de contenido de un save. Distingue TRES casos
   /// (spec 001-integridad-transaccional-saves; corrección tras comparar con
-  /// la implementación paralela de Codex, 2026-07-18):
+  /// la implementación alternativa, 2026-07-18):
   ///
   /// - `manifest.json` AUSENTE → formato plano heredado (todo save de antes
   ///   de esta versión, legítimo — nunca tuvo manifiesto).
@@ -1309,8 +1309,8 @@ class DriveService {
   }
 
   /// Umbral para una carpeta que Drive devuelve continuamente como ausente
-  /// (2026-07-15, corregido tras comparar con la solución independiente de
-  /// Codex sobre el mismo diagnóstico). Los errores 403, 429 y 5xx pueden
+  /// (2026-07-15, corregido tras comparar con la solución independiente
+  /// alternativa sobre el mismo diagnóstico). Los errores 403, 429 y 5xx pueden
   /// ser cuota, red o backend y NUNCA convierten una compartida en partida
   /// normal, por muy larga que sea la racha — Drive ya devuelve 404 (no
   /// 403) cuando de verdad no tienes ningún acceso, precisamente para no
@@ -1386,7 +1386,7 @@ class DriveService {
         // Solo un 404 (carpeta realmente ausente) puede avanzar la racha
         // que confirma revocación — el resto (403, 429, 5xx) es ambigüedad
         // de red/cuota/servidor y NUNCA cuenta para ello, por larga que sea
-        // la racha (2026-07-15, corrección tras comparar con Codex).
+        // la racha (2026-07-15, corrección tras revisión cruzada).
         final isMissing = e.status == 404;
         final reallyRevoked = isMissing && missingForLongEnough();
         markUnavailable();

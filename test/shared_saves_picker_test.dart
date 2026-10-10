@@ -371,7 +371,7 @@ void main() {
     test(
       'un 403 tras 24h ININTERRUMPIDAS de fallo NUNCA revoca — puede ser '
       'cuota/red, Drive ya usa 404 para "sin ningún acceso" '
-      '(2026-07-15, corrección tras comparar con Codex)',
+      '(2026-07-15, corrección tras revisión cruzada)',
       () async {
         SharedPreferences.setMockInitialValues({
           'shared_saves_registry::me@example.com': jsonEncode([

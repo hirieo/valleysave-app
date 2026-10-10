@@ -378,7 +378,7 @@ class HostSwapService {
       // Validación post-swap (delta: automática, no manual). Extraída a
       // `_isHostSwapIntegrityValid` para poder re-ejecutarla también sobre
       // el destino YA PUBLICADO, no solo sobre esta copia de trabajo (ver
-      // más abajo, `validate:` al núcleo — sugerencia de Codex, 2026-07-18:
+      // más abajo, `validate:` al núcleo — sugerencia de revisión, 2026-07-18:
       // así una corrupción durante la copia a staging o el rename final
       // también la detectaría esta validación específica, no solo la
       // genérica del núcleo).
@@ -425,7 +425,7 @@ class HostSwapService {
       // importación, sin duplicar la lógica (F9). El zip `_pre-swap_` ya
       // hecho y verificado se pasa como preverificado: conserva su nombre
       // permanente y la retención automática nunca lo poda. Integrado tras
-      // ver la implementación paralela de Codex (2026-07-18); condición de
+      // ver la implementación alternativa (2026-07-18); condición de
       // aceptación: los tests de host swap pasan sin modificarlos.
       final replace = await SaveReplaceService.instance.replaceSaveFolder(
         savesDir: Directory(saveFolderPath).parent.path,
@@ -1295,8 +1295,8 @@ Future<bool> _verifyBackupZip(File zipFile, String folderName) =>
 /// ANTES del swap como, vía el `validate` de `replaceSaveFolder`, sobre el
 /// destino ya publicado — una corrupción durante la copia a staging o el
 /// rename final la detectaría esta comprobación, no solo la genérica del
-/// núcleo (integrado tras sugerencia de la implementación paralela de
-/// Codex, 2026-07-18).
+/// núcleo (integrado tras sugerencia de una implementación
+/// alternativa, 2026-07-18).
 Future<bool> _isHostSwapIntegrityValid(
   Directory dir, {
   required String folderName,

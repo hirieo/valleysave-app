@@ -2478,4 +2478,70 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get modsCompatLegend =>
       'Android: ✓ обычно работает · ⚠ может не работать (мод с кодом) · ✗ требует версию SMAPI, которой для Android пока нет.';
+
+  @override
+  String modsUploadAction(int count) {
+    return 'Upload $count mods to Drive';
+  }
+
+  @override
+  String get modsUploading => 'Uploading…';
+
+  @override
+  String modsDownloadTitle(String farm, int count) {
+    return '$farm uses $count mods';
+  }
+
+  @override
+  String get modsDownloadSubtitle =>
+      'Choose which ones to install on this device. Mods you already have in the same version are not touched.';
+
+  @override
+  String modsDownloadWarning(String mods) {
+    return 'Heads up: if you open the save without $mods, its items and villagers may disappear. Mods that get replaced are backed up first.';
+  }
+
+  @override
+  String modsDownloadWithMods(int count) {
+    return 'Download + $count mods';
+  }
+
+  @override
+  String get modsDownloadOnlySave => 'Only the save';
+
+  @override
+  String get modsNeedUpdate => 'update';
+
+  @override
+  String get modsNeedNew => 'new';
+
+  @override
+  String get modsNeedNotInDrive => 'not in Drive';
+
+  @override
+  String modsNeedUpdateDetail(String drive, String here) {
+    return 'Drive v$drive · here v$here → will be updated';
+  }
+
+  @override
+  String modsNeedNewDetail(String version) {
+    return 'Drive v$version · not installed';
+  }
+
+  @override
+  String get modsNeedNoLink =>
+      'Upload it from the device that has it, or install it by hand.';
+
+  @override
+  String get modsNeedUnsupportedHere => 'won’t work on this platform';
+
+  @override
+  String snackModsUploaded(int done, int failed) {
+    return 'Mods uploaded: $done · failed: $failed';
+  }
+
+  @override
+  String snackModsInstalled(int done, int failed) {
+    return 'Mods installed: $done · failed: $failed';
+  }
 }

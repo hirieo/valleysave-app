@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../generated/app_localizations.dart';
 import '../../core/models/backup_entry.dart';
 import '../../core/models/player_stats.dart';
+import '../../core/models/mod_info.dart';
 import '../../core/models/save_area.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
@@ -29,6 +30,8 @@ import '../../core/services/game_launch_service.dart';
 import '../../core/services/host_swap_service.dart';
 import '../../core/services/local_save_watcher.dart';
 import '../../core/services/mod_scanner.dart';
+import '../../core/services/mod_transfer_service.dart';
+import '../../core/services/mod_prefs.dart';
 import '../../core/services/save_area_classifier.dart';
 import '../../core/services/save_replace_service.dart';
 import '../../core/services/save_service.dart';
@@ -50,6 +53,7 @@ import 'widgets/card_focus_frame.dart';
 import 'widgets/latest_badge.dart';
 import 'widgets/save_area_tabs.dart';
 import 'widgets/save_mods_dialog.dart';
+import 'widgets/save_mods_download_dialog.dart';
 import 'widgets/shared_folder_picker_screen.dart';
 import 'widgets/saves_top_bar.dart';
 import 'widgets/seasonal_loader.dart';
@@ -1826,6 +1830,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         name,
         players: local.players,
       );
+      await _writeCarriedModsList(name);
       await _load(silent: true);
     } on UploadIncompleteSaveException {
       if (mounted) _snack(l10n.snackUploadIncomplete);
@@ -1863,7 +1868,168 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     final confirmed = await _confirmDownload(entry);
     if (confirmed != true) return;
-    await _downloadNow(entry);
+
+    // spec 010 F3 — partida SMAPI: elegir qué mods instalar antes de bajar.
+    final modChoice = await _chooseModsForDownload(entry);
+    if (modChoice == null) return;
+    final ok = await _downloadNow(entry);
+    if (ok && modChoice.selected.isNotEmpty) {
+      await _installMods(modChoice.needs, modChoice.selected);
+    }
+  }
+
+  /// Mods de la partida que faltan o están más viejos en este equipo, y cuáles
+  /// quiere instalar el usuario. `null` = canceló (no se baja nada). Fuera de
+  /// la pestaña SMAPI, o sin `mods.json`, no pregunta nada.
+  Future<({List<ModNeed> needs, Set<String> selected})?> _chooseModsForDownload(
+    SaveEntry entry,
+  ) async {
+    const none = (needs: <ModNeed>[], selected: <String>{});
+    final install = SmapiService.instance.install;
+    final folderId = entry.driveFolderId;
+    if (_area != SaveArea.smapi || install == null || folderId == null) {
+      return none;
+    }
+    final List<SaveModEntry> wanted;
+    final List<ModInfo> local;
+    try {
+      wanted = SaveModEntry.decodeList(await _drive!.readSaveMods(folderId));
+      if (wanted.isEmpty) return none;
+      local = await ModScanner.scan(install.modsDir);
+    } catch (_) {
+      return none;
+    }
+    final localByKey = {for (final m in local) m.key: m};
+    final needs = <ModNeed>[];
+    for (final w in wanted) {
+      final mine = localByKey[w.key];
+      if (mine != null &&
+          ModScanner.compareVersions(mine.version, w.version) >= 0) {
+        continue;
+      }
+      final inDrive =
+          DriveService.isValidModKey(w.key) &&
+          DriveService.isValidModVersion(w.version) &&
+          await _drive!.hasModVersion(w.key, w.version);
+      needs.add(
+        ModNeed(
+          entry: w,
+          status: !inDrive
+              ? ModNeedStatus.notInDrive
+              : (mine == null ? ModNeedStatus.missing : ModNeedStatus.update),
+          localVersion: mine?.version,
+          localFolder: mine?.folderPath,
+        ),
+      );
+    }
+    if (needs.isEmpty || !mounted) return none;
+    final selected = await showSaveModsDownloadDialog(
+      context,
+      farmName: entry.primary.farmName,
+      totalMods: wanted.length,
+      needs: needs,
+    );
+    if (selected == null) return null;
+    return (needs: needs, selected: selected);
+  }
+
+  /// Baja de Drive e instala (con respaldo y vuelta atrás) los mods elegidos.
+  Future<void> _installMods(List<ModNeed> needs, Set<String> selected) async {
+    final l10n = AppLocalizations.of(context)!;
+    final install = SmapiService.instance.install;
+    if (install == null || _drive == null) return;
+    final backupsDir = await _backupsDirPath();
+    var installed = 0;
+    var failed = 0;
+    for (final n in needs) {
+      if (!selected.contains(n.entry.key) || !n.installable) continue;
+      try {
+        final zip = await _drive!.downloadModZip(n.entry.key, n.entry.version);
+        if (zip == null) {
+          failed++;
+          continue;
+        }
+        final r = await ModTransferService.installMod(
+          zip,
+          modsDir: install.modsDir,
+          relativePath: n.entry.relativePath,
+          expectedUniqueId: n.entry.uniqueId,
+          existingFolder: n.localFolder,
+          backupsDir: backupsDir,
+        );
+        r.ok ? installed++ : failed++;
+      } catch (_) {
+        failed++;
+      }
+    }
+    if (mounted) _snack(l10n.snackModsInstalled(installed, failed));
+  }
+
+  /// Sube a la biblioteca de Drive los mods que viajan con la partida (los que
+  /// ya están en esa versión no se repiten) y escribe su `mods.json`.
+  Future<void> _uploadMods(String folderName, List<ModInfo> carried) async {
+    final l10n = AppLocalizations.of(context)!;
+    final drive = _drive;
+    if (drive == null) return;
+    await ModPrefs.instance.ensureLoaded();
+    var uploaded = 0;
+    var failed = 0;
+    for (final m in carried) {
+      try {
+        if (!DriveService.isValidModKey(m.key) ||
+            !DriveService.isValidModVersion(m.version)) {
+          failed++;
+          continue;
+        }
+        if (await drive.hasModVersion(m.key, m.version)) continue;
+        final zip = await ModTransferService.zipMod(
+          m,
+          includeConfig: ModPrefs.instance.includeConfig(m.key),
+        );
+        await drive.uploadModZip(m.key, m.version, zip);
+        uploaded++;
+      } catch (_) {
+        failed++;
+      }
+    }
+    try {
+      await drive.writeSaveMods(
+        folderName,
+        SaveModEntry.encodeList(_saveModEntries(carried)),
+      );
+    } catch (_) {
+      failed++;
+    }
+    if (mounted) _snack(l10n.snackModsUploaded(uploaded, failed));
+  }
+
+  List<SaveModEntry> _saveModEntries(List<ModInfo> carried) => [
+    for (final m in carried)
+      SaveModEntry.fromMod(
+        m,
+        includeConfig: ModPrefs.instance.includeConfig(m.key),
+      ),
+  ];
+
+  /// Lista de mods de una partida SMAPI tras subirla (solo la lista; los
+  /// archivos se suben desde "Mods"). Un fallo aquí no invalida la subida.
+  Future<void> _writeCarriedModsList(String folderName) async {
+    final install = SmapiService.instance.install;
+    if (_area != SaveArea.smapi || install == null || _drive == null) return;
+    try {
+      await ModPrefs.instance.ensureLoaded();
+      final carried = [
+        for (final m in await ModScanner.scan(install.modsDir))
+          if (m.kind != ModKind.invalid &&
+              ModPrefs.instance.carries(folderName, m.key))
+            m,
+      ];
+      if (carried.isEmpty) return;
+      await _drive!.writeSaveMods(
+        folderName,
+        SaveModEntry.encodeList(_saveModEntries(carried)),
+      );
+    } catch (_) {}
   }
 
   /// Ejecuta la descarga real, SIN confirmación — mismo papel que
@@ -1874,11 +2040,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// `verdict == green`, saltándose `_confirmDownload` a propósito — el paso
   /// de confirmación es precisamente lo que la Capa 2 se salta cuando es
   /// seguro (D6).
-  Future<void> _downloadNow(SaveEntry entry) async {
+  Future<bool> _downloadNow(SaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     final drive = entry.drive;
     final folderId = entry.driveFolderId;
-    if (drive == null || folderId == null || _drive == null) return;
+    if (drive == null || folderId == null || _drive == null) return false;
 
     final name = drive.folderName;
     setState(() => _busy.add(name));
@@ -1888,39 +2054,41 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         await _drive!.downloadSaveToDir(folderId, name, Directory(out));
         if (!await _isValidStagedSave(out, name)) {
           if (mounted) _snack(l10n.snackReplaceValidationFailed);
-          return;
+          return false;
         }
         final ok = await ShizukuService.instance.pushSaveAsRoot(out, name);
         if (!ok) {
           if (mounted) _snack(l10n.snackWriteError);
-          return;
+          return false;
         }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
+        return true;
       } else if (Platform.isAndroid && _mode == AndroidMode.shizuku) {
         // Shizuku: descargar a carpeta propia → validar → empujar al juego vía cp.
         if (!_shizukuReady) {
           if (mounted) _snack(l10n.activateShizuku);
-          return;
+          return false;
         }
         final out = await ShizukuService.instance.prepareOut(name);
         await _drive!.downloadSaveToDir(folderId, name, Directory(out));
         if (!await _isValidStagedSave(out, name)) {
           if (mounted) _snack(l10n.snackReplaceValidationFailed);
-          return;
+          return false;
         }
         final ok = await ShizukuService.instance.pushSave(name);
         if (!ok) {
           if (mounted) _snack(l10n.snackWriteError);
-          return;
+          return false;
         }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
+        return true;
       } else {
         final savesDir = SaveService.savesDirectory;
         if (savesDir == null) {
           if (mounted) _snack(l10n.snackPlatformNotSupported);
-          return;
+          return false;
         }
         final backupsDir = await _backupsDirPath();
         final result = await SaveReplaceService.instance.replaceSaveFolder(
@@ -1932,7 +2100,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         );
         if (!result.ok) {
           if (mounted) _snack(_replaceErrorMessage(result.error));
-          return;
+          return false;
         }
         // La partida bajada pasa a la pestaña de la que vino (spec 010).
         if (_splitByArea) {
@@ -1940,12 +2108,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
+        return true;
       }
     } catch (e) {
       if (mounted) _snack(l10n.snackDownloadError(e.toString()));
     } finally {
       if (mounted) setState(() => _busy.remove(name));
     }
+    return false;
   }
 
   /// Desde una cara concreta confirma solo esa ubicación; desde la papelera
@@ -4189,6 +4359,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       folderName: entry.folderName,
       mods: mods,
       smapiVersion: install.version,
+      onUpload: _drive == null
+          ? null
+          : (carried) => _uploadMods(entry.folderName, carried),
     );
   }
 

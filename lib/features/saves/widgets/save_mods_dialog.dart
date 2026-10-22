@@ -15,13 +15,15 @@ const _gold = Color(0xFFE8B84A);
 /// "Mods de {granja}" (spec 010, mockup aprobado 2026-10-23, bloque 2): qué
 /// mods viajan con esta partida (check grande), "llevar siempre" y "con sus
 /// ajustes" por mod, versión y compatibilidad PC/Android. Las elecciones se
-/// guardan al momento en [ModPrefs]; la subida a Drive llega en la fase F3.
+/// guardan al momento en [ModPrefs]. Con Drive conectado, [onUpload] sube
+/// los mods marcados y la lista de la partida (fase F3).
 Future<void> showSaveModsDialog(
   BuildContext context, {
   required String farmName,
   required String folderName,
   required List<ModInfo> mods,
   required String? smapiVersion,
+  Future<void> Function(List<ModInfo> carried)? onUpload,
 }) async {
   await ModPrefs.instance.ensureLoaded();
   if (!context.mounted) return;
@@ -39,6 +41,7 @@ Future<void> showSaveModsDialog(
           folderName: folderName,
           mods: mods,
           smapiVersion: smapiVersion,
+          onUpload: onUpload,
         ),
       ),
     ),
@@ -51,12 +54,14 @@ class _SaveModsBody extends StatefulWidget {
     required this.folderName,
     required this.mods,
     required this.smapiVersion,
+    this.onUpload,
   });
 
   final String farmName;
   final String folderName;
   final List<ModInfo> mods;
   final String? smapiVersion;
+  final Future<void> Function(List<ModInfo> carried)? onUpload;
 
   @override
   State<_SaveModsBody> createState() => _SaveModsBodyState();
@@ -64,6 +69,25 @@ class _SaveModsBody extends StatefulWidget {
 
 class _SaveModsBodyState extends State<_SaveModsBody> {
   final _prefs = ModPrefs.instance;
+  bool _uploading = false;
+
+  List<ModInfo> get _carried => [
+    for (final m in widget.mods)
+      if (m.kind != ModKind.invalid &&
+          _prefs.carries(widget.folderName, m.key))
+        m,
+  ];
+
+  Future<void> _upload() async {
+    final carried = _carried;
+    if (_uploading || carried.isEmpty || widget.onUpload == null) return;
+    setState(() => _uploading = true);
+    try {
+      await widget.onUpload!(carried);
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +143,16 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
               ),
       ),
       actions: [
+        if (widget.onUpload != null && _carried.isNotEmpty)
+          ActionBtn(
+            label: _uploading
+                ? l10n.modsUploading
+                : l10n.modsUploadAction(_carried.length),
+            color: _gold,
+            icon: Icons.cloud_upload_outlined,
+            filled: true,
+            onTap: _uploading ? null : _upload,
+          ),
         ActionBtn(
           label: l10n.modsDialogClose,
           autofocus: true,

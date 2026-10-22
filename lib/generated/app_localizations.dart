@@ -4290,6 +4290,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Android: ✓ usually works · ⚠ may fail (code mod) · ✗ needs a SMAPI version Android doesn’t have yet.'**
   String get modsCompatLegend;
+
+  /// No description provided for @modsUploadAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload {count} mods to Drive'**
+  String modsUploadAction(int count);
+
+  /// No description provided for @modsUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading…'**
+  String get modsUploading;
+
+  /// No description provided for @modsDownloadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{farm} uses {count} mods'**
+  String modsDownloadTitle(String farm, int count);
+
+  /// No description provided for @modsDownloadSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which ones to install on this device. Mods you already have in the same version are not touched.'**
+  String get modsDownloadSubtitle;
+
+  /// No description provided for @modsDownloadWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: if you open the save without {mods}, its items and villagers may disappear. Mods that get replaced are backed up first.'**
+  String modsDownloadWarning(String mods);
+
+  /// No description provided for @modsDownloadWithMods.
+  ///
+  /// In en, this message translates to:
+  /// **'Download + {count} mods'**
+  String modsDownloadWithMods(int count);
+
+  /// No description provided for @modsDownloadOnlySave.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the save'**
+  String get modsDownloadOnlySave;
+
+  /// No description provided for @modsNeedUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'update'**
+  String get modsNeedUpdate;
+
+  /// No description provided for @modsNeedNew.
+  ///
+  /// In en, this message translates to:
+  /// **'new'**
+  String get modsNeedNew;
+
+  /// No description provided for @modsNeedNotInDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'not in Drive'**
+  String get modsNeedNotInDrive;
+
+  /// No description provided for @modsNeedUpdateDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive v{drive} · here v{here} → will be updated'**
+  String modsNeedUpdateDetail(String drive, String here);
+
+  /// No description provided for @modsNeedNewDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive v{version} · not installed'**
+  String modsNeedNewDetail(String version);
+
+  /// No description provided for @modsNeedNoLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload it from the device that has it, or install it by hand.'**
+  String get modsNeedNoLink;
+
+  /// No description provided for @modsNeedUnsupportedHere.
+  ///
+  /// In en, this message translates to:
+  /// **'won’t work on this platform'**
+  String get modsNeedUnsupportedHere;
+
+  /// No description provided for @snackModsUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Mods uploaded: {done} · failed: {failed}'**
+  String snackModsUploaded(int done, int failed);
+
+  /// No description provided for @snackModsInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Mods installed: {done} · failed: {failed}'**
+  String snackModsInstalled(int done, int failed);
 }
 
 class _AppLocalizationsDelegate

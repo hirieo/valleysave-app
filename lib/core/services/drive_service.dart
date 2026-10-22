@@ -44,7 +44,8 @@ bool isModSidecarName(String name) =>
     _modSidecarNameRe.hasMatch(name) &&
     !name.contains('..') &&
     name != _manifestFileName &&
-    name != _playersJsonName;
+    name != _playersJsonName &&
+    name != 'mods.json';
 const _folderMime = 'application/vnd.google-apps.folder';
 const _readmeName = 'LEEME - ValleySave.txt';
 
@@ -1054,6 +1055,131 @@ class DriveService {
       permissionId,
       $fields: 'id',
     );
+  }
+
+  // ── Mods SMAPI (spec 010 F3) ──
+  // `ValleySave/SMAPI/Mods/<uniqueId en minúsculas>/<versión>/mod.zip`, y por
+  // partida un `mods.json` junto a `players.json`. Solo nombres validados
+  // entran en las consultas a Drive.
+
+  static final _modKeyRe = RegExp(r'^[a-z0-9][a-z0-9._-]{0,127}$');
+  static final _modVersionRe = RegExp(r'^[A-Za-z0-9][A-Za-z0-9._+-]{0,39}$');
+  static const _saveModsFileName = 'mods.json';
+  static const _modZipName = 'mod.zip';
+
+  static bool isValidModKey(String key) => _modKeyRe.hasMatch(key);
+  static bool isValidModVersion(String v) => _modVersionRe.hasMatch(v);
+
+  Future<String> _modsRoot() async {
+    final rootId = await ensureFolder();
+    final smapiId = await _ensureSubfolder(_smapiFolderName, rootId);
+    return _ensureSubfolder('Mods', smapiId);
+  }
+
+  Future<drive.File?> _findChild(String parentId, String name) async {
+    final result = await _api.files.list(
+      q: "name='$name' and '$parentId' in parents and trashed=false",
+      spaces: 'drive',
+      $fields: 'files(id,name)',
+    );
+    return result.files?.firstOrNull;
+  }
+
+  /// ¿Ya está esta versión del mod en la biblioteca de Drive?
+  Future<bool> hasModVersion(String modKey, String version) async =>
+      await _findModZip(modKey, version) != null;
+
+  Future<drive.File?> _findModZip(String modKey, String version) async {
+    if (!isValidModKey(modKey) || !isValidModVersion(version)) return null;
+    final modsRoot = await _modsRoot();
+    final modFolder = await _findChild(modsRoot, modKey);
+    if (modFolder?.id == null) return null;
+    final versionFolder = await _findChild(modFolder!.id!, version);
+    if (versionFolder?.id == null) return null;
+    return _findChild(versionFolder!.id!, _modZipName);
+  }
+
+  /// Sube (o sustituye) una versión de un mod a la biblioteca de Drive.
+  Future<void> uploadModZip(
+    String modKey,
+    String version,
+    List<int> zipBytes,
+  ) async {
+    if (!isValidModKey(modKey) || !isValidModVersion(version)) {
+      throw ArgumentError('Invalid mod id or version');
+    }
+    final modsRoot = await _modsRoot();
+    final modFolder = await _ensureSubfolder(modKey, modsRoot);
+    final versionFolder = await _ensureSubfolder(version, modFolder);
+    final media = drive.Media(Stream.value(zipBytes), zipBytes.length);
+    final existing = await _findChild(versionFolder, _modZipName);
+    if (existing?.id != null) {
+      await _api.files.update(
+        drive.File(),
+        existing!.id!,
+        uploadMedia: media,
+        $fields: 'id',
+      );
+      return;
+    }
+    await _api.files.create(
+      drive.File()
+        ..name = _modZipName
+        ..parents = [versionFolder],
+      uploadMedia: media,
+      $fields: 'id',
+    );
+  }
+
+  /// Zip de una versión del mod, o `null` si no está en Drive.
+  Future<List<int>?> downloadModZip(String modKey, String version) async {
+    final file = await _findModZip(modKey, version);
+    if (file?.id == null) return null;
+    final media =
+        await _api.files.get(
+              file!.id!,
+              downloadOptions: drive.DownloadOptions.fullMedia,
+            )
+            as drive.Media;
+    return _readAll(media.stream);
+  }
+
+  /// Escribe la lista de mods de una partida de esta sección.
+  Future<void> writeSaveMods(String folderName, String json) async {
+    final saveFolderId = await _ensureSaveFolder(folderName);
+    final bytes = utf8.encode(json);
+    final media = drive.Media(Stream.value(bytes), bytes.length);
+    final existing = await _findChild(saveFolderId, _saveModsFileName);
+    if (existing?.id != null) {
+      await _api.files.update(
+        drive.File(),
+        existing!.id!,
+        uploadMedia: media,
+        $fields: 'id',
+      );
+      return;
+    }
+    await _api.files.create(
+      drive.File()
+        ..name = _saveModsFileName
+        ..parents = [saveFolderId]
+        ..mimeType = 'application/json',
+      uploadMedia: media,
+      $fields: 'id',
+    );
+  }
+
+  /// `mods.json` de la partida con carpeta [driveFolderId], o `null`.
+  Future<String?> readSaveMods(String driveFolderId) async {
+    final file = await _findChild(driveFolderId, _saveModsFileName);
+    if (file?.id == null) return null;
+    final media =
+        await _api.files.get(
+              file!.id!,
+              downloadOptions: drive.DownloadOptions.fullMedia,
+            )
+            as drive.Media;
+    return utf8.decode(await _readAll(media.stream), allowMalformed: true);
   }
 
   // ── Respaldos pre-swap en Drive (spec 007) ──

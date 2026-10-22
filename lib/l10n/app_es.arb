@@ -953,5 +953,21 @@
   "modKindInvalid": "manifiesto no válido",
   "modAlwaysCarry": "llevar siempre",
   "modWithConfig": "con sus ajustes",
-  "modsCompatLegend": "Android: ✓ suele funcionar · ⚠ puede fallar (mod de código) · ✗ pide una versión de SMAPI que Android aún no tiene."
+  "modsCompatLegend": "Android: ✓ suele funcionar · ⚠ puede fallar (mod de código) · ✗ pide una versión de SMAPI que Android aún no tiene.",
+  "modsUploadAction": "Subir {count} mods a Drive",
+  "modsUploading": "Subiendo…",
+  "modsDownloadTitle": "{farm} usa {count} mods",
+  "modsDownloadSubtitle": "Elige cuáles instalar en este equipo. Los que ya tienes en la misma versión no se tocan.",
+  "modsDownloadWarning": "Ojo: si abres la partida sin {mods}, sus objetos y vecinos pueden desaparecer. Se hace copia de seguridad de los mods que se sustituyan.",
+  "modsDownloadWithMods": "Bajar + {count} mods",
+  "modsDownloadOnlySave": "Solo la partida",
+  "modsNeedUpdate": "actualizar",
+  "modsNeedNew": "nuevo",
+  "modsNeedNotInDrive": "no está en Drive",
+  "modsNeedUpdateDetail": "Drive v{drive} · aquí v{here} → se actualiza",
+  "modsNeedNewDetail": "Drive v{version} · no instalado",
+  "modsNeedNoLink": "Súbelo desde el equipo que lo tiene o instálalo a mano.",
+  "modsNeedUnsupportedHere": "no sirve en esta plataforma",
+  "snackModsUploaded": "Mods subidos: {done} · fallidos: {failed}",
+  "snackModsInstalled": "Mods instalados: {done} · fallidos: {failed}"
 }

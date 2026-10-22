@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../core/models/mod_info.dart';
 import '../../../core/services/mod_prefs.dart';
 import '../../../core/services/mod_scanner.dart';
+import '../../../core/services/mod_update_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../shared/widgets/glass_dialog.dart';
@@ -24,6 +25,7 @@ Future<void> showSaveModsDialog(
   required List<ModInfo> mods,
   required String? smapiVersion,
   Future<void> Function(List<ModInfo> carried)? onUpload,
+  Future<ModUpdateResult>? updates,
 }) async {
   await ModPrefs.instance.ensureLoaded();
   if (!context.mounted) return;
@@ -42,6 +44,7 @@ Future<void> showSaveModsDialog(
           mods: mods,
           smapiVersion: smapiVersion,
           onUpload: onUpload,
+          updates: updates,
         ),
       ),
     ),
@@ -55,6 +58,7 @@ class _SaveModsBody extends StatefulWidget {
     required this.mods,
     required this.smapiVersion,
     this.onUpload,
+    this.updates,
   });
 
   final String farmName;
@@ -63,6 +67,9 @@ class _SaveModsBody extends StatefulWidget {
   final String? smapiVersion;
   final Future<void> Function(List<ModInfo> carried)? onUpload;
 
+  /// Comprobación de versiones nuevas (fase F4), en curso al abrir.
+  final Future<ModUpdateResult>? updates;
+
   @override
   State<_SaveModsBody> createState() => _SaveModsBodyState();
 }
@@ -70,6 +77,21 @@ class _SaveModsBody extends StatefulWidget {
 class _SaveModsBodyState extends State<_SaveModsBody> {
   final _prefs = ModPrefs.instance;
   bool _uploading = false;
+  ModUpdateResult? _updates;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.updates?.then((r) {
+      if (mounted) setState(() => _updates = r);
+    });
+  }
+
+  String? _newerVersion(ModInfo mod) {
+    final v = _updates?.updates[mod.key];
+    if (v == null) return null;
+    return ModScanner.compareVersions(v, mod.version) > 0 ? v : null;
+  }
 
   List<ModInfo> get _carried => [
     for (final m in widget.mods)
@@ -136,6 +158,20 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
                   children: [
                     for (var i = 0; i < widget.mods.length; i++)
                       _modRow(widget.mods[i], l10n, first: i == 0),
+                    if (_updates?.failed ?? false) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        l10n.modsUpdateCheckFailed(_updates!.error!),
+                        style: GoogleFonts.firaCode(
+                          fontSize: 9.5,
+                          color: AppColors.statusErr,
+                        ),
+                      ),
+                    ],
+                    if (widget.onUpload != null) ...[
+                      const SizedBox(height: 10),
+                      _autoToggle(l10n),
+                    ],
                     const SizedBox(height: 10),
                     _legend(l10n),
                   ],
@@ -218,8 +254,17 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  meta,
+                Text.rich(
+                  TextSpan(
+                    text: meta,
+                    children: [
+                      if (_newerVersion(mod) case final newer?)
+                        TextSpan(
+                          text: ' · ${l10n.modUpdateAvailable(newer)}',
+                          style: const TextStyle(color: _gold),
+                        ),
+                    ],
+                  ),
                   style: GoogleFonts.firaCode(
                     fontSize: 9.5,
                     color: AppColors.textFaint,
@@ -341,6 +386,58 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
           fontSize: 8.5,
           fontWeight: FontWeight.w700,
           color: color,
+        ),
+      ),
+    );
+  }
+
+  /// ⚡ D10 — por partida: subir sus mods al subirla e instalarlos al bajarla
+  /// cuando no haya nada que decidir.
+  Widget _autoToggle(AppLocalizations l10n) {
+    final on = _prefs.autoSync(widget.folderName);
+    return InkWell(
+      onTap: () async {
+        await _prefs.setAutoSync(widget.folderName, !on);
+        if (mounted) setState(() {});
+      },
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.bgAlt,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                '⚡ ${l10n.modsAutoSyncToggle}',
+                style: GoogleFonts.firaCode(
+                  fontSize: 10.5,
+                  color: AppColors.text,
+                ),
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 160),
+              width: 32,
+              height: 18,
+              padding: const EdgeInsets.all(2),
+              alignment: on ? Alignment.centerRight : Alignment.centerLeft,
+              decoration: BoxDecoration(
+                color: on ? const Color(0xFF62B074) : const Color(0xFF3A4A3F),
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -2542,4 +2542,17 @@ class AppLocalizationsUk extends AppLocalizations {
   String snackModsInstalled(int done, int failed) {
     return 'Mods installed: $done · failed: $failed';
   }
+
+  @override
+  String get modsAutoSyncToggle => 'Upload and download its mods with the save';
+
+  @override
+  String modUpdateAvailable(String version) {
+    return 'v$version available';
+  }
+
+  @override
+  String modsUpdateCheckFailed(String reason) {
+    return 'Couldn’t check for new mod versions ($reason).';
+  }
 }

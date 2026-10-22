@@ -4386,6 +4386,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mods installed: {done} · failed: {failed}'**
   String snackModsInstalled(int done, int failed);
+
+  /// No description provided for @modsAutoSyncToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload and download its mods with the save'**
+  String get modsAutoSyncToggle;
+
+  /// No description provided for @modUpdateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'v{version} available'**
+  String modUpdateAvailable(String version);
+
+  /// No description provided for @modsUpdateCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t check for new mod versions ({reason}).'**
+  String modsUpdateCheckFailed(String reason);
 }
 
 class _AppLocalizationsDelegate

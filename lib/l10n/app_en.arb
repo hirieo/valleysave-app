@@ -1257,5 +1257,10 @@
   "snackModsUploaded": "Mods uploaded: {done} · failed: {failed}",
   "@snackModsUploaded": {"placeholders": {"done": {"type": "int"}, "failed": {"type": "int"}}},
   "snackModsInstalled": "Mods installed: {done} · failed: {failed}",
-  "@snackModsInstalled": {"placeholders": {"done": {"type": "int"}, "failed": {"type": "int"}}}
+  "@snackModsInstalled": {"placeholders": {"done": {"type": "int"}, "failed": {"type": "int"}}},
+  "modsAutoSyncToggle": "Upload and download its mods with the save",
+  "modUpdateAvailable": "v{version} available",
+  "@modUpdateAvailable": {"placeholders": {"version": {"type": "String"}}},
+  "modsUpdateCheckFailed": "Couldn’t check for new mod versions ({reason}).",
+  "@modsUpdateCheckFailed": {"placeholders": {"reason": {"type": "String"}}}
 }

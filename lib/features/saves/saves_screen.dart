@@ -31,6 +31,7 @@ import '../../core/services/host_swap_service.dart';
 import '../../core/services/local_save_watcher.dart';
 import '../../core/services/mod_scanner.dart';
 import '../../core/services/mod_transfer_service.dart';
+import '../../core/services/mod_update_service.dart';
 import '../../core/services/mod_prefs.dart';
 import '../../core/services/save_area_classifier.dart';
 import '../../core/services/save_replace_service.dart';
@@ -1923,6 +1924,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
     }
     if (needs.isEmpty || !mounted) return none;
+    await ModPrefs.instance.ensureLoaded();
+    if (ModPrefs.instance.autoSync(entry.folderName) &&
+        needs.every((n) => n.installable && !n.unsupportedHere)) {
+      return (needs: needs, selected: {for (final n in needs) n.entry.key});
+    }
+    if (!mounted) return none;
     final selected = await showSaveModsDownloadDialog(
       context,
       farmName: entry.primary.farmName,
@@ -2025,6 +2032,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             m,
       ];
       if (carried.isEmpty) return;
+      if (ModPrefs.instance.autoSync(folderName)) {
+        await _uploadMods(folderName, carried);
+        return;
+      }
       await _drive!.writeSaveMods(
         folderName,
         SaveModEntry.encodeList(_saveModEntries(carried)),
@@ -4362,6 +4373,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       onUpload: _drive == null
           ? null
           : (carried) => _uploadMods(entry.folderName, carried),
+      updates: ModUpdateService.instance.check(
+        mods,
+        smapiVersion: install.version,
+      ),
     );
   }
 

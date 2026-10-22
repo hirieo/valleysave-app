@@ -969,5 +969,8 @@
   "modsNeedNoLink": "Súbelo desde el equipo que lo tiene o instálalo a mano.",
   "modsNeedUnsupportedHere": "no sirve en esta plataforma",
   "snackModsUploaded": "Mods subidos: {done} · fallidos: {failed}",
-  "snackModsInstalled": "Mods instalados: {done} · fallidos: {failed}"
+  "snackModsInstalled": "Mods instalados: {done} · fallidos: {failed}",
+  "modsAutoSyncToggle": "Subir y bajar sus mods con la partida",
+  "modUpdateAvailable": "v{version} disponible",
+  "modsUpdateCheckFailed": "No se pudo comprobar si hay versiones nuevas de los mods ({reason})."
 }

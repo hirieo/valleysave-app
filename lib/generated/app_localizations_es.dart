@@ -2528,4 +2528,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String snackModsInstalled(int done, int failed) {
     return 'Mods instalados: $done · fallidos: $failed';
   }
+
+  @override
+  String get modsAutoSyncToggle => 'Subir y bajar sus mods con la partida';
+
+  @override
+  String modUpdateAvailable(String version) {
+    return 'v$version disponible';
+  }
+
+  @override
+  String modsUpdateCheckFailed(String reason) {
+    return 'No se pudo comprobar si hay versiones nuevas de los mods ($reason).';
+  }
 }

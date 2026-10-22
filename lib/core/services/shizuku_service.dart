@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -6,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shizuku_api/shizuku_api.dart';
 
 import 'android_protected_commands.dart';
+import 'stardew_coop_calibration.dart';
+import 'stardew_coop_preferences.dart';
 import 'saves_folder_scan.dart';
 import 'stardew_paths.dart';
 
@@ -87,7 +90,8 @@ class ShizukuService {
       final savesPath = AndroidSavesPath.instance.current;
       if (!isValidSavesPath(savesPath)) return null;
       final dst = await _freshDir('game_in');
-      final ok = (await _native.invokeMethod<bool>('pullSavesAsRoot', {
+      final ok =
+          (await _native.invokeMethod<bool>('pullSavesAsRoot', {
             'dst': dst.path,
             'savesPath': savesPath,
           })) ??
@@ -118,10 +122,9 @@ class ShizukuService {
     );
     if (script == null) return false;
     try {
-      return (await _native.invokeMethod<bool>(
-            'runProtectedScriptAsRoot',
-            {'script': script},
-          )) ??
+      return (await _native.invokeMethod<bool>('runProtectedScriptAsRoot', {
+            'script': script,
+          })) ??
           false;
     } catch (_) {
       return false;
@@ -152,10 +155,9 @@ class ShizukuService {
   Future<String?> runReadOnly(String command, {required bool root}) async {
     try {
       if (root) {
-        return await _native.invokeMethod<String>(
-          'runRootCommand',
-          {'command': command},
-        );
+        return await _native.invokeMethod<String>('runRootCommand', {
+          'command': command,
+        });
       }
       return await _api.runCommand(command);
     } catch (_) {
@@ -196,7 +198,8 @@ class ShizukuService {
       (await _api.requestPermission()) ?? false;
 
   Future<Directory> _freshDir(String sub) async {
-    final ext = await getExternalStorageDirectory(); // /Android/data/<pkg>/files
+    final ext =
+        await getExternalStorageDirectory(); // /Android/data/<pkg>/files
     final dir = Directory('${ext!.path}/$sub');
     if (await dir.exists()) await dir.delete(recursive: true);
     await dir.create(recursive: true);
@@ -212,7 +215,9 @@ class ShizukuService {
     final dst = await _freshDir('game_in');
     // -p preserva mtime → la comparación local vs Drive sigue siendo válida.
     // Rutas propias de la app, pero se escapan igual por uniformidad.
-    await _api.runCommand('cp -rfp ${_shellQuote('$savesPath/.')} ${_shellQuote('${dst.path}/')}');
+    await _api.runCommand(
+      'cp -rfp ${_shellQuote('$savesPath/.')} ${_shellQuote('${dst.path}/')}',
+    );
     // Verificación robusta vía File API: ¿llegó algo? (no parseamos stdout)
     final empty = await dst.list().isEmpty;
     return empty ? null : dst.path;
@@ -273,6 +278,130 @@ class ShizukuService {
     final check = await _api.runCommand('ls -d ${_shellQuote(path)}') ?? '';
     return check.toLowerCase().contains('no such') || check.trim().isEmpty;
   }
+
+  /// Activa el menú coop oculto de Stardew mediante la preferencia privada.
+  /// Solo solicita ROOT cuando se invoca explícitamente desde Ajustes.
+  Future<CoopMenuActivationResult> activateCoopMenu() async {
+    if (!await checkRoot()) return CoopMenuActivationResult.rootDenied;
+    try {
+      final read = await _native.invokeMapMethod<String, String>(
+        'readCoopPreferencesAsRoot',
+      );
+      if (read?['ok'] != 'true') {
+        return switch (read?['reason']) {
+          'running' => CoopMenuActivationResult.gameRunning,
+          'unsupported' => CoopMenuActivationResult.unsupported,
+          _ => CoopMenuActivationResult.unavailable,
+        };
+      }
+      final updatedXml = StardewCoopPreferences.enable(read!['xml']!);
+      if (updatedXml == null) {
+        return CoopMenuActivationResult.alreadyEnabled;
+      }
+      final write = await _native.invokeMapMethod<String, String>(
+        'writeCoopPreferencesAsRoot',
+        {
+          'xml': updatedXml,
+          'originalExists': read['exists'] == 'true',
+          'originalHash': read['hash'] ?? '',
+        },
+      );
+      if (write?['ok'] == 'true') {
+        return write?['created'] == 'true'
+            ? CoopMenuActivationResult.successCreated
+            : CoopMenuActivationResult.success;
+      }
+      return switch (write?['reason']) {
+        'running' => CoopMenuActivationResult.gameRunning,
+        'unsupported' => CoopMenuActivationResult.unsupported,
+        'changed' => CoopMenuActivationResult.preferenceChanged,
+        _ => CoopMenuActivationResult.writeFailed,
+      };
+    } catch (_) {
+      return CoopMenuActivationResult.invalid;
+    }
+  }
+
+  /// Calibrates the real Stardew title screen, then asks Shizuku to send the
+  /// official mobile unlock taps. The game state is always confirmed by the user.
+  Future<CoopMenuActivationResult> activateCoopMenuViaShizuku({
+    required String language,
+  }) async {
+    try {
+      if (!await isRunning())
+        return CoopMenuActivationResult.shizukuUnavailable;
+      if (!await hasPermission() && !await requestPermission()) {
+        return CoopMenuActivationResult.shizukuDenied;
+      }
+      final canOverlay =
+          (await _native.invokeMethod<bool>('hasOverlayPermission')) ?? false;
+      if (!canOverlay) {
+        await _native.invokeMethod<bool>('requestOverlayPermission');
+        return CoopMenuActivationResult.overlayPermissionRequired;
+      }
+      final calibrationResult = await _native.invokeMapMethod<String, Object?>(
+        'startCoopCalibration',
+        {'language': language},
+      );
+      if (calibrationResult?['status'] == 'cancelled') {
+        return CoopMenuActivationResult.cancelled;
+      }
+      if (calibrationResult?['status'] == 'timeout') {
+        return CoopMenuActivationResult.calibrationTimeout;
+      }
+      if (calibrationResult?['status'] == 'shizuku_permission') {
+        return CoopMenuActivationResult.shizukuDenied;
+      }
+      if (calibrationResult?['status'] == 'display_changed') {
+        return CoopMenuActivationResult.displayChanged;
+      }
+      if (calibrationResult?['status'] == 'not_foreground') {
+        return CoopMenuActivationResult.gameNotForeground;
+      }
+      if (calibrationResult?['status'] == 'overlay_permission') {
+        return CoopMenuActivationResult.overlayPermissionRequired;
+      }
+      if (calibrationResult?['status'] != 'ready') {
+        return CoopMenuActivationResult.unavailable;
+      }
+      final calibration = StardewCoopCalibration.fromNative(calibrationResult);
+      if (calibration == null) return CoopMenuActivationResult.invalid;
+
+      final sequenceFuture = _native.invokeMapMethod<String, Object?>(
+        'runCoopTapSequence',
+        {
+          'points': calibration.points,
+          'width': calibration.width,
+          'height': calibration.height,
+          'rotation': calibration.rotation,
+        },
+      );
+      final timeout = Timer(const Duration(seconds: 25), () {
+        unawaited(_native.invokeMethod<bool>('cancelCoopTapSequence'));
+      });
+      try {
+        final outcome = await sequenceFuture;
+        return switch (outcome?['status']) {
+          'sent' => CoopMenuActivationResult.tapsSent,
+          'cancelled' => CoopMenuActivationResult.cancelled,
+          'timeout' => CoopMenuActivationResult.sequenceTimeout,
+          'not_foreground' => CoopMenuActivationResult.gameNotForeground,
+          'display_changed' => CoopMenuActivationResult.displayChanged,
+          'shizuku_permission' => CoopMenuActivationResult.shizukuDenied,
+          'unsupported' => CoopMenuActivationResult.unsupported,
+          _ => CoopMenuActivationResult.unavailable,
+        };
+      } on PlatformException {
+        return CoopMenuActivationResult.unavailable;
+      } finally {
+        timeout.cancel();
+      }
+    } on PlatformException {
+      return CoopMenuActivationResult.unavailable;
+    } catch (_) {
+      return CoopMenuActivationResult.invalid;
+    }
+  }
 }
 
 /// Nombres de save aceptados en cualquier comando shell root — mismo criterio
@@ -291,3 +420,25 @@ bool _isSafeSaveName(String value) =>
 /// un comando shell, sin rechazar nombres legítimos.
 String _shellQuote(String value) => "'${_shellLiteral(value)}'";
 String _shellLiteral(String value) => value.replaceAll("'", "'\\''");
+
+enum CoopMenuActivationResult {
+  success,
+  successCreated,
+  alreadyEnabled,
+  rootDenied,
+  gameRunning,
+  unsupported,
+  preferenceChanged,
+  unavailable,
+  invalid,
+  writeFailed,
+  shizukuUnavailable,
+  shizukuDenied,
+  overlayPermissionRequired,
+  calibrationTimeout,
+  tapsSent,
+  sequenceTimeout,
+  gameNotForeground,
+  displayChanged,
+  cancelled,
+}

@@ -83,6 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   _UpdateState _updateState = _UpdateState.idle;
   String _appVersion = '';
   UpdateInfo? _updateInfo;
+
   /// Motivo técnico cuando `_updateState == _UpdateState.checkFailed`.
   String? _checkFailureReason;
   double _downloadProgress = 0;
@@ -98,6 +99,15 @@ class _SettingsScreenState extends State<SettingsScreen>
   late final AnimationController _entranceCtrl;
   late final Animation<double> _contentAnim;
   bool _modeDropdownOpen = false;
+  bool _coopBusy = false;
+  bool _coopDropdownOpen = false;
+  late final AnimationController _coopMenuCtrl;
+  late final Animation<double> _coopMenuAnimation;
+  late final Animation<Offset> _coopMenuOffset;
+  bool _accessDropdownOpen = false;
+  late final AnimationController _accessMenuCtrl;
+  late final Animation<double> _accessMenuAnimation;
+  late final Animation<Offset> _accessMenuOffset;
   String? _connectedEmail;
 
   @override
@@ -124,11 +134,39 @@ class _SettingsScreenState extends State<SettingsScreen>
       parent: _entranceCtrl,
       curve: const Cubic(0.23, 1, 0.32, 1),
     );
+    _coopMenuCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
+    _coopMenuAnimation = CurvedAnimation(
+      parent: _coopMenuCtrl,
+      curve: const Cubic(0.23, 1, 0.32, 1),
+      reverseCurve: Curves.easeOutCubic,
+    );
+    _coopMenuOffset = Tween<Offset>(
+      begin: const Offset(0, -0.025),
+      end: Offset.zero,
+    ).animate(_coopMenuAnimation);
+    _accessMenuCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
+    _accessMenuAnimation = CurvedAnimation(
+      parent: _accessMenuCtrl,
+      curve: const Cubic(0.23, 1, 0.32, 1),
+      reverseCurve: Curves.easeOutCubic,
+    );
+    _accessMenuOffset = Tween<Offset>(
+      begin: const Offset(0, -0.025),
+      end: Offset.zero,
+    ).animate(_accessMenuAnimation);
   }
 
   @override
   void dispose() {
     _progressNotifier.dispose();
+    _coopMenuCtrl.dispose();
+    _accessMenuCtrl.dispose();
     _entranceCtrl.dispose();
     super.dispose();
   }
@@ -208,7 +246,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           Navigator.of(context, rootNavigator: true).maybePop();
           setState(() => _updateState = _UpdateState.available);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.updateNeedsPermission)),
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.updateNeedsPermission,
+              ),
+            ),
           );
         }
       },
@@ -449,11 +491,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   style: AppTypography.eyebrow(),
                                 ),
                                 const SizedBox(height: 12),
-                                _changeAccessTile(accent, l10n),
+                                _accessMethodTile(accent, l10n),
                                 if (_androidAccess != null) ...[
                                   const SizedBox(height: 8),
                                   _savesFolderTile(accent, l10n),
                                 ],
+                                const SizedBox(height: 8),
+                                _coopMenuTile(accent, l10n),
                               ],
                               const SizedBox(height: 32),
                               Text(
@@ -505,10 +549,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       onTap: () async {
         await showDialog<bool>(
           context: context,
-          builder: (_) => SavesFolderDialog(
-            root: _androidAccess == 'root',
-            accent: accent,
-          ),
+          builder: (_) =>
+              SavesFolderDialog(root: _androidAccess == 'root', accent: accent),
         );
         if (!mounted) return;
         setState(() => _savesPath = AndroidSavesPath.instance.current);
@@ -526,7 +568,10 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l10n.savesFolderTitle, style: AppTypography.bodyStrong()),
+                  Text(
+                    l10n.savesFolderTitle,
+                    style: AppTypography.bodyStrong(),
+                  ),
                   const SizedBox(height: 2),
                   Text(
                     _savesPath,
@@ -559,48 +604,511 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _changeAccessTile(Color accent, AppLocalizations l10n) {
-    // Foco de teclado/mando (2026-08): reescrito sobre `PressableScale`, que
-    // ya lo lleva incorporado — el oscurecido extra al pasar el ratón se
-    // simplifica a su valor fijo, el halo de foco de `PressableScale` ya
-    // da suficiente feedback sin necesitar ese matiz por hover.
+  Widget _coopMethodRow({
+    required Color accent,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String description,
+    required VoidCallback onTap,
+  }) {
     return PressableScale(
-      onTap: () => Navigator.pop(context, 'change_mode'),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.45),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
-        ),
+      onTap: onTap,
+      semanticLabel: '$title. $subtitle $description',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Icon(icon, color: accent, size: 19),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'ROOT / SHIZUKU',
-                    style: AppTypography.mono(
-                      color: AppColors.textFaint,
-                      size: 9,
-                    ),
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.bodyStrong(color: AppColors.text),
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    l10n.bridgeChangeMode,
-                    style: AppTypography.bodyStrong(color: AppColors.text),
+                    subtitle,
+                    style: AppTypography.mono(color: accent, size: 9),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    description,
+                    style: AppTypography.mono(
+                      color: AppColors.textFaint,
+                      size: 10,
+                    ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             Icon(
               Icons.chevron_right_rounded,
-              color: Colors.white.withValues(alpha: 0.40),
+              color: Colors.white.withValues(alpha: 0.38),
+              size: 19,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _runCoopActivation(
+    bool useRoot,
+    Color accent,
+    AppLocalizations l10n,
+  ) async {
+    if (_coopBusy) return;
+    setState(() => _coopBusy = true);
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => PopScope(
+        canPop: false,
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: glassDialogShell(
+            ctx,
+            accent: accent,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: accent,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    l10n.settingsCoopWorking,
+                    style: AppTypography.mono(color: AppColors.text, size: 12),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final CoopMenuActivationResult result;
+    if (useRoot) {
+      result = await ShizukuService.instance.activateCoopMenu();
+    } else {
+      final language = Localizations.localeOf(context).languageCode == 'es'
+          ? 'es'
+          : 'en';
+      result = await ShizukuService.instance.activateCoopMenuViaShizuku(
+        language: language,
+      );
+    }
+    if (!mounted) return;
+    Navigator.of(context, rootNavigator: true).pop();
+    setState(() => _coopBusy = false);
+    if (result == CoopMenuActivationResult.cancelled) return;
+
+    final isSuccess = switch (result) {
+      CoopMenuActivationResult.success ||
+      CoopMenuActivationResult.successCreated ||
+      CoopMenuActivationResult.alreadyEnabled ||
+      CoopMenuActivationResult.tapsSent => true,
+      _ => false,
+    };
+    final message = switch (result) {
+      CoopMenuActivationResult.success => l10n.settingsCoopSuccess,
+      CoopMenuActivationResult.successCreated => l10n.settingsCoopCreated,
+      CoopMenuActivationResult.alreadyEnabled => l10n.settingsCoopAlready,
+      CoopMenuActivationResult.rootDenied => l10n.settingsCoopRootDenied,
+      CoopMenuActivationResult.gameRunning => l10n.settingsCoopGameRunning,
+      CoopMenuActivationResult.unsupported => l10n.settingsCoopUnsupported,
+      CoopMenuActivationResult.preferenceChanged => l10n.settingsCoopChanged,
+      CoopMenuActivationResult.unavailable => l10n.settingsCoopUnavailable,
+      CoopMenuActivationResult.invalid => l10n.settingsCoopInvalid,
+      CoopMenuActivationResult.writeFailed => l10n.settingsCoopWriteFailed,
+      CoopMenuActivationResult.shizukuUnavailable =>
+        l10n.settingsCoopShizukuUnavailable,
+      CoopMenuActivationResult.shizukuDenied => l10n.settingsCoopShizukuDenied,
+      CoopMenuActivationResult.overlayPermissionRequired =>
+        l10n.settingsCoopOverlayPermission,
+      CoopMenuActivationResult.calibrationTimeout =>
+        l10n.settingsCoopCalibrationTimeout,
+      CoopMenuActivationResult.sequenceTimeout =>
+        l10n.settingsCoopSequenceTimeout,
+      CoopMenuActivationResult.gameNotForeground =>
+        l10n.settingsCoopNotForeground,
+      CoopMenuActivationResult.displayChanged =>
+        l10n.settingsCoopDisplayChanged,
+      CoopMenuActivationResult.cancelled => l10n.settingsCoopCancelled,
+      CoopMenuActivationResult.tapsSent => l10n.settingsCoopShizukuSent,
+    };
+    final title = switch (result) {
+      CoopMenuActivationResult.alreadyEnabled => l10n.settingsCoopAlreadyTitle,
+      CoopMenuActivationResult.tapsSent => l10n.settingsCoopShizukuResultTitle,
+      _ when isSuccess => l10n.settingsCoopSuccessTitle,
+      _ => l10n.settingsCoopErrorTitle,
+    };
+    final color = isSuccess ? accent : const Color(0xFFC06050);
+    await showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.60),
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: glassDialogShell(
+          ctx,
+          accent: color,
+          child: dialogBody(
+            title: Row(
+              children: [
+                Icon(
+                  isSuccess
+                      ? Icons.check_circle_outline_rounded
+                      : Icons.error_outline_rounded,
+                  color: color,
+                  size: 22,
+                ),
+                const SizedBox(width: 9),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: GoogleFonts.bodoniModa(
+                      color: AppColors.text,
+                      fontSize: 22,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            content: Text(
+              message,
+              style: AppTypography.mono(color: AppColors.textMuted, size: 11),
+            ),
+            actions: [
+              ActionBtn(
+                label: l10n.settingsCoopDismiss,
+                color: color,
+                filled: true,
+                onTap: () => Navigator.pop(ctx),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _setCoopDropdownOpen(bool open) {
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final closeAccess = open && _accessDropdownOpen;
+    setState(() {
+      _coopDropdownOpen = open;
+      if (closeAccess) _accessDropdownOpen = false;
+    });
+    if (disableAnimations) {
+      _coopMenuCtrl.value = open ? 1 : 0;
+      if (closeAccess) _accessMenuCtrl.value = 0;
+    } else if (open) {
+      _coopMenuCtrl.forward();
+      if (closeAccess) _accessMenuCtrl.reverse();
+    } else {
+      _coopMenuCtrl.reverse();
+    }
+  }
+
+  void _setAccessDropdownOpen(bool open) {
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final closeCoop = open && _coopDropdownOpen;
+    setState(() {
+      _accessDropdownOpen = open;
+      if (closeCoop) _coopDropdownOpen = false;
+    });
+    if (disableAnimations) {
+      _accessMenuCtrl.value = open ? 1 : 0;
+      if (closeCoop) _coopMenuCtrl.value = 0;
+    } else if (open) {
+      _accessMenuCtrl.forward();
+      if (closeCoop) _coopMenuCtrl.reverse();
+    } else {
+      _accessMenuCtrl.reverse();
+    }
+  }
+
+  Widget _accessMethodTile(Color accent, AppLocalizations l10n) {
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final triggerDuration = disableAnimations
+        ? Duration.zero
+        : const Duration(milliseconds: 180);
+    return Column(
+      children: [
+        Semantics(
+          expanded: _accessDropdownOpen,
+          child: PressableScale(
+            onTap: () => _setAccessDropdownOpen(!_accessDropdownOpen),
+            semanticLabel: l10n.bridgeChangeMode,
+            child: AnimatedContainer(
+              duration: triggerDuration,
+              curve: Curves.easeOut,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(
+                  alpha: _accessDropdownOpen ? 0.70 : 0.45,
+                ),
+                borderRadius: BorderRadius.vertical(
+                  top: const Radius.circular(12),
+                  bottom: Radius.circular(_accessDropdownOpen ? 0 : 12),
+                ),
+                border: Border.all(
+                  color: _accessDropdownOpen
+                      ? accent.withValues(alpha: 0.42)
+                      : Colors.white.withValues(alpha: 0.10),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.tune_rounded, color: accent, size: 20),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ROOT / SHIZUKU',
+                          style: AppTypography.mono(
+                            color: AppColors.textFaint,
+                            size: 9,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          l10n.bridgeChangeMode,
+                          style: AppTypography.bodyStrong(
+                            color: AppColors.text,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _accessDropdownOpen ? 0.5 : 0,
+                    duration: triggerDuration,
+                    curve: Curves.easeOut,
+                    child: Icon(
+                      Icons.expand_more_rounded,
+                      color: Colors.white.withValues(alpha: 0.52),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        ClipRect(
+          child: SizeTransition(
+            axis: Axis.vertical,
+            alignment: Alignment.topCenter,
+            sizeFactor: _accessMenuAnimation,
+            child: FadeTransition(
+              opacity: _accessMenuAnimation,
+              child: SlideTransition(
+                position: _accessMenuOffset,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.55),
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(12),
+                    ),
+                    border: Border.all(color: accent.withValues(alpha: 0.28)),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _coopMethodRow(
+                        accent: accent,
+                        icon: Icons.lock_open_rounded,
+                        title: l10n.chooserRootTitle,
+                        subtitle: l10n.chooserRootBadge,
+                        description: l10n.chooserRootDesc,
+                        onTap: () {
+                          _setAccessDropdownOpen(false);
+                          Navigator.pop(context, 'change_mode_root');
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.white.withValues(alpha: 0.10),
+                        ),
+                      ),
+                      _coopMethodRow(
+                        accent: accent,
+                        icon: Icons.usb_rounded,
+                        title: l10n.hiwShizukuTitle,
+                        subtitle: l10n.hiwShizukuBadge,
+                        description: l10n.hiwShizukuSubtitle,
+                        onTap: () {
+                          _setAccessDropdownOpen(false);
+                          Navigator.pop(context, 'change_mode_shizuku');
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _coopMenuTile(Color accent, AppLocalizations l10n) {
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final triggerDuration = disableAnimations
+        ? Duration.zero
+        : const Duration(milliseconds: 180);
+    return Column(
+      children: [
+        Semantics(
+          expanded: _coopDropdownOpen,
+          child: PressableScale(
+            onTap: _coopBusy
+                ? null
+                : () => _setCoopDropdownOpen(!_coopDropdownOpen),
+            semanticLabel: l10n.settingsCoopRowTitle,
+            child: AnimatedContainer(
+              duration: triggerDuration,
+              curve: Curves.easeOut,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(
+                  alpha: _coopDropdownOpen ? 0.70 : 0.45,
+                ),
+                borderRadius: BorderRadius.vertical(
+                  top: const Radius.circular(12),
+                  bottom: Radius.circular(_coopDropdownOpen ? 0 : 12),
+                ),
+                border: Border.all(
+                  color: _coopDropdownOpen
+                      ? accent.withValues(alpha: 0.42)
+                      : Colors.white.withValues(alpha: 0.10),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.people_alt_outlined, color: accent, size: 20),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.settingsCoopRowTitle,
+                          style: AppTypography.bodyStrong(
+                            color: AppColors.text,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          l10n.settingsCoopRowSubtitle,
+                          style: AppTypography.mono(
+                            color: AppColors.textFaint,
+                            size: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _coopDropdownOpen ? 0.5 : 0,
+                    duration: triggerDuration,
+                    curve: Curves.easeOut,
+                    child: Icon(
+                      Icons.expand_more_rounded,
+                      color: Colors.white.withValues(alpha: 0.52),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        ClipRect(
+          child: SizeTransition(
+            axis: Axis.vertical,
+            alignment: Alignment.topCenter,
+            sizeFactor: _coopMenuAnimation,
+            child: FadeTransition(
+              opacity: _coopMenuAnimation,
+              child: SlideTransition(
+                position: _coopMenuOffset,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.55),
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(12),
+                    ),
+                    border: Border.all(color: accent.withValues(alpha: 0.28)),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _coopMethodRow(
+                        accent: accent,
+                        icon: Icons.lock_open_rounded,
+                        title: l10n.settingsCoopRootTitle,
+                        subtitle: l10n.settingsCoopRootSubtitle,
+                        description: l10n.settingsCoopDescription,
+                        onTap: () async {
+                          _setCoopDropdownOpen(false);
+                          await _runCoopActivation(true, accent, l10n);
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.white.withValues(alpha: 0.10),
+                        ),
+                      ),
+                      _coopMethodRow(
+                        accent: accent,
+                        icon: Icons.touch_app_rounded,
+                        title: l10n.settingsCoopShizukuTitle,
+                        subtitle: l10n.settingsCoopShizukuSubtitle,
+                        description: l10n.settingsCoopShizukuDescription,
+                        onTap: () async {
+                          _setCoopDropdownOpen(false);
+                          await _runCoopActivation(false, accent, l10n);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -618,61 +1126,61 @@ class _SettingsScreenState extends State<SettingsScreen>
         PressableScale(
           onTap: () => setState(() => _modeDropdownOpen = !_modeDropdownOpen),
           child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOut,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: BoxDecoration(
-                color: _modeDropdownOpen
-                    ? Colors.black.withValues(alpha: 0.70)
-                    : Colors.black.withValues(alpha: 0.45),
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(12),
-                  topRight: const Radius.circular(12),
-                  bottomLeft: Radius.circular(_modeDropdownOpen ? 0 : 12),
-                  bottomRight: Radius.circular(_modeDropdownOpen ? 0 : 12),
-                ),
-                border: Border.all(
-                  color: _modeDropdownOpen
-                      ? accent.withValues(alpha: 0.45)
-                      : Colors.white.withValues(alpha: 0.10),
-                ),
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: _modeDropdownOpen
+                  ? Colors.black.withValues(alpha: 0.70)
+                  : Colors.black.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(12),
+                topRight: const Radius.circular(12),
+                bottomLeft: Radius.circular(_modeDropdownOpen ? 0 : 12),
+                bottomRight: Radius.circular(_modeDropdownOpen ? 0 : 12),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.sectionMode.toUpperCase(),
-                          style: AppTypography.mono(
-                            color: AppColors.textFaint,
-                            size: 9,
-                          ),
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          _currentModeLabel(l10n),
-                          style: AppTypography.bodyStrong(color: accent),
-                        ),
-                      ],
-                    ),
-                  ),
-                  AnimatedRotation(
-                    turns: _modeDropdownOpen ? 0.5 : 0.0,
-                    duration: const Duration(milliseconds: 350),
-                    curve: const Cubic(0.23, 1, 0.32, 1),
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: _modeDropdownOpen
-                          ? accent
-                          : Colors.white.withValues(alpha: 0.28),
-                      size: 22,
-                    ),
-                  ),
-                ],
+              border: Border.all(
+                color: _modeDropdownOpen
+                    ? accent.withValues(alpha: 0.45)
+                    : Colors.white.withValues(alpha: 0.10),
               ),
             ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.sectionMode.toUpperCase(),
+                        style: AppTypography.mono(
+                          color: AppColors.textFaint,
+                          size: 9,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        _currentModeLabel(l10n),
+                        style: AppTypography.bodyStrong(color: accent),
+                      ),
+                    ],
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: _modeDropdownOpen ? 0.5 : 0.0,
+                  duration: const Duration(milliseconds: 350),
+                  curve: const Cubic(0.23, 1, 0.32, 1),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: _modeDropdownOpen
+                        ? accent
+                        : Colors.white.withValues(alpha: 0.28),
+                    size: 22,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         AnimatedSize(
           duration: const Duration(milliseconds: 420),
@@ -878,29 +1386,29 @@ class _SettingsScreenState extends State<SettingsScreen>
           onTap: () =>
               _save(SeasonSettings(mode: SeasonMode.fixed, fixedSeason: s)),
           child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: selected
+                  ? Color.alphaBlend(
+                      accent.withValues(alpha: 0.20),
+                      const Color(0xFF040405),
+                    ).withValues(alpha: 0.70)
+                  : Colors.black.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
                 color: selected
-                    ? Color.alphaBlend(
-                        accent.withValues(alpha: 0.20),
-                        const Color(0xFF040405),
-                      ).withValues(alpha: 0.70)
-                    : Colors.black.withValues(alpha: 0.45),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: selected
-                      ? accent.withValues(alpha: 0.75)
-                      : Colors.white.withValues(alpha: 0.10),
-                ),
+                    ? accent.withValues(alpha: 0.75)
+                    : Colors.white.withValues(alpha: 0.10),
               ),
-              child: Text(
-                '$emoji $label',
-                style: AppTypography.eyebrow(
-                  color: selected ? accent : AppColors.textMuted,
-                ),
+            ),
+            child: Text(
+              '$emoji $label',
+              style: AppTypography.eyebrow(
+                color: selected ? accent : AppColors.textMuted,
               ),
+            ),
           ),
         );
       }).toList(),
@@ -987,59 +1495,52 @@ class _SettingsScreenState extends State<SettingsScreen>
         }
       },
       child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.10),
+        duration: const Duration(milliseconds: 140),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.settingsGameExePath,
+                    style: AppTypography.bodyStrong(),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    hasPath ? _gameExePath! : l10n.settingsGameExeNotFound,
+                    style: AppTypography.mono(
+                      color: hasPath ? AppColors.statusOk : AppColors.textFaint,
+                      size: 10,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsGameExePath,
-                      style: AppTypography.bodyStrong(),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      hasPath ? _gameExePath! : l10n.settingsGameExeNotFound,
-                      style: AppTypography.mono(
-                        color: hasPath
-                            ? AppColors.statusOk
-                            : AppColors.textFaint,
-                        size: 10,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+            const SizedBox(width: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: accent.withValues(alpha: 0.35)),
               ),
-              const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: accent.withValues(alpha: 0.35)),
-                ),
-                child: Text(
-                  l10n.settingsGameExeBrowse,
-                  style: AppTypography.mono(color: accent, size: 11),
-                ),
+              child: Text(
+                l10n.settingsGameExeBrowse,
+                style: AppTypography.mono(color: accent, size: 11),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1292,24 +1793,24 @@ class _SettingsScreenState extends State<SettingsScreen>
           ? _checkUpdateFromSettings
           : null,
       child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _updateState == _UpdateState.available
+              ? Color.alphaBlend(
+                  accent.withValues(alpha: 0.06),
+                  Colors.black.withValues(alpha: 0.45),
+                )
+              : Colors.black.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
             color: _updateState == _UpdateState.available
-                ? Color.alphaBlend(
-                    accent.withValues(alpha: 0.06),
-                    Colors.black.withValues(alpha: 0.45),
-                  )
-                : Colors.black.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: _updateState == _UpdateState.available
-                  ? accent.withValues(alpha: 0.38)
-                  : Colors.white.withValues(alpha: 0.10),
-            ),
+                ? accent.withValues(alpha: 0.38)
+                : Colors.white.withValues(alpha: 0.10),
           ),
-          child: content,
+        ),
+        child: content,
       ),
     );
   }
@@ -1339,54 +1840,49 @@ class _SettingsScreenState extends State<SettingsScreen>
     return PressableScale(
       onTap: () => _openLanguageDialog(context, l10n),
       child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.10),
+        duration: const Duration(milliseconds: 140),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.languageTileLabel,
+                style: AppTypography.bodyStrong(),
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  l10n.languageTileLabel,
-                  style: AppTypography.bodyStrong(),
-                ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: accent.withValues(alpha: 0.35)),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: accent.withValues(alpha: 0.35)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    flagView(flag, 13),
-                    const SizedBox(width: 6),
-                    Text(
-                      label,
-                      style: AppTypography.mono(color: accent, size: 12),
-                    ),
-                  ],
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  flagView(flag, 13),
+                  const SizedBox(width: 6),
+                  Text(
+                    label,
+                    style: AppTypography.mono(color: accent, size: 12),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 18,
-                color: AppColors.textFaint,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 12),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 18,
+              color: AppColors.textFaint,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1429,35 +1925,35 @@ class _SettingsScreenState extends State<SettingsScreen>
     return PressableScale(
       onTap: _showDisconnectDialog,
       child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xFFC84632).withValues(alpha: 0.14),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFC84632), width: 1.5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.logout_rounded,
-                size: 16,
-                color: const Color(0xFFE85840),
+        duration: const Duration(milliseconds: 140),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFC84632).withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFC84632), width: 1.5),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.logout_rounded,
+              size: 16,
+              color: const Color(0xFFE85840),
+            ),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                _connectedEmail == null
+                    ? l10n.disconnectButton
+                    : l10n.disconnectButtonEmail(_connectedEmail!),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.bodyStrong(color: const Color(0xFFE85840)),
               ),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Text(
-                  _connectedEmail == null
-                      ? l10n.disconnectButton
-                      : l10n.disconnectButtonEmail(_connectedEmail!),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.bodyStrong(color: const Color(0xFFE85840)),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1482,43 +1978,43 @@ class _AutoRefreshSwitch extends StatelessWidget {
     return PressableScale(
       onTap: () => onChanged(!value),
       child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          width: 42,
-          height: 24,
-          padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        width: 42,
+        height: 24,
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: value
+              ? _gold.withValues(alpha: 0.28)
+              : Colors.white.withValues(alpha: 0.08),
+          border: Border.all(
             color: value
-                ? _gold.withValues(alpha: 0.28)
-                : Colors.white.withValues(alpha: 0.08),
-            border: Border.all(
-              color: value
-                  ? _gold.withValues(alpha: 0.65)
-                  : Colors.white.withValues(alpha: 0.16),
+                ? _gold.withValues(alpha: 0.65)
+                : Colors.white.withValues(alpha: 0.16),
+          ),
+        ),
+        child: AnimatedAlign(
+          duration: const Duration(milliseconds: 200),
+          curve: const Cubic(0.23, 1, 0.32, 1),
+          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            width: 18,
+            height: 18,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: value ? _gold : Colors.white.withValues(alpha: 0.55),
+              boxShadow: value
+                  ? [
+                      BoxShadow(
+                        color: _gold.withValues(alpha: 0.6),
+                        blurRadius: 6,
+                      ),
+                    ]
+                  : null,
             ),
           ),
-          child: AnimatedAlign(
-            duration: const Duration(milliseconds: 200),
-            curve: const Cubic(0.23, 1, 0.32, 1),
-            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-            child: Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: value ? _gold : Colors.white.withValues(alpha: 0.55),
-                boxShadow: value
-                    ? [
-                        BoxShadow(
-                          color: _gold.withValues(alpha: 0.6),
-                          blurRadius: 6,
-                        ),
-                      ]
-                    : null,
-              ),
-            ),
-          ),
+        ),
       ),
     );
   }

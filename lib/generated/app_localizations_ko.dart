@@ -1987,6 +1987,141 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsGameSection => '게임';
 
   @override
+  String get settingsCoopSection => '코옵 메뉴';
+
+  @override
+  String get settingsCoopTitle => '숨겨진 코옵 메뉴 잠금 해제';
+
+  @override
+  String get settingsCoopDescription =>
+      '환경설정을 직접 변경하는 옵션에는 ROOT가 필요합니다. Stardew는 종료되어 있어야 하며, 설정을 바꾸기 전에 ValleySave가 백업을 만듭니다.';
+
+  @override
+  String get settingsCoopManual =>
+      'ROOT 없이: Stardew를 열고 ↑↑↓↓←→←→를 입력한 다음 ?를 탭하여 나가세요.';
+
+  @override
+  String get settingsCoopActivate => 'ROOT로 활성화';
+
+  @override
+  String get settingsCoopWorking => '처리 중…';
+
+  @override
+  String get settingsCoopSuccess => '코옵 메뉴의 잠금이 해제되었습니다. 환경설정 백업이 저장되었습니다.';
+
+  @override
+  String get settingsCoopCreated =>
+      '코옵 메뉴의 잠금이 해제되었습니다. Stardew에 환경설정 파일이 없어 새로 만들었습니다.';
+
+  @override
+  String get settingsCoopAlready => '코옵 메뉴는 이미 잠금 해제되어 있습니다.';
+
+  @override
+  String get settingsCoopRootDenied =>
+      'ROOT 접근을 사용할 수 없거나 거부되었습니다. 루트 설정을 확인한 후 다시 시도하세요.';
+
+  @override
+  String get settingsCoopGameRunning => 'Stardew Valley를 완전히 종료한 후 다시 시도하세요.';
+
+  @override
+  String get settingsCoopUnsupported => '기본 Android 사용자에게 게임이 설치되어 있어야 합니다.';
+
+  @override
+  String get settingsCoopChanged =>
+      '활성화하는 동안 Stardew의 환경설정이 변경되었습니다. 아무것도 변경되지 않았습니다. 다시 시도하세요.';
+
+  @override
+  String get settingsCoopUnavailable =>
+      'Stardew의 환경설정을 읽을 수 없었습니다. 아무것도 변경되지 않았습니다.';
+
+  @override
+  String get settingsCoopInvalid => '환경설정 파일의 형식이 예상과 다릅니다. 아무것도 변경되지 않았습니다.';
+
+  @override
+  String get settingsCoopWriteFailed =>
+      '환경설정을 안전하게 업데이트할 수 없었습니다. 다시 시도하기 전에 백업을 확인하세요.';
+
+  @override
+  String get settingsCoopShizukuTitle => 'Shizuku로 보정';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      '실험적 기능: 다른 앱 위에 표시 권한을 허용한 다음, Stardew 타이틀 화면에서 표시된 다섯 곳(W, V, S, Y, ?)을 탭하세요. 좌표는 이 세션 동안에만 사용됩니다.';
+
+  @override
+  String get settingsCoopShizukuActivate => 'Shizuku로 보정';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      '탭을 전송했습니다. ? 화면을 직접 닫고 코옵이 나타나는지 확인하세요. ValleySave는 잠금 해제 여부를 확인할 수 없습니다.';
+
+  @override
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku가 실행 중이 아닙니다. 실행한 후 다시 시도하세요.';
+
+  @override
+  String get settingsCoopShizukuDenied => 'ValleySave에 Shizuku 권한이 없습니다.';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      'ValleySave가 다른 앱 위에 표시되도록 허용한 다음, Shizuku 버튼을 다시 탭하세요.';
+
+  @override
+  String get settingsCoopCalibrationTimeout =>
+      '보정 시간이 초과되었습니다. Stardew 타이틀 화면에서 다시 시작하세요.';
+
+  @override
+  String get settingsCoopSequenceTimeout => '탭 순서 시간이 초과되어 취소되었습니다.';
+
+  @override
+  String get settingsCoopNotForeground =>
+      'Stardew가 포그라운드에서 벗어났습니다. 더 이상 탭이 전송되지 않았습니다. 타이틀 화면으로 돌아가 다시 시도하세요.';
+
+  @override
+  String get settingsCoopDisplayChanged =>
+      '보정 중에 화면이 변경되었습니다. 탭이 전송되지 않았습니다. 다시 보정하세요.';
+
+  @override
+  String get settingsCoopCancelled => '코옵 활성화가 취소되었습니다.';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      '모바일 코옵 기능은 실험적입니다. Stardew를 타이틀 화면에 둔 채 ? 페이지를 직접 닫고 코옵이 나타나는지 확인하세요.';
+
+  @override
+  String get settingsCoopRowTitle => '모바일 코옵';
+
+  @override
+  String get settingsCoopRowSubtitle => 'Stardew Valley의 숨겨진 코옵 옵션 잠금 해제';
+
+  @override
+  String get settingsCoopChooserIntro => '이 휴대폰에서 코옵 잠금을 해제할 방법을 선택하세요.';
+
+  @override
+  String get settingsCoopRootTitle => 'ROOT로 바로 실행';
+
+  @override
+  String get settingsCoopRootSubtitle => '권장 · 안정적';
+
+  @override
+  String get settingsCoopShizukuSubtitle => '실험적 · 안내형 탭';
+
+  @override
+  String get settingsCoopSuccessTitle => '코옵 준비 완료';
+
+  @override
+  String get settingsCoopAlreadyTitle => '이미 잠금 해제됨';
+
+  @override
+  String get settingsCoopShizukuResultTitle => '순서 완료';
+
+  @override
+  String get settingsCoopErrorTitle => '코옵 잠금을 해제할 수 없습니다';
+
+  @override
+  String get settingsCoopDismiss => '알겠습니다';
+
+  @override
   String get settingsGameExePath => 'Stardew Valley 실행 파일';
 
   @override

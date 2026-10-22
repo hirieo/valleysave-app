@@ -2028,6 +2028,147 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settingsGameSection => 'เกม';
 
   @override
+  String get settingsCoopSection => 'เมนูโคออป';
+
+  @override
+  String get settingsCoopTitle => 'ปลดล็อกเมนูโคออปที่ซ่อนอยู่';
+
+  @override
+  String get settingsCoopDescription =>
+      'ตัวเลือกแก้ไขการตั้งค่าโดยตรงต้องใช้ ROOT ต้องปิด Stardew ก่อน ValleySave จะสร้างข้อมูลสำรองก่อนเปลี่ยนการตั้งค่า';
+
+  @override
+  String get settingsCoopManual =>
+      'ไม่มี ROOT: เปิด Stardew ป้อน ↑↑↓↓←→←→ แล้วแตะ ? เพื่อออก';
+
+  @override
+  String get settingsCoopActivate => 'เปิดใช้งานด้วย ROOT';
+
+  @override
+  String get settingsCoopWorking => 'กำลังดำเนินการ…';
+
+  @override
+  String get settingsCoopSuccess =>
+      'ปลดล็อกเมนูโคออปแล้ว บันทึกข้อมูลสำรองของการตั้งค่าไว้แล้ว';
+
+  @override
+  String get settingsCoopCreated =>
+      'ปลดล็อกเมนูโคออปแล้ว Stardew ไม่มีไฟล์การตั้งค่า จึงสร้างไฟล์ใหม่ขึ้นมา';
+
+  @override
+  String get settingsCoopAlready => 'เมนูโคออปถูกปลดล็อกอยู่แล้ว';
+
+  @override
+  String get settingsCoopRootDenied =>
+      'ไม่สามารถเข้าถึง ROOT ได้หรือถูกปฏิเสธ ตรวจสอบการตั้งค่า root แล้วลองอีกครั้ง';
+
+  @override
+  String get settingsCoopGameRunning =>
+      'ปิด Stardew Valley ให้สนิท แล้วลองอีกครั้ง';
+
+  @override
+  String get settingsCoopUnsupported =>
+      'ต้องติดตั้งเกมไว้สำหรับผู้ใช้หลักของ Android';
+
+  @override
+  String get settingsCoopChanged =>
+      'การตั้งค่าของ Stardew เปลี่ยนไประหว่างการเปิดใช้งาน ไม่มีอะไรถูกเปลี่ยนแปลง ลองอีกครั้ง';
+
+  @override
+  String get settingsCoopUnavailable =>
+      'ไม่สามารถอ่านการตั้งค่าของ Stardew ได้ ไม่มีอะไรถูกเปลี่ยนแปลง';
+
+  @override
+  String get settingsCoopInvalid =>
+      'ไฟล์การตั้งค่ามีรูปแบบที่ไม่คาดคิด ไม่มีอะไรถูกเปลี่ยนแปลง';
+
+  @override
+  String get settingsCoopWriteFailed =>
+      'ไม่สามารถอัปเดตการตั้งค่าได้อย่างปลอดภัย ตรวจสอบข้อมูลสำรองก่อนลองอีกครั้ง';
+
+  @override
+  String get settingsCoopShizukuTitle => 'ปรับเทียบด้วย Shizuku';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      'ทดลอง: อนุญาตให้แสดงทับแอปอื่น จากนั้นแตะเป้าหมายที่ทำเครื่องหมายไว้ห้าจุดบนหน้าจอชื่อเกมของ Stardew (W, V, S, Y และ ?) พิกัดจะใช้เฉพาะในเซสชันนี้เท่านั้น';
+
+  @override
+  String get settingsCoopShizukuActivate => 'ปรับเทียบด้วย Shizuku';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      'ส่งการแตะแล้ว ปิดหน้าจอ ? ด้วยตนเอง แล้วตรวจสอบว่าโคออปปรากฏขึ้นหรือไม่ ValleySave ไม่สามารถยืนยันการปลดล็อกได้';
+
+  @override
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku ไม่ได้ทำงานอยู่ เริ่มใช้งานแล้วลองอีกครั้ง';
+
+  @override
+  String get settingsCoopShizukuDenied => 'ValleySave ไม่มีสิทธิ์ Shizuku';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      'อนุญาตให้ ValleySave แสดงทับแอปอื่น แล้วแตะปุ่ม Shizuku อีกครั้ง';
+
+  @override
+  String get settingsCoopCalibrationTimeout =>
+      'การปรับเทียบหมดเวลา เริ่มใหม่จากหน้าจอชื่อเกมของ Stardew';
+
+  @override
+  String get settingsCoopSequenceTimeout => 'ลำดับการแตะหมดเวลาและถูกยกเลิก';
+
+  @override
+  String get settingsCoopNotForeground =>
+      'Stardew ไม่ได้อยู่เบื้องหน้าแล้ว ไม่มีการส่งการแตะเพิ่มเติม กลับไปที่หน้าจอชื่อเกมแล้วลองอีกครั้ง';
+
+  @override
+  String get settingsCoopDisplayChanged =>
+      'หน้าจอเปลี่ยนไประหว่างการปรับเทียบ ไม่มีการส่งการแตะ ปรับเทียบอีกครั้ง';
+
+  @override
+  String get settingsCoopCancelled => 'ยกเลิกการเปิดใช้งานโคออปแล้ว';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      'ฟีเจอร์โคออปบนมือถือยังอยู่ในขั้นทดลอง ให้ Stardew อยู่ที่หน้าจอชื่อเกม ปิดหน้า ? ด้วยตนเอง แล้วตรวจสอบว่าโคออปปรากฏขึ้นหรือไม่';
+
+  @override
+  String get settingsCoopRowTitle => 'โคออปบนมือถือ';
+
+  @override
+  String get settingsCoopRowSubtitle =>
+      'ปลดล็อกตัวเลือกโคออปที่ซ่อนอยู่ใน Stardew Valley';
+
+  @override
+  String get settingsCoopChooserIntro =>
+      'เลือกวิธีปลดล็อกโคออปบนโทรศัพท์เครื่องนี้';
+
+  @override
+  String get settingsCoopRootTitle => 'โดยตรงด้วย ROOT';
+
+  @override
+  String get settingsCoopRootSubtitle => 'แนะนำ · เสถียร';
+
+  @override
+  String get settingsCoopShizukuSubtitle => 'ทดลอง · แตะตามคำแนะนำ';
+
+  @override
+  String get settingsCoopSuccessTitle => 'โคออปพร้อมแล้ว';
+
+  @override
+  String get settingsCoopAlreadyTitle => 'ปลดล็อกแล้วก่อนหน้านี้';
+
+  @override
+  String get settingsCoopShizukuResultTitle => 'ทำตามลำดับเสร็จสิ้น';
+
+  @override
+  String get settingsCoopErrorTitle => 'ไม่สามารถปลดล็อกโคออปได้';
+
+  @override
+  String get settingsCoopDismiss => 'รับทราบ';
+
+  @override
   String get settingsGameExePath => 'ไฟล์ปฏิบัติการ Stardew Valley';
 
   @override

@@ -98,6 +98,7 @@ typedef OverwriteLedger = ({
   bool isDanger,
   _OverwriteVerdict verdict,
   String verdictText,
+
   /// Frase corta ("7 días y 3h30m") ya formateada — se reutiliza tal cual en
   /// el segundo diálogo de confirmación del caso peligro, sin recalcularla.
   String delta,
@@ -314,7 +315,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 24,
+          ),
           child: _glassDialogShell(
             maxWidth: 380,
             accent: kAutoSync,
@@ -368,9 +372,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     // solo le faltaba un color de foco visible sobre este
                     // fondo oscuro (el de Material por defecto casi no se ve).
                     focusColor: AppColors.accent.withValues(alpha: 0.15),
-                    onTap: () => setDialogState(
-                      () => dontShowAgain = !dontShowAgain,
-                    ),
+                    onTap: () =>
+                        setDialogState(() => dontShowAgain = !dontShowAgain),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
@@ -428,20 +431,20 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   color: kAutoSync,
                   icon: Icons.autorenew_rounded,
                   filled: true,
-                  onTap: () => Navigator.pop(
-                    ctx,
-                    (confirmed: true, dontShowAgain: dontShowAgain),
-                  ),
+                  onTap: () => Navigator.pop(ctx, (
+                    confirmed: true,
+                    dontShowAgain: dontShowAgain,
+                  )),
                 ),
                 ActionBtn(
                   label: l10n.cancel,
                   autofocus: true,
                   color: Colors.white.withValues(alpha: 0.55),
                   filled: false,
-                  onTap: () => Navigator.pop(
-                    ctx,
-                    (confirmed: false, dontShowAgain: dontShowAgain),
-                  ),
+                  onTap: () => Navigator.pop(ctx, (
+                    confirmed: false,
+                    dontShowAgain: dontShowAgain,
+                  )),
                 ),
               ],
             ),
@@ -551,7 +554,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // Submodo Shizuku: el usuario pudo activarlo fuera de la app.
-      if (Platform.isAndroid && _mode == AndroidMode.shizuku && !_shizukuReady) {
+      if (Platform.isAndroid &&
+          _mode == AndroidMode.shizuku &&
+          !_shizukuReady) {
         _checkShizuku();
       }
       // spec 009 (T914, D3, G3): al volver a primer plano, reanuda el timer
@@ -1396,7 +1401,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-
   Future<bool?> _confirmRemoveShared(String ownerEmail) {
     final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
@@ -1618,8 +1622,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (!mounted) return;
     if (result == 'disconnect') {
       _disconnectDrive();
-    } else if (result == 'change_mode') {
-      _showChangeModeDialog();
+    } else if (result == 'change_mode_root') {
+      await _chooseMode(AndroidMode.root);
+    } else if (result == 'change_mode_shizuku') {
+      await _chooseMode(AndroidMode.shizuku);
     } else {
       await GameLaunchService.instance.init();
       if (mounted) {
@@ -1657,122 +1663,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     } catch (_) {
       if (mounted) _snack(AppLocalizations.of(context)!.snackLaunchError);
     }
-  }
-
-  void _showChangeModeDialog() {
-    final l10n = AppLocalizations.of(context)!;
-    final accent = _seasonAccent;
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        child: _glassDialogShell(
-          accent: accent,
-          child: _dialogBody(
-            title: Text(
-              l10n.bridgeChangeMode,
-              style: GoogleFonts.bodoniModa(
-                color: AppColors.text,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _changeModeOption(
-                  ctx,
-                  l10n.chooserRootBadge,
-                  l10n.chooserRootTitle,
-                  AndroidMode.root,
-                  accent,
-                ),
-                const SizedBox(height: 8),
-                _changeModeOption(
-                  ctx,
-                  l10n.hiwShizukuBadge,
-                  l10n.hiwShizukuTitle,
-                  AndroidMode.shizuku,
-                  accent,
-                ),
-              ],
-            ),
-            actions: [
-              ActionBtn(
-                label: l10n.cancel,
-                autofocus: true,
-                color: Colors.white.withValues(alpha: 0.55),
-                filled: false,
-                onTap: () => Navigator.pop(ctx),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _changeModeOption(
-    BuildContext ctx,
-    String badge,
-    String title,
-    AndroidMode mode,
-    Color accent,
-  ) {
-    final isActive = _mode == mode;
-    return PressableScale(
-      onTap: () {
-        Navigator.pop(ctx);
-        if (!isActive) _chooseMode(mode);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isActive
-              ? accent.withValues(alpha: 0.16)
-              : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isActive
-                ? accent.withValues(alpha: 0.55)
-                : Colors.white.withValues(alpha: 0.10),
-            width: isActive ? 1.5 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    badge,
-                    style: GoogleFonts.firaCode(
-                      fontSize: 8.5,
-                      letterSpacing: 1.1,
-                      fontWeight: FontWeight.w700,
-                      color: isActive ? accent : AppColors.textFaint,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    title,
-                    style: GoogleFonts.firaCode(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: isActive ? accent : AppColors.text,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (isActive)
-              Icon(Icons.check_circle_rounded, size: 18, color: accent),
-          ],
-        ),
-      ),
-    );
   }
 
   Future<void> _disconnectDrive() async {
@@ -1973,7 +1863,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           // la carpeta real del juego — borrarla ahí no borraría nada de
           // verdad (ver doc de deleteLocalViaShizuku).
           final ok = await ShizukuService.instance.deleteLocalViaShizuku(name);
-          if (!ok && mounted) _snack(l10n.snackDeleteError('shizuku rm failed'));
+          if (!ok && mounted)
+            _snack(l10n.snackDeleteError('shizuku rm failed'));
         } else {
           final localSave = entry.local;
           if (localSave != null) {
@@ -2183,9 +2074,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final out = await ShizukuService.instance.prepareOut(folderName);
       final outDir = Directory(out);
       if (await outDir.exists()) await outDir.delete(recursive: true);
-      await Directory(
-        '${stagingDir.path}${Platform.pathSeparator}$folderName',
-      ).rename(out);
+      await Directory('${stagingDir.path}${Platform.pathSeparator}$folderName')
+          .rename(out);
 
       final ok = _mode == AndroidMode.root
           ? await ShizukuService.instance.pushSaveAsRoot(out, folderName)
@@ -2340,9 +2230,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
-                          color: const Color(
-                            0xFFE0B850,
-                          ).withValues(alpha: 0.55),
+                          color: const Color(0xFFE0B850)
+                              .withValues(alpha: 0.55),
                         ),
                       ),
                     ),
@@ -2389,9 +2278,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       decoration: BoxDecoration(
                         color: const Color(0xFFE0B850).withValues(alpha: 0.10),
                         border: Border.all(
-                          color: const Color(
-                            0xFFE0B850,
-                          ).withValues(alpha: 0.35),
+                          color: const Color(0xFFE0B850)
+                              .withValues(alpha: 0.35),
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -2537,9 +2425,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: const Color(
-                                  0xFFE0B850,
-                                ).withValues(alpha: 0.16),
+                                color: const Color(0xFFE0B850)
+                                    .withValues(alpha: 0.16),
                               ),
                               child: Text(
                                 (p.emailAddress as String? ?? '?')
@@ -3758,9 +3645,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final out = await ShizukuService.instance.prepareOut(folderName);
       final outDir = Directory(out);
       if (await outDir.exists()) await outDir.delete(recursive: true);
-      await Directory(
-        '${stagingDir.path}${Platform.pathSeparator}$folderName',
-      ).rename(out);
+      await Directory('${stagingDir.path}${Platform.pathSeparator}$folderName')
+          .rename(out);
 
       final ok = _mode == AndroidMode.root
           ? await ShizukuService.instance.pushSaveAsRoot(out, folderName)
@@ -4373,14 +4259,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: const Color(
-                            0xFFE09020,
-                          ).withValues(alpha: 0.10),
+                          color: const Color(0xFFE09020)
+                              .withValues(alpha: 0.10),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: const Color(
-                              0xFFE09020,
-                            ).withValues(alpha: 0.40),
+                            color: const Color(0xFFE09020)
+                                .withValues(alpha: 0.40),
                           ),
                         ),
                         child: Text(
@@ -4391,9 +4275,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                           style: GoogleFonts.firaCode(
                             fontSize: 10,
                             height: 1.5,
-                            color: const Color(
-                              0xFFE09020,
-                            ).withValues(alpha: 0.90),
+                            color: const Color(0xFFE09020)
+                                .withValues(alpha: 0.90),
                           ),
                         ),
                       ),
@@ -4716,8 +4599,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
             color: const Color(0xFF151512),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: (tagged && danger ? kDangerColor : color)
-                  .withValues(alpha: 0.60),
+              color: (tagged && danger ? kDangerColor : color).withValues(
+                alpha: 0.60,
+              ),
               width: 1.5,
             ),
           ),
@@ -4840,10 +4724,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6,
-                vertical: 2,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.14),
                 borderRadius: BorderRadius.circular(5),
@@ -5450,7 +5331,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                   if (danger) {
                     final targets = <String>[
                       if (dangerOwn) l10n.sharedTargetOwnDrive,
-                      if (dangerOwner) l10n.sharedSyncTargetOwner(entry.ownerEmail),
+                      if (dangerOwner)
+                        l10n.sharedSyncTargetOwner(entry.ownerEmail),
                     ];
                     final targetsPhrase = targets.length == 2
                         ? l10n.overwriteBothDestinationsLabel(
@@ -5527,12 +5409,20 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final m = d.inMinutes.remainder(60);
       return m == 0 ? '${h}h' : '${h}h${m.toString().padLeft(2, '0')}m';
     }
+
     String mineLabel(SaveFile s) => s.deepestMineLevel == 0
         ? l10n.previewColUnexplored
         : 'Nv. ${s.deepestMineLevel}';
 
-    _StatDiff? diff(String label, bool changed, String before, String after, bool worse) =>
-        changed ? (label: label, before: before, after: after, worse: worse) : null;
+    _StatDiff? diff(
+      String label,
+      bool changed,
+      String before,
+      String after,
+      bool worse,
+    ) => changed
+        ? (label: label, before: before, after: after, worse: worse)
+        : null;
 
     final headline = <_StatDiff>[];
     final skills = <_StatDiff>[];
@@ -5584,12 +5474,22 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         : identical.add(l10n.previewColTotal.toLowerCase());
 
     void addSkill(String label, int before, int after) {
-      final d = diff(label, before != after, '$before', '$after', after < before);
+      final d = diff(
+        label,
+        before != after,
+        '$before',
+        '$after',
+        after < before,
+      );
       d != null ? skills.add(d) : identical.add(label.toLowerCase());
     }
 
     addSkill(l10n.previewColFarming, current.farmingLevel, result.farmingLevel);
-    addSkill(l10n.previewColForaging, current.foragingLevel, result.foragingLevel);
+    addSkill(
+      l10n.previewColForaging,
+      current.foragingLevel,
+      result.foragingLevel,
+    );
     addSkill(l10n.previewColMining, current.miningLevel, result.miningLevel);
     addSkill(l10n.previewColFishing, current.fishingLevel, result.fishingLevel);
     addSkill(l10n.previewColCombat, current.combatLevel, result.combatLevel);
@@ -5649,17 +5549,20 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     ];
     final isDanger = dangerCandidates.any((d) => d.worse);
 
-    final dayDeltaAbs =
-        (result.calendarDayOrdinal - current.calendarDayOrdinal).abs();
-    final timeDeltaMs =
-        (result.millisecondsPlayed - current.millisecondsPlayed).abs();
+    final dayDeltaAbs = (result.calendarDayOrdinal - current.calendarDayOrdinal)
+        .abs();
+    final timeDeltaMs = (result.millisecondsPlayed - current.millisecondsPlayed)
+        .abs();
     final timeDeltaAbs = Duration(milliseconds: timeDeltaMs);
     final h = timeDeltaAbs.inHours;
     final m = timeDeltaAbs.inMinutes.remainder(60);
-    final timeDeltaLabel = h == 0 ? '${m}m' : '${h}h${m.toString().padLeft(2, '0')}m';
+    final timeDeltaLabel = h == 0
+        ? '${m}m'
+        : '${h}h${m.toString().padLeft(2, '0')}m';
     final delta = l10n.overwriteDeltaPhrase(dayDeltaAbs, timeDeltaLabel);
 
-    final negligible = !isDanger &&
+    final negligible =
+        !isDanger &&
         dayDiff == null &&
         skills.isEmpty &&
         others.isEmpty &&
@@ -5765,10 +5668,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// `SharedSyncState.fromEntry` (spec 008) para la relación de cada lado —
   /// mismo cálculo ya probado que usa el footer para decidir qué botón
   /// mostrar, no una versión nueva.
-  ({_AutoSyncAction ownDrive, _AutoSyncAction ownerDrive}) _decideSharedAutoSync(
-    AppLocalizations l10n,
-    SharedSaveEntry entry,
-  ) {
+  ({_AutoSyncAction ownDrive, _AutoSyncAction ownerDrive})
+  _decideSharedAutoSync(AppLocalizations l10n, SharedSaveEntry entry) {
     final local = entry.localMatch;
     if (local == null) {
       return (ownDrive: _AutoSyncAction.none, ownerDrive: _AutoSyncAction.none);
@@ -5782,7 +5683,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       String remoteLabel,
       bool remoteComplete,
     ) {
-      if (remote == null) return _AutoSyncAction.none; // missing: sin ledger que calcular
+      if (remote == null)
+        return _AutoSyncAction.none; // missing: sin ledger que calcular
       switch (relation) {
         case SharedCopyRelation.behind:
           final ledger = _computeOverwriteLedger(
@@ -5847,7 +5749,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   void _snackAutoSyncIfSynced(String folderName, String farmName) {
     if (!mounted) return;
     final own = _entries.where((e) => e.folderName == folderName);
-    final ownSynced = own.isNotEmpty && own.first.status == SaveSyncStatus.synced;
+    final ownSynced =
+        own.isNotEmpty && own.first.status == SaveSyncStatus.synced;
 
     final shared = _sharedEntries.where((e) => e.folderName == folderName);
     var sharedSynced = false;
@@ -6010,9 +5913,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           '${DateTime.now().toIso8601String()} $label -> '
           'debugLabel=${f?.debugLabel} rect=${f?.rect} '
           'hasPrimaryFocus=${f?.hasPrimaryFocus}\n';
-      File(
-        '${Directory.systemTemp.path}\\valleysave_debug.log',
-      ).writeAsStringSync(line, mode: FileMode.append, flush: true);
+      File('${Directory.systemTemp.path}\\valleysave_debug.log')
+          .writeAsStringSync(line, mode: FileMode.append, flush: true);
     } catch (_) {
       // El log de depuración nunca debe romper la app real.
     }
@@ -6196,56 +6098,57 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                         onMoveSelection: (delta) =>
                             _moveCardSelection(visibleEntries, i, delta),
                         child: SaveCard(
-                        entry: visibleEntries[i],
-                        busy: _busy.contains(visibleEntries[i].folderName),
-                        onUpload: () => _handleUpload(visibleEntries[i]),
-                        // FR-015: botón atenuado (no solo bloqueado al
-                        // tocarlo) cuando la partida está incompleta en
-                        // Drive — coincide con el mockup aprobado.
-                        onDownload: visibleEntries[i].driveComplete
-                            ? () => _handleDownload(visibleEntries[i])
-                            : null,
-                        onDeleteFromDrive:
-                            visibleEntries[i].driveFolderId != null &&
-                                widget.drive != null
-                            ? () => _handleDelete(
-                                visibleEntries[i],
-                                location: _DeleteChoice.driveOnly,
-                              )
-                            : null,
-                        onDeleteLocal: visibleEntries[i].local != null
-                            ? () => _handleDelete(
-                                visibleEntries[i],
-                                location: _DeleteChoice.localOnly,
-                              )
-                            : null,
-                        onManageCopies: () => _handleDelete(visibleEntries[i]),
-                        // F3 — gate de plataforma centralizado en
-                        // `_hostSwapAvailable` (ver F3 v2, 2026-07-15).
-                        onMakeHost:
-                            _hostSwapAvailable &&
-                                visibleEntries[i].local != null
-                            ? (target) =>
-                                  _handleMakeHost(visibleEntries[i], target)
-                            : null,
-                        onExport: visibleEntries[i].local != null
-                            ? () => _handleExport(visibleEntries[i])
-                            : null,
-                        onShare:
-                            widget.drive != null &&
-                                visibleEntries[i].driveFolderId != null
-                            ? () => _handleShare(visibleEntries[i])
-                            : null,
-                        onBackups: visibleEntries[i].local != null
-                            ? () => _handleOpenBackups(visibleEntries[i])
-                            : null,
-                        backupCount:
-                            _backupCounts[visibleEntries[i].folderName] ?? 0,
-                        autoSyncEnabled: _isAutoSyncEnabled(
-                          visibleEntries[i].folderName,
-                        ),
-                        onToggleAutoSync: () =>
-                            _toggleAutoSync(visibleEntries[i].folderName),
+                          entry: visibleEntries[i],
+                          busy: _busy.contains(visibleEntries[i].folderName),
+                          onUpload: () => _handleUpload(visibleEntries[i]),
+                          // FR-015: botón atenuado (no solo bloqueado al
+                          // tocarlo) cuando la partida está incompleta en
+                          // Drive — coincide con el mockup aprobado.
+                          onDownload: visibleEntries[i].driveComplete
+                              ? () => _handleDownload(visibleEntries[i])
+                              : null,
+                          onDeleteFromDrive:
+                              visibleEntries[i].driveFolderId != null &&
+                                  widget.drive != null
+                              ? () => _handleDelete(
+                                  visibleEntries[i],
+                                  location: _DeleteChoice.driveOnly,
+                                )
+                              : null,
+                          onDeleteLocal: visibleEntries[i].local != null
+                              ? () => _handleDelete(
+                                  visibleEntries[i],
+                                  location: _DeleteChoice.localOnly,
+                                )
+                              : null,
+                          onManageCopies: () =>
+                              _handleDelete(visibleEntries[i]),
+                          // F3 — gate de plataforma centralizado en
+                          // `_hostSwapAvailable` (ver F3 v2, 2026-07-15).
+                          onMakeHost:
+                              _hostSwapAvailable &&
+                                  visibleEntries[i].local != null
+                              ? (target) =>
+                                    _handleMakeHost(visibleEntries[i], target)
+                              : null,
+                          onExport: visibleEntries[i].local != null
+                              ? () => _handleExport(visibleEntries[i])
+                              : null,
+                          onShare:
+                              widget.drive != null &&
+                                  visibleEntries[i].driveFolderId != null
+                              ? () => _handleShare(visibleEntries[i])
+                              : null,
+                          onBackups: visibleEntries[i].local != null
+                              ? () => _handleOpenBackups(visibleEntries[i])
+                              : null,
+                          backupCount:
+                              _backupCounts[visibleEntries[i].folderName] ?? 0,
+                          autoSyncEnabled: _isAutoSyncEnabled(
+                            visibleEntries[i].folderName,
+                          ),
+                          onToggleAutoSync: () =>
+                              _toggleAutoSync(visibleEntries[i].folderName),
                         ),
                       ),
                     ],
@@ -6355,9 +6258,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               entry: e,
               busy: _busy.contains(e.folderName),
               // FR-015: mismo gate que la lista principal.
-              onDownload: e.complete
-                  ? () => _handleDownloadShared(e)
-                  : null,
+              onDownload: e.complete ? () => _handleDownloadShared(e) : null,
               onSync: (e.canSync && e.localMatch != null)
                   ? () => _handleSyncShared(e)
                   : null,
@@ -6541,87 +6442,87 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     return PressableScale(
       onTap: onTap,
       child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: recommended
-                    ? Color.alphaBlend(
-                        season.withValues(alpha: 0.16),
-                        const Color(0xFF040405),
-                      ).withValues(alpha: 0.68)
-                    : Color.alphaBlend(
-                        season.withValues(alpha: 0.07),
-                        Colors.black,
-                      ).withValues(alpha: 0.42),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: season.withValues(alpha: recommended ? 0.60 : 0.22),
-                  width: recommended ? 1.5 : 1,
-                ),
-              ),
-              child: Row(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: recommended
+              ? Color.alphaBlend(
+                  season.withValues(alpha: 0.16),
+                  const Color(0xFF040405),
+                ).withValues(alpha: 0.68)
+              : Color.alphaBlend(
+                  season.withValues(alpha: 0.07),
+                  Colors.black,
+                ).withValues(alpha: 0.42),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: season.withValues(alpha: recommended ? 0.60 : 0.22),
+            width: recommended ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          badge,
-                          style: GoogleFonts.firaCode(
-                            fontSize: 8.5,
-                            letterSpacing: 1.1,
-                            fontWeight: FontWeight.w700,
-                            color: recommended ? season : AppColors.textFaint,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          title,
-                          style: GoogleFonts.firaCode(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: recommended ? season : AppColors.text,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          desc,
-                          style: GoogleFonts.firaCode(
-                            fontSize: 12,
-                            height: 1.5,
-                            color: recommended
-                                ? Colors.white.withValues(alpha: 0.82)
-                                : AppColors.textFaint,
-                          ),
-                        ),
-                      ],
+                  Text(
+                    badge,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 8.5,
+                      letterSpacing: 1.1,
+                      fontWeight: FontWeight.w700,
+                      color: recommended ? season : AppColors.textFaint,
                     ),
                   ),
-                  const SizedBox(width: 14),
-                  Container(
-                    width: 22,
-                    height: 22,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: recommended ? season : Colors.transparent,
-                      border: recommended
-                          ? null
-                          : Border.all(
-                              color: season.withValues(alpha: 0.30),
-                              width: 2,
-                            ),
+                  const SizedBox(height: 4),
+                  Text(
+                    title,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: recommended ? season : AppColors.text,
                     ),
-                    child: recommended
-                        ? const Icon(
-                            Icons.check_rounded,
-                            size: 13,
-                            color: Colors.black,
-                          )
-                        : null,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    desc,
+                    style: GoogleFonts.firaCode(
+                      fontSize: 12,
+                      height: 1.5,
+                      color: recommended
+                          ? Colors.white.withValues(alpha: 0.82)
+                          : AppColors.textFaint,
+                    ),
                   ),
                 ],
               ),
+            ),
+            const SizedBox(width: 14),
+            Container(
+              width: 22,
+              height: 22,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: recommended ? season : Colors.transparent,
+                border: recommended
+                    ? null
+                    : Border.all(
+                        color: season.withValues(alpha: 0.30),
+                        width: 2,
+                      ),
+              ),
+              child: recommended
+                  ? const Icon(
+                      Icons.check_rounded,
+                      size: 13,
+                      color: Colors.black,
+                    )
+                  : null,
+            ),
+          ],
+        ),
       ),
     );
   }

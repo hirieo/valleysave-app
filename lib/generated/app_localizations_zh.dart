@@ -1946,6 +1946,131 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsGameSection => '游戏';
 
   @override
+  String get settingsCoopSection => '合作菜单';
+
+  @override
+  String get settingsCoopTitle => '解锁隐藏的合作菜单';
+
+  @override
+  String get settingsCoopDescription =>
+      '直接修改偏好设置的选项需要 ROOT。Stardew 必须已关闭；ValleySave 会在修改设置前创建备份。';
+
+  @override
+  String get settingsCoopManual => '没有 ROOT：打开 Stardew，输入 ↑↑↓↓←→←→，然后点击 ? 退出。';
+
+  @override
+  String get settingsCoopActivate => '使用 ROOT 激活';
+
+  @override
+  String get settingsCoopWorking => '处理中…';
+
+  @override
+  String get settingsCoopSuccess => '合作菜单已解锁。已保存偏好设置备份。';
+
+  @override
+  String get settingsCoopCreated => '合作菜单已解锁。Stardew 没有偏好设置文件，因此已创建新文件。';
+
+  @override
+  String get settingsCoopAlready => '合作菜单已经解锁。';
+
+  @override
+  String get settingsCoopRootDenied => 'ROOT 访问不可用或被拒绝。请检查 Root 设置后重试。';
+
+  @override
+  String get settingsCoopGameRunning => '请完全关闭 Stardew Valley，然后重试。';
+
+  @override
+  String get settingsCoopUnsupported => '这需要游戏安装在 Android 主用户下。';
+
+  @override
+  String get settingsCoopChanged => '激活期间 Stardew 的偏好设置发生了变化。未做任何更改；请重试。';
+
+  @override
+  String get settingsCoopUnavailable => '无法读取 Stardew 的偏好设置。未做任何更改。';
+
+  @override
+  String get settingsCoopInvalid => '偏好设置文件格式异常。未做任何更改。';
+
+  @override
+  String get settingsCoopWriteFailed => '无法安全地更新偏好设置。重试前请先检查备份。';
+
+  @override
+  String get settingsCoopShizukuTitle => '使用 Shizuku 校准';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      '实验性功能：允许显示在其他应用上层，然后在 Stardew 标题画面上点击五个标记目标（W、V、S、Y 和 ?）。坐标仅在本次会话中使用。';
+
+  @override
+  String get settingsCoopShizukuActivate => '使用 Shizuku 校准';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      '已发送点击。请手动关闭 ? 画面，然后检查是否出现合作选项。ValleySave 无法验证是否已解锁。';
+
+  @override
+  String get settingsCoopShizukuUnavailable => 'Shizuku 未运行。请启动后重试。';
+
+  @override
+  String get settingsCoopShizukuDenied => 'ValleySave 没有 Shizuku 权限。';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      '请允许 ValleySave 显示在其他应用上层，然后再次点击 Shizuku 按钮。';
+
+  @override
+  String get settingsCoopCalibrationTimeout => '校准超时。请从 Stardew 标题画面重新开始。';
+
+  @override
+  String get settingsCoopSequenceTimeout => '点击序列超时，已取消。';
+
+  @override
+  String get settingsCoopNotForeground => 'Stardew 已离开前台。未再发送更多点击；请回到标题画面后重试。';
+
+  @override
+  String get settingsCoopDisplayChanged => '校准期间屏幕发生了变化。未发送任何点击；请重新校准。';
+
+  @override
+  String get settingsCoopCancelled => '合作激活已取消。';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      '手机合作模式功能为实验性功能。请让 Stardew 停留在标题画面；自行关闭 ? 页面，并检查是否出现合作选项。';
+
+  @override
+  String get settingsCoopRowTitle => '手机合作模式';
+
+  @override
+  String get settingsCoopRowSubtitle => '解锁 Stardew Valley 中隐藏的合作选项';
+
+  @override
+  String get settingsCoopChooserIntro => '选择在这台手机上解锁合作的方式。';
+
+  @override
+  String get settingsCoopRootTitle => '使用 ROOT 直接解锁';
+
+  @override
+  String get settingsCoopRootSubtitle => '推荐 · 稳定';
+
+  @override
+  String get settingsCoopShizukuSubtitle => '实验性 · 引导点击';
+
+  @override
+  String get settingsCoopSuccessTitle => '合作已就绪';
+
+  @override
+  String get settingsCoopAlreadyTitle => '已经解锁';
+
+  @override
+  String get settingsCoopShizukuResultTitle => '序列已完成';
+
+  @override
+  String get settingsCoopErrorTitle => '无法解锁合作';
+
+  @override
+  String get settingsCoopDismiss => '知道了';
+
+  @override
   String get settingsGameExePath => 'Stardew Valley 可执行文件';
 
   @override
@@ -4033,6 +4158,131 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsGameSection => '遊戲';
+
+  @override
+  String get settingsCoopSection => '合作選單';
+
+  @override
+  String get settingsCoopTitle => '解鎖隱藏的合作選單';
+
+  @override
+  String get settingsCoopDescription =>
+      '直接修改偏好設定的選項需要 ROOT。Stardew 必須已關閉；ValleySave 會在修改設定前建立備份。';
+
+  @override
+  String get settingsCoopManual => '沒有 ROOT：開啟 Stardew，輸入 ↑↑↓↓←→←→，然後點擊 ? 離開。';
+
+  @override
+  String get settingsCoopActivate => '使用 ROOT 啟用';
+
+  @override
+  String get settingsCoopWorking => '處理中…';
+
+  @override
+  String get settingsCoopSuccess => '合作選單已解鎖。已儲存偏好設定備份。';
+
+  @override
+  String get settingsCoopCreated => '合作選單已解鎖。Stardew 沒有偏好設定檔，因此已建立新檔案。';
+
+  @override
+  String get settingsCoopAlready => '合作選單已經解鎖。';
+
+  @override
+  String get settingsCoopRootDenied => 'ROOT 存取無法使用或遭拒。請檢查 Root 設定後重試。';
+
+  @override
+  String get settingsCoopGameRunning => '請完全關閉 Stardew Valley，然後重試。';
+
+  @override
+  String get settingsCoopUnsupported => '這需要將遊戲安裝在 Android 主要使用者下。';
+
+  @override
+  String get settingsCoopChanged => '啟用期間 Stardew 的偏好設定發生了變化。未做任何變更；請重試。';
+
+  @override
+  String get settingsCoopUnavailable => '無法讀取 Stardew 的偏好設定。未做任何變更。';
+
+  @override
+  String get settingsCoopInvalid => '偏好設定檔格式異常。未做任何變更。';
+
+  @override
+  String get settingsCoopWriteFailed => '無法安全地更新偏好設定。重試前請先檢查備份。';
+
+  @override
+  String get settingsCoopShizukuTitle => '使用 Shizuku 校準';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      '實驗性功能：允許顯示在其他應用程式上層，然後在 Stardew 標題畫面上點擊五個標記目標（W、V、S、Y 和 ?）。座標僅在本次工作階段中使用。';
+
+  @override
+  String get settingsCoopShizukuActivate => '使用 Shizuku 校準';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      '已傳送點擊。請手動關閉 ? 畫面，然後檢查是否出現合作選項。ValleySave 無法驗證是否已解鎖。';
+
+  @override
+  String get settingsCoopShizukuUnavailable => 'Shizuku 未執行。請啟動後重試。';
+
+  @override
+  String get settingsCoopShizukuDenied => 'ValleySave 沒有 Shizuku 權限。';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      '請允許 ValleySave 顯示在其他應用程式上層，然後再次點擊 Shizuku 按鈕。';
+
+  @override
+  String get settingsCoopCalibrationTimeout => '校準逾時。請從 Stardew 標題畫面重新開始。';
+
+  @override
+  String get settingsCoopSequenceTimeout => '點擊序列逾時，已取消。';
+
+  @override
+  String get settingsCoopNotForeground => 'Stardew 已離開前景。未再傳送更多點擊；請回到標題畫面後重試。';
+
+  @override
+  String get settingsCoopDisplayChanged => '校準期間螢幕發生了變化。未傳送任何點擊；請重新校準。';
+
+  @override
+  String get settingsCoopCancelled => '合作啟用已取消。';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      '手機合作模式功能為實驗性功能。請讓 Stardew 停留在標題畫面；自行關閉 ? 頁面，並檢查是否出現合作選項。';
+
+  @override
+  String get settingsCoopRowTitle => '手機合作模式';
+
+  @override
+  String get settingsCoopRowSubtitle => '解鎖 Stardew Valley 中隱藏的合作選項';
+
+  @override
+  String get settingsCoopChooserIntro => '選擇在這支手機上解鎖合作的方式。';
+
+  @override
+  String get settingsCoopRootTitle => '使用 ROOT 直接解鎖';
+
+  @override
+  String get settingsCoopRootSubtitle => '推薦 · 穩定';
+
+  @override
+  String get settingsCoopShizukuSubtitle => '實驗性 · 引導點擊';
+
+  @override
+  String get settingsCoopSuccessTitle => '合作已就緒';
+
+  @override
+  String get settingsCoopAlreadyTitle => '已經解鎖';
+
+  @override
+  String get settingsCoopShizukuResultTitle => '序列已完成';
+
+  @override
+  String get settingsCoopErrorTitle => '無法解鎖合作';
+
+  @override
+  String get settingsCoopDismiss => '知道了';
 
   @override
   String get settingsGameExePath => 'Stardew Valley 可執行檔';

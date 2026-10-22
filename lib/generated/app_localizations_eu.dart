@@ -2045,6 +2045,149 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsGameSection => 'Jokoa';
 
   @override
+  String get settingsCoopSection => 'Coop menua';
+
+  @override
+  String get settingsCoopTitle => 'Desblokeatu ezkutuko coop menua';
+
+  @override
+  String get settingsCoopDescription =>
+      'Lehentasunak zuzenean aldatzeko aukerak ROOT behar du. Stardew itxita egon behar da; ValleySave-k babeskopia sortzen du ezarpena aldatu aurretik.';
+
+  @override
+  String get settingsCoopManual =>
+      'ROOT gabe: ireki Stardew, sartu ↑↑↓↓←→←→ eta ukitu ? irteteko.';
+
+  @override
+  String get settingsCoopActivate => 'Aktibatu ROOT bidez';
+
+  @override
+  String get settingsCoopWorking => 'Prozesatzen…';
+
+  @override
+  String get settingsCoopSuccess =>
+      'Coop menua desblokeatu da. Lehentasunen babeskopia gorde da.';
+
+  @override
+  String get settingsCoopCreated =>
+      'Coop menua desblokeatu da. Stardew-ek ez zuen lehentasun-fitxategirik, beraz berri bat sortu da.';
+
+  @override
+  String get settingsCoopAlready => 'Coop menua dagoeneko desblokeatuta dago.';
+
+  @override
+  String get settingsCoopRootDenied =>
+      'ROOT sarbidea ez dago erabilgarri edo ukatu egin da. Egiaztatu root konfigurazioa eta saiatu berriro.';
+
+  @override
+  String get settingsCoopGameRunning =>
+      'Itxi Stardew Valley guztiz eta saiatu berriro.';
+
+  @override
+  String get settingsCoopUnsupported =>
+      'Honek jokoa Android erabiltzaile nagusirako instalatuta egotea behar du.';
+
+  @override
+  String get settingsCoopChanged =>
+      'Stardew-en lehentasunak aldatu dira aktibazioan zehar. Ez da ezer aldatu; saiatu berriro.';
+
+  @override
+  String get settingsCoopUnavailable =>
+      'Ezin izan dira Stardew-en lehentasunak irakurri. Ez da ezer aldatu.';
+
+  @override
+  String get settingsCoopInvalid =>
+      'Lehentasun-fitxategiak ustekabeko formatua du. Ez da ezer aldatu.';
+
+  @override
+  String get settingsCoopWriteFailed =>
+      'Ezin izan dira lehentasunak modu seguruan eguneratu. Egiaztatu babeskopia berriro saiatu aurretik.';
+
+  @override
+  String get settingsCoopShizukuTitle => 'Kalibratu Shizuku-rekin';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      'Esperimentala: baimendu beste aplikazioen gainean bistaratzea eta, ondoren, ukitu Stardew-en hasierako pantailan markatutako bost puntuak (W, V, S, Y eta ?). Koordenatuak saio honetan soilik erabiltzen dira.';
+
+  @override
+  String get settingsCoopShizukuActivate => 'Kalibratu Shizuku-rekin';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      'Ukituak bidali dira. Itxi eskuz ? pantaila eta egiaztatu Coop agertzen den. ValleySave-k ezin du desblokeoa egiaztatu.';
+
+  @override
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku ez dago martxan. Abiarazi eta saiatu berriro.';
+
+  @override
+  String get settingsCoopShizukuDenied =>
+      'ValleySave-k ez du Shizuku-ren baimenik.';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      'Baimendu ValleySave beste aplikazioen gainean bistaratzea eta ukitu berriro Shizuku botoia.';
+
+  @override
+  String get settingsCoopCalibrationTimeout =>
+      'Kalibrazioaren denbora agortu da. Hasi berriro Stardew-en hasierako pantailatik.';
+
+  @override
+  String get settingsCoopSequenceTimeout =>
+      'Ukitu-sekuentziaren denbora agortu da eta bertan behera utzi da.';
+
+  @override
+  String get settingsCoopNotForeground =>
+      'Stardew aurreko planotik atera da. Ez da ukitu gehiagorik bidali; itzuli hasierako pantailara eta saiatu berriro.';
+
+  @override
+  String get settingsCoopDisplayChanged =>
+      'Pantaila aldatu da kalibrazioan zehar. Ez da ukiturik bidali; kalibratu berriro.';
+
+  @override
+  String get settingsCoopCancelled => 'Coop aktibazioa bertan behera utzi da.';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      'Mugikorreko coop funtzioa esperimentala da. Utzi Stardew hasierako pantailan; itxi zeuk ? orria eta egiaztatu Coop agertzen den.';
+
+  @override
+  String get settingsCoopRowTitle => 'Mugikorreko coop';
+
+  @override
+  String get settingsCoopRowSubtitle =>
+      'Desblokeatu Stardew Valley-ko coop aukera ezkutua';
+
+  @override
+  String get settingsCoopChooserIntro =>
+      'Aukeratu nola desblokeatu coop telefono honetan.';
+
+  @override
+  String get settingsCoopRootTitle => 'Zuzenean ROOT bidez';
+
+  @override
+  String get settingsCoopRootSubtitle => 'Gomendatua · egonkorra';
+
+  @override
+  String get settingsCoopShizukuSubtitle => 'Esperimentala · ukitu gidatuak';
+
+  @override
+  String get settingsCoopSuccessTitle => 'Coop prest dago';
+
+  @override
+  String get settingsCoopAlreadyTitle => 'Dagoeneko desblokeatuta';
+
+  @override
+  String get settingsCoopShizukuResultTitle => 'Sekuentzia osatu da';
+
+  @override
+  String get settingsCoopErrorTitle => 'Ezin izan da coop desblokeatu';
+
+  @override
+  String get settingsCoopDismiss => 'Ulertu';
+
+  @override
   String get settingsGameExePath => 'Stardew Valley exekutagarria';
 
   @override

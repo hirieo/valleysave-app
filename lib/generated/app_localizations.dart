@@ -3577,6 +3577,246 @@ abstract class AppLocalizations {
   /// **'Game'**
   String get settingsGameSection;
 
+  /// No description provided for @settingsCoopSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Co-op menu'**
+  String get settingsCoopSection;
+
+  /// No description provided for @settingsCoopTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the hidden co-op menu'**
+  String get settingsCoopTitle;
+
+  /// No description provided for @settingsCoopDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The direct preferences option needs ROOT. Stardew must be closed; ValleySave creates a backup before changing the setting.'**
+  String get settingsCoopDescription;
+
+  /// No description provided for @settingsCoopManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Without ROOT: open Stardew, enter ↑↑↓↓←→←→, then tap ? to exit.'**
+  String get settingsCoopManual;
+
+  /// No description provided for @settingsCoopActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate with ROOT'**
+  String get settingsCoopActivate;
+
+  /// No description provided for @settingsCoopWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Working…'**
+  String get settingsCoopWorking;
+
+  /// No description provided for @settingsCoopSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Co-op menu unlocked. A preferences backup was saved.'**
+  String get settingsCoopSuccess;
+
+  /// No description provided for @settingsCoopCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Co-op menu unlocked. Stardew had no preferences file, so a new one was created.'**
+  String get settingsCoopCreated;
+
+  /// No description provided for @settingsCoopAlready.
+  ///
+  /// In en, this message translates to:
+  /// **'The co-op menu is already unlocked.'**
+  String get settingsCoopAlready;
+
+  /// No description provided for @settingsCoopRootDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'ROOT access is unavailable or was denied. Check root setup and try again.'**
+  String get settingsCoopRootDenied;
+
+  /// No description provided for @settingsCoopGameRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Stardew Valley completely, then try again.'**
+  String get settingsCoopGameRunning;
+
+  /// No description provided for @settingsCoopUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This requires the game installed for the primary Android user.'**
+  String get settingsCoopUnsupported;
+
+  /// No description provided for @settingsCoopChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Stardew’s preferences changed during activation. Nothing was changed; try again.'**
+  String get settingsCoopChanged;
+
+  /// No description provided for @settingsCoopUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read Stardew’s preferences. Nothing was changed.'**
+  String get settingsCoopUnavailable;
+
+  /// No description provided for @settingsCoopInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The preferences file has an unexpected format. Nothing was changed.'**
+  String get settingsCoopInvalid;
+
+  /// No description provided for @settingsCoopWriteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not safely update the preferences. Check the backup before retrying.'**
+  String get settingsCoopWriteFailed;
+
+  /// No description provided for @settingsCoopShizukuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibrate with Shizuku'**
+  String get settingsCoopShizukuTitle;
+
+  /// No description provided for @settingsCoopShizukuDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental: allow display-over-apps access, then tap the five marked targets on Stardew’s title screen (W, V, S, Y, and ?). Coordinates are used only for this session.'**
+  String get settingsCoopShizukuDescription;
+
+  /// No description provided for @settingsCoopShizukuActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibrate with Shizuku'**
+  String get settingsCoopShizukuActivate;
+
+  /// No description provided for @settingsCoopShizukuSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Taps sent. Close the ? screen manually, then check that Co-op appears. ValleySave cannot verify the unlock.'**
+  String get settingsCoopShizukuSent;
+
+  /// No description provided for @settingsCoopShizukuUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Shizuku is not running. Start it, then try again.'**
+  String get settingsCoopShizukuUnavailable;
+
+  /// No description provided for @settingsCoopShizukuDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave does not have Shizuku permission.'**
+  String get settingsCoopShizukuDenied;
+
+  /// No description provided for @settingsCoopOverlayPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow ValleySave to display over other apps, then tap the Shizuku button again.'**
+  String get settingsCoopOverlayPermission;
+
+  /// No description provided for @settingsCoopCalibrationTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibration timed out. Start again from Stardew’s title screen.'**
+  String get settingsCoopCalibrationTimeout;
+
+  /// No description provided for @settingsCoopSequenceTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The tap sequence timed out and was cancelled.'**
+  String get settingsCoopSequenceTimeout;
+
+  /// No description provided for @settingsCoopNotForeground.
+  ///
+  /// In en, this message translates to:
+  /// **'Stardew left the foreground. No more taps were sent; return to its title screen and retry.'**
+  String get settingsCoopNotForeground;
+
+  /// No description provided for @settingsCoopDisplayChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The display changed during calibration. No taps were sent; calibrate again.'**
+  String get settingsCoopDisplayChanged;
+
+  /// No description provided for @settingsCoopCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Co-op activation cancelled.'**
+  String get settingsCoopCancelled;
+
+  /// No description provided for @settingsCoopExperimentalManual.
+  ///
+  /// In en, this message translates to:
+  /// **'The mobile co-op feature is experimental. Keep Stardew on its title screen; close the ? page yourself and check for Co-op.'**
+  String get settingsCoopExperimentalManual;
+
+  /// No description provided for @settingsCoopRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile co-op'**
+  String get settingsCoopRowTitle;
+
+  /// No description provided for @settingsCoopRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the hidden co-op option in Stardew Valley'**
+  String get settingsCoopRowSubtitle;
+
+  /// No description provided for @settingsCoopChooserIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how to unlock co-op on this phone.'**
+  String get settingsCoopChooserIntro;
+
+  /// No description provided for @settingsCoopRootTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct with ROOT'**
+  String get settingsCoopRootTitle;
+
+  /// No description provided for @settingsCoopRootSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended · stable'**
+  String get settingsCoopRootSubtitle;
+
+  /// No description provided for @settingsCoopShizukuSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental · guided taps'**
+  String get settingsCoopShizukuSubtitle;
+
+  /// No description provided for @settingsCoopSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Co-op is ready'**
+  String get settingsCoopSuccessTitle;
+
+  /// No description provided for @settingsCoopAlreadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Already unlocked'**
+  String get settingsCoopAlreadyTitle;
+
+  /// No description provided for @settingsCoopShizukuResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sequence complete'**
+  String get settingsCoopShizukuResultTitle;
+
+  /// No description provided for @settingsCoopErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not unlock co-op'**
+  String get settingsCoopErrorTitle;
+
+  /// No description provided for @settingsCoopDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get settingsCoopDismiss;
+
   /// No description provided for @settingsGameExePath.
   ///
   /// In en, this message translates to:

@@ -2029,6 +2029,149 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsGameSection => 'Game';
 
   @override
+  String get settingsCoopSection => 'Co-op menu';
+
+  @override
+  String get settingsCoopTitle => 'Unlock the hidden co-op menu';
+
+  @override
+  String get settingsCoopDescription =>
+      'The direct preferences option needs ROOT. Stardew must be closed; ValleySave creates a backup before changing the setting.';
+
+  @override
+  String get settingsCoopManual =>
+      'Without ROOT: open Stardew, enter ↑↑↓↓←→←→, then tap ? to exit.';
+
+  @override
+  String get settingsCoopActivate => 'Activate with ROOT';
+
+  @override
+  String get settingsCoopWorking => 'Working…';
+
+  @override
+  String get settingsCoopSuccess =>
+      'Co-op menu unlocked. A preferences backup was saved.';
+
+  @override
+  String get settingsCoopCreated =>
+      'Co-op menu unlocked. Stardew had no preferences file, so a new one was created.';
+
+  @override
+  String get settingsCoopAlready => 'The co-op menu is already unlocked.';
+
+  @override
+  String get settingsCoopRootDenied =>
+      'ROOT access is unavailable or was denied. Check root setup and try again.';
+
+  @override
+  String get settingsCoopGameRunning =>
+      'Close Stardew Valley completely, then try again.';
+
+  @override
+  String get settingsCoopUnsupported =>
+      'This requires the game installed for the primary Android user.';
+
+  @override
+  String get settingsCoopChanged =>
+      'Stardew’s preferences changed during activation. Nothing was changed; try again.';
+
+  @override
+  String get settingsCoopUnavailable =>
+      'Could not read Stardew’s preferences. Nothing was changed.';
+
+  @override
+  String get settingsCoopInvalid =>
+      'The preferences file has an unexpected format. Nothing was changed.';
+
+  @override
+  String get settingsCoopWriteFailed =>
+      'Could not safely update the preferences. Check the backup before retrying.';
+
+  @override
+  String get settingsCoopShizukuTitle => 'Calibrate with Shizuku';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      'Experimental: allow display-over-apps access, then tap the five marked targets on Stardew’s title screen (W, V, S, Y, and ?). Coordinates are used only for this session.';
+
+  @override
+  String get settingsCoopShizukuActivate => 'Calibrate with Shizuku';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      'Taps sent. Close the ? screen manually, then check that Co-op appears. ValleySave cannot verify the unlock.';
+
+  @override
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku is not running. Start it, then try again.';
+
+  @override
+  String get settingsCoopShizukuDenied =>
+      'ValleySave does not have Shizuku permission.';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      'Allow ValleySave to display over other apps, then tap the Shizuku button again.';
+
+  @override
+  String get settingsCoopCalibrationTimeout =>
+      'Calibration timed out. Start again from Stardew’s title screen.';
+
+  @override
+  String get settingsCoopSequenceTimeout =>
+      'The tap sequence timed out and was cancelled.';
+
+  @override
+  String get settingsCoopNotForeground =>
+      'Stardew left the foreground. No more taps were sent; return to its title screen and retry.';
+
+  @override
+  String get settingsCoopDisplayChanged =>
+      'The display changed during calibration. No taps were sent; calibrate again.';
+
+  @override
+  String get settingsCoopCancelled => 'Co-op activation cancelled.';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      'The mobile co-op feature is experimental. Keep Stardew on its title screen; close the ? page yourself and check for Co-op.';
+
+  @override
+  String get settingsCoopRowTitle => 'Mobile co-op';
+
+  @override
+  String get settingsCoopRowSubtitle =>
+      'Unlock the hidden co-op option in Stardew Valley';
+
+  @override
+  String get settingsCoopChooserIntro =>
+      'Choose how to unlock co-op on this phone.';
+
+  @override
+  String get settingsCoopRootTitle => 'Direct with ROOT';
+
+  @override
+  String get settingsCoopRootSubtitle => 'Recommended · stable';
+
+  @override
+  String get settingsCoopShizukuSubtitle => 'Experimental · guided taps';
+
+  @override
+  String get settingsCoopSuccessTitle => 'Co-op is ready';
+
+  @override
+  String get settingsCoopAlreadyTitle => 'Already unlocked';
+
+  @override
+  String get settingsCoopShizukuResultTitle => 'Sequence complete';
+
+  @override
+  String get settingsCoopErrorTitle => 'Could not unlock co-op';
+
+  @override
+  String get settingsCoopDismiss => 'Got it';
+
+  @override
   String get settingsGameExePath => 'Stardew Valley executable';
 
   @override

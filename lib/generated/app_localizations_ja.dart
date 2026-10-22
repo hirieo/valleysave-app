@@ -1983,6 +1983,141 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsGameSection => 'ゲーム';
 
   @override
+  String get settingsCoopSection => 'コープメニュー';
+
+  @override
+  String get settingsCoopTitle => '隠しコープメニューを解放';
+
+  @override
+  String get settingsCoopDescription =>
+      '設定を直接変更する方法にはROOTが必要です。Stardewを終了しておく必要があります。設定を変更する前に、ValleySaveがバックアップを作成します。';
+
+  @override
+  String get settingsCoopManual =>
+      'ROOTなし：Stardewを開き、↑↑↓↓←→←→と入力して、?をタップして終了します。';
+
+  @override
+  String get settingsCoopActivate => 'ROOTで有効化';
+
+  @override
+  String get settingsCoopWorking => '処理中…';
+
+  @override
+  String get settingsCoopSuccess => 'コープメニューを解放しました。設定のバックアップを保存しました。';
+
+  @override
+  String get settingsCoopCreated =>
+      'コープメニューを解放しました。Stardewに設定ファイルがなかったため、新しく作成しました。';
+
+  @override
+  String get settingsCoopAlready => 'コープメニューはすでに解放されています。';
+
+  @override
+  String get settingsCoopRootDenied =>
+      'ROOTアクセスが利用できないか、拒否されました。root設定を確認して、もう一度お試しください。';
+
+  @override
+  String get settingsCoopGameRunning => 'Stardew Valleyを完全に終了してから、もう一度お試しください。';
+
+  @override
+  String get settingsCoopUnsupported =>
+      'この機能には、Androidのメインユーザーにゲームがインストールされている必要があります。';
+
+  @override
+  String get settingsCoopChanged =>
+      '有効化中にStardewの設定が変更されました。何も変更されていません。もう一度お試しください。';
+
+  @override
+  String get settingsCoopUnavailable => 'Stardewの設定を読み取れませんでした。何も変更されていません。';
+
+  @override
+  String get settingsCoopInvalid => '設定ファイルの形式が想定外です。何も変更されていません。';
+
+  @override
+  String get settingsCoopWriteFailed =>
+      '設定を安全に更新できませんでした。再試行する前にバックアップを確認してください。';
+
+  @override
+  String get settingsCoopShizukuTitle => 'Shizukuでキャリブレーション';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      '実験的機能：他のアプリの上に重ねて表示する権限を許可し、Stardewのタイトル画面で印の付いた5か所（W、V、S、Y、?）をタップしてください。座標はこのセッション中のみ使用されます。';
+
+  @override
+  String get settingsCoopShizukuActivate => 'Shizukuでキャリブレーション';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      'タップを送信しました。?の画面を手動で閉じて、コープが表示されているか確認してください。ValleySaveは解放を検証できません。';
+
+  @override
+  String get settingsCoopShizukuUnavailable =>
+      'Shizukuが起動していません。起動してから、もう一度お試しください。';
+
+  @override
+  String get settingsCoopShizukuDenied => 'ValleySaveにShizukuの権限がありません。';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      'ValleySaveが他のアプリの上に表示されることを許可してから、もう一度Shizukuのボタンをタップしてください。';
+
+  @override
+  String get settingsCoopCalibrationTimeout =>
+      'キャリブレーションがタイムアウトしました。Stardewのタイトル画面からやり直してください。';
+
+  @override
+  String get settingsCoopSequenceTimeout => 'タップ操作がタイムアウトし、キャンセルされました。';
+
+  @override
+  String get settingsCoopNotForeground =>
+      'Stardewがフォアグラウンドから外れました。これ以上のタップは送信されていません。タイトル画面に戻って再試行してください。';
+
+  @override
+  String get settingsCoopDisplayChanged =>
+      'キャリブレーション中に画面が変更されました。タップは送信されていません。もう一度キャリブレーションしてください。';
+
+  @override
+  String get settingsCoopCancelled => 'コープの有効化をキャンセルしました。';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      'モバイルのコープ機能は実験的です。Stardewをタイトル画面のままにして、?のページは自分で閉じ、コープが表示されるか確認してください。';
+
+  @override
+  String get settingsCoopRowTitle => 'モバイルコープ';
+
+  @override
+  String get settingsCoopRowSubtitle => 'Stardew Valleyの隠しコープオプションを解放します';
+
+  @override
+  String get settingsCoopChooserIntro => 'このスマートフォンでコープを解放する方法を選択してください。';
+
+  @override
+  String get settingsCoopRootTitle => 'ROOTで直接';
+
+  @override
+  String get settingsCoopRootSubtitle => '推奨 · 安定';
+
+  @override
+  String get settingsCoopShizukuSubtitle => '実験的 · ガイド付きタップ';
+
+  @override
+  String get settingsCoopSuccessTitle => 'コープの準備ができました';
+
+  @override
+  String get settingsCoopAlreadyTitle => 'すでに解放済み';
+
+  @override
+  String get settingsCoopShizukuResultTitle => '操作が完了しました';
+
+  @override
+  String get settingsCoopErrorTitle => 'コープを解放できませんでした';
+
+  @override
+  String get settingsCoopDismiss => 'わかりました';
+
+  @override
   String get settingsGameExePath => 'Stardew Valley 実行ファイル';
 
   @override

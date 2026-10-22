@@ -2054,6 +2054,149 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsGameSection => 'Jeu';
 
   @override
+  String get settingsCoopSection => 'Menu coop';
+
+  @override
+  String get settingsCoopTitle => 'Débloquer le menu coop caché';
+
+  @override
+  String get settingsCoopDescription =>
+      'L\'option directe des préférences nécessite ROOT. Stardew doit être fermé ; ValleySave crée une sauvegarde de secours avant de modifier le réglage.';
+
+  @override
+  String get settingsCoopManual =>
+      'Sans ROOT : ouvrez Stardew, saisissez ↑↑↓↓←→←→, puis appuyez sur ? pour quitter.';
+
+  @override
+  String get settingsCoopActivate => 'Activer avec ROOT';
+
+  @override
+  String get settingsCoopWorking => 'Traitement en cours…';
+
+  @override
+  String get settingsCoopSuccess =>
+      'Menu coop débloqué. Une sauvegarde de secours des préférences a été enregistrée.';
+
+  @override
+  String get settingsCoopCreated =>
+      'Menu coop débloqué. Stardew n\'avait pas de fichier de préférences, un nouveau a donc été créé.';
+
+  @override
+  String get settingsCoopAlready => 'Le menu coop est déjà débloqué.';
+
+  @override
+  String get settingsCoopRootDenied =>
+      'L\'accès ROOT est indisponible ou a été refusé. Vérifiez la configuration root et réessayez.';
+
+  @override
+  String get settingsCoopGameRunning =>
+      'Fermez complètement Stardew Valley, puis réessayez.';
+
+  @override
+  String get settingsCoopUnsupported =>
+      'Cela nécessite que le jeu soit installé pour l\'utilisateur principal d\'Android.';
+
+  @override
+  String get settingsCoopChanged =>
+      'Les préférences de Stardew ont changé pendant l\'activation. Rien n\'a été modifié ; réessayez.';
+
+  @override
+  String get settingsCoopUnavailable =>
+      'Impossible de lire les préférences de Stardew. Rien n\'a été modifié.';
+
+  @override
+  String get settingsCoopInvalid =>
+      'Le fichier de préférences a un format inattendu. Rien n\'a été modifié.';
+
+  @override
+  String get settingsCoopWriteFailed =>
+      'Impossible de mettre à jour les préférences en toute sécurité. Vérifiez la sauvegarde de secours avant de réessayer.';
+
+  @override
+  String get settingsCoopShizukuTitle => 'Calibrer avec Shizuku';
+
+  @override
+  String get settingsCoopShizukuDescription =>
+      'Expérimental : autorisez l\'affichage par-dessus les autres applications, puis appuyez sur les cinq cibles indiquées sur l\'écran titre de Stardew (W, V, S, Y et ?). Les coordonnées ne sont utilisées que pour cette session.';
+
+  @override
+  String get settingsCoopShizukuActivate => 'Calibrer avec Shizuku';
+
+  @override
+  String get settingsCoopShizukuSent =>
+      'Appuis envoyés. Fermez manuellement l\'écran ?, puis vérifiez que Coop apparaît. ValleySave ne peut pas vérifier le déblocage.';
+
+  @override
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku n\'est pas en cours d\'exécution. Lancez-le, puis réessayez.';
+
+  @override
+  String get settingsCoopShizukuDenied =>
+      'ValleySave n\'a pas l\'autorisation Shizuku.';
+
+  @override
+  String get settingsCoopOverlayPermission =>
+      'Autorisez ValleySave à s\'afficher par-dessus les autres applications, puis appuyez de nouveau sur le bouton Shizuku.';
+
+  @override
+  String get settingsCoopCalibrationTimeout =>
+      'Délai de calibrage dépassé. Recommencez depuis l\'écran titre de Stardew.';
+
+  @override
+  String get settingsCoopSequenceTimeout =>
+      'La séquence d\'appuis a expiré et a été annulée.';
+
+  @override
+  String get settingsCoopNotForeground =>
+      'Stardew a quitté le premier plan. Aucun autre appui n\'a été envoyé ; revenez à son écran titre et réessayez.';
+
+  @override
+  String get settingsCoopDisplayChanged =>
+      'L\'affichage a changé pendant le calibrage. Aucun appui n\'a été envoyé ; recalibrez.';
+
+  @override
+  String get settingsCoopCancelled => 'Activation du coop annulée.';
+
+  @override
+  String get settingsCoopExperimentalManual =>
+      'La fonction coop mobile est expérimentale. Laissez Stardew sur son écran titre ; fermez vous-même la page ? et vérifiez que Coop apparaît.';
+
+  @override
+  String get settingsCoopRowTitle => 'Coop mobile';
+
+  @override
+  String get settingsCoopRowSubtitle =>
+      'Débloquer l\'option coop cachée de Stardew Valley';
+
+  @override
+  String get settingsCoopChooserIntro =>
+      'Choisissez comment débloquer le coop sur ce téléphone.';
+
+  @override
+  String get settingsCoopRootTitle => 'Direct avec ROOT';
+
+  @override
+  String get settingsCoopRootSubtitle => 'Recommandé · stable';
+
+  @override
+  String get settingsCoopShizukuSubtitle => 'Expérimental · appuis guidés';
+
+  @override
+  String get settingsCoopSuccessTitle => 'Le coop est prêt';
+
+  @override
+  String get settingsCoopAlreadyTitle => 'Déjà débloqué';
+
+  @override
+  String get settingsCoopShizukuResultTitle => 'Séquence terminée';
+
+  @override
+  String get settingsCoopErrorTitle => 'Impossible de débloquer le coop';
+
+  @override
+  String get settingsCoopDismiss => 'Compris';
+
+  @override
   String get settingsGameExePath => 'Exécutable Stardew Valley';
 
   @override

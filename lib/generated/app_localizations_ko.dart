@@ -2272,4 +2272,52 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get savesFolderParent => '상위 폴더';
+
+  @override
+  String get saveAreaNormal => '일반';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => '위치';
+
+  @override
+  String get settingsLocationsNormalSaves => '일반 저장';
+
+  @override
+  String get settingsLocationsDetected => '감지됨';
+
+  @override
+  String get settingsLocationsCustom => '선택됨';
+
+  @override
+  String get settingsLocationsChange => '변경…';
+
+  @override
+  String get settingsLocationsReset => '초기화';
+
+  @override
+  String get settingsSmapiNotDetected => '감지되지 않음';
+
+  @override
+  String get settingsSmapiSavesShared => '저장: 같은 폴더 (PC에서는 SMAPI가 구분하지 않음)';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'Mods 변경…';
+
+  @override
+  String get settingsSmapiSearch => '검색';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'SMAPI를 설치하거나 위의 “게임” 섹션에서 게임 위치를 지정하세요.';
+
+  @override
+  String get snackInvalidFolder => '해당 폴더는 사용할 수 없습니다.';
 }

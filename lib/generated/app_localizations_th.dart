@@ -2325,4 +2325,53 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'โฟลเดอร์ระดับบน';
+
+  @override
+  String get saveAreaNormal => 'ปกติ';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => 'ตำแหน่งที่ตั้ง';
+
+  @override
+  String get settingsLocationsNormalSaves => 'เซฟปกติ';
+
+  @override
+  String get settingsLocationsDetected => 'ตรวจพบ';
+
+  @override
+  String get settingsLocationsCustom => 'เลือกแล้ว';
+
+  @override
+  String get settingsLocationsChange => 'เปลี่ยน…';
+
+  @override
+  String get settingsLocationsReset => 'รีเซ็ต';
+
+  @override
+  String get settingsSmapiNotDetected => 'ไม่พบ';
+
+  @override
+  String get settingsSmapiSavesShared =>
+      'เซฟ: โฟลเดอร์เดียวกัน (บน PC SMAPI ไม่แยกกัน)';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'เปลี่ยน Mods…';
+
+  @override
+  String get settingsSmapiSearch => 'ค้นหา';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'ติดตั้ง SMAPI หรือระบุตำแหน่งของเกมในส่วน “เกม” ด้านบน';
+
+  @override
+  String get snackInvalidFolder => 'ไม่สามารถใช้โฟลเดอร์นั้นได้';
 }

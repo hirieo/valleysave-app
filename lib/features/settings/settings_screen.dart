@@ -16,6 +16,7 @@ import '../../core/services/locale_controller.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/season_service.dart';
 import '../../core/services/shizuku_service.dart';
+import '../../core/services/smapi_service.dart';
 import '../../core/services/stardew_paths.dart';
 import '../../core/services/update_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -28,6 +29,7 @@ import '../../shared/widgets/valley_canvas_widget.dart';
 import '../saves/save_card.dart' show ActionBtn;
 import '../saves/widgets/seasonal_loader.dart';
 import 'widgets/language_dialog.dart';
+import 'widgets/locations_tile.dart';
 import 'widgets/saves_folder_dialog.dart';
 
 enum _UpdateState {
@@ -265,6 +267,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     final s = await _service.loadSettings();
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       await GameLaunchService.instance.init();
+      await SmapiService.instance.init();
     }
     if (Platform.isAndroid) await _loadAndroidAccess();
     if (mounted) {
@@ -483,6 +486,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                                 ),
                                 const SizedBox(height: 12),
                                 _gameTile(accent, l10n),
+                                const SizedBox(height: 32),
+                                Text(
+                                  l10n.settingsLocationsSection.toUpperCase(),
+                                  style: AppTypography.eyebrow(),
+                                ),
+                                const SizedBox(height: 12),
+                                LocationsTile(accent: accent),
                               ],
                               if (Platform.isAndroid) ...[
                                 const SizedBox(height: 32),

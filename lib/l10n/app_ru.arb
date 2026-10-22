@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Не удалось прочитать эту папку.",
   "savesFolderDetecting": "Поиск папок…",
   "savesFolderDefaultTag": "По умолчанию",
-  "savesFolderParent": "Родительская папка"
+  "savesFolderParent": "Родительская папка",
+  "saveAreaNormal": "Обычные",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Расположение",
+  "settingsLocationsNormalSaves": "Обычные сохранения",
+  "settingsLocationsDetected": "найдена",
+  "settingsLocationsCustom": "выбрана",
+  "settingsLocationsChange": "Изменить…",
+  "settingsLocationsReset": "Сбросить",
+  "settingsSmapiNotDetected": "не обнаружено",
+  "settingsSmapiSavesShared": "Сохранения: та же папка (на ПК SMAPI их не разделяет)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Изменить Mods…",
+  "settingsSmapiSearch": "Найти",
+  "settingsSmapiNotFoundHint": "Установите SMAPI или укажите расположение игры в разделе «Игра» выше.",
+  "snackInvalidFolder": "Эту папку нельзя использовать."
 }

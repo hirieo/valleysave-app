@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Não foi possível ler esta pasta.",
   "savesFolderDetecting": "A procurar pastas…",
   "savesFolderDefaultTag": "Predefinida",
-  "savesFolderParent": "Pasta superior"
+  "savesFolderParent": "Pasta superior",
+  "saveAreaNormal": "Normal",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Locais",
+  "settingsLocationsNormalSaves": "Saves normais",
+  "settingsLocationsDetected": "detectada",
+  "settingsLocationsCustom": "escolhida",
+  "settingsLocationsChange": "Alterar…",
+  "settingsLocationsReset": "Repor",
+  "settingsSmapiNotDetected": "não detectado",
+  "settingsSmapiSavesShared": "Saves: mesma pasta (no PC, o SMAPI não os separa)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Alterar Mods…",
+  "settingsSmapiSearch": "Procurar",
+  "settingsSmapiNotFoundHint": "Instale o SMAPI ou defina onde está o jogo na seção «Jogo» acima.",
+  "snackInvalidFolder": "Essa pasta não pode ser usada."
 }

@@ -1165,5 +1165,27 @@
   "savesFolderListError": "이 폴더를 읽을 수 없습니다.",
   "savesFolderDetecting": "폴더 검색 중…",
   "savesFolderDefaultTag": "기본값",
-  "savesFolderParent": "상위 폴더"
+  "savesFolderParent": "상위 폴더",
+  "saveAreaNormal": "일반",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "위치",
+  "settingsLocationsNormalSaves": "일반 저장",
+  "settingsLocationsDetected": "감지됨",
+  "settingsLocationsCustom": "선택됨",
+  "settingsLocationsChange": "변경…",
+  "settingsLocationsReset": "초기화",
+  "settingsSmapiNotDetected": "감지되지 않음",
+  "settingsSmapiSavesShared": "저장: 같은 폴더 (PC에서는 SMAPI가 구분하지 않음)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Mods 변경…",
+  "settingsSmapiSearch": "검색",
+  "settingsSmapiNotFoundHint": "SMAPI를 설치하거나 위의 “게임” 섹션에서 게임 위치를 지정하세요.",
+  "snackInvalidFolder": "해당 폴더는 사용할 수 없습니다."
 }

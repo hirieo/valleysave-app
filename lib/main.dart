@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/services/gamepad_service.dart';
 import 'core/services/locale_controller.dart';
+import 'core/services/save_service.dart';
 import 'core/services/season_controller.dart';
 import 'core/theme/app_theme.dart';
 import 'features/onboarding/privacy_screen.dart';
@@ -18,6 +19,7 @@ void main() async {
   } catch (_) {
     // .env no disponible (CI, build sin credenciales): continuar sin él
   }
+  await SaveService.loadCustomDirectory();
   await SeasonController.instance.init();
   await LocaleController.instance.init();
   final accepted = await hasAcceptedPrivacy();

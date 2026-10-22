@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Dieser Ordner konnte nicht gelesen werden.",
   "savesFolderDetecting": "Suche Ordner…",
   "savesFolderDefaultTag": "Standard",
-  "savesFolderParent": "Übergeordneter Ordner"
+  "savesFolderParent": "Übergeordneter Ordner",
+  "saveAreaNormal": "Normal",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Speicherorte",
+  "settingsLocationsNormalSaves": "Normale Speicherstände",
+  "settingsLocationsDetected": "erkannt",
+  "settingsLocationsCustom": "gewählt",
+  "settingsLocationsChange": "Ändern…",
+  "settingsLocationsReset": "Zurücksetzen",
+  "settingsSmapiNotDetected": "nicht erkannt",
+  "settingsSmapiSavesShared": "Speicherstände: gleicher Ordner (am PC trennt SMAPI sie nicht)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Mods ändern…",
+  "settingsSmapiSearch": "Suchen",
+  "settingsSmapiNotFoundHint": "Installiere SMAPI oder lege im Abschnitt „Spiel“ oben fest, wo sich das Spiel befindet.",
+  "snackInvalidFolder": "Dieser Ordner kann nicht verwendet werden."
 }

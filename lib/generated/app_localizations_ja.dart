@@ -2267,4 +2267,52 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get savesFolderParent => '上のフォルダ';
+
+  @override
+  String get saveAreaNormal => '通常';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => '保存場所';
+
+  @override
+  String get settingsLocationsNormalSaves => '通常のセーブ';
+
+  @override
+  String get settingsLocationsDetected => '検出済み';
+
+  @override
+  String get settingsLocationsCustom => '選択済み';
+
+  @override
+  String get settingsLocationsChange => '変更…';
+
+  @override
+  String get settingsLocationsReset => 'リセット';
+
+  @override
+  String get settingsSmapiNotDetected => '未検出';
+
+  @override
+  String get settingsSmapiSavesShared => 'セーブ：同じフォルダ（PCではSMAPIは分けません）';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'Mods を変更…';
+
+  @override
+  String get settingsSmapiSearch => '検索';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'SMAPI をインストールするか、上の「ゲーム」セクションでゲームの場所を指定してください。';
+
+  @override
+  String get snackInvalidFolder => 'そのフォルダは使用できません。';
 }

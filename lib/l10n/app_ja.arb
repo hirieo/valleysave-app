@@ -1165,5 +1165,27 @@
   "savesFolderListError": "このフォルダを読み取れませんでした。",
   "savesFolderDetecting": "フォルダを検索中…",
   "savesFolderDefaultTag": "初期値",
-  "savesFolderParent": "上のフォルダ"
+  "savesFolderParent": "上のフォルダ",
+  "saveAreaNormal": "通常",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "保存場所",
+  "settingsLocationsNormalSaves": "通常のセーブ",
+  "settingsLocationsDetected": "検出済み",
+  "settingsLocationsCustom": "選択済み",
+  "settingsLocationsChange": "変更…",
+  "settingsLocationsReset": "リセット",
+  "settingsSmapiNotDetected": "未検出",
+  "settingsSmapiSavesShared": "セーブ：同じフォルダ（PCではSMAPIは分けません）",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Mods を変更…",
+  "settingsSmapiSearch": "検索",
+  "settingsSmapiNotFoundHint": "SMAPI をインストールするか、上の「ゲーム」セクションでゲームの場所を指定してください。",
+  "snackInvalidFolder": "そのフォルダは使用できません。"
 }

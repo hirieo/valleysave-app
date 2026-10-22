@@ -2219,6 +2219,53 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get savesFolderParent => '上级文件夹';
+
+  @override
+  String get saveAreaNormal => '普通';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => '位置';
+
+  @override
+  String get settingsLocationsNormalSaves => '普通存档';
+
+  @override
+  String get settingsLocationsDetected => '已检测';
+
+  @override
+  String get settingsLocationsCustom => '已选择';
+
+  @override
+  String get settingsLocationsChange => '更改…';
+
+  @override
+  String get settingsLocationsReset => '重置';
+
+  @override
+  String get settingsSmapiNotDetected => '未检测到';
+
+  @override
+  String get settingsSmapiSavesShared => '存档：同一文件夹（在 PC 上 SMAPI 不会将它们分开）';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => '更改 Mods…';
+
+  @override
+  String get settingsSmapiSearch => '搜索';
+
+  @override
+  String get settingsSmapiNotFoundHint => '请安装 SMAPI，或在上方“游戏”部分指定游戏所在位置。';
+
+  @override
+  String get snackInvalidFolder => '无法使用该文件夹。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4433,4 +4480,51 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get savesFolderParent => '上層資料夾';
+
+  @override
+  String get saveAreaNormal => '普通';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => '位置';
+
+  @override
+  String get settingsLocationsNormalSaves => '一般存檔';
+
+  @override
+  String get settingsLocationsDetected => '已偵測';
+
+  @override
+  String get settingsLocationsCustom => '已選擇';
+
+  @override
+  String get settingsLocationsChange => '變更…';
+
+  @override
+  String get settingsLocationsReset => '重設';
+
+  @override
+  String get settingsSmapiNotDetected => '未偵測到';
+
+  @override
+  String get settingsSmapiSavesShared => '存檔：同一資料夾（在 PC 上 SMAPI 不會將它們分開）';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => '變更 Mods…';
+
+  @override
+  String get settingsSmapiSearch => '搜尋';
+
+  @override
+  String get settingsSmapiNotFoundHint => '請安裝 SMAPI，或在上方「遊戲」區段指定遊戲所在位置。';
+
+  @override
+  String get snackInvalidFolder => '無法使用該資料夾。';
 }

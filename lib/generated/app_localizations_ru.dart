@@ -2357,4 +2357,53 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'Родительская папка';
+
+  @override
+  String get saveAreaNormal => 'Обычные';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => 'Расположение';
+
+  @override
+  String get settingsLocationsNormalSaves => 'Обычные сохранения';
+
+  @override
+  String get settingsLocationsDetected => 'найдена';
+
+  @override
+  String get settingsLocationsCustom => 'выбрана';
+
+  @override
+  String get settingsLocationsChange => 'Изменить…';
+
+  @override
+  String get settingsLocationsReset => 'Сбросить';
+
+  @override
+  String get settingsSmapiNotDetected => 'не обнаружено';
+
+  @override
+  String get settingsSmapiSavesShared =>
+      'Сохранения: та же папка (на ПК SMAPI их не разделяет)';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'Изменить Mods…';
+
+  @override
+  String get settingsSmapiSearch => 'Найти';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'Установите SMAPI или укажите расположение игры в разделе «Игра» выше.';
+
+  @override
+  String get snackInvalidFolder => 'Эту папку нельзя использовать.';
 }

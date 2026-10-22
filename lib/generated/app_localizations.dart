@@ -4080,6 +4080,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Parent folder'**
   String get savesFolderParent;
+
+  /// No description provided for @saveAreaNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get saveAreaNormal;
+
+  /// No description provided for @saveAreaSmapi.
+  ///
+  /// In en, this message translates to:
+  /// **'SMAPI'**
+  String get saveAreaSmapi;
+
+  /// No description provided for @settingsLocationsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Locations'**
+  String get settingsLocationsSection;
+
+  /// No description provided for @settingsLocationsNormalSaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal saves'**
+  String get settingsLocationsNormalSaves;
+
+  /// No description provided for @settingsLocationsDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'detected'**
+  String get settingsLocationsDetected;
+
+  /// No description provided for @settingsLocationsCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'chosen'**
+  String get settingsLocationsCustom;
+
+  /// No description provided for @settingsLocationsChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change…'**
+  String get settingsLocationsChange;
+
+  /// No description provided for @settingsLocationsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get settingsLocationsReset;
+
+  /// No description provided for @settingsSmapiNotDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'not detected'**
+  String get settingsSmapiNotDetected;
+
+  /// No description provided for @settingsSmapiSavesShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves: same folder (on PC, SMAPI doesn’t separate them)'**
+  String get settingsSmapiSavesShared;
+
+  /// No description provided for @settingsSmapiModsPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Mods: {path}'**
+  String settingsSmapiModsPath(String path);
+
+  /// No description provided for @settingsSmapiChangeMods.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Mods…'**
+  String get settingsSmapiChangeMods;
+
+  /// No description provided for @settingsSmapiSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get settingsSmapiSearch;
+
+  /// No description provided for @settingsSmapiNotFoundHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Install SMAPI, or set where the game is in the Game section above.'**
+  String get settingsSmapiNotFoundHint;
+
+  /// No description provided for @snackInvalidFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'That folder can’t be used.'**
+  String get snackInvalidFolder;
 }
 
 class _AppLocalizationsDelegate

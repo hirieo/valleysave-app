@@ -918,5 +918,20 @@
   "savesFolderListError": "No se pudo leer esta carpeta.",
   "savesFolderDetecting": "Buscando carpetas…",
   "savesFolderDefaultTag": "Por defecto",
-  "savesFolderParent": "Carpeta superior"
+  "savesFolderParent": "Carpeta superior",
+  "saveAreaNormal": "Normal",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Ubicaciones",
+  "settingsLocationsNormalSaves": "Partidas normales",
+  "settingsLocationsDetected": "detectada",
+  "settingsLocationsCustom": "elegida",
+  "settingsLocationsChange": "Cambiar…",
+  "settingsLocationsReset": "Restablecer",
+  "settingsSmapiNotDetected": "no detectada",
+  "settingsSmapiSavesShared": "Partidas: la misma carpeta (en PC, SMAPI no las separa)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "settingsSmapiChangeMods": "Cambiar Mods…",
+  "settingsSmapiSearch": "Buscar",
+  "settingsSmapiNotFoundHint": "Instala SMAPI o indica dónde está el juego en la sección Juego de arriba.",
+  "snackInvalidFolder": "Esa carpeta no se puede usar."
 }

@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Не вдалося прочитати цю папку.",
   "savesFolderDetecting": "Пошук папок…",
   "savesFolderDefaultTag": "Типово",
-  "savesFolderParent": "Батьківська папка"
+  "savesFolderParent": "Батьківська папка",
+  "saveAreaNormal": "Звичайні",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Розташування",
+  "settingsLocationsNormalSaves": "Звичайні збереження",
+  "settingsLocationsDetected": "знайдена",
+  "settingsLocationsCustom": "вибрана",
+  "settingsLocationsChange": "Змінити…",
+  "settingsLocationsReset": "Скинути",
+  "settingsSmapiNotDetected": "не виявлено",
+  "settingsSmapiSavesShared": "Збереження: та сама папка (на ПК SMAPI їх не розділяє)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Змінити Mods…",
+  "settingsSmapiSearch": "Знайти",
+  "settingsSmapiNotFoundHint": "Встановіть SMAPI або вкажіть, де розташована гра, у розділі «Гра» вище.",
+  "snackInvalidFolder": "Цю папку не можна використовувати."
 }

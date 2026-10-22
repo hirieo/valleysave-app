@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../generated/app_localizations.dart';
 import '../../core/models/backup_entry.dart';
 import '../../core/models/player_stats.dart';
+import '../../core/models/save_area.dart';
 import '../../core/models/save_entry.dart';
 import '../../core/models/save_file.dart';
 import '../../core/models/season_state.dart';
@@ -27,10 +28,12 @@ import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/host_swap_service.dart';
 import '../../core/services/local_save_watcher.dart';
+import '../../core/services/save_area_classifier.dart';
 import '../../core/services/save_replace_service.dart';
 import '../../core/services/save_service.dart';
 import '../../core/services/season_controller.dart';
 import '../../core/services/shizuku_service.dart';
+import '../../core/services/smapi_service.dart';
 import '../../core/services/stardew_paths.dart';
 import '../../core/services/transfer_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -44,6 +47,7 @@ import 'save_card.dart';
 import 'widgets/backup_action_button.dart';
 import 'widgets/card_focus_frame.dart';
 import 'widgets/latest_badge.dart';
+import 'widgets/save_area_tabs.dart';
 import 'widgets/shared_folder_picker_screen.dart';
 import 'widgets/saves_top_bar.dart';
 import 'widgets/seasonal_loader.dart';
@@ -121,6 +125,30 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   bool _gameCanLaunch = false;
   final _busy = <String>{}; // folderName en curso (subiendo/descargando)
 
+  // ── spec 010 — pestañas Normal / SMAPI ──
+  // En escritorio las dos secciones comparten la carpeta local de partidas;
+  // cada pestaña muestra sus partidas locales (ver `SaveAreaClassifier`) y
+  // su carpeta de Drive. Un mismo `folderName` local se empareja en las dos
+  // pestañas: es la misma granja física, nunca se esconde una sobrescritura.
+  SaveArea _area = SaveArea.normal;
+  bool _smapiVisible = false;
+  DriveService? _smapiDrive;
+  final Map<SaveArea, int?> _areaCounts = {
+    SaveArea.normal: null,
+    SaveArea.smapi: null,
+  };
+
+  DriveService? get _drive => _area == SaveArea.normal
+      ? widget.drive
+      : (_smapiDrive ??= widget.drive?.forArea(SaveArea.smapi));
+
+  /// Clave de auto-sync por pestaña: activar AUTO en una granja de Normal no
+  /// la sincroniza sola en SMAPI (y al revés).
+  String _autoKey(String folderName) =>
+      _area == SaveArea.normal ? folderName : 'smapi:$folderName';
+
+  bool get _splitByArea => !Platform.isAndroid && _smapiVisible;
+
   // ── Selección de partida a dos niveles (2026-08-15) ──
   // Nivel 1 (recuadro entero) / nivel 2 (dentro, A/B) — ver
   // `CardFocusFrame`. Registro por `folderName`, para que arriba/abajo en
@@ -178,7 +206,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   // ── spec 009 — Capa 2: auto-sync por partida (D6-D9) ──
   Set<String> _autoSyncFolders = {};
   bool _isAutoSyncEnabled(String folderName) =>
-      _autoSyncFolders.contains(folderName);
+      _autoSyncFolders.contains(_autoKey(folderName));
   // Timer PROPIO (2026-08-02): antes el ciclo de auto-sync solo se disparaba
   // dentro de `_pollDriveChanges`, que corta en seco si `_autoRefreshEnabled`
   // (Capa 1, interruptor global) está apagado. Eso rompía la garantía D7
@@ -223,14 +251,61 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _initSmapi();
     _init();
     _loadConnectedEmail();
     _initAutoRefresh();
     _loadAutoSyncPrefs();
   }
 
+  /// spec 010 — ¿hay pestaña SMAPI? Detecta SMAPI junto al juego (o el
+  /// usuario la activó a mano en Ajustes).
+  Future<void> _initSmapi() async {
+    await SmapiService.instance.init();
+    if (!mounted) return;
+    final visible = SmapiService.instance.sectionVisible;
+    if (visible == _smapiVisible) return;
+    setState(() => _smapiVisible = visible);
+    if (!_loading) await _load(silent: true);
+  }
+
+  void _selectArea(SaveArea area) {
+    if (area == _area || _busy.isNotEmpty) return;
+    setState(() {
+      _area = area;
+      _entries = [];
+    });
+    _load();
+  }
+
+  /// Partidas locales de la pestaña actual. Sin pestaña SMAPI (o en Android,
+  /// donde cada sección tiene su propia carpeta, fase F5) no se filtra nada:
+  /// todo sigue en Normal como antes de spec 010.
+  Future<List<SaveFile>> _localForArea(List<SaveFile> local) async {
+    if (!_splitByArea) {
+      _areaCounts[SaveArea.normal] = local.length;
+      return local;
+    }
+    final savesDir = SaveService.savesDirectory;
+    if (savesDir == null) return local;
+    final byArea = <SaveArea, List<SaveFile>>{
+      SaveArea.normal: [],
+      SaveArea.smapi: [],
+    };
+    for (final s in local) {
+      final area = await SaveAreaClassifier.instance.classify(
+        savesDir,
+        s.folderName,
+      );
+      byArea[area]!.add(s);
+    }
+    final other = _area == SaveArea.normal ? SaveArea.smapi : SaveArea.normal;
+    _areaCounts[other] ??= byArea[other]!.length;
+    return byArea[_area]!;
+  }
+
   Future<void> _loadConnectedEmail() async {
-    final email = await widget.drive?.myEmail();
+    final email = await _drive?.myEmail();
     if (mounted && email != null) setState(() => _connectedEmail = email);
   }
 
@@ -268,30 +343,31 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// persiste en segundo plano.
   Future<void> _toggleAutoSync(String folderName) async {
     final enabled = !_isAutoSyncEnabled(folderName);
+    final key = _autoKey(folderName);
     // Cada activación en cualquier partida → explicar antes de encender nada
     // (2026-07-31, checkbox añadido 2026-08-01): el chip por sí solo no deja
     // claro que la app va a subir/bajar SIN preguntar. Si cancela, no se
     // activa. Apagar nunca pregunta (no hay riesgo en volver a manual). El
     // aviso vuelve a salir cada vez salvo que el usuario marque "no volver
     // a mostrar" (desmarcado por defecto).
-    if (enabled && !await AutoSyncPrefs.explainerDismissed(folderName)) {
+    if (enabled && !await AutoSyncPrefs.explainerDismissed(key)) {
       if (!mounted) return;
       final result = await _explainAutoSync(folderName);
       if (result == null || !result.confirmed) return;
       if (result.dontShowAgain) {
-        await AutoSyncPrefs.markExplainerDismissed(folderName);
+        await AutoSyncPrefs.markExplainerDismissed(key);
       }
       if (!mounted) return;
     }
     setState(() {
       if (enabled) {
-        _autoSyncFolders.add(folderName);
+        _autoSyncFolders.add(key);
       } else {
-        _autoSyncFolders.remove(folderName);
+        _autoSyncFolders.remove(key);
       }
     });
     _syncAutoSyncTimerState();
-    await AutoSyncPrefs.setEnabled(folderName, enabled);
+    await AutoSyncPrefs.setEnabled(key, enabled);
   }
 
   /// Diálogo de la PRIMERA activación de auto-sync (una sola vez en toda la
@@ -486,7 +562,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   void _startDriveChangesTimer() {
     _driveChangesTimer?.cancel();
     _driveChangesTimer = null;
-    if (widget.drive == null) return;
+    if (_drive == null) return;
     _driveChangesTimer = Timer.periodic(
       const Duration(seconds: 30),
       (_) => _pollDriveChanges(),
@@ -504,7 +580,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// ambos ciclos en uno reintrodujo ese acoplamiento (bug 2026-08-02: con el
   /// refresco global apagado, el chip AUTO no sincronizaba nunca).
   Future<void> _pollDriveChanges() async {
-    final drive = widget.drive;
+    final drive = _drive;
     if (!_autoRefreshEnabled || drive == null) return;
     if (_busy.isNotEmpty) return; // G4 — no a mitad de una operación
 
@@ -563,7 +639,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       // de Drive + un chequeo inmediato (cubre haber estado en segundo
       // plano más de 30s sin sondear). El watcher local no se pausa nunca
       // (D1 es instantáneo, sin coste de red).
-      if (_autoRefreshEnabled && widget.drive != null) {
+      if (_autoRefreshEnabled && _drive != null) {
         _startDriveChangesTimer();
         _pollDriveChanges();
       }
@@ -777,11 +853,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _load({bool silent = false}) async {
     if (!silent) setState(() => _loading = true);
 
-    final local = await _scanLocal();
+    final allLocal = await _scanLocal();
+    final local = await _localForArea(allLocal);
     var drive = <DriveSaveSummary>[];
-    if (widget.drive != null) {
+    if (_drive != null) {
       try {
-        drive = await widget.drive!.listSaveSummaries();
+        drive = await _drive!.listSaveSummaries();
       } catch (e, st) {
         debugPrint('DRIVE_ERROR: $e\n$st');
         if (!mounted) return;
@@ -804,6 +881,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
 
     final localByName = {for (final s in local) s.folderName: s};
+    // Emparejar con la copia local aunque esté en la otra pestaña: en
+    // escritorio es la misma carpeta, y así subir/bajar compara de verdad.
+    final allLocalByName = {for (final s in allLocal) s.folderName: s};
     final driveByName = {for (final d in drive) d.folderName: d};
     final names = {...localByName.keys, ...driveByName.keys};
 
@@ -812,7 +892,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final d = driveByName[name];
       entries.add(
         SaveEntry(
-          local: localByName[name],
+          local: allLocalByName[name],
           drive: d?.save,
           driveFolderId: d?.folderId,
           driveComplete: d?.complete ?? true,
@@ -826,6 +906,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (mounted) {
       setState(() {
         _entries = entries;
+        _areaCounts[_area] = entries.length;
         _loading = false;
         // Solo en cargas NO silenciosas (2026-08-02): esto cambia la `key`
         // de cada card y fuerza a Flutter a recrearlas, repitiendo la
@@ -840,7 +921,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     // Las acciones esperan también a que la vista COOP recomponga sus tres
     // ubicaciones. Así el spinner no termina antes de que "Mi Drive" refleje
     // una subida o un borrado, igual que en las partidas normales.
-    await Future.wait([_loadSharedSaves(local), _loadBackupCounts()]);
+    await Future.wait([
+      // "Compartidas conmigo" solo vive en la pestaña Normal (spec 010 D11).
+      if (_area == SaveArea.normal) _loadSharedSaves(allLocal),
+      _loadBackupCounts(),
+    ]);
   }
 
   /// spec 007 — conteo LOCAL de backups por save, para el badge del botón
@@ -863,7 +948,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// (rol/estado nunca se confían al registro local, ver G3/G4). [local]
   /// son los saves YA escaneados por [_load], para no repetir el scan.
   Future<void> _loadSharedSaves(List<SaveFile> local) async {
-    if (widget.drive == null) {
+    if (_drive == null) {
       if (mounted) setState(() => _sharedLoading = false);
       return;
     }
@@ -874,7 +959,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       // "Añadir" si ya jugábamos esa granja (2026-07-15, petición usuario).
       await _autoRegisterMatchingShares(local);
 
-      final shared = await widget.drive!.listSharedSaves();
+      final shared = await _drive!.listSharedSaves();
       final localByName = {for (final s in local) s.folderName: s};
       // `_entries` ya está actualizado en este punto (lo fija `_load` con
       // setState de forma síncrona antes del `unawaited` que llega aquí) —
@@ -906,7 +991,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       }
       final myEmail = reallyRevoked.isEmpty
           ? null
-          : await widget.drive!.myEmail();
+          : await _drive!.myEmail();
       for (final r in reallyRevoked) {
         await _handleConfirmedRevocation(
           folderId: r.folderId,
@@ -939,8 +1024,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     bool reload = true,
     bool selfCleanup = false,
   }) async {
-    if (widget.drive == null) return;
-    await widget.drive!.removeSharedSave(folderId);
+    if (_drive == null) return;
+    await _drive!.removeSharedSave(folderId);
     if (reload) await _load(silent: true);
     if (mounted) {
       await _showSharedRevokedDialog(
@@ -957,7 +1042,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// por granja, así que una coincidencia es prácticamente inequívoca.
   /// Best-effort: cualquier fallo se ignora, la siguiente carga reintenta.
   Future<void> _autoRegisterMatchingShares(List<SaveFile> local) async {
-    final drive = widget.drive;
+    final drive = _drive;
     if (drive == null) return;
     try {
       final knownFolderNames = {
@@ -1040,12 +1125,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// compartidas conmigo en Drive y, si se elige una, la valida y persiste.
   Future<void> _handleAddShared() async {
     final l10n = AppLocalizations.of(context)!;
-    if (widget.drive == null) return;
-    final folderId = await showPickerScreen(context, drive: widget.drive!);
+    if (_drive == null) return;
+    final folderId = await showPickerScreen(context, drive: _drive!);
     if (folderId == null || folderId.isEmpty) return;
 
     try {
-      await widget.drive!.addSharedSave(folderId);
+      await _drive!.addSharedSave(folderId);
       await _load(silent: true);
     } catch (e) {
       if (mounted) _snack(l10n.importErrNotASave);
@@ -1068,11 +1153,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// es la parte que NUNCA se fusiona con la subida a Mi Drive.
   Future<void> _uploadToOwnerDrive(SharedSaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
-    if (widget.drive == null || entry.localMatch == null) return;
+    if (_drive == null || entry.localMatch == null) return;
 
     setState(() => _busy.add(entry.folderName));
     try {
-      await widget.drive!.uploadToSharedSave(
+      await _drive!.uploadToSharedSave(
         entry.folderId,
         entry.localMatch!.folderPath,
         players: entry.localMatch!.players,
@@ -1111,7 +1196,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// lector, subir a Mi Drive nunca).
   Future<void> _handleSyncShared(SharedSaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
-    if (widget.drive == null || entry.localMatch == null) return;
+    if (_drive == null || entry.localMatch == null) return;
     if (_busy.contains(entry.folderName)) return;
 
     final proceed = await _confirmUploadStep(
@@ -1133,7 +1218,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// ledger, sin el selector intermedio — el selector solo aparece cuando
   /// de verdad hay que elegir entre dos.
   Future<void> _handleSharedSyncRequested(SharedSaveEntry entry) async {
-    final drive = widget.drive;
+    final drive = _drive;
     final local = entry.localMatch;
     if (drive == null || local == null || _busy.contains(entry.folderName)) {
       return;
@@ -1180,7 +1265,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// único punto de subida (`_uploadToOwnDrive`/`_uploadToOwnerDrive`, G9),
   /// conservando el manejo de excepciones de compartido de la segunda (G2).
   Future<void> _handleSyncBoth(SharedSaveEntry entry) async {
-    if (widget.drive == null || entry.localMatch == null) return;
+    if (_drive == null || entry.localMatch == null) return;
     if (_busy.contains(entry.folderName)) return;
 
     final proceed = await _confirmUploadToBoth(entry);
@@ -1216,10 +1301,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _handleRemoveShared(SharedSaveEntry entry) async {
-    if (widget.drive == null) return;
+    if (_drive == null) return;
     final confirmed = await _confirmRemoveShared(entry.ownerEmail);
     if (confirmed != true) return;
-    await widget.drive!.removeSharedSave(entry.folderId);
+    await _drive!.removeSharedSave(entry.folderId);
     await _load(silent: true);
   }
 
@@ -1228,12 +1313,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// `'me'`). Irreversible sin que el dueño vuelva a compartir contigo.
   Future<void> _handleLeaveShared(SharedSaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
-    if (widget.drive == null) return;
+    if (_drive == null) return;
     final confirmed = await _confirmLeaveShared(entry.ownerEmail);
     if (confirmed != true) return;
     try {
-      await widget.drive!.leaveSharedSave(entry.folderId);
-      await widget.drive!.removeSharedSave(entry.folderId);
+      await _drive!.leaveSharedSave(entry.folderId);
+      await _drive!.removeSharedSave(entry.folderId);
       if (mounted) _snack(l10n.sharedLeaveSuccess(entry.ownerEmail));
       await _load(silent: true);
     } catch (e) {
@@ -1612,6 +1697,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<void> _openSettings() async {
     final savesPathBefore = AndroidSavesPath.instance.current;
+    final desktopSavesBefore = SaveService.savesDirectory;
+    final smapiBefore = SmapiService.instance.install?.modsDir;
     final result = await Navigator.push<String?>(
       context,
       AppPageRoute(
@@ -1639,6 +1726,22 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         AndroidSavesPath.instance.current != savesPathBefore) {
       await _load();
       if (!mounted) return;
+    }
+    // spec 010 — Ajustes → Ubicaciones pudo cambiar la carpeta de partidas
+    // de escritorio o la detección de SMAPI (pestaña SMAPI aparece/se va).
+    if (!Platform.isAndroid && result == null) {
+      final smapiVisibleBefore = _smapiVisible;
+      await _initSmapi();
+      if (!mounted) return;
+      if (!_smapiVisible && _area == SaveArea.smapi) {
+        setState(() => _area = SaveArea.normal);
+      }
+      if (SaveService.savesDirectory != desktopSavesBefore ||
+          SmapiService.instance.install?.modsDir != smapiBefore ||
+          _smapiVisible != smapiVisibleBefore) {
+        await _load();
+        if (!mounted) return;
+      }
     }
     // T916 (D4, G6): el interruptor de auto-actualizar pudo cambiar en
     // Ajustes — releer y aplicar en caliente (arranca o para watcher+timer),
@@ -1705,12 +1808,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _uploadToOwnDrive(SaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     final local = entry.local;
-    if (local == null || widget.drive == null) return;
+    if (local == null || _drive == null) return;
     final name = local.folderName;
 
     setState(() => _busy.add(name));
     try {
-      await widget.drive!.uploadSave(
+      await _drive!.uploadSave(
         local.folderPath,
         name,
         players: local.players,
@@ -1727,7 +1830,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<void> _handleUpload(SaveEntry entry) async {
     final local = entry.local;
-    if (local == null || widget.drive == null) return;
+    if (local == null || _drive == null) return;
     final name = local.folderName;
     if (_busy.contains(name)) return;
 
@@ -1740,7 +1843,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final l10n = AppLocalizations.of(context)!;
     final drive = entry.drive;
     final folderId = entry.driveFolderId;
-    if (drive == null || folderId == null || widget.drive == null) return;
+    if (drive == null || folderId == null || _drive == null) return;
 
     // FR-015: nunca se ofrece descargar un save al que le falta contenido en
     // Drive — evita bajar algo a medias. El aviso llega como snack (mismo
@@ -1767,14 +1870,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final l10n = AppLocalizations.of(context)!;
     final drive = entry.drive;
     final folderId = entry.driveFolderId;
-    if (drive == null || folderId == null || widget.drive == null) return;
+    if (drive == null || folderId == null || _drive == null) return;
 
     final name = drive.folderName;
     setState(() => _busy.add(name));
     try {
       if (Platform.isAndroid && _mode == AndroidMode.root) {
         final out = await ShizukuService.instance.prepareOut(name);
-        await widget.drive!.downloadSaveToDir(folderId, name, Directory(out));
+        await _drive!.downloadSaveToDir(folderId, name, Directory(out));
         if (!await _isValidStagedSave(out, name)) {
           if (mounted) _snack(l10n.snackReplaceValidationFailed);
           return;
@@ -1793,7 +1896,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           return;
         }
         final out = await ShizukuService.instance.prepareOut(name);
-        await widget.drive!.downloadSaveToDir(folderId, name, Directory(out));
+        await _drive!.downloadSaveToDir(folderId, name, Directory(out));
         if (!await _isValidStagedSave(out, name)) {
           if (mounted) _snack(l10n.snackReplaceValidationFailed);
           return;
@@ -1817,11 +1920,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           folderName: name,
           backupsDir: backupsDir,
           prepare: (stagingDir) =>
-              widget.drive!.downloadSaveToDir(folderId, name, stagingDir),
+              _drive!.downloadSaveToDir(folderId, name, stagingDir),
         );
         if (!result.ok) {
           if (mounted) _snack(_replaceErrorMessage(result.error));
           return;
+        }
+        // La partida bajada pasa a la pestaña de la que vino (spec 010).
+        if (_splitByArea) {
+          await SaveAreaClassifier.instance.setOverride(name, _area);
         }
         await _load(silent: true);
         if (mounted) _snack(l10n.snackDownloaded);
@@ -1838,7 +1945,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _handleDelete(SaveEntry entry, {_DeleteChoice? location}) async {
     final l10n = AppLocalizations.of(context)!;
     final hasLocal = entry.local != null;
-    final hasDrive = entry.driveFolderId != null && widget.drive != null;
+    final hasDrive = entry.driveFolderId != null && _drive != null;
     if (!hasLocal && !hasDrive) return;
 
     final farmName = entry.primary.farmName;
@@ -1875,8 +1982,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       }
       if (choice == _DeleteChoice.driveOnly || choice == _DeleteChoice.both) {
         final folderId = entry.driveFolderId;
-        if (folderId != null && widget.drive != null) {
-          await widget.drive!.trashSave(folderId);
+        if (folderId != null && _drive != null) {
+          await _drive!.trashSave(folderId);
         }
       }
       await _load(silent: true);
@@ -2130,7 +2237,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _handleShare(SaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     final folderId = entry.driveFolderId;
-    if (widget.drive == null || folderId == null) return;
+    if (_drive == null || folderId == null) return;
     final coop = entry.primary.isCoop;
 
     final picked = await _promptShareEmail(entry: entry, coop: coop);
@@ -2139,7 +2246,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (email.isEmpty) return;
 
     try {
-      final existing = await widget.drive!.listPermissions(folderId);
+      final existing = await _drive!.listPermissions(folderId);
       dynamic current;
       for (final p in existing) {
         if (p.emailAddress?.toLowerCase() == email.toLowerCase()) {
@@ -2148,9 +2255,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         }
       }
       if (current == null) {
-        await widget.drive!.shareSave(folderId, email, role: role);
+        await _drive!.shareSave(folderId, email, role: role);
       } else if (coop && current.role != role && current.id != null) {
-        await widget.drive!.updatePermission(
+        await _drive!.updatePermission(
           folderId,
           current.id as String,
           role,
@@ -2368,12 +2475,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _showManageAccess(SaveEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     final folderId = entry.driveFolderId;
-    if (widget.drive == null || folderId == null) return;
+    if (_drive == null || folderId == null) return;
     final coop = entry.primary.isCoop;
 
     List<dynamic> permissions;
     try {
-      permissions = await widget.drive!.listPermissions(folderId);
+      permissions = await _drive!.listPermissions(folderId);
     } catch (e) {
       if (mounted) _snack(l10n.exportError(e.toString()));
       return;
@@ -2456,7 +2563,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                 onTap: () async {
                                   if (p.role == 'reader') return;
                                   try {
-                                    await widget.drive!.updatePermission(
+                                    await _drive!.updatePermission(
                                       folderId,
                                       p.id as String,
                                       'reader',
@@ -2476,7 +2583,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                 onTap: () async {
                                   if (p.role == 'writer') return;
                                   try {
-                                    await widget.drive!.updatePermission(
+                                    await _drive!.updatePermission(
                                       folderId,
                                       p.id as String,
                                       'writer',
@@ -2496,7 +2603,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                 semanticLabel: l10n.manageAccessRevoke,
                                 onTap: () async {
                                   try {
-                                    await widget.drive!.unshareSave(
+                                    await _drive!.unshareSave(
                                       folderId,
                                       p.id as String,
                                     );
@@ -2949,7 +3056,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// completo y se muestra un snack.
   Future<void> _handleSwapBackupChoice(String backupZipPath) async {
     final l10n = AppLocalizations.of(context)!;
-    if (widget.drive == null) {
+    if (_drive == null) {
       if (mounted) _snack(l10n.swapBackupLocalOnlySnack);
       return;
     }
@@ -2958,7 +3065,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     switch (choice) {
       case _SwapBackupChoice.upload:
         try {
-          await widget.drive!.uploadBackupZip(backupZipPath);
+          await _drive!.uploadBackupZip(backupZipPath);
           if (mounted) _snack(l10n.swapBackupUploadOk);
         } catch (e) {
           if (mounted) _snack(l10n.swapBackupUploadErr(e.toString()));
@@ -3062,9 +3169,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     var driveBackups = <BackupEntry>[];
     var sharedBackups = <BackupEntry>[];
-    if (widget.drive != null) {
+    if (_drive != null) {
       try {
-        driveBackups = await widget.drive!.listDriveBackups(
+        driveBackups = await _drive!.listDriveBackups(
           folderName: source.folderName,
         );
       } catch (_) {
@@ -3072,7 +3179,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       }
       if (sharedFolderId != null) {
         try {
-          sharedBackups = await widget.drive!.listSharedSaveBackups(
+          sharedBackups = await _drive!.listSharedSaveBackups(
             sharedFolderId,
             folderName: source.folderName,
           );
@@ -3216,7 +3323,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               : null,
                           onDownload:
                               !entry.isLocal &&
-                                  widget.drive != null &&
+                                  _drive != null &&
                                   (entry.isOnDrive || entry.isOnSharedDrive)
                               ? () => _downloadBackup(
                                   entry,
@@ -3225,13 +3332,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                                   setState,
                                 )
                               : null,
-                          onUploadOwn: widget.drive != null && !entry.isOnDrive
+                          onUploadOwn: _drive != null && !entry.isOnDrive
                               ? () => _uploadBackup(entry, entries, setState)
                               : null,
                           ownActionCopiesRemote:
                               !entry.isLocal && entry.isOnSharedDrive,
                           onUploadShared:
-                              widget.drive != null &&
+                              _drive != null &&
                                   sharedFolderId != null &&
                                   canEditShared &&
                                   !entry.isOnSharedDrive
@@ -3438,14 +3545,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     String? sharedFolderId,
     String? sharedOwnerEmail,
   }) async {
-    if (widget.drive == null) return;
+    if (_drive == null) return;
     final l10n = AppLocalizations.of(context)!;
     try {
       final id = await _withBackupFile(
         entry,
         (path) => sharedFolderId == null
-            ? widget.drive!.uploadBackupZip(path)
-            : widget.drive!.uploadBackupZipToSharedSave(sharedFolderId, path),
+            ? _drive!.uploadBackupZip(path)
+            : _drive!.uploadBackupZipToSharedSave(sharedFolderId, path),
       );
       final updated = sharedFolderId == null
           ? entry.copyWith(driveFileId: id)
@@ -3505,10 +3612,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   ) async {
     final l10n = AppLocalizations.of(context)!;
     final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
-    if (widget.drive == null || remoteId == null) return;
+    if (_drive == null || remoteId == null) return;
     try {
       final path = '$backupsDir${Platform.pathSeparator}${entry.fileName}';
-      await widget.drive!.downloadFile(remoteId, path);
+      await _drive!.downloadFile(remoteId, path);
       final updated = entry.copyWith(
         localPath: path,
         sizeBytes: await File(path).length(),
@@ -3527,13 +3634,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   ) async {
     if (entry.localPath != null) return action(entry.localPath!);
     final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
-    if (widget.drive == null || remoteId == null) {
+    if (_drive == null || remoteId == null) {
       throw StateError('El respaldo no está disponible para transferirlo.');
     }
     final tempDir = await Directory.systemTemp.createTemp('vs_backup_copy_');
     final path = '${tempDir.path}${Platform.pathSeparator}${entry.fileName}';
     try {
-      await widget.drive!.downloadFile(remoteId, path);
+      await _drive!.downloadFile(remoteId, path);
       return await action(path);
     } finally {
       try {
@@ -3585,8 +3692,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     }
 
     final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
-    final downloadToPath = (remoteId != null && widget.drive != null)
-        ? (String path) => widget.drive!.downloadFile(remoteId, path)
+    final downloadToPath = (remoteId != null && _drive != null)
+        ? (String path) => _drive!.downloadFile(remoteId, path)
         : null;
 
     if (androidBridge) {
@@ -3704,16 +3811,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       if ((choice == _BackupDeleteChoice.ownDrive ||
               choice == _BackupDeleteChoice.all) &&
           entry.driveFileId != null &&
-          widget.drive != null) {
-        await widget.drive!.deleteDriveBackup(entry.driveFileId!);
+          _drive != null) {
+        await _drive!.deleteDriveBackup(entry.driveFileId!);
         remaining = remaining.copyWith(clearDriveFileId: true);
       }
       if ((choice == _BackupDeleteChoice.sharedDrive ||
               choice == _BackupDeleteChoice.all) &&
           entry.sharedDriveFileId != null &&
           canEditShared &&
-          widget.drive != null) {
-        await widget.drive!.deleteDriveBackup(entry.sharedDriveFileId!);
+          _drive != null) {
+        await _drive!.deleteDriveBackup(entry.sharedDriveFileId!);
         remaining = remaining.copyWith(clearSharedDriveFileId: true);
       }
       unawaited(_loadBackupCounts());
@@ -3898,7 +4005,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }) {
     final l10n = AppLocalizations.of(context)!;
     final hasLocal = entry.local != null;
-    final hasDrive = entry.driveFolderId != null && widget.drive != null;
+    final hasDrive = entry.driveFolderId != null && _drive != null;
     final farmName = entry.primary.farmName;
     final deletingLocal = requestedLocation == _DeleteChoice.localOnly;
     final deletingDrive = requestedLocation == _DeleteChoice.driveOnly;
@@ -5985,6 +6092,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     showSharedTitle: _showSharedHeader,
                     connectedEmail: _connectedEmail,
                   ),
+                  if (_splitByArea)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 460),
+                        child: SaveAreaTabs(
+                          selected: _area,
+                          counts: _areaCounts,
+                          onSelect: _selectArea,
+                        ),
+                      ),
+                    ),
                   Expanded(child: _buildBody()),
                 ],
               ),
@@ -6012,7 +6131,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
     // US5: la sección "Compartidas conmigo" es su propio ítem final de la
     // lista — solo con Drive conectado (sin él no hay forma de usar Picker).
-    final showShared = widget.drive != null;
+    final showShared = _drive != null && _area == SaveArea.normal;
     // Un save descargado de un compartido NUNCA se duplica en "Mis
     // partidas" — vive solo en "Compartidas conmigo" (decisión 2026-07-12,
     // evita confusión de dos tarjetas casi idénticas). Sigue existiendo de
@@ -6109,7 +6228,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               : null,
                           onDeleteFromDrive:
                               visibleEntries[i].driveFolderId != null &&
-                                  widget.drive != null
+                                  _drive != null
                               ? () => _handleDelete(
                                   visibleEntries[i],
                                   location: _DeleteChoice.driveOnly,
@@ -6135,7 +6254,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                               ? () => _handleExport(visibleEntries[i])
                               : null,
                           onShare:
-                              widget.drive != null &&
+                              _drive != null &&
                                   visibleEntries[i].driveFolderId != null
                               ? () => _handleShare(visibleEntries[i])
                               : null,
@@ -6279,7 +6398,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               // delante de tu copia). Disponible siempre que haya Drive
               // conectado y copia local, no solo cuando se revoca el acceso
               // (decisión 2026-07-12, modelo de 3 sitios).
-              onUploadToOwnDrive: widget.drive != null && e.localMatch != null
+              onUploadToOwnDrive: _drive != null && e.localMatch != null
                   ? () => _handleUpload(e.asOwnEntry)
                   : null,
               // Caso inverso: jugaste en otro equipo y subiste a tu Drive
@@ -6291,7 +6410,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               // comparaciones y una sola confirmación — sustituye la
               // secuencia de dos diálogos separados de antes.
               onSyncBoth:
-                  widget.drive != null && e.localMatch != null && e.canSync
+                  _drive != null && e.localMatch != null && e.canSync
                   ? () => _handleSyncBoth(e)
                   : null,
               // Exportar/Backups operan sobre la copia LOCAL — mismo

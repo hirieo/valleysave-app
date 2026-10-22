@@ -2349,4 +2349,53 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'Goiko karpeta';
+
+  @override
+  String get saveAreaNormal => 'Normala';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => 'Kokalekuak';
+
+  @override
+  String get settingsLocationsNormalSaves => 'Gordeta normalak';
+
+  @override
+  String get settingsLocationsDetected => 'detektatua';
+
+  @override
+  String get settingsLocationsCustom => 'aukeratua';
+
+  @override
+  String get settingsLocationsChange => 'Aldatu…';
+
+  @override
+  String get settingsLocationsReset => 'Berrezarri';
+
+  @override
+  String get settingsSmapiNotDetected => 'ez da detektatu';
+
+  @override
+  String get settingsSmapiSavesShared =>
+      'Gordetakoak: karpeta bera (PCan, SMAPIk ez ditu bereizten)';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'Mods aldatu…';
+
+  @override
+  String get settingsSmapiSearch => 'Bilatu';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'Instalatu SMAPI, edo ezarri non dagoen jokoa goiko “Jokoa” atalean.';
+
+  @override
+  String get snackInvalidFolder => 'Karpeta hori ezin da erabili.';
 }

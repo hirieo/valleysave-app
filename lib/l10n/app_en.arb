@@ -1193,5 +1193,21 @@
   "savesFolderListError": "Could not read this folder.",
   "savesFolderDetecting": "Looking for folders…",
   "savesFolderDefaultTag": "Default",
-  "savesFolderParent": "Parent folder"
+  "savesFolderParent": "Parent folder",
+  "saveAreaNormal": "Normal",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Locations",
+  "settingsLocationsNormalSaves": "Normal saves",
+  "settingsLocationsDetected": "detected",
+  "settingsLocationsCustom": "chosen",
+  "settingsLocationsChange": "Change…",
+  "settingsLocationsReset": "Reset",
+  "settingsSmapiNotDetected": "not detected",
+  "settingsSmapiSavesShared": "Saves: same folder (on PC, SMAPI doesn’t separate them)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {"placeholders": {"path": {"type": "String"}}},
+  "settingsSmapiChangeMods": "Change Mods…",
+  "settingsSmapiSearch": "Search",
+  "settingsSmapiNotFoundHint": "Install SMAPI, or set where the game is in the Game section above.",
+  "snackInvalidFolder": "That folder can’t be used."
 }

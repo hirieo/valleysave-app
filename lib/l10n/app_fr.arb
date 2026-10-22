@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Impossible de lire ce dossier.",
   "savesFolderDetecting": "Recherche des dossiers…",
   "savesFolderDefaultTag": "Par défaut",
-  "savesFolderParent": "Dossier parent"
+  "savesFolderParent": "Dossier parent",
+  "saveAreaNormal": "Normal",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Emplacements",
+  "settingsLocationsNormalSaves": "Sauvegardes normales",
+  "settingsLocationsDetected": "détecté",
+  "settingsLocationsCustom": "choisi",
+  "settingsLocationsChange": "Modifier…",
+  "settingsLocationsReset": "Réinitialiser",
+  "settingsSmapiNotDetected": "non détecté",
+  "settingsSmapiSavesShared": "Sauvegardes : même dossier (sur PC, SMAPI ne les sépare pas)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Modifier Mods…",
+  "settingsSmapiSearch": "Rechercher",
+  "settingsSmapiNotFoundHint": "Installez SMAPI, ou indiquez où se trouve le jeu dans la section « Jeu » ci-dessus.",
+  "snackInvalidFolder": "Ce dossier ne peut pas être utilisé."
 }

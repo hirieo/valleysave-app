@@ -2340,4 +2340,53 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'Pasta superior';
+
+  @override
+  String get saveAreaNormal => 'Normal';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => 'Locais';
+
+  @override
+  String get settingsLocationsNormalSaves => 'Saves normais';
+
+  @override
+  String get settingsLocationsDetected => 'detectada';
+
+  @override
+  String get settingsLocationsCustom => 'escolhida';
+
+  @override
+  String get settingsLocationsChange => 'Alterar…';
+
+  @override
+  String get settingsLocationsReset => 'Repor';
+
+  @override
+  String get settingsSmapiNotDetected => 'não detectado';
+
+  @override
+  String get settingsSmapiSavesShared =>
+      'Saves: mesma pasta (no PC, o SMAPI não os separa)';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'Alterar Mods…';
+
+  @override
+  String get settingsSmapiSearch => 'Procurar';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'Instale o SMAPI ou defina onde está o jogo na seção «Jogo» acima.';
+
+  @override
+  String get snackInvalidFolder => 'Essa pasta não pode ser usada.';
 }

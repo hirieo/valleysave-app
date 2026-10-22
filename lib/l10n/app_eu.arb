@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Ezin izan da karpeta hau irakurri.",
   "savesFolderDetecting": "Karpetak bilatzen…",
   "savesFolderDefaultTag": "Lehenetsia",
-  "savesFolderParent": "Goiko karpeta"
+  "savesFolderParent": "Goiko karpeta",
+  "saveAreaNormal": "Normala",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Kokalekuak",
+  "settingsLocationsNormalSaves": "Gordeta normalak",
+  "settingsLocationsDetected": "detektatua",
+  "settingsLocationsCustom": "aukeratua",
+  "settingsLocationsChange": "Aldatu…",
+  "settingsLocationsReset": "Berrezarri",
+  "settingsSmapiNotDetected": "ez da detektatu",
+  "settingsSmapiSavesShared": "Gordetakoak: karpeta bera (PCan, SMAPIk ez ditu bereizten)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Mods aldatu…",
+  "settingsSmapiSearch": "Bilatu",
+  "settingsSmapiNotFoundHint": "Instalatu SMAPI, edo ezarri non dagoen jokoa goiko “Jokoa” atalean.",
+  "snackInvalidFolder": "Karpeta hori ezin da erabili."
 }

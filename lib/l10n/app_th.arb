@@ -1165,5 +1165,27 @@
   "savesFolderListError": "อ่านโฟลเดอร์นี้ไม่ได้",
   "savesFolderDetecting": "กำลังค้นหาโฟลเดอร์…",
   "savesFolderDefaultTag": "ค่าเริ่มต้น",
-  "savesFolderParent": "โฟลเดอร์ระดับบน"
+  "savesFolderParent": "โฟลเดอร์ระดับบน",
+  "saveAreaNormal": "ปกติ",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "ตำแหน่งที่ตั้ง",
+  "settingsLocationsNormalSaves": "เซฟปกติ",
+  "settingsLocationsDetected": "ตรวจพบ",
+  "settingsLocationsCustom": "เลือกแล้ว",
+  "settingsLocationsChange": "เปลี่ยน…",
+  "settingsLocationsReset": "รีเซ็ต",
+  "settingsSmapiNotDetected": "ไม่พบ",
+  "settingsSmapiSavesShared": "เซฟ: โฟลเดอร์เดียวกัน (บน PC SMAPI ไม่แยกกัน)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "เปลี่ยน Mods…",
+  "settingsSmapiSearch": "ค้นหา",
+  "settingsSmapiNotFoundHint": "ติดตั้ง SMAPI หรือระบุตำแหน่งของเกมในส่วน “เกม” ด้านบน",
+  "snackInvalidFolder": "ไม่สามารถใช้โฟลเดอร์นั้นได้"
 }

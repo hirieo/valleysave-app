@@ -2356,4 +2356,53 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'Übergeordneter Ordner';
+
+  @override
+  String get saveAreaNormal => 'Normal';
+
+  @override
+  String get saveAreaSmapi => 'SMAPI';
+
+  @override
+  String get settingsLocationsSection => 'Speicherorte';
+
+  @override
+  String get settingsLocationsNormalSaves => 'Normale Speicherstände';
+
+  @override
+  String get settingsLocationsDetected => 'erkannt';
+
+  @override
+  String get settingsLocationsCustom => 'gewählt';
+
+  @override
+  String get settingsLocationsChange => 'Ändern…';
+
+  @override
+  String get settingsLocationsReset => 'Zurücksetzen';
+
+  @override
+  String get settingsSmapiNotDetected => 'nicht erkannt';
+
+  @override
+  String get settingsSmapiSavesShared =>
+      'Speicherstände: gleicher Ordner (am PC trennt SMAPI sie nicht)';
+
+  @override
+  String settingsSmapiModsPath(String path) {
+    return 'Mods: $path';
+  }
+
+  @override
+  String get settingsSmapiChangeMods => 'Mods ändern…';
+
+  @override
+  String get settingsSmapiSearch => 'Suchen';
+
+  @override
+  String get settingsSmapiNotFoundHint =>
+      'Installiere SMAPI oder lege im Abschnitt „Spiel“ oben fest, wo sich das Spiel befindet.';
+
+  @override
+  String get snackInvalidFolder => 'Dieser Ordner kann nicht verwendet werden.';
 }

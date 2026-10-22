@@ -1172,5 +1172,27 @@
   "savesFolderListError": "无法读取此文件夹。",
   "savesFolderDetecting": "正在查找文件夹…",
   "savesFolderDefaultTag": "默认",
-  "savesFolderParent": "上级文件夹"
+  "savesFolderParent": "上级文件夹",
+  "saveAreaNormal": "普通",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "位置",
+  "settingsLocationsNormalSaves": "普通存档",
+  "settingsLocationsDetected": "已检测",
+  "settingsLocationsCustom": "已选择",
+  "settingsLocationsChange": "更改…",
+  "settingsLocationsReset": "重置",
+  "settingsSmapiNotDetected": "未检测到",
+  "settingsSmapiSavesShared": "存档：同一文件夹（在 PC 上 SMAPI 不会将它们分开）",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "更改 Mods…",
+  "settingsSmapiSearch": "搜索",
+  "settingsSmapiNotFoundHint": "请安装 SMAPI，或在上方“游戏”部分指定游戏所在位置。",
+  "snackInvalidFolder": "无法使用该文件夹。"
 }

@@ -1172,5 +1172,27 @@
   "savesFolderListError": "Impossibile leggere questa cartella.",
   "savesFolderDetecting": "Ricerca delle cartelle…",
   "savesFolderDefaultTag": "Predefinita",
-  "savesFolderParent": "Cartella superiore"
+  "savesFolderParent": "Cartella superiore",
+  "saveAreaNormal": "Normale",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "Posizioni",
+  "settingsLocationsNormalSaves": "Salvataggi normali",
+  "settingsLocationsDetected": "rilevata",
+  "settingsLocationsCustom": "scelta",
+  "settingsLocationsChange": "Cambia…",
+  "settingsLocationsReset": "Ripristina",
+  "settingsSmapiNotDetected": "non rilevato",
+  "settingsSmapiSavesShared": "Salvataggi: stessa cartella (su PC, SMAPI non li separa)",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "Cambia Mods…",
+  "settingsSmapiSearch": "Cerca",
+  "settingsSmapiNotFoundHint": "Installa SMAPI, oppure indica dove si trova il gioco nella sezione «Gioco» qui sopra.",
+  "snackInvalidFolder": "Quella cartella non può essere usata."
 }

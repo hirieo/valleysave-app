@@ -1172,5 +1172,27 @@
   "savesFolderListError": "無法讀取此資料夾。",
   "savesFolderDetecting": "正在尋找資料夾…",
   "savesFolderDefaultTag": "預設",
-  "savesFolderParent": "上層資料夾"
+  "savesFolderParent": "上層資料夾",
+  "saveAreaNormal": "普通",
+  "saveAreaSmapi": "SMAPI",
+  "settingsLocationsSection": "位置",
+  "settingsLocationsNormalSaves": "一般存檔",
+  "settingsLocationsDetected": "已偵測",
+  "settingsLocationsCustom": "已選擇",
+  "settingsLocationsChange": "變更…",
+  "settingsLocationsReset": "重設",
+  "settingsSmapiNotDetected": "未偵測到",
+  "settingsSmapiSavesShared": "存檔：同一資料夾（在 PC 上 SMAPI 不會將它們分開）",
+  "settingsSmapiModsPath": "Mods: {path}",
+  "@settingsSmapiModsPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSmapiChangeMods": "變更 Mods…",
+  "settingsSmapiSearch": "搜尋",
+  "settingsSmapiNotFoundHint": "請安裝 SMAPI，或在上方「遊戲」區段指定遊戲所在位置。",
+  "snackInvalidFolder": "無法使用該資料夾。"
 }

@@ -1,12 +1,45 @@
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart';
 
 import '../models/player_stats.dart';
 import '../models/save_file.dart';
+import 'smapi_service.dart';
 
 class SaveService {
+  /// Carpeta de partidas de escritorio elegida a mano en Ajustes →
+  /// Ubicaciones (spec 010 D2). Se carga al arrancar con [loadCustomDirectory].
+  static const customDirectoryPrefKey = 'desktop_saves_path';
+  static String? customDirectory;
+
+  static Future<void> loadCustomDirectory() async {
+    if (Platform.isAndroid || Platform.isIOS) return;
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(customDirectoryPrefKey);
+    customDirectory = saved != null && await Directory(saved).exists()
+        ? saved
+        : null;
+  }
+
+  /// Guarda (o con `null` quita) la carpeta elegida. `false` si no existe.
+  static Future<bool> setCustomDirectory(String? path) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (path == null) {
+      await prefs.remove(customDirectoryPrefKey);
+      customDirectory = null;
+      return true;
+    }
+    if (!SmapiService.isValidLocalPath(path) || !await Directory(path).exists()) {
+      return false;
+    }
+    await prefs.setString(customDirectoryPrefKey, path);
+    customDirectory = path;
+    return true;
+  }
+
   static String? get savesDirectory {
+    if (!Platform.isAndroid && customDirectory != null) return customDirectory;
     if (Platform.isWindows) {
       final appData = Platform.environment['APPDATA'];
       if (appData == null) return null;

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/backup_entry.dart';
 import '../models/player_stats.dart';
+import '../models/save_area.dart';
 import '../models/save_file.dart';
 import '../models/shared_save_entry.dart';
 import 'save_service.dart';
@@ -26,6 +27,24 @@ const _playersJsonName = 'players.json';
 const _manifestFileName = 'manifest.json';
 
 const _folderName = 'ValleySave';
+
+/// Partidas SMAPI (spec 010): `ValleySave/SMAPI/Saves/<folderName>/`. Las
+/// versiones antiguas de la app no las ven — `listSaveSummaries` ignora
+/// cualquier carpeta de la raíz sin `SaveGameInfo`.
+const _smapiFolderName = 'SMAPI';
+const _smapiSavesFolderName = 'Saves';
+
+final _modSidecarNameRe = RegExp(r'^[A-Za-z0-9][A-Za-z0-9._ -]{0,126}\.json$');
+
+/// ¿[name] es un archivo de datos de mod que vive junto a la partida (p. ej.
+/// `spacecore-serialization.json`, spec 010 research §5) y por tanto viaja
+/// con las partidas SMAPI? Solo nombres planos `.json`: nunca rutas, nunca
+/// los metadatos propios de la app.
+bool isModSidecarName(String name) =>
+    _modSidecarNameRe.hasMatch(name) &&
+    !name.contains('..') &&
+    name != _manifestFileName &&
+    name != _playersJsonName;
 const _folderMime = 'application/vnd.google-apps.folder';
 const _readmeName = 'LEEME - ValleySave.txt';
 
@@ -130,11 +149,22 @@ class _ResolvedContent {
 }
 
 class DriveService {
-  DriveService(this._client) : _api = drive.DriveApi(_client);
+  DriveService(this._client, {this.area = SaveArea.normal})
+    : _api = drive.DriveApi(_client);
 
   final AuthClient _client;
   final drive.DriveApi _api;
+
+  /// Sección cuyas partidas lee/escribe esta instancia. Solo cambia la
+  /// carpeta raíz de las partidas ([savesRoot]); respaldos, compartidas y
+  /// el registro de cambios siguen siendo comunes a la cuenta.
+  final SaveArea area;
   String? _folderId;
+  String? _smapiSavesFolderId;
+
+  /// Misma cuenta, otra sección. Devuelve `this` si ya es esa sección.
+  DriveService forArea(SaveArea other) =>
+      other == area ? this : DriveService(_client, area: other);
   String? _myEmail;
 
   /// Token OAuth vigente — solo lo necesita el WebView de Picker (US5), que
@@ -227,6 +257,20 @@ class DriveService {
     return _folderId!;
   }
 
+  /// Carpeta que contiene las partidas de [area]: `ValleySave/` o
+  /// `ValleySave/SMAPI/Saves/` (se crea al primer uso).
+  Future<String> savesRoot() async {
+    final rootId = await ensureFolder();
+    if (area == SaveArea.normal) return rootId;
+    if (_smapiSavesFolderId != null) return _smapiSavesFolderId!;
+    final smapiId = await _ensureSubfolder(_smapiFolderName, rootId);
+    _smapiSavesFolderId = await _ensureSubfolder(
+      _smapiSavesFolderName,
+      smapiId,
+    );
+    return _smapiSavesFolderId!;
+  }
+
   Future<void> _ensureReadme(String folderId) async {
     try {
       final result = await _api.files.list(
@@ -252,7 +296,7 @@ class DriveService {
 
   /// Lista saves dentro de ValleySave/ ordenados por fecha de modificación.
   Future<List<drive.File>> listSaves() async {
-    final folderId = await ensureFolder();
+    final folderId = await savesRoot();
     final result = await _api.files.list(
       q: "'$folderId' in parents and trashed=false",
       spaces: 'drive',
@@ -361,7 +405,7 @@ class DriveService {
 
   /// Busca o crea subcarpeta ValleySave/[saveName]/.
   Future<String> _ensureSaveFolder(String saveName) async {
-    final rootId = await ensureFolder();
+    final rootId = await savesRoot();
     return _ensureSubfolder(saveName, rootId);
   }
 
@@ -467,6 +511,12 @@ class DriveService {
     if (await _hasValidOldPair(folderPath, folderName)) {
       localPaths.add('$folderPath${sep}SaveGameInfo_old');
       localPaths.add('$folderPath$sep${folderName}_old');
+    }
+    if (area == SaveArea.smapi) {
+      await for (final e in Directory(folderPath).list(followLinks: false)) {
+        final name = e.path.split(sep).last;
+        if (e is File && isModSidecarName(name)) localPaths.add(e.path);
+      }
     }
 
     for (final localPath in localPaths) {
@@ -644,7 +694,7 @@ class DriveService {
   /// FR-015: sin esto, un save subido con el modelo de generación quedaría
   /// invisible aquí (sus archivos viven en `gen_<ts>/`, no al nivel raíz).
   Future<List<DriveSaveSummary>> listSaveSummaries() async {
-    final rootId = await ensureFolder();
+    final rootId = await savesRoot();
     final folders = await _api.files.list(
       q: "'$rootId' in parents and mimeType='$_folderMime' and trashed=false",
       spaces: 'drive',
@@ -794,7 +844,12 @@ class DriveService {
 
     for (final f in resolved.children) {
       if (f.id == null || f.name == null) continue;
-      if (!whitelist.contains(f.name)) continue;
+      // Partidas SMAPI: además, los datos de mod que viven junto a la
+      // partida (nombre plano `.json` validado, nunca una ruta).
+      final allowed =
+          whitelist.contains(f.name) ||
+          (area == SaveArea.smapi && isModSidecarName(f.name!));
+      if (!allowed) continue;
       final media =
           await _api.files.get(
                 f.id!,
@@ -926,7 +981,7 @@ class DriveService {
 
   /// Lista subcarpetas de saves en la Papelera de Drive.
   Future<List<drive.File>> listTrashedSaves() async {
-    final rootId = await ensureFolder();
+    final rootId = await savesRoot();
     final result = await _api.files.list(
       q: "'$rootId' in parents and mimeType='$_folderMime' and trashed=true",
       spaces: 'drive',

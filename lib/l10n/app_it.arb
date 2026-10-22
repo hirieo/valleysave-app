@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "Cambia Mods…",
   "settingsSmapiSearch": "Cerca",
   "settingsSmapiNotFoundHint": "Installa SMAPI, oppure indica dove si trova il gioco nella sezione «Gioco» qui sopra.",
-  "snackInvalidFolder": "Quella cartella non può essere usata."
+  "snackInvalidFolder": "Quella cartella non può essere usata.",
+  "moveToSmapiAction": "In SMAPI",
+  "moveToNormalAction": "In Normale",
+  "moveToSmapiTitle": "Spostare {farm} in SMAPI?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "Spostare {farm} in Normale?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "Lo vedrai nella scheda SMAPI e, quando lo carichi, andrà nella cartella SMAPI del tuo Drive.",
+  "moveToNormalBody": "Lo vedrai nella scheda Normale e, quando lo carichi, andrà nella cartella normale del tuo Drive.",
+  "moveAreaNoFilesTouched": "Su PC nessun file viene spostato o modificato: il gioco normale e SMAPI usano la stessa cartella dei salvataggi. Puoi spostarlo di nuovo quando vuoi. La sua copia nell'altra cartella di Drive resta dov'è.",
+  "moveToSmapiConfirm": "Sposta in SMAPI",
+  "moveToNormalConfirm": "Sposta in Normale",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods di {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "{count} installati su questo dispositivo · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Nessuna mod trovata nella cartella Mods.",
+  "modsDialogClose": "Chiudi",
+  "modKindCode": "mod di codice",
+  "modKindContent": "contenuto",
+  "modKindInvalid": "manifest non valido",
+  "modAlwaysCarry": "porta sempre",
+  "modWithConfig": "con le sue impostazioni",
+  "modsCompatLegend": "Android: ✓ di solito funziona · ⚠ può non funzionare (mod di codice) · ✗ richiede una versione di SMAPI che Android non ha ancora."
 }

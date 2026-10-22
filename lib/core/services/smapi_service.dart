@@ -119,6 +119,21 @@ class SmapiService {
   static String? parseManifestVersion(String manifest) =>
       _versionRe.firstMatch(manifest)?.group(1)?.trim();
 
+  /// Abre el juego con SMAPI (fase F2). Su consola queda abierta: es la que
+  /// muestra qué mods cargó.
+  Future<void> launch(SmapiInstall install) async {
+    final exe = launcherPath(install.gameDir);
+    if (!await File(exe).exists()) {
+      throw StateError('SMAPI launcher not found');
+    }
+    await Process.start(
+      exe,
+      [],
+      workingDirectory: install.gameDir,
+      mode: ProcessStartMode.detached,
+    );
+  }
+
   /// Ejecutable de SMAPI dentro de [gameDir] (fase F2: "Abrir con SMAPI").
   static String launcherPath(String gameDir) {
     final sep = Platform.pathSeparator;

@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "Alterar Mods…",
   "settingsSmapiSearch": "Procurar",
   "settingsSmapiNotFoundHint": "Instale o SMAPI ou defina onde está o jogo na seção «Jogo» acima.",
-  "snackInvalidFolder": "Essa pasta não pode ser usada."
+  "snackInvalidFolder": "Essa pasta não pode ser usada.",
+  "moveToSmapiAction": "Para SMAPI",
+  "moveToNormalAction": "Para Normal",
+  "moveToSmapiTitle": "Mover {farm} para SMAPI?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "Mover {farm} para Normal?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "Você verá o save na aba SMAPI e, ao enviá-lo, ele irá para a pasta SMAPI do seu Drive.",
+  "moveToNormalBody": "Você verá o save na aba Normal e, ao enviá-lo, ele irá para a pasta normal do seu Drive.",
+  "moveAreaNoFilesTouched": "No PC, nenhum arquivo é movido nem alterado: o jogo normal e o SMAPI usam a mesma pasta de saves. Você pode movê-lo de volta quando quiser. A cópia dele na outra pasta do Drive continua onde está.",
+  "moveToSmapiConfirm": "Mover para SMAPI",
+  "moveToNormalConfirm": "Mover para Normal",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods de {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "{count} instalados neste dispositivo · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Nenhum mod encontrado na pasta Mods.",
+  "modsDialogClose": "Fechar",
+  "modKindCode": "mod de código",
+  "modKindContent": "conteúdo",
+  "modKindInvalid": "manifesto inválido",
+  "modAlwaysCarry": "levar sempre",
+  "modWithConfig": "com as configurações",
+  "modsCompatLegend": "Android: ✓ costuma funcionar · ⚠ pode falhar (mod de código) · ✗ exige uma versão do SMAPI que o Android ainda não tem."
 }

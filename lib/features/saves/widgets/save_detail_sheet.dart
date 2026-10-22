@@ -12,6 +12,7 @@ import '../../../core/models/save_file.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart';
+import 'save_area_tabs.dart' show smapiAccent;
 
 enum SaveDetailLocation { local, drive, extraDrive }
 
@@ -43,6 +44,9 @@ class _DetailSide {
     this.onShare,
     this.onBackups,
     this.backupCount = 0,
+    this.onMoveArea,
+    this.moveAreaLabel = '',
+    this.onMods,
     this.onRemove,
     this.removeLabel = '',
   });
@@ -76,6 +80,14 @@ class _DetailSide {
   /// menos uno (el caller decide, ver `backupCount`).
   final VoidCallback? onBackups;
   final int backupCount;
+
+  /// spec 010 — pasar la granja a la otra pestaña (Normal ⇄ SMAPI). Solo la
+  /// cara LOCAL, solo si hay pestaña SMAPI.
+  final VoidCallback? onMoveArea;
+  final String moveAreaLabel;
+
+  /// spec 010 F2 — mods de la partida (solo cara LOCAL de la pestaña SMAPI).
+  final VoidCallback? onMods;
 }
 
 /// Hoja inferior con los stats completos de una versión, con título de la cara,
@@ -94,6 +106,9 @@ void showSaveDetail(
   VoidCallback? onBackups,
   int backupCount = 0,
   bool backupsOnRemote = false,
+  VoidCallback? onMoveArea,
+  String? moveAreaLabel,
+  VoidCallback? onMods,
   int initialPlayerIndex = 0,
   ValueChanged<int>? onPlayerIndexChanged,
   String? initialPlayerId,
@@ -146,6 +161,9 @@ void showSaveDetail(
         onExport: onExport, // solo la cara local — nunca Drive
         onBackups: onBackups, // solo la cara local — nunca Drive
         backupCount: backupCount,
+        onMoveArea: onMoveArea, // solo la cara local — nunca Drive
+        moveAreaLabel: moveAreaLabel ?? '',
+        onMods: onMods,
       ),
     if (entry.drive != null)
       _DetailSide(
@@ -852,6 +870,26 @@ class _DetailPage extends StatelessWidget {
             side.onBackups!.call();
           },
         ),
+      if (side.onMods != null)
+        _SecondaryAction(
+          icon: Icons.widgets_outlined,
+          label: l10n.modsAction,
+          accentColor: smapiAccent,
+          onTap: () {
+            Navigator.pop(context);
+            side.onMods!.call();
+          },
+        ),
+      if (side.onMoveArea != null)
+        _SecondaryAction(
+          icon: Icons.extension_rounded,
+          label: side.moveAreaLabel,
+          accentColor: smapiAccent,
+          onTap: () {
+            Navigator.pop(context);
+            side.onMoveArea!.call();
+          },
+        ),
       if (side.onDelete != null)
         _SecondaryAction(
           key: ValueKey('save-detail-delete-${side.location.name}'),
@@ -908,16 +946,29 @@ class _DetailPage extends StatelessWidget {
       );
     }
 
-    if (secondary.isNotEmpty) {
+    // Más de 5 acciones (pestaña SMAPI, spec 010): dos filas equilibradas en
+    // vez de iconos tan estrechos que corten la etiqueta.
+    final perRow = secondary.length > 5
+        ? (secondary.length + 1) ~/ 2
+        : secondary.length;
+    for (var start = 0; start < secondary.length; start += perRow) {
+      final rowItems = secondary.sublist(
+        start,
+        (start + perRow).clamp(0, secondary.length),
+      );
       children.add(const SizedBox(height: 8));
       children.add(
         _stagger(
           staggerIndex++,
           Row(
             children: [
-              for (var i = 0; i < secondary.length; i++) ...[
+              for (var i = 0; i < perRow; i++) ...[
                 if (i > 0) const SizedBox(width: 7),
-                Expanded(child: secondary[i]),
+                Expanded(
+                  child: i < rowItems.length
+                      ? rowItems[i]
+                      : const SizedBox.shrink(),
+                ),
               ],
             ],
           ),

@@ -2374,4 +2374,76 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'ไม่สามารถใช้โฟลเดอร์นั้นได้';
+
+  @override
+  String get moveToSmapiAction => 'ไป SMAPI';
+
+  @override
+  String get moveToNormalAction => 'ไปปกติ';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'ย้าย $farm ไป SMAPI หรือไม่?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'ย้าย $farm ไปปกติหรือไม่?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'คุณจะเห็นเซฟนี้ในแท็บ SMAPI และเมื่ออัปโหลด เซฟจะไปอยู่ในโฟลเดอร์ SMAPI บน Drive ของคุณ';
+
+  @override
+  String get moveToNormalBody =>
+      'คุณจะเห็นเซฟนี้ในแท็บปกติ และเมื่ออัปโหลด เซฟจะไปอยู่ในโฟลเดอร์ปกติบน Drive ของคุณ';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'บน PC จะไม่มีไฟล์ใดถูกย้ายหรือแก้ไข: เกมปกติและ SMAPI ใช้โฟลเดอร์เซฟเดียวกัน คุณย้ายกลับได้ทุกเมื่อ ส่วนสำเนาในโฟลเดอร์ Drive อีกโฟลเดอร์จะยังอยู่ที่เดิม';
+
+  @override
+  String get moveToSmapiConfirm => 'ย้ายไป SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'ย้ายไปปกติ';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods ของ $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return 'ติดตั้งในอุปกรณ์นี้ $count รายการ · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'ไม่พบม็อดในโฟลเดอร์ Mods';
+
+  @override
+  String get modsDialogClose => 'ปิด';
+
+  @override
+  String get modKindCode => 'ม็อดโค้ด';
+
+  @override
+  String get modKindContent => 'เนื้อหา';
+
+  @override
+  String get modKindInvalid => 'manifest ไม่ถูกต้อง';
+
+  @override
+  String get modAlwaysCarry => 'นำไปด้วยเสมอ';
+
+  @override
+  String get modWithConfig => 'พร้อมการตั้งค่า';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ มักใช้งานได้ · ⚠ อาจล้มเหลว (ม็อดโค้ด) · ✗ ต้องใช้ SMAPI เวอร์ชันที่ Android ยังไม่มี';
 }

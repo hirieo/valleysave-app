@@ -4170,6 +4170,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That folder can’t be used.'**
   String get snackInvalidFolder;
+
+  /// No description provided for @moveToSmapiAction.
+  ///
+  /// In en, this message translates to:
+  /// **'To SMAPI'**
+  String get moveToSmapiAction;
+
+  /// No description provided for @moveToNormalAction.
+  ///
+  /// In en, this message translates to:
+  /// **'To Normal'**
+  String get moveToNormalAction;
+
+  /// No description provided for @moveToSmapiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Move {farm} to SMAPI?'**
+  String moveToSmapiTitle(String farm);
+
+  /// No description provided for @moveToNormalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Move {farm} to Normal?'**
+  String moveToNormalTitle(String farm);
+
+  /// No description provided for @moveToSmapiBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ll see it in the SMAPI tab and, when you upload it, it will go to the SMAPI folder in your Drive.'**
+  String get moveToSmapiBody;
+
+  /// No description provided for @moveToNormalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ll see it in the Normal tab and, when you upload it, it will go to the normal folder in your Drive.'**
+  String get moveToNormalBody;
+
+  /// No description provided for @moveAreaNoFilesTouched.
+  ///
+  /// In en, this message translates to:
+  /// **'On PC no file is moved or changed: the normal game and SMAPI use the same saves folder. You can move it back whenever you want. Its copy in the other Drive folder stays where it is.'**
+  String get moveAreaNoFilesTouched;
+
+  /// No description provided for @moveToSmapiConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to SMAPI'**
+  String get moveToSmapiConfirm;
+
+  /// No description provided for @moveToNormalConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to Normal'**
+  String get moveToNormalConfirm;
+
+  /// No description provided for @modsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Mods'**
+  String get modsAction;
+
+  /// No description provided for @modsDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mods for {farm}'**
+  String modsDialogTitle(String farm);
+
+  /// No description provided for @modsDialogSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} installed on this device · SMAPI {version}'**
+  String modsDialogSubtitle(int count, String version);
+
+  /// No description provided for @modsDialogEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No mods found in the Mods folder.'**
+  String get modsDialogEmpty;
+
+  /// No description provided for @modsDialogClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get modsDialogClose;
+
+  /// No description provided for @modKindCode.
+  ///
+  /// In en, this message translates to:
+  /// **'code mod'**
+  String get modKindCode;
+
+  /// No description provided for @modKindContent.
+  ///
+  /// In en, this message translates to:
+  /// **'content'**
+  String get modKindContent;
+
+  /// No description provided for @modKindInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'invalid manifest'**
+  String get modKindInvalid;
+
+  /// No description provided for @modAlwaysCarry.
+  ///
+  /// In en, this message translates to:
+  /// **'always bring'**
+  String get modAlwaysCarry;
+
+  /// No description provided for @modWithConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'with its settings'**
+  String get modWithConfig;
+
+  /// No description provided for @modsCompatLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Android: ✓ usually works · ⚠ may fail (code mod) · ✗ needs a SMAPI version Android doesn’t have yet.'**
+  String get modsCompatLegend;
 }
 
 class _AppLocalizationsDelegate

@@ -2406,4 +2406,76 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Ce dossier ne peut pas être utilisé.';
+
+  @override
+  String get moveToSmapiAction => 'Vers SMAPI';
+
+  @override
+  String get moveToNormalAction => 'Vers Normal';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'Déplacer $farm vers SMAPI ?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'Déplacer $farm vers Normal ?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'Vous la verrez dans l\'onglet SMAPI et, quand vous l\'enverrez, elle ira dans le dossier SMAPI de votre Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'Vous la verrez dans l\'onglet Normal et, quand vous l\'enverrez, elle ira dans le dossier normal de votre Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'Sur PC, aucun fichier n\'est déplacé ni modifié : le jeu normal et SMAPI utilisent le même dossier de sauvegardes. Vous pouvez la ramener quand vous voulez. Sa copie dans l\'autre dossier Drive reste où elle est.';
+
+  @override
+  String get moveToSmapiConfirm => 'Déplacer vers SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Déplacer vers Normal';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods de $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count installés sur cet appareil · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Aucun mod trouvé dans le dossier Mods.';
+
+  @override
+  String get modsDialogClose => 'Fermer';
+
+  @override
+  String get modKindCode => 'mod de code';
+
+  @override
+  String get modKindContent => 'contenu';
+
+  @override
+  String get modKindInvalid => 'manifeste invalide';
+
+  @override
+  String get modAlwaysCarry => 'toujours emporter';
+
+  @override
+  String get modWithConfig => 'avec ses réglages';
+
+  @override
+  String get modsCompatLegend =>
+      'Android : ✓ fonctionne en général · ⚠ peut échouer (mod de code) · ✗ exige une version de SMAPI qu\'Android n\'a pas encore.';
 }

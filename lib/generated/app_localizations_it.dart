@@ -2398,4 +2398,76 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Quella cartella non può essere usata.';
+
+  @override
+  String get moveToSmapiAction => 'In SMAPI';
+
+  @override
+  String get moveToNormalAction => 'In Normale';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'Spostare $farm in SMAPI?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'Spostare $farm in Normale?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'Lo vedrai nella scheda SMAPI e, quando lo carichi, andrà nella cartella SMAPI del tuo Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'Lo vedrai nella scheda Normale e, quando lo carichi, andrà nella cartella normale del tuo Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'Su PC nessun file viene spostato o modificato: il gioco normale e SMAPI usano la stessa cartella dei salvataggi. Puoi spostarlo di nuovo quando vuoi. La sua copia nell\'altra cartella di Drive resta dov\'è.';
+
+  @override
+  String get moveToSmapiConfirm => 'Sposta in SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Sposta in Normale';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods di $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count installati su questo dispositivo · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Nessuna mod trovata nella cartella Mods.';
+
+  @override
+  String get modsDialogClose => 'Chiudi';
+
+  @override
+  String get modKindCode => 'mod di codice';
+
+  @override
+  String get modKindContent => 'contenuto';
+
+  @override
+  String get modKindInvalid => 'manifest non valido';
+
+  @override
+  String get modAlwaysCarry => 'porta sempre';
+
+  @override
+  String get modWithConfig => 'con le sue impostazioni';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ di solito funziona · ⚠ può non funzionare (mod di codice) · ✗ richiede una versione di SMAPI che Android non ha ancora.';
 }

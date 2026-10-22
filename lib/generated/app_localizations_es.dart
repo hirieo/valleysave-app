@@ -2390,4 +2390,76 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Esa carpeta no se puede usar.';
+
+  @override
+  String get moveToSmapiAction => 'A SMAPI';
+
+  @override
+  String get moveToNormalAction => 'A Normal';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '¿Pasar $farm a SMAPI?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '¿Pasar $farm a Normal?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'La verás en la pestaña SMAPI y, al subirla, irá a la carpeta SMAPI de tu Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'La verás en la pestaña Normal y, al subirla, irá a la carpeta normal de tu Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'En PC no se mueve ni se toca ningún archivo: el juego normal y SMAPI usan la misma carpeta de partidas. Puedes volver a pasarla cuando quieras. Su copia en la otra carpeta de Drive se queda donde está.';
+
+  @override
+  String get moveToSmapiConfirm => 'Pasar a SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Pasar a Normal';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods de $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count instalados en este equipo · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'No hay mods en la carpeta Mods.';
+
+  @override
+  String get modsDialogClose => 'Cerrar';
+
+  @override
+  String get modKindCode => 'mod de código';
+
+  @override
+  String get modKindContent => 'contenido';
+
+  @override
+  String get modKindInvalid => 'manifiesto no válido';
+
+  @override
+  String get modAlwaysCarry => 'llevar siempre';
+
+  @override
+  String get modWithConfig => 'con sus ajustes';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ suele funcionar · ⚠ puede fallar (mod de código) · ✗ pide una versión de SMAPI que Android aún no tiene.';
 }

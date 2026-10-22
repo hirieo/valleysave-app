@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "Изменить Mods…",
   "settingsSmapiSearch": "Найти",
   "settingsSmapiNotFoundHint": "Установите SMAPI или укажите расположение игры в разделе «Игра» выше.",
-  "snackInvalidFolder": "Эту папку нельзя использовать."
+  "snackInvalidFolder": "Эту папку нельзя использовать.",
+  "moveToSmapiAction": "В SMAPI",
+  "moveToNormalAction": "В Обычные",
+  "moveToSmapiTitle": "Перенести {farm} в SMAPI?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "Перенести {farm} в «Обычные»?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "Вы увидите сохранение во вкладке SMAPI, а при загрузке оно попадёт в папку SMAPI на вашем Drive.",
+  "moveToNormalBody": "Вы увидите сохранение во вкладке «Обычные», а при загрузке оно попадёт в обычную папку на вашем Drive.",
+  "moveAreaNoFilesTouched": "На ПК файлы не перемещаются и не изменяются: обычная игра и SMAPI используют одну папку сохранений. Вы можете вернуть сохранение обратно в любой момент. Его копия в другой папке Drive останется на месте.",
+  "moveToSmapiConfirm": "Перенести в SMAPI",
+  "moveToNormalConfirm": "Перенести в «Обычные»",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods: {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "Установлено на этом устройстве: {count} · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "В папке Mods моды не найдены.",
+  "modsDialogClose": "Закрыть",
+  "modKindCode": "мод с кодом",
+  "modKindContent": "контент",
+  "modKindInvalid": "неверный манифест",
+  "modAlwaysCarry": "всегда брать",
+  "modWithConfig": "с настройками",
+  "modsCompatLegend": "Android: ✓ обычно работает · ⚠ может не работать (мод с кодом) · ✗ требует версию SMAPI, которой для Android пока нет."
 }

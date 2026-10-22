@@ -2405,4 +2405,76 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Dieser Ordner kann nicht verwendet werden.';
+
+  @override
+  String get moveToSmapiAction => 'Zu SMAPI';
+
+  @override
+  String get moveToNormalAction => 'Zu Normal';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '$farm zu SMAPI verschieben?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '$farm zu Normal verschieben?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'Du findest ihn im Tab „SMAPI“ und beim Hochladen landet er im SMAPI-Ordner auf deinem Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'Du findest ihn im Tab „Normal“ und beim Hochladen landet er im normalen Ordner auf deinem Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'Am PC wird keine Datei verschoben oder verändert: Das normale Spiel und SMAPI verwenden denselben Speicherordner. Du kannst ihn jederzeit zurückverschieben. Seine Kopie im anderen Drive-Ordner bleibt, wo sie ist.';
+
+  @override
+  String get moveToSmapiConfirm => 'Zu SMAPI verschieben';
+
+  @override
+  String get moveToNormalConfirm => 'Zu Normal verschieben';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods von $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count auf diesem Gerät installiert · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Keine Mods im Mods-Ordner gefunden.';
+
+  @override
+  String get modsDialogClose => 'Schließen';
+
+  @override
+  String get modKindCode => 'Code-Mod';
+
+  @override
+  String get modKindContent => 'Inhalt';
+
+  @override
+  String get modKindInvalid => 'ungültiges Manifest';
+
+  @override
+  String get modAlwaysCarry => 'immer mitnehmen';
+
+  @override
+  String get modWithConfig => 'mit Einstellungen';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ funktioniert meist · ⚠ kann fehlschlagen (Code-Mod) · ✗ benötigt eine SMAPI-Version, die es für Android noch nicht gibt.';
 }

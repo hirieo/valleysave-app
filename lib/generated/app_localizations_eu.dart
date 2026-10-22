@@ -2398,4 +2398,76 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Karpeta hori ezin da erabili.';
+
+  @override
+  String get moveToSmapiAction => 'SMAPIra';
+
+  @override
+  String get moveToNormalAction => 'Normalera';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '$farm SMAPIra eraman?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '$farm Normalera eraman?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'SMAPI fitxan ikusiko duzu eta, igotzean, zure Drive-ko SMAPI karpetara joango da.';
+
+  @override
+  String get moveToNormalBody =>
+      'Normala fitxan ikusiko duzu eta, igotzean, zure Drive-ko karpeta normalera joango da.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'PCan ez da fitxategirik mugitzen edo aldatzen: joko normalak eta SMAPIk gordetakoen karpeta bera erabiltzen dute. Nahi duzunean itzul dezakezu. Bere kopia Drive-ko beste karpetan dagoen lekuan geratzen da.';
+
+  @override
+  String get moveToSmapiConfirm => 'Eraman SMAPIra';
+
+  @override
+  String get moveToNormalConfirm => 'Eraman Normalera';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods: $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count instalatuta gailu honetan · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Ez da mod-ik aurkitu Mods karpetan.';
+
+  @override
+  String get modsDialogClose => 'Itxi';
+
+  @override
+  String get modKindCode => 'kodezko mod';
+
+  @override
+  String get modKindContent => 'edukia';
+
+  @override
+  String get modKindInvalid => 'manifestu baliogabea';
+
+  @override
+  String get modAlwaysCarry => 'eraman beti';
+
+  @override
+  String get modWithConfig => 'bere ezarpenekin';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ normalean funtzionatzen du · ⚠ huts egin dezake (kodezko mod) · ✗ Androidek oraindik ez duen SMAPI bertsio bat behar du.';
 }

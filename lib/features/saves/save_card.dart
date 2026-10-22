@@ -110,6 +110,9 @@ class SaveCard extends StatefulWidget {
     this.onExport,
     this.onShare,
     this.onBackups,
+    this.onMoveArea,
+    this.moveAreaLabel,
+    this.onMods,
     this.backupCount = 0,
     this.footer,
     this.footerBuilder,
@@ -129,6 +132,9 @@ class SaveCard extends StatefulWidget {
   final VoidCallback? onExport; // F1 — solo cara local
   final VoidCallback? onShare; // F2 — solo cara Mi Drive
   final VoidCallback? onBackups; // spec 007 — solo cara local
+  final VoidCallback? onMoveArea; // spec 010 — solo cara local
+  final String? moveAreaLabel;
+  final VoidCallback? onMods; // spec 010 F2 — solo cara local
   final int backupCount;
 
   /// spec 009 (Capa 2, D7-D9): estado del chip `⚡ AUTO` de ESTA partida
@@ -253,6 +259,9 @@ class _SaveCardState extends State<SaveCard> {
                 onExport: widget.onExport,
                 onShare: widget.onShare,
                 onBackups: widget.onBackups,
+                onMoveArea: widget.onMoveArea,
+                moveAreaLabel: widget.moveAreaLabel,
+                onMods: widget.onMods,
                 backupCount: widget.backupCount,
                 autoSyncEnabled: widget.autoSyncEnabled,
                 onToggleAutoSync: widget.onToggleAutoSync,
@@ -1326,6 +1335,9 @@ class _PresenceRow extends StatelessWidget {
     this.onExport,
     this.onShare,
     this.onBackups,
+    this.onMoveArea,
+    this.moveAreaLabel,
+    this.onMods,
     this.backupCount = 0,
     this.autoSyncEnabled = false,
     this.onToggleAutoSync,
@@ -1348,6 +1360,9 @@ class _PresenceRow extends StatelessWidget {
   final VoidCallback? onExport;
   final VoidCallback? onShare;
   final VoidCallback? onBackups;
+  final VoidCallback? onMoveArea; // spec 010 — solo cara local
+  final String? moveAreaLabel;
+  final VoidCallback? onMods; // spec 010 F2 — solo cara local
   final int backupCount;
 
   @override
@@ -1387,6 +1402,9 @@ class _PresenceRow extends StatelessWidget {
                 onExport: onExport,
                 onShare: onShare,
                 onBackups: onBackups,
+                onMoveArea: onMoveArea,
+                moveAreaLabel: moveAreaLabel,
+                onMods: onMods,
                 backupCount: backupCount,
                 autoSyncEnabled: autoSyncEnabled,
                 onToggleAutoSync: onToggleAutoSync,
@@ -1412,6 +1430,9 @@ class _PresenceRow extends StatelessWidget {
                 onExport: onExport,
                 onShare: onShare,
                 onBackups: onBackups,
+                onMoveArea: onMoveArea,
+                moveAreaLabel: moveAreaLabel,
+                onMods: onMods,
                 backupCount: backupCount,
                 autoSyncEnabled: autoSyncEnabled,
                 onToggleAutoSync: onToggleAutoSync,
@@ -1443,6 +1464,9 @@ class _SideTile extends StatefulWidget {
     this.onExport,
     this.onShare,
     this.onBackups,
+    this.onMoveArea,
+    this.moveAreaLabel,
+    this.onMods,
     this.backupCount = 0,
     this.autoSyncEnabled = false,
     this.onToggleAutoSync,
@@ -1467,6 +1491,9 @@ class _SideTile extends StatefulWidget {
   final VoidCallback? onExport;
   final VoidCallback? onShare;
   final VoidCallback? onBackups;
+  final VoidCallback? onMoveArea; // spec 010 — solo cara local
+  final String? moveAreaLabel;
+  final VoidCallback? onMods; // spec 010 F2 — solo cara local
   final int backupCount;
 
   @override
@@ -1520,6 +1547,9 @@ class _SideTileState extends State<_SideTile> {
       onExport: widget.onExport,
       onShare: widget.onShare,
       onBackups: widget.onBackups,
+      onMoveArea: widget.onMoveArea,
+      moveAreaLabel: widget.moveAreaLabel,
+      onMods: widget.onMods,
       backupCount: widget.backupCount,
       initialPlayerId: widget.selectedPlayerId,
       onPlayerIdChanged: widget.onPlayerIdChanged,

@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "Mods aldatu…",
   "settingsSmapiSearch": "Bilatu",
   "settingsSmapiNotFoundHint": "Instalatu SMAPI, edo ezarri non dagoen jokoa goiko “Jokoa” atalean.",
-  "snackInvalidFolder": "Karpeta hori ezin da erabili."
+  "snackInvalidFolder": "Karpeta hori ezin da erabili.",
+  "moveToSmapiAction": "SMAPIra",
+  "moveToNormalAction": "Normalera",
+  "moveToSmapiTitle": "{farm} SMAPIra eraman?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "{farm} Normalera eraman?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "SMAPI fitxan ikusiko duzu eta, igotzean, zure Drive-ko SMAPI karpetara joango da.",
+  "moveToNormalBody": "Normala fitxan ikusiko duzu eta, igotzean, zure Drive-ko karpeta normalera joango da.",
+  "moveAreaNoFilesTouched": "PCan ez da fitxategirik mugitzen edo aldatzen: joko normalak eta SMAPIk gordetakoen karpeta bera erabiltzen dute. Nahi duzunean itzul dezakezu. Bere kopia Drive-ko beste karpetan dagoen lekuan geratzen da.",
+  "moveToSmapiConfirm": "Eraman SMAPIra",
+  "moveToNormalConfirm": "Eraman Normalera",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods: {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "{count} instalatuta gailu honetan · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Ez da mod-ik aurkitu Mods karpetan.",
+  "modsDialogClose": "Itxi",
+  "modKindCode": "kodezko mod",
+  "modKindContent": "edukia",
+  "modKindInvalid": "manifestu baliogabea",
+  "modAlwaysCarry": "eraman beti",
+  "modWithConfig": "bere ezarpenekin",
+  "modsCompatLegend": "Android: ✓ normalean funtzionatzen du · ⚠ huts egin dezake (kodezko mod) · ✗ Androidek oraindik ez duen SMAPI bertsio bat behar du."
 }

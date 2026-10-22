@@ -1187,5 +1187,56 @@
   "settingsSmapiChangeMods": "Mods を変更…",
   "settingsSmapiSearch": "検索",
   "settingsSmapiNotFoundHint": "SMAPI をインストールするか、上の「ゲーム」セクションでゲームの場所を指定してください。",
-  "snackInvalidFolder": "そのフォルダは使用できません。"
+  "snackInvalidFolder": "そのフォルダは使用できません。",
+  "moveToSmapiAction": "SMAPIへ",
+  "moveToNormalAction": "通常へ",
+  "moveToSmapiTitle": "{farm}をSMAPIに移動しますか?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "{farm}を通常に移動しますか?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "SMAPIタブに表示され、アップロードするとDriveのSMAPIフォルダに保存されます。",
+  "moveToNormalBody": "通常タブに表示され、アップロードするとDriveの通常フォルダに保存されます。",
+  "moveAreaNoFilesTouched": "PCではファイルの移動や変更は行われません。通常のゲームとSMAPIは同じセーブフォルダを使用します。いつでも元に戻せます。もう一方のDriveフォルダにあるコピーはそのまま残ります。",
+  "moveToSmapiConfirm": "SMAPIに移動",
+  "moveToNormalConfirm": "通常に移動",
+  "modsAction": "Mods",
+  "modsDialogTitle": "{farm}のMods",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "このデバイスに{count}件インストール済み · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Modsフォルダにmodが見つかりません。",
+  "modsDialogClose": "閉じる",
+  "modKindCode": "コードmod",
+  "modKindContent": "コンテンツ",
+  "modKindInvalid": "無効なマニフェスト",
+  "modAlwaysCarry": "常に同梱",
+  "modWithConfig": "設定も同梱",
+  "modsCompatLegend": "Android：✓ 通常は動作します · ⚠ 失敗する可能性あり（コードmod） · ✗ Androidにまだない SMAPI バージョンが必要です。"
 }

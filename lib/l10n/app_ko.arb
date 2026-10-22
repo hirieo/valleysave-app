@@ -1187,5 +1187,56 @@
   "settingsSmapiChangeMods": "Mods 변경…",
   "settingsSmapiSearch": "검색",
   "settingsSmapiNotFoundHint": "SMAPI를 설치하거나 위의 “게임” 섹션에서 게임 위치를 지정하세요.",
-  "snackInvalidFolder": "해당 폴더는 사용할 수 없습니다."
+  "snackInvalidFolder": "해당 폴더는 사용할 수 없습니다.",
+  "moveToSmapiAction": "SMAPI로",
+  "moveToNormalAction": "일반으로",
+  "moveToSmapiTitle": "{farm}을(를) SMAPI로 이동할까요?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "{farm}을(를) 일반으로 이동할까요?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "SMAPI 탭에 표시되며, 업로드하면 Drive의 SMAPI 폴더로 올라갑니다.",
+  "moveToNormalBody": "일반 탭에 표시되며, 업로드하면 Drive의 일반 폴더로 올라갑니다.",
+  "moveAreaNoFilesTouched": "PC에서는 파일이 이동되거나 변경되지 않습니다. 일반 게임과 SMAPI는 같은 저장 폴더를 사용합니다. 언제든지 다시 옮길 수 있습니다. 다른 Drive 폴더에 있는 사본은 그대로 유지됩니다.",
+  "moveToSmapiConfirm": "SMAPI로 이동",
+  "moveToNormalConfirm": "일반으로 이동",
+  "modsAction": "Mods",
+  "modsDialogTitle": "{farm}의 Mods",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "이 기기에 {count}개 설치됨 · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Mods 폴더에 모드가 없습니다.",
+  "modsDialogClose": "닫기",
+  "modKindCode": "코드 모드",
+  "modKindContent": "콘텐츠",
+  "modKindInvalid": "잘못된 매니페스트",
+  "modAlwaysCarry": "항상 포함",
+  "modWithConfig": "설정 포함",
+  "modsCompatLegend": "Android: ✓ 대체로 작동 · ⚠ 실패할 수 있음(코드 모드) · ✗ Android에 아직 없는 SMAPI 버전이 필요함."
 }

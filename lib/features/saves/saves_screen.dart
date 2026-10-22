@@ -28,6 +28,7 @@ import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
 import '../../core/services/host_swap_service.dart';
 import '../../core/services/local_save_watcher.dart';
+import '../../core/services/mod_scanner.dart';
 import '../../core/services/save_area_classifier.dart';
 import '../../core/services/save_replace_service.dart';
 import '../../core/services/save_service.dart';
@@ -48,6 +49,7 @@ import 'widgets/backup_action_button.dart';
 import 'widgets/card_focus_frame.dart';
 import 'widgets/latest_badge.dart';
 import 'widgets/save_area_tabs.dart';
+import 'widgets/save_mods_dialog.dart';
 import 'widgets/shared_folder_picker_screen.dart';
 import 'widgets/saves_top_bar.dart';
 import 'widgets/seasonal_loader.dart';
@@ -1762,6 +1764,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   Future<void> _handleLaunchGame() async {
     try {
+      // spec 010 F2 — en la pestaña SMAPI, ▶ abre el juego con mods.
+      final smapi = SmapiService.instance.install;
+      if (_area == SaveArea.smapi && smapi != null) {
+        await SmapiService.instance.launch(smapi);
+        return;
+      }
       await GameLaunchService.instance.launch();
     } catch (_) {
       if (mounted) _snack(AppLocalizations.of(context)!.snackLaunchError);
@@ -4168,6 +4176,96 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   /// F1 — conflicto de importación (US2 escenario 5, FR-008): mismo patrón
   /// visual que [_confirmDeleteLocal], nunca sobrescribe en silencio.
+  /// spec 010 F2 — mods instalados en este equipo y cuáles viajan con la
+  /// partida (mockup aprobado, bloque 2).
+  Future<void> _handleOpenMods(SaveEntry entry) async {
+    final install = SmapiService.instance.install;
+    if (install == null) return;
+    final mods = await ModScanner.scan(install.modsDir);
+    if (!mounted) return;
+    await showSaveModsDialog(
+      context,
+      farmName: entry.primary.farmName,
+      folderName: entry.folderName,
+      mods: mods,
+      smapiVersion: install.version,
+    );
+  }
+
+  /// spec 010 — pasa una granja local a la otra pestaña (mini mockup
+  /// aprobado 2026-10-23). En escritorio no toca ningún archivo: solo cambia
+  /// su clasificación, y con ella a qué carpeta de Drive sube.
+  Future<void> _handleMoveArea(SaveEntry entry) async {
+    final l10n = AppLocalizations.of(context)!;
+    final target = _area == SaveArea.normal ? SaveArea.smapi : SaveArea.normal;
+    final toSmapi = target == SaveArea.smapi;
+    final farm = entry.primary.farmName;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: _glassDialogShell(
+          accent: smapiAccent,
+          child: _dialogBody(
+            title: Text(
+              toSmapi
+                  ? l10n.moveToSmapiTitle(farm)
+                  : l10n.moveToNormalTitle(farm),
+              style: GoogleFonts.bodoniModa(
+                color: AppColors.text,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  toSmapi ? l10n.moveToSmapiBody : l10n.moveToNormalBody,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 12,
+                    height: 1.5,
+                    color: Colors.white.withValues(alpha: 0.80),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _infoBox(
+                  color: smapiAccent,
+                  icon: Icons.info_outline_rounded,
+                  text: l10n.moveAreaNoFilesTouched,
+                ),
+              ],
+            ),
+            actions: [
+              ActionBtn(
+                label: toSmapi
+                    ? l10n.moveToSmapiConfirm
+                    : l10n.moveToNormalConfirm,
+                color: smapiAccent,
+                icon: Icons.extension_rounded,
+                filled: true,
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+              ActionBtn(
+                label: l10n.cancel,
+                autofocus: true,
+                color: Colors.white.withValues(alpha: 0.55),
+                filled: false,
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    await SaveAreaClassifier.instance.setOverride(entry.folderName, target);
+    _areaCounts[target] = null;
+    await _load(silent: true);
+  }
+
   Future<bool?> _confirmImportConflict() {
     final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
@@ -6261,6 +6359,19 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                           onBackups: visibleEntries[i].local != null
                               ? () => _handleOpenBackups(visibleEntries[i])
                               : null,
+                          onMoveArea:
+                              _splitByArea && visibleEntries[i].local != null
+                              ? () => _handleMoveArea(visibleEntries[i])
+                              : null,
+                          onMods:
+                              _area == SaveArea.smapi &&
+                                  SmapiService.instance.install != null &&
+                                  visibleEntries[i].local != null
+                              ? () => _handleOpenMods(visibleEntries[i])
+                              : null,
+                          moveAreaLabel: _area == SaveArea.normal
+                              ? AppLocalizations.of(context)!.moveToSmapiAction
+                              : AppLocalizations.of(context)!.moveToNormalAction,
                           backupCount:
                               _backupCounts[visibleEntries[i].folderName] ?? 0,
                           autoSyncEnabled: _isAutoSyncEnabled(

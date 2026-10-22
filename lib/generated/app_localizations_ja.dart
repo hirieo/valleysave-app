@@ -2315,4 +2315,74 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'そのフォルダは使用できません。';
+
+  @override
+  String get moveToSmapiAction => 'SMAPIへ';
+
+  @override
+  String get moveToNormalAction => '通常へ';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '$farmをSMAPIに移動しますか?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '$farmを通常に移動しますか?';
+  }
+
+  @override
+  String get moveToSmapiBody => 'SMAPIタブに表示され、アップロードするとDriveのSMAPIフォルダに保存されます。';
+
+  @override
+  String get moveToNormalBody => '通常タブに表示され、アップロードするとDriveの通常フォルダに保存されます。';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'PCではファイルの移動や変更は行われません。通常のゲームとSMAPIは同じセーブフォルダを使用します。いつでも元に戻せます。もう一方のDriveフォルダにあるコピーはそのまま残ります。';
+
+  @override
+  String get moveToSmapiConfirm => 'SMAPIに移動';
+
+  @override
+  String get moveToNormalConfirm => '通常に移動';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return '$farmのMods';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return 'このデバイスに$count件インストール済み · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Modsフォルダにmodが見つかりません。';
+
+  @override
+  String get modsDialogClose => '閉じる';
+
+  @override
+  String get modKindCode => 'コードmod';
+
+  @override
+  String get modKindContent => 'コンテンツ';
+
+  @override
+  String get modKindInvalid => '無効なマニフェスト';
+
+  @override
+  String get modAlwaysCarry => '常に同梱';
+
+  @override
+  String get modWithConfig => '設定も同梱';
+
+  @override
+  String get modsCompatLegend =>
+      'Android：✓ 通常は動作します · ⚠ 失敗する可能性あり（コードmod） · ✗ Androidにまだない SMAPI バージョンが必要です。';
 }

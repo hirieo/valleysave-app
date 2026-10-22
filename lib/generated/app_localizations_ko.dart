@@ -2320,4 +2320,74 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => '해당 폴더는 사용할 수 없습니다.';
+
+  @override
+  String get moveToSmapiAction => 'SMAPI로';
+
+  @override
+  String get moveToNormalAction => '일반으로';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '$farm을(를) SMAPI로 이동할까요?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '$farm을(를) 일반으로 이동할까요?';
+  }
+
+  @override
+  String get moveToSmapiBody => 'SMAPI 탭에 표시되며, 업로드하면 Drive의 SMAPI 폴더로 올라갑니다.';
+
+  @override
+  String get moveToNormalBody => '일반 탭에 표시되며, 업로드하면 Drive의 일반 폴더로 올라갑니다.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'PC에서는 파일이 이동되거나 변경되지 않습니다. 일반 게임과 SMAPI는 같은 저장 폴더를 사용합니다. 언제든지 다시 옮길 수 있습니다. 다른 Drive 폴더에 있는 사본은 그대로 유지됩니다.';
+
+  @override
+  String get moveToSmapiConfirm => 'SMAPI로 이동';
+
+  @override
+  String get moveToNormalConfirm => '일반으로 이동';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return '$farm의 Mods';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '이 기기에 $count개 설치됨 · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Mods 폴더에 모드가 없습니다.';
+
+  @override
+  String get modsDialogClose => '닫기';
+
+  @override
+  String get modKindCode => '코드 모드';
+
+  @override
+  String get modKindContent => '콘텐츠';
+
+  @override
+  String get modKindInvalid => '잘못된 매니페스트';
+
+  @override
+  String get modAlwaysCarry => '항상 포함';
+
+  @override
+  String get modWithConfig => '설정 포함';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ 대체로 작동 · ⚠ 실패할 수 있음(코드 모드) · ✗ Android에 아직 없는 SMAPI 버전이 필요함.';
 }

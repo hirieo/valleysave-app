@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "Modifier Mods…",
   "settingsSmapiSearch": "Rechercher",
   "settingsSmapiNotFoundHint": "Installez SMAPI, ou indiquez où se trouve le jeu dans la section « Jeu » ci-dessus.",
-  "snackInvalidFolder": "Ce dossier ne peut pas être utilisé."
+  "snackInvalidFolder": "Ce dossier ne peut pas être utilisé.",
+  "moveToSmapiAction": "Vers SMAPI",
+  "moveToNormalAction": "Vers Normal",
+  "moveToSmapiTitle": "Déplacer {farm} vers SMAPI ?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "Déplacer {farm} vers Normal ?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "Vous la verrez dans l'onglet SMAPI et, quand vous l'enverrez, elle ira dans le dossier SMAPI de votre Drive.",
+  "moveToNormalBody": "Vous la verrez dans l'onglet Normal et, quand vous l'enverrez, elle ira dans le dossier normal de votre Drive.",
+  "moveAreaNoFilesTouched": "Sur PC, aucun fichier n'est déplacé ni modifié : le jeu normal et SMAPI utilisent le même dossier de sauvegardes. Vous pouvez la ramener quand vous voulez. Sa copie dans l'autre dossier Drive reste où elle est.",
+  "moveToSmapiConfirm": "Déplacer vers SMAPI",
+  "moveToNormalConfirm": "Déplacer vers Normal",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods de {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "{count} installés sur cet appareil · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Aucun mod trouvé dans le dossier Mods.",
+  "modsDialogClose": "Fermer",
+  "modKindCode": "mod de code",
+  "modKindContent": "contenu",
+  "modKindInvalid": "manifeste invalide",
+  "modAlwaysCarry": "toujours emporter",
+  "modWithConfig": "avec ses réglages",
+  "modsCompatLegend": "Android : ✓ fonctionne en général · ⚠ peut échouer (mod de code) · ✗ exige une version de SMAPI qu'Android n'a pas encore."
 }

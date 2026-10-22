@@ -2380,4 +2380,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'That folder can’t be used.';
+
+  @override
+  String get moveToSmapiAction => 'To SMAPI';
+
+  @override
+  String get moveToNormalAction => 'To Normal';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'Move $farm to SMAPI?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'Move $farm to Normal?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'You’ll see it in the SMAPI tab and, when you upload it, it will go to the SMAPI folder in your Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'You’ll see it in the Normal tab and, when you upload it, it will go to the normal folder in your Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'On PC no file is moved or changed: the normal game and SMAPI use the same saves folder. You can move it back whenever you want. Its copy in the other Drive folder stays where it is.';
+
+  @override
+  String get moveToSmapiConfirm => 'Move to SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Move to Normal';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods for $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count installed on this device · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'No mods found in the Mods folder.';
+
+  @override
+  String get modsDialogClose => 'Close';
+
+  @override
+  String get modKindCode => 'code mod';
+
+  @override
+  String get modKindContent => 'content';
+
+  @override
+  String get modKindInvalid => 'invalid manifest';
+
+  @override
+  String get modAlwaysCarry => 'always bring';
+
+  @override
+  String get modWithConfig => 'with its settings';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ usually works · ⚠ may fail (code mod) · ✗ needs a SMAPI version Android doesn’t have yet.';
 }

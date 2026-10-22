@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "更改 Mods…",
   "settingsSmapiSearch": "搜索",
   "settingsSmapiNotFoundHint": "请安装 SMAPI，或在上方“游戏”部分指定游戏所在位置。",
-  "snackInvalidFolder": "无法使用该文件夹。"
+  "snackInvalidFolder": "无法使用该文件夹。",
+  "moveToSmapiAction": "转到 SMAPI",
+  "moveToNormalAction": "转到普通",
+  "moveToSmapiTitle": "将 {farm} 移到 SMAPI？",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "将 {farm} 移到普通？",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "你会在 SMAPI 标签页看到它，上传时它会进入 Drive 中的 SMAPI 文件夹。",
+  "moveToNormalBody": "你会在普通标签页看到它，上传时它会进入 Drive 中的普通文件夹。",
+  "moveAreaNoFilesTouched": "在 PC 上不会移动或更改任何文件：普通游戏和 SMAPI 使用同一个存档文件夹。你可以随时移回。它在另一个 Drive 文件夹中的副本保持原样。",
+  "moveToSmapiConfirm": "移到 SMAPI",
+  "moveToNormalConfirm": "移到普通",
+  "modsAction": "Mods",
+  "modsDialogTitle": "{farm} 的 Mods",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "此设备上已安装 {count} 个 · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "Mods 文件夹中没有找到 mod。",
+  "modsDialogClose": "关闭",
+  "modKindCode": "代码 mod",
+  "modKindContent": "内容",
+  "modKindInvalid": "无效的清单",
+  "modAlwaysCarry": "始终携带",
+  "modWithConfig": "连同设置",
+  "modsCompatLegend": "Android：✓ 通常可用 · ⚠ 可能失败（代码 mod） · ✗ 需要 Android 尚不具备的 SMAPI 版本。"
 }

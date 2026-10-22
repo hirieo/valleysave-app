@@ -2389,4 +2389,76 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Essa pasta não pode ser usada.';
+
+  @override
+  String get moveToSmapiAction => 'Para SMAPI';
+
+  @override
+  String get moveToNormalAction => 'Para Normal';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'Mover $farm para SMAPI?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'Mover $farm para Normal?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'Você verá o save na aba SMAPI e, ao enviá-lo, ele irá para a pasta SMAPI do seu Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'Você verá o save na aba Normal e, ao enviá-lo, ele irá para a pasta normal do seu Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'No PC, nenhum arquivo é movido nem alterado: o jogo normal e o SMAPI usam a mesma pasta de saves. Você pode movê-lo de volta quando quiser. A cópia dele na outra pasta do Drive continua onde está.';
+
+  @override
+  String get moveToSmapiConfirm => 'Mover para SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Mover para Normal';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods de $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '$count instalados neste dispositivo · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Nenhum mod encontrado na pasta Mods.';
+
+  @override
+  String get modsDialogClose => 'Fechar';
+
+  @override
+  String get modKindCode => 'mod de código';
+
+  @override
+  String get modKindContent => 'conteúdo';
+
+  @override
+  String get modKindInvalid => 'manifesto inválido';
+
+  @override
+  String get modAlwaysCarry => 'levar sempre';
+
+  @override
+  String get modWithConfig => 'com as configurações';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ costuma funcionar · ⚠ pode falhar (mod de código) · ✗ exige uma versão do SMAPI que o Android ainda não tem.';
 }

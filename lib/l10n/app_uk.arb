@@ -1194,5 +1194,56 @@
   "settingsSmapiChangeMods": "Змінити Mods…",
   "settingsSmapiSearch": "Знайти",
   "settingsSmapiNotFoundHint": "Встановіть SMAPI або вкажіть, де розташована гра, у розділі «Гра» вище.",
-  "snackInvalidFolder": "Цю папку не можна використовувати."
+  "snackInvalidFolder": "Цю папку не можна використовувати.",
+  "moveToSmapiAction": "До SMAPI",
+  "moveToNormalAction": "У Звичайні",
+  "moveToSmapiTitle": "Перенести {farm} до SMAPI?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "Перенести {farm} у «Звичайні»?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "Ви побачите збереження на вкладці SMAPI, а після завантаження воно потрапить до папки SMAPI на вашому Drive.",
+  "moveToNormalBody": "Ви побачите збереження на вкладці «Звичайні», а після завантаження воно потрапить до звичайної папки на вашому Drive.",
+  "moveAreaNoFilesTouched": "На ПК жоден файл не переміщується й не змінюється: звичайна гра та SMAPI використовують одну папку збережень. Ви можете повернути збереження будь-коли. Його копія в іншій папці Drive залишиться на місці.",
+  "moveToSmapiConfirm": "Перенести до SMAPI",
+  "moveToNormalConfirm": "Перенести у «Звичайні»",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods: {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "Встановлено на цьому пристрої: {count} · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "У папці Mods модів не знайдено.",
+  "modsDialogClose": "Закрити",
+  "modKindCode": "мод із кодом",
+  "modKindContent": "вміст",
+  "modKindInvalid": "недійсний маніфест",
+  "modAlwaysCarry": "завжди брати",
+  "modWithConfig": "з налаштуваннями",
+  "modsCompatLegend": "Android: ✓ зазвичай працює · ⚠ може не спрацювати (мод із кодом) · ✗ потрібна версія SMAPI, якої для Android ще немає."
 }

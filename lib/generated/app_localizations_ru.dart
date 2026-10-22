@@ -2406,4 +2406,76 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Эту папку нельзя использовать.';
+
+  @override
+  String get moveToSmapiAction => 'В SMAPI';
+
+  @override
+  String get moveToNormalAction => 'В Обычные';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'Перенести $farm в SMAPI?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'Перенести $farm в «Обычные»?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'Вы увидите сохранение во вкладке SMAPI, а при загрузке оно попадёт в папку SMAPI на вашем Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'Вы увидите сохранение во вкладке «Обычные», а при загрузке оно попадёт в обычную папку на вашем Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'На ПК файлы не перемещаются и не изменяются: обычная игра и SMAPI используют одну папку сохранений. Вы можете вернуть сохранение обратно в любой момент. Его копия в другой папке Drive останется на месте.';
+
+  @override
+  String get moveToSmapiConfirm => 'Перенести в SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Перенести в «Обычные»';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods: $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return 'Установлено на этом устройстве: $count · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'В папке Mods моды не найдены.';
+
+  @override
+  String get modsDialogClose => 'Закрыть';
+
+  @override
+  String get modKindCode => 'мод с кодом';
+
+  @override
+  String get modKindContent => 'контент';
+
+  @override
+  String get modKindInvalid => 'неверный манифест';
+
+  @override
+  String get modAlwaysCarry => 'всегда брать';
+
+  @override
+  String get modWithConfig => 'с настройками';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ обычно работает · ⚠ может не работать (мод с кодом) · ✗ требует версию SMAPI, которой для Android пока нет.';
 }

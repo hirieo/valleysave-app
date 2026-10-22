@@ -1187,5 +1187,56 @@
   "settingsSmapiChangeMods": "เปลี่ยน Mods…",
   "settingsSmapiSearch": "ค้นหา",
   "settingsSmapiNotFoundHint": "ติดตั้ง SMAPI หรือระบุตำแหน่งของเกมในส่วน “เกม” ด้านบน",
-  "snackInvalidFolder": "ไม่สามารถใช้โฟลเดอร์นั้นได้"
+  "snackInvalidFolder": "ไม่สามารถใช้โฟลเดอร์นั้นได้",
+  "moveToSmapiAction": "ไป SMAPI",
+  "moveToNormalAction": "ไปปกติ",
+  "moveToSmapiTitle": "ย้าย {farm} ไป SMAPI หรือไม่?",
+  "@moveToSmapiTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToNormalTitle": "ย้าย {farm} ไปปกติหรือไม่?",
+  "@moveToNormalTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "moveToSmapiBody": "คุณจะเห็นเซฟนี้ในแท็บ SMAPI และเมื่ออัปโหลด เซฟจะไปอยู่ในโฟลเดอร์ SMAPI บน Drive ของคุณ",
+  "moveToNormalBody": "คุณจะเห็นเซฟนี้ในแท็บปกติ และเมื่ออัปโหลด เซฟจะไปอยู่ในโฟลเดอร์ปกติบน Drive ของคุณ",
+  "moveAreaNoFilesTouched": "บน PC จะไม่มีไฟล์ใดถูกย้ายหรือแก้ไข: เกมปกติและ SMAPI ใช้โฟลเดอร์เซฟเดียวกัน คุณย้ายกลับได้ทุกเมื่อ ส่วนสำเนาในโฟลเดอร์ Drive อีกโฟลเดอร์จะยังอยู่ที่เดิม",
+  "moveToSmapiConfirm": "ย้ายไป SMAPI",
+  "moveToNormalConfirm": "ย้ายไปปกติ",
+  "modsAction": "Mods",
+  "modsDialogTitle": "Mods ของ {farm}",
+  "@modsDialogTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogSubtitle": "ติดตั้งในอุปกรณ์นี้ {count} รายการ · SMAPI {version}",
+  "@modsDialogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDialogEmpty": "ไม่พบม็อดในโฟลเดอร์ Mods",
+  "modsDialogClose": "ปิด",
+  "modKindCode": "ม็อดโค้ด",
+  "modKindContent": "เนื้อหา",
+  "modKindInvalid": "manifest ไม่ถูกต้อง",
+  "modAlwaysCarry": "นำไปด้วยเสมอ",
+  "modWithConfig": "พร้อมการตั้งค่า",
+  "modsCompatLegend": "Android: ✓ มักใช้งานได้ · ⚠ อาจล้มเหลว (ม็อดโค้ด) · ✗ ต้องใช้ SMAPI เวอร์ชันที่ Android ยังไม่มี"
 }

@@ -2404,4 +2404,76 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => 'Цю папку не можна використовувати.';
+
+  @override
+  String get moveToSmapiAction => 'До SMAPI';
+
+  @override
+  String get moveToNormalAction => 'У Звичайні';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return 'Перенести $farm до SMAPI?';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return 'Перенести $farm у «Звичайні»?';
+  }
+
+  @override
+  String get moveToSmapiBody =>
+      'Ви побачите збереження на вкладці SMAPI, а після завантаження воно потрапить до папки SMAPI на вашому Drive.';
+
+  @override
+  String get moveToNormalBody =>
+      'Ви побачите збереження на вкладці «Звичайні», а після завантаження воно потрапить до звичайної папки на вашому Drive.';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      'На ПК жоден файл не переміщується й не змінюється: звичайна гра та SMAPI використовують одну папку збережень. Ви можете повернути збереження будь-коли. Його копія в іншій папці Drive залишиться на місці.';
+
+  @override
+  String get moveToSmapiConfirm => 'Перенести до SMAPI';
+
+  @override
+  String get moveToNormalConfirm => 'Перенести у «Звичайні»';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return 'Mods: $farm';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return 'Встановлено на цьому пристрої: $count · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'У папці Mods модів не знайдено.';
+
+  @override
+  String get modsDialogClose => 'Закрити';
+
+  @override
+  String get modKindCode => 'мод із кодом';
+
+  @override
+  String get modKindContent => 'вміст';
+
+  @override
+  String get modKindInvalid => 'недійсний маніфест';
+
+  @override
+  String get modAlwaysCarry => 'завжди брати';
+
+  @override
+  String get modWithConfig => 'з налаштуваннями';
+
+  @override
+  String get modsCompatLegend =>
+      'Android: ✓ зазвичай працює · ⚠ може не спрацювати (мод із кодом) · ✗ потрібна версія SMAPI, якої для Android ще немає.';
 }

@@ -2266,6 +2266,76 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get snackInvalidFolder => '无法使用该文件夹。';
+
+  @override
+  String get moveToSmapiAction => '转到 SMAPI';
+
+  @override
+  String get moveToNormalAction => '转到普通';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '将 $farm 移到 SMAPI？';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '将 $farm 移到普通？';
+  }
+
+  @override
+  String get moveToSmapiBody => '你会在 SMAPI 标签页看到它，上传时它会进入 Drive 中的 SMAPI 文件夹。';
+
+  @override
+  String get moveToNormalBody => '你会在普通标签页看到它，上传时它会进入 Drive 中的普通文件夹。';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      '在 PC 上不会移动或更改任何文件：普通游戏和 SMAPI 使用同一个存档文件夹。你可以随时移回。它在另一个 Drive 文件夹中的副本保持原样。';
+
+  @override
+  String get moveToSmapiConfirm => '移到 SMAPI';
+
+  @override
+  String get moveToNormalConfirm => '移到普通';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return '$farm 的 Mods';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '此设备上已安装 $count 个 · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Mods 文件夹中没有找到 mod。';
+
+  @override
+  String get modsDialogClose => '关闭';
+
+  @override
+  String get modKindCode => '代码 mod';
+
+  @override
+  String get modKindContent => '内容';
+
+  @override
+  String get modKindInvalid => '无效的清单';
+
+  @override
+  String get modAlwaysCarry => '始终携带';
+
+  @override
+  String get modWithConfig => '连同设置';
+
+  @override
+  String get modsCompatLegend =>
+      'Android：✓ 通常可用 · ⚠ 可能失败（代码 mod） · ✗ 需要 Android 尚不具备的 SMAPI 版本。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4527,4 +4597,74 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get snackInvalidFolder => '無法使用該資料夾。';
+
+  @override
+  String get moveToSmapiAction => '轉到 SMAPI';
+
+  @override
+  String get moveToNormalAction => '轉到普通';
+
+  @override
+  String moveToSmapiTitle(String farm) {
+    return '將 $farm 移到 SMAPI？';
+  }
+
+  @override
+  String moveToNormalTitle(String farm) {
+    return '將 $farm 移到普通？';
+  }
+
+  @override
+  String get moveToSmapiBody => '你會在 SMAPI 分頁看到它，上傳時它會進入 Drive 中的 SMAPI 資料夾。';
+
+  @override
+  String get moveToNormalBody => '你會在普通分頁看到它，上傳時它會進入 Drive 中的普通資料夾。';
+
+  @override
+  String get moveAreaNoFilesTouched =>
+      '在 PC 上不會移動或更改任何檔案：普通遊戲和 SMAPI 使用同一個存檔資料夾。你可以隨時移回。它在另一個 Drive 資料夾中的副本保持原樣。';
+
+  @override
+  String get moveToSmapiConfirm => '移到 SMAPI';
+
+  @override
+  String get moveToNormalConfirm => '移到普通';
+
+  @override
+  String get modsAction => 'Mods';
+
+  @override
+  String modsDialogTitle(String farm) {
+    return '$farm 的 Mods';
+  }
+
+  @override
+  String modsDialogSubtitle(int count, String version) {
+    return '此設備上已安裝 $count 個 · SMAPI $version';
+  }
+
+  @override
+  String get modsDialogEmpty => 'Mods 資料夾中沒有找到 mod。';
+
+  @override
+  String get modsDialogClose => '關閉';
+
+  @override
+  String get modKindCode => '程式碼 mod';
+
+  @override
+  String get modKindContent => '內容';
+
+  @override
+  String get modKindInvalid => '無效的清單';
+
+  @override
+  String get modAlwaysCarry => '一律攜帶';
+
+  @override
+  String get modWithConfig => '連同設定';
+
+  @override
+  String get modsCompatLegend =>
+      'Android：✓ 通常可用 · ⚠ 可能失敗（程式碼 mod） · ✗ 需要 Android 尚未具備的 SMAPI 版本。';
 }

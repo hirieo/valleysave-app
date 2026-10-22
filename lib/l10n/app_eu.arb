@@ -1245,5 +1245,106 @@
   "modKindInvalid": "manifestu baliogabea",
   "modAlwaysCarry": "eraman beti",
   "modWithConfig": "bere ezarpenekin",
-  "modsCompatLegend": "Android: ✓ normalean funtzionatzen du · ⚠ huts egin dezake (kodezko mod) · ✗ Androidek oraindik ez duen SMAPI bertsio bat behar du."
+  "modsCompatLegend": "Android: ✓ normalean funtzionatzen du · ⚠ huts egin dezake (kodezko mod) · ✗ Androidek oraindik ez duen SMAPI bertsio bat behar du.",
+  "modsUploadAction": "Igo {count} mod Drive-ra",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "Igotzen…",
+  "modsDownloadTitle": "{farm}: {count} mod erabiltzen ditu",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "Aukeratu zein instalatu gailu honetan. Dagoeneko bertsio berean dituzunak ez dira ukitzen.",
+  "modsDownloadWarning": "Kontuz: partida {mods} gabe irekitzen baduzu, bertako objektuak eta herritarrak desager daitezke. Ordezkatzen diren mod-ak aurrez babeskopiatzen dira.",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "Deskargatu + {count} mod",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "Gordetzea soilik",
+  "modsNeedUpdate": "eguneratu",
+  "modsNeedNew": "berria",
+  "modsNeedNotInDrive": "ez dago Drive-n",
+  "modsNeedUpdateDetail": "Drive v{drive} · hemen v{here} → eguneratuko da",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · instalatu gabe",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "Igo ezazu daukan gailutik, edo instalatu eskuz.",
+  "modsNeedUnsupportedHere": "ez dabil plataforma honetan",
+  "snackModsUploaded": "Mods igota: {done} · hutsegiteak: {failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "Mods instalatuta: {done} · hutsegiteak: {failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "Igo eta deskargatu bere mod-ak partidarekin batera",
+  "modUpdateAvailable": "v{version} eskuragarri",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "Ezin izan da mod-en bertsio berririk dagoen egiaztatu ({reason}).",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

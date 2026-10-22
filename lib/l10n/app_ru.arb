@@ -1245,5 +1245,106 @@
   "modKindInvalid": "неверный манифест",
   "modAlwaysCarry": "всегда брать",
   "modWithConfig": "с настройками",
-  "modsCompatLegend": "Android: ✓ обычно работает · ⚠ может не работать (мод с кодом) · ✗ требует версию SMAPI, которой для Android пока нет."
+  "modsCompatLegend": "Android: ✓ обычно работает · ⚠ может не работать (мод с кодом) · ✗ требует версию SMAPI, которой для Android пока нет.",
+  "modsUploadAction": "Загрузить Mods на Drive ({count})",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "Загрузка…",
+  "modsDownloadTitle": "{farm} использует Mods: {count}",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "Выберите, какие установить на это устройство. Те, что уже есть в той же версии, не затрагиваются.",
+  "modsDownloadWarning": "Внимание: если открыть сохранение без {mods}, предметы и жители могут исчезнуть. Заменяемые моды сначала копируются в резерв.",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "Скачать + Mods ({count})",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "Только сохранение",
+  "modsNeedUpdate": "обновить",
+  "modsNeedNew": "новый",
+  "modsNeedNotInDrive": "нет на Drive",
+  "modsNeedUpdateDetail": "Drive v{drive} · здесь v{here} → будет обновлён",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · не установлен",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "Загрузите его с устройства, где он есть, или установите вручную.",
+  "modsNeedUnsupportedHere": "не работает на этой платформе",
+  "snackModsUploaded": "Mods загружено: {done} · с ошибкой: {failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "Mods установлено: {done} · с ошибкой: {failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "Загружать на Drive и скачивать его моды вместе с сохранением",
+  "modUpdateAvailable": "доступна v{version}",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "Не удалось проверить новые версии модов ({reason}).",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

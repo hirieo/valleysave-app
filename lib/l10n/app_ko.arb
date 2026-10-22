@@ -1238,5 +1238,106 @@
   "modKindInvalid": "잘못된 매니페스트",
   "modAlwaysCarry": "항상 포함",
   "modWithConfig": "설정 포함",
-  "modsCompatLegend": "Android: ✓ 대체로 작동 · ⚠ 실패할 수 있음(코드 모드) · ✗ Android에 아직 없는 SMAPI 버전이 필요함."
+  "modsCompatLegend": "Android: ✓ 대체로 작동 · ⚠ 실패할 수 있음(코드 모드) · ✗ Android에 아직 없는 SMAPI 버전이 필요함.",
+  "modsUploadAction": "mod {count}개를 Drive에 업로드",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "업로드 중…",
+  "modsDownloadTitle": "{farm}은(는) mod {count}개를 사용합니다",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "이 기기에 설치할 항목을 선택하세요. 이미 같은 버전이 있는 mod는 건드리지 않습니다.",
+  "modsDownloadWarning": "주의: {mods} 없이 저장을 열면 아이템과 주민이 사라질 수 있습니다. 교체되는 mod는 먼저 백업됩니다.",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "다운로드 + mod {count}개",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "저장만",
+  "modsNeedUpdate": "업데이트",
+  "modsNeedNew": "신규",
+  "modsNeedNotInDrive": "Drive에 없음",
+  "modsNeedUpdateDetail": "Drive v{drive} · 여기 v{here} → 업데이트 예정",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · 설치 안 됨",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "가지고 있는 기기에서 업로드하거나 직접 설치하세요.",
+  "modsNeedUnsupportedHere": "이 플랫폼에서는 작동하지 않음",
+  "snackModsUploaded": "mod 업로드됨: {done} · 실패: {failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "mod 설치됨: {done} · 실패: {failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "저장과 함께 mod도 업로드 및 다운로드",
+  "modUpdateAvailable": "v{version} 사용 가능",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "mod 새 버전을 확인하지 못했습니다({reason}).",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

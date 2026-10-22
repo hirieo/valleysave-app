@@ -2449,80 +2449,79 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String modsUploadAction(int count) {
-    return 'Upload $count mods to Drive';
+    return 'อัปโหลด $count ม็อดไปยัง Drive';
   }
 
   @override
-  String get modsUploading => 'Uploading…';
+  String get modsUploading => 'กำลังอัปโหลด…';
 
   @override
   String modsDownloadTitle(String farm, int count) {
-    return '$farm uses $count mods';
+    return '$farm ใช้ $count ม็อด';
   }
 
   @override
   String get modsDownloadSubtitle =>
-      'Choose which ones to install on this device. Mods you already have in the same version are not touched.';
+      'เลือกม็อดที่จะติดตั้งบนอุปกรณ์นี้ ม็อดที่มีเวอร์ชันเดียวกันอยู่แล้วจะไม่ถูกแตะต้อง';
 
   @override
   String modsDownloadWarning(String mods) {
-    return 'Heads up: if you open the save without $mods, its items and villagers may disappear. Mods that get replaced are backed up first.';
+    return 'โปรดทราบ: หากเปิดการบันทึกโดยไม่มี $mods ไอเทมและชาวบ้านอาจหายไป ม็อดที่ถูกแทนที่จะถูกสำรองไว้ก่อน';
   }
 
   @override
   String modsDownloadWithMods(int count) {
-    return 'Download + $count mods';
+    return 'ดาวน์โหลด + $count ม็อด';
   }
 
   @override
-  String get modsDownloadOnlySave => 'Only the save';
+  String get modsDownloadOnlySave => 'เฉพาะการบันทึก';
 
   @override
-  String get modsNeedUpdate => 'update';
+  String get modsNeedUpdate => 'อัปเดต';
 
   @override
-  String get modsNeedNew => 'new';
+  String get modsNeedNew => 'ใหม่';
 
   @override
-  String get modsNeedNotInDrive => 'not in Drive';
+  String get modsNeedNotInDrive => 'ไม่มีใน Drive';
 
   @override
   String modsNeedUpdateDetail(String drive, String here) {
-    return 'Drive v$drive · here v$here → will be updated';
+    return 'Drive v$drive · ที่นี่ v$here → จะอัปเดต';
   }
 
   @override
   String modsNeedNewDetail(String version) {
-    return 'Drive v$version · not installed';
+    return 'Drive v$version · ยังไม่ได้ติดตั้ง';
   }
 
   @override
-  String get modsNeedNoLink =>
-      'Upload it from the device that has it, or install it by hand.';
+  String get modsNeedNoLink => 'อัปโหลดจากอุปกรณ์ที่มีม็อดนี้ หรือติดตั้งเอง';
 
   @override
-  String get modsNeedUnsupportedHere => 'won’t work on this platform';
+  String get modsNeedUnsupportedHere => 'ใช้ไม่ได้บนแพลตฟอร์มนี้';
 
   @override
   String snackModsUploaded(int done, int failed) {
-    return 'Mods uploaded: $done · failed: $failed';
+    return 'อัปโหลดม็อดแล้ว: $done · ล้มเหลว: $failed';
   }
 
   @override
   String snackModsInstalled(int done, int failed) {
-    return 'Mods installed: $done · failed: $failed';
+    return 'ติดตั้งม็อดแล้ว: $done · ล้มเหลว: $failed';
   }
 
   @override
-  String get modsAutoSyncToggle => 'Upload and download its mods with the save';
+  String get modsAutoSyncToggle => 'อัปโหลดและดาวน์โหลดม็อดพร้อมกับการบันทึก';
 
   @override
   String modUpdateAvailable(String version) {
-    return 'v$version available';
+    return 'มี v$version ให้ใช้งาน';
   }
 
   @override
   String modsUpdateCheckFailed(String reason) {
-    return 'Couldn’t check for new mod versions ($reason).';
+    return 'ตรวจสอบม็อดเวอร์ชันใหม่ไม่ได้ ($reason)';
   }
 }

@@ -1245,5 +1245,106 @@
   "modKindInvalid": "無效的清單",
   "modAlwaysCarry": "一律攜帶",
   "modWithConfig": "連同設定",
-  "modsCompatLegend": "Android：✓ 通常可用 · ⚠ 可能失敗（程式碼 mod） · ✗ 需要 Android 尚未具備的 SMAPI 版本。"
+  "modsCompatLegend": "Android：✓ 通常可用 · ⚠ 可能失敗（程式碼 mod） · ✗ 需要 Android 尚未具備的 SMAPI 版本。",
+  "modsUploadAction": "上傳 {count} 個 mod 到 Drive",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "上傳中…",
+  "modsDownloadTitle": "{farm} 使用了 {count} 個 mod",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "選擇要在此裝置上安裝的 mod。已有相同版本的不會被更動。",
+  "modsDownloadWarning": "注意：如果在沒有 {mods} 的情況下開啟存檔，其中的物品和村民可能會消失。被取代的 mod 會先備份。",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "下載 + {count} 個 mod",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "僅存檔",
+  "modsNeedUpdate": "更新",
+  "modsNeedNew": "新增",
+  "modsNeedNotInDrive": "不在 Drive",
+  "modsNeedUpdateDetail": "Drive v{drive} · 此處 v{here} → 將更新",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · 未安裝",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "請從擁有它的裝置上傳，或手動安裝。",
+  "modsNeedUnsupportedHere": "在此平台上無法使用",
+  "snackModsUploaded": "mod 已上傳：{done} · 失敗：{failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "mod 已安裝：{done} · 失敗：{failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "隨存檔一起上傳與下載其 mod",
+  "modUpdateAvailable": "v{version} 可用",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "無法檢查 mod 的新版本（{reason}）。",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

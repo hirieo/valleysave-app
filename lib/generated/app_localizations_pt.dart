@@ -2464,80 +2464,80 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String modsUploadAction(int count) {
-    return 'Upload $count mods to Drive';
+    return 'Enviar $count mods para o Drive';
   }
 
   @override
-  String get modsUploading => 'Uploading…';
+  String get modsUploading => 'Enviando…';
 
   @override
   String modsDownloadTitle(String farm, int count) {
-    return '$farm uses $count mods';
+    return '$farm usa $count mods';
   }
 
   @override
   String get modsDownloadSubtitle =>
-      'Choose which ones to install on this device. Mods you already have in the same version are not touched.';
+      'Escolha quais instalar neste dispositivo. Os que você já tem na mesma versão não são alterados.';
 
   @override
   String modsDownloadWarning(String mods) {
-    return 'Heads up: if you open the save without $mods, its items and villagers may disappear. Mods that get replaced are backed up first.';
+    return 'Atenção: se você abrir o save sem $mods, itens e moradores podem desaparecer. Os mods substituídos recebem backup antes.';
   }
 
   @override
   String modsDownloadWithMods(int count) {
-    return 'Download + $count mods';
+    return 'Baixar + $count mods';
   }
 
   @override
-  String get modsDownloadOnlySave => 'Only the save';
+  String get modsDownloadOnlySave => 'Só o save';
 
   @override
-  String get modsNeedUpdate => 'update';
+  String get modsNeedUpdate => 'atualizar';
 
   @override
-  String get modsNeedNew => 'new';
+  String get modsNeedNew => 'novo';
 
   @override
-  String get modsNeedNotInDrive => 'not in Drive';
+  String get modsNeedNotInDrive => 'não está no Drive';
 
   @override
   String modsNeedUpdateDetail(String drive, String here) {
-    return 'Drive v$drive · here v$here → will be updated';
+    return 'Drive v$drive · aqui v$here → será atualizado';
   }
 
   @override
   String modsNeedNewDetail(String version) {
-    return 'Drive v$version · not installed';
+    return 'Drive v$version · não instalado';
   }
 
   @override
   String get modsNeedNoLink =>
-      'Upload it from the device that has it, or install it by hand.';
+      'Envie-o do dispositivo que o tem ou instale à mão.';
 
   @override
-  String get modsNeedUnsupportedHere => 'won’t work on this platform';
+  String get modsNeedUnsupportedHere => 'não funciona nesta plataforma';
 
   @override
   String snackModsUploaded(int done, int failed) {
-    return 'Mods uploaded: $done · failed: $failed';
+    return 'Mods enviados: $done · falhas: $failed';
   }
 
   @override
   String snackModsInstalled(int done, int failed) {
-    return 'Mods installed: $done · failed: $failed';
+    return 'Mods instalados: $done · falhas: $failed';
   }
 
   @override
-  String get modsAutoSyncToggle => 'Upload and download its mods with the save';
+  String get modsAutoSyncToggle => 'Enviar e baixar os mods junto com o save';
 
   @override
   String modUpdateAvailable(String version) {
-    return 'v$version available';
+    return 'v$version disponível';
   }
 
   @override
   String modsUpdateCheckFailed(String reason) {
-    return 'Couldn’t check for new mod versions ($reason).';
+    return 'Não foi possível verificar novas versões dos mods ($reason).';
   }
 }

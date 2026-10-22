@@ -2339,81 +2339,79 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String modsUploadAction(int count) {
-    return 'Upload $count mods to Drive';
+    return '上传 $count 个 mod 到 Drive';
   }
 
   @override
-  String get modsUploading => 'Uploading…';
+  String get modsUploading => '上传中…';
 
   @override
   String modsDownloadTitle(String farm, int count) {
-    return '$farm uses $count mods';
+    return '$farm 使用了 $count 个 mod';
   }
 
   @override
-  String get modsDownloadSubtitle =>
-      'Choose which ones to install on this device. Mods you already have in the same version are not touched.';
+  String get modsDownloadSubtitle => '选择要在此设备上安装的 mod。已有相同版本的不会被改动。';
 
   @override
   String modsDownloadWarning(String mods) {
-    return 'Heads up: if you open the save without $mods, its items and villagers may disappear. Mods that get replaced are backed up first.';
+    return '注意：如果在没有 $mods 的情况下打开存档，其中的物品和村民可能会消失。被替换的 mod 会先备份。';
   }
 
   @override
   String modsDownloadWithMods(int count) {
-    return 'Download + $count mods';
+    return '下载 + $count 个 mod';
   }
 
   @override
-  String get modsDownloadOnlySave => 'Only the save';
+  String get modsDownloadOnlySave => '仅存档';
 
   @override
-  String get modsNeedUpdate => 'update';
+  String get modsNeedUpdate => '更新';
 
   @override
-  String get modsNeedNew => 'new';
+  String get modsNeedNew => '新增';
 
   @override
-  String get modsNeedNotInDrive => 'not in Drive';
+  String get modsNeedNotInDrive => '不在 Drive';
 
   @override
   String modsNeedUpdateDetail(String drive, String here) {
-    return 'Drive v$drive · here v$here → will be updated';
+    return 'Drive v$drive · 此处 v$here → 将更新';
   }
 
   @override
   String modsNeedNewDetail(String version) {
-    return 'Drive v$version · not installed';
+    return 'Drive v$version · 未安装';
   }
 
   @override
-  String get modsNeedNoLink =>
-      'Upload it from the device that has it, or install it by hand.';
+  String get modsNeedNoLink => '请从拥有它的设备上传，或手动安装。';
 
   @override
-  String get modsNeedUnsupportedHere => 'won’t work on this platform';
+  String get modsNeedUnsupportedHere => '在此平台上无法使用';
 
   @override
   String snackModsUploaded(int done, int failed) {
-    return 'Mods uploaded: $done · failed: $failed';
+    return 'mod 已上传：$done · 失败：$failed';
   }
 
   @override
   String snackModsInstalled(int done, int failed) {
-    return 'Mods installed: $done · failed: $failed';
+    return 'mod 已安装：$done · 失败：$failed';
   }
 
   @override
-  String get modsAutoSyncToggle => 'Upload and download its mods with the save';
+  String get modsAutoSyncToggle => '随存档一起上传和下载其 mod';
 
   @override
   String modUpdateAvailable(String version) {
-    return 'v$version available';
+    return 'v$version 可用';
   }
 
   @override
   String modsUpdateCheckFailed(String reason) {
-    return 'Couldn’t check for new mod versions ($reason).';
+    return '无法检查 mod 的新版本（$reason）。';
   }
 }
 
@@ -4746,4 +4744,81 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get modsCompatLegend =>
       'Android：✓ 通常可用 · ⚠ 可能失敗（程式碼 mod） · ✗ 需要 Android 尚未具備的 SMAPI 版本。';
+
+  @override
+  String modsUploadAction(int count) {
+    return '上傳 $count 個 mod 到 Drive';
+  }
+
+  @override
+  String get modsUploading => '上傳中…';
+
+  @override
+  String modsDownloadTitle(String farm, int count) {
+    return '$farm 使用了 $count 個 mod';
+  }
+
+  @override
+  String get modsDownloadSubtitle => '選擇要在此裝置上安裝的 mod。已有相同版本的不會被更動。';
+
+  @override
+  String modsDownloadWarning(String mods) {
+    return '注意：如果在沒有 $mods 的情況下開啟存檔，其中的物品和村民可能會消失。被取代的 mod 會先備份。';
+  }
+
+  @override
+  String modsDownloadWithMods(int count) {
+    return '下載 + $count 個 mod';
+  }
+
+  @override
+  String get modsDownloadOnlySave => '僅存檔';
+
+  @override
+  String get modsNeedUpdate => '更新';
+
+  @override
+  String get modsNeedNew => '新增';
+
+  @override
+  String get modsNeedNotInDrive => '不在 Drive';
+
+  @override
+  String modsNeedUpdateDetail(String drive, String here) {
+    return 'Drive v$drive · 此處 v$here → 將更新';
+  }
+
+  @override
+  String modsNeedNewDetail(String version) {
+    return 'Drive v$version · 未安裝';
+  }
+
+  @override
+  String get modsNeedNoLink => '請從擁有它的裝置上傳，或手動安裝。';
+
+  @override
+  String get modsNeedUnsupportedHere => '在此平台上無法使用';
+
+  @override
+  String snackModsUploaded(int done, int failed) {
+    return 'mod 已上傳：$done · 失敗：$failed';
+  }
+
+  @override
+  String snackModsInstalled(int done, int failed) {
+    return 'mod 已安裝：$done · 失敗：$failed';
+  }
+
+  @override
+  String get modsAutoSyncToggle => '隨存檔一起上傳與下載其 mod';
+
+  @override
+  String modUpdateAvailable(String version) {
+    return 'v$version 可用';
+  }
+
+  @override
+  String modsUpdateCheckFailed(String reason) {
+    return '無法檢查 mod 的新版本（$reason）。';
+  }
 }

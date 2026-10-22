@@ -1238,5 +1238,106 @@
   "modKindInvalid": "manifest ไม่ถูกต้อง",
   "modAlwaysCarry": "นำไปด้วยเสมอ",
   "modWithConfig": "พร้อมการตั้งค่า",
-  "modsCompatLegend": "Android: ✓ มักใช้งานได้ · ⚠ อาจล้มเหลว (ม็อดโค้ด) · ✗ ต้องใช้ SMAPI เวอร์ชันที่ Android ยังไม่มี"
+  "modsCompatLegend": "Android: ✓ มักใช้งานได้ · ⚠ อาจล้มเหลว (ม็อดโค้ด) · ✗ ต้องใช้ SMAPI เวอร์ชันที่ Android ยังไม่มี",
+  "modsUploadAction": "อัปโหลด {count} ม็อดไปยัง Drive",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "กำลังอัปโหลด…",
+  "modsDownloadTitle": "{farm} ใช้ {count} ม็อด",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "เลือกม็อดที่จะติดตั้งบนอุปกรณ์นี้ ม็อดที่มีเวอร์ชันเดียวกันอยู่แล้วจะไม่ถูกแตะต้อง",
+  "modsDownloadWarning": "โปรดทราบ: หากเปิดการบันทึกโดยไม่มี {mods} ไอเทมและชาวบ้านอาจหายไป ม็อดที่ถูกแทนที่จะถูกสำรองไว้ก่อน",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "ดาวน์โหลด + {count} ม็อด",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "เฉพาะการบันทึก",
+  "modsNeedUpdate": "อัปเดต",
+  "modsNeedNew": "ใหม่",
+  "modsNeedNotInDrive": "ไม่มีใน Drive",
+  "modsNeedUpdateDetail": "Drive v{drive} · ที่นี่ v{here} → จะอัปเดต",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · ยังไม่ได้ติดตั้ง",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "อัปโหลดจากอุปกรณ์ที่มีม็อดนี้ หรือติดตั้งเอง",
+  "modsNeedUnsupportedHere": "ใช้ไม่ได้บนแพลตฟอร์มนี้",
+  "snackModsUploaded": "อัปโหลดม็อดแล้ว: {done} · ล้มเหลว: {failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "ติดตั้งม็อดแล้ว: {done} · ล้มเหลว: {failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "อัปโหลดและดาวน์โหลดม็อดพร้อมกับการบันทึก",
+  "modUpdateAvailable": "มี v{version} ให้ใช้งาน",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "ตรวจสอบม็อดเวอร์ชันใหม่ไม่ได้ ({reason})",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

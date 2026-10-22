@@ -2473,80 +2473,81 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String modsUploadAction(int count) {
-    return 'Upload $count mods to Drive';
+    return 'Igo $count mod Drive-ra';
   }
 
   @override
-  String get modsUploading => 'Uploading…';
+  String get modsUploading => 'Igotzen…';
 
   @override
   String modsDownloadTitle(String farm, int count) {
-    return '$farm uses $count mods';
+    return '$farm: $count mod erabiltzen ditu';
   }
 
   @override
   String get modsDownloadSubtitle =>
-      'Choose which ones to install on this device. Mods you already have in the same version are not touched.';
+      'Aukeratu zein instalatu gailu honetan. Dagoeneko bertsio berean dituzunak ez dira ukitzen.';
 
   @override
   String modsDownloadWarning(String mods) {
-    return 'Heads up: if you open the save without $mods, its items and villagers may disappear. Mods that get replaced are backed up first.';
+    return 'Kontuz: partida $mods gabe irekitzen baduzu, bertako objektuak eta herritarrak desager daitezke. Ordezkatzen diren mod-ak aurrez babeskopiatzen dira.';
   }
 
   @override
   String modsDownloadWithMods(int count) {
-    return 'Download + $count mods';
+    return 'Deskargatu + $count mod';
   }
 
   @override
-  String get modsDownloadOnlySave => 'Only the save';
+  String get modsDownloadOnlySave => 'Gordetzea soilik';
 
   @override
-  String get modsNeedUpdate => 'update';
+  String get modsNeedUpdate => 'eguneratu';
 
   @override
-  String get modsNeedNew => 'new';
+  String get modsNeedNew => 'berria';
 
   @override
-  String get modsNeedNotInDrive => 'not in Drive';
+  String get modsNeedNotInDrive => 'ez dago Drive-n';
 
   @override
   String modsNeedUpdateDetail(String drive, String here) {
-    return 'Drive v$drive · here v$here → will be updated';
+    return 'Drive v$drive · hemen v$here → eguneratuko da';
   }
 
   @override
   String modsNeedNewDetail(String version) {
-    return 'Drive v$version · not installed';
+    return 'Drive v$version · instalatu gabe';
   }
 
   @override
   String get modsNeedNoLink =>
-      'Upload it from the device that has it, or install it by hand.';
+      'Igo ezazu daukan gailutik, edo instalatu eskuz.';
 
   @override
-  String get modsNeedUnsupportedHere => 'won’t work on this platform';
+  String get modsNeedUnsupportedHere => 'ez dabil plataforma honetan';
 
   @override
   String snackModsUploaded(int done, int failed) {
-    return 'Mods uploaded: $done · failed: $failed';
+    return 'Mods igota: $done · hutsegiteak: $failed';
   }
 
   @override
   String snackModsInstalled(int done, int failed) {
-    return 'Mods installed: $done · failed: $failed';
+    return 'Mods instalatuta: $done · hutsegiteak: $failed';
   }
 
   @override
-  String get modsAutoSyncToggle => 'Upload and download its mods with the save';
+  String get modsAutoSyncToggle =>
+      'Igo eta deskargatu bere mod-ak partidarekin batera';
 
   @override
   String modUpdateAvailable(String version) {
-    return 'v$version available';
+    return 'v$version eskuragarri';
   }
 
   @override
   String modsUpdateCheckFailed(String reason) {
-    return 'Couldn’t check for new mod versions ($reason).';
+    return 'Ezin izan da mod-en bertsio berririk dagoen egiaztatu ($reason).';
   }
 }

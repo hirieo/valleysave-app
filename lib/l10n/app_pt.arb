@@ -1245,5 +1245,106 @@
   "modKindInvalid": "manifesto inválido",
   "modAlwaysCarry": "levar sempre",
   "modWithConfig": "com as configurações",
-  "modsCompatLegend": "Android: ✓ costuma funcionar · ⚠ pode falhar (mod de código) · ✗ exige uma versão do SMAPI que o Android ainda não tem."
+  "modsCompatLegend": "Android: ✓ costuma funcionar · ⚠ pode falhar (mod de código) · ✗ exige uma versão do SMAPI que o Android ainda não tem.",
+  "modsUploadAction": "Enviar {count} mods para o Drive",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "Enviando…",
+  "modsDownloadTitle": "{farm} usa {count} mods",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "Escolha quais instalar neste dispositivo. Os que você já tem na mesma versão não são alterados.",
+  "modsDownloadWarning": "Atenção: se você abrir o save sem {mods}, itens e moradores podem desaparecer. Os mods substituídos recebem backup antes.",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "Baixar + {count} mods",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "Só o save",
+  "modsNeedUpdate": "atualizar",
+  "modsNeedNew": "novo",
+  "modsNeedNotInDrive": "não está no Drive",
+  "modsNeedUpdateDetail": "Drive v{drive} · aqui v{here} → será atualizado",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · não instalado",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "Envie-o do dispositivo que o tem ou instale à mão.",
+  "modsNeedUnsupportedHere": "não funciona nesta plataforma",
+  "snackModsUploaded": "Mods enviados: {done} · falhas: {failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "Mods instalados: {done} · falhas: {failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "Enviar e baixar os mods junto com o save",
+  "modUpdateAvailable": "v{version} disponível",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "Não foi possível verificar novas versões dos mods ({reason}).",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

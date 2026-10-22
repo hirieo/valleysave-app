@@ -1245,5 +1245,106 @@
   "modKindInvalid": "недійсний маніфест",
   "modAlwaysCarry": "завжди брати",
   "modWithConfig": "з налаштуваннями",
-  "modsCompatLegend": "Android: ✓ зазвичай працює · ⚠ може не спрацювати (мод із кодом) · ✗ потрібна версія SMAPI, якої для Android ще немає."
+  "modsCompatLegend": "Android: ✓ зазвичай працює · ⚠ може не спрацювати (мод із кодом) · ✗ потрібна версія SMAPI, якої для Android ще немає.",
+  "modsUploadAction": "Завантажити Mods на Drive ({count})",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "Завантаження…",
+  "modsDownloadTitle": "{farm} використовує Mods: {count}",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "Виберіть, які встановити на цей пристрій. Ті, що вже є в тій самій версії, не чіпаються.",
+  "modsDownloadWarning": "Увага: якщо відкрити збереження без {mods}, предмети й жителі можуть зникнути. Моди, які замінюються, спершу копіюються в резерв.",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "Завантажити + Mods ({count})",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "Лише збереження",
+  "modsNeedUpdate": "оновити",
+  "modsNeedNew": "новий",
+  "modsNeedNotInDrive": "немає на Drive",
+  "modsNeedUpdateDetail": "Drive v{drive} · тут v{here} → буде оновлено",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · не встановлено",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "Завантажте його з пристрою, де він є, або встановіть вручну.",
+  "modsNeedUnsupportedHere": "не працює на цій платформі",
+  "snackModsUploaded": "Mods завантажено: {done} · з помилкою: {failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "Mods встановлено: {done} · з помилкою: {failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "Завантажувати на Drive і з Drive його моди разом зі збереженням",
+  "modUpdateAvailable": "доступна v{version}",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "Не вдалося перевірити нові версії модів ({reason}).",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

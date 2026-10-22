@@ -1238,5 +1238,106 @@
   "modKindInvalid": "無効なマニフェスト",
   "modAlwaysCarry": "常に同梱",
   "modWithConfig": "設定も同梱",
-  "modsCompatLegend": "Android：✓ 通常は動作します · ⚠ 失敗する可能性あり（コードmod） · ✗ Androidにまだない SMAPI バージョンが必要です。"
+  "modsCompatLegend": "Android：✓ 通常は動作します · ⚠ 失敗する可能性あり（コードmod） · ✗ Androidにまだない SMAPI バージョンが必要です。",
+  "modsUploadAction": "{count}個のmodをDriveにアップロード",
+  "@modsUploadAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsUploading": "アップロード中…",
+  "modsDownloadTitle": "{farm}は{count}個のmodを使用",
+  "@modsDownloadTitle": {
+    "placeholders": {
+      "farm": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadSubtitle": "このデバイスにインストールするものを選択してください。すでに同じバージョンがあるものは変更されません。",
+  "modsDownloadWarning": "注意：{mods}なしでセーブを開くと、アイテムや住民が消える場合があります。置き換えられるmodは事前にバックアップされます。",
+  "@modsDownloadWarning": {
+    "placeholders": {
+      "mods": {
+        "type": "String"
+      }
+    }
+  },
+  "modsDownloadWithMods": "ダウンロード + {count}個のmod",
+  "@modsDownloadWithMods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modsDownloadOnlySave": "セーブのみ",
+  "modsNeedUpdate": "更新",
+  "modsNeedNew": "新規",
+  "modsNeedNotInDrive": "Driveにない",
+  "modsNeedUpdateDetail": "Drive v{drive} · この端末 v{here} → 更新されます",
+  "@modsNeedUpdateDetail": {
+    "placeholders": {
+      "drive": {
+        "type": "String"
+      },
+      "here": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNewDetail": "Drive v{version} · 未インストール",
+  "@modsNeedNewDetail": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsNeedNoLink": "持っているデバイスからアップロードするか、手動でインストールしてください。",
+  "modsNeedUnsupportedHere": "このプラットフォームでは動作しません",
+  "snackModsUploaded": "modをアップロードしました：{done} · 失敗：{failed}",
+  "@snackModsUploaded": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "snackModsInstalled": "modをインストールしました：{done} · 失敗：{failed}",
+  "@snackModsInstalled": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "modsAutoSyncToggle": "セーブと一緒にmodもアップロード／ダウンロード",
+  "modUpdateAvailable": "v{version} が利用可能",
+  "@modUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "modsUpdateCheckFailed": "modの新バージョンを確認できませんでした（{reason}）。",
+  "@modsUpdateCheckFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  }
 }

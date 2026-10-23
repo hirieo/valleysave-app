@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,7 +77,11 @@ class SaveAreaClassifier {
         cached.modified == stat.modified) {
       return cached.found;
     }
-    final found = await containsBytes(main.openRead(), _marker);
+    // Archivo de varios MB: se busca en otro isolate para no congelar la
+    // interfaz (las animaciones de temporada se paraban al cambiar de pestaña).
+    final path = main.path;
+    final marker = _marker;
+    final found = await Isolate.run(() => fileContainsSync(path, marker));
     _markerCache[main.path] = (
       size: stat.size,
       modified: stat.modified,
@@ -101,10 +106,31 @@ class SaveAreaClassifier {
     return false;
   }
 
+  /// Versión síncrona de [containsBytes] sobre un archivo, para un isolate.
+  static bool fileContainsSync(String path, List<int> needle) {
+    final raf = File(path).openSync();
+    try {
+      const chunk = 1 << 20;
+      var carry = <int>[];
+      while (true) {
+        final bytes = raf.readSync(chunk);
+        if (bytes.isEmpty) return false;
+        final data = carry.isEmpty ? bytes : [...carry, ...bytes];
+        if (_indexOf(data, needle) >= 0) return true;
+        final keep = needle.length - 1;
+        carry = data.length > keep ? data.sublist(data.length - keep) : data;
+      }
+    } finally {
+      raf.closeSync();
+    }
+  }
+
   static int _indexOf(List<int> data, List<int> needle) {
+    final first = needle.first;
     outer:
     for (var i = 0; i <= data.length - needle.length; i++) {
-      for (var j = 0; j < needle.length; j++) {
+      if (data[i] != first) continue;
+      for (var j = 1; j < needle.length; j++) {
         if (data[i + j] != needle[j]) continue outer;
       }
       return i;

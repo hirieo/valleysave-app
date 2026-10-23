@@ -866,13 +866,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (mounted) setState(() => _refreshing = false);
   }
 
-  Future<void> _load({bool silent = false}) async {
+  /// [forArea] distinta de la pestaña visible = precarga en segundo plano:
+  /// solo rellena su caché, nunca pinta ni muestra el cargador.
+  Future<void> _load({bool silent = false, SaveArea? forArea}) async {
     if (!silent) setState(() => _loading = true);
 
     // La pestaña puede cambiar mientras carga: todo se calcula para la que
     // estaba activa al empezar y solo se pinta si sigue siéndolo.
-    final area = _area;
-    final driveForArea = _drive;
+    final area = forArea ?? _area;
+    final driveForArea = area == SaveArea.normal
+        ? widget.drive
+        : (_smapiDrive ??= widget.drive?.forArea(SaveArea.smapi));
     final allLocal = await _scanLocal();
     final local = await _localForArea(allLocal, area);
     var drive = <DriveSaveSummary>[];
@@ -951,6 +955,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       if (_area == SaveArea.normal) _loadSharedSaves(allLocal),
       _loadBackupCounts(),
     ]);
+
+    // Precarga la otra pestaña para que hasta el primer cambio sea al
+    // instante (fluidez, feedback 2026-10-23).
+    if (forArea == null && _splitByArea && mounted) {
+      final other = area == SaveArea.normal ? SaveArea.smapi : SaveArea.normal;
+      if (_entriesByArea[other] == null) {
+        unawaited(_load(silent: true, forArea: other));
+      }
+    }
   }
 
   /// spec 007 — conteo LOCAL de backups por save, para el badge del botón

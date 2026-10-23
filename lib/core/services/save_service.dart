@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart';
@@ -72,30 +73,65 @@ class SaveService {
 
   /// Escanea cualquier carpeta que contenga subcarpetas de save (usado tanto
   /// para la carpeta nativa de desktop como para la copia-puente de Android).
+  ///
+  /// El análisis (XML de varios MB en partidas coop) corre en un isolate
+  /// aparte: en el hilo de la interfaz congelaba las animaciones de temporada
+  /// en cada refresco y cambio de pestaña. Si ninguna partida cambió desde el
+  /// último escaneo (misma firma de fechas y tamaños) se reutiliza el
+  /// resultado sin volver a leer nada.
   Future<List<SaveFile>> scanDir(String dir) async {
     final savesDir = Directory(dir);
     if (!await savesDir.exists()) return [];
 
-    final results = <SaveFile>[];
+    final signature = await _signature(savesDir);
+    final cached = _scanCache;
+    if (cached != null && cached.signature == signature) return cached.saves;
 
+    final results = await Isolate.run(() => _scanDirBlocking(dir));
+    _scanCache = (signature: signature, saves: results);
+    return results;
+  }
+
+  static ({String signature, List<SaveFile> saves})? _scanCache;
+
+  /// Ruta + fecha/tamaño de los archivos que cambian al guardar. Barato: solo
+  /// `stat`, sin leer contenido.
+  static Future<String> _signature(Directory savesDir) async {
+    final sep = Platform.pathSeparator;
+    final parts = <String>[savesDir.path];
     await for (final entity in savesDir.list()) {
       if (entity is! Directory) continue;
-      final save = await _parseSave(entity);
+      final name = entity.path.split(sep).last;
+      final info = await File('${entity.path}${sep}SaveGameInfo').stat();
+      final main = await File('${entity.path}$sep$name').stat();
+      parts.add(
+        '$name:${info.modified.millisecondsSinceEpoch}:${info.size}'
+        ':${main.modified.millisecondsSinceEpoch}:${main.size}',
+      );
+    }
+    parts.sort();
+    return parts.join('|');
+  }
+
+  static List<SaveFile> _scanDirBlocking(String dir) {
+    final results = <SaveFile>[];
+    for (final entity in Directory(dir).listSync()) {
+      if (entity is! Directory) continue;
+      final save = _parseSaveBlocking(entity);
       if (save != null) results.add(save);
     }
-
     results.sort((a, b) => b.lastModified.compareTo(a.lastModified));
     return results;
   }
 
-  Future<SaveFile?> _parseSave(Directory folder) async {
+  static SaveFile? _parseSaveBlocking(Directory folder) {
     try {
       final sep = Platform.pathSeparator;
       final infoFile = File('${folder.path}${sep}SaveGameInfo');
-      if (!await infoFile.exists()) return null;
+      if (!infoFile.existsSync()) return null;
 
-      final raw = await infoFile.readAsString();
-      final lastMod = await infoFile.lastModified();
+      final raw = infoFile.readAsStringSync();
+      final lastMod = infoFile.lastModifiedSync();
       final folderName = folder.path.split(sep).last;
 
       final base = parseSaveGameInfo(
@@ -110,8 +146,8 @@ class SaveService {
       if (base == null || !base.isCoop) return base;
 
       final bigFile = File('${folder.path}$sep$folderName');
-      if (!await bigFile.exists()) return base;
-      final players = parseFullSave(await bigFile.readAsString());
+      if (!bigFile.existsSync()) return base;
+      final players = parseFullSave(bigFile.readAsStringSync());
       if (players.isEmpty) return base;
 
       return parseSaveGameInfo(

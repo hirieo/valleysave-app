@@ -4394,7 +4394,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: _glassDialogShell(
-          accent: smapiAccent,
+          accent: currentSeasonAccent,
           child: _dialogBody(
             title: Text(
               toSmapi
@@ -4420,7 +4420,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 ),
                 const SizedBox(height: 12),
                 _infoBox(
-                  color: smapiAccent,
+                  color: currentSeasonAccent,
                   icon: Icons.info_outline_rounded,
                   text: l10n.moveAreaNoFilesTouched,
                 ),
@@ -4431,7 +4431,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 label: toSmapi
                     ? l10n.moveToSmapiConfirm
                     : l10n.moveToNormalConfirm,
-                color: smapiAccent,
+                color: currentSeasonAccent,
                 icon: Icons.extension_rounded,
                 filled: true,
                 onTap: () => Navigator.pop(ctx, true),

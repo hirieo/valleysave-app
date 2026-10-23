@@ -12,7 +12,7 @@ import '../../../core/models/save_file.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart';
-import 'save_area_tabs.dart' show smapiAccent;
+import 'save_area_tabs.dart' show currentSeasonAccent;
 
 enum SaveDetailLocation { local, drive, extraDrive }
 
@@ -874,7 +874,7 @@ class _DetailPage extends StatelessWidget {
         _SecondaryAction(
           icon: Icons.widgets_outlined,
           label: l10n.modsAction,
-          accentColor: smapiAccent,
+          accentColor: currentSeasonAccent,
           onTap: () {
             Navigator.pop(context);
             side.onMods!.call();
@@ -884,7 +884,7 @@ class _DetailPage extends StatelessWidget {
         _SecondaryAction(
           icon: Icons.extension_rounded,
           label: side.moveAreaLabel,
-          accentColor: smapiAccent,
+          accentColor: currentSeasonAccent,
           onTap: () {
             Navigator.pop(context);
             side.onMoveArea!.call();

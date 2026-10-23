@@ -6,9 +6,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../shared/widgets/glass_dialog.dart';
 import '../save_card.dart' show ActionBtn;
-import 'save_area_tabs.dart' show smapiAccent;
+import 'save_area_tabs.dart' show currentSeasonAccent;
 
-const _gold = Color(0xFFE8B84A);
 
 enum ModNeedStatus { update, missing, notInDrive }
 
@@ -52,7 +51,7 @@ Future<Set<String>?> showSaveModsDownloadDialog(
       child: glassDialogShell(
         ctx,
         maxWidth: 460,
-        accent: smapiAccent,
+        accent: currentSeasonAccent,
         child: _Body(farmName: farmName, totalMods: totalMods, needs: needs),
       ),
     ),
@@ -130,7 +129,7 @@ class _BodyState extends State<_Body> {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: _gold.withValues(alpha: 0.07),
+                    color: currentSeasonAccent.withValues(alpha: 0.07),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -150,7 +149,7 @@ class _BodyState extends State<_Body> {
       actions: [
         ActionBtn(
           label: l10n.modsDownloadWithMods(_selected.length),
-          color: _gold,
+          color: currentSeasonAccent,
           icon: Icons.cloud_download_outlined,
           filled: true,
           onTap: () => Navigator.pop(context, Set<String>.of(_selected)),
@@ -170,7 +169,7 @@ class _BodyState extends State<_Body> {
     final on = _selected.contains(n.entry.key);
     final (pillText, pillColor) = switch (n.status) {
       ModNeedStatus.update => (l10n.modsNeedUpdate, AppColors.statusPend),
-      ModNeedStatus.missing => (l10n.modsNeedNew, smapiAccent),
+      ModNeedStatus.missing => (l10n.modsNeedNew, currentSeasonAccent),
       ModNeedStatus.notInDrive => (l10n.modsNeedNotInDrive, AppColors.statusErr),
     };
     final detail = switch (n.status) {
@@ -207,10 +206,10 @@ class _BodyState extends State<_Body> {
               height: 16,
               margin: const EdgeInsets.only(top: 2),
               decoration: BoxDecoration(
-                color: on ? _gold : Colors.transparent,
+                color: on ? currentSeasonAccent : Colors.transparent,
                 border: Border.all(
                   color: on
-                      ? _gold
+                      ? currentSeasonAccent
                       : AppColors.textFaint.withValues(
                           alpha: n.installable ? 1 : 0.4,
                         ),

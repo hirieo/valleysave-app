@@ -7,7 +7,7 @@ import '../../../core/services/smapi_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../generated/app_localizations.dart';
-import '../../saves/widgets/save_area_tabs.dart' show smapiAccent;
+import '../../saves/widgets/save_area_tabs.dart' show currentSeasonAccent;
 
 /// Ajustes → Ubicaciones en escritorio (spec 010 D2, mockup aprobado
 /// 2026-10-23, bloque 4): carpeta de partidas normales y estado de SMAPI con
@@ -87,7 +87,7 @@ class _LocationsTileState extends State<LocationsTile> {
         if (install != null)
           _box(
             title: '🧩 SMAPI',
-            titleColor: smapiAccent,
+            titleColor: currentSeasonAccent,
             pill: _pill(install.version ?? '?', AppColors.statusOk),
             lines: [
               l10n.settingsSmapiSavesShared,
@@ -104,7 +104,7 @@ class _LocationsTileState extends State<LocationsTile> {
         else
           _box(
             title: '🧩 SMAPI',
-            titleColor: smapiAccent,
+            titleColor: currentSeasonAccent,
             pill: _pill(l10n.settingsSmapiNotDetected, AppColors.statusPend),
             lines: [l10n.settingsSmapiNotFoundHint],
             actions: [

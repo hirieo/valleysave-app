@@ -9,9 +9,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../shared/widgets/glass_dialog.dart';
 import '../save_card.dart' show ActionBtn;
-import 'save_area_tabs.dart' show smapiAccent;
+import 'save_area_tabs.dart' show currentSeasonAccent;
 
-const _gold = Color(0xFFE8B84A);
 
 /// "Mods de {granja}" (spec 010, mockup aprobado 2026-10-23, bloque 2): qué
 /// mods viajan con esta partida (check grande), "llevar siempre" y "con sus
@@ -37,7 +36,7 @@ Future<void> showSaveModsDialog(
       child: glassDialogShell(
         ctx,
         maxWidth: 460,
-        accent: smapiAccent,
+        accent: currentSeasonAccent,
         child: _SaveModsBody(
           farmName: farmName,
           folderName: folderName,
@@ -184,7 +183,7 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
             label: _uploading
                 ? l10n.modsUploading
                 : l10n.modsUploadAction(_carried.length),
-            color: _gold,
+            color: currentSeasonAccent,
             icon: Icons.cloud_upload_outlined,
             filled: true,
             onTap: _uploading ? null : _upload,
@@ -261,7 +260,7 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
                       if (_newerVersion(mod) case final newer?)
                         TextSpan(
                           text: ' · ${l10n.modUpdateAvailable(newer)}',
-                          style: const TextStyle(color: _gold),
+                          style: TextStyle(color: currentSeasonAccent),
                         ),
                     ],
                   ),
@@ -344,9 +343,9 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
       height: size,
       margin: EdgeInsets.only(top: size > 12 ? 2 : 0),
       decoration: BoxDecoration(
-        color: on ? _gold : Colors.transparent,
+        color: on ? currentSeasonAccent : Colors.transparent,
         border: Border.all(
-          color: on ? _gold : AppColors.textFaint,
+          color: on ? currentSeasonAccent : AppColors.textFaint,
           width: 1.5,
         ),
         borderRadius: BorderRadius.circular(size > 12 ? 4 : 3),
@@ -404,7 +403,7 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColors.bgAlt,
+          color: Colors.black.withValues(alpha: 0.22),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -447,7 +446,7 @@ class _SaveModsBodyState extends State<_SaveModsBody> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: _gold.withValues(alpha: 0.07),
+        color: currentSeasonAccent.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(

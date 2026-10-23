@@ -2094,6 +2094,33 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get savesFolderParent => '上级文件夹';
+
+  @override
+  String get forcedUpdateTitle => '正在更新 ValleySave';
+
+  @override
+  String get forcedUpdateInstalling => '正在安装…';
+
+  @override
+  String get forcedUpdateInstallingBody => 'ValleySave 将关闭并以新版本重新打开。';
+
+  @override
+  String get forcedUpdateAlmostDone => '即将完成';
+
+  @override
+  String get forcedUpdateAndroidConfirm => 'Android 会要求你确认安装，这是出于安全考虑的必要步骤。';
+
+  @override
+  String get forcedUpdateFailedTitle => '无法更新';
+
+  @override
+  String get forcedUpdateFailedBody => '此版本已无法同步。请连接网络后重试。';
+
+  @override
+  String get forcedUpdateRetry => '重试';
+
+  @override
+  String get forcedUpdateSafe => '你的存档很安全：它们仍在你的设备和 Drive 中。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4183,4 +4210,31 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get savesFolderParent => '上層資料夾';
+
+  @override
+  String get forcedUpdateTitle => '正在更新 ValleySave';
+
+  @override
+  String get forcedUpdateInstalling => '正在安裝…';
+
+  @override
+  String get forcedUpdateInstallingBody => 'ValleySave 將關閉並以新版本重新開啟。';
+
+  @override
+  String get forcedUpdateAlmostDone => '即將完成';
+
+  @override
+  String get forcedUpdateAndroidConfirm => 'Android 會要求你確認安裝，這是基於安全考量的必要步驟。';
+
+  @override
+  String get forcedUpdateFailedTitle => '無法更新';
+
+  @override
+  String get forcedUpdateFailedBody => '此版本已無法同步。請連上網路後重試。';
+
+  @override
+  String get forcedUpdateRetry => '重試';
+
+  @override
+  String get forcedUpdateSafe => '你的存檔很安全：它們仍在你的裝置和 Drive 中。';
 }

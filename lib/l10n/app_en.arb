@@ -1153,5 +1153,14 @@
   "savesFolderListError": "Could not read this folder.",
   "savesFolderDetecting": "Looking for folders…",
   "savesFolderDefaultTag": "Default",
-  "savesFolderParent": "Parent folder"
+  "savesFolderParent": "Parent folder",
+  "forcedUpdateTitle": "Updating ValleySave",
+  "forcedUpdateInstalling": "Installing…",
+  "forcedUpdateInstallingBody": "ValleySave will close and reopen with the new version.",
+  "forcedUpdateAlmostDone": "Almost done",
+  "forcedUpdateAndroidConfirm": "Android asks you to confirm the installation. It’s required for security.",
+  "forcedUpdateFailedTitle": "Couldn’t update",
+  "forcedUpdateFailedBody": "This version can no longer sync. Connect to the internet and try again.",
+  "forcedUpdateRetry": "Retry",
+  "forcedUpdateSafe": "Your saves are safe: they stay on your device and in your Drive."
 }

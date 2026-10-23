@@ -3840,6 +3840,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Parent folder'**
   String get savesFolderParent;
+
+  /// No description provided for @forcedUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating ValleySave'**
+  String get forcedUpdateTitle;
+
+  /// No description provided for @forcedUpdateInstalling.
+  ///
+  /// In en, this message translates to:
+  /// **'Installing…'**
+  String get forcedUpdateInstalling;
+
+  /// No description provided for @forcedUpdateInstallingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'ValleySave will close and reopen with the new version.'**
+  String get forcedUpdateInstallingBody;
+
+  /// No description provided for @forcedUpdateAlmostDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost done'**
+  String get forcedUpdateAlmostDone;
+
+  /// No description provided for @forcedUpdateAndroidConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Android asks you to confirm the installation. It’s required for security.'**
+  String get forcedUpdateAndroidConfirm;
+
+  /// No description provided for @forcedUpdateFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t update'**
+  String get forcedUpdateFailedTitle;
+
+  /// No description provided for @forcedUpdateFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This version can no longer sync. Connect to the internet and try again.'**
+  String get forcedUpdateFailedBody;
+
+  /// No description provided for @forcedUpdateRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get forcedUpdateRetry;
+
+  /// No description provided for @forcedUpdateSafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Your saves are safe: they stay on your device and in your Drive.'**
+  String get forcedUpdateSafe;
 }
 
 class _AppLocalizationsDelegate

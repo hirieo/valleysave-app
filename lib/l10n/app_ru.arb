@@ -1132,5 +1132,14 @@
   "savesFolderListError": "Не удалось прочитать эту папку.",
   "savesFolderDetecting": "Поиск папок…",
   "savesFolderDefaultTag": "По умолчанию",
-  "savesFolderParent": "Родительская папка"
+  "savesFolderParent": "Родительская папка",
+  "forcedUpdateTitle": "Обновление ValleySave",
+  "forcedUpdateInstalling": "Установка…",
+  "forcedUpdateInstallingBody": "ValleySave закроется и снова откроется в новой версии.",
+  "forcedUpdateAlmostDone": "Почти готово",
+  "forcedUpdateAndroidConfirm": "Android попросит подтвердить установку. Это обязательно в целях безопасности.",
+  "forcedUpdateFailedTitle": "Не удалось обновить",
+  "forcedUpdateFailedBody": "Эта версия больше не может синхронизировать. Подключитесь к интернету и попробуйте снова.",
+  "forcedUpdateRetry": "Повторить",
+  "forcedUpdateSafe": "Ваши сохранения в безопасности: они остаются на устройстве и в вашем Drive."
 }

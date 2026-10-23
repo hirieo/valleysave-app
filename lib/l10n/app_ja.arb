@@ -1125,5 +1125,14 @@
   "savesFolderListError": "このフォルダを読み取れませんでした。",
   "savesFolderDetecting": "フォルダを検索中…",
   "savesFolderDefaultTag": "初期値",
-  "savesFolderParent": "上のフォルダ"
+  "savesFolderParent": "上のフォルダ",
+  "forcedUpdateTitle": "ValleySave を更新中",
+  "forcedUpdateInstalling": "インストール中…",
+  "forcedUpdateInstallingBody": "ValleySave は終了し、新しいバージョンで再び起動します。",
+  "forcedUpdateAlmostDone": "もう少しで完了",
+  "forcedUpdateAndroidConfirm": "Android がインストールの確認を求めます。セキュリティ上必要な手順です。",
+  "forcedUpdateFailedTitle": "更新できませんでした",
+  "forcedUpdateFailedBody": "このバージョンでは同期できなくなりました。インターネットに接続して再試行してください。",
+  "forcedUpdateRetry": "再試行",
+  "forcedUpdateSafe": "セーブデータは安全です。端末と Drive にそのまま残ります。"
 }

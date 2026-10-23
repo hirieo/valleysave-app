@@ -1132,5 +1132,14 @@
   "savesFolderListError": "Ezin izan da karpeta hau irakurri.",
   "savesFolderDetecting": "Karpetak bilatzen…",
   "savesFolderDefaultTag": "Lehenetsia",
-  "savesFolderParent": "Goiko karpeta"
+  "savesFolderParent": "Goiko karpeta",
+  "forcedUpdateTitle": "ValleySave eguneratzen",
+  "forcedUpdateInstalling": "Instalatzen…",
+  "forcedUpdateInstallingBody": "ValleySave itxi eta bertsio berriarekin irekiko da berriro.",
+  "forcedUpdateAlmostDone": "Ia prest",
+  "forcedUpdateAndroidConfirm": "Androidek instalazioa berresteko eskatzen du. Segurtasunagatik derrigorrezkoa da.",
+  "forcedUpdateFailedTitle": "Ezin izan da eguneratu",
+  "forcedUpdateFailedBody": "Bertsio honek ezin du gehiago sinkronizatu. Konektatu internetera eta saiatu berriro.",
+  "forcedUpdateRetry": "Saiatu berriro",
+  "forcedUpdateSafe": "Zure partidak salbu daude: zure gailuan eta zure Drive-n jarraitzen dute."
 }

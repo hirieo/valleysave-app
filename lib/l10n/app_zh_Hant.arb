@@ -1132,5 +1132,14 @@
   "savesFolderListError": "無法讀取此資料夾。",
   "savesFolderDetecting": "正在尋找資料夾…",
   "savesFolderDefaultTag": "預設",
-  "savesFolderParent": "上層資料夾"
+  "savesFolderParent": "上層資料夾",
+  "forcedUpdateTitle": "正在更新 ValleySave",
+  "forcedUpdateInstalling": "正在安裝…",
+  "forcedUpdateInstallingBody": "ValleySave 將關閉並以新版本重新開啟。",
+  "forcedUpdateAlmostDone": "即將完成",
+  "forcedUpdateAndroidConfirm": "Android 會要求你確認安裝，這是基於安全考量的必要步驟。",
+  "forcedUpdateFailedTitle": "無法更新",
+  "forcedUpdateFailedBody": "此版本已無法同步。請連上網路後重試。",
+  "forcedUpdateRetry": "重試",
+  "forcedUpdateSafe": "你的存檔很安全：它們仍在你的裝置和 Drive 中。"
 }

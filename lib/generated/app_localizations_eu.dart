@@ -2206,4 +2206,35 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'Goiko karpeta';
+
+  @override
+  String get forcedUpdateTitle => 'ValleySave eguneratzen';
+
+  @override
+  String get forcedUpdateInstalling => 'Instalatzen…';
+
+  @override
+  String get forcedUpdateInstallingBody =>
+      'ValleySave itxi eta bertsio berriarekin irekiko da berriro.';
+
+  @override
+  String get forcedUpdateAlmostDone => 'Ia prest';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Androidek instalazioa berresteko eskatzen du. Segurtasunagatik derrigorrezkoa da.';
+
+  @override
+  String get forcedUpdateFailedTitle => 'Ezin izan da eguneratu';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'Bertsio honek ezin du gehiago sinkronizatu. Konektatu internetera eta saiatu berriro.';
+
+  @override
+  String get forcedUpdateRetry => 'Saiatu berriro';
+
+  @override
+  String get forcedUpdateSafe =>
+      'Zure partidak salbu daude: zure gailuan eta zure Drive-n jarraitzen dute.';
 }

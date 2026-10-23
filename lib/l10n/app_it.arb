@@ -1132,5 +1132,14 @@
   "savesFolderListError": "Impossibile leggere questa cartella.",
   "savesFolderDetecting": "Ricerca delle cartelle…",
   "savesFolderDefaultTag": "Predefinita",
-  "savesFolderParent": "Cartella superiore"
+  "savesFolderParent": "Cartella superiore",
+  "forcedUpdateTitle": "Aggiornamento di ValleySave",
+  "forcedUpdateInstalling": "Installazione…",
+  "forcedUpdateInstallingBody": "ValleySave si chiuderà e si riaprirà con la nuova versione.",
+  "forcedUpdateAlmostDone": "Quasi fatto",
+  "forcedUpdateAndroidConfirm": "Android ti chiede di confermare l’installazione. È obbligatorio per sicurezza.",
+  "forcedUpdateFailedTitle": "Impossibile aggiornare",
+  "forcedUpdateFailedBody": "Questa versione non può più sincronizzare. Connettiti a internet e riprova.",
+  "forcedUpdateRetry": "Riprova",
+  "forcedUpdateSafe": "I tuoi salvataggi sono al sicuro: restano sul tuo dispositivo e nel tuo Drive."
 }

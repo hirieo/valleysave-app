@@ -2211,4 +2211,35 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get savesFolderParent => 'Übergeordneter Ordner';
+
+  @override
+  String get forcedUpdateTitle => 'ValleySave wird aktualisiert';
+
+  @override
+  String get forcedUpdateInstalling => 'Wird installiert…';
+
+  @override
+  String get forcedUpdateInstallingBody =>
+      'ValleySave wird geschlossen und mit der neuen Version wieder geöffnet.';
+
+  @override
+  String get forcedUpdateAlmostDone => 'Fast fertig';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Android fragt nach einer Bestätigung der Installation. Das ist aus Sicherheitsgründen nötig.';
+
+  @override
+  String get forcedUpdateFailedTitle => 'Aktualisierung fehlgeschlagen';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'Diese Version kann nicht mehr synchronisieren. Verbinde dich mit dem Internet und versuche es erneut.';
+
+  @override
+  String get forcedUpdateRetry => 'Erneut versuchen';
+
+  @override
+  String get forcedUpdateSafe =>
+      'Deine Spielstände sind sicher: Sie bleiben auf deinem Gerät und in deinem Drive.';
 }

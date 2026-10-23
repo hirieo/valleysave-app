@@ -2132,4 +2132,33 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get savesFolderParent => '上のフォルダ';
+
+  @override
+  String get forcedUpdateTitle => 'ValleySave を更新中';
+
+  @override
+  String get forcedUpdateInstalling => 'インストール中…';
+
+  @override
+  String get forcedUpdateInstallingBody => 'ValleySave は終了し、新しいバージョンで再び起動します。';
+
+  @override
+  String get forcedUpdateAlmostDone => 'もう少しで完了';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Android がインストールの確認を求めます。セキュリティ上必要な手順です。';
+
+  @override
+  String get forcedUpdateFailedTitle => '更新できませんでした';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'このバージョンでは同期できなくなりました。インターネットに接続して再試行してください。';
+
+  @override
+  String get forcedUpdateRetry => '再試行';
+
+  @override
+  String get forcedUpdateSafe => 'セーブデータは安全です。端末と Drive にそのまま残ります。';
 }

@@ -1132,5 +1132,14 @@
   "savesFolderListError": "Не вдалося прочитати цю папку.",
   "savesFolderDetecting": "Пошук папок…",
   "savesFolderDefaultTag": "Типово",
-  "savesFolderParent": "Батьківська папка"
+  "savesFolderParent": "Батьківська папка",
+  "forcedUpdateTitle": "Оновлення ValleySave",
+  "forcedUpdateInstalling": "Встановлення…",
+  "forcedUpdateInstallingBody": "ValleySave закриється і знову відкриється в новій версії.",
+  "forcedUpdateAlmostDone": "Майже готово",
+  "forcedUpdateAndroidConfirm": "Android попросить підтвердити встановлення. Це обов’язково з міркувань безпеки.",
+  "forcedUpdateFailedTitle": "Не вдалося оновити",
+  "forcedUpdateFailedBody": "Ця версія більше не може синхронізувати. Підключіться до інтернету і спробуйте ще раз.",
+  "forcedUpdateRetry": "Повторити",
+  "forcedUpdateSafe": "Ваші збереження в безпеці: вони залишаються на пристрої та у вашому Drive."
 }

@@ -1132,5 +1132,14 @@
   "savesFolderListError": "Não foi possível ler esta pasta.",
   "savesFolderDetecting": "A procurar pastas…",
   "savesFolderDefaultTag": "Predefinida",
-  "savesFolderParent": "Pasta superior"
+  "savesFolderParent": "Pasta superior",
+  "forcedUpdateTitle": "A atualizar o ValleySave",
+  "forcedUpdateInstalling": "A instalar…",
+  "forcedUpdateInstallingBody": "O ValleySave vai fechar e abrir de novo com a nova versão.",
+  "forcedUpdateAlmostDone": "Quase pronto",
+  "forcedUpdateAndroidConfirm": "O Android pede para confirmar a instalação. É obrigatório por segurança.",
+  "forcedUpdateFailedTitle": "Não foi possível atualizar",
+  "forcedUpdateFailedBody": "Esta versão já não consegue sincronizar. Liga-te à internet e tenta de novo.",
+  "forcedUpdateRetry": "Tentar de novo",
+  "forcedUpdateSafe": "Os teus jogos guardados estão seguros: continuam no teu dispositivo e no teu Drive."
 }

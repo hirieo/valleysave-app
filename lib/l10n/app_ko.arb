@@ -1125,5 +1125,14 @@
   "savesFolderListError": "이 폴더를 읽을 수 없습니다.",
   "savesFolderDetecting": "폴더 검색 중…",
   "savesFolderDefaultTag": "기본값",
-  "savesFolderParent": "상위 폴더"
+  "savesFolderParent": "상위 폴더",
+  "forcedUpdateTitle": "ValleySave 업데이트 중",
+  "forcedUpdateInstalling": "설치 중…",
+  "forcedUpdateInstallingBody": "ValleySave가 종료된 뒤 새 버전으로 다시 열립니다.",
+  "forcedUpdateAlmostDone": "거의 완료",
+  "forcedUpdateAndroidConfirm": "Android에서 설치 확인을 요청합니다. 보안상 필수 단계입니다.",
+  "forcedUpdateFailedTitle": "업데이트할 수 없습니다",
+  "forcedUpdateFailedBody": "이 버전은 더 이상 동기화할 수 없습니다. 인터넷에 연결한 뒤 다시 시도하세요.",
+  "forcedUpdateRetry": "다시 시도",
+  "forcedUpdateSafe": "세이브는 안전합니다. 기기와 Drive에 그대로 남아 있습니다."
 }

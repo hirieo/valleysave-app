@@ -82,11 +82,14 @@ class SaveAreaTabs extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Mismo estilo que la insignia «ÚLTIMA PARTIDA» (aprobado
+                // 2026-10-23): mayúsculas, espaciado amplio, grosor medio.
                 Text(
-                  label,
+                  label.toUpperCase(),
                   style: GoogleFonts.firaCode(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 10,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w500,
                     color: textColor,
                   ),
                 ),

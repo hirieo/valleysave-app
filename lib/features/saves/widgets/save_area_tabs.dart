@@ -47,7 +47,7 @@ class SaveAreaTabs extends StatelessWidget {
             children: [
               _tab(SaveArea.normal, l10n.saveAreaNormal, accent),
               const SizedBox(width: 4),
-              _tab(SaveArea.smapi, '🧩 ${l10n.saveAreaSmapi}', accent),
+              _tab(SaveArea.smapi, l10n.saveAreaSmapi, accent),
             ],
           ),
         );
@@ -58,7 +58,7 @@ class SaveAreaTabs extends StatelessWidget {
   Widget _tab(SaveArea area, String label, Color accent) {
     final on = area == selected;
     final count = counts[area];
-    final textColor = on ? accent : Colors.white.withValues(alpha: 0.45);
+    final textColor = on ? accent : Colors.white.withValues(alpha: 0.55);
     return Expanded(
       child: Semantics(
         selected: on,
@@ -79,28 +79,46 @@ class SaveAreaTabs extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(9),
             ),
-            child: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: label,
-                    style: GoogleFonts.firaCode(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: textColor,
-                    ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: textColor,
                   ),
-                  if (count != null)
-                    TextSpan(
-                      text: '  $count',
+                ),
+                // Número en pastilla (mockup aprobado 2026-10-23): rellena
+                // del color de la temporada en la activa, gris claro legible
+                // en la inactiva.
+                if (count != null) ...[
+                  const SizedBox(width: 7),
+                  Container(
+                    constraints: const BoxConstraints(minWidth: 18),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: on ? accent : Colors.white.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      '$count',
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.firaCode(
-                        fontSize: 11,
-                        color: textColor.withValues(alpha: 0.6),
+                        fontSize: 9.5,
+                        fontWeight: FontWeight.w700,
+                        color: on
+                            ? const Color(0xFF14110A)
+                            : Colors.white.withValues(alpha: 0.85),
                       ),
                     ),
+                  ),
                 ],
-              ),
-              textAlign: TextAlign.center,
+              ],
             ),
           ),
         ),

@@ -145,6 +145,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     SaveArea.smapi: null,
   };
 
+  /// Última lista de cada pestaña: al cambiar se pinta al instante y se
+  /// refresca en silencio (sin cargador ni parpadeo).
+  final Map<SaveArea, List<SaveEntry>> _entriesByArea = {};
+
   DriveService? get _drive => _area == SaveArea.normal
       ? widget.drive
       : (_smapiDrive ??= widget.drive?.forArea(SaveArea.smapi));
@@ -278,17 +282,22 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
 
   void _selectArea(SaveArea area) {
     if (area == _area || _busy.isNotEmpty) return;
+    final cached = _entriesByArea[area];
     setState(() {
       _area = area;
-      _entries = [];
+      _entries = cached ?? [];
+      if (cached != null) _loading = false;
     });
-    _load();
+    _load(silent: cached != null);
   }
 
   /// Partidas locales de la pestaña actual. Sin pestaña SMAPI (o en Android,
   /// donde cada sección tiene su propia carpeta, fase F5) no se filtra nada:
   /// todo sigue en Normal como antes de spec 010.
-  Future<List<SaveFile>> _localForArea(List<SaveFile> local) async {
+  Future<List<SaveFile>> _localForArea(
+    List<SaveFile> local,
+    SaveArea area,
+  ) async {
     if (!_splitByArea) {
       _areaCounts[SaveArea.normal] = local.length;
       return local;
@@ -306,9 +315,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
       byArea[area]!.add(s);
     }
-    final other = _area == SaveArea.normal ? SaveArea.smapi : SaveArea.normal;
+    final other = area == SaveArea.normal ? SaveArea.smapi : SaveArea.normal;
     _areaCounts[other] ??= byArea[other]!.length;
-    return byArea[_area]!;
+    return byArea[area]!;
   }
 
   Future<void> _loadConnectedEmail() async {
@@ -860,12 +869,16 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   Future<void> _load({bool silent = false}) async {
     if (!silent) setState(() => _loading = true);
 
+    // La pestaña puede cambiar mientras carga: todo se calcula para la que
+    // estaba activa al empezar y solo se pinta si sigue siéndolo.
+    final area = _area;
+    final driveForArea = _drive;
     final allLocal = await _scanLocal();
-    final local = await _localForArea(allLocal);
+    final local = await _localForArea(allLocal, area);
     var drive = <DriveSaveSummary>[];
-    if (_drive != null) {
+    if (driveForArea != null) {
       try {
-        drive = await _drive!.listSaveSummaries();
+        drive = await driveForArea.listSaveSummaries();
       } catch (e, st) {
         debugPrint('DRIVE_ERROR: $e\n$st');
         if (!mounted) return;
@@ -910,10 +923,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       (a, b) => b.primary.lastModified.compareTo(a.primary.lastModified),
     );
 
+    _entriesByArea[area] = entries;
+    if (mounted && area != _area) {
+      setState(() => _areaCounts[area] = entries.length);
+      return;
+    }
     if (mounted) {
       setState(() {
         _entries = entries;
-        _areaCounts[_area] = entries.length;
+        _areaCounts[area] = entries.length;
         _loading = false;
         // Solo en cargas NO silenciosas (2026-08-02): esto cambia la `key`
         // de cada card y fuerza a Flutter a recrearlas, repitiendo la

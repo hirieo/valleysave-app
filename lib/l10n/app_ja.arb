@@ -1085,6 +1085,9 @@
   "backupsKeepErr": "バックアップを保持できませんでした: {error}",
   "backupsExpandAll": "すべて展開",
   "backupsCollapseAll": "すべて折りたたむ",
+  "backupsRestoreNoSafetyTitle": "現在のセーブを保存できませんでした",
+  "backupsRestoreNoSafetyBody": "続行すると、バックアップにない進行状況は失われます。元に戻せません。",
+  "backupsRestoreNoSafetyConfirm": "それでも復元",
   "deleteUnifiedTitle": "{farmName}を削除しますか?",
   "@deleteUnifiedTitle": {
     "placeholders": {

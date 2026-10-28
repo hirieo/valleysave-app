@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Não foi possível manter o backup: {error}",
   "backupsExpandAll": "Expandir tudo",
   "backupsCollapseAll": "Recolher tudo",
+  "backupsRestoreNoSafetyTitle": "Não foi possível salvar a partida atual",
+  "backupsRestoreNoSafetyBody": "Se continuar, o progresso que não estiver em um backup será perdido. Não é possível desfazer.",
+  "backupsRestoreNoSafetyConfirm": "Restaurar mesmo assim",
   "deleteUnifiedTitle": "Deletar {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

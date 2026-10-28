@@ -314,6 +314,44 @@ class BackupService {
   @visibleForTesting
   static void clearSummaryCache() => _summaryCache.clear();
 
+  /// Asegura que el contenido actual de [saveFolderPath] queda en un zip antes
+  /// de sustituirlo (D4): si ya hay un backup verificado idéntico lo devuelve;
+  /// si no, crea un [BackupOrigin.preRestore], lo verifica y aplica su
+  /// retención. Para los callers que restauran fuera de
+  /// `SaveReplaceService` (Android: la partida viva está en la carpeta del
+  /// juego y solo se ve como copia puente). `null` si no se pudo asegurar —
+  /// el caller decide si seguir.
+  Future<BackupEntry?> ensurePreRestoreBackup({
+    required String saveFolderPath,
+    required String folderName,
+    required String backupsDir,
+    DateTime? now,
+  }) async {
+    try {
+      final identical = await findIdenticalBackup(
+        saveFolderPath: saveFolderPath,
+        folderName: folderName,
+        backupsDir: backupsDir,
+      );
+      if (identical != null) return identical;
+      final created = await createBackup(
+        saveFolderPath: saveFolderPath,
+        folderName: folderName,
+        backupsDir: backupsDir,
+        origin: BackupOrigin.preRestore,
+        now: now,
+      );
+      if (!await verifyBackupZipContents(created.localPath!, folderName)) {
+        await deleteLocalBackup(created.localPath!);
+        return null;
+      }
+      await enforceRetention(backupsDir, folderName, BackupOrigin.preRestore);
+      return created;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// «Conservar» (spec 012, D5): convierte un automático o un «antes de
   /// restaurar» en manual cambiando el tag del nombre a `_backup_` (la fecha
   /// no cambia). Renombra el zip local y, vía [renameRemote], el de Mi Drive

@@ -952,6 +952,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backupsCollapseAll => 'Collapse all';
 
   @override
+  String get backupsRestoreNoSafetyTitle => 'Couldn\'t save your current game';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'If you continue, any progress that is not in a backup will be lost. This can\'t be undone.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Restore anyway';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Delete $farmName?';
   }

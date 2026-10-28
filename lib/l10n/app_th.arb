@@ -1085,6 +1085,9 @@
   "backupsKeepErr": "เก็บข้อมูลสำรองไม่สำเร็จ: {error}",
   "backupsExpandAll": "ขยายทั้งหมด",
   "backupsCollapseAll": "ย่อทั้งหมด",
+  "backupsRestoreNoSafetyTitle": "บันทึกเกมปัจจุบันของคุณไม่สำเร็จ",
+  "backupsRestoreNoSafetyBody": "หากดำเนินการต่อ ความคืบหน้าที่ไม่อยู่ในข้อมูลสำรองจะสูญหาย และไม่สามารถย้อนกลับได้",
+  "backupsRestoreNoSafetyConfirm": "คืนค่าต่อไป",
   "deleteUnifiedTitle": "ลบ {farmName} หรือไม่?",
   "@deleteUnifiedTitle": {
     "placeholders": {

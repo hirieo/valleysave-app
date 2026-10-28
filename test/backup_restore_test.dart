@@ -208,4 +208,84 @@ void main() {
       expect(await const BackupInUseStore().get(folderName), isNull);
     },
   );
+
+  group('ensurePreRestoreBackup (Android: partida viva fuera de savesDir)', () {
+    test('contenido nuevo: crea un «antes de restaurar» verificado', () async {
+      await writeSave('999');
+
+      final entry = await service.ensurePreRestoreBackup(
+        saveFolderPath: savePath,
+        folderName: folderName,
+        backupsDir: backupsDir,
+      );
+
+      expect(entry, isNotNull);
+      expect(entry!.origin, BackupOrigin.preRestore);
+      expect(
+        await hashBackupZip(entry.localPath!, folderName),
+        await hashSaveFolder(savePath),
+      );
+      expect(await listed(), hasLength(1));
+    });
+
+    test('contenido ya respaldado: devuelve ese zip y no crea otro', () async {
+      final a = await manualBackupOf('100', DateTime(2026, 7, 1, 10));
+
+      final entry = await service.ensurePreRestoreBackup(
+        saveFolderPath: savePath,
+        folderName: folderName,
+        backupsDir: backupsDir,
+      );
+
+      expect(entry!.fileName, a.fileName);
+      expect(await listed(), hasLength(1));
+    });
+
+    test('aplica el límite de 3 sin tocar manuales ni automáticos', () async {
+      await manualBackupOf('1', DateTime(2026, 7, 1, 9));
+      for (var i = 0; i < 4; i++) {
+        await writeSave('${200 + i}');
+        final e = await service.ensurePreRestoreBackup(
+          saveFolderPath: savePath,
+          folderName: folderName,
+          backupsDir: backupsDir,
+          now: DateTime(2026, 7, 2, 10, i),
+        );
+        expect(e, isNotNull);
+      }
+
+      final all = await listed();
+      expect(
+        all.where((e) => e.origin == BackupOrigin.preRestore),
+        hasLength(kMaxPreRestoreBackups),
+      );
+      expect(all.where((e) => e.origin == BackupOrigin.manual), hasLength(1));
+    });
+
+    test('carpeta que no existe: devuelve null sin lanzar', () async {
+      final entry = await service.ensurePreRestoreBackup(
+        saveFolderPath: '${tempDir.path}${sep}no-existe',
+        folderName: folderName,
+        backupsDir: backupsDir,
+      );
+
+      expect(entry, isNull);
+      expect(await listed(), isEmpty);
+    });
+
+    test('carpeta que no es una partida válida: no deja un zip malo', () async {
+      final junk = Directory('${tempDir.path}${sep}junk');
+      await junk.create(recursive: true);
+      await File('${junk.path}${sep}marker').writeAsString('x');
+
+      final entry = await service.ensurePreRestoreBackup(
+        saveFolderPath: junk.path,
+        folderName: folderName,
+        backupsDir: backupsDir,
+      );
+
+      expect(entry, isNull);
+      expect(await listed(), isEmpty);
+    });
+  });
 }

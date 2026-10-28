@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Impossible de conserver la sauvegarde : {error}",
   "backupsExpandAll": "Tout déplier",
   "backupsCollapseAll": "Tout replier",
+  "backupsRestoreNoSafetyTitle": "Impossible de sauvegarder la partie actuelle",
+  "backupsRestoreNoSafetyBody": "Si la restauration continue, la progression absente des sauvegardes sera perdue. Cette action est irréversible.",
+  "backupsRestoreNoSafetyConfirm": "Restaurer quand même",
   "deleteUnifiedTitle": "Supprimer {farmName} ?",
   "@deleteUnifiedTitle": {
     "placeholders": {

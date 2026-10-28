@@ -929,6 +929,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backupsCollapseAll => '全部折叠';
 
   @override
+  String get backupsRestoreNoSafetyTitle => '无法保存当前存档';
+
+  @override
+  String get backupsRestoreNoSafetyBody => '继续的话，不在备份中的进度将会丢失，且无法撤销。';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => '仍然恢复';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '要删除 $farmName 吗？';
   }
@@ -3420,6 +3429,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get backupsCollapseAll => '全部摺疊';
+
+  @override
+  String get backupsRestoreNoSafetyTitle => '無法儲存目前的存檔';
+
+  @override
+  String get backupsRestoreNoSafetyBody => '繼續的話，不在備份中的進度將會遺失，且無法復原。';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => '仍然恢復';
 
   @override
   String deleteUnifiedTitle(String farmName) {

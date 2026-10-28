@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Не вдалося зберегти резервну копію: {error}",
   "backupsExpandAll": "Розгорнути все",
   "backupsCollapseAll": "Згорнути все",
+  "backupsRestoreNoSafetyTitle": "Не вдалося зберегти поточну гру",
+  "backupsRestoreNoSafetyBody": "Якщо продовжити, прогрес, якого немає в резервних копіях, буде втрачено. Скасувати це неможливо.",
+  "backupsRestoreNoSafetyConfirm": "Усе одно відновити",
   "deleteUnifiedTitle": "Видалити {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

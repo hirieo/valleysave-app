@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Impossibile conservare il backup: {error}",
   "backupsExpandAll": "Espandi tutto",
   "backupsCollapseAll": "Comprimi tutto",
+  "backupsRestoreNoSafetyTitle": "Impossibile salvare la partita attuale",
+  "backupsRestoreNoSafetyBody": "Se continui, i progressi che non sono in un backup andranno persi. Non si può annullare.",
+  "backupsRestoreNoSafetyConfirm": "Ripristina comunque",
   "deleteUnifiedTitle": "Eliminare {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

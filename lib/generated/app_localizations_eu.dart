@@ -961,6 +961,17 @@ class AppLocalizationsEu extends AppLocalizations {
   String get backupsCollapseAll => 'Tolestu guztiak';
 
   @override
+  String get backupsRestoreNoSafetyTitle =>
+      'Ezin izan da zure uneko partida gorde';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'Jarraitzen baduzu, babeskopian ez dagoen aurrerapena galduko da. Ezin da desegin.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Leheneratu hala ere';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '$farmName ezabatu?';
   }

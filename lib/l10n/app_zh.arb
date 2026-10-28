@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "无法保留备份：{error}",
   "backupsExpandAll": "全部展开",
   "backupsCollapseAll": "全部折叠",
+  "backupsRestoreNoSafetyTitle": "无法保存当前存档",
+  "backupsRestoreNoSafetyBody": "继续的话，不在备份中的进度将会丢失，且无法撤销。",
+  "backupsRestoreNoSafetyConfirm": "仍然恢复",
   "deleteUnifiedTitle": "要删除 {farmName} 吗？",
   "@deleteUnifiedTitle": {
     "placeholders": {

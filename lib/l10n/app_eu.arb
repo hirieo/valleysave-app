@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Ezin izan da babeskopia mantendu: {error}",
   "backupsExpandAll": "Zabaldu guztiak",
   "backupsCollapseAll": "Tolestu guztiak",
+  "backupsRestoreNoSafetyTitle": "Ezin izan da zure uneko partida gorde",
+  "backupsRestoreNoSafetyBody": "Jarraitzen baduzu, babeskopian ez dagoen aurrerapena galduko da. Ezin da desegin.",
+  "backupsRestoreNoSafetyConfirm": "Leheneratu hala ere",
   "deleteUnifiedTitle": "{farmName} ezabatu?",
   "@deleteUnifiedTitle": {
     "placeholders": {

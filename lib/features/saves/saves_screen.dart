@@ -3856,6 +3856,22 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   }) async {
     final l10n = AppLocalizations.of(context)!;
     final folderName = entry.folderName;
+
+    // La partida viva está en la carpeta del juego y la carpeta puente de
+    // abajo empieza vacía: sin esto no habría «Antes de restaurar». Si no se
+    // puede guardar, se pregunta antes de pisarla (spec 012, punto 7).
+    if (!await _saveCurrentAndroidGame(folderName)) {
+      if (!mounted) return false;
+      final goOn = await _confirmBackupAction(
+        accent: const Color(0xFFE05252),
+        title: l10n.backupsRestoreNoSafetyTitle,
+        body: l10n.backupsRestoreNoSafetyBody,
+        confirmLabel: l10n.backupsRestoreNoSafetyConfirm,
+        confirmIcon: Icons.warning_amber_rounded,
+      );
+      if (goOn != true) return false;
+    }
+
     final stagingDir = await Directory.systemTemp.createTemp(
       'vs_restore_stage_',
     );
@@ -3894,6 +3910,30 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       return false;
     } finally {
       if (await stagingDir.exists()) await stagingDir.delete(recursive: true);
+    }
+  }
+
+  /// Android root/Shizuku: copia la partida viva del juego a la carpeta de la
+  /// app (lo mismo que hace [_scanLocal]) y asegura que su contenido queda en
+  /// un zip ([BackupService.ensurePreRestoreBackup]). `true` si quedó a salvo
+  /// o si el juego no tiene esa partida (nada que perder); `false` si no se
+  /// pudo copiar o respaldar.
+  Future<bool> _saveCurrentAndroidGame(String folderName) async {
+    try {
+      final bridge = _mode == AndroidMode.root
+          ? await ShizukuService.instance.pullSavesAsRoot()
+          : await ShizukuService.instance.pullSaves();
+      if (bridge == null) return false;
+      final live = Directory('$bridge${Platform.pathSeparator}$folderName');
+      if (!await live.exists()) return true;
+      final safe = await BackupService().ensurePreRestoreBackup(
+        saveFolderPath: live.path,
+        folderName: folderName,
+        backupsDir: await _backupsDirPath(),
+      );
+      return safe != null;
+    } catch (_) {
+      return false;
     }
   }
 

@@ -954,6 +954,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get backupsCollapseAll => 'Recolher tudo';
 
   @override
+  String get backupsRestoreNoSafetyTitle =>
+      'Não foi possível salvar a partida atual';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'Se continuar, o progresso que não estiver em um backup será perdido. Não é possível desfazer.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Restaurar mesmo assim';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Deletar $farmName?';
   }

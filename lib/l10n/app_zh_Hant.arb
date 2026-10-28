@@ -1041,6 +1041,9 @@
   "backupsKeepErr": "無法保留備份：{error}",
   "backupsExpandAll": "全部展開",
   "backupsCollapseAll": "全部摺疊",
+  "backupsRestoreNoSafetyTitle": "無法儲存目前的存檔",
+  "backupsRestoreNoSafetyBody": "繼續的話，不在備份中的進度將會遺失，且無法復原。",
+  "backupsRestoreNoSafetyConfirm": "仍然恢復",
   "deleteUnifiedTitle": "要刪除 {farmName} 嗎？",
   "@deleteUnifiedTitle": {
     "placeholders": {

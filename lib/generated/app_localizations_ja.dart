@@ -935,6 +935,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backupsCollapseAll => 'すべて折りたたむ';
 
   @override
+  String get backupsRestoreNoSafetyTitle => '現在のセーブを保存できませんでした';
+
+  @override
+  String get backupsRestoreNoSafetyBody => '続行すると、バックアップにない進行状況は失われます。元に戻せません。';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'それでも復元';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '$farmNameを削除しますか?';
   }

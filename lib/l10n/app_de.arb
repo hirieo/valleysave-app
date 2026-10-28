@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Die Sicherung konnte nicht behalten werden: {error}",
   "backupsExpandAll": "Alle ausklappen",
   "backupsCollapseAll": "Alle einklappen",
+  "backupsRestoreNoSafetyTitle": "Deine aktuelle Partie konnte nicht gesichert werden",
+  "backupsRestoreNoSafetyBody": "Wenn du fortfährst, geht Fortschritt verloren, der in keiner Sicherung steckt. Das lässt sich nicht rückgängig machen.",
+  "backupsRestoreNoSafetyConfirm": "Trotzdem wiederherstellen",
   "deleteUnifiedTitle": "{farmName} löschen?",
   "@deleteUnifiedTitle": {
     "placeholders": {

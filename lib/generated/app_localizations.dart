@@ -1759,6 +1759,24 @@ abstract class AppLocalizations {
   /// **'Collapse all'**
   String get backupsCollapseAll;
 
+  /// No description provided for @backupsRestoreNoSafetyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your current game'**
+  String get backupsRestoreNoSafetyTitle;
+
+  /// No description provided for @backupsRestoreNoSafetyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you continue, any progress that is not in a backup will be lost. This can\'t be undone.'**
+  String get backupsRestoreNoSafetyBody;
+
+  /// No description provided for @backupsRestoreNoSafetyConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore anyway'**
+  String get backupsRestoreNoSafetyConfirm;
+
   /// No description provided for @deleteUnifiedTitle.
   ///
   /// In en, this message translates to:

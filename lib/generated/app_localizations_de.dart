@@ -963,6 +963,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get backupsCollapseAll => 'Alle einklappen';
 
   @override
+  String get backupsRestoreNoSafetyTitle =>
+      'Deine aktuelle Partie konnte nicht gesichert werden';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'Wenn du fortfährst, geht Fortschritt verloren, der in keiner Sicherung steckt. Das lässt sich nicht rückgängig machen.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Trotzdem wiederherstellen';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '$farmName löschen?';
   }

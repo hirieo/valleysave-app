@@ -968,6 +968,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupsCollapseAll => 'Tout replier';
 
   @override
+  String get backupsRestoreNoSafetyTitle =>
+      'Impossible de sauvegarder la partie actuelle';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'Si la restauration continue, la progression absente des sauvegardes sera perdue. Cette action est irréversible.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Restaurer quand même';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Supprimer $farmName ?';
   }

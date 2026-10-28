@@ -936,6 +936,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupsCollapseAll => '모두 접기';
 
   @override
+  String get backupsRestoreNoSafetyTitle => '현재 게임을 저장하지 못했습니다';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      '계속하면 백업에 없는 진행 상황이 사라집니다. 되돌릴 수 없습니다.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => '그래도 복원';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '$farmName을(를) 삭제하시겠습니까?';
   }

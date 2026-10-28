@@ -1092,6 +1092,9 @@
   "backupsKeepErr": "Не удалось сохранить резервную копию: {error}",
   "backupsExpandAll": "Развернуть все",
   "backupsCollapseAll": "Свернуть все",
+  "backupsRestoreNoSafetyTitle": "Не удалось сохранить текущую партию",
+  "backupsRestoreNoSafetyBody": "Если продолжить, прогресс, которого нет в резервных копиях, будет потерян. Это нельзя отменить.",
+  "backupsRestoreNoSafetyConfirm": "Всё равно восстановить",
   "deleteUnifiedTitle": "Удалить {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

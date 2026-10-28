@@ -519,6 +519,9 @@
   },
   "backupsExpandAll": "Expand all",
   "backupsCollapseAll": "Collapse all",
+  "backupsRestoreNoSafetyTitle": "Couldn't save your current game",
+  "backupsRestoreNoSafetyBody": "If you continue, any progress that is not in a backup will be lost. This can't be undone.",
+  "backupsRestoreNoSafetyConfirm": "Restore anyway",
   "deleteUnifiedTitle": "Delete {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

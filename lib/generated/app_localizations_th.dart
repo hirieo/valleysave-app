@@ -950,6 +950,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get backupsCollapseAll => 'ย่อทั้งหมด';
 
   @override
+  String get backupsRestoreNoSafetyTitle => 'บันทึกเกมปัจจุบันของคุณไม่สำเร็จ';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'หากดำเนินการต่อ ความคืบหน้าที่ไม่อยู่ในข้อมูลสำรองจะสูญหาย และไม่สามารถย้อนกลับได้';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'คืนค่าต่อไป';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'ลบ $farmName หรือไม่?';
   }

@@ -21,6 +21,9 @@ const _keys = [
   'backupsKeepErr',
   'backupsExpandAll',
   'backupsCollapseAll',
+  'backupsRestoreNoSafetyTitle',
+  'backupsRestoreNoSafetyBody',
+  'backupsRestoreNoSafetyConfirm',
 ];
 
 Set<String> _placeholders(String text) => {

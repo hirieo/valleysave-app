@@ -961,6 +961,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backupsCollapseAll => 'Свернуть все';
 
   @override
+  String get backupsRestoreNoSafetyTitle =>
+      'Не удалось сохранить текущую партию';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'Если продолжить, прогресс, которого нет в резервных копиях, будет потерян. Это нельзя отменить.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Всё равно восстановить';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Удалить $farmName?';
   }

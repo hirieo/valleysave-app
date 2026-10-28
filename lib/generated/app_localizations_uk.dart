@@ -959,6 +959,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get backupsCollapseAll => 'Згорнути все';
 
   @override
+  String get backupsRestoreNoSafetyTitle => 'Не вдалося зберегти поточну гру';
+
+  @override
+  String get backupsRestoreNoSafetyBody =>
+      'Якщо продовжити, прогрес, якого немає в резервних копіях, буде втрачено. Скасувати це неможливо.';
+
+  @override
+  String get backupsRestoreNoSafetyConfirm => 'Усе одно відновити';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Видалити $farmName?';
   }

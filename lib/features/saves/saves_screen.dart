@@ -2403,8 +2403,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final out = await ShizukuService.instance.prepareOut(folderName);
       final outDir = Directory(out);
       if (await outDir.exists()) await outDir.delete(recursive: true);
-      await Directory('${stagingDir.path}${Platform.pathSeparator}$folderName')
-          .rename(out);
+      // Copiar, no mover: la caché y la carpeta externa son discos distintos
+      // y `rename` falla con errno 18 (EXDEV).
+      await copyDirectory(
+        Directory('${stagingDir.path}${Platform.pathSeparator}$folderName'),
+        outDir,
+      );
 
       final ok = _mode == AndroidMode.root
           ? await ShizukuService.instance.pushSaveAsRoot(out, folderName)
@@ -3891,8 +3895,12 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       final out = await ShizukuService.instance.prepareOut(folderName);
       final outDir = Directory(out);
       if (await outDir.exists()) await outDir.delete(recursive: true);
-      await Directory('${stagingDir.path}${Platform.pathSeparator}$folderName')
-          .rename(out);
+      // Copiar, no mover: la caché y la carpeta externa son discos distintos
+      // y `rename` falla con errno 18 (EXDEV).
+      await copyDirectory(
+        Directory('${stagingDir.path}${Platform.pathSeparator}$folderName'),
+        outDir,
+      );
 
       final ok = _mode == AndroidMode.root
           ? await ShizukuService.instance.pushSaveAsRoot(out, folderName)

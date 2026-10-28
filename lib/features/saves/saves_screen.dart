@@ -129,6 +129,10 @@ class SavesScreen extends StatefulWidget {
 class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   List<SaveEntry> _entries = [];
   int _staggerVersion = 0;
+
+  /// `true` mientras el diálogo de Backups está abierto: la pantalla de atrás
+  /// (barra y tarjetas) se funde y solo queda el fondo animado.
+  final ValueNotifier<bool> _backupsOpen = ValueNotifier(false);
   bool _loading = true;
   bool _refreshing = false;
   bool _gameCanLaunch = false;
@@ -332,6 +336,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _stopAutoRefresh();
     _autoSyncTimer?.cancel();
+    _backupsOpen.dispose();
     super.dispose();
   }
 
@@ -3144,10 +3149,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     required Widget child,
     double maxWidth = 380,
     Color? accent,
+    Color? fill,
+    double blurSigma = 6,
   }) => glassDialogShell(
     context,
     maxWidth: maxWidth,
     accent: accent ?? _seasonAccent,
+    fill: fill,
+    blurSigma: blurSigma,
     child: child,
   );
 
@@ -3468,8 +3477,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final initialOpen = await BackupsSectionsPrefs.load();
     if (!mounted) return;
     var inUse = initialInUse;
+    _backupsOpen.value = true;
     await showDialog<void>(
       context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.12),
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -3487,9 +3498,18 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               setState(() => inUse = marked?.fileName);
             }
 
+            // Cristal casi transparente con tinte de la estación (variante C
+            // aprobada): se ve el fondo animado y no las cards, que se funden
+            // mientras el diálogo está abierto (`_backupsOpen`).
+            final accent = _seasonAccent;
             return _glassDialogShell(
               maxWidth: 420,
-              accent: const Color(0xFF97C459),
+              accent: accent,
+              blurSigma: 14,
+              fill: Color.alphaBlend(
+                accent.withValues(alpha: 0.12),
+                const Color(0xFF14110A).withValues(alpha: 0.30),
+              ),
               child: _dialogBody(
                 title: Text(
                   l10n.backupsScreenTitle(farmName),
@@ -3596,7 +3616,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           },
         ),
       ),
-    );
+    ).whenComplete(() => _backupsOpen.value = false);
   }
 
   /// Vuelve a leer los backups LOCALES de [folderName] y los fusiona en
@@ -6350,33 +6370,44 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
             ),
             SafeArea(
-              child: Column(
-                children: [
-                  SavesTopBar(
-                    onBack: () => Navigator.pop(context),
-                    onSettings: _openSettings,
-                    onRefresh: _refresh,
-                    refreshing: _refreshing,
-                    canLaunchGame: _gameCanLaunch,
-                    onLaunch: _handleLaunchGame,
-                    onImport: _handleImport,
-                    showSharedTitle: _showSharedHeader,
-                    connectedEmail: _connectedEmail,
-                  ),
-                  if (_splitByArea)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 460),
-                        child: SaveAreaTabs(
-                          selected: _area,
-                          counts: _areaCounts,
-                          onSelect: _selectArea,
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _backupsOpen,
+                builder: (context, backupsOpen, child) => AnimatedOpacity(
+                  opacity: backupsOpen ? 0 : 1,
+                  duration: MediaQuery.of(context).disableAnimations
+                      ? Duration.zero
+                      : const Duration(milliseconds: 220),
+                  curve: Curves.easeOut,
+                  child: child,
+                ),
+                child: Column(
+                  children: [
+                    SavesTopBar(
+                      onBack: () => Navigator.pop(context),
+                      onSettings: _openSettings,
+                      onRefresh: _refresh,
+                      refreshing: _refreshing,
+                      canLaunchGame: _gameCanLaunch,
+                      onLaunch: _handleLaunchGame,
+                      onImport: _handleImport,
+                      showSharedTitle: _showSharedHeader,
+                      connectedEmail: _connectedEmail,
+                    ),
+                    if (_splitByArea)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 460),
+                          child: SaveAreaTabs(
+                            selected: _area,
+                            counts: _areaCounts,
+                            onSelect: _selectArea,
+                          ),
                         ),
                       ),
-                    ),
-                  Expanded(child: _buildBody()),
-                ],
+                    Expanded(child: _buildBody()),
+                  ],
+                ),
               ),
             ),
           ],

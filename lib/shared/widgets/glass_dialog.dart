@@ -6,12 +6,17 @@ import 'package:flutter/material.dart';
 /// diálogos de la app (antes solo vivía duplicado dentro de
 /// `saves_screen.dart`; extraído 2026-07-15 para que cualquier pantalla
 /// pueda usar el mismo, en vez de reinventar un contenedor plano propio).
+///
+/// [fill] y [blurSigma] solo los cambia un diálogo que quiera dejar ver el
+/// fondo animado (Backups): por defecto, el cristal casi opaco de siempre.
 Widget glassDialogShell(
   BuildContext context, {
   required Widget child,
   double maxWidth = 380,
   required Color accent,
   EdgeInsets padding = const EdgeInsets.fromLTRB(22, 20, 22, 16),
+  Color? fill,
+  double blurSigma = 6,
 }) {
   final borderColor = accent.withValues(alpha: 0.22);
   return ConstrainedBox(
@@ -22,10 +27,10 @@ Widget glassDialogShell(
     child: ClipRRect(
       borderRadius: BorderRadius.circular(22),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+        filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF14110A).withValues(alpha: 0.92),
+            color: fill ?? const Color(0xFF14110A).withValues(alpha: 0.92),
             borderRadius: BorderRadius.circular(22),
             border: Border.all(color: borderColor),
             boxShadow: [

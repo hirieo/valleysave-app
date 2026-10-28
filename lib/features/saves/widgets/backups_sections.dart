@@ -341,6 +341,13 @@ class _Section extends StatelessWidget {
       BackupOrigin.preRestore => l10n.backupsRuleKeep(kMaxPreRestoreBackups),
     };
     final inUse = entries.where((e) => e.fileName == inUseFileName).firstOrNull;
+    // El backup «En uso» sube siempre al principio de su sección; el resto
+    // conserva el orden por fecha.
+    final ordered = [
+      ?inUse,
+      for (final e in entries)
+        if (e.fileName != inUseFileName) e,
+    ];
 
     final Widget summary;
     if (open) {
@@ -461,14 +468,14 @@ class _Section extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (var i = 0; i < entries.length; i++)
+                for (var i = 0; i < ordered.length; i++)
                   _BackupRow(
-                    key: ValueKey('backup-row-${entries[i].fileName}'),
-                    entry: entries[i],
+                    key: ValueKey('backup-row-${ordered[i].fileName}'),
+                    entry: ordered[i],
                     first: i == 0,
-                    inUse: entries[i].fileName == inUseFileName,
+                    inUse: ordered[i].fileName == inUseFileName,
                     showSharedLocation: showSharedLocation,
-                    actions: actionsFor(entries[i]),
+                    actions: actionsFor(ordered[i]),
                     loadSummary: loadSummary,
                   ),
               ],

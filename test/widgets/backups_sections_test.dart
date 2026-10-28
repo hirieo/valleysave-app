@@ -319,6 +319,31 @@ void main() {
 
     expect(find.text('12,4 MB'), findsOneWidget);
   });
+  testWidgets('el backup en uso sube al principio de su sección', (
+    tester,
+  ) async {
+    final newer = _entry('autobackup', '20261030-100000');
+    await pump(
+      tester,
+      entries: [newer, _autoInUse, _auto2],
+      inUse: _autoInUse.fileName,
+      open: {BackupOrigin.auto},
+    );
+
+    final inUseTop = tester
+        .getTopLeft(find.byKey(ValueKey('backup-row-${_autoInUse.fileName}')))
+        .dy;
+    final newerTop = tester
+        .getTopLeft(find.byKey(ValueKey('backup-row-${newer.fileName}')))
+        .dy;
+    final olderTop = tester
+        .getTopLeft(find.byKey(ValueKey('backup-row-${_auto2.fileName}')))
+        .dy;
+
+    expect(inUseTop, lessThan(newerTop));
+    expect(newerTop, lessThan(olderTop));
+  });
+
   testWidgets('ningún texto del diálogo baja de 11 px', (tester) async {
     await pump(tester, open: BackupOrigin.values.toSet());
 

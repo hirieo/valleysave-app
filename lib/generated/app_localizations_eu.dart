@@ -45,57 +45,49 @@ class AppLocalizationsEu extends AppLocalizations {
   String get privacyTitle => 'Pribatutasun eta datuen erabilpena';
 
   @override
-  String get privacyDescription =>
-      'ValleySave Stardew Valley gordetzeak sinkronizatzeko aplikazioa da zure Google Drive kontuarekin.';
+  String get privacyDescription => 'ValleySave Stardew Valley gordetzeak sinkronizatzeko aplikazioa da zure Google Drive kontuarekin.';
 
   @override
   String get whatDataTitle => 'Zer datu erabiltzen ditu';
 
   @override
-  String get whatDataDesc =>
-      'ValleySave Stardew Valley gordetzeak bakarrik atzitzen ditu kopiak egiteko, sinkronizatzeko edo leheneratzeko.';
+  String get whatDataDesc => 'ValleySave Stardew Valley gordetzeak bakarrik atzitzen ditu kopiak egiteko, sinkronizatzeko edo leheneratzeko.';
 
   @override
   String get googleDriveTitle => 'Google Drive';
 
   @override
-  String get googleDriveDesc =>
-      'Zure gordetzeek zure Google Drive kontuan igotzen dira. ValleySave ez du bere zerbitzaririk erabiltzen zure jokoak biltegiratzeko.';
+  String get googleDriveDesc => 'Zure gordetzeek zure Google Drive kontuan igotzen dira. ValleySave ez du bere zerbitzaririk erabiltzen zure jokoak biltegiratzeko.';
 
   @override
   String get androidPermissionsTitle => 'Android-eko baimenak';
 
   @override
-  String get androidPermissionsDesc =>
-      'ValleySave gordetze fitxategiak atzitzeko biltegi-baimenak edo Shizuku bezalako tresneria beharko litezke.';
+  String get androidPermissionsDesc => 'ValleySave gordetze fitxategiak atzitzeko biltegi-baimenak edo Shizuku bezalako tresneria beharko litezke.';
 
   @override
   String get adsTitle => 'Iragarkiak';
 
   @override
-  String get adsDesc =>
-      'ValleySave Google AdMob-en bidezko iragarkiak erakutsi ditzake.';
+  String get adsDesc => 'ValleySave Google AdMob-en bidezko iragarkiak erakutsi ditzake.';
 
   @override
   String get responsibilityTitle => 'Erantzukizuna';
 
   @override
-  String get responsibilityDesc =>
-      'Zure gordetze fitxategiak zure erantzukizuna dira.';
+  String get responsibilityDesc => 'Zure gordetze fitxategiak zure erantzukizuna dira.';
 
   @override
   String get deleteDataTitle => 'Datua ezabatu';
 
   @override
-  String get deleteDataDesc =>
-      'Zure sinkronizaturiko kopiak ezabatu ditzakezu Google Drive-tik ValleySave karpeta eskuz ezabatuz.';
+  String get deleteDataDesc => 'Zure sinkronizaturiko kopiak ezabatu ditzakezu Google Drive-tik ValleySave karpeta eskuz ezabatuz.';
 
   @override
   String get sourceCodeTitle => 'Kodea eta kontaktua';
 
   @override
-  String get sourceCodeDesc =>
-      'ValleySave Polyform Noncommercial lizentzapean kode disponiblearekin dagoen proiektua da.';
+  String get sourceCodeDesc => 'ValleySave Polyform Noncommercial lizentzapean kode disponiblearekin dagoen proiektua da.';
 
   @override
   String get upToDate => 'Eguneratuta';
@@ -124,8 +116,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shizukuGuide => 'Shizuku Konfigurazio Gidaburuak';
 
   @override
-  String get activateShizuku =>
-      'Shizuku gaitu gordetze jokoen artikuluan idazteko.';
+  String get activateShizuku => 'Shizuku gaitu gordetze jokoen artikuluan idazteko.';
 
   @override
   String deleteSaveTitle(Object saveName) {
@@ -133,8 +124,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get deleteSaveMessage =>
-      'Honek gailutik gordetze hau kendu egingo du. Jarraitu nahi duzu?';
+  String get deleteSaveMessage => 'Honek gailutik gordetze hau kendu egingo du. Jarraitu nahi duzu?';
 
   @override
   String get deleteFromDrive => 'Drive-tik ezabatu';
@@ -196,8 +186,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get welcomeHeroPost => '\njokoan hartu.';
 
   @override
-  String get welcomeSubtitle =>
-      'Sinkronizatu Stardew Valley gordetzeeak zure gailu guztietan. Zure datuak zure Google Drive-ean bizi dira — ez zerbitzariak, ez harpidetzak, zure kontrolpean.';
+  String get welcomeSubtitle => 'Sinkronizatu Stardew Valley gordetzeeak zure gailu guztietan. Zure datuak zure Google Drive-ean bizi dira — ez zerbitzariak, ez harpidetzak, zure kontrolpean.';
 
   @override
   String get welcomeDriveConnected => 'Drive konektatuta';
@@ -223,22 +212,19 @@ class AppLocalizationsEu extends AppLocalizations {
   String get modeAutoTitle => 'Automatikoa';
 
   @override
-  String get modeAutoDesc =>
-      'Zure aktiboen gordetzeari jarraikitzen zaio eta, gordetzerik ez badago, zure errealeko kokalekuari.';
+  String get modeAutoDesc => 'Zure aktiboen gordetzeari jarraikitzen zaio eta, gordetzerik ez badago, zure errealeko kokalekuari.';
 
   @override
   String get modeSavesTitle => 'Gordetzearen arabera';
 
   @override
-  String get modeSavesDesc =>
-      'Beti zure azkeneko gordetzearen denboraldia erabiltzen du.';
+  String get modeSavesDesc => 'Beti zure azkeneko gordetzearen denboraldia erabiltzen du.';
 
   @override
   String get modeGeoTitle => 'Kokalekuaren arabera';
 
   @override
-  String get modeGeoDesc =>
-      'Beti zure kokalekuaren errealeko denboraldia erabiltzen du.';
+  String get modeGeoDesc => 'Beti zure kokalekuaren errealeko denboraldia erabiltzen du.';
 
   @override
   String get modeFixedTitle => 'Finkatutako denboraldi';
@@ -250,8 +236,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get modeRandomTitle => 'Ausazkoa';
 
   @override
-  String get modeRandomDesc =>
-      'Aplikazioa irekitzen duzunean denboraldi desberdina aukeratzen du.';
+  String get modeRandomDesc => 'Aplikazioa irekitzen duzunean denboraldi desberdina aukeratzen du.';
 
   @override
   String get seasonInitial => 'Hasierakoa';
@@ -281,15 +266,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get autoStep2Title => 'Gordetze aktiboa';
 
   @override
-  String get autoStep2Desc =>
-      'Zure azkeneko sinkronizaturiko gordetzearen denboraldia erabiltzen du.';
+  String get autoStep2Desc => 'Zure azkeneko sinkronizaturiko gordetzearen denboraldia erabiltzen du.';
 
   @override
   String get autoStep3Title => 'Kokalekua';
 
   @override
-  String get autoStep3Desc =>
-      'Zure hemisferioa eta zure eskualdeko errealeko denboraldia detektatzen du.';
+  String get autoStep3Desc => 'Zure hemisferioa eta zure eskualdeko errealeko denboraldia detektatzen du.';
 
   @override
   String get autoStep4Title => 'Lehenetsitakoa';
@@ -316,8 +299,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get updateError => 'Akatsa — sakatu berriz saiatzen';
 
   @override
-  String get updateNeedsPermission =>
-      'Gaitu \"ezezaguneko aplikazioak instalatzea\" ValleySaverentzat eta sakatu Eguneratu berriro';
+  String get updateNeedsPermission => 'Gaitu \"ezezaguneko aplikazioak instalatzea\" ValleySaverentzat eta sakatu Eguneratu berriro';
 
   @override
   String get disconnectTitle => 'Drive deskonektatu?';
@@ -447,35 +429,28 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get importErrInvalidZip =>
-      'Fitxategi hau ez da zip fitxategi baliozkoa.';
+  String get importErrInvalidZip => 'Fitxategi hau ez da zip fitxategi baliozkoa.';
 
   @override
-  String get importErrUnsafePath =>
-      'Fitxategi honek egitura ez-segurua du eta ezetsi egin da.';
+  String get importErrUnsafePath => 'Fitxategi honek egitura ez-segurua du eta ezetsi egin da.';
 
   @override
   String get importErrTooLarge => 'Fitxategi hau handiegia da inportatzeko.';
 
   @override
-  String get importErrNotASave =>
-      'Fitxategi honek ez du gordetze ezagungarririk.';
+  String get importErrNotASave => 'Fitxategi honek ez du gordetze ezagungarririk.';
 
   @override
-  String get importErrWrite =>
-      'Ezin izan da inportatutako gordetzea idatzi (diskoa/baimenak).';
+  String get importErrWrite => 'Ezin izan da inportatutako gordetzea idatzi (diskoa/baimenak).';
 
   @override
-  String get importErrBackupFailed =>
-      'Ezin izan da babeskopia sortu. Ez da ezer inportatu.';
+  String get importErrBackupFailed => 'Ezin izan da babeskopia sortu. Ez da ezer inportatu.';
 
   @override
-  String get importConflictTitle =>
-      'Dagoeneko badago izen hori duen gordetze bat';
+  String get importConflictTitle => 'Dagoeneko badago izen hori duen gordetze bat';
 
   @override
-  String get importConflictBody =>
-      'Inportatzeak dagoen kopia lokala ordeztuko du. Ezin da desegin.';
+  String get importConflictBody => 'Inportatzeak dagoen kopia lokala ordeztuko du. Ezin da desegin.';
 
   @override
   String get importConflictConfirm => 'Gainidatzi';
@@ -493,8 +468,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shareEmailPlaceholder => 'izena@adibidea.com';
 
   @override
-  String get shareInfoNote =>
-      'Partekatzeak ikusi eta deskargatzeko sarbidea ematen du. Zuk bakarrik editatu edo ezaba dezakezu zure Drive-ko kopia.';
+  String get shareInfoNote => 'Partekatzeak ikusi eta deskargatzeko sarbidea ematen du. Zuk bakarrik editatu edo ezaba dezakezu zure Drive-ko kopia.';
 
   @override
   String get shareRoleReader => 'Irakurtzeko soilik';
@@ -503,8 +477,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shareRoleWriter => 'Sinkronizatzea baimendu';
 
   @override
-  String get shareInfoNoteCoop =>
-      'Irakurtzeko soilik aukerak ikusi eta deskargatzeko aukera ematen du. Sinkronizatzea baimentzeak zure Drive-ko kopia gainidazteko aukera ematen du — inoiz ez dute ezabatuko.';
+  String get shareInfoNoteCoop => 'Irakurtzeko soilik aukerak ikusi eta deskargatzeko aukera ematen du. Sinkronizatzea baimentzeak zure Drive-ko kopia gainidazteko aukera ematen du — inoiz ez dute ezabatuko.';
 
   @override
   String get shareConfirmButton => 'Partekatu';
@@ -532,12 +505,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get driveOnlyControlsYourCopy =>
-      'Partekatzeak zure Drive-ko kopia kontrolatzen du soilik. Norbaitek deskargatzen badu, kopia hori berea da.';
+  String get driveOnlyControlsYourCopy => 'Partekatzeak zure Drive-ko kopia kontrolatzen du soilik. Norbaitek deskargatzen badu, kopia hori berea da.';
 
   @override
-  String get driveOnlyControlsYourCopyCoop =>
-      'Sinkronizatzeak zure Drive-ko kopia kontrolatzen du — baimentzen duzunak gainidatz dezake, baina inoiz ez ezabatu.';
+  String get driveOnlyControlsYourCopyCoop => 'Sinkronizatzeak zure Drive-ko kopia kontrolatzen du — baimentzen duzunak gainidatz dezake, baina inoiz ez ezabatu.';
 
   @override
   String get sharedWithMeTitle => 'Nirekin partekatuak';
@@ -585,8 +556,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedManageDialogTitle => 'Partekatuak kudeatu';
 
   @override
-  String get sharedManageDialogHint =>
-      'Hemen partekatutako gordetze batetik benetan atera zaitezke.';
+  String get sharedManageDialogHint => 'Hemen partekatutako gordetze batetik benetan atera zaitezke.';
 
   @override
   String get sharedLeaveButton => 'Partekatzetik atera';
@@ -632,8 +602,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedDownloadOwn => 'Deskargatu nire Drive-tik';
 
   @override
-  String get sharedStatusOwnDriveAhead =>
-      'Zure Drive-a aurretik doa — deskargatu';
+  String get sharedStatusOwnDriveAhead => 'Zure Drive-a aurretik doa — deskargatu';
 
   @override
   String get sharedSyncBoth => 'Igo bi Drive-etara';
@@ -652,12 +621,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get sharedStatusSyncedNoOwnDrive =>
-      'Jabearekin sinkronizatuta · zure Drive-n kopiarik gabe';
+  String get sharedStatusSyncedNoOwnDrive => 'Jabearekin sinkronizatuta · zure Drive-n kopiarik gabe';
 
   @override
-  String get sharedStatusAheadNoOwnDrive =>
-      'Aurretik zoaz · zure Drive-n kopiarik gabe';
+  String get sharedStatusAheadNoOwnDrive => 'Aurretik zoaz · zure Drive-n kopiarik gabe';
 
   @override
   String sharedStatusOwnerAheadNoOwnDrive(String email) {
@@ -671,8 +638,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedStatusAheadBoth => 'Bi Drive-etan aurretik zoaz';
 
   @override
-  String get sharedStatusMixed =>
-      'Sinkronizatu gabe — egiaztatu Drive bakoitza';
+  String get sharedStatusMixed => 'Sinkronizatu gabe — egiaztatu Drive bakoitza';
 
   @override
   String get sharedStatusFullySynced => 'Erabat sinkronizatuta';
@@ -712,8 +678,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedSyncChooseTitle => 'Non sinkronizatu nahi duzu?';
 
   @override
-  String get sharedSyncChooseBody =>
-      'Aukeratu zein hodei-kopia eguneratu nahi dituzun gailu honetako gordetzearekin.';
+  String get sharedSyncChooseBody => 'Aukeratu zein hodei-kopia eguneratu nahi dituzun gailu honetako gordetzearekin.';
 
   @override
   String get sharedSyncTargetOwn => 'Nire Drive-a';
@@ -730,8 +695,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedDownloadChooseTitle => 'Zein kopia deskargatu nahi duzu?';
 
   @override
-  String get sharedDownloadChooseBody =>
-      'Kopia bat baino gehiago dago aurretik. Aukeratu zein ekarri nahi duzun gailu honetara.';
+  String get sharedDownloadChooseBody => 'Kopia bat baino gehiago dago aurretik. Aukeratu zein ekarri nahi duzun gailu honetara.';
 
   @override
   String get sharedDownloadSourceOwn => 'Nire Drive-tik';
@@ -745,8 +709,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get sharedWithMePickerTitle => 'Gehitu partekatutako gordetzea';
 
   @override
-  String get sharedPickerEmptyHint =>
-      'Beste jokalari batek Drive-tik zurekin partekatzen duena hemen agertzen da.';
+  String get sharedPickerEmptyHint => 'Beste jokalari batek Drive-tik zurekin partekatzen duena hemen agertzen da.';
 
   @override
   String get sharedPickerAddButton => 'Gehitu';
@@ -763,8 +726,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get swapBackupDialogTitle => 'Babeskopia sortuta';
 
   @override
-  String get swapBackupDialogBody =>
-      'Aurreko bertsioa zip gisa gorde da. Zer egin nahi duzu horrekin?';
+  String get swapBackupDialogBody => 'Aurreko bertsioa zip gisa gorde da. Zer egin nahi duzu horrekin?';
 
   @override
   String get swapBackupUpload => 'Igo Drive-ra';
@@ -804,8 +766,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get backupsRestoreConfirmTitle => 'Babeskopia hau leheneratu?';
 
   @override
-  String get backupsRestoreConfirmBody =>
-      'Honek zure uneko gordetzea aurreko bertsio honekin gainidazten du. Ezin da desegin.';
+  String get backupsRestoreConfirmBody => 'Honek zure uneko gordetzea aurreko bertsio honekin gainidazten du. Ezin da desegin.';
 
   @override
   String get backupsDelete => 'Ezabatu';
@@ -814,8 +775,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get backupsDeleteConfirmTitle => 'Babeskopia hau ezabatu?';
 
   @override
-  String get backupsDeleteConfirmBody =>
-      'Existitzen den leku guztietatik ezabatuko da (gailu hau eta Drive, igo bada). Ezin da desegin.';
+  String get backupsDeleteConfirmBody => 'Existitzen den leku guztietatik ezabatuko da (gailu hau eta Drive, igo bada). Ezin da desegin.';
 
   @override
   String get backupsRestoreOk => 'Babeskopia leheneratu da.';
@@ -824,8 +784,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get backupsRestoreManualTitle => 'Eskuz leheneratu';
 
   @override
-  String get backupsRestoreManualBody =>
-      'Zubi moduan, ValleySave-k ezin du automatikoki idatzi jokoaren karpetan. Atera zeuk babeskopia honen .zip-a Stardew Valley-ren Saves karpetan, edo aldatu Root/Shizuku modura Ezarpenetan automatikoki leheneratzeko.';
+  String get backupsRestoreManualBody => 'Zubi moduan, ValleySave-k ezin du automatikoki idatzi jokoaren karpetan. Atera zeuk babeskopia honen .zip-a Stardew Valley-ren Saves karpetan, edo aldatu Root/Shizuku modura Ezarpenetan automatikoki leheneratzeko.';
 
   @override
   String backupsRestoreErr(String error) {
@@ -841,8 +800,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get backupsCreate => 'Sortu babeskopia lokala';
 
   @override
-  String get backupsCreateLocalHint =>
-      'Babeskopiak lehenengo gailu honetan sortzen dira. Ondoren Drive-ra igo ditzakezu.';
+  String get backupsCreateLocalHint => 'Babeskopiak lehenengo gailu honetan sortzen dira. Ondoren Drive-ra igo ditzakezu.';
 
   @override
   String get backupsCreateOk => 'Babeskopia sortu da.';
@@ -890,8 +848,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get backupsLocationSharedDrive => 'Partekatutako Drive-a';
 
   @override
-  String get backupsDeleteChooseBody =>
-      'Aukeratu zehazki non ezabatu. Babeskopia hau dagoen lekuak bakarrik agertzen dira.';
+  String get backupsDeleteChooseBody => 'Aukeratu zehazki non ezabatu. Babeskopia hau dagoen lekuak bakarrik agertzen dira.';
 
   @override
   String get backupsDeleteLocalOnly => 'Gailu honetatik bakarrik';
@@ -911,13 +868,62 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get backupsSectionManual => 'Manual';
+
+  @override
+  String get backupsSectionAuto => 'Automatic';
+
+  @override
+  String get backupsSectionPreRestore => 'Before restoring';
+
+  @override
+  String backupsSectionLast(String date) {
+    return 'last $date';
+  }
+
+  @override
+  String get backupsInUseShort => 'in use';
+
+  @override
+  String get backupsInUseTag => 'In use';
+
+  @override
+  String get backupsRuleManual => 'never deleted automatically';
+
+  @override
+  String backupsRuleKeep(int count) {
+    return 'keeps $count';
+  }
+
+  @override
+  String get backupsKeep => 'Keep';
+
+  @override
+  String get backupsKeepOk => 'Backup kept in Manual.';
+
+  @override
+  String backupsKeepRemoteErr(String error) {
+    return 'Kept on this device, but renaming it on Drive failed: $error';
+  }
+
+  @override
+  String backupsKeepErr(String error) {
+    return 'Could not keep the backup: $error';
+  }
+
+  @override
+  String get backupsExpandAll => 'Expand all';
+
+  @override
+  String get backupsCollapseAll => 'Collapse all';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '$farmName ezabatu?';
   }
 
   @override
-  String get deleteChooseLocationBody =>
-      'Aukeratu nondik. Gailu honetako kopia betirako ezabatuko da; Drive-koa Zaborrera mugituko da (30 egun).';
+  String get deleteChooseLocationBody => 'Aukeratu nondik. Gailu honetako kopia betirako ezabatuko da; Drive-koa Zaborrera mugituko da (30 egun).';
 
   @override
   String deleteDriveContextTitle(String farmName) {
@@ -925,12 +931,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get deleteDriveContextBody =>
-      'Drive-ko kopia Zaborrera mugituko da, eta 30 egunean leheneratu ahal izango duzu.';
+  String get deleteDriveContextBody => 'Drive-ko kopia Zaborrera mugituko da, eta 30 egunean leheneratu ahal izango duzu.';
 
   @override
-  String get deleteDriveLocalKept =>
-      'Gailu honetako kopiak aldaketarik gabe jarraituko du.';
+  String get deleteDriveLocalKept => 'Gailu honetako kopiak aldaketarik gabe jarraituko du.';
 
   @override
   String deleteLocalContextTitle(String farmName) {
@@ -938,8 +942,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get deleteLocalContextBody =>
-      'Gailu honetako kopia betirako ezabatuko da.';
+  String get deleteLocalContextBody => 'Gailu honetako kopia betirako ezabatuko da.';
 
   @override
   String deleteLocalDriveCurrent(String date) {
@@ -962,8 +965,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get deleteLocalNoRecovery =>
-      'Ez dago Drive-n kopiarik ezta babeskopia lokalik ere gordetze hau berreskuratzeko.';
+  String get deleteLocalNoRecovery => 'Ez dago Drive-n kopiarik ezta babeskopia lokalik ere gordetze hau berreskuratzeko.';
 
   @override
   String get deleteOptionLocalOnly => 'Gailu honetatik bakarrik';
@@ -1062,8 +1064,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwConnectTitle => 'Konektatu zure kontua';
 
   @override
-  String get hiwConnectDesc =>
-      'ValleySave-k zure Google kontua erabiltzen du zure gordetzeak zure Drive-eko ValleySave karpeta pribatuan gordetzeko.';
+  String get hiwConnectDesc => 'ValleySave-k zure Google kontua erabiltzen du zure gordetzeak zure Drive-eko ValleySave karpeta pribatuan gordetzeko.';
 
   @override
   String get hiwConnectStepGoogle => 'Google\nkontua';
@@ -1075,15 +1076,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwConnectStepReady => 'Prest\nsinkronizatzeko';
 
   @override
-  String get hiwConnectTipOwnership =>
-      'Zuk bakarrik editatu edo ezaba ditzakezu Drive-ko zure kopiak — ValleySave-k bere karpetaren barruan bakarrik irakurri eta idazten du.';
+  String get hiwConnectTipOwnership => 'Zuk bakarrik editatu edo ezaba ditzakezu Drive-ko zure kopiak — ValleySave-k bere karpetaren barruan bakarrik irakurri eta idazten du.';
 
   @override
   String get hiwSyncTitle => 'Nola dabil sinkronizatzea';
 
   @override
-  String get hiwSyncIntro =>
-      'ValleySave zure Google Drive erabiltzen du gordetzeeak gailuen artean mugitzeko. Zerbitzari bitartekaririk ez: fitxategiak zureak dira.';
+  String get hiwSyncIntro => 'ValleySave zure Google Drive erabiltzen du gordetzeeak gailuen artean mugitzeko. Zerbitzari bitartekaririk ez: fitxategiak zureak dira.';
 
   @override
   String get hiwSyncDevice => 'Zure\ngailua';
@@ -1098,26 +1097,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwUploadTitle => 'Gordetze igo';
 
   @override
-  String get hiwUploadDesc =>
-      'Igotzen duzunean, ValleySave gordetze fitxategi biak (SaveGameInfo + farmak fitxategia) zure ValleySave/ karpetan igo egiten du Drive-an.';
+  String get hiwUploadDesc => 'Igotzen duzunean, ValleySave gordetze fitxategi biak (SaveGameInfo + farmak fitxategia) zure ValleySave/ karpetan igo egiten du Drive-an.';
 
   @override
   String get hiwDownloadTitle => 'Gordetze deskargatu';
 
   @override
-  String get hiwDownloadDesc =>
-      'Deskargatzen duzunean, ValleySave fitxategiak Drive-etik ekartzen ditu eta zuzenean jokoen karpetan jartzen ditu.';
+  String get hiwDownloadDesc => 'Deskargatzen duzunean, ValleySave fitxategiak Drive-etik ekartzen ditu eta zuzenean jokoen karpetan jartzen ditu.';
 
   @override
   String get hiwCompareTitle => 'Zer ditu konparatu?';
 
   @override
-  String get hiwCompareIntro =>
-      'Zein bertsioa aurretik dagoen jakin ahal izateko, ValleySave joko-denbora guztira erabiltzen du — bakarrik handitu daitekeen datua.';
+  String get hiwCompareIntro => 'Zein bertsioa aurretik dagoen jakin ahal izateko, ValleySave joko-denbora guztira erabiltzen du — bakarrik handitu daitekeen datua.';
 
   @override
-  String get hiwCompareNote =>
-      'Aurretik egiaztatzen duzu ere ikus al duzu, eta erabaki dezakezu:';
+  String get hiwCompareNote => 'Aurretik egiaztatzen duzu ere ikus al duzu, eta erabaki dezakezu:';
 
   @override
   String get hiwCompareMoney => 'Unean dauden dirua eta guztira irabazita';
@@ -1126,8 +1121,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwCompareMine => 'Meatzeen maila';
 
   @override
-  String get hiwCompareSkills =>
-      'Trebetasunak (laborantzak, meatzea, borroka…)';
+  String get hiwCompareSkills => 'Trebetasunak (laborantzak, meatzea, borroka…)';
 
   @override
   String get hiwCompareRelations => 'Lagunak, bestiak hil eta hautsi';
@@ -1136,27 +1130,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwCompareStamina => 'Energia eta osasuna';
 
   @override
-  String get hiwCompareNotShown =>
-      'Hauek ez dira erakusten — nozko norutz aldatzen dira eta ez dute adierazten zein gordetze aurretik dagoen.';
+  String get hiwCompareNotShown => 'Hauek ez dira erakusten — nozko norutz aldatzen dira eta ez dute adierazten zein gordetze aurretik dagoen.';
 
   @override
-  String get hiwCompareNotShownExamples =>
-      'Basoaren eta animalien egoera, inbentarioa eta objektuak, banakako harremanak';
+  String get hiwCompareNotShownExamples => 'Basoaren eta animalien egoera, inbentarioa eta objektuak, banakako harremanak';
 
   @override
-  String get hiwCompareWarning =>
-      'Ez dira erakusten — nozko norutz aldatzen dira eta ez dute adierazten zein gordetze aurretik dagoen.';
+  String get hiwCompareWarning => 'Ez dira erakusten — nozko norutz aldatzen dira eta ez dute adierazten zein gordetze aurretik dagoen.';
 
   @override
   String get hiwConflictTitle => 'Sinkronizatu gabe jokatzen baduzu';
 
   @override
-  String get hiwConflictDesc =>
-      'Mugikorrean eta PCan sinkronizatu gabe aurrera daitezke saioek, bi gordetze bertsio lortzen dituzu.';
+  String get hiwConflictDesc => 'Mugikorrean eta PCan sinkronizatu gabe aurrera daitezke saioek, bi gordetze bertsio lortzen dituzu.';
 
   @override
-  String get hiwConflictNoMerge =>
-      'Ezin daitezke batu. ValleySave bertsioak erakusten ditu beti zuk zein aurten dezakezu.';
+  String get hiwConflictNoMerge => 'Ezin daitezke batu. ValleySave bertsioak erakusten ditu beti zuk zein aurten dezakezu.';
 
   @override
   String get hiwConflictMobile => 'Mugikorra';
@@ -1174,8 +1163,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwDeleteTitle => 'Gordetze ezabatzen bada';
 
   @override
-  String get hiwDeleteDesc =>
-      'Drive-etik gordetze ezabatzen duzunean, ez da berehala desagertzen: Google Drive Zaborra basurantz doa.';
+  String get hiwDeleteDesc => 'Drive-etik gordetze ezabatzen duzunean, ez da berehala desagertzen: Google Drive Zaborra basurantz doa.';
 
   @override
   String get hiwCompatTitle => 'Plataformaren bateragarritasuna';
@@ -1187,26 +1175,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwShizukuTitle => 'Shizuku-rekin';
 
   @override
-  String get hiwShizukuSubtitle =>
-      'Konfiguratu behin. Ondoren, ValleySave berez sinkronizatzen du, inoiz ez hori apurtu gabe.';
+  String get hiwShizukuSubtitle => 'Konfiguratu behin. Ondoren, ValleySave berez sinkronizatzen du, inoiz ez hori apurtu gabe.';
 
   @override
   String get hiwShizukuBadge => 'AUTOMATIKOA · GOMENDATUA';
 
   @override
-  String get hiwShizukuDone =>
-      '✓ Egina. Ordutik aurrera, gordetzeeak deskargatzea eta igotzeya zuzenean egiten da, ordenagailuaren bezala.';
+  String get hiwShizukuDone => '✓ Egina. Ordutik aurrera, gordetzeeak deskargatzea eta igotzeya zuzenean egiten da, ordenagailuaren bezala.';
 
   @override
-  String get hiwShizukuNote =>
-      'Parea lehen aldia bakarrik. Shizuku bertsio berriak berez berriro aktibatzen dira telefonoa berrabiartu ondoren.';
+  String get hiwShizukuNote => 'Parea lehen aldia bakarrik. Shizuku bertsio berriak berez berriro aktibatzen dira telefonoa berrabiartu ondoren.';
 
   @override
   String get hiwBridgeTitle => 'Zubi eskuzkoa';
 
   @override
-  String get hiwBridgeSubtitle =>
-      'Android 11 eta 12-an bakarrik darabila. Ezer extra instalatu ez behar; gordetze kopia eskuz biltegian egiten duzu denbora bakoitzean.';
+  String get hiwBridgeSubtitle => 'Android 11 eta 12-an bakarrik darabila. Ezer extra instalatu ez behar; gordetze kopia eskuz biltegian egiten duzu denbora bakoitzean.';
 
   @override
   String get hiwBridgeBadge => 'ESKUZKOA ALTERNATIBOA · ANDROID 11-12';
@@ -1218,32 +1202,25 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwBridgeValleySaveFolder => 'ValleySave-ren karpeta';
 
   @override
-  String get hiwBridgeNote =>
-      'Darabila zure sistemaren fitxategien aplikazio hartan horien karpetak atzitu ditzakete (ValleySave ez dak).';
+  String get hiwBridgeNote => 'Darabila zure sistemaren fitxategien aplikazio hartan horien karpetak atzitu ditzakete (ValleySave ez dak).';
 
   @override
-  String get hiwTipAlwaysShow =>
-      'Beti Drive-ean dagoena ikusiko duzu idatzia aurretik, konparatu ahal izateko.';
+  String get hiwTipAlwaysShow => 'Beti Drive-ean dagoena ikusiko duzu idatzia aurretik, konparatu ahal izateko.';
 
   @override
-  String get hiwTipWithoutUpload =>
-      'Igotu gabe, beste gailuak ez ditu zure aurrerapen berria ikusiko.';
+  String get hiwTipWithoutUpload => 'Igotu gabe, beste gailuak ez ditu zure aurrerapen berria ikusiko.';
 
   @override
-  String get hiwTipComparison =>
-      'Konparaketa ikusiko duzu lokalen eta Drive-en artean egiaztatzen aurretik.';
+  String get hiwTipComparison => 'Konparaketa ikusiko duzu lokalen eta Drive-en artean egiaztatzen aurretik.';
 
   @override
-  String get hiwTipDownloadOverwrite =>
-      'Deskargatzea zure gordetze lokala idazten du. Sinkronizagabeko aurrerapenik galduko da.';
+  String get hiwTipDownloadOverwrite => 'Deskargatzea zure gordetze lokala idazten du. Sinkronizagabeko aurrerapenik galduko da.';
 
   @override
-  String get hiwTipSync =>
-      'Beti igo Drive-ra gailua aldatu aurretik, eta deskargatu heltzean.';
+  String get hiwTipSync => 'Beti igo Drive-ra gailua aldatu aurretik, eta deskargatu heltzean.';
 
   @override
-  String get hiwTipDeletion =>
-      '30 egunean Drive Zabortik leheneratu dezakezu betirako ezabatu aurretik.';
+  String get hiwTipDeletion => '30 egunean Drive Zabortik leheneratu dezakezu betirako ezabatu aurretik.';
 
   @override
   String get hiwPrivacyLink => 'Pribatutasun politika eta erabilpena';
@@ -1252,15 +1229,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get emptyNoSaves => 'Gordetzerik ez aurkitu';
 
   @override
-  String get emptyNoSavesHint =>
-      'Gordetze lokalik ez da irakur daiteke gailu honetan';
+  String get emptyNoSavesHint => 'Gordetze lokalik ez da irakur daiteke gailu honetan';
 
   @override
   String get bridgeTitle => 'Zure gordetzeeak ekartzen';
 
   @override
-  String get bridgeDesc =>
-      'Zure gordetze lokalak ikusi eta igo ahal izateko, kopiak zure fitxategien aplikazioarekin Stardew karpetetik ValleySave karpetara. Ondoren, gorantz estali berritzeko.';
+  String get bridgeDesc => 'Zure gordetze lokalak ikusi eta igo ahal izateko, kopiak zure fitxategien aplikazioarekin Stardew karpetetik ValleySave karpetara. Ondoren, gorantz estali berritzeko.';
 
   @override
   String get bridgeRefresh => 'Berritu';
@@ -1305,8 +1280,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shizukuStep3Desc => 'ValleySave sarbidea eskatuko du';
 
   @override
-  String get shizukuDone =>
-      '✓ Egina. Ordutik aurrera, gordetzeeak deskargatzea eta igotzeya zuzenean egiten da, ordenagailuaren bezala.';
+  String get shizukuDone => '✓ Egina. Ordutik aurrera, gordetzeeak deskargatzea eta igotzeya zuzenean egiten da, ordenagailuaren bezala.';
 
   @override
   String get dlgDeleteDriveTitle => 'Drive-tik ezabatu';
@@ -1410,8 +1384,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get overwriteVerdictMoneySpent =>
-      '💰 Uneko dirua jaitsi da, baina aurrerapen orokorra aurrera doa — ziurrenik zerbaitetan gastatu duzu. Ez da benetako galera.';
+  String get overwriteVerdictMoneySpent => '💰 Uneko dirua jaitsi da, baina aurrerapen orokorra aurrera doa — ziurrenik zerbaitetan gastatu duzu. Ez da benetako galera.';
 
   @override
   String overwriteVerdictNegligible(String delta) {
@@ -1501,32 +1474,25 @@ class AppLocalizationsEu extends AppLocalizations {
   String get snackDownloaded => 'Gordetze jokoen deskargatuta';
 
   @override
-  String get snackReplacePrepareFailed =>
-      'Ezin izan da gordetzea prestatu. Ez da ezer aldatu diskoan';
+  String get snackReplacePrepareFailed => 'Ezin izan da gordetzea prestatu. Ez da ezer aldatu diskoan';
 
   @override
-  String get snackReplaceValidationFailed =>
-      'Deskargatutako gordetzea baliogabea edo osatugabea dirudi. Ez da ezer aldatu diskoan';
+  String get snackReplaceValidationFailed => 'Deskargatutako gordetzea baliogabea edo osatugabea dirudi. Ez da ezer aldatu diskoan';
 
   @override
-  String get snackReplaceBackupFailed =>
-      'Ezin izan da babeskopia sortu. Ez da ezer aldatu diskoan';
+  String get snackReplaceBackupFailed => 'Ezin izan da babeskopia sortu. Ez da ezer aldatu diskoan';
 
   @override
-  String get snackReplaceSwapFailed =>
-      'Trukeak huts egin du, baina jatorrizko gordetzea babeskopiatik leheneratu da';
+  String get snackReplaceSwapFailed => 'Trukeak huts egin du, baina jatorrizko gordetzea babeskopiatik leheneratu da';
 
   @override
-  String get snackReplaceBusy =>
-      'Dagoeneko eragiketa bat martxan dago gordetze honentzat';
+  String get snackReplaceBusy => 'Dagoeneko eragiketa bat martxan dago gordetze honentzat';
 
   @override
-  String get snackUploadIncomplete =>
-      'Gordetze lokala osatugabea edo hondatuta dago. Ez da ezer igo';
+  String get snackUploadIncomplete => 'Gordetze lokala osatugabea edo hondatuta dago. Ez da ezer igo';
 
   @override
-  String get snackDownloadIncomplete =>
-      'Ezin da deskargatu: Drive-en edukia falta zaio';
+  String get snackDownloadIncomplete => 'Ezin da deskargatu: Drive-en edukia falta zaio';
 
   @override
   String get cardIncomplete => 'Osatu gabea Drive-n';
@@ -1535,8 +1501,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get autoRefreshTitle => 'Berritze automatikoa';
 
   @override
-  String get autoRefreshSubtitle =>
-      'Drive-eko aldaketak egiaztatzen ditu 30 segundotik behin';
+  String get autoRefreshSubtitle => 'Drive-eko aldaketak egiaztatzen ditu 30 segundotik behin';
 
   @override
   String autoSyncSnack(String farmName) {
@@ -1544,12 +1509,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get autoSyncTooltipOn =>
-      'Sinkronizazio automatikoa piztuta — bakarrik sinkronizatzen da segurua denean';
+  String get autoSyncTooltipOn => 'Sinkronizazio automatikoa piztuta — bakarrik sinkronizatzen da segurua denean';
 
   @override
-  String get autoSyncTooltipOff =>
-      'Sinkronizazio automatikoa itzalita — sakatu pizteko';
+  String get autoSyncTooltipOff => 'Sinkronizazio automatikoa itzalita — sakatu pizteko';
 
   @override
   String get autoSyncExplainTitle => 'Sinkronizazio automatikoa';
@@ -1560,16 +1523,13 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get autoSyncExplainSafe =>
-      'Argi eta garbi aurretik zoazenean eta ezer galtzen ez denean bakarrik jarduten du.';
+  String get autoSyncExplainSafe => 'Argi eta garbi aurretik zoazenean eta ezer galtzen ez denean bakarrik jarduten du.';
 
   @override
-  String get autoSyncExplainDanger =>
-      'Aurrerapena galtzeko arriskurik balego, inoiz ez du bere kabuz jarduten: zuk erabakiko duzu beti ohiko elkarrizketa-koadroaren bidez.';
+  String get autoSyncExplainDanger => 'Aurrerapena galtzeko arriskurik balego, inoiz ez du bere kabuz jarduten: zuk erabakiko duzu beti ohiko elkarrizketa-koadroaren bidez.';
 
   @override
-  String get autoSyncExplainMissing =>
-      'Bi kopietako bat falta bada, ez du bere kabuz sortzen: lehen igoera edo deskarga zuk erabakitzen duzu.';
+  String get autoSyncExplainMissing => 'Bi kopietako bat falta bada, ez du bere kabuz sortzen: lehen igoera edo deskarga zuk erabakitzen duzu.';
 
   @override
   String get autoSyncExplainDontShowAgain => 'Ez erakutsi abisu hau berriro';
@@ -1581,28 +1541,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwAutoSyncTitle => 'Bere kabuz sinkronizatu';
 
   @override
-  String get hiwAutoSyncDesc =>
-      'Gordetze bakoitzak AUTO txartel bat du bere kartan. Piztutakoan, gordetze hori bere kabuz igo edo deskargatuko da aplikazioak aldaketa bat detektatzen duenean — sartu eta berresteko beharrik gabe.';
+  String get hiwAutoSyncDesc => 'Gordetze bakoitzak AUTO txartel bat du bere kartan. Piztutakoan, gordetze hori bere kabuz igo edo deskargatuko da aplikazioak aldaketa bat detektatzen duenean — sartu eta berresteko beharrik gabe.';
 
   @override
-  String get hiwAutoSyncTipSafe =>
-      'Argi eta garbi aurretik zoazenean eta ezer galtzen ez denean bakarrik sinkronizatzen da bere kabuz.';
+  String get hiwAutoSyncTipSafe => 'Argi eta garbi aurretik zoazenean eta ezer galtzen ez denean bakarrik sinkronizatzen da bere kabuz.';
 
   @override
-  String get hiwAutoSyncTipDanger =>
-      'Aurrerapena galtzeko arriskurik balego, inoiz ez du bere kabuz egiten: ohiko konparaketaren bidez galdetzen jarraituko dizu.';
+  String get hiwAutoSyncTipDanger => 'Aurrerapena galtzeko arriskurik balego, inoiz ez du bere kabuz egiten: ohiko konparaketaren bidez galdetzen jarraituko dizu.';
 
   @override
-  String get hiwAutoSyncTipPerSave =>
-      'Gordetzez gordetze aktibatzen da, ez guztiak batera: zeurean piztuta eta partekatutako batean itzalita eduki dezakezu.';
+  String get hiwAutoSyncTipPerSave => 'Gordetzez gordetze aktibatzen da, ez guztiak batera: zeurean piztuta eta partekatutako batean itzalita eduki dezakezu.';
 
   @override
-  String get hiwAutoSyncTipMissing =>
-      'Dagoeneko dauden bi kopiak sinkronizatuta mantentzen ditu bakarrik. Bat falta bada, lehen igoera edo deskarga zuk egiten duzu.';
+  String get hiwAutoSyncTipMissing => 'Dagoeneko dauden bi kopiak sinkronizatuta mantentzen ditu bakarrik. Bat falta bada, lehen igoera edo deskarga zuk egiten duzu.';
 
   @override
-  String get hiwAutoSyncTipRefresh =>
-      'Ezarpenetan aldaketen egiaztapen automatikoa erabat itzali dezakezu.';
+  String get hiwAutoSyncTipRefresh => 'Ezarpenetan aldaketen egiaztapen automatikoa erabat itzali dezakezu.';
 
   @override
   String get snackSessionExpired => 'Drive saioai amaitu. Berrkonektatu';
@@ -1636,51 +1590,40 @@ class AppLocalizationsEu extends AppLocalizations {
   String get snackShizukuRequired => 'Shizuku gaitu…';
 
   @override
-  String get snackWriteError =>
-      'Jokoen idaztera ezin. Telefo batzuk /Android/data ez dituzte oztat Shizuku-rekin ere.';
+  String get snackWriteError => 'Jokoen idaztera ezin. Telefo batzuk /Android/data ez dituzte oztat Shizuku-rekin ere.';
 
   @override
-  String get snackPlatformNotSupported =>
-      'Plataforma honek ez dak oraindik gordetze lokalak idaztea';
+  String get snackPlatformNotSupported => 'Plataforma honek ez dak oraindik gordetze lokalak idaztea';
 
   @override
-  String get snackWirelessDebugHint =>
-      'Ireki eskuz: Ezarpenak → Garapeneraren aukerak → Hari gabea debugging.';
+  String get snackWirelessDebugHint => 'Ireki eskuz: Ezarpenak → Garapeneraren aukerak → Hari gabea debugging.';
 
   @override
-  String get snackOpenShizukuApp =>
-      'Irekiertz Shizuku zure aplikazioen bilatzean.';
+  String get snackOpenShizukuApp => 'Irekiertz Shizuku zure aplikazioen bilatzean.';
 
   @override
-  String get hiwTipDeletePermanent =>
-      'ValleySave inoiz ez al dezake berriz galdutako gordetzeeak. Drive fitxategiak zure erantzukizuna dira.';
+  String get hiwTipDeletePermanent => 'ValleySave inoiz ez al dezake berriz galdutako gordetzeeak. Drive fitxategiak zure erantzukizuna dira.';
 
   @override
-  String get hiwCompatAchievements =>
-      'Steam eta Google Play lorpenak ez dira transferitzen. Plataforma bakoitzak berez lotzen ditu bakarrik gertatutako lorpenak — gordetze fitxategik ez ditu retroaktiboki sustatzen.';
+  String get hiwCompatAchievements => 'Steam eta Google Play lorpenak ez dira transferitzen. Plataforma bakoitzak berez lotzen ditu bakarrik gertatutako lorpenak — gordetze fitxategik ez ditu retroaktiboki sustatzen.';
 
   @override
-  String get hiwCompatOverwrite =>
-      'Bi gailuetatik sinkronizatu gabe ordenari jarraiki, gordetze batak bestea bota ditzake. Beti igo Drive-ra deskargatu aurretik.';
+  String get hiwCompatOverwrite => 'Bi gailuetatik sinkronizatu gabe ordenari jarraiki, gordetze batak bestea bota ditzake. Beti igo Drive-ra deskargatu aurretik.';
 
   @override
-  String get hiwCompatVersions =>
-      'Jokoen berbtsio desberdinetatik gordetzeeak ez agian ez direla kargatzen ondo. ValleySave abisezia ematen dizu bertsio desparekotasuna atzemarik aurretik deskargatzen baduzu.';
+  String get hiwCompatVersions => 'Jokoen berbtsio desberdinetatik gordetzeeak ez agian ez direla kargatzen ondo. ValleySave abisezia ematen dizu bertsio desparekotasuna atzemarik aurretik deskargatzen baduzu.';
 
   @override
-  String get hiwCompatMods =>
-      'SMAPI moldaketak datu osagarri gehitze dituzte gordetzeean. SMAPI moldaketak ez badaude gailuan non kargatzen baduzu, jokoa huts egite edo moldaketa datuak galdu ditzake.\n\nAndroid-ean, SMAPI moldaketak erabiltzeko instalatu ditzake.';
+  String get hiwCompatMods => 'SMAPI moldaketak datu osagarri gehitze dituzte gordetzeean. SMAPI moldaketak ez badaude gailuan non kargatzen baduzu, jokoa huts egite edo moldaketa datuak galdu ditzake.\n\nAndroid-ean, SMAPI moldaketak erabiltzeko instalatu ditzake.';
 
   @override
-  String get hiwCompatIncomplete =>
-      'Gordetze batean \"Osatu gabea Drive-n\" ikusten baduzu, hodeian beharrezko fitxategiren bat falta zaio — ezin da deskargatu beste gailu batetik ondo berriro igo arte.';
+  String get hiwCompatIncomplete => 'Gordetze batean \"Osatu gabea Drive-n\" ikusten baduzu, hodeian beharrezko fitxategiren bat falta zaio — ezin da deskargatu beste gailu batetik ondo berriro igo arte.';
 
   @override
   String get hiwShareTitle => 'Besteekin partekatu';
 
   @override
-  String get hiwShareDesc =>
-      'Partekatu gordetze bat beste jokalari batekin emailez. Bere gailuan Nirekin partekatuak atalean ikusiko du.';
+  String get hiwShareDesc => 'Partekatu gordetze bat beste jokalari batekin emailez. Bere gailuan Nirekin partekatuak atalean ikusiko du.';
 
   @override
   String get hiwShareStepYourSave => 'Zure\ngordetzea';
@@ -1692,19 +1635,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwShareStepFriend => 'Nirekin\npartekatuak';
 
   @override
-  String get hiwShareTipRoles =>
-      'Bi rol daude: Irakurtzeko soilik aukerak ikusi eta deskargatzeko aukera ematen du. Sinkronizatzea baimentzeak zure Drive-ko kopia gainidazteko aukera ematen du. Inoiz ere ezin dute ezabatu — zuk, jabeak, bakarrik ezaba dezakezu zure gordetzea.';
+  String get hiwShareTipRoles => 'Bi rol daude: Irakurtzeko soilik aukerak ikusi eta deskargatzeko aukera ematen du. Sinkronizatzea baimentzeak zure Drive-ko kopia gainidazteko aukera ematen du. Inoiz ere ezin dute ezabatu — zuk, jabeak, bakarrik ezaba dezakezu zure gordetzea.';
 
   @override
-  String get hiwShareTipDisconnect =>
-      'Deskonektatzeak bere aldeko sinkronizazioa gelditzen du soilik — partekatzeak aktibo jarraitzen du benetan Partekatuak kudeatu ataletik uzten duzun arte.';
+  String get hiwShareTipDisconnect => 'Deskonektatzeak bere aldeko sinkronizazioa gelditzen du soilik — partekatzeak aktibo jarraitzen du benetan Partekatuak kudeatu ataletik uzten duzun arte.';
 
   @override
   String get hiwHostSwapTitle => 'Ostalari aldaketa';
 
   @override
-  String get hiwHostSwapDesc =>
-      'Aldatu zein farmhand den gordetzearen ostalaria, tokian bertan ordeztuz — gorde-toki bera, partekatze-baimen berak.';
+  String get hiwHostSwapDesc => 'Aldatu zein farmhand den gordetzearen ostalaria, tokian bertan ordeztuz — gorde-toki bera, partekatze-baimen berak.';
 
   @override
   String get hiwHostSwapStepPick => 'Aukeratu\nfarmhand-a';
@@ -1716,19 +1656,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwHostSwapStepDone => 'Gordetze berria\nsortuta';
 
   @override
-  String get hiwHostSwapTipMove =>
-      'Baserriko objektu batzuk lekuz alda daitezke etxeari tokia egiteko — ezer ez da ezabatzen.';
+  String get hiwHostSwapTipMove => 'Baserriko objektu batzuk lekuz alda daitezke etxeari tokia egiteko — ezer ez da ezabatzen.';
 
   @override
-  String get hiwHostSwapTipHouse =>
-      'Ostalari berriaren etxea jokoaren lehenetsitako etxe handia bezala ikusiko da — etxolaren itxura ez da onartzen modrik gabe.';
+  String get hiwHostSwapTipHouse => 'Ostalari berriaren etxea jokoaren lehenetsitako etxe handia bezala ikusiko da — etxolaren itxura ez da onartzen modrik gabe.';
 
   @override
   String get hiwBackupsTitle => 'Babeskopiak';
 
   @override
-  String get hiwBackupsDesc =>
-      'Babeskopia bat gero leheneratu dezakezun gordetze baten argazkia da. Sortu eskuz nahi duzunean, edo utzi ValleySave-ri automatikoki sortzen gordetze bat gainidatzi aurretik (deskargatzean, inportatzean, leheneratzean edo ostalaria aldatzean).';
+  String get hiwBackupsDesc => 'Babeskopia bat gero leheneratu dezakezun gordetze baten argazkia da. Sortu eskuz nahi duzunean, edo utzi ValleySave-ri automatikoki sortzen gordetze bat gainidatzi aurretik (deskargatzean, inportatzean, leheneratzean edo ostalaria aldatzean).';
 
   @override
   String get hiwBackupsStepSave => 'Zure\ngordetzea';
@@ -1740,24 +1677,19 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwBackupsStepStore => 'Lokala eta/edo\nDrive';
 
   @override
-  String get hiwBackupsTipRestore =>
-      'Leheneratzeak zure uneko gordetzea aurreko bertsio horrekin gainidazten du — ezin da desegin.';
+  String get hiwBackupsTipRestore => 'Leheneratzeak zure uneko gordetzea aurreko bertsio horrekin gainidazten du — ezin da desegin.';
 
   @override
-  String get hiwBackupsTipDelete =>
-      'Babeskopia bat ezabatzeak existitzen den leku guztietatik kentzen du (gailu hau eta Drive, igo bada) — ezin da desegin.';
+  String get hiwBackupsTipDelete => 'Babeskopia bat ezabatzeak existitzen den leku guztietatik kentzen du (gailu hau eta Drive, igo bada) — ezin da desegin.';
 
   @override
-  String get hiwBackupsTipExport =>
-      'Gordetze bat Zip gisa Esportatu ere badezakezu nahi duzun tokian gordetzeko, eta gero berriro Inportatu — barneko babeskopien eskuzko eta eramangarria den alternatiba bat.';
+  String get hiwBackupsTipExport => 'Gordetze bat Zip gisa Esportatu ere badezakezu nahi duzun tokian gordetzeko, eta gero berriro Inportatu — barneko babeskopien eskuzko eta eramangarria den alternatiba bat.';
 
   @override
-  String get hiwBackupsTipRetention =>
-      'ValleySave-k gordetze bakoitzeko azken 5 babeskopia automatikoak gordetzen ditu; eskuz sortzen dituzunak inoiz ez dira bakarrik ezabatzen.';
+  String get hiwBackupsTipRetention => 'ValleySave-k gordetze bakoitzeko azken 5 babeskopia automatikoak gordetzen ditu; eskuz sortzen dituzunak inoiz ez dira bakarrik ezabatzen.';
 
   @override
-  String get hiwBackupsTipRestoreBridge =>
-      'Zubi moduan (Android root/Shizuku gabe), babeskopia bat leheneratzeak .zip-a eskuz Stardew karpetan ateratzeko eskatzen dizu — deskargatzean bezala.';
+  String get hiwBackupsTipRestoreBridge => 'Zubi moduan (Android root/Shizuku gabe), babeskopia bat leheneratzeak .zip-a eskuz Stardew karpetan ateratzeko eskatzen dizu — deskargatzean bezala.';
 
   @override
   String get hiwComparePrimary => 'Joko-denbora guztira';
@@ -1775,23 +1707,19 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwShizuku1 => 'Shizuku instalatu (Play Store edo GitHub APK).';
 
   @override
-  String get hiwShizuku2 =>
-      'Aktibatu hari gabeko debugging-ean — ValleySave pausoka gidalari egiten dizu.';
+  String get hiwShizuku2 => 'Aktibatu hari gabeko debugging-ean — ValleySave pausoka gidalari egiten dizu.';
 
   @override
   String get hiwShizuku3 => 'Baimena emango ValleySave behartzean.';
 
   @override
-  String get hiwBridge1 =>
-      'Drive-tik deskargatu: ValleySave gordetzeea bere karpetan utzietan. Zuk kopian harekin fitxategian Stardew-ren karpetan.';
+  String get hiwBridge1 => 'Drive-tik deskargatu: ValleySave gordetzeea bere karpetan utzietan. Zuk kopian harekin fitxategian Stardew-ren karpetan.';
 
   @override
-  String get hiwBridge2 =>
-      'Drive-ra igo: kopiatu gordetzeea Stardew-tik ValleySave-ren karpetan. ValleySave atzemanzen du eta igotzea.';
+  String get hiwBridge2 => 'Drive-ra igo: kopiatu gordetzeea Stardew-tik ValleySave-ren karpetan. ValleySave atzemanzen du eta igotzea.';
 
   @override
-  String get snackShizukuBattery =>
-      'Ezarpenak → Aplikazioak → Shizuku → Bateria → Mugarik gabe.';
+  String get snackShizukuBattery => 'Ezarpenak → Aplikazioak → Shizuku → Bateria → Mugarik gabe.';
 
   @override
   String snackDriveError(String error) {
@@ -1799,8 +1727,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get dlgDeleteLocalWarning =>
-      '⚠️ Drive-ra igo ez baduzu, betirako galduko da. Berreskurapenez gabe.';
+  String get dlgDeleteLocalWarning => '⚠️ Drive-ra igo ez baduzu, betirako galduko da. Berreskurapenez gabe.';
 
   @override
   String get dlgDelete => 'Ezabatu';
@@ -1852,19 +1779,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get pathLabelToValleySave => 'Helmuganera (ValleySave)';
 
   @override
-  String get chooserDesc =>
-      'Android jokoen karpeta babestuetan. Nola emango diozu ValleySave-ri sarbidea — noiznahi aldatu dezakezu.';
+  String get chooserDesc => 'Android jokoen karpeta babestuetan. Nola emango diozu ValleySave-ri sarbidea — noiznahi aldatu dezakezu.';
 
   @override
-  String get chooserShizukuDesc =>
-      'Konfiguraturik behin. Ondoren ValleySave berez sinkronizatzen du, inoiz ez hori apurtu gabe. Android 13 eta hurrengoan bakarrik fidagarri metodo.';
+  String get chooserShizukuDesc => 'Konfiguraturik behin. Ondoren ValleySave berez sinkronizatzen du, inoiz ez hori apurtu gabe. Android 13 eta hurrengoan bakarrik fidagarri metodo.';
 
   @override
   String get chooserManualBadge => 'ANDROID 11-12 BAKARRIK';
 
   @override
-  String get chooserBridgeDesc =>
-      'Gordetzeeak zure fitxategien aplikazioarekin kopian. Ezer extra ez instalatu. Android 11 eta 12-an bakarrik.';
+  String get chooserBridgeDesc => 'Gordetzeeak zure fitxategien aplikazioarekin kopian. Ezer extra ez instalatu. Android 11 eta 12-an bakarrik.';
 
   @override
   String get chooserRootBadge => 'ROOT';
@@ -1873,15 +1797,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get chooserRootTitle => 'Root Sarbidea';
 
   @override
-  String get chooserRootDesc =>
-      'Errotu diren gailuetarako (Magisk / SuperSU). Root baimena behin onartu — geroztik automatikoki.';
+  String get chooserRootDesc => 'Errotu diren gailuetarako (Magisk / SuperSU). Root baimena behin onartu — geroztik automatikoki.';
 
   @override
   String get snackRootDenied => 'Root sarbidea ukatua. Saiatu Shizuku.';
 
   @override
-  String get shizukuGateSubtitle =>
-      'Konfiguraturik behin · lehen aldia bakarrik';
+  String get shizukuGateSubtitle => 'Konfiguraturik behin · lehen aldia bakarrik';
 
   @override
   String get shizukuStatusLabel => 'Shizuku aktibo';
@@ -1908,8 +1830,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shizukuGuideHeader => 'PAUSOKA GIDABURUAK';
 
   @override
-  String get shizukuStep1DescFull =>
-      'Aske. Google Play-k zure telefonoan blokeatu baldin badu, offizialaren GitHub APK erabili.';
+  String get shizukuStep1DescFull => 'Aske. Google Play-k zure telefonoan blokeatu baldin badu, offizialaren GitHub APK erabili.';
 
   @override
   String get btnPlayStore => 'Play Store';
@@ -1921,15 +1842,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shizukuStep2TitleFull => 'Garapeneraren aukerak gaitu';
 
   @override
-  String get shizukuStep2DescFull =>
-      'Ezarpenak → Telefo info → Software info → sakatu \"Eraikuntza zenbakia\" 7 alditan.';
+  String get shizukuStep2DescFull => 'Ezarpenak → Telefo info → Software info → sakatu \"Eraikuntza zenbakia\" 7 alditan.';
 
   @override
   String get shizukuStep3TitleFull => 'Hari gabeko debugging gaitu';
 
   @override
-  String get shizukuStep3DescFull =>
-      'Botoia nora joana hartzen dizu eta nabarmentzena. Gaitu (ON). Ondoren sakatu \"Gailu parean pairing kodearen bidez\" — 6 zifraren kodea pantailan agertuko zaio.';
+  String get shizukuStep3DescFull => 'Botoia nora joana hartzen dizu eta nabarmentzena. Gaitu (ON). Ondoren sakatu \"Gailu parean pairing kodearen bidez\" — 6 zifraren kodea pantailan agertuko zaio.';
 
   @override
   String get btnOpenAndHighlight => 'Ireki eta nabarmen';
@@ -1938,8 +1857,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shizukuStep4Title => 'Parean eta SHIZUKU HASI';
 
   @override
-  String get shizukuStep4Desc =>
-      'Ireki Shizuku → \"Hasi hari gabeko debugging bidez\" → \"Parean pairing kodearen bidez\". Shizuku jakinarazpen bat bidaliko du itxaroten zaio. Sartu 6 zifraren kodea hari gabeko debugging pantailatik. Parean ondoren, sakatu START — bota azkoa gabe Shizuku ez aktibatuta.';
+  String get shizukuStep4Desc => 'Ireki Shizuku → \"Hasi hari gabeko debugging bidez\" → \"Parean pairing kodearen bidez\". Shizuku jakinarazpen bat bidaliko du itxaroten zaio. Sartu 6 zifraren kodea hari gabeko debugging pantailatik. Parean ondoren, sakatu START — bota azkoa gabe Shizuku ez aktibatuta.';
 
   @override
   String get btnOpenShizuku => 'Ireki Shizuku';
@@ -1948,19 +1866,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get shizukuStep5Title => 'Shizuku bateria mugarik gabe konfiguratu';
 
   @override
-  String get shizukuStep5Desc =>
-      'Ireki aplikazio info → Bateria → Mugarik gabe. Honek ez baduzu, sistemak Shizuku atzemakaian itxi agertuko eta START berriro sakatu beharko duzu.';
+  String get shizukuStep5Desc => 'Ireki aplikazio info → Bateria → Mugarik gabe. Honek ez baduzu, sistemak Shizuku atzemakaian itxi agertuko eta START berriro sakatu beharko duzu.';
 
   @override
   String get btnShizukuAppInfo => 'Shizuku aplikazio info';
 
   @override
-  String get shizukuStep6DescActive =>
-      'Shizuku aktibo dago. Botoia sakatu baimen emango.';
+  String get shizukuStep6DescActive => 'Shizuku aktibo dago. Botoia sakatu baimen emango.';
 
   @override
-  String get shizukuStep6DescWaiting =>
-      'Erabilgarri Shizuku aktiboan bada (4 pausoa).';
+  String get shizukuStep6DescWaiting => 'Erabilgarri Shizuku aktiboan bada (4 pausoa).';
 
   @override
   String get btnGrantPermission => 'Baimena emango';
@@ -2012,39 +1927,31 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hiwLaunchTitle => 'Jokoa ireki';
 
   @override
-  String get hiwLaunchDesc =>
-      'Nire gordetakoak pantailako goiko barrako ▶ botoiak Stardew Valley zuzenean aplikaziotik irekitzen du.';
+  String get hiwLaunchDesc => 'Nire gordetakoak pantailako goiko barrako ▶ botoiak Stardew Valley zuzenean aplikaziotik irekitzen du.';
 
   @override
-  String get hiwLaunchTipWindows =>
-      'Windowsen jokoa automatikoki aurkitzen ez bada, Ezarpenak → Jokoa atalean exekutagarriaren bidea ezarri.';
+  String get hiwLaunchTipWindows => 'Windowsen jokoa automatikoki aurkitzen ez bada, Ezarpenak → Jokoa atalean exekutagarriaren bidea ezarri.';
 
   @override
-  String get hiwLaunchTipAndroid =>
-      'Androiden instalatuta badago jokoa irekitzen du.';
+  String get hiwLaunchTipAndroid => 'Androiden instalatuta badago jokoa irekitzen du.';
 
   @override
-  String get hiwLaunchTipLinux =>
-      'Linux-en, jokoa automatikoki detektatzen ez bada, konfiguratu exekutagarriaren bidea Ezarpenak → Jokoa atalean.';
+  String get hiwLaunchTipLinux => 'Linux-en, jokoa automatikoki detektatzen ez bada, konfiguratu exekutagarriaren bidea Ezarpenak → Jokoa atalean.';
 
   @override
   String get hiwSaveLocationsTitle => 'Non bizi diren zure gordetzeak';
 
   @override
-  String get hiwSaveLocationsDesc =>
-      'ValleySave-k zuzenean irakurtzen eta idazten du jokoaren gordetze-karpetan plataforma bakoitzean.';
+  String get hiwSaveLocationsDesc => 'ValleySave-k zuzenean irakurtzen eta idazten du jokoaren gordetze-karpetan plataforma bakoitzean.';
 
   @override
-  String get hiwSaveLocationWindows =>
-      'Windows: %AppData%\\StardewValley\\Saves';
+  String get hiwSaveLocationWindows => 'Windows: %AppData%\\StardewValley\\Saves';
 
   @override
-  String get hiwSaveLocationAndroid =>
-      'Android: babestutako karpeta, Shizuku edo Zubiaren bidez atzitzen da';
+  String get hiwSaveLocationAndroid => 'Android: babestutako karpeta, Shizuku edo Zubiaren bidez atzitzen da';
 
   @override
-  String get hiwSaveLocationLinux =>
-      'Linux: ~/.config/StardewValley/Saves (edo ~/snap/steam/common/.config/StardewValley/Saves Steam snap bidez instalatuta badago)';
+  String get hiwSaveLocationLinux => 'Linux: ~/.config/StardewValley/Saves (edo ~/snap/steam/common/.config/StardewValley/Saves Steam snap bidez instalatuta badago)';
 
   @override
   String get settingsGameSection => 'Jokoa';
@@ -2056,12 +1963,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsCoopTitle => 'Desblokeatu ezkutuko coop menua';
 
   @override
-  String get settingsCoopDescription =>
-      'Lehentasunak zuzenean aldatzeko aukerak ROOT behar du. Stardew itxita egon behar da; ValleySave-k babeskopia sortzen du ezarpena aldatu aurretik.';
+  String get settingsCoopDescription => 'Lehentasunak zuzenean aldatzeko aukerak ROOT behar du. Stardew itxita egon behar da; ValleySave-k babeskopia sortzen du ezarpena aldatu aurretik.';
 
   @override
-  String get settingsCoopManual =>
-      'ROOT gabe: ireki Stardew, sartu ↑↑↓↓←→←→ eta ukitu ? irteteko.';
+  String get settingsCoopManual => 'ROOT gabe: ireki Stardew, sartu ↑↑↓↓←→←→ eta ukitu ? irteteko.';
 
   @override
   String get settingsCoopActivate => 'Aktibatu ROOT bidez';
@@ -2070,103 +1975,82 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsCoopWorking => 'Prozesatzen…';
 
   @override
-  String get settingsCoopSuccess =>
-      'Coop menua desblokeatu da. Lehentasunen babeskopia gorde da.';
+  String get settingsCoopSuccess => 'Coop menua desblokeatu da. Lehentasunen babeskopia gorde da.';
 
   @override
-  String get settingsCoopCreated =>
-      'Coop menua desblokeatu da. Stardew-ek ez zuen lehentasun-fitxategirik, beraz berri bat sortu da.';
+  String get settingsCoopCreated => 'Coop menua desblokeatu da. Stardew-ek ez zuen lehentasun-fitxategirik, beraz berri bat sortu da.';
 
   @override
   String get settingsCoopAlready => 'Coop menua dagoeneko desblokeatuta dago.';
 
   @override
-  String get settingsCoopRootDenied =>
-      'ROOT sarbidea ez dago erabilgarri edo ukatu egin da. Egiaztatu root konfigurazioa eta saiatu berriro.';
+  String get settingsCoopRootDenied => 'ROOT sarbidea ez dago erabilgarri edo ukatu egin da. Egiaztatu root konfigurazioa eta saiatu berriro.';
 
   @override
-  String get settingsCoopGameRunning =>
-      'Itxi Stardew Valley guztiz eta saiatu berriro.';
+  String get settingsCoopGameRunning => 'Itxi Stardew Valley guztiz eta saiatu berriro.';
 
   @override
-  String get settingsCoopUnsupported =>
-      'Honek jokoa Android erabiltzaile nagusirako instalatuta egotea behar du.';
+  String get settingsCoopUnsupported => 'Honek jokoa Android erabiltzaile nagusirako instalatuta egotea behar du.';
 
   @override
-  String get settingsCoopChanged =>
-      'Stardew-en lehentasunak aldatu dira aktibazioan zehar. Ez da ezer aldatu; saiatu berriro.';
+  String get settingsCoopChanged => 'Stardew-en lehentasunak aldatu dira aktibazioan zehar. Ez da ezer aldatu; saiatu berriro.';
 
   @override
-  String get settingsCoopUnavailable =>
-      'Ezin izan dira Stardew-en lehentasunak irakurri. Ez da ezer aldatu.';
+  String get settingsCoopUnavailable => 'Ezin izan dira Stardew-en lehentasunak irakurri. Ez da ezer aldatu.';
 
   @override
-  String get settingsCoopInvalid =>
-      'Lehentasun-fitxategiak ustekabeko formatua du. Ez da ezer aldatu.';
+  String get settingsCoopInvalid => 'Lehentasun-fitxategiak ustekabeko formatua du. Ez da ezer aldatu.';
 
   @override
-  String get settingsCoopWriteFailed =>
-      'Ezin izan dira lehentasunak modu seguruan eguneratu. Egiaztatu babeskopia berriro saiatu aurretik.';
+  String get settingsCoopWriteFailed => 'Ezin izan dira lehentasunak modu seguruan eguneratu. Egiaztatu babeskopia berriro saiatu aurretik.';
 
   @override
   String get settingsCoopShizukuTitle => 'Kalibratu Shizuku-rekin';
 
   @override
-  String get settingsCoopShizukuDescription =>
-      'Esperimentala: baimendu beste aplikazioen gainean bistaratzea eta, ondoren, ukitu Stardew-en hasierako pantailan markatutako bost puntuak (W, V, S, Y eta ?). Koordenatuak saio honetan soilik erabiltzen dira.';
+  String get settingsCoopShizukuDescription => 'Esperimentala: baimendu beste aplikazioen gainean bistaratzea eta, ondoren, ukitu Stardew-en hasierako pantailan markatutako bost puntuak (W, V, S, Y eta ?). Koordenatuak saio honetan soilik erabiltzen dira.';
 
   @override
   String get settingsCoopShizukuActivate => 'Kalibratu Shizuku-rekin';
 
   @override
-  String get settingsCoopShizukuSent =>
-      'Ukituak bidali dira. Itxi eskuz ? pantaila eta egiaztatu Coop agertzen den. ValleySave-k ezin du desblokeoa egiaztatu.';
+  String get settingsCoopShizukuSent => 'Ukituak bidali dira. Itxi eskuz ? pantaila eta egiaztatu Coop agertzen den. ValleySave-k ezin du desblokeoa egiaztatu.';
 
   @override
-  String get settingsCoopShizukuUnavailable =>
-      'Shizuku ez dago martxan. Abiarazi eta saiatu berriro.';
+  String get settingsCoopShizukuUnavailable => 'Shizuku ez dago martxan. Abiarazi eta saiatu berriro.';
 
   @override
-  String get settingsCoopShizukuDenied =>
-      'ValleySave-k ez du Shizuku-ren baimenik.';
+  String get settingsCoopShizukuDenied => 'ValleySave-k ez du Shizuku-ren baimenik.';
 
   @override
-  String get settingsCoopOverlayPermission =>
-      'Baimendu ValleySave beste aplikazioen gainean bistaratzea eta ukitu berriro Shizuku botoia.';
+  String get settingsCoopOverlayPermission => 'Baimendu ValleySave beste aplikazioen gainean bistaratzea eta ukitu berriro Shizuku botoia.';
 
   @override
-  String get settingsCoopCalibrationTimeout =>
-      'Kalibrazioaren denbora agortu da. Hasi berriro Stardew-en hasierako pantailatik.';
+  String get settingsCoopCalibrationTimeout => 'Kalibrazioaren denbora agortu da. Hasi berriro Stardew-en hasierako pantailatik.';
 
   @override
-  String get settingsCoopSequenceTimeout =>
-      'Ukitu-sekuentziaren denbora agortu da eta bertan behera utzi da.';
+  String get settingsCoopSequenceTimeout => 'Ukitu-sekuentziaren denbora agortu da eta bertan behera utzi da.';
 
   @override
-  String get settingsCoopNotForeground =>
-      'Stardew aurreko planotik atera da. Ez da ukitu gehiagorik bidali; itzuli hasierako pantailara eta saiatu berriro.';
+  String get settingsCoopNotForeground => 'Stardew aurreko planotik atera da. Ez da ukitu gehiagorik bidali; itzuli hasierako pantailara eta saiatu berriro.';
 
   @override
-  String get settingsCoopDisplayChanged =>
-      'Pantaila aldatu da kalibrazioan zehar. Ez da ukiturik bidali; kalibratu berriro.';
+  String get settingsCoopDisplayChanged => 'Pantaila aldatu da kalibrazioan zehar. Ez da ukiturik bidali; kalibratu berriro.';
 
   @override
   String get settingsCoopCancelled => 'Coop aktibazioa bertan behera utzi da.';
 
   @override
-  String get settingsCoopExperimentalManual =>
-      'Mugikorreko coop funtzioa esperimentala da. Utzi Stardew hasierako pantailan; itxi zeuk ? orria eta egiaztatu Coop agertzen den.';
+  String get settingsCoopExperimentalManual => 'Mugikorreko coop funtzioa esperimentala da. Utzi Stardew hasierako pantailan; itxi zeuk ? orria eta egiaztatu Coop agertzen den.';
 
   @override
   String get settingsCoopRowTitle => 'Mugikorreko coop';
 
   @override
-  String get settingsCoopRowSubtitle =>
-      'Desblokeatu Stardew Valley-ko coop aukera ezkutua';
+  String get settingsCoopRowSubtitle => 'Desblokeatu Stardew Valley-ko coop aukera ezkutua';
 
   @override
-  String get settingsCoopChooserIntro =>
-      'Aukeratu nola desblokeatu coop telefono honetan.';
+  String get settingsCoopChooserIntro => 'Aukeratu nola desblokeatu coop telefono honetan.';
 
   @override
   String get settingsCoopRootTitle => 'Zuzenean ROOT bidez';
@@ -2222,25 +2106,21 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get makeHostNewCopyNote =>
-      'Partida berri bat sortzen da. Gero erabakiko duzu jatorrizkoarekin zer egin.';
+  String get makeHostNewCopyNote => 'Partida berri bat sortzen da. Gero erabakiko duzu jatorrizkoarekin zer egin.';
 
   @override
   String makeHostMoveCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Baserriko $count objektu lekuz aldatuko dira etxeari tokia egiteko. Ezer ez da ezabatzen.',
-      one:
-          'Baserriko objektu 1 lekuz aldatuko da etxeari tokia egiteko. Ezer ez da ezabatzen.',
+      other: 'Baserriko $count objektu lekuz aldatuko dira etxeari tokia egiteko. Ezer ez da ezabatzen.',
+      one: 'Baserriko objektu 1 lekuz aldatuko da etxeari tokia egiteko. Ezer ez da ezabatzen.',
     );
     return '$_temp0';
   }
 
   @override
-  String get makeHostHouseWarning =>
-      'Ostalari berriaren etxea jokoaren baserri handi bezala ikusiko da. Etxolaren itxura ez da onartzen modrik gabe.';
+  String get makeHostHouseWarning => 'Ostalari berriaren etxea jokoaren baserri handi bezala ikusiko da. Etxolaren itxura ez da onartzen modrik gabe.';
 
   @override
   String get makeHostConfirmButton => 'Ostalari bihurtu';
@@ -2251,36 +2131,28 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get hostSwapErrInvalid =>
-      'Partida honek ustekabeko egitura du. Ez da ezer aldatu.';
+  String get hostSwapErrInvalid => 'Partida honek ustekabeko egitura du. Ez da ezer aldatu.';
 
   @override
-  String get hostSwapErrNoSpace =>
-      'Ez dago leku librerik baserrian objektuak lekuz aldatzeko. Ez da ezer aldatu.';
+  String get hostSwapErrNoSpace => 'Ez dago leku librerik baserrian objektuak lekuz aldatzeko. Ez da ezer aldatu.';
 
   @override
-  String get hostSwapErrWrite =>
-      'Ezin izan da partida berria idatzi (diskoa/baimenak). Ez da ezer aldatu.';
+  String get hostSwapErrWrite => 'Ezin izan da partida berria idatzi (diskoa/baimenak). Ez da ezer aldatu.';
 
   @override
-  String get hostSwapErrValidation =>
-      'Partida berriaren egiaztapenak huts egin du eta baztertu egin da. Jatorrizkoa osorik dago.';
+  String get hostSwapErrValidation => 'Partida berriaren egiaztapenak huts egin du eta baztertu egin da. Jatorrizkoa osorik dago.';
 
   @override
-  String get makeHostDeleteOriginalTitle =>
-      'Jatorrizko partida gailu honetatik ezabatu?';
+  String get makeHostDeleteOriginalTitle => 'Jatorrizko partida gailu honetatik ezabatu?';
 
   @override
-  String get makeHostDeleteOriginalBody =>
-      'Partida berria prest dago. Igo jatorrizkoa zure Drive-ra babeskopia gisa (gero berriz deskarga dezakezu), edo ezabatu kopia lokala soilik.';
+  String get makeHostDeleteOriginalBody => 'Partida berria prest dago. Igo jatorrizkoa zure Drive-ra babeskopia gisa (gero berriz deskarga dezakezu), edo ezabatu kopia lokala soilik.';
 
   @override
-  String get makeHostDeleteOriginalNoBackupBody =>
-      'Driverekin konexiorik ez: ez da babeskopiarik geratuko. Gailu honetako kopia lokala bakarrik ezabatuko da.';
+  String get makeHostDeleteOriginalNoBackupBody => 'Driverekin konexiorik ez: ez da babeskopiarik geratuko. Gailu honetako kopia lokala bakarrik ezabatuko da.';
 
   @override
-  String get makeHostDeleteOriginalUploadBody =>
-      'Jatorrizko partida zure Drive-ra igoko da lehenik babeskopia gisa, eta gero gailu honetako kopia lokala ezabatuko da.';
+  String get makeHostDeleteOriginalUploadBody => 'Jatorrizko partida zure Drive-ra igoko da lehenik babeskopia gisa, eta gero gailu honetako kopia lokala ezabatuko da.';
 
   @override
   String get makeHostDeleteWithoutUpload => 'Ezabatu igo gabe';
@@ -2309,8 +2181,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get savesFolderNoneDetected =>
-      'Ez da karpetarik automatikoki detektatu.';
+  String get savesFolderNoneDetected => 'Ez da karpetarik automatikoki detektatu.';
 
   @override
   String get savesFolderBrowse => 'Arakatu karpetak…';
@@ -2330,12 +2201,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get savesFolderVerifyEmpty =>
-      'Karpeta honetan ez dago gordetakorik. Hala ere erabil dezakezu.';
+  String get savesFolderVerifyEmpty => 'Karpeta honetan ez dago gordetakorik. Hala ere erabil dezakezu.';
 
   @override
-  String get savesFolderVerifyMissing =>
-      'Karpeta ez da aurkitu edo ezin da irakurri.';
+  String get savesFolderVerifyMissing => 'Karpeta ez da aurkitu edo ezin da irakurri.';
 
   @override
   String get savesFolderLooksLike => 'Gordetako karpeta';
@@ -2383,8 +2252,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsSmapiNotDetected => 'ez da detektatu';
 
   @override
-  String get settingsSmapiSavesShared =>
-      'Gordetakoak: karpeta bera (PCan, SMAPIk ez ditu bereizten)';
+  String get settingsSmapiSavesShared => 'Gordetakoak: karpeta bera (PCan, SMAPIk ez ditu bereizten)';
 
   @override
   String settingsSmapiModsPath(String path) {
@@ -2398,8 +2266,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsSmapiSearch => 'Bilatu';
 
   @override
-  String get settingsSmapiNotFoundHint =>
-      'Instalatu SMAPI, edo ezarri non dagoen jokoa goiko “Jokoa” atalean.';
+  String get settingsSmapiNotFoundHint => 'Instalatu SMAPI, edo ezarri non dagoen jokoa goiko “Jokoa” atalean.';
 
   @override
   String get snackInvalidFolder => 'Karpeta hori ezin da erabili.';
@@ -2421,16 +2288,13 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get moveToSmapiBody =>
-      'SMAPI fitxan ikusiko duzu eta, igotzean, zure Drive-ko SMAPI karpetara joango da.';
+  String get moveToSmapiBody => 'SMAPI fitxan ikusiko duzu eta, igotzean, zure Drive-ko SMAPI karpetara joango da.';
 
   @override
-  String get moveToNormalBody =>
-      'Normala fitxan ikusiko duzu eta, igotzean, zure Drive-ko karpeta normalera joango da.';
+  String get moveToNormalBody => 'Normala fitxan ikusiko duzu eta, igotzean, zure Drive-ko karpeta normalera joango da.';
 
   @override
-  String get moveAreaNoFilesTouched =>
-      'PCan ez da fitxategirik mugitzen edo aldatzen: joko normalak eta SMAPIk gordetakoen karpeta bera erabiltzen dute. Nahi duzunean itzul dezakezu. Bere kopia Drive-ko beste karpetan dagoen lekuan geratzen da.';
+  String get moveAreaNoFilesTouched => 'PCan ez da fitxategirik mugitzen edo aldatzen: joko normalak eta SMAPIk gordetakoen karpeta bera erabiltzen dute. Nahi duzunean itzul dezakezu. Bere kopia Drive-ko beste karpetan dagoen lekuan geratzen da.';
 
   @override
   String get moveToSmapiConfirm => 'Eraman SMAPIra';
@@ -2473,8 +2337,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get modWithConfig => 'bere ezarpenekin';
 
   @override
-  String get modsCompatLegend =>
-      'Android: ✓ normalean funtzionatzen du · ⚠ huts egin dezake (kodezko mod) · ✗ Androidek oraindik ez duen SMAPI bertsio bat behar du.';
+  String get modsCompatLegend => 'Android: ✓ normalean funtzionatzen du · ⚠ huts egin dezake (kodezko mod) · ✗ Androidek oraindik ez duen SMAPI bertsio bat behar du.';
 
   @override
   String modsUploadAction(int count) {
@@ -2490,8 +2353,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get modsDownloadSubtitle =>
-      'Aukeratu zein instalatu gailu honetan. Dagoeneko bertsio berean dituzunak ez dira ukitzen.';
+  String get modsDownloadSubtitle => 'Aukeratu zein instalatu gailu honetan. Dagoeneko bertsio berean dituzunak ez dira ukitzen.';
 
   @override
   String modsDownloadWarning(String mods) {
@@ -2526,8 +2388,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get modsNeedNoLink =>
-      'Igo ezazu daukan gailutik, edo instalatu eskuz.';
+  String get modsNeedNoLink => 'Igo ezazu daukan gailutik, edo instalatu eskuz.';
 
   @override
   String get modsNeedUnsupportedHere => 'ez dabil plataforma honetan';
@@ -2543,8 +2404,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get modsAutoSyncToggle =>
-      'Igo eta deskargatu bere mod-ak partidarekin batera';
+  String get modsAutoSyncToggle => 'Igo eta deskargatu bere mod-ak partidarekin batera';
 
   @override
   String modUpdateAvailable(String version) {
@@ -2563,27 +2423,23 @@ class AppLocalizationsEu extends AppLocalizations {
   String get forcedUpdateInstalling => 'Instalatzen…';
 
   @override
-  String get forcedUpdateInstallingBody =>
-      'ValleySave itxi eta bertsio berriarekin irekiko da berriro.';
+  String get forcedUpdateInstallingBody => 'ValleySave itxi eta bertsio berriarekin irekiko da berriro.';
 
   @override
   String get forcedUpdateAlmostDone => 'Ia prest';
 
   @override
-  String get forcedUpdateAndroidConfirm =>
-      'Androidek instalazioa berresteko eskatzen du. Segurtasunagatik derrigorrezkoa da.';
+  String get forcedUpdateAndroidConfirm => 'Androidek instalazioa berresteko eskatzen du. Segurtasunagatik derrigorrezkoa da.';
 
   @override
   String get forcedUpdateFailedTitle => 'Ezin izan da eguneratu';
 
   @override
-  String get forcedUpdateFailedBody =>
-      'Bertsio honek ezin du gehiago sinkronizatu. Konektatu internetera eta saiatu berriro.';
+  String get forcedUpdateFailedBody => 'Bertsio honek ezin du gehiago sinkronizatu. Konektatu internetera eta saiatu berriro.';
 
   @override
   String get forcedUpdateRetry => 'Saiatu berriro';
 
   @override
-  String get forcedUpdateSafe =>
-      'Zure partidak salbu daude: zure gailuan eta zure Drive-n jarraitzen dute.';
+  String get forcedUpdateSafe => 'Zure partidak salbu daude: zure gailuan eta zure Drive-n jarraitzen dute.';
 }

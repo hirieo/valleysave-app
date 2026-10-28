@@ -45,8 +45,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get privacyTitle => '隐私和数据使用';
 
   @override
-  String get privacyDescription =>
-      'ValleySave 是一款应用，可将您的 Stardew Valley 存档与您自己的 Google Drive 账户同步。';
+  String get privacyDescription => 'ValleySave 是一款应用，可将您的 Stardew Valley 存档与您自己的 Google Drive 账户同步。';
 
   @override
   String get whatDataTitle => '使用哪些数据';
@@ -58,15 +57,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get googleDriveTitle => 'Google Drive';
 
   @override
-  String get googleDriveDesc =>
-      '您的存档被上传到您自己的 Google Drive 账户。ValleySave 不使用其自有服务器来存储您的游戏。';
+  String get googleDriveDesc => '您的存档被上传到您自己的 Google Drive 账户。ValleySave 不使用其自有服务器来存储您的游戏。';
 
   @override
   String get androidPermissionsTitle => 'Android 上的权限';
 
   @override
-  String get androidPermissionsDesc =>
-      'ValleySave 可能需要存储权限或 Shizuku 等工具来访问存档文件。';
+  String get androidPermissionsDesc => 'ValleySave 可能需要存储权限或 Shizuku 等工具来访问存档文件。';
 
   @override
   String get adsTitle => '广告';
@@ -84,15 +81,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteDataTitle => '删除数据';
 
   @override
-  String get deleteDataDesc =>
-      '您可以通过从 Google Drive 手动删除 ValleySave 文件夹来删除同步的副本。';
+  String get deleteDataDesc => '您可以通过从 Google Drive 手动删除 ValleySave 文件夹来删除同步的副本。';
 
   @override
   String get sourceCodeTitle => '源代码和联系';
 
   @override
-  String get sourceCodeDesc =>
-      'ValleySave 是一个在 Polyform Noncommercial 许可证下提供可用代码的项目。';
+  String get sourceCodeDesc => 'ValleySave 是一个在 Polyform Noncommercial 许可证下提供可用代码的项目。';
 
   @override
   String get upToDate => '最新';
@@ -191,8 +186,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeHeroPost => '\n随身携带。';
 
   @override
-  String get welcomeSubtitle =>
-      '将您的 Stardew Valley 存档在所有设备上同步。您的数据存放在您自己的 Google Drive 中——没有服务器，没有订阅，由您掌控。';
+  String get welcomeSubtitle => '将您的 Stardew Valley 存档在所有设备上同步。您的数据存放在您自己的 Google Drive 中——没有服务器，没有订阅，由您掌控。';
 
   @override
   String get welcomeDriveConnected => 'Drive 已连接';
@@ -483,8 +477,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shareRoleWriter => '允许同步';
 
   @override
-  String get shareInfoNoteCoop =>
-      '只读权限允许查看和下载。允许同步权限允许覆盖你 Drive 上的副本——但永远无法删除它。';
+  String get shareInfoNoteCoop => '只读权限允许查看和下载。允许同步权限允许覆盖你 Drive 上的副本——但永远无法删除它。';
 
   @override
   String get shareConfirmButton => '共享';
@@ -512,12 +505,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get driveOnlyControlsYourCopy =>
-      '共享只控制你在 Drive 上的副本。如果有人下载了它，那份副本就是他们的了。';
+  String get driveOnlyControlsYourCopy => '共享只控制你在 Drive 上的副本。如果有人下载了它，那份副本就是他们的了。';
 
   @override
-  String get driveOnlyControlsYourCopyCoop =>
-      '同步只控制你在 Drive 上的副本——你授权的人可以覆盖它，但永远无法删除。';
+  String get driveOnlyControlsYourCopyCoop => '同步只控制你在 Drive 上的副本——你授权的人可以覆盖它，但永远无法删除。';
 
   @override
   String get sharedWithMeTitle => '与我共享的';
@@ -784,8 +775,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backupsDeleteConfirmTitle => '要删除此备份吗？';
 
   @override
-  String get backupsDeleteConfirmBody =>
-      '将从存在的所有位置删除（本设备和 Drive，如果已上传）。此操作无法撤销。';
+  String get backupsDeleteConfirmBody => '将从存在的所有位置删除（本设备和 Drive，如果已上传）。此操作无法撤销。';
 
   @override
   String get backupsRestoreOk => '备份已恢复。';
@@ -794,8 +784,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backupsRestoreManualTitle => '手动恢复';
 
   @override
-  String get backupsRestoreManualBody =>
-      '在桥接模式下，ValleySave 无法自动写入游戏文件夹。请自行将此备份的 .zip 解压到 Stardew Valley 的 Saves 文件夹，或在设置中切换到 Root/Shizuku 模式以自动恢复。';
+  String get backupsRestoreManualBody => '在桥接模式下，ValleySave 无法自动写入游戏文件夹。请自行将此备份的 .zip 解压到 Stardew Valley 的 Saves 文件夹，或在设置中切换到 Root/Shizuku 模式以自动恢复。';
 
   @override
   String backupsRestoreErr(String error) {
@@ -879,13 +868,62 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get backupsSectionManual => 'Manual';
+
+  @override
+  String get backupsSectionAuto => 'Automatic';
+
+  @override
+  String get backupsSectionPreRestore => 'Before restoring';
+
+  @override
+  String backupsSectionLast(String date) {
+    return 'last $date';
+  }
+
+  @override
+  String get backupsInUseShort => 'in use';
+
+  @override
+  String get backupsInUseTag => 'In use';
+
+  @override
+  String get backupsRuleManual => 'never deleted automatically';
+
+  @override
+  String backupsRuleKeep(int count) {
+    return 'keeps $count';
+  }
+
+  @override
+  String get backupsKeep => 'Keep';
+
+  @override
+  String get backupsKeepOk => 'Backup kept in Manual.';
+
+  @override
+  String backupsKeepRemoteErr(String error) {
+    return 'Kept on this device, but renaming it on Drive failed: $error';
+  }
+
+  @override
+  String backupsKeepErr(String error) {
+    return 'Could not keep the backup: $error';
+  }
+
+  @override
+  String get backupsExpandAll => 'Expand all';
+
+  @override
+  String get backupsCollapseAll => 'Collapse all';
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '要删除 $farmName 吗？';
   }
 
   @override
-  String get deleteChooseLocationBody =>
-      '选择从哪里删除。本设备的副本将被永久删除；Drive 上的副本会进入回收站（30 天）。';
+  String get deleteChooseLocationBody => '选择从哪里删除。本设备的副本将被永久删除；Drive 上的副本会进入回收站（30 天）。';
 
   @override
   String deleteDriveContextTitle(String farmName) {
@@ -1026,8 +1064,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwConnectTitle => '连接你的账号';
 
   @override
-  String get hiwConnectDesc =>
-      'ValleySave 使用你的 Google 账号，把存档保存在你自己 Drive 中的 ValleySave 专属文件夹里。';
+  String get hiwConnectDesc => 'ValleySave 使用你的 Google 账号，把存档保存在你自己 Drive 中的 ValleySave 专属文件夹里。';
 
   @override
   String get hiwConnectStepGoogle => 'Google\n账号';
@@ -1039,15 +1076,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwConnectStepReady => '准备好\n同步了';
 
   @override
-  String get hiwConnectTipOwnership =>
-      '只有你能编辑或删除 Drive 中的副本——ValleySave 只在自己的文件夹内读写。';
+  String get hiwConnectTipOwnership => '只有你能编辑或删除 Drive 中的副本——ValleySave 只在自己的文件夹内读写。';
 
   @override
   String get hiwSyncTitle => '同步原理';
 
   @override
-  String get hiwSyncIntro =>
-      'ValleySave 使用您自己的 Google Drive 在设备间移动存档。没有中介服务器：文件是您的。';
+  String get hiwSyncIntro => 'ValleySave 使用您自己的 Google Drive 在设备间移动存档。没有中介服务器：文件是您的。';
 
   @override
   String get hiwSyncDevice => '您的\n设备';
@@ -1062,8 +1097,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwUploadTitle => '上传存档';
 
   @override
-  String get hiwUploadDesc =>
-      '上传时，ValleySave 会将两个存档文件（SaveGameInfo + 农场文件）复制到您 Drive 上的 ValleySave/ 文件夹。';
+  String get hiwUploadDesc => '上传时，ValleySave 会将两个存档文件（SaveGameInfo + 农场文件）复制到您 Drive 上的 ValleySave/ 文件夹。';
 
   @override
   String get hiwDownloadTitle => '下载存档';
@@ -1108,8 +1142,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwConflictTitle => '如果您不进行同步就玩游戏';
 
   @override
-  String get hiwConflictDesc =>
-      '如果您在移动设备和 PC 上进行了游戏但没有在会话间进行同步，最终会得到同一存档的两个版本。';
+  String get hiwConflictDesc => '如果您在移动设备和 PC 上进行了游戏但没有在会话间进行同步，最终会得到同一存档的两个版本。';
 
   @override
   String get hiwConflictNoMerge => '它们无法合并。ValleySave 始终向您显示两个版本，以便您可以选择保留哪一个。';
@@ -1157,8 +1190,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwBridgeTitle => '手动桥接';
 
   @override
-  String get hiwBridgeSubtitle =>
-      '仅在 Android 11 和 12 上有效。您无需安装任何额外的东西；相反，您需要每次同步时使用您的文件应用手动复制存档。';
+  String get hiwBridgeSubtitle => '仅在 Android 11 和 12 上有效。您无需安装任何额外的东西；相反，您需要每次同步时使用您的文件应用手动复制存档。';
 
   @override
   String get hiwBridgeBadge => '手动替代方案 · Android 11-12';
@@ -1203,8 +1235,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bridgeTitle => '带上您的存档';
 
   @override
-  String get bridgeDesc =>
-      '要查看和上传您的本地存档，请使用您的文件应用从 Stardew 文件夹复制它们到此 ValleySave 文件夹。然后向下滑动刷新。';
+  String get bridgeDesc => '要查看和上传您的本地存档，请使用您的文件应用从 Stardew 文件夹复制它们到此 ValleySave 文件夹。然后向下滑动刷新。';
 
   @override
   String get bridgeRefresh => '刷新';
@@ -1352,8 +1383,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get overwriteVerdictMoneySpent =>
-      '💰 当前金钱变少了，但整体进度在前进——你可能是把钱花在了什么东西上。这不是真正的损失。';
+  String get overwriteVerdictMoneySpent => '💰 当前金钱变少了，但整体进度在前进——你可能是把钱花在了什么东西上。这不是真正的损失。';
 
   @override
   String overwriteVerdictNegligible(String delta) {
@@ -1509,8 +1539,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwAutoSyncTitle => '自动同步';
 
   @override
-  String get hiwAutoSyncDesc =>
-      '每个存档卡片上都有一个 AUTO 标签。开启后，一旦应用检测到变化，该存档就会自动上传或下载——你不需要进入确认。';
+  String get hiwAutoSyncDesc => '每个存档卡片上都有一个 AUTO 标签。开启后，一旦应用检测到变化，该存档就会自动上传或下载——你不需要进入确认。';
 
   @override
   String get hiwAutoSyncTipSafe => '只有在你明显领先且不会丢失任何内容时，它才会自动同步。';
@@ -1519,8 +1548,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwAutoSyncTipDanger => '如果有丢失进度的风险，它绝不会自动执行：仍会像往常一样通过比较界面向你确认。';
 
   @override
-  String get hiwAutoSyncTipPerSave =>
-      '逐个存档单独开启，不是一次性全部开启：你可以只在自己的存档上开启，共享存档上不开启。';
+  String get hiwAutoSyncTipPerSave => '逐个存档单独开启，不是一次性全部开启：你可以只在自己的存档上开启，共享存档上不开启。';
 
   @override
   String get hiwAutoSyncTipMissing => '它只保持已存在的两个副本同步。如果缺少一个，第一次上传或下载需要你自己完成。';
@@ -1575,24 +1603,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwTipDeletePermanent => 'ValleySave 无法恢复永久删除的存档。Drive 文件是您的责任。';
 
   @override
-  String get hiwCompatAchievements =>
-      'Steam 和 Google Play 成就不会转移。每个平台只跟踪实时发生的成就——存档文件不会以回溯方式触发它们。';
+  String get hiwCompatAchievements => 'Steam 和 Google Play 成就不会转移。每个平台只跟踪实时发生的成就——存档文件不会以回溯方式触发它们。';
 
   @override
-  String get hiwCompatOverwrite =>
-      '如果您在没有设定顺序的情况下从两个设备同步，一个存档可能会覆盖另一个。始终在下载之前上传。';
+  String get hiwCompatOverwrite => '如果您在没有设定顺序的情况下从两个设备同步，一个存档可能会覆盖另一个。始终在下载之前上传。';
 
   @override
-  String get hiwCompatVersions =>
-      '来自不同游戏版本的存档可能无法正确加载。如果在下载之前检测到版本不匹配，ValleySave 会提醒您。';
+  String get hiwCompatVersions => '来自不同游戏版本的存档可能无法正确加载。如果在下载之前检测到版本不匹配，ValleySave 会提醒您。';
 
   @override
-  String get hiwCompatMods =>
-      'SMAPI 模组会向存档添加额外数据。如果您在未安装这些模组的设备上加载已修改的存档，游戏可能会崩溃或丢失模组数据。\n\n在 Android 上，也可以安装 SMAPI 来使用模组。';
+  String get hiwCompatMods => 'SMAPI 模组会向存档添加额外数据。如果您在未安装这些模组的设备上加载已修改的存档，游戏可能会崩溃或丢失模组数据。\n\n在 Android 上，也可以安装 SMAPI 来使用模组。';
 
   @override
-  String get hiwCompatIncomplete =>
-      '如果你在某个存档上看到\"Drive 上不完整\"，说明云端缺少必要的文件——在从其他设备重新正确上传之前无法下载。';
+  String get hiwCompatIncomplete => '如果你在某个存档上看到\"Drive 上不完整\"，说明云端缺少必要的文件——在从其他设备重新正确上传之前无法下载。';
 
   @override
   String get hiwShareTitle => '与他人共享';
@@ -1610,12 +1633,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwShareStepFriend => '与我\n共享的';
 
   @override
-  String get hiwShareTipRoles =>
-      '两种角色：只读权限可以查看和下载。允许同步权限可以覆盖你 Drive 上的副本。无论哪种角色都不能删除它——只有你这个所有者才能删除你的存档。';
+  String get hiwShareTipRoles => '两种角色：只读权限可以查看和下载。允许同步权限可以覆盖你 Drive 上的副本。无论哪种角色都不能删除它——只有你这个所有者才能删除你的存档。';
 
   @override
-  String get hiwShareTipDisconnect =>
-      '断开连接只会停止对方那一侧的同步——共享关系仍然有效，直到你在\"管理共享\"中真正退出为止。';
+  String get hiwShareTipDisconnect => '断开连接只会停止对方那一侧的同步——共享关系仍然有效，直到你在\"管理共享\"中真正退出为止。';
 
   @override
   String get hiwHostSwapTitle => '更换房主';
@@ -1642,8 +1663,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwBackupsTitle => '备份';
 
   @override
-  String get hiwBackupsDesc =>
-      '备份是存档在某一时刻的快照，之后可以恢复。你可以随时手动创建，也可以让 ValleySave 在覆盖存档之前（下载、导入、恢复或更换房主时）自动创建。';
+  String get hiwBackupsDesc => '备份是存档在某一时刻的快照，之后可以恢复。你可以随时手动创建，也可以让 ValleySave 在覆盖存档之前（下载、导入、恢复或更换房主时）自动创建。';
 
   @override
   String get hiwBackupsStepSave => '你的\n存档';
@@ -1658,20 +1678,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwBackupsTipRestore => '恢复会用之前的版本覆盖你当前的存档——此操作无法撤销。';
 
   @override
-  String get hiwBackupsTipDelete =>
-      '删除备份会将其从存在的所有位置移除（本设备和 Drive，如果已上传）——此操作无法撤销。';
+  String get hiwBackupsTipDelete => '删除备份会将其从存在的所有位置移除（本设备和 Drive，如果已上传）——此操作无法撤销。';
 
   @override
-  String get hiwBackupsTipExport =>
-      '你还可以将存档导出为 zip 文件，保存到任何地方，之后再导入回来——这是内置备份之外的一种手动、可移动的替代方案。';
+  String get hiwBackupsTipExport => '你还可以将存档导出为 zip 文件，保存到任何地方，之后再导入回来——这是内置备份之外的一种手动、可移动的替代方案。';
 
   @override
-  String get hiwBackupsTipRetention =>
-      'ValleySave 为每个存档保留最近的 5 个自动备份；你手动创建的备份永远不会被自动删除。';
+  String get hiwBackupsTipRetention => 'ValleySave 为每个存档保留最近的 5 个自动备份；你手动创建的备份永远不会被自动删除。';
 
   @override
-  String get hiwBackupsTipRestoreBridge =>
-      '在桥接模式下（Android 无 root/Shizuku），恢复备份需要你手动将 .zip 解压到 Stardew 文件夹——和下载时一样。';
+  String get hiwBackupsTipRestoreBridge => '在桥接模式下（Android 无 root/Shizuku），恢复备份需要你手动将 .zip 解压到 Stardew 文件夹——和下载时一样。';
 
   @override
   String get hiwComparePrimary => '总游玩时间';
@@ -1695,12 +1711,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwShizuku3 => '在提示时授予 ValleySave 权限。';
 
   @override
-  String get hiwBridge1 =>
-      '从 Drive 下载：ValleySave 将存档保留在其文件夹中。您使用文件应用将其复制到 Stardew 的文件夹。';
+  String get hiwBridge1 => '从 Drive 下载：ValleySave 将存档保留在其文件夹中。您使用文件应用将其复制到 Stardew 的文件夹。';
 
   @override
-  String get hiwBridge2 =>
-      '上传到 Drive：从 Stardew 复制存档到 ValleySave 的文件夹。ValleySave 检测它并上传它。';
+  String get hiwBridge2 => '上传到 Drive：从 Stardew 复制存档到 ValleySave 的文件夹。ValleySave 检测它并上传它。';
 
   @override
   String get snackShizukuBattery => '设置 → 应用 → Shizuku → 电池 → 不受限制。';
@@ -1766,8 +1780,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chooserDesc => 'Android 保护游戏文件夹。选择如何给 ValleySave 访问权限——您可以随时更改。';
 
   @override
-  String get chooserShizukuDesc =>
-      '配置一次。之后 ValleySave 自动同步，无需您触摸任何东西。仅在 Android 13+ 上的可靠方法。';
+  String get chooserShizukuDesc => '配置一次。之后 ValleySave 自动同步，无需您触摸任何东西。仅在 Android 13+ 上的可靠方法。';
 
   @override
   String get chooserManualBadge => '仅 Android 11-12';
@@ -1782,8 +1795,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chooserRootTitle => 'Root 访问';
 
   @override
-  String get chooserRootDesc =>
-      '适用于已 Root 的设备（Magisk / SuperSU）。批准一次 Root 权限请求，之后自动生效。';
+  String get chooserRootDesc => '适用于已 Root 的设备（Magisk / SuperSU）。批准一次 Root 权限请求，之后自动生效。';
 
   @override
   String get snackRootDenied => 'Root 访问被拒绝。请尝试 Shizuku。';
@@ -1816,8 +1828,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shizukuGuideHeader => '分步指南';
 
   @override
-  String get shizukuStep1DescFull =>
-      '免费。如果 Google Play 在您的手机上阻止它，请使用官方 GitHub APK。';
+  String get shizukuStep1DescFull => '免费。如果 Google Play 在您的手机上阻止它，请使用官方 GitHub APK。';
 
   @override
   String get btnPlayStore => 'Play Store';
@@ -1829,15 +1840,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shizukuStep2TitleFull => '启用开发者选项';
 
   @override
-  String get shizukuStep2DescFull =>
-      '设置 → 关于手机 → 软件信息 → 点击 \"Build number\" 7 次。';
+  String get shizukuStep2DescFull => '设置 → 关于手机 → 软件信息 → 点击 \"Build number\" 7 次。';
 
   @override
   String get shizukuStep3TitleFull => '启用无线调试';
 
   @override
-  String get shizukuStep3DescFull =>
-      '该按钮将带您到那里并高亮显示它。启用它（开启）。然后点击 \"使用配对码配对设备\"——屏幕上会出现 6 位数代码。';
+  String get shizukuStep3DescFull => '该按钮将带您到那里并高亮显示它。启用它（开启）。然后点击 \"使用配对码配对设备\"——屏幕上会出现 6 位数代码。';
 
   @override
   String get btnOpenAndHighlight => '打开并高亮';
@@ -1846,8 +1855,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shizukuStep4Title => '配对并启动 Shizuku';
 
   @override
-  String get shizukuStep4Desc =>
-      '打开 Shizuku → \"通过无线调试启动\" → \"使用配对码配对\"。Shizuku 将发送通知说它在等待。输入无线调试屏幕上的 6 位数代码。配对后，按启动——没有最后一次点击 Shizuku 将不会激活。';
+  String get shizukuStep4Desc => '打开 Shizuku → \"通过无线调试启动\" → \"使用配对码配对\"。Shizuku 将发送通知说它在等待。输入无线调试屏幕上的 6 位数代码。配对后，按启动——没有最后一次点击 Shizuku 将不会激活。';
 
   @override
   String get btnOpenShizuku => '打开 Shizuku';
@@ -1856,8 +1864,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shizukuStep5Title => '将 Shizuku 电池设置为不受限制';
 
   @override
-  String get shizukuStep5Desc =>
-      '打开应用信息 → 电池 → 不受限制。如果您不这样做，系统将在后台关闭 Shizuku，您必须再次按启动。';
+  String get shizukuStep5Desc => '打开应用信息 → 电池 → 不受限制。如果您不这样做，系统将在后台关闭 Shizuku，您必须再次按启动。';
 
   @override
   String get btnShizukuAppInfo => 'Shizuku 应用信息';
@@ -1921,8 +1928,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwLaunchDesc => '在“我的存档”上方栏点击 ▶ 按鈕，可直接从应用启动 Stardew Valley。';
 
   @override
-  String get hiwLaunchTipWindows =>
-      '在 Windows 上，若未自动检测到游戏，请在设置 → 游戏中设置可执行文件路径。';
+  String get hiwLaunchTipWindows => '在 Windows 上，若未自动检测到游戏，请在设置 → 游戏中设置可执行文件路径。';
 
   @override
   String get hiwLaunchTipAndroid => '在 Android 上，若已安装游戏则直接启动。';
@@ -1937,15 +1943,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hiwSaveLocationsDesc => 'ValleySave 会直接在每个平台的游戏存档文件夹中读写。';
 
   @override
-  String get hiwSaveLocationWindows =>
-      'Windows: %AppData%\\StardewValley\\Saves';
+  String get hiwSaveLocationWindows => 'Windows: %AppData%\\StardewValley\\Saves';
 
   @override
   String get hiwSaveLocationAndroid => 'Android：受保护的文件夹，需通过 Shizuku 或桥接模式访问';
 
   @override
-  String get hiwSaveLocationLinux =>
-      'Linux：~/.config/StardewValley/Saves（如果通过 snap 安装了 Steam，则为 ~/snap/steam/common/.config/StardewValley/Saves）';
+  String get hiwSaveLocationLinux => 'Linux：~/.config/StardewValley/Saves（如果通过 snap 安装了 Steam，则为 ~/snap/steam/common/.config/StardewValley/Saves）';
 
   @override
   String get settingsGameSection => '游戏';
@@ -1957,8 +1961,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsCoopTitle => '解锁隐藏的合作菜单';
 
   @override
-  String get settingsCoopDescription =>
-      '直接修改偏好设置的选项需要 ROOT。Stardew 必须已关闭；ValleySave 会在修改设置前创建备份。';
+  String get settingsCoopDescription => '直接修改偏好设置的选项需要 ROOT。Stardew 必须已关闭；ValleySave 会在修改设置前创建备份。';
 
   @override
   String get settingsCoopManual => '没有 ROOT：打开 Stardew，输入 ↑↑↓↓←→←→，然后点击 ? 退出。';
@@ -2003,15 +2006,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsCoopShizukuTitle => '使用 Shizuku 校准';
 
   @override
-  String get settingsCoopShizukuDescription =>
-      '实验性功能：允许显示在其他应用上层，然后在 Stardew 标题画面上点击五个标记目标（W、V、S、Y 和 ?）。坐标仅在本次会话中使用。';
+  String get settingsCoopShizukuDescription => '实验性功能：允许显示在其他应用上层，然后在 Stardew 标题画面上点击五个标记目标（W、V、S、Y 和 ?）。坐标仅在本次会话中使用。';
 
   @override
   String get settingsCoopShizukuActivate => '使用 Shizuku 校准';
 
   @override
-  String get settingsCoopShizukuSent =>
-      '已发送点击。请手动关闭 ? 画面，然后检查是否出现合作选项。ValleySave 无法验证是否已解锁。';
+  String get settingsCoopShizukuSent => '已发送点击。请手动关闭 ? 画面，然后检查是否出现合作选项。ValleySave 无法验证是否已解锁。';
 
   @override
   String get settingsCoopShizukuUnavailable => 'Shizuku 未运行。请启动后重试。';
@@ -2020,8 +2021,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsCoopShizukuDenied => 'ValleySave 没有 Shizuku 权限。';
 
   @override
-  String get settingsCoopOverlayPermission =>
-      '请允许 ValleySave 显示在其他应用上层，然后再次点击 Shizuku 按钮。';
+  String get settingsCoopOverlayPermission => '请允许 ValleySave 显示在其他应用上层，然后再次点击 Shizuku 按钮。';
 
   @override
   String get settingsCoopCalibrationTimeout => '校准超时。请从 Stardew 标题画面重新开始。';
@@ -2039,8 +2039,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsCoopCancelled => '合作激活已取消。';
 
   @override
-  String get settingsCoopExperimentalManual =>
-      '手机合作模式功能为实验性功能。请让 Stardew 停留在标题画面；自行关闭 ? 页面，并检查是否出现合作选项。';
+  String get settingsCoopExperimentalManual => '手机合作模式功能为实验性功能。请让 Stardew 停留在标题画面；自行关闭 ? 页面，并检查是否出现合作选项。';
 
   @override
   String get settingsCoopRowTitle => '手机合作模式';
@@ -2144,16 +2143,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get makeHostDeleteOriginalTitle => '要从此设备删除原始存档吗？';
 
   @override
-  String get makeHostDeleteOriginalBody =>
-      '新存档已就绪。可以先把原始存档备份到你的 Drive（之后可重新下载），或者只删除本地副本。';
+  String get makeHostDeleteOriginalBody => '新存档已就绪。可以先把原始存档备份到你的 Drive（之后可重新下载），或者只删除本地副本。';
 
   @override
-  String get makeHostDeleteOriginalNoBackupBody =>
-      '未连接 Drive：不会保留任何备份。仅会删除本设备上的本地副本。';
+  String get makeHostDeleteOriginalNoBackupBody => '未连接 Drive：不会保留任何备份。仅会删除本设备上的本地副本。';
 
   @override
-  String get makeHostDeleteOriginalUploadBody =>
-      '原始存档会先上传到你的 Drive 作为备份，然后再删除本设备上的本地副本。';
+  String get makeHostDeleteOriginalUploadBody => '原始存档会先上传到你的 Drive 作为备份，然后再删除本设备上的本地副本。';
 
   @override
   String get makeHostDeleteWithoutUpload => '不上传直接删除';
@@ -2295,8 +2291,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get moveToNormalBody => '你会在普通标签页看到它，上传时它会进入 Drive 中的普通文件夹。';
 
   @override
-  String get moveAreaNoFilesTouched =>
-      '在 PC 上不会移动或更改任何文件：普通游戏和 SMAPI 使用同一个存档文件夹。你可以随时移回。它在另一个 Drive 文件夹中的副本保持原样。';
+  String get moveAreaNoFilesTouched => '在 PC 上不会移动或更改任何文件：普通游戏和 SMAPI 使用同一个存档文件夹。你可以随时移回。它在另一个 Drive 文件夹中的副本保持原样。';
 
   @override
   String get moveToSmapiConfirm => '移到 SMAPI';
@@ -2339,8 +2334,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get modWithConfig => '连同设置';
 
   @override
-  String get modsCompatLegend =>
-      'Android：✓ 通常可用 · ⚠ 可能失败（代码 mod） · ✗ 需要 Android 尚不具备的 SMAPI 版本。';
+  String get modsCompatLegend => 'Android：✓ 通常可用 · ⚠ 可能失败（代码 mod） · ✗ 需要 Android 尚不具备的 SMAPI 版本。';
 
   @override
   String modsUploadAction(int count) {
@@ -2449,7 +2443,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
 class AppLocalizationsZhHant extends AppLocalizationsZh {
-  AppLocalizationsZhHant() : super('zh_Hant');
+  AppLocalizationsZhHant(): super('zh_Hant');
 
   @override
   String get appTitle => 'ValleySave';
@@ -2488,8 +2482,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get privacyTitle => '隱私和數據使用';
 
   @override
-  String get privacyDescription =>
-      'ValleySave 是一款應用，可將您的 Stardew Valley 存檔與您自己的 Google Drive 帳戶同步。';
+  String get privacyDescription => 'ValleySave 是一款應用，可將您的 Stardew Valley 存檔與您自己的 Google Drive 帳戶同步。';
 
   @override
   String get whatDataTitle => '使用哪些數據';
@@ -2501,15 +2494,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get googleDriveTitle => 'Google Drive';
 
   @override
-  String get googleDriveDesc =>
-      '您的存檔被上傳到您自己的 Google Drive 帳戶。ValleySave 不使用其自有伺服器來儲存您的遊戲。';
+  String get googleDriveDesc => '您的存檔被上傳到您自己的 Google Drive 帳戶。ValleySave 不使用其自有伺服器來儲存您的遊戲。';
 
   @override
   String get androidPermissionsTitle => 'Android 上的權限';
 
   @override
-  String get androidPermissionsDesc =>
-      'ValleySave 可能需要儲存權限或 Shizuku 等工具來訪問存檔文件。';
+  String get androidPermissionsDesc => 'ValleySave 可能需要儲存權限或 Shizuku 等工具來訪問存檔文件。';
 
   @override
   String get adsTitle => '廣告';
@@ -2527,15 +2518,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get deleteDataTitle => '刪除數據';
 
   @override
-  String get deleteDataDesc =>
-      '您可以透過從 Google Drive 手動刪除 ValleySave 文件夾來刪除同步的副本。';
+  String get deleteDataDesc => '您可以透過從 Google Drive 手動刪除 ValleySave 文件夾來刪除同步的副本。';
 
   @override
   String get sourceCodeTitle => '源代碼和聯繫';
 
   @override
-  String get sourceCodeDesc =>
-      'ValleySave 是一個在 Polyform Noncommercial 許可證下提供可用代碼的項目。';
+  String get sourceCodeDesc => 'ValleySave 是一個在 Polyform Noncommercial 許可證下提供可用代碼的項目。';
 
   @override
   String get upToDate => '最新';
@@ -2634,8 +2623,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get welcomeHeroPost => '\n隨身攜帶。';
 
   @override
-  String get welcomeSubtitle =>
-      '在所有設備上同步您的 Stardew Valley 存檔。您的數據存儲在您自己的 Google Drive 中 — 無伺服器、無訂閱、完全由您控制。';
+  String get welcomeSubtitle => '在所有設備上同步您的 Stardew Valley 存檔。您的數據存儲在您自己的 Google Drive 中 — 無伺服器、無訂閱、完全由您控制。';
 
   @override
   String get welcomeDriveConnected => 'Drive 已連接';
@@ -2926,8 +2914,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get shareRoleWriter => '允許同步';
 
   @override
-  String get shareInfoNoteCoop =>
-      '唯讀權限允許檢視和下載。允許同步權限允許覆蓋你 Drive 上的副本——但永遠無法刪除它。';
+  String get shareInfoNoteCoop => '唯讀權限允許檢視和下載。允許同步權限允許覆蓋你 Drive 上的副本——但永遠無法刪除它。';
 
   @override
   String get shareConfirmButton => '共用';
@@ -2955,12 +2942,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get driveOnlyControlsYourCopy =>
-      '共用只控制你在 Drive 上的副本。如果有人下載了它，那份副本就是他們的了。';
+  String get driveOnlyControlsYourCopy => '共用只控制你在 Drive 上的副本。如果有人下載了它，那份副本就是他們的了。';
 
   @override
-  String get driveOnlyControlsYourCopyCoop =>
-      '同步只控制你在 Drive 上的副本——你授權的人可以覆蓋它，但永遠無法刪除。';
+  String get driveOnlyControlsYourCopyCoop => '同步只控制你在 Drive 上的副本——你授權的人可以覆蓋它，但永遠無法刪除。';
 
   @override
   String get sharedWithMeTitle => '與我共用的';
@@ -3227,8 +3212,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get backupsDeleteConfirmTitle => '要刪除此備份嗎？';
 
   @override
-  String get backupsDeleteConfirmBody =>
-      '將從存在的所有位置刪除（本機裝置和 Drive，如果已上傳）。此操作無法復原。';
+  String get backupsDeleteConfirmBody => '將從存在的所有位置刪除（本機裝置和 Drive，如果已上傳）。此操作無法復原。';
 
   @override
   String get backupsRestoreOk => '備份已恢復。';
@@ -3237,8 +3221,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get backupsRestoreManualTitle => '手動恢復';
 
   @override
-  String get backupsRestoreManualBody =>
-      '在橋接模式下，ValleySave 無法自動寫入遊戲資料夾。請自行將此備份的 .zip 解壓縮到 Stardew Valley 的 Saves 資料夾，或在設定中切換到 Root/Shizuku 模式以自動復原。';
+  String get backupsRestoreManualBody => '在橋接模式下，ValleySave 無法自動寫入遊戲資料夾。請自行將此備份的 .zip 解壓縮到 Stardew Valley 的 Saves 資料夾，或在設定中切換到 Root/Shizuku 模式以自動復原。';
 
   @override
   String backupsRestoreErr(String error) {
@@ -3322,8 +3305,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get deleteChooseLocationBody =>
-      '選擇從哪裡刪除。本機裝置的副本將被永久刪除；Drive 上的副本會進入垃圾桶（30 天）。';
+  String get deleteChooseLocationBody => '選擇從哪裡刪除。本機裝置的副本將被永久刪除；Drive 上的副本會進入垃圾桶（30 天）。';
 
   @override
   String deleteDriveContextTitle(String farmName) {
@@ -3464,8 +3446,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwConnectTitle => '連接你的帳號';
 
   @override
-  String get hiwConnectDesc =>
-      'ValleySave 使用你的 Google 帳號，將存檔保存在你自己 Drive 中的 ValleySave 專屬資料夾裡。';
+  String get hiwConnectDesc => 'ValleySave 使用你的 Google 帳號，將存檔保存在你自己 Drive 中的 ValleySave 專屬資料夾裡。';
 
   @override
   String get hiwConnectStepGoogle => 'Google\n帳號';
@@ -3477,15 +3458,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwConnectStepReady => '準備好\n同步了';
 
   @override
-  String get hiwConnectTipOwnership =>
-      '只有你能編輯或刪除 Drive 中的副本——ValleySave 只在自己的資料夾內讀寫。';
+  String get hiwConnectTipOwnership => '只有你能編輯或刪除 Drive 中的副本——ValleySave 只在自己的資料夾內讀寫。';
 
   @override
   String get hiwSyncTitle => '同步如何運作';
 
   @override
-  String get hiwSyncIntro =>
-      'ValleySave 使用您自己的 Google Drive 在設備間移動存檔。沒有中間伺服器：文件是您的。';
+  String get hiwSyncIntro => 'ValleySave 使用您自己的 Google Drive 在設備間移動存檔。沒有中間伺服器：文件是您的。';
 
   @override
   String get hiwSyncDevice => '您的\n設備';
@@ -3500,8 +3479,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwUploadTitle => '上傳存檔';
 
   @override
-  String get hiwUploadDesc =>
-      '上傳時，ValleySave 將兩個存檔文件（SaveGameInfo + 農場文件）複製到您在 Drive 上的 ValleySave/ 文件夾。';
+  String get hiwUploadDesc => '上傳時，ValleySave 將兩個存檔文件（SaveGameInfo + 農場文件）複製到您在 Drive 上的 ValleySave/ 文件夾。';
 
   @override
   String get hiwDownloadTitle => '下載存檔';
@@ -3594,8 +3572,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwBridgeTitle => '手動橋接';
 
   @override
-  String get hiwBridgeSubtitle =>
-      '僅適用於 Android 11 和 12。您無需安裝任何額外內容；相反，您每次同步時都使用 Files 應用手動複製存檔。';
+  String get hiwBridgeSubtitle => '僅適用於 Android 11 和 12。您無需安裝任何額外內容；相反，您每次同步時都使用 Files 應用手動複製存檔。';
 
   @override
   String get hiwBridgeBadge => '手動替代方案 · ANDROID 11-12';
@@ -3640,8 +3617,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get bridgeTitle => '帶上您的存檔';
 
   @override
-  String get bridgeDesc =>
-      '要查看和上傳您的本地存檔，請使用 Files 應用從 Stardew 文件夾將它們複製到此 ValleySave 文件夾。然後刷新。';
+  String get bridgeDesc => '要查看和上傳您的本地存檔，請使用 Files 應用從 Stardew 文件夾將它們複製到此 ValleySave 文件夾。然後刷新。';
 
   @override
   String get bridgeRefresh => '刷新';
@@ -3789,8 +3765,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get overwriteVerdictMoneySpent =>
-      '💰 目前金錢變少了，但整體進度在前進——你可能是把錢花在了某樣東西上。這不是真正的損失。';
+  String get overwriteVerdictMoneySpent => '💰 目前金錢變少了，但整體進度在前進——你可能是把錢花在了某樣東西上。這不是真正的損失。';
 
   @override
   String overwriteVerdictNegligible(String delta) {
@@ -3946,8 +3921,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwAutoSyncTitle => '自動同步';
 
   @override
-  String get hiwAutoSyncDesc =>
-      '每個存檔卡片上都有一個 AUTO 標籤。開啟後，一旦應用程式偵測到變化，該存檔就會自動上傳或下載——你不需要進入確認。';
+  String get hiwAutoSyncDesc => '每個存檔卡片上都有一個 AUTO 標籤。開啟後，一旦應用程式偵測到變化，該存檔就會自動上傳或下載——你不需要進入確認。';
 
   @override
   String get hiwAutoSyncTipSafe => '只有在你明顯領先且不會遺失任何內容時，它才會自動同步。';
@@ -3956,8 +3930,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwAutoSyncTipDanger => '如果有遺失進度的風險，它絕不會自動執行：仍會像往常一樣透過比較介面向你確認。';
 
   @override
-  String get hiwAutoSyncTipPerSave =>
-      '逐個存檔單獨開啟，不是一次性全部開啟：你可以只在自己的存檔上開啟，共用存檔上不開啟。';
+  String get hiwAutoSyncTipPerSave => '逐個存檔單獨開啟，不是一次性全部開啟：你可以只在自己的存檔上開啟，共用存檔上不開啟。';
 
   @override
   String get hiwAutoSyncTipMissing => '它只保持已存在的兩個副本同步。如果缺少一個，第一次上傳或下載需要你自己完成。';
@@ -4012,23 +3985,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwTipDeletePermanent => 'ValleySave 無法恢復永久刪除的存檔。Drive 文件是您的責任。';
 
   @override
-  String get hiwCompatAchievements =>
-      'Steam 和 Google Play 成就不會轉移。每個平台僅跟踪實時發生的成就 — 存檔文件不會觸發它們回顧。';
+  String get hiwCompatAchievements => 'Steam 和 Google Play 成就不會轉移。每個平台僅跟踪實時發生的成就 — 存檔文件不會觸發它們回顧。';
 
   @override
   String get hiwCompatOverwrite => '如果您從兩個設備同步而沒有設置順序，一個存檔可能會覆蓋另一個。始終在下載前上傳。';
 
   @override
-  String get hiwCompatVersions =>
-      '來自不同遊戲版本的存檔可能無法正確加載。ValleySave 將在檢測到版本不匹配時在下載前警告您。';
+  String get hiwCompatVersions => '來自不同遊戲版本的存檔可能無法正確加載。ValleySave 將在檢測到版本不匹配時在下載前警告您。';
 
   @override
-  String get hiwCompatMods =>
-      'SMAPI mod 會向存檔添加額外數據。如果您在未安裝這些 mod 的設備上加載已修改的存檔，遊戲可能會崩潰或丟失 mod 數據。\n\n在 Android 上，也可以安裝 SMAPI 來使用 mod。';
+  String get hiwCompatMods => 'SMAPI mod 會向存檔添加額外數據。如果您在未安裝這些 mod 的設備上加載已修改的存檔，遊戲可能會崩潰或丟失 mod 數據。\n\n在 Android 上，也可以安裝 SMAPI 來使用 mod。';
 
   @override
-  String get hiwCompatIncomplete =>
-      '如果你在某個存檔上看到「Drive 上不完整」，表示雲端缺少必要的檔案——在從其他裝置重新正確上傳之前無法下載。';
+  String get hiwCompatIncomplete => '如果你在某個存檔上看到「Drive 上不完整」，表示雲端缺少必要的檔案——在從其他裝置重新正確上傳之前無法下載。';
 
   @override
   String get hiwShareTitle => '與他人共用';
@@ -4046,12 +4015,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwShareStepFriend => '與我\n共用的';
 
   @override
-  String get hiwShareTipRoles =>
-      '兩種角色：唯讀權限可以檢視和下載。允許同步權限可以覆蓋你 Drive 上的副本。無論哪種角色都不能刪除它——只有你這個擁有者才能刪除你的存檔。';
+  String get hiwShareTipRoles => '兩種角色：唯讀權限可以檢視和下載。允許同步權限可以覆蓋你 Drive 上的副本。無論哪種角色都不能刪除它——只有你這個擁有者才能刪除你的存檔。';
 
   @override
-  String get hiwShareTipDisconnect =>
-      '中斷連線只會停止對方那一側的同步——共用關係仍然有效，直到你在「管理共用」中真正退出為止。';
+  String get hiwShareTipDisconnect => '中斷連線只會停止對方那一側的同步——共用關係仍然有效，直到你在「管理共用」中真正退出為止。';
 
   @override
   String get hiwHostSwapTitle => '更換房主';
@@ -4078,8 +4045,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwBackupsTitle => '備份';
 
   @override
-  String get hiwBackupsDesc =>
-      '備份是存檔在某一時刻的快照，之後可以復原。你可以隨時手動建立，也可以讓 ValleySave 在覆蓋存檔之前（下載、匯入、復原或更換房主時）自動建立。';
+  String get hiwBackupsDesc => '備份是存檔在某一時刻的快照，之後可以復原。你可以隨時手動建立，也可以讓 ValleySave 在覆蓋存檔之前（下載、匯入、復原或更換房主時）自動建立。';
 
   @override
   String get hiwBackupsStepSave => '你的\n存檔';
@@ -4094,20 +4060,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwBackupsTipRestore => '恢復會用之前的版本覆蓋你目前的存檔——此操作無法復原。';
 
   @override
-  String get hiwBackupsTipDelete =>
-      '刪除備份會將其從存在的所有位置移除（本機裝置和 Drive，如果已上傳）——此操作無法復原。';
+  String get hiwBackupsTipDelete => '刪除備份會將其從存在的所有位置移除（本機裝置和 Drive，如果已上傳）——此操作無法復原。';
 
   @override
-  String get hiwBackupsTipExport =>
-      '你還可以將存檔匯出為 zip 檔案，保存到任何地方，之後再匯入回來——這是內建備份之外的一種手動、可攜式的替代方案。';
+  String get hiwBackupsTipExport => '你還可以將存檔匯出為 zip 檔案，保存到任何地方，之後再匯入回來——這是內建備份之外的一種手動、可攜式的替代方案。';
 
   @override
-  String get hiwBackupsTipRetention =>
-      'ValleySave 為每個存檔保留最近的 5 個自動備份；你手動建立的備份永遠不會被自動刪除。';
+  String get hiwBackupsTipRetention => 'ValleySave 為每個存檔保留最近的 5 個自動備份；你手動建立的備份永遠不會被自動刪除。';
 
   @override
-  String get hiwBackupsTipRestoreBridge =>
-      '在橋接模式下（Android 無 root/Shizuku），復原備份需要你手動將 .zip 解壓縮到 Stardew 資料夾——和下載時一樣。';
+  String get hiwBackupsTipRestoreBridge => '在橋接模式下（Android 無 root/Shizuku），復原備份需要你手動將 .zip 解壓縮到 Stardew 資料夾——和下載時一樣。';
 
   @override
   String get hiwComparePrimary => '總遊戲時間';
@@ -4131,12 +4093,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwShizuku3 => '當提示時，授予 ValleySave 權限。';
 
   @override
-  String get hiwBridge1 =>
-      '從 Drive 下載：ValleySave 將存檔留在其文件夾中。您使用 Files 將其複製到 Stardew 的文件夾。';
+  String get hiwBridge1 => '從 Drive 下載：ValleySave 將存檔留在其文件夾中。您使用 Files 將其複製到 Stardew 的文件夾。';
 
   @override
-  String get hiwBridge2 =>
-      '上傳到 Drive：從 Stardew 複製存檔到 ValleySave 的文件夾。ValleySave 檢測到它並上傳它。';
+  String get hiwBridge2 => '上傳到 Drive：從 Stardew 複製存檔到 ValleySave 的文件夾。ValleySave 檢測到它並上傳它。';
 
   @override
   String get snackShizukuBattery => '設定 → 應用 → Shizuku → 電池 → 不受限制。';
@@ -4202,15 +4162,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get chooserDesc => 'Android 保護遊戲文件夾。選擇如何給予 ValleySave 訪問權限 — 您可以隨時更改。';
 
   @override
-  String get chooserShizukuDesc =>
-      '配置一次。之後 ValleySave 可自動同步，無需您觸碰任何東西。Android 13+ 上的唯一可靠方法。';
+  String get chooserShizukuDesc => '配置一次。之後 ValleySave 可自動同步，無需您觸碰任何東西。Android 13+ 上的唯一可靠方法。';
 
   @override
   String get chooserManualBadge => '僅 ANDROID 11-12';
 
   @override
-  String get chooserBridgeDesc =>
-      '使用 Files 應用複製存檔。無需額外安裝。僅適用於 Android 11 和 12。';
+  String get chooserBridgeDesc => '使用 Files 應用複製存檔。無需額外安裝。僅適用於 Android 11 和 12。';
 
   @override
   String get chooserRootBadge => 'ROOT';
@@ -4219,8 +4177,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get chooserRootTitle => 'Root 存取';
 
   @override
-  String get chooserRootDesc =>
-      '適用於已 Root 的裝置（Magisk / SuperSU）。批准一次 Root 權限請求，之後自動生效。';
+  String get chooserRootDesc => '適用於已 Root 的裝置（Magisk / SuperSU）。批准一次 Root 權限請求，之後自動生效。';
 
   @override
   String get snackRootDenied => 'Root 存取遭拒。請嘗試 Shizuku。';
@@ -4253,8 +4210,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get shizukuGuideHeader => '逐步指南';
 
   @override
-  String get shizukuStep1DescFull =>
-      '免費。如果 Google Play 在您的手機上阻止它，請使用官方 GitHub APK。';
+  String get shizukuStep1DescFull => '免費。如果 Google Play 在您的手機上阻止它，請使用官方 GitHub APK。';
 
   @override
   String get btnPlayStore => 'Play Store';
@@ -4272,8 +4228,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get shizukuStep3TitleFull => '啟用無線調試';
 
   @override
-  String get shizukuStep3DescFull =>
-      '該按鈕將帶您到那裡並高亮它。啟用它（開啟）。然後點擊「使用配對代碼配對設備」— 屏幕上將出現 6 位數代碼。';
+  String get shizukuStep3DescFull => '該按鈕將帶您到那裡並高亮它。啟用它（開啟）。然後點擊「使用配對代碼配對設備」— 屏幕上將出現 6 位數代碼。';
 
   @override
   String get btnOpenAndHighlight => '打開並高亮';
@@ -4282,8 +4237,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get shizukuStep4Title => '配對並啟動 SHIZUKU';
 
   @override
-  String get shizukuStep4Desc =>
-      '打開 Shizuku → 「通過無線調試啟動」→ 「使用配對代碼配對」。Shizuku 將發送一條通知，表明它正在等待。從無線調試屏幕輸入 6 位數代碼。配對後，按啟動 — 沒有最後這一步，Shizuku 將不會活躍。';
+  String get shizukuStep4Desc => '打開 Shizuku → 「通過無線調試啟動」→ 「使用配對代碼配對」。Shizuku 將發送一條通知，表明它正在等待。從無線調試屏幕輸入 6 位數代碼。配對後，按啟動 — 沒有最後這一步，Shizuku 將不會活躍。';
 
   @override
   String get btnOpenShizuku => '打開 Shizuku';
@@ -4292,8 +4246,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get shizukuStep5Title => '將 Shizuku 電池設置為不受限制';
 
   @override
-  String get shizukuStep5Desc =>
-      '打開應用信息 → 電池 → 不受限制。如果您不這樣做，系統將在後台關閉 Shizuku，您將必須再次按啟動。';
+  String get shizukuStep5Desc => '打開應用信息 → 電池 → 不受限制。如果您不這樣做，系統將在後台關閉 Shizuku，您將必須再次按啟動。';
 
   @override
   String get btnShizukuAppInfo => 'Shizuku 應用信息';
@@ -4372,15 +4325,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hiwSaveLocationsDesc => 'ValleySave 會直接在每個平台的遊戲存檔資料夾中讀寫。';
 
   @override
-  String get hiwSaveLocationWindows =>
-      'Windows: %AppData%\\StardewValley\\Saves';
+  String get hiwSaveLocationWindows => 'Windows: %AppData%\\StardewValley\\Saves';
 
   @override
   String get hiwSaveLocationAndroid => 'Android：受保護的資料夾，需透過 Shizuku 或橋接模式存取';
 
   @override
-  String get hiwSaveLocationLinux =>
-      'Linux：~/.config/StardewValley/Saves（如果透過 snap 安裝了 Steam，則為 ~/snap/steam/common/.config/StardewValley/Saves）';
+  String get hiwSaveLocationLinux => 'Linux：~/.config/StardewValley/Saves（如果透過 snap 安裝了 Steam，則為 ~/snap/steam/common/.config/StardewValley/Saves）';
 
   @override
   String get settingsGameSection => '遊戲';
@@ -4392,8 +4343,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsCoopTitle => '解鎖隱藏的合作選單';
 
   @override
-  String get settingsCoopDescription =>
-      '直接修改偏好設定的選項需要 ROOT。Stardew 必須已關閉；ValleySave 會在修改設定前建立備份。';
+  String get settingsCoopDescription => '直接修改偏好設定的選項需要 ROOT。Stardew 必須已關閉；ValleySave 會在修改設定前建立備份。';
 
   @override
   String get settingsCoopManual => '沒有 ROOT：開啟 Stardew，輸入 ↑↑↓↓←→←→，然後點擊 ? 離開。';
@@ -4438,15 +4388,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsCoopShizukuTitle => '使用 Shizuku 校準';
 
   @override
-  String get settingsCoopShizukuDescription =>
-      '實驗性功能：允許顯示在其他應用程式上層，然後在 Stardew 標題畫面上點擊五個標記目標（W、V、S、Y 和 ?）。座標僅在本次工作階段中使用。';
+  String get settingsCoopShizukuDescription => '實驗性功能：允許顯示在其他應用程式上層，然後在 Stardew 標題畫面上點擊五個標記目標（W、V、S、Y 和 ?）。座標僅在本次工作階段中使用。';
 
   @override
   String get settingsCoopShizukuActivate => '使用 Shizuku 校準';
 
   @override
-  String get settingsCoopShizukuSent =>
-      '已傳送點擊。請手動關閉 ? 畫面，然後檢查是否出現合作選項。ValleySave 無法驗證是否已解鎖。';
+  String get settingsCoopShizukuSent => '已傳送點擊。請手動關閉 ? 畫面，然後檢查是否出現合作選項。ValleySave 無法驗證是否已解鎖。';
 
   @override
   String get settingsCoopShizukuUnavailable => 'Shizuku 未執行。請啟動後重試。';
@@ -4455,8 +4403,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsCoopShizukuDenied => 'ValleySave 沒有 Shizuku 權限。';
 
   @override
-  String get settingsCoopOverlayPermission =>
-      '請允許 ValleySave 顯示在其他應用程式上層，然後再次點擊 Shizuku 按鈕。';
+  String get settingsCoopOverlayPermission => '請允許 ValleySave 顯示在其他應用程式上層，然後再次點擊 Shizuku 按鈕。';
 
   @override
   String get settingsCoopCalibrationTimeout => '校準逾時。請從 Stardew 標題畫面重新開始。';
@@ -4474,8 +4421,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsCoopCancelled => '合作啟用已取消。';
 
   @override
-  String get settingsCoopExperimentalManual =>
-      '手機合作模式功能為實驗性功能。請讓 Stardew 停留在標題畫面；自行關閉 ? 頁面，並檢查是否出現合作選項。';
+  String get settingsCoopExperimentalManual => '手機合作模式功能為實驗性功能。請讓 Stardew 停留在標題畫面；自行關閉 ? 頁面，並檢查是否出現合作選項。';
 
   @override
   String get settingsCoopRowTitle => '手機合作模式';
@@ -4579,16 +4525,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get makeHostDeleteOriginalTitle => '要從此裝置刪除原始存檔嗎？';
 
   @override
-  String get makeHostDeleteOriginalBody =>
-      '新存檔已就緒。可以先把原始存檔備份到你的 Drive（之後可重新下載），或者只刪除本機副本。';
+  String get makeHostDeleteOriginalBody => '新存檔已就緒。可以先把原始存檔備份到你的 Drive（之後可重新下載），或者只刪除本機副本。';
 
   @override
-  String get makeHostDeleteOriginalNoBackupBody =>
-      '未連接 Drive：不會保留任何備份。僅會刪除本裝置上的本機副本。';
+  String get makeHostDeleteOriginalNoBackupBody => '未連接 Drive：不會保留任何備份。僅會刪除本裝置上的本機副本。';
 
   @override
-  String get makeHostDeleteOriginalUploadBody =>
-      '原始存檔會先上傳到你的 Drive 作為備份，然後再刪除本裝置上的本機副本。';
+  String get makeHostDeleteOriginalUploadBody => '原始存檔會先上傳到你的 Drive 作為備份，然後再刪除本裝置上的本機副本。';
 
   @override
   String get makeHostDeleteWithoutUpload => '不上傳直接刪除';
@@ -4730,8 +4673,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get moveToNormalBody => '你會在普通分頁看到它，上傳時它會進入 Drive 中的普通資料夾。';
 
   @override
-  String get moveAreaNoFilesTouched =>
-      '在 PC 上不會移動或更改任何檔案：普通遊戲和 SMAPI 使用同一個存檔資料夾。你可以隨時移回。它在另一個 Drive 資料夾中的副本保持原樣。';
+  String get moveAreaNoFilesTouched => '在 PC 上不會移動或更改任何檔案：普通遊戲和 SMAPI 使用同一個存檔資料夾。你可以隨時移回。它在另一個 Drive 資料夾中的副本保持原樣。';
 
   @override
   String get moveToSmapiConfirm => '移到 SMAPI';
@@ -4774,8 +4716,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get modWithConfig => '連同設定';
 
   @override
-  String get modsCompatLegend =>
-      'Android：✓ 通常可用 · ⚠ 可能失敗（程式碼 mod） · ✗ 需要 Android 尚未具備的 SMAPI 版本。';
+  String get modsCompatLegend => 'Android：✓ 通常可用 · ⚠ 可能失敗（程式碼 mod） · ✗ 需要 Android 尚未具備的 SMAPI 版本。';
 
   @override
   String modsUploadAction(int count) {

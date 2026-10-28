@@ -477,6 +477,48 @@
       }
     }
   },
+  "backupsSectionManual": "Manual",
+  "backupsSectionAuto": "Automatic",
+  "backupsSectionPreRestore": "Before restoring",
+  "backupsSectionLast": "last {date}",
+  "@backupsSectionLast": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsInUseShort": "in use",
+  "backupsInUseTag": "In use",
+  "backupsRuleManual": "never deleted automatically",
+  "backupsRuleKeep": "keeps {count}",
+  "@backupsRuleKeep": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupsKeep": "Keep",
+  "backupsKeepOk": "Backup kept in Manual.",
+  "backupsKeepRemoteErr": "Kept on this device, but renaming it on Drive failed: {error}",
+  "@backupsKeepRemoteErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsKeepErr": "Could not keep the backup: {error}",
+  "@backupsKeepErr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupsExpandAll": "Expand all",
+  "backupsCollapseAll": "Collapse all",
   "deleteUnifiedTitle": "Delete {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

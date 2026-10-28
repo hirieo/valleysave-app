@@ -24,6 +24,7 @@ import '../../core/models/shared_sync_state.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/auto_refresh_prefs.dart';
 import '../../core/services/auto_sync_prefs.dart';
+import '../../core/services/backup_in_use_store.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/services/drive_service.dart';
 import '../../core/services/game_launch_service.dart';
@@ -50,6 +51,7 @@ import '../help/how_it_works_screen.dart';
 import '../settings/settings_screen.dart';
 import 'save_card.dart';
 import 'widgets/backup_action_button.dart';
+import 'widgets/backups_sections.dart';
 import 'widgets/card_focus_frame.dart';
 import 'widgets/latest_badge.dart';
 import 'widgets/save_area_tabs.dart';
@@ -3387,14 +3389,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       folderName: source.folderName,
     );
     // D3: si la partida cambió desde la restauración, la marca «en uso» se
-    // quita aquí (la lista del diálogo la lee del almacén).
+    // quita aquí. Sin copia local no hay con qué comparar: no se marca nada.
     final localSave = entry.local;
-    if (localSave != null) {
-      await BackupService().currentInUse(
-        source.folderName,
-        localSave.folderPath,
-      );
-    }
+    final inUse = localSave == null
+        ? null
+        : await BackupService().currentInUse(
+            source.folderName,
+            localSave.folderPath,
+          );
 
     var driveBackups = <BackupEntry>[];
     var sharedBackups = <BackupEntry>[];
@@ -3438,6 +3440,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       source.farmName,
       list,
       backupsDir: backupsDir,
+      folderName: source.folderName,
+      initialInUse: inUse,
       localSave: entry.local,
       sharedFolderId: sharedFolderId,
       canEditShared: canEditShared,
@@ -3449,12 +3453,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     String farmName,
     List<BackupEntry> initial, {
     required String backupsDir,
+    required String folderName,
+    String? initialInUse,
     SaveFile? localSave,
     String? sharedFolderId,
     required bool canEditShared,
     String? sharedOwnerEmail,
   }) async {
     final l10n = AppLocalizations.of(context)!;
+    final initialOpen = await BackupsSectionsPrefs.load();
+    if (!mounted) return;
+    var inUse = initialInUse;
     await showDialog<void>(
       context: context,
       builder: (ctx) => Dialog(
@@ -3463,6 +3472,17 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         child: StatefulBuilder(
           builder: (ctx, setState) {
             final entries = initial;
+
+            // Tras restaurar o conservar cambian los backups locales (se creó
+            // un «antes de restaurar», la retención borró otro, un tag cambió)
+            // y la marca «en uso»: se vuelve a leer ambos.
+            Future<void> refreshAfterChange() async {
+              await _syncLocalBackups(entries, backupsDir, folderName);
+              final marked = await const BackupInUseStore().get(folderName);
+              if (!ctx.mounted) return;
+              setState(() => inUse = marked?.fileName);
+            }
+
             return _glassDialogShell(
               maxWidth: 420,
               accent: const Color(0xFF97C459),
@@ -3475,112 +3495,87 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (localSave != null) ...[
-                      _infoBox(
-                        color: const Color(0xFF97C459),
-                        icon: Icons.laptop_mac_rounded,
-                        text: l10n.backupsCreateLocalHint,
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    if (localSave != null || entries.isEmpty)
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 8,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          if (localSave != null)
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 235),
-                              child: BackupActionButton(
-                                key: const ValueKey('backup-create-action'),
-                                label: l10n.backupsCreate,
-                                icon: Icons.add_box_outlined,
-                                color: const Color(0xFFE0B850),
-                                filled: true,
-                                onPressed: () => _createManualBackup(
-                                  localSave,
-                                  backupsDir,
-                                  entries,
-                                  setState,
-                                ),
-                              ),
-                            ),
-                          if (entries.isEmpty)
-                            Text(
-                              l10n.backupsEmpty,
-                              style: GoogleFonts.firaCode(
-                                fontSize: 11,
-                                color: Colors.white.withValues(alpha: 0.5),
-                              ),
-                            ),
-                        ],
-                      ),
-                    if (localSave != null || entries.isEmpty)
-                      const SizedBox(height: 5),
-                    if (entries.isNotEmpty)
-                      for (final entry in List<BackupEntry>.of(entries))
-                        _backupRow(
-                          entry,
-                          onRestore: () async {
-                            await _handleRestoreBackup(entry);
-                          },
-                          onDelete: _canDeleteBackup(entry, canEditShared)
-                              ? () async {
-                                  final result = await _handleDeleteBackup(
-                                    entry,
-                                    canEditShared: canEditShared,
-                                  );
-                                  if (!result.changed) return;
-                                  setState(() {
-                                    final index = entries.indexWhere(
-                                      (item) => item.fileName == entry.fileName,
-                                    );
-                                    if (index < 0) return;
-                                    final remaining = result.remaining;
-                                    if (remaining == null) {
-                                      entries.removeAt(index);
-                                    } else {
-                                      entries[index] = remaining;
-                                    }
-                                  });
-                                }
-                              : null,
-                          onDownload:
-                              !entry.isLocal &&
-                                  _drive != null &&
-                                  (entry.isOnDrive || entry.isOnSharedDrive)
-                              ? () => _downloadBackup(
-                                  entry,
-                                  backupsDir,
-                                  entries,
-                                  setState,
-                                )
-                              : null,
-                          onUploadOwn: _drive != null && !entry.isOnDrive
-                              ? () => _uploadBackup(entry, entries, setState)
-                              : null,
-                          ownActionCopiesRemote:
-                              !entry.isLocal && entry.isOnSharedDrive,
-                          onUploadShared:
-                              _drive != null &&
-                                  sharedFolderId != null &&
-                                  canEditShared &&
-                                  !entry.isOnSharedDrive
-                              ? () => _uploadBackup(
-                                  entry,
-                                  entries,
-                                  setState,
-                                  sharedFolderId: sharedFolderId,
-                                  sharedOwnerEmail: sharedOwnerEmail,
-                                )
-                              : null,
+                content: BackupsSections(
+                  entries: entries,
+                  inUseFileName: inUse,
+                  initialOpen: initialOpen,
+                  showSharedLocation: sharedFolderId != null,
+                  loadSummary: (e) => e.localPath == null
+                      ? Future.value(null)
+                      : BackupService().readGameSummary(e.localPath!),
+                  onCreate: localSave == null
+                      ? null
+                      : () => _createManualBackup(
+                          localSave,
+                          backupsDir,
+                          entries,
+                          setState,
                         ),
-                  ],
+                  actionsFor: (entry) => BackupRowActions(
+                    onRestore: () async {
+                      final restored = await _handleRestoreBackup(entry);
+                      if (restored) await refreshAfterChange();
+                    },
+                    onKeep: entry.origin == BackupOrigin.manual
+                        ? null
+                        : () => _keepBackup(
+                            entry,
+                            entries,
+                            setState,
+                            canEditShared: canEditShared,
+                            onDone: refreshAfterChange,
+                          ),
+                    onDelete: _canDeleteBackup(entry, canEditShared)
+                        ? () async {
+                            final result = await _handleDeleteBackup(
+                              entry,
+                              canEditShared: canEditShared,
+                            );
+                            if (!result.changed) return;
+                            setState(() {
+                              final index = entries.indexWhere(
+                                (item) => item.fileName == entry.fileName,
+                              );
+                              if (index < 0) return;
+                              final remaining = result.remaining;
+                              if (remaining == null) {
+                                entries.removeAt(index);
+                              } else {
+                                entries[index] = remaining;
+                              }
+                            });
+                          }
+                        : null,
+                    onDownload:
+                        !entry.isLocal &&
+                            _drive != null &&
+                            (entry.isOnDrive || entry.isOnSharedDrive)
+                        ? () => _downloadBackup(
+                            entry,
+                            backupsDir,
+                            entries,
+                            setState,
+                          )
+                        : null,
+                    onUploadOwn: _drive != null && !entry.isOnDrive
+                        ? () => _uploadBackup(entry, entries, setState)
+                        : null,
+                    ownActionCopiesRemote:
+                        !entry.isLocal && entry.isOnSharedDrive,
+                    onUploadShared:
+                        _drive != null &&
+                            sharedFolderId != null &&
+                            canEditShared &&
+                            !entry.isOnSharedDrive
+                        ? () => _uploadBackup(
+                            entry,
+                            entries,
+                            setState,
+                            sharedFolderId: sharedFolderId,
+                            sharedOwnerEmail: sharedOwnerEmail,
+                          )
+                        : null,
+                  ),
                 ),
                 actions: [
                   ActionBtn(
@@ -3599,173 +3594,68 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     );
   }
 
-  Widget _backupRow(
-    BackupEntry entry, {
-    required Future<void> Function() onRestore,
-    Future<void> Function()? onDelete,
-    Future<void> Function()? onDownload,
-    Future<void> Function()? onUploadOwn,
-    Future<void> Function()? onUploadShared,
-    bool ownActionCopiesRemote = false,
-  }) {
-    final l10n = AppLocalizations.of(context)!;
-    final ts = entry.timestamp;
-    String p(int n) => n.toString().padLeft(2, '0');
-    final dateLabel =
-        '${p(ts.day)}/${p(ts.month)}/${ts.year} · ${p(ts.hour)}:${p(ts.minute)}';
-    final sizeLabel =
-        '${(entry.sizeBytes / (1024 * 1024)).toStringAsFixed(1)} MB';
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: .035),
-          borderRadius: BorderRadius.circular(13),
-          border: Border.all(
-            color: const Color(0xFF8C795A).withValues(alpha: .38),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        dateLabel,
-                        style: GoogleFonts.firaCode(
-                          fontSize: 12,
-                          color: Colors.white.withValues(alpha: .85),
-                        ),
-                      ),
-                      Text(
-                        sizeLabel,
-                        style: GoogleFonts.firaCode(
-                          fontSize: 9.5,
-                          color: Colors.white.withValues(alpha: .4),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                _backupLocationIcon(
-                  icon: Icons.laptop_mac_rounded,
-                  active: entry.isLocal,
-                  activeColor: const Color(0xFFE0B850),
-                  tooltip: l10n.backupsLocationLocal,
-                ),
-                const SizedBox(width: 5),
-                _backupLocationIcon(
-                  icon: Icons.cloud_outlined,
-                  active: entry.isOnDrive,
-                  activeColor: const Color(0xFF5AA8E0),
-                  tooltip: l10n.backupsLocationOwnDrive,
-                ),
-                const SizedBox(width: 5),
-                _backupLocationIcon(
-                  icon: Icons.link_rounded,
-                  active: entry.isOnSharedDrive,
-                  activeColor: const Color(0xFF42D392),
-                  tooltip: l10n.backupsLocationSharedDrive,
-                ),
-                const SizedBox(width: 6),
-                BackupActionButton(
-                  key: ValueKey('backup-restore-${entry.fileName}'),
-                  label: l10n.backupsRestore,
-                  icon: Icons.settings_backup_restore_rounded,
-                  color: const Color(0xFF7FC4F5),
-                  onPressed: onRestore,
-                ),
-                if (onDelete != null) ...[
-                  const SizedBox(width: 6),
-                  BackupActionButton(
-                    key: ValueKey('backup-delete-${entry.fileName}'),
-                    label: l10n.backupsDelete,
-                    icon: Icons.delete_outline_rounded,
-                    color: const Color(0xFFE05252),
-                    iconOnly: true,
-                    tooltip: l10n.backupsDelete,
-                    onPressed: onDelete,
-                  ),
-                ],
-              ],
-            ),
-            if (onDownload != null ||
-                onUploadOwn != null ||
-                onUploadShared != null) ...[
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 7,
-                runSpacing: 7,
-                children: [
-                  if (onDownload != null)
-                    BackupActionButton(
-                      key: ValueKey('backup-download-${entry.fileName}'),
-                      label: l10n.backupsDownload,
-                      icon: Icons.download_rounded,
-                      color: const Color(0xFF7FC4F5),
-                      filled: true,
-                      onPressed: onDownload,
-                    ),
-                  if (onUploadOwn != null)
-                    BackupActionButton(
-                      key: ValueKey('backup-upload-own-${entry.fileName}'),
-                      label: ownActionCopiesRemote
-                          ? l10n.backupsCopyOwn
-                          : l10n.backupsUploadOwn,
-                      icon: Icons.cloud_upload_outlined,
-                      color: const Color(0xFF5AA8E0),
-                      onPressed: onUploadOwn,
-                    ),
-                  if (onUploadShared != null)
-                    BackupActionButton(
-                      key: ValueKey('backup-upload-shared-${entry.fileName}'),
-                      label: l10n.backupsUploadShared,
-                      icon: Icons.link_rounded,
-                      color: const Color(0xFF42D392),
-                      onPressed: onUploadShared,
-                    ),
-                ],
-              ),
-            ],
-          ],
-        ),
-      ),
+  /// Vuelve a leer los backups LOCALES de [folderName] y los fusiona en
+  /// [entries]: añade los nuevos, quita la ubicación local de los que ya no
+  /// están (los borró la retención) y descarta los que solo existían ahí.
+  Future<void> _syncLocalBackups(
+    List<BackupEntry> entries,
+    String backupsDir,
+    String folderName,
+  ) async {
+    final local = await BackupService().listLocalBackups(
+      backupsDir,
+      folderName: folderName,
     );
+    final byName = {for (final b in local) b.fileName: b};
+    for (var i = entries.length - 1; i >= 0; i--) {
+      final e = entries[i];
+      if (!e.isLocal || byName.containsKey(e.fileName)) continue;
+      if (e.isOnDrive || e.isOnSharedDrive) {
+        entries[i] = e.copyWith(clearLocalPath: true);
+      } else {
+        entries.removeAt(i);
+      }
+    }
+    for (final b in local) {
+      final i = entries.indexWhere((e) => e.fileName == b.fileName);
+      if (i < 0) {
+        entries.add(b);
+      } else {
+        entries[i] = entries[i].mergeWith(b);
+      }
+    }
+    entries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
-  Widget _backupLocationIcon({
-    required IconData icon,
-    required bool active,
-    required Color activeColor,
-    required String tooltip,
-  }) => Tooltip(
-    message: tooltip,
-    child: Container(
-      width: 25,
-      height: 25,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: active ? activeColor.withValues(alpha: .10) : Colors.transparent,
-        border: Border.all(
-          color: active
-              ? activeColor.withValues(alpha: .55)
-              : Colors.white.withValues(alpha: .10),
-        ),
-        borderRadius: BorderRadius.circular(7),
-      ),
-      child: Icon(
-        icon,
-        size: 14,
-        color: active ? activeColor : Colors.white.withValues(alpha: .16),
-      ),
-    ),
-  );
+  /// «Conservar» (spec 012, D5): el backup pasa a Manuales. Si Drive falla, el
+  /// local ya está renombrado y se avisa con el motivo.
+  Future<void> _keepBackup(
+    BackupEntry entry,
+    List<BackupEntry> entries,
+    void Function(void Function()) refresh, {
+    required bool canEditShared,
+    required Future<void> Function() onDone,
+  }) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final result = await BackupService().keepBackup(
+        entry,
+        renameRemote: _drive?.renameBackup,
+        renameShared: canEditShared,
+      );
+      final renamed = result.entry.fileName != entry.fileName;
+      if (renamed) _replaceBackupEntry(entry, result.entry, entries, refresh);
+      await onDone();
+      if (!mounted) return;
+      if (result.remoteError != null) {
+        _snack(l10n.backupsKeepRemoteErr(result.remoteError!));
+      } else if (renamed) {
+        _snack(l10n.backupsKeepOk);
+      }
+    } catch (e) {
+      if (mounted) _snack(l10n.backupsKeepErr(e.toString()));
+    }
+  }
 
   Future<void> _uploadBackup(
     BackupEntry entry,
@@ -3892,7 +3782,8 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (index >= 0) refresh(() => entries[index] = updated);
   }
 
-  Future<void> _handleRestoreBackup(BackupEntry entry) async {
+  /// `true` solo si el backup quedó restaurado de verdad.
+  Future<bool> _handleRestoreBackup(BackupEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await _confirmBackupAction(
       accent: const Color(0xFF5AA8E0),
@@ -3901,7 +3792,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       confirmLabel: l10n.backupsRestore,
       confirmIcon: Icons.settings_backup_restore_rounded,
     );
-    if (confirmed != true) return;
+    if (confirmed != true) return false;
 
     // F6 (T023) — mismo gate que `_hostSwapAvailable`: root/Shizuku son los
     // únicos submodos Android con una copia local sobre la que se puede
@@ -3913,11 +3804,11 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         (_mode == AndroidMode.root || _mode == AndroidMode.shizuku);
     if (Platform.isAndroid && !androidBridge) {
       await _showManualRestoreDialog();
-      return;
+      return false;
     }
     if (androidBridge && _mode == AndroidMode.shizuku && !_shizukuReady) {
       if (mounted) _snack(l10n.activateShizuku);
-      return;
+      return false;
     }
 
     final remoteId = entry.driveFileId ?? entry.sharedDriveFileId;
@@ -3926,14 +3817,13 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         : null;
 
     if (androidBridge) {
-      await _restoreBackupAndroid(entry, downloadToPath: downloadToPath);
-      return;
+      return _restoreBackupAndroid(entry, downloadToPath: downloadToPath);
     }
 
     final savesDir = SaveService.savesDirectory;
     if (savesDir == null) {
       if (mounted) _snack(l10n.snackPlatformNotSupported);
-      return;
+      return false;
     }
     try {
       final result = await BackupService().restoreBackup(
@@ -3944,12 +3834,14 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
       if (!result.ok) {
         if (mounted) _snack(l10n.backupsRestoreErr(result.error?.name ?? ''));
-        return;
+        return false;
       }
       await _load(silent: true);
       if (mounted) _snack(l10n.backupsRestoreOk);
+      return true;
     } catch (e) {
       if (mounted) _snack(l10n.backupsRestoreErr(e.toString()));
+      return false;
     }
   }
 
@@ -3957,7 +3849,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   /// (nunca al `savesDir` real, protegido) y solo empuja al juego si
   /// `BackupService.restoreBackup` (que hereda la transaccionalidad de F5)
   /// termina con éxito — mismo patrón que `_importAndroid`.
-  Future<void> _restoreBackupAndroid(
+  Future<bool> _restoreBackupAndroid(
     BackupEntry entry, {
     Future<void> Function(String localPath)? downloadToPath,
   }) async {
@@ -3976,7 +3868,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       );
       if (!result.ok) {
         if (mounted) _snack(l10n.backupsRestoreErr(result.error?.name ?? ''));
-        return;
+        return false;
       }
 
       final out = await ShizukuService.instance.prepareOut(folderName);
@@ -3990,13 +3882,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           : await ShizukuService.instance.pushSave(folderName);
       if (!ok) {
         if (mounted) _snack(l10n.snackWriteError);
-        return;
+        return false;
       }
       await BackupService().markRestoredInUse(entry);
       await _load(silent: true);
       if (mounted) _snack(l10n.backupsRestoreOk);
+      return true;
     } catch (e) {
       if (mounted) _snack(l10n.backupsRestoreErr(e.toString()));
+      return false;
     } finally {
       if (await stagingDir.exists()) await stagingDir.delete(recursive: true);
     }

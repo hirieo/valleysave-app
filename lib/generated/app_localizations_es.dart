@@ -756,7 +756,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get swapBackupDialogTitle => 'Respaldo creado';
+  String get swapBackupDialogTitle => 'Backup creado';
 
   @override
   String get swapBackupDialogBody =>
@@ -772,32 +772,32 @@ class AppLocalizationsEs extends AppLocalizations {
   String get swapBackupDeleteNow => 'Borrar ahora';
 
   @override
-  String get swapBackupUploadOk => 'Respaldo subido a Drive.';
+  String get swapBackupUploadOk => 'Backup subido a Drive.';
 
   @override
   String swapBackupUploadErr(String error) {
-    return 'No se pudo subir el respaldo: $error';
+    return 'No se pudo subir el backup: $error';
   }
 
   @override
-  String get swapBackupLocalOnlySnack => 'Respaldo guardado en este equipo.';
+  String get swapBackupLocalOnlySnack => 'Backup guardado en este equipo.';
 
   @override
   String get backupsAction => 'Backups';
 
   @override
   String backupsScreenTitle(String farmName) {
-    return 'Respaldos de $farmName';
+    return 'Backups de $farmName';
   }
 
   @override
-  String get backupsEmpty => 'Sin respaldos todavía.';
+  String get backupsEmpty => 'Sin backups todavía.';
 
   @override
   String get backupsRestore => 'Restaurar';
 
   @override
-  String get backupsRestoreConfirmTitle => '¿Restaurar este respaldo?';
+  String get backupsRestoreConfirmTitle => '¿Restaurar este backup?';
 
   @override
   String get backupsRestoreConfirmBody =>
@@ -807,56 +807,56 @@ class AppLocalizationsEs extends AppLocalizations {
   String get backupsDelete => 'Eliminar';
 
   @override
-  String get backupsDeleteConfirmTitle => '¿Eliminar este respaldo?';
+  String get backupsDeleteConfirmTitle => '¿Eliminar este backup?';
 
   @override
   String get backupsDeleteConfirmBody =>
       'Se borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió). No se puede deshacer.';
 
   @override
-  String get backupsRestoreOk => 'Respaldo restaurado.';
+  String get backupsRestoreOk => 'Backup restaurado.';
 
   @override
   String get backupsRestoreManualTitle => 'Restaurar manualmente';
 
   @override
   String get backupsRestoreManualBody =>
-      'En modo Puente, ValleySave no puede escribir en la carpeta del juego de forma automática. Extrae tú mismo el .zip de este respaldo en la carpeta Saves de Stardew Valley, o cambia a modo Root/Shizuku en Ajustes para restaurar de forma automática.';
+      'En modo Puente, ValleySave no puede escribir en la carpeta del juego de forma automática. Extrae tú mismo el .zip de este backup en la carpeta Saves de Stardew Valley, o cambia a modo Root/Shizuku en Ajustes para restaurar de forma automática.';
 
   @override
   String backupsRestoreErr(String error) {
-    return 'No se pudo restaurar el respaldo: $error';
+    return 'No se pudo restaurar el backup: $error';
   }
 
   @override
   String backupsDeleteErr(String error) {
-    return 'No se pudo eliminar el respaldo: $error';
+    return 'No se pudo eliminar el backup: $error';
   }
 
   @override
-  String get backupsCreate => 'Crear respaldo local';
+  String get backupsCreate => 'Crear backup local';
 
   @override
   String get backupsCreateLocalHint =>
-      'Los respaldos se crean primero en este equipo. Después podrás subirlos a Drive.';
+      'Los backups se crean primero en este equipo. Después podrás subirlos a Drive.';
 
   @override
-  String get backupsCreateOk => 'Respaldo creado.';
+  String get backupsCreateOk => 'Backup creado.';
 
   @override
   String backupsCreateErr(String error) {
-    return 'No se pudo crear el respaldo: $error';
+    return 'No se pudo crear el backup: $error';
   }
 
   @override
   String get backupsDownload => 'Descargar';
 
   @override
-  String get backupsDownloadOk => 'Respaldo descargado en este equipo.';
+  String get backupsDownloadOk => 'Backup descargado en este equipo.';
 
   @override
   String backupsDownloadErr(String error) {
-    return 'No se pudo descargar el respaldo: $error';
+    return 'No se pudo descargar el backup: $error';
   }
 
   @override
@@ -869,11 +869,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get backupsUploadShared => 'Al Drive compartido';
 
   @override
-  String get backupsUploadOk => 'Respaldo subido.';
+  String get backupsUploadOk => 'Backup subido.';
 
   @override
   String backupsUploadErr(String error) {
-    return 'No se pudo subir el respaldo: $error';
+    return 'No se pudo subir el backup: $error';
   }
 
   @override
@@ -887,7 +887,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backupsDeleteChooseBody =>
-      'Elige exactamente dónde borrarlo. Solo aparecen las ubicaciones donde existe este respaldo.';
+      'Elige exactamente dónde borrarlo. Solo aparecen las ubicaciones donde existe este backup.';
 
   @override
   String get backupsDeleteLocalOnly => 'Solo de este equipo';
@@ -1004,12 +1004,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String deleteLocalBackupAvailable(int count) {
-    return 'Hay $count respaldos locales disponibles por si necesitas una copia anterior.';
+    return 'Hay $count backups locales disponibles por si necesitas una copia anterior.';
   }
 
   @override
   String get deleteLocalNoRecovery =>
-      'No hay una copia en Drive ni un respaldo local desde el que recuperar esta partida.';
+      'No hay una copia en Drive ni un backup local desde el que recuperar esta partida.';
 
   @override
   String get deleteOptionLocalOnly => 'Solo de este equipo';
@@ -1767,17 +1767,17 @@ class AppLocalizationsEs extends AppLocalizations {
       'La casa del nuevo anfitrión se verá como la casa grande por defecto del juego — la estética de cabaña no está soportada sin mods.';
 
   @override
-  String get hiwBackupsTitle => 'Respaldos';
+  String get hiwBackupsTitle => 'Backups';
 
   @override
   String get hiwBackupsDesc =>
-      'Un respaldo es una foto de una partida que puedes restaurar más adelante. Créalo manualmente cuando quieras, o deja que ValleySave cree uno automáticamente antes de sobrescribir una partida (al descargar, importar, restaurar o cambiar de anfitrión).';
+      'Un backup es una foto de una partida que puedes restaurar más adelante. Créalo manualmente cuando quieras, o deja que ValleySave cree uno automáticamente antes de sobrescribir una partida (al descargar, importar, restaurar o cambiar de anfitrión).';
 
   @override
   String get hiwBackupsStepSave => 'Tu\npartida';
 
   @override
-  String get hiwBackupsStepSnapshot => 'Respaldo\ncreado';
+  String get hiwBackupsStepSnapshot => 'Backup\ncreado';
 
   @override
   String get hiwBackupsStepStore => 'Local y/o\nDrive';
@@ -1788,19 +1788,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hiwBackupsTipDelete =>
-      'Eliminar un respaldo lo borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió) — no se puede deshacer.';
+      'Eliminar un backup lo borra en todas las ubicaciones donde exista (este equipo y Drive, si se subió) — no se puede deshacer.';
 
   @override
   String get hiwBackupsTipExport =>
-      'También puedes Exportar una partida como zip para guardarla donde quieras, e Importarla de vuelta más adelante — una alternativa manual y portable a los respaldos integrados.';
+      'También puedes Exportar una partida como zip para guardarla donde quieras, e Importarla de vuelta más adelante — una alternativa manual y portable a los backups integrados.';
 
   @override
   String get hiwBackupsTipRetention =>
-      'ValleySave conserva los 5 respaldos automáticos más recientes de cada partida; los que creas tú a mano nunca se borran solos.';
+      'ValleySave conserva los 5 backups automáticos más recientes de cada partida; los que creas tú a mano nunca se borran solos.';
 
   @override
   String get hiwBackupsTipRestoreBridge =>
-      'En modo Puente (Android sin root/Shizuku), restaurar un respaldo te pide extraer el .zip a mano en la carpeta de Stardew — igual que al descargar.';
+      'En modo Puente (Android sin root/Shizuku), restaurar un backup te pide extraer el .zip a mano en la carpeta de Stardew — igual que al descargar.';
 
   @override
   String get hiwComparePrimary => 'Tiempo total jugado';
@@ -2315,15 +2315,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get makeHostDeleteOriginalBody =>
-      'La nueva partida ya está lista. Sube la original a tu Drive como respaldo (podrás redescargarla luego) o borra solo la copia local.';
+      'La nueva partida ya está lista. Sube la original a tu Drive como backup (podrás redescargarla luego) o borra solo la copia local.';
 
   @override
   String get makeHostDeleteOriginalNoBackupBody =>
-      'Sin conexión con Drive: no quedará ningún respaldo. Solo se borrará la copia local de este equipo.';
+      'Sin conexión con Drive: no quedará ningún backup. Solo se borrará la copia local de este equipo.';
 
   @override
   String get makeHostDeleteOriginalUploadBody =>
-      'La partida original se subirá primero a tu Drive como respaldo y luego se borrará la copia local de este equipo.';
+      'La partida original se subirá primero a tu Drive como backup y luego se borrará la copia local de este equipo.';
 
   @override
   String get makeHostDeleteWithoutUpload => 'Borrar sin subir';

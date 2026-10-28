@@ -287,6 +287,16 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+  testWidgets('los botones de la fila miden 34 px y la papelera no se estira', (
+    tester,
+  ) async {
+    await pump(tester, open: {BackupOrigin.auto});
+
+    expect(tester.getSize(find.byKey(_restore(_auto2))).height, 34);
+    expect(tester.getSize(find.byKey(_keep(_auto2))).height, 34);
+    expect(tester.getSize(find.byKey(_delete(_auto2))), const Size(34, 34));
+  });
+
   testWidgets('el aviso aparece solo si se pasa, en 11 px', (tester) async {
     await pump(tester);
     expect(find.text('Aviso de prueba'), findsNothing);

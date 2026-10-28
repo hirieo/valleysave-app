@@ -30,7 +30,7 @@ class BackupActionButton extends StatefulWidget {
   final String? tooltip;
 
   /// Variante de las filas del diálogo de backups (spec 012, D7): texto de
-  /// 11 px sin icono (salvo [iconOnly]), relleno 10×6 y sin altura mínima.
+  /// 11 px sin icono (salvo [iconOnly]), relleno 10×6 y 34 px de alto.
   final bool compact;
 
   /// Variante rellena del botón principal del diálogo de backups: fondo del
@@ -119,9 +119,15 @@ class _BackupActionButtonState extends State<BackupActionButton> {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 140),
               curve: const Cubic(.23, 1, .32, 1),
+              // Compacto: 34 px de alto (aprobado 2026-10-28 tras comparar
+              // 27/34/40 en mockup). El contenido se centra con factores 1
+              // (ver `child`): un `alignment` aquí haría que el botón se
+              // estirara a todo el ancho dentro de un Wrap.
               constraints: BoxConstraints(
-                minWidth: widget.iconOnly && !compact ? 40 : 0,
-                minHeight: compact ? 0 : 40,
+                minWidth: widget.iconOnly
+                    ? (widget.compact ? 34 : (compact ? 0 : 40))
+                    : 0,
+                minHeight: widget.compact ? 34 : (compact ? 0 : 40),
               ),
               padding: widget.iconOnly
                   ? (compact
@@ -154,34 +160,40 @@ class _BackupActionButtonState extends State<BackupActionButton> {
                     : null,
               ),
               child: widget.iconOnly
-                  ? Center(child: _iconOrProgress())
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (!widget.compact || _busy) ...[
-                          _iconOrProgress(),
-                          const SizedBox(width: 6),
-                        ],
-                        Flexible(
-                          child: Text(
-                            widget.label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.firaCode(
-                              fontSize: fontSize,
-                              fontWeight: widget.solid
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                              color: widget.solid && !_busy
-                                  ? _solidForeground
-                                  : color.withValues(
-                                      alpha: enabled || _busy ? 1 : .45,
-                                    ),
+                  ? Center(
+                      widthFactor: 1,
+                      heightFactor: 1,
+                      child: _iconOrProgress(),
+                    )
+                  : _centered(
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (!widget.compact || _busy) ...[
+                            _iconOrProgress(),
+                            const SizedBox(width: 6),
+                          ],
+                          Flexible(
+                            child: Text(
+                              widget.label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.firaCode(
+                                fontSize: fontSize,
+                                fontWeight: widget.solid
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: widget.solid && !_busy
+                                    ? _solidForeground
+                                    : color.withValues(
+                                        alpha: enabled || _busy ? 1 : .45,
+                                      ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
             ),
           ),
@@ -194,6 +206,12 @@ class _BackupActionButtonState extends State<BackupActionButton> {
     }
     return button;
   }
+
+  /// Con altura mínima (compacto: 34 px) centra el contenido sin ocupar más
+  /// ancho del que necesita; los demás botones quedan como estaban.
+  Widget _centered(Widget content) => widget.compact
+      ? Center(widthFactor: 1, heightFactor: 1, child: content)
+      : content;
 
   Widget _iconOrProgress() {
     if (_busy) {

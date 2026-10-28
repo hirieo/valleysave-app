@@ -63,4 +63,50 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('backup-action-progress')), findsNothing);
   });
+
+  testWidgets('compacto mide 34 px de alto; el normal sigue en 40', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              BackupActionButton(
+                key: const ValueKey('compacto'),
+                label: 'Restaurar',
+                icon: Icons.settings_backup_restore_rounded,
+                color: Colors.blue,
+                compact: true,
+                onPressed: () async {},
+              ),
+              BackupActionButton(
+                key: const ValueKey('compacto-icono'),
+                label: 'Eliminar',
+                icon: Icons.delete_outline_rounded,
+                color: Colors.red,
+                compact: true,
+                iconOnly: true,
+                onPressed: () async {},
+              ),
+              BackupActionButton(
+                key: const ValueKey('normal'),
+                label: 'Descargar',
+                icon: Icons.download_rounded,
+                color: Colors.blue,
+                onPressed: () async {},
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byKey(const ValueKey('compacto'))).height, 34);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('compacto-icono'))),
+      const Size(34, 34),
+    );
+    expect(tester.getSize(find.byKey(const ValueKey('normal'))).height, 40);
+  });
 }

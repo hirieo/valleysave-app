@@ -3386,6 +3386,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
       backupsDir,
       folderName: source.folderName,
     );
+    // D3: si la partida cambió desde la restauración, la marca «en uso» se
+    // quita aquí (la lista del diálogo la lee del almacén).
+    final localSave = entry.local;
+    if (localSave != null) {
+      await BackupService().currentInUse(
+        source.folderName,
+        localSave.folderPath,
+      );
+    }
 
     var driveBackups = <BackupEntry>[];
     var sharedBackups = <BackupEntry>[];
@@ -3963,6 +3972,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         savesDir: stagingDir.path,
         backupsDir: await _backupsDirPath(),
         downloadToPath: downloadToPath,
+        markInUse: false,
       );
       if (!result.ok) {
         if (mounted) _snack(l10n.backupsRestoreErr(result.error?.name ?? ''));
@@ -3982,6 +3992,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
         if (mounted) _snack(l10n.snackWriteError);
         return;
       }
+      await BackupService().markRestoredInUse(entry);
       await _load(silent: true);
       if (mounted) _snack(l10n.backupsRestoreOk);
     } catch (e) {

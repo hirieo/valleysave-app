@@ -179,11 +179,18 @@ class BackupService {
   /// local, [downloadToPath] lo descarga primero a un temporal que se limpia
   /// tanto en éxito como en fallo (G12). [downloadToPath] se inyecta para
   /// que este servicio siga siendo Dart puro, sin acoplar a `DriveService`.
+  ///
+  /// El respaldo de seguridad de la partida que se sustituye es de tipo
+  /// [BackupOrigin.preRestore] (spec 012). Si todo sale bien, [entry] queda
+  /// marcado «en uso» ([BackupInUseStore]); el caller que aún tiene que
+  /// copiar el resultado a otro sitio (Android) pasa [markInUse] `false` y
+  /// llama a [markRestoredInUse] cuando termina de verdad.
   Future<ImportResult> restoreBackup(
     BackupEntry entry, {
     required String savesDir,
     required String backupsDir,
     Future<void> Function(String localPath)? downloadToPath,
+    bool markInUse = true,
   }) async {
     String zipPath;
     Directory? tempDir;
@@ -205,11 +212,24 @@ class BackupService {
         savesDir: savesDir,
         backupsDir: backupsDir,
         overwrite: true,
+        safetyOrigin: BackupOrigin.preRestore,
       );
       if (result.ok) {
         final hash = await hashBackupZip(zipPath, entry.folderName);
         if (hash != null) {
           await const BackupHashCache().put(entry.fileName, hash);
+          if (markInUse) {
+            try {
+              await const BackupInUseStore().set(
+                entry.folderName,
+                entry.fileName,
+                hash,
+              );
+            } catch (_) {
+              // La restauración ya está hecha: perder la marca solo quita
+              // la etiqueta «En uso», nunca debe convertirla en un error.
+            }
+          }
         }
       }
       return result;
@@ -222,6 +242,40 @@ class BackupService {
         }
       }
     }
+  }
+
+  /// Marca [entry] «en uso» con la huella que [restoreBackup] dejó en caché.
+  /// Para los callers que llamaron a [restoreBackup] con `markInUse: false`.
+  Future<void> markRestoredInUse(BackupEntry entry) async {
+    try {
+      final hash = await const BackupHashCache().get(entry.fileName);
+      if (hash == null) return;
+      await const BackupInUseStore().set(
+        entry.folderName,
+        entry.fileName,
+        hash,
+      );
+    } catch (_) {
+      // Solo se pierde la etiqueta «En uso».
+    }
+  }
+
+  /// `fileName` del backup «en uso» de [folderName], o `null`. Si el
+  /// contenido actual de [saveFolderPath] ya no coincide con el que dejó la
+  /// restauración (se jugó o se sincronizó), la marca se quita (D3).
+  Future<String?> currentInUse(String folderName, String saveFolderPath) async {
+    const store = BackupInUseStore();
+    final marked = await store.get(folderName);
+    if (marked == null) return null;
+    try {
+      if (await hashSaveFolder(saveFolderPath) == marked.contentHash) {
+        return marked.fileName;
+      }
+    } catch (_) {
+      // carpeta ilegible o ausente: tampoco coincide.
+    }
+    await store.clear(folderName);
+    return null;
   }
 
   Future<void> deleteLocalBackup(String localPath) async {

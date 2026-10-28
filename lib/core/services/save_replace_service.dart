@@ -121,6 +121,10 @@ class SaveReplaceService {
   ///    primero antes de devolver [ReplaceError.swapFailed] — el destino
   ///    NUNCA queda sin carpeta válida.
   /// 6. Limpia rollback y temporal.
+  ///
+  /// [safetyOrigin] es el tipo del backup de seguridad del paso 4:
+  /// [BackupOrigin.auto] por defecto; la restauración de un backup pasa
+  /// [BackupOrigin.preRestore] (spec 012).
   Future<ReplaceResult> replaceSaveFolder({
     required String savesDir,
     required String folderName,
@@ -128,6 +132,7 @@ class SaveReplaceService {
     Future<bool> Function(Directory stagingDir)? validate,
     required String backupsDir,
     String? preverifiedBackupPath,
+    BackupOrigin safetyOrigin = BackupOrigin.auto,
   }) async {
     // Clave por RUTA ABSOLUTA, no solo `folderName` — dos partidas con el
     // mismo nombre en raíces `savesDir` distintas (p. ej. dos discos, o un
@@ -207,7 +212,7 @@ class SaveReplaceService {
               saveFolderPath: destination.path,
               folderName: folderName,
               backupsDir: backupsDir,
-              origin: BackupOrigin.auto,
+              origin: safetyOrigin,
             );
             final verified = await verifyBackupZipContents(
               autoBackup.localPath!,
@@ -224,7 +229,7 @@ class SaveReplaceService {
             await BackupService().enforceRetention(
               backupsDir,
               folderName,
-              BackupOrigin.auto,
+              safetyOrigin,
             );
           }
         } catch (_) {

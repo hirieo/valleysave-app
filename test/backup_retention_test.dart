@@ -410,7 +410,7 @@ void main() {
 
   group('restoreBackup delega en el flujo transaccional (T022, T023)', () {
     test(
-      'restaurar sobre un save existente genera un auto-backup nuevo y aplica retención',
+      'restaurar sobre un save existente genera un «antes de restaurar» y no toca los automáticos',
       () async {
         final savesDir = Directory(
           '${tempDir.path}${Platform.pathSeparator}Saves',
@@ -433,8 +433,19 @@ void main() {
           ).writeAsBytes(f.content);
         }
 
-        // Ya hay 5 auto-backups previos de este mismo save — la retención
-        // debe entrar en juego cuando se cree el sexto.
+        // La partida viva tiene progreso que ningún backup contiene: si no,
+        // restaurar no necesitaría respaldo (D4, sin duplicados).
+        final liveInfo = File(
+          '${existing.path}${Platform.pathSeparator}SaveGameInfo',
+        );
+        await liveInfo.writeAsString(
+          (await liveInfo.readAsString()).replaceFirst(
+            '<money>500</money>',
+            '<money>777</money>',
+          ),
+        );
+
+        // Ya hay 5 auto-backups previos de este mismo save.
         final base = DateTime(2026, 7, 1, 10);
         for (var i = 0; i < kMaxAutoBackups; i++) {
           await writeBackupFile(
@@ -470,16 +481,15 @@ void main() {
           backupsDir.path,
           folderName: folderName,
         );
-        final autosAfter = afterRestore.where(
-          (e) => e.origin == BackupOrigin.auto,
+        expect(
+          afterRestore.where((e) => e.origin == BackupOrigin.auto),
+          hasLength(kMaxAutoBackups),
+          reason: 'restaurar no toca los automáticos (D2)',
         );
         expect(
-          autosAfter,
-          hasLength(kMaxAutoBackups),
-          reason:
-              'SaveReplaceService creó un auto-backup del save previo a '
-              'restaurar Y aplicó la retención — nunca más de '
-              'kMaxAutoBackups',
+          afterRestore.where((e) => e.origin == BackupOrigin.preRestore),
+          hasLength(1),
+          reason: 'el respaldo del save previo es «Antes de restaurar»',
         );
       },
     );

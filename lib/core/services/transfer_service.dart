@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 
+import '../models/backup_entry.dart' show BackupOrigin;
 import 'host_swap_service.dart' show copyDirectory;
 import 'save_replace_service.dart';
 import 'save_service.dart';
@@ -88,6 +89,7 @@ class TransferService {
     required String savesDir,
     required String backupsDir,
     bool overwrite = false,
+    BackupOrigin safetyOrigin = BackupOrigin.auto,
   }) async {
     final List<int> bytes;
     try {
@@ -108,6 +110,7 @@ class TransferService {
       savesDir: savesDir,
       backupsDir: backupsDir,
       overwrite: overwrite,
+      safetyOrigin: safetyOrigin,
     );
   }
 
@@ -120,6 +123,7 @@ class TransferService {
     required String savesDir,
     required String backupsDir,
     bool overwrite = false,
+    BackupOrigin safetyOrigin = BackupOrigin.auto,
   }) async {
     // 1) Seguridad de rutas ANTES de tocar disco: rechaza symlinks, `..` y
     //    rutas absolutas en cualquier entrada.
@@ -229,6 +233,7 @@ class TransferService {
         folderName: folderName,
         backupsDir: backupsDir,
         prepare: (stagingDir) => copyDirectory(tempSaveDir, stagingDir),
+        safetyOrigin: safetyOrigin,
       );
       await _safeDelete(tempRoot);
 

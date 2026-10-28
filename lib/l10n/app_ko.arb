@@ -1,4 +1,4 @@
-﻿{
+{
   "@@locale": "ko",
   "appTitle": "ValleySave",
   "welcomeTitle": "농장을 잃지 마세요, 어디든지 가져가세요.",
@@ -1070,6 +1070,21 @@
   "backupsDeleteOwnOnly": "내 Drive에서만",
   "backupsDeleteSharedOnly": "공유 Drive에서만",
   "backupsDeleteAll": "모든 사본에서",
+  "backupsGameSummary": "{year}년차 · {season} {day}일 · {money} g",
+  "backupsSectionManual": "수동",
+  "backupsSectionAuto": "자동",
+  "backupsSectionPreRestore": "복원 전",
+  "backupsSectionLast": "최근 {date}",
+  "backupsInUseShort": "사용 중",
+  "backupsInUseTag": "사용 중",
+  "backupsRuleManual": "자동으로 삭제되지 않음",
+  "backupsRuleKeep": "{count}개 보관",
+  "backupsKeep": "보관",
+  "backupsKeepOk": "백업을 '수동'에 보관했습니다.",
+  "backupsKeepRemoteErr": "이 기기에는 보관했지만 Drive에서 이름을 바꾸지 못했습니다: {error}",
+  "backupsKeepErr": "백업을 보관하지 못했습니다: {error}",
+  "backupsExpandAll": "모두 펼치기",
+  "backupsCollapseAll": "모두 접기",
   "deleteUnifiedTitle": "{farmName}을(를) 삭제하시겠습니까?",
   "@deleteUnifiedTitle": {
     "placeholders": {

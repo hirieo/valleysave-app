@@ -1,4 +1,4 @@
-﻿{
+{
   "@@locale": "uk",
   "appTitle": "ValleySave",
   "welcomeTitle": "Ніколи не втрачай свою ферму, бери її з собою.",
@@ -1077,6 +1077,21 @@
   "backupsDeleteOwnOnly": "Тільки з мого Drive",
   "backupsDeleteSharedOnly": "Тільки зі спільного Drive",
   "backupsDeleteAll": "З усіх копій",
+  "backupsGameSummary": "Рік {year} · {season} {day} · {money} g",
+  "backupsSectionManual": "Ручні",
+  "backupsSectionAuto": "Автоматичні",
+  "backupsSectionPreRestore": "Перед відновленням",
+  "backupsSectionLast": "остання {date}",
+  "backupsInUseShort": "використовується",
+  "backupsInUseTag": "Використовується",
+  "backupsRuleManual": "ніколи не видаляються автоматично",
+  "backupsRuleKeep": "зберігається {count}",
+  "backupsKeep": "Зберегти",
+  "backupsKeepOk": "Резервну копію збережено в «Ручні».",
+  "backupsKeepRemoteErr": "Збережено на цьому пристрої, але перейменувати на Drive не вдалося: {error}",
+  "backupsKeepErr": "Не вдалося зберегти резервну копію: {error}",
+  "backupsExpandAll": "Розгорнути все",
+  "backupsCollapseAll": "Згорнути все",
   "deleteUnifiedTitle": "Видалити {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

@@ -12,7 +12,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appTitle => 'ValleySave';
 
   @override
-  String get welcomeTitle => 'Ne perdez jamais votre ferme, emportez-la partout.';
+  String get welcomeTitle =>
+      'Ne perdez jamais votre ferme, emportez-la partout.';
 
   @override
   String get connectGoogleDrive => 'Connecter Google Drive';
@@ -45,49 +46,57 @@ class AppLocalizationsFr extends AppLocalizations {
   String get privacyTitle => 'Confidentialité et utilisation des données';
 
   @override
-  String get privacyDescription => 'ValleySave est une application pour synchroniser vos sauvegardes Stardew Valley avec votre propre compte Google Drive.';
+  String get privacyDescription =>
+      'ValleySave est une application pour synchroniser vos sauvegardes Stardew Valley avec votre propre compte Google Drive.';
 
   @override
   String get whatDataTitle => 'Quelles données sont utilisées';
 
   @override
-  String get whatDataDesc => 'ValleySave n\'accède qu\'aux fichiers de sauvegarde Stardew Valley nécessaires pour faire des copies, les synchroniser ou les restaurer.';
+  String get whatDataDesc =>
+      'ValleySave n\'accède qu\'aux fichiers de sauvegarde Stardew Valley nécessaires pour faire des copies, les synchroniser ou les restaurer.';
 
   @override
   String get googleDriveTitle => 'Google Drive';
 
   @override
-  String get googleDriveDesc => 'Vos sauvegardes sont téléchargées sur votre propre compte Google Drive. ValleySave n\'utilise pas ses propres serveurs pour stocker vos jeux.';
+  String get googleDriveDesc =>
+      'Vos sauvegardes sont téléchargées sur votre propre compte Google Drive. ValleySave n\'utilise pas ses propres serveurs pour stocker vos jeux.';
 
   @override
   String get androidPermissionsTitle => 'Permissions sur Android';
 
   @override
-  String get androidPermissionsDesc => 'ValleySave peut avoir besoin de permissions de stockage ou d\'outils comme Shizuku pour accéder aux fichiers de sauvegarde.';
+  String get androidPermissionsDesc =>
+      'ValleySave peut avoir besoin de permissions de stockage ou d\'outils comme Shizuku pour accéder aux fichiers de sauvegarde.';
 
   @override
   String get adsTitle => 'Publicités';
 
   @override
-  String get adsDesc => 'ValleySave peut afficher des publicités via Google AdMob.';
+  String get adsDesc =>
+      'ValleySave peut afficher des publicités via Google AdMob.';
 
   @override
   String get responsibilityTitle => 'Responsabilité';
 
   @override
-  String get responsibilityDesc => 'Vos fichiers de sauvegarde sont votre responsabilité.';
+  String get responsibilityDesc =>
+      'Vos fichiers de sauvegarde sont votre responsabilité.';
 
   @override
   String get deleteDataTitle => 'Supprimer les données';
 
   @override
-  String get deleteDataDesc => 'Vous pouvez supprimer vos copies synchronisées en supprimant manuellement le dossier ValleySave de Google Drive.';
+  String get deleteDataDesc =>
+      'Vous pouvez supprimer vos copies synchronisées en supprimant manuellement le dossier ValleySave de Google Drive.';
 
   @override
   String get sourceCodeTitle => 'Code source et contact';
 
   @override
-  String get sourceCodeDesc => 'ValleySave est un projet avec code disponible sous licence Polyform Noncommercial.';
+  String get sourceCodeDesc =>
+      'ValleySave est un projet avec code disponible sous licence Polyform Noncommercial.';
 
   @override
   String get upToDate => 'À jour';
@@ -116,7 +125,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shizukuGuide => 'Guide de configuration de Shizuku';
 
   @override
-  String get activateShizuku => 'Activez Shizuku pour écrire la sauvegarde dans le jeu.';
+  String get activateShizuku =>
+      'Activez Shizuku pour écrire la sauvegarde dans le jeu.';
 
   @override
   String deleteSaveTitle(Object saveName) {
@@ -124,7 +134,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get deleteSaveMessage => 'Cela supprimera la sauvegarde de cet appareil. Voulez-vous continuer?';
+  String get deleteSaveMessage =>
+      'Cela supprimera la sauvegarde de cet appareil. Voulez-vous continuer?';
 
   @override
   String get deleteFromDrive => 'Supprimer de Drive';
@@ -186,13 +197,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeHeroPost => '\nemportez-la partout.';
 
   @override
-  String get welcomeSubtitle => 'Synchronisez vos sauvegardes Stardew Valley sur tous vos appareils. Vos données restent dans votre propre Google Drive — pas de serveurs, pas d\'abonnements, sous votre contrôle.';
+  String get welcomeSubtitle =>
+      'Synchronisez vos sauvegardes Stardew Valley sur tous vos appareils. Vos données restent dans votre propre Google Drive — pas de serveurs, pas d\'abonnements, sous votre contrôle.';
 
   @override
   String get welcomeDriveConnected => 'Drive connecté';
 
   @override
-  String get welcomeFooterTagline => '· Non commercial · Gratuit pour toujours ·';
+  String get welcomeFooterTagline =>
+      '· Non commercial · Gratuit pour toujours ·';
 
   @override
   String updateVersionAvailable(String version) {
@@ -212,19 +225,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get modeAutoTitle => 'Automatique';
 
   @override
-  String get modeAutoDesc => 'Suit votre sauvegarde active et, si aucune, votre emplacement réel.';
+  String get modeAutoDesc =>
+      'Suit votre sauvegarde active et, si aucune, votre emplacement réel.';
 
   @override
   String get modeSavesTitle => 'Par sauvegarde';
 
   @override
-  String get modeSavesDesc => 'Utilise toujours la saison de votre sauvegarde la plus récente.';
+  String get modeSavesDesc =>
+      'Utilise toujours la saison de votre sauvegarde la plus récente.';
 
   @override
   String get modeGeoTitle => 'Par emplacement';
 
   @override
-  String get modeGeoDesc => 'Utilise toujours la saison réelle de votre emplacement.';
+  String get modeGeoDesc =>
+      'Utilise toujours la saison réelle de votre emplacement.';
 
   @override
   String get modeFixedTitle => 'Saison fixe';
@@ -236,7 +252,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get modeRandomTitle => 'Aléatoire';
 
   @override
-  String get modeRandomDesc => 'Choisit une saison différente à chaque ouverture de l\'application.';
+  String get modeRandomDesc =>
+      'Choisit une saison différente à chaque ouverture de l\'application.';
 
   @override
   String get seasonInitial => 'Initiale';
@@ -266,19 +283,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get autoStep2Title => 'Sauvegarde active';
 
   @override
-  String get autoStep2Desc => 'Utilise la saison de votre dernière sauvegarde synchronisée.';
+  String get autoStep2Desc =>
+      'Utilise la saison de votre dernière sauvegarde synchronisée.';
 
   @override
   String get autoStep3Title => 'Emplacement';
 
   @override
-  String get autoStep3Desc => 'Détecte votre hémisphère et la saison réelle de votre région.';
+  String get autoStep3Desc =>
+      'Détecte votre hémisphère et la saison réelle de votre région.';
 
   @override
   String get autoStep4Title => 'Par défaut';
 
   @override
-  String get autoStep4Desc => 'Initial (mode nuit) si aucune donnée n\'est disponible.';
+  String get autoStep4Desc =>
+      'Initial (mode nuit) si aucune donnée n\'est disponible.';
 
   @override
   String get versionInstalled => 'Version installée';
@@ -299,7 +319,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get updateError => 'Erreur — appuyer pour réessayer';
 
   @override
-  String get updateNeedsPermission => 'Active « installer des applications inconnues » pour ValleySave, puis appuie de nouveau sur Mettre à jour';
+  String get updateNeedsPermission =>
+      'Active « installer des applications inconnues » pour ValleySave, puis appuie de nouveau sur Mettre à jour';
 
   @override
   String get disconnectTitle => 'Déconnecter Drive?';
@@ -432,25 +453,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get importErrInvalidZip => 'Ce fichier n\'est pas un zip valide.';
 
   @override
-  String get importErrUnsafePath => 'Ce fichier a une structure non sécurisée et a été rejeté.';
+  String get importErrUnsafePath =>
+      'Ce fichier a une structure non sécurisée et a été rejeté.';
 
   @override
-  String get importErrTooLarge => 'Ce fichier est trop volumineux pour être importé.';
+  String get importErrTooLarge =>
+      'Ce fichier est trop volumineux pour être importé.';
 
   @override
-  String get importErrNotASave => 'Ce fichier ne contient pas de sauvegarde reconnaissable.';
+  String get importErrNotASave =>
+      'Ce fichier ne contient pas de sauvegarde reconnaissable.';
 
   @override
-  String get importErrWrite => 'Impossible d\'écrire la sauvegarde importée (disque/permissions).';
+  String get importErrWrite =>
+      'Impossible d\'écrire la sauvegarde importée (disque/permissions).';
 
   @override
-  String get importErrBackupFailed => 'Impossible de créer une sauvegarde de secours. Rien n\'a été importé.';
+  String get importErrBackupFailed =>
+      'Impossible de créer une sauvegarde de secours. Rien n\'a été importé.';
 
   @override
   String get importConflictTitle => 'Une sauvegarde portant ce nom existe déjà';
 
   @override
-  String get importConflictBody => 'L\'importation remplacera la copie locale existante. Irréversible.';
+  String get importConflictBody =>
+      'L\'importation remplacera la copie locale existante. Irréversible.';
 
   @override
   String get importConflictConfirm => 'Écraser';
@@ -468,7 +495,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareEmailPlaceholder => 'nom@exemple.com';
 
   @override
-  String get shareInfoNote => 'Le partage donne un accès en consultation et téléchargement uniquement. Vous seul pouvez modifier ou supprimer votre copie sur Drive.';
+  String get shareInfoNote =>
+      'Le partage donne un accès en consultation et téléchargement uniquement. Vous seul pouvez modifier ou supprimer votre copie sur Drive.';
 
   @override
   String get shareRoleReader => 'Lecture seule';
@@ -477,7 +505,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareRoleWriter => 'Autoriser la synchronisation';
 
   @override
-  String get shareInfoNoteCoop => 'Lecture seule permet de voir et de télécharger. Autoriser la synchronisation permet d\'écraser votre copie sur Drive — ils ne pourront jamais la supprimer.';
+  String get shareInfoNoteCoop =>
+      'Lecture seule permet de voir et de télécharger. Autoriser la synchronisation permet d\'écraser votre copie sur Drive — ils ne pourront jamais la supprimer.';
 
   @override
   String get shareConfirmButton => 'Partager';
@@ -505,10 +534,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get driveOnlyControlsYourCopy => 'Le partage contrôle votre copie sur Drive. Si quelqu\'un la télécharge, cette copie lui appartient.';
+  String get driveOnlyControlsYourCopy =>
+      'Le partage contrôle votre copie sur Drive. Si quelqu\'un la télécharge, cette copie lui appartient.';
 
   @override
-  String get driveOnlyControlsYourCopyCoop => 'La synchronisation contrôle votre copie sur Drive — elle peut être écrasée, mais jamais supprimée, par les personnes que vous autorisez.';
+  String get driveOnlyControlsYourCopyCoop =>
+      'La synchronisation contrôle votre copie sur Drive — elle peut être écrasée, mais jamais supprimée, par les personnes que vous autorisez.';
 
   @override
   String get sharedWithMeTitle => 'Partagées avec moi';
@@ -556,7 +587,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sharedManageDialogTitle => 'Gérer les partages';
 
   @override
-  String get sharedManageDialogHint => 'Ici, vous pouvez vraiment quitter une sauvegarde partagée.';
+  String get sharedManageDialogHint =>
+      'Ici, vous pouvez vraiment quitter une sauvegarde partagée.';
 
   @override
   String get sharedLeaveButton => 'Quitter le partage';
@@ -602,7 +634,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sharedDownloadOwn => 'Télécharger depuis mon Drive';
 
   @override
-  String get sharedStatusOwnDriveAhead => 'Votre Drive a de l\'avance — téléchargez-le';
+  String get sharedStatusOwnDriveAhead =>
+      'Votre Drive a de l\'avance — téléchargez-le';
 
   @override
   String get sharedSyncBoth => 'Envoyer vers les deux Drives';
@@ -621,10 +654,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get sharedStatusSyncedNoOwnDrive => 'Synchronisé avec le propriétaire · aucune copie sur votre Drive';
+  String get sharedStatusSyncedNoOwnDrive =>
+      'Synchronisé avec le propriétaire · aucune copie sur votre Drive';
 
   @override
-  String get sharedStatusAheadNoOwnDrive => 'Vous avez de l\'avance · aucune copie sur votre Drive';
+  String get sharedStatusAheadNoOwnDrive =>
+      'Vous avez de l\'avance · aucune copie sur votre Drive';
 
   @override
   String sharedStatusOwnerAheadNoOwnDrive(String email) {
@@ -635,7 +670,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sharedStatusAllSynced => 'Synchronisé (local + les deux Drives)';
 
   @override
-  String get sharedStatusAheadBoth => 'Vous avez de l\'avance sur les deux Drives';
+  String get sharedStatusAheadBoth =>
+      'Vous avez de l\'avance sur les deux Drives';
 
   @override
   String get sharedStatusMixed => 'Désynchronisé — vérifiez chaque Drive';
@@ -678,7 +714,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sharedSyncChooseTitle => 'Où voulez-vous synchroniser ?';
 
   @override
-  String get sharedSyncChooseBody => 'Choisissez quelles copies dans le cloud vous voulez mettre à jour avec la sauvegarde de cet appareil.';
+  String get sharedSyncChooseBody =>
+      'Choisissez quelles copies dans le cloud vous voulez mettre à jour avec la sauvegarde de cet appareil.';
 
   @override
   String get sharedSyncTargetOwn => 'Mon Drive';
@@ -692,10 +729,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sharedSyncTargetBoth => 'Les deux Drives';
 
   @override
-  String get sharedDownloadChooseTitle => 'Quelle copie voulez-vous télécharger ?';
+  String get sharedDownloadChooseTitle =>
+      'Quelle copie voulez-vous télécharger ?';
 
   @override
-  String get sharedDownloadChooseBody => 'Plusieurs copies ont de l\'avance. Choisissez celle que vous voulez amener sur cet appareil.';
+  String get sharedDownloadChooseBody =>
+      'Plusieurs copies ont de l\'avance. Choisissez celle que vous voulez amener sur cet appareil.';
 
   @override
   String get sharedDownloadSourceOwn => 'Depuis mon Drive';
@@ -709,7 +748,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sharedWithMePickerTitle => 'Ajouter une sauvegarde partagée';
 
   @override
-  String get sharedPickerEmptyHint => 'Ce qu\'un autre joueur partage avec vous depuis Drive apparaît ici.';
+  String get sharedPickerEmptyHint =>
+      'Ce qu\'un autre joueur partage avec vous depuis Drive apparaît ici.';
 
   @override
   String get sharedPickerAddButton => 'Ajouter';
@@ -726,7 +766,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get swapBackupDialogTitle => 'Sauvegarde de secours créée';
 
   @override
-  String get swapBackupDialogBody => 'La version précédente a été enregistrée en zip. Que voulez-vous en faire ?';
+  String get swapBackupDialogBody =>
+      'La version précédente a été enregistrée en zip. Que voulez-vous en faire ?';
 
   @override
   String get swapBackupUpload => 'Envoyer vers Drive';
@@ -746,7 +787,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get swapBackupLocalOnlySnack => 'Sauvegarde de secours enregistrée sur cet appareil.';
+  String get swapBackupLocalOnlySnack =>
+      'Sauvegarde de secours enregistrée sur cet appareil.';
 
   @override
   String get backupsAction => 'Sauvegardes';
@@ -763,19 +805,23 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupsRestore => 'Restaurer';
 
   @override
-  String get backupsRestoreConfirmTitle => 'Restaurer cette sauvegarde de secours ?';
+  String get backupsRestoreConfirmTitle =>
+      'Restaurer cette sauvegarde de secours ?';
 
   @override
-  String get backupsRestoreConfirmBody => 'Cela écrase votre sauvegarde actuelle avec cette version antérieure. Irréversible.';
+  String get backupsRestoreConfirmBody =>
+      'Cela écrase votre sauvegarde actuelle avec cette version antérieure. Irréversible.';
 
   @override
   String get backupsDelete => 'Supprimer';
 
   @override
-  String get backupsDeleteConfirmTitle => 'Supprimer cette sauvegarde de secours ?';
+  String get backupsDeleteConfirmTitle =>
+      'Supprimer cette sauvegarde de secours ?';
 
   @override
-  String get backupsDeleteConfirmBody => 'Elle sera supprimée partout où elle existe (cet appareil et Drive, si elle a été envoyée). Irréversible.';
+  String get backupsDeleteConfirmBody =>
+      'Elle sera supprimée partout où elle existe (cet appareil et Drive, si elle a été envoyée). Irréversible.';
 
   @override
   String get backupsRestoreOk => 'Sauvegarde de secours restaurée.';
@@ -784,7 +830,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupsRestoreManualTitle => 'Restaurer manuellement';
 
   @override
-  String get backupsRestoreManualBody => 'En mode Pont, ValleySave ne peut pas écrire automatiquement dans le dossier du jeu. Extrayez vous-même le .zip de cette sauvegarde de secours dans le dossier Saves de Stardew Valley, ou passez au mode Root/Shizuku dans les Paramètres pour restaurer automatiquement.';
+  String get backupsRestoreManualBody =>
+      'En mode Pont, ValleySave ne peut pas écrire automatiquement dans le dossier du jeu. Extrayez vous-même le .zip de cette sauvegarde de secours dans le dossier Saves de Stardew Valley, ou passez au mode Root/Shizuku dans les Paramètres pour restaurer automatiquement.';
 
   @override
   String backupsRestoreErr(String error) {
@@ -800,7 +847,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupsCreate => 'Créer une sauvegarde de secours locale';
 
   @override
-  String get backupsCreateLocalHint => 'Les sauvegardes de secours sont d\'abord créées sur cet appareil. Vous pourrez ensuite les envoyer vers Drive.';
+  String get backupsCreateLocalHint =>
+      'Les sauvegardes de secours sont d\'abord créées sur cet appareil. Vous pourrez ensuite les envoyer vers Drive.';
 
   @override
   String get backupsCreateOk => 'Sauvegarde de secours créée.';
@@ -814,7 +862,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupsDownload => 'Télécharger';
 
   @override
-  String get backupsDownloadOk => 'Sauvegarde de secours téléchargée sur cet appareil.';
+  String get backupsDownloadOk =>
+      'Sauvegarde de secours téléchargée sur cet appareil.';
 
   @override
   String backupsDownloadErr(String error) {
@@ -848,7 +897,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backupsLocationSharedDrive => 'Drive partagé';
 
   @override
-  String get backupsDeleteChooseBody => 'Choisissez précisément où la supprimer. Seuls les emplacements où cette sauvegarde de secours existe s\'affichent.';
+  String get backupsDeleteChooseBody =>
+      'Choisissez précisément où la supprimer. Seuls les emplacements où cette sauvegarde de secours existe s\'affichent.';
 
   @override
   String get backupsDeleteLocalOnly => 'Uniquement de cet appareil';
@@ -864,58 +914,58 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String backupsGameSummary(int year, String season, int day, String money) {
-    return 'Year $year · $season $day · $money g';
+    return 'Année $year · $season $day · $money g';
   }
 
   @override
-  String get backupsSectionManual => 'Manual';
+  String get backupsSectionManual => 'Manuelles';
 
   @override
-  String get backupsSectionAuto => 'Automatic';
+  String get backupsSectionAuto => 'Automatiques';
 
   @override
-  String get backupsSectionPreRestore => 'Before restoring';
+  String get backupsSectionPreRestore => 'Avant restauration';
 
   @override
   String backupsSectionLast(String date) {
-    return 'last $date';
+    return 'dernière $date';
   }
 
   @override
-  String get backupsInUseShort => 'in use';
+  String get backupsInUseShort => 'en usage';
 
   @override
-  String get backupsInUseTag => 'In use';
+  String get backupsInUseTag => 'En usage';
 
   @override
-  String get backupsRuleManual => 'never deleted automatically';
+  String get backupsRuleManual => 'jamais supprimées automatiquement';
 
   @override
   String backupsRuleKeep(int count) {
-    return 'keeps $count';
+    return '$count conservées';
   }
 
   @override
-  String get backupsKeep => 'Keep';
+  String get backupsKeep => 'Conserver';
 
   @override
-  String get backupsKeepOk => 'Backup kept in Manual.';
+  String get backupsKeepOk => 'Sauvegarde conservée dans Manuelles.';
 
   @override
   String backupsKeepRemoteErr(String error) {
-    return 'Kept on this device, but renaming it on Drive failed: $error';
+    return 'Conservée sur cet appareil, mais le renommage sur Drive a échoué : $error';
   }
 
   @override
   String backupsKeepErr(String error) {
-    return 'Could not keep the backup: $error';
+    return 'Impossible de conserver la sauvegarde : $error';
   }
 
   @override
-  String get backupsExpandAll => 'Expand all';
+  String get backupsExpandAll => 'Tout déplier';
 
   @override
-  String get backupsCollapseAll => 'Collapse all';
+  String get backupsCollapseAll => 'Tout replier';
 
   @override
   String deleteUnifiedTitle(String farmName) {
@@ -923,7 +973,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get deleteChooseLocationBody => 'Choisissez d\'où. La copie de cet appareil est supprimée pour toujours ; celle de Drive va à la Corbeille (30 jours).';
+  String get deleteChooseLocationBody =>
+      'Choisissez d\'où. La copie de cet appareil est supprimée pour toujours ; celle de Drive va à la Corbeille (30 jours).';
 
   @override
   String deleteDriveContextTitle(String farmName) {
@@ -931,10 +982,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get deleteDriveContextBody => 'La copie sur Drive ira à la Corbeille, où vous pourrez la récupérer pendant 30 jours.';
+  String get deleteDriveContextBody =>
+      'La copie sur Drive ira à la Corbeille, où vous pourrez la récupérer pendant 30 jours.';
 
   @override
-  String get deleteDriveLocalKept => 'La copie sur cet appareil restera inchangée.';
+  String get deleteDriveLocalKept =>
+      'La copie sur cet appareil restera inchangée.';
 
   @override
   String deleteLocalContextTitle(String farmName) {
@@ -942,7 +995,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get deleteLocalContextBody => 'La copie sur cet appareil sera supprimée pour toujours.';
+  String get deleteLocalContextBody =>
+      'La copie sur cet appareil sera supprimée pour toujours.';
 
   @override
   String deleteLocalDriveCurrent(String date) {
@@ -965,7 +1019,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get deleteLocalNoRecovery => 'Il n\'y a ni copie sur Drive ni sauvegarde de secours locale permettant de récupérer cette sauvegarde.';
+  String get deleteLocalNoRecovery =>
+      'Il n\'y a ni copie sur Drive ni sauvegarde de secours locale permettant de récupérer cette sauvegarde.';
 
   @override
   String get deleteOptionLocalOnly => 'Uniquement de cet appareil';
@@ -1064,7 +1119,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwConnectTitle => 'Connecter votre compte';
 
   @override
-  String get hiwConnectDesc => 'ValleySave utilise votre compte Google pour enregistrer vos sauvegardes dans un dossier ValleySave privé sur votre propre Drive.';
+  String get hiwConnectDesc =>
+      'ValleySave utilise votre compte Google pour enregistrer vos sauvegardes dans un dossier ValleySave privé sur votre propre Drive.';
 
   @override
   String get hiwConnectStepGoogle => 'Compte\nGoogle';
@@ -1076,13 +1132,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwConnectStepReady => 'Prêt à\nsynchroniser';
 
   @override
-  String get hiwConnectTipOwnership => 'Vous seul pouvez modifier ou supprimer vos copies sur Drive — ValleySave ne fait que lire et écrire dans son propre dossier.';
+  String get hiwConnectTipOwnership =>
+      'Vous seul pouvez modifier ou supprimer vos copies sur Drive — ValleySave ne fait que lire et écrire dans son propre dossier.';
 
   @override
   String get hiwSyncTitle => 'Comment fonctionne la synchronisation';
 
   @override
-  String get hiwSyncIntro => 'ValleySave utilise votre propre Google Drive pour déplacer les sauvegardes entre appareils. Pas de serveurs intermédiaires : les fichiers sont les vôtres.';
+  String get hiwSyncIntro =>
+      'ValleySave utilise votre propre Google Drive pour déplacer les sauvegardes entre appareils. Pas de serveurs intermédiaires : les fichiers sont les vôtres.';
 
   @override
   String get hiwSyncDevice => 'Votre\nappareil';
@@ -1097,22 +1155,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwUploadTitle => 'Envoyer une sauvegarde';
 
   @override
-  String get hiwUploadDesc => 'Lors de l\'envoi, ValleySave copie les deux fichiers de sauvegarde (SaveGameInfo + fichier ferme) dans votre dossier ValleySave/ sur Drive.';
+  String get hiwUploadDesc =>
+      'Lors de l\'envoi, ValleySave copie les deux fichiers de sauvegarde (SaveGameInfo + fichier ferme) dans votre dossier ValleySave/ sur Drive.';
 
   @override
   String get hiwDownloadTitle => 'Télécharger une sauvegarde';
 
   @override
-  String get hiwDownloadDesc => 'Lors du téléchargement, ValleySave récupère les fichiers depuis Drive et les place directement dans le dossier du jeu.';
+  String get hiwDownloadDesc =>
+      'Lors du téléchargement, ValleySave récupère les fichiers depuis Drive et les place directement dans le dossier du jeu.';
 
   @override
   String get hiwCompareTitle => 'Que compare-t-il?';
 
   @override
-  String get hiwCompareIntro => 'Pour savoir quelle version est en avance, ValleySave utilise le temps de jeu total — la seule donnée qui ne peut que croître.';
+  String get hiwCompareIntro =>
+      'Pour savoir quelle version est en avance, ValleySave utilise le temps de jeu total — la seule donnée qui ne peut que croître.';
 
   @override
-  String get hiwCompareNote => 'Avant de confirmer, vous verrez aussi, pour pouvoir décider :';
+  String get hiwCompareNote =>
+      'Avant de confirmer, vous verrez aussi, pour pouvoir décider :';
 
   @override
   String get hiwCompareMoney => 'Argent actuel et total gagné';
@@ -1130,22 +1192,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwCompareStamina => 'Énergie et santé';
 
   @override
-  String get hiwCompareNotShown => 'Ceux-ci ne sont pas affichés — ils varient dans tous les sens et n\'indiquent pas quelle sauvegarde est en avance.';
+  String get hiwCompareNotShown =>
+      'Ceux-ci ne sont pas affichés — ils varient dans tous les sens et n\'indiquent pas quelle sauvegarde est en avance.';
 
   @override
-  String get hiwCompareNotShownExamples => 'État des cultures et animaux, inventaire et objets, relations individuelles';
+  String get hiwCompareNotShownExamples =>
+      'État des cultures et animaux, inventaire et objets, relations individuelles';
 
   @override
-  String get hiwCompareWarning => 'Ils ne sont pas affichés — ils varient dans tous les sens et n\'indiquent pas quelle sauvegarde est en avance.';
+  String get hiwCompareWarning =>
+      'Ils ne sont pas affichés — ils varient dans tous les sens et n\'indiquent pas quelle sauvegarde est en avance.';
 
   @override
   String get hiwConflictTitle => 'Si vous jouez sans synchroniser';
 
   @override
-  String get hiwConflictDesc => 'Si vous progressez sur mobile et PC sans synchroniser entre les sessions, vous vous retrouvez avec deux versions de la même sauvegarde.';
+  String get hiwConflictDesc =>
+      'Si vous progressez sur mobile et PC sans synchroniser entre les sessions, vous vous retrouvez avec deux versions de la même sauvegarde.';
 
   @override
-  String get hiwConflictNoMerge => 'Elles ne peuvent pas être fusionnées. ValleySave vous affiche toujours les deux versions pour que vous puissiez choisir laquelle conserver.';
+  String get hiwConflictNoMerge =>
+      'Elles ne peuvent pas être fusionnées. ValleySave vous affiche toujours les deux versions pour que vous puissiez choisir laquelle conserver.';
 
   @override
   String get hiwConflictMobile => 'Mobile';
@@ -1163,7 +1230,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwDeleteTitle => 'Si une sauvegarde est supprimée';
 
   @override
-  String get hiwDeleteDesc => 'Quand vous supprimez une sauvegarde de Drive, elle ne disparaît pas immédiatement : elle va dans la Corbeille de Google Drive.';
+  String get hiwDeleteDesc =>
+      'Quand vous supprimez une sauvegarde de Drive, elle ne disparaît pas immédiatement : elle va dans la Corbeille de Google Drive.';
 
   @override
   String get hiwCompatTitle => 'Compatibilité des plateformes';
@@ -1175,22 +1243,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwShizukuTitle => 'Avec Shizuku';
 
   @override
-  String get hiwShizukuSubtitle => 'Configurer une fois. Ensuite, ValleySave synchronise tout seul, sans que vous ayez à intervenir.';
+  String get hiwShizukuSubtitle =>
+      'Configurer une fois. Ensuite, ValleySave synchronise tout seul, sans que vous ayez à intervenir.';
 
   @override
   String get hiwShizukuBadge => 'AUTOMATIQUE · RECOMMANDÉ';
 
   @override
-  String get hiwShizukuDone => '✓  Terminé. À partir de là, télécharger et envoyer des sauvegardes est direct, comme sur un ordinateur.';
+  String get hiwShizukuDone =>
+      '✓  Terminé. À partir de là, télécharger et envoyer des sauvegardes est direct, comme sur un ordinateur.';
 
   @override
-  String get hiwShizukuNote => 'Le jumelage n\'est nécessaire qu\'une seule fois. Les nouvelles versions de Shizuku se réactivent d\'elles-mêmes après le redémarrage du téléphone.';
+  String get hiwShizukuNote =>
+      'Le jumelage n\'est nécessaire qu\'une seule fois. Les nouvelles versions de Shizuku se réactivent d\'elles-mêmes après le redémarrage du téléphone.';
 
   @override
   String get hiwBridgeTitle => 'Pont manuel';
 
   @override
-  String get hiwBridgeSubtitle => 'Fonctionne uniquement sur Android 11 et 12. Vous n\'installez rien de plus ; vous copiez la sauvegarde manuellement avec votre application Fichiers à chaque synchronisation.';
+  String get hiwBridgeSubtitle =>
+      'Fonctionne uniquement sur Android 11 et 12. Vous n\'installez rien de plus ; vous copiez la sauvegarde manuellement avec votre application Fichiers à chaque synchronisation.';
 
   @override
   String get hiwBridgeBadge => 'ALTERNATIVE MANUELLE · ANDROID 11-12';
@@ -1202,25 +1274,32 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwBridgeValleySaveFolder => 'Dossier ValleySave';
 
   @override
-  String get hiwBridgeNote => 'Cela fonctionne parce que votre application Fichiers système peut accéder à ces dossiers (ValleySave ne le peut pas).';
+  String get hiwBridgeNote =>
+      'Cela fonctionne parce que votre application Fichiers système peut accéder à ces dossiers (ValleySave ne le peut pas).';
 
   @override
-  String get hiwTipAlwaysShow => 'Vous verrez toujours ce qui est sur Drive avant d\'écraser, pour pouvoir comparer.';
+  String get hiwTipAlwaysShow =>
+      'Vous verrez toujours ce qui est sur Drive avant d\'écraser, pour pouvoir comparer.';
 
   @override
-  String get hiwTipWithoutUpload => 'Sans envoi, aucun autre appareil ne verra votre progression récente.';
+  String get hiwTipWithoutUpload =>
+      'Sans envoi, aucun autre appareil ne verra votre progression récente.';
 
   @override
-  String get hiwTipComparison => 'Vous verrez la comparaison entre local et Drive avant de confirmer.';
+  String get hiwTipComparison =>
+      'Vous verrez la comparaison entre local et Drive avant de confirmer.';
 
   @override
-  String get hiwTipDownloadOverwrite => 'Le téléchargement écrase votre sauvegarde locale. Toute progression non synchronisée sera perdue.';
+  String get hiwTipDownloadOverwrite =>
+      'Le téléchargement écrase votre sauvegarde locale. Toute progression non synchronisée sera perdue.';
 
   @override
-  String get hiwTipSync => 'Envoyez toujours avant de changer d\'appareil, et téléchargez à l\'arrivée.';
+  String get hiwTipSync =>
+      'Envoyez toujours avant de changer d\'appareil, et téléchargez à l\'arrivée.';
 
   @override
-  String get hiwTipDeletion => 'Vous avez 30 jours pour la restaurer depuis la Corbeille Drive avant sa suppression définitive.';
+  String get hiwTipDeletion =>
+      'Vous avez 30 jours pour la restaurer depuis la Corbeille Drive avant sa suppression définitive.';
 
   @override
   String get hiwPrivacyLink => 'Politique de confidentialité et utilisation';
@@ -1229,13 +1308,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get emptyNoSaves => 'Aucune sauvegarde trouvée';
 
   @override
-  String get emptyNoSavesHint => 'Aucune sauvegarde locale ne peut être lue sur cet appareil';
+  String get emptyNoSavesHint =>
+      'Aucune sauvegarde locale ne peut être lue sur cet appareil';
 
   @override
   String get bridgeTitle => 'Importer vos sauvegardes';
 
   @override
-  String get bridgeDesc => 'Pour voir et envoyer vos sauvegardes locales, copiez-les avec votre application Fichiers depuis le dossier Stardew vers ce dossier ValleySave. Puis glissez pour actualiser.';
+  String get bridgeDesc =>
+      'Pour voir et envoyer vos sauvegardes locales, copiez-les avec votre application Fichiers depuis le dossier Stardew vers ce dossier ValleySave. Puis glissez pour actualiser.';
 
   @override
   String get bridgeRefresh => 'Actualiser';
@@ -1271,7 +1352,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shizukuStep2Title => 'Activer Shizuku';
 
   @override
-  String get shizukuStep2Desc => 'Lancer l\'application et accorder les permissions';
+  String get shizukuStep2Desc =>
+      'Lancer l\'application et accorder les permissions';
 
   @override
   String get shizukuStep3Title => 'Accorder la permission';
@@ -1280,7 +1362,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shizukuStep3Desc => 'ValleySave demandera l\'accès';
 
   @override
-  String get shizukuDone => '✓  Terminé. À partir de là, télécharger et envoyer des sauvegardes fonctionne directement, comme sur un ordinateur.';
+  String get shizukuDone =>
+      '✓  Terminé. À partir de là, télécharger et envoyer des sauvegardes fonctionne directement, comme sur un ordinateur.';
 
   @override
   String get dlgDeleteDriveTitle => 'Supprimer de Drive';
@@ -1384,7 +1467,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get overwriteVerdictMoneySpent => '💰 L\'argent actuel a baissé, mais la progression globale avance — vous l\'avez probablement dépensé pour quelque chose. Ce n\'est pas une vraie perte.';
+  String get overwriteVerdictMoneySpent =>
+      '💰 L\'argent actuel a baissé, mais la progression globale avance — vous l\'avez probablement dépensé pour quelque chose. Ce n\'est pas une vraie perte.';
 
   @override
   String overwriteVerdictNegligible(String delta) {
@@ -1474,25 +1558,32 @@ class AppLocalizationsFr extends AppLocalizations {
   String get snackDownloaded => 'Sauvegarde téléchargée dans le jeu';
 
   @override
-  String get snackReplacePrepareFailed => 'Impossible de préparer la sauvegarde. Rien n\'a été modifié sur le disque';
+  String get snackReplacePrepareFailed =>
+      'Impossible de préparer la sauvegarde. Rien n\'a été modifié sur le disque';
 
   @override
-  String get snackReplaceValidationFailed => 'La sauvegarde téléchargée semble invalide ou incomplète. Rien n\'a été modifié sur le disque';
+  String get snackReplaceValidationFailed =>
+      'La sauvegarde téléchargée semble invalide ou incomplète. Rien n\'a été modifié sur le disque';
 
   @override
-  String get snackReplaceBackupFailed => 'Impossible de créer une sauvegarde de secours. Rien n\'a été modifié sur le disque';
+  String get snackReplaceBackupFailed =>
+      'Impossible de créer une sauvegarde de secours. Rien n\'a été modifié sur le disque';
 
   @override
-  String get snackReplaceSwapFailed => 'L\'échange a échoué, mais la sauvegarde d\'origine a été restaurée à partir de la copie de secours';
+  String get snackReplaceSwapFailed =>
+      'L\'échange a échoué, mais la sauvegarde d\'origine a été restaurée à partir de la copie de secours';
 
   @override
-  String get snackReplaceBusy => 'Une opération est déjà en cours pour cette sauvegarde';
+  String get snackReplaceBusy =>
+      'Une opération est déjà en cours pour cette sauvegarde';
 
   @override
-  String get snackUploadIncomplete => 'La sauvegarde locale est incomplète ou corrompue. Rien n\'a été envoyé';
+  String get snackUploadIncomplete =>
+      'La sauvegarde locale est incomplète ou corrompue. Rien n\'a été envoyé';
 
   @override
-  String get snackDownloadIncomplete => 'Impossible de télécharger : il manque du contenu sur Drive';
+  String get snackDownloadIncomplete =>
+      'Impossible de télécharger : il manque du contenu sur Drive';
 
   @override
   String get cardIncomplete => 'Incomplète sur Drive';
@@ -1501,7 +1592,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get autoRefreshTitle => 'Actualisation automatique';
 
   @override
-  String get autoRefreshSubtitle => 'Vérifie les changements sur Drive toutes les 30 s';
+  String get autoRefreshSubtitle =>
+      'Vérifie les changements sur Drive toutes les 30 s';
 
   @override
   String autoSyncSnack(String farmName) {
@@ -1509,10 +1601,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get autoSyncTooltipOn => 'Synchro auto activée — se synchronise seule quand c\'est sûr';
+  String get autoSyncTooltipOn =>
+      'Synchro auto activée — se synchronise seule quand c\'est sûr';
 
   @override
-  String get autoSyncTooltipOff => 'Synchro auto désactivée — touchez pour l\'activer';
+  String get autoSyncTooltipOff =>
+      'Synchro auto désactivée — touchez pour l\'activer';
 
   @override
   String get autoSyncExplainTitle => 'Synchro auto';
@@ -1523,13 +1617,16 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get autoSyncExplainSafe => 'Elle n\'agit que lorsque vous avez clairement de l\'avance et que rien n\'est perdu.';
+  String get autoSyncExplainSafe =>
+      'Elle n\'agit que lorsque vous avez clairement de l\'avance et que rien n\'est perdu.';
 
   @override
-  String get autoSyncExplainDanger => 'En cas de risque de perte de progression, elle n\'agit jamais seule : vous continuerez à décider via la boîte de dialogue habituelle.';
+  String get autoSyncExplainDanger =>
+      'En cas de risque de perte de progression, elle n\'agit jamais seule : vous continuerez à décider via la boîte de dialogue habituelle.';
 
   @override
-  String get autoSyncExplainMissing => 'Si l\'une des deux copies manque, elle ne la crée pas seule : le premier envoi ou téléchargement, c\'est vous qui décidez.';
+  String get autoSyncExplainMissing =>
+      'Si l\'une des deux copies manque, elle ne la crée pas seule : le premier envoi ou téléchargement, c\'est vous qui décidez.';
 
   @override
   String get autoSyncExplainDontShowAgain => 'Ne plus afficher cet avis';
@@ -1541,22 +1638,28 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwAutoSyncTitle => 'Synchronisation automatique';
 
   @override
-  String get hiwAutoSyncDesc => 'Chaque sauvegarde a une puce AUTO sur sa carte. En l\'activant, cette sauvegarde s\'envoie ou se télécharge seule dès que l\'application détecte un changement — sans que vous ayez à l\'ouvrir pour confirmer.';
+  String get hiwAutoSyncDesc =>
+      'Chaque sauvegarde a une puce AUTO sur sa carte. En l\'activant, cette sauvegarde s\'envoie ou se télécharge seule dès que l\'application détecte un changement — sans que vous ayez à l\'ouvrir pour confirmer.';
 
   @override
-  String get hiwAutoSyncTipSafe => 'Elle ne se synchronise seule que lorsque vous avez clairement de l\'avance et que rien n\'est perdu.';
+  String get hiwAutoSyncTipSafe =>
+      'Elle ne se synchronise seule que lorsque vous avez clairement de l\'avance et que rien n\'est perdu.';
 
   @override
-  String get hiwAutoSyncTipDanger => 'En cas de risque de perte de progression, elle ne le fait jamais seule : elle continue à vous demander avec la comparaison habituelle.';
+  String get hiwAutoSyncTipDanger =>
+      'En cas de risque de perte de progression, elle ne le fait jamais seule : elle continue à vous demander avec la comparaison habituelle.';
 
   @override
-  String get hiwAutoSyncTipPerSave => 'Elle s\'active sauvegarde par sauvegarde, pas d\'un coup : vous pouvez l\'avoir sur la vôtre et pas sur une partagée.';
+  String get hiwAutoSyncTipPerSave =>
+      'Elle s\'active sauvegarde par sauvegarde, pas d\'un coup : vous pouvez l\'avoir sur la vôtre et pas sur une partagée.';
 
   @override
-  String get hiwAutoSyncTipMissing => 'Elle ne fait que maintenir synchronisées deux copies déjà existantes. Si l\'une manque, c\'est vous qui effectuez le premier envoi ou téléchargement.';
+  String get hiwAutoSyncTipMissing =>
+      'Elle ne fait que maintenir synchronisées deux copies déjà existantes. Si l\'une manque, c\'est vous qui effectuez le premier envoi ou téléchargement.';
 
   @override
-  String get hiwAutoSyncTipRefresh => 'Dans les Paramètres, vous pouvez désactiver complètement la vérification automatique des changements.';
+  String get hiwAutoSyncTipRefresh =>
+      'Dans les Paramètres, vous pouvez désactiver complètement la vérification automatique des changements.';
 
   @override
   String get snackSessionExpired => 'Session Drive expirée. Reconnectez-vous';
@@ -1590,40 +1693,51 @@ class AppLocalizationsFr extends AppLocalizations {
   String get snackShizukuRequired => 'Activez Shizuku…';
 
   @override
-  String get snackWriteError => 'Impossible d\'écrire dans le jeu. Certains téléphones bloquent /Android/data même avec Shizuku.';
+  String get snackWriteError =>
+      'Impossible d\'écrire dans le jeu. Certains téléphones bloquent /Android/data même avec Shizuku.';
 
   @override
-  String get snackPlatformNotSupported => 'Cette plateforme ne prend pas encore en charge l\'écriture de sauvegardes locales.';
+  String get snackPlatformNotSupported =>
+      'Cette plateforme ne prend pas encore en charge l\'écriture de sauvegardes locales.';
 
   @override
-  String get snackWirelessDebugHint => 'Ouvrir manuellement : Paramètres → Options développeur → Débogage sans fil.';
+  String get snackWirelessDebugHint =>
+      'Ouvrir manuellement : Paramètres → Options développeur → Débogage sans fil.';
 
   @override
-  String get snackOpenShizukuApp => 'Ouvrez Shizuku depuis votre tiroir d\'applications.';
+  String get snackOpenShizukuApp =>
+      'Ouvrez Shizuku depuis votre tiroir d\'applications.';
 
   @override
-  String get hiwTipDeletePermanent => 'ValleySave ne peut pas récupérer les sauvegardes supprimées définitivement. Les fichiers Drive sont votre responsabilité.';
+  String get hiwTipDeletePermanent =>
+      'ValleySave ne peut pas récupérer les sauvegardes supprimées définitivement. Les fichiers Drive sont votre responsabilité.';
 
   @override
-  String get hiwCompatAchievements => 'Les succès Steam et Google Play ne se transfèrent pas. Chaque plateforme ne suit que les succès obtenus en temps réel — le fichier de sauvegarde ne les déclenche pas rétroactivement.';
+  String get hiwCompatAchievements =>
+      'Les succès Steam et Google Play ne se transfèrent pas. Chaque plateforme ne suit que les succès obtenus en temps réel — le fichier de sauvegarde ne les déclenche pas rétroactivement.';
 
   @override
-  String get hiwCompatOverwrite => 'Si vous synchronisez depuis deux appareils sans ordre établi, une sauvegarde peut écraser l\'autre. Envoyez toujours avant de télécharger.';
+  String get hiwCompatOverwrite =>
+      'Si vous synchronisez depuis deux appareils sans ordre établi, une sauvegarde peut écraser l\'autre. Envoyez toujours avant de télécharger.';
 
   @override
-  String get hiwCompatVersions => 'Les sauvegardes de différentes versions du jeu peuvent ne pas se charger correctement. ValleySave vous avertit s\'il détecte une incompatibilité de version avant le téléchargement.';
+  String get hiwCompatVersions =>
+      'Les sauvegardes de différentes versions du jeu peuvent ne pas se charger correctement. ValleySave vous avertit s\'il détecte une incompatibilité de version avant le téléchargement.';
 
   @override
-  String get hiwCompatMods => 'Les mods SMAPI ajoutent des données supplémentaires à la sauvegarde. Si vous chargez une sauvegarde moddée sur un appareil où ces mods ne sont pas installés, le jeu peut planter ou perdre les données des mods.\n\nSur Android, SMAPI peut également être installé pour utiliser des mods.';
+  String get hiwCompatMods =>
+      'Les mods SMAPI ajoutent des données supplémentaires à la sauvegarde. Si vous chargez une sauvegarde moddée sur un appareil où ces mods ne sont pas installés, le jeu peut planter ou perdre les données des mods.\n\nSur Android, SMAPI peut également être installé pour utiliser des mods.';
 
   @override
-  String get hiwCompatIncomplete => 'Si vous voyez \"Incomplète sur Drive\" sur une sauvegarde, il lui manque un fichier nécessaire dans le cloud — elle ne peut pas être téléchargée tant qu\'elle n\'a pas été correctement renvoyée depuis un autre appareil.';
+  String get hiwCompatIncomplete =>
+      'Si vous voyez \"Incomplète sur Drive\" sur une sauvegarde, il lui manque un fichier nécessaire dans le cloud — elle ne peut pas être téléchargée tant qu\'elle n\'a pas été correctement renvoyée depuis un autre appareil.';
 
   @override
   String get hiwShareTitle => 'Partager avec d\'autres';
 
   @override
-  String get hiwShareDesc => 'Partagez une sauvegarde avec un autre joueur par e-mail. Il la verra dans Partagées avec moi sur son propre appareil.';
+  String get hiwShareDesc =>
+      'Partagez une sauvegarde avec un autre joueur par e-mail. Il la verra dans Partagées avec moi sur son propre appareil.';
 
   @override
   String get hiwShareStepYourSave => 'Votre\nsauvegarde';
@@ -1635,16 +1749,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwShareStepFriend => 'Partagées\navec moi';
 
   @override
-  String get hiwShareTipRoles => 'Deux rôles : Lecture seule permet de voir et de télécharger. Autoriser la synchronisation permet d\'écraser votre copie sur Drive. Dans tous les cas, ils ne peuvent jamais la supprimer — seul vous, le propriétaire, pouvez supprimer votre sauvegarde.';
+  String get hiwShareTipRoles =>
+      'Deux rôles : Lecture seule permet de voir et de télécharger. Autoriser la synchronisation permet d\'écraser votre copie sur Drive. Dans tous les cas, ils ne peuvent jamais la supprimer — seul vous, le propriétaire, pouvez supprimer votre sauvegarde.';
 
   @override
-  String get hiwShareTipDisconnect => 'Se déconnecter n\'arrête la synchronisation que de leur côté — le partage reste actif jusqu\'à ce que vous le quittiez vraiment depuis Gérer les partages.';
+  String get hiwShareTipDisconnect =>
+      'Se déconnecter n\'arrête la synchronisation que de leur côté — le partage reste actif jusqu\'à ce que vous le quittiez vraiment depuis Gérer les partages.';
 
   @override
   String get hiwHostSwapTitle => 'Changement d\'hôte';
 
   @override
-  String get hiwHostSwapDesc => 'Change quel Farmhand est l\'hôte de la sauvegarde, en la remplaçant sur place — même emplacement de sauvegarde, mêmes autorisations de partage.';
+  String get hiwHostSwapDesc =>
+      'Change quel Farmhand est l\'hôte de la sauvegarde, en la remplaçant sur place — même emplacement de sauvegarde, mêmes autorisations de partage.';
 
   @override
   String get hiwHostSwapStepPick => 'Choisir un\nFarmhand';
@@ -1656,16 +1773,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwHostSwapStepDone => 'Nouvelle sauvegarde\ncréée';
 
   @override
-  String get hiwHostSwapTipMove => 'Certains objets de la ferme peuvent être déplacés pour faire de la place à la maison — rien n\'est supprimé.';
+  String get hiwHostSwapTipMove =>
+      'Certains objets de la ferme peuvent être déplacés pour faire de la place à la maison — rien n\'est supprimé.';
 
   @override
-  String get hiwHostSwapTipHouse => 'La maison du nouvel hôte ressemblera à la grande maison par défaut du jeu — l\'apparence de cabane n\'est pas prise en charge sans mods.';
+  String get hiwHostSwapTipHouse =>
+      'La maison du nouvel hôte ressemblera à la grande maison par défaut du jeu — l\'apparence de cabane n\'est pas prise en charge sans mods.';
 
   @override
   String get hiwBackupsTitle => 'Sauvegardes de secours';
 
   @override
-  String get hiwBackupsDesc => 'Une sauvegarde de secours est un instantané d\'une sauvegarde que vous pouvez restaurer plus tard. Créez-la manuellement quand vous voulez, ou laissez ValleySave en créer une automatiquement avant d\'écraser une sauvegarde (téléchargement, importation, restauration ou changement d\'hôte).';
+  String get hiwBackupsDesc =>
+      'Une sauvegarde de secours est un instantané d\'une sauvegarde que vous pouvez restaurer plus tard. Créez-la manuellement quand vous voulez, ou laissez ValleySave en créer une automatiquement avant d\'écraser une sauvegarde (téléchargement, importation, restauration ou changement d\'hôte).';
 
   @override
   String get hiwBackupsStepSave => 'Votre\nsauvegarde';
@@ -1677,19 +1797,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwBackupsStepStore => 'Local et/ou\nDrive';
 
   @override
-  String get hiwBackupsTipRestore => 'Restaurer écrase votre sauvegarde actuelle avec cette version antérieure — irréversible.';
+  String get hiwBackupsTipRestore =>
+      'Restaurer écrase votre sauvegarde actuelle avec cette version antérieure — irréversible.';
 
   @override
-  String get hiwBackupsTipDelete => 'Supprimer une sauvegarde de secours l\'efface partout où elle existe (cet appareil et Drive, si elle a été envoyée) — irréversible.';
+  String get hiwBackupsTipDelete =>
+      'Supprimer une sauvegarde de secours l\'efface partout où elle existe (cet appareil et Drive, si elle a été envoyée) — irréversible.';
 
   @override
-  String get hiwBackupsTipExport => 'Vous pouvez aussi Exporter une sauvegarde en zip pour la conserver où vous voulez, et l\'Importer de nouveau plus tard — une alternative manuelle et portable aux sauvegardes de secours intégrées.';
+  String get hiwBackupsTipExport =>
+      'Vous pouvez aussi Exporter une sauvegarde en zip pour la conserver où vous voulez, et l\'Importer de nouveau plus tard — une alternative manuelle et portable aux sauvegardes de secours intégrées.';
 
   @override
-  String get hiwBackupsTipRetention => 'ValleySave conserve les 5 sauvegardes de secours automatiques les plus récentes de chaque sauvegarde ; celles que vous créez manuellement ne sont jamais supprimées d\'elles-mêmes.';
+  String get hiwBackupsTipRetention =>
+      'ValleySave conserve les 5 sauvegardes de secours automatiques les plus récentes de chaque sauvegarde ; celles que vous créez manuellement ne sont jamais supprimées d\'elles-mêmes.';
 
   @override
-  String get hiwBackupsTipRestoreBridge => 'En mode Pont (Android sans root/Shizuku), restaurer une sauvegarde de secours vous demande d\'extraire le .zip manuellement dans le dossier Stardew — comme lors du téléchargement.';
+  String get hiwBackupsTipRestoreBridge =>
+      'En mode Pont (Android sans root/Shizuku), restaurer une sauvegarde de secours vous demande d\'extraire le .zip manuellement dans le dossier Stardew — comme lors du téléchargement.';
 
   @override
   String get hiwComparePrimary => 'Temps de jeu total';
@@ -1707,19 +1832,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwShizuku1 => 'Installez Shizuku (Play Store ou APK GitHub).';
 
   @override
-  String get hiwShizuku2 => 'Activez-le avec le Débogage sans fil — ValleySave vous guide étape par étape.';
+  String get hiwShizuku2 =>
+      'Activez-le avec le Débogage sans fil — ValleySave vous guide étape par étape.';
 
   @override
-  String get hiwShizuku3 => 'Accordez la permission à ValleySave lorsque vous y êtes invité.';
+  String get hiwShizuku3 =>
+      'Accordez la permission à ValleySave lorsque vous y êtes invité.';
 
   @override
-  String get hiwBridge1 => 'Télécharger depuis Drive : ValleySave dépose la sauvegarde dans son dossier. Vous la copiez avec Fichiers vers le dossier Stardew.';
+  String get hiwBridge1 =>
+      'Télécharger depuis Drive : ValleySave dépose la sauvegarde dans son dossier. Vous la copiez avec Fichiers vers le dossier Stardew.';
 
   @override
-  String get hiwBridge2 => 'Envoyer sur Drive : copiez la sauvegarde de Stardew vers le dossier ValleySave. ValleySave la détecte et l\'envoie.';
+  String get hiwBridge2 =>
+      'Envoyer sur Drive : copiez la sauvegarde de Stardew vers le dossier ValleySave. ValleySave la détecte et l\'envoie.';
 
   @override
-  String get snackShizukuBattery => 'Paramètres → Applications → Shizuku → Batterie → Sans restriction.';
+  String get snackShizukuBattery =>
+      'Paramètres → Applications → Shizuku → Batterie → Sans restriction.';
 
   @override
   String snackDriveError(String error) {
@@ -1727,7 +1857,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get dlgDeleteLocalWarning => '⚠️ Si vous n\'avez pas envoyé sur Drive, elle sera perdue définitivement. Aucune récupération possible.';
+  String get dlgDeleteLocalWarning =>
+      '⚠️ Si vous n\'avez pas envoyé sur Drive, elle sera perdue définitivement. Aucune récupération possible.';
 
   @override
   String get dlgDelete => 'Supprimer';
@@ -1779,16 +1910,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pathLabelToValleySave => 'À (ValleySave)';
 
   @override
-  String get chooserDesc => 'Android protège le dossier du jeu. Choisissez comment donner l\'accès à ValleySave — vous pouvez changer à tout moment.';
+  String get chooserDesc =>
+      'Android protège le dossier du jeu. Choisissez comment donner l\'accès à ValleySave — vous pouvez changer à tout moment.';
 
   @override
-  String get chooserShizukuDesc => 'Configuré une fois. Ensuite ValleySave synchronise tout seul, sans que vous touchiez à quoi que ce soit. Seule méthode fiable sur Android 13+.';
+  String get chooserShizukuDesc =>
+      'Configuré une fois. Ensuite ValleySave synchronise tout seul, sans que vous touchiez à quoi que ce soit. Seule méthode fiable sur Android 13+.';
 
   @override
   String get chooserManualBadge => 'ANDROID 11-12 SEULEMENT';
 
   @override
-  String get chooserBridgeDesc => 'Copiez les sauvegardes avec votre application Fichiers. Pas d\'installation supplémentaire. Uniquement sur Android 11 et 12.';
+  String get chooserBridgeDesc =>
+      'Copiez les sauvegardes avec votre application Fichiers. Pas d\'installation supplémentaire. Uniquement sur Android 11 et 12.';
 
   @override
   String get chooserRootBadge => 'ROOT';
@@ -1797,13 +1931,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get chooserRootTitle => 'Accès Root';
 
   @override
-  String get chooserRootDesc => 'Pour les appareils rootés (Magisk / SuperSU). Autorisez l\'accès root une fois — automatique ensuite.';
+  String get chooserRootDesc =>
+      'Pour les appareils rootés (Magisk / SuperSU). Autorisez l\'accès root une fois — automatique ensuite.';
 
   @override
   String get snackRootDenied => 'Accès root refusé. Essayez Shizuku.';
 
   @override
-  String get shizukuGateSubtitle => 'Configuré une fois · première fois seulement';
+  String get shizukuGateSubtitle =>
+      'Configuré une fois · première fois seulement';
 
   @override
   String get shizukuStatusLabel => 'Shizuku actif';
@@ -1830,7 +1966,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shizukuGuideHeader => 'GUIDE ÉTAPE PAR ÉTAPE';
 
   @override
-  String get shizukuStep1DescFull => 'Gratuit. Si Google Play le bloque sur votre téléphone, utilisez l\'APK officiel GitHub.';
+  String get shizukuStep1DescFull =>
+      'Gratuit. Si Google Play le bloque sur votre téléphone, utilisez l\'APK officiel GitHub.';
 
   @override
   String get btnPlayStore => 'Play Store';
@@ -1842,13 +1979,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shizukuStep2TitleFull => 'Activer les options développeur';
 
   @override
-  String get shizukuStep2DescFull => 'Paramètres → Infos sur le téléphone → Infos logicielles → appuyez 7 fois sur \"Numéro de build\".';
+  String get shizukuStep2DescFull =>
+      'Paramètres → Infos sur le téléphone → Infos logicielles → appuyez 7 fois sur \"Numéro de build\".';
 
   @override
   String get shizukuStep3TitleFull => 'Activer le débogage sans fil';
 
   @override
-  String get shizukuStep3DescFull => 'Le bouton vous y amène et le met en évidence. Activez-le (ON). Puis appuyez sur \"Appairer l\'appareil avec un code d\'appairage\" — un code à 6 chiffres apparaîtra à l\'écran.';
+  String get shizukuStep3DescFull =>
+      'Le bouton vous y amène et le met en évidence. Activez-le (ON). Puis appuyez sur \"Appairer l\'appareil avec un code d\'appairage\" — un code à 6 chiffres apparaîtra à l\'écran.';
 
   @override
   String get btnOpenAndHighlight => 'Ouvrir et mettre en évidence';
@@ -1857,25 +1996,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shizukuStep4Title => 'Appairer et DÉMARRER Shizuku';
 
   @override
-  String get shizukuStep4Desc => 'Ouvrez Shizuku → \"Démarrer via le débogage sans fil\" → \"Appairer avec un code d\'appairage\". Shizuku enverra une notification indiquant qu\'il attend. Entrez le code à 6 chiffres de l\'écran de débogage sans fil. Après l\'appairage, appuyez sur DÉMARRER — sans ce dernier appui, Shizuku ne sera pas actif.';
+  String get shizukuStep4Desc =>
+      'Ouvrez Shizuku → \"Démarrer via le débogage sans fil\" → \"Appairer avec un code d\'appairage\". Shizuku enverra une notification indiquant qu\'il attend. Entrez le code à 6 chiffres de l\'écran de débogage sans fil. Après l\'appairage, appuyez sur DÉMARRER — sans ce dernier appui, Shizuku ne sera pas actif.';
 
   @override
   String get btnOpenShizuku => 'Ouvrir Shizuku';
 
   @override
-  String get shizukuStep5Title => 'Régler la batterie de Shizuku sur Sans restriction';
+  String get shizukuStep5Title =>
+      'Régler la batterie de Shizuku sur Sans restriction';
 
   @override
-  String get shizukuStep5Desc => 'Ouvrez les infos de l\'application → Batterie → Sans restriction. Sinon, le système fermera Shizuku en arrière-plan et vous devrez appuyer à nouveau sur Démarrer.';
+  String get shizukuStep5Desc =>
+      'Ouvrez les infos de l\'application → Batterie → Sans restriction. Sinon, le système fermera Shizuku en arrière-plan et vous devrez appuyer à nouveau sur Démarrer.';
 
   @override
   String get btnShizukuAppInfo => 'Infos de l\'application Shizuku';
 
   @override
-  String get shizukuStep6DescActive => 'Shizuku est actif. Appuyez sur le bouton pour autoriser.';
+  String get shizukuStep6DescActive =>
+      'Shizuku est actif. Appuyez sur le bouton pour autoriser.';
 
   @override
-  String get shizukuStep6DescWaiting => 'Disponible une fois Shizuku actif (étape 4).';
+  String get shizukuStep6DescWaiting =>
+      'Disponible une fois Shizuku actif (étape 4).';
 
   @override
   String get btnGrantPermission => 'Accorder la permission';
@@ -1927,31 +2071,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hiwLaunchTitle => 'Lancer le jeu';
 
   @override
-  String get hiwLaunchDesc => 'Le bouton ▶ dans la barre supérieure de Mes sauvegardes ouvre Stardew Valley directement depuis l’app.';
+  String get hiwLaunchDesc =>
+      'Le bouton ▶ dans la barre supérieure de Mes sauvegardes ouvre Stardew Valley directement depuis l’app.';
 
   @override
-  String get hiwLaunchTipWindows => 'Sur Windows, si le jeu n’est pas détecté automatiquement, configurez le chemin de l’exécutable dans Paramètres → Jeu.';
+  String get hiwLaunchTipWindows =>
+      'Sur Windows, si le jeu n’est pas détecté automatiquement, configurez le chemin de l’exécutable dans Paramètres → Jeu.';
 
   @override
-  String get hiwLaunchTipAndroid => 'Sur Android, ouvre le jeu s’il est installé.';
+  String get hiwLaunchTipAndroid =>
+      'Sur Android, ouvre le jeu s’il est installé.';
 
   @override
-  String get hiwLaunchTipLinux => 'Sous Linux, si le jeu n\'est pas détecté automatiquement, définissez le chemin de l\'exécutable dans Paramètres → Jeu.';
+  String get hiwLaunchTipLinux =>
+      'Sous Linux, si le jeu n\'est pas détecté automatiquement, définissez le chemin de l\'exécutable dans Paramètres → Jeu.';
 
   @override
   String get hiwSaveLocationsTitle => 'Où vivent vos sauvegardes';
 
   @override
-  String get hiwSaveLocationsDesc => 'ValleySave lit et écrit directement dans le dossier de sauvegardes du jeu sur chaque plateforme.';
+  String get hiwSaveLocationsDesc =>
+      'ValleySave lit et écrit directement dans le dossier de sauvegardes du jeu sur chaque plateforme.';
 
   @override
-  String get hiwSaveLocationWindows => 'Windows : %AppData%\\StardewValley\\Saves';
+  String get hiwSaveLocationWindows =>
+      'Windows : %AppData%\\StardewValley\\Saves';
 
   @override
-  String get hiwSaveLocationAndroid => 'Android : dossier protégé, accessible via Shizuku ou le Pont';
+  String get hiwSaveLocationAndroid =>
+      'Android : dossier protégé, accessible via Shizuku ou le Pont';
 
   @override
-  String get hiwSaveLocationLinux => 'Linux : ~/.config/StardewValley/Saves (ou ~/snap/steam/common/.config/StardewValley/Saves si Steam est installé via snap)';
+  String get hiwSaveLocationLinux =>
+      'Linux : ~/.config/StardewValley/Saves (ou ~/snap/steam/common/.config/StardewValley/Saves si Steam est installé via snap)';
 
   @override
   String get settingsGameSection => 'Jeu';
@@ -1963,10 +2115,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsCoopTitle => 'Débloquer le menu coop caché';
 
   @override
-  String get settingsCoopDescription => 'L\'option directe des préférences nécessite ROOT. Stardew doit être fermé ; ValleySave crée une sauvegarde de secours avant de modifier le réglage.';
+  String get settingsCoopDescription =>
+      'L\'option directe des préférences nécessite ROOT. Stardew doit être fermé ; ValleySave crée une sauvegarde de secours avant de modifier le réglage.';
 
   @override
-  String get settingsCoopManual => 'Sans ROOT : ouvrez Stardew, saisissez ↑↑↓↓←→←→, puis appuyez sur ? pour quitter.';
+  String get settingsCoopManual =>
+      'Sans ROOT : ouvrez Stardew, saisissez ↑↑↓↓←→←→, puis appuyez sur ? pour quitter.';
 
   @override
   String get settingsCoopActivate => 'Activer avec ROOT';
@@ -1975,82 +2129,103 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsCoopWorking => 'Traitement en cours…';
 
   @override
-  String get settingsCoopSuccess => 'Menu coop débloqué. Une sauvegarde de secours des préférences a été enregistrée.';
+  String get settingsCoopSuccess =>
+      'Menu coop débloqué. Une sauvegarde de secours des préférences a été enregistrée.';
 
   @override
-  String get settingsCoopCreated => 'Menu coop débloqué. Stardew n\'avait pas de fichier de préférences, un nouveau a donc été créé.';
+  String get settingsCoopCreated =>
+      'Menu coop débloqué. Stardew n\'avait pas de fichier de préférences, un nouveau a donc été créé.';
 
   @override
   String get settingsCoopAlready => 'Le menu coop est déjà débloqué.';
 
   @override
-  String get settingsCoopRootDenied => 'L\'accès ROOT est indisponible ou a été refusé. Vérifiez la configuration root et réessayez.';
+  String get settingsCoopRootDenied =>
+      'L\'accès ROOT est indisponible ou a été refusé. Vérifiez la configuration root et réessayez.';
 
   @override
-  String get settingsCoopGameRunning => 'Fermez complètement Stardew Valley, puis réessayez.';
+  String get settingsCoopGameRunning =>
+      'Fermez complètement Stardew Valley, puis réessayez.';
 
   @override
-  String get settingsCoopUnsupported => 'Cela nécessite que le jeu soit installé pour l\'utilisateur principal d\'Android.';
+  String get settingsCoopUnsupported =>
+      'Cela nécessite que le jeu soit installé pour l\'utilisateur principal d\'Android.';
 
   @override
-  String get settingsCoopChanged => 'Les préférences de Stardew ont changé pendant l\'activation. Rien n\'a été modifié ; réessayez.';
+  String get settingsCoopChanged =>
+      'Les préférences de Stardew ont changé pendant l\'activation. Rien n\'a été modifié ; réessayez.';
 
   @override
-  String get settingsCoopUnavailable => 'Impossible de lire les préférences de Stardew. Rien n\'a été modifié.';
+  String get settingsCoopUnavailable =>
+      'Impossible de lire les préférences de Stardew. Rien n\'a été modifié.';
 
   @override
-  String get settingsCoopInvalid => 'Le fichier de préférences a un format inattendu. Rien n\'a été modifié.';
+  String get settingsCoopInvalid =>
+      'Le fichier de préférences a un format inattendu. Rien n\'a été modifié.';
 
   @override
-  String get settingsCoopWriteFailed => 'Impossible de mettre à jour les préférences en toute sécurité. Vérifiez la sauvegarde de secours avant de réessayer.';
+  String get settingsCoopWriteFailed =>
+      'Impossible de mettre à jour les préférences en toute sécurité. Vérifiez la sauvegarde de secours avant de réessayer.';
 
   @override
   String get settingsCoopShizukuTitle => 'Calibrer avec Shizuku';
 
   @override
-  String get settingsCoopShizukuDescription => 'Expérimental : autorisez l\'affichage par-dessus les autres applications, puis appuyez sur les cinq cibles indiquées sur l\'écran titre de Stardew (W, V, S, Y et ?). Les coordonnées ne sont utilisées que pour cette session.';
+  String get settingsCoopShizukuDescription =>
+      'Expérimental : autorisez l\'affichage par-dessus les autres applications, puis appuyez sur les cinq cibles indiquées sur l\'écran titre de Stardew (W, V, S, Y et ?). Les coordonnées ne sont utilisées que pour cette session.';
 
   @override
   String get settingsCoopShizukuActivate => 'Calibrer avec Shizuku';
 
   @override
-  String get settingsCoopShizukuSent => 'Appuis envoyés. Fermez manuellement l\'écran ?, puis vérifiez que Coop apparaît. ValleySave ne peut pas vérifier le déblocage.';
+  String get settingsCoopShizukuSent =>
+      'Appuis envoyés. Fermez manuellement l\'écran ?, puis vérifiez que Coop apparaît. ValleySave ne peut pas vérifier le déblocage.';
 
   @override
-  String get settingsCoopShizukuUnavailable => 'Shizuku n\'est pas en cours d\'exécution. Lancez-le, puis réessayez.';
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku n\'est pas en cours d\'exécution. Lancez-le, puis réessayez.';
 
   @override
-  String get settingsCoopShizukuDenied => 'ValleySave n\'a pas l\'autorisation Shizuku.';
+  String get settingsCoopShizukuDenied =>
+      'ValleySave n\'a pas l\'autorisation Shizuku.';
 
   @override
-  String get settingsCoopOverlayPermission => 'Autorisez ValleySave à s\'afficher par-dessus les autres applications, puis appuyez de nouveau sur le bouton Shizuku.';
+  String get settingsCoopOverlayPermission =>
+      'Autorisez ValleySave à s\'afficher par-dessus les autres applications, puis appuyez de nouveau sur le bouton Shizuku.';
 
   @override
-  String get settingsCoopCalibrationTimeout => 'Délai de calibrage dépassé. Recommencez depuis l\'écran titre de Stardew.';
+  String get settingsCoopCalibrationTimeout =>
+      'Délai de calibrage dépassé. Recommencez depuis l\'écran titre de Stardew.';
 
   @override
-  String get settingsCoopSequenceTimeout => 'La séquence d\'appuis a expiré et a été annulée.';
+  String get settingsCoopSequenceTimeout =>
+      'La séquence d\'appuis a expiré et a été annulée.';
 
   @override
-  String get settingsCoopNotForeground => 'Stardew a quitté le premier plan. Aucun autre appui n\'a été envoyé ; revenez à son écran titre et réessayez.';
+  String get settingsCoopNotForeground =>
+      'Stardew a quitté le premier plan. Aucun autre appui n\'a été envoyé ; revenez à son écran titre et réessayez.';
 
   @override
-  String get settingsCoopDisplayChanged => 'L\'affichage a changé pendant le calibrage. Aucun appui n\'a été envoyé ; recalibrez.';
+  String get settingsCoopDisplayChanged =>
+      'L\'affichage a changé pendant le calibrage. Aucun appui n\'a été envoyé ; recalibrez.';
 
   @override
   String get settingsCoopCancelled => 'Activation du coop annulée.';
 
   @override
-  String get settingsCoopExperimentalManual => 'La fonction coop mobile est expérimentale. Laissez Stardew sur son écran titre ; fermez vous-même la page ? et vérifiez que Coop apparaît.';
+  String get settingsCoopExperimentalManual =>
+      'La fonction coop mobile est expérimentale. Laissez Stardew sur son écran titre ; fermez vous-même la page ? et vérifiez que Coop apparaît.';
 
   @override
   String get settingsCoopRowTitle => 'Coop mobile';
 
   @override
-  String get settingsCoopRowSubtitle => 'Débloquer l\'option coop cachée de Stardew Valley';
+  String get settingsCoopRowSubtitle =>
+      'Débloquer l\'option coop cachée de Stardew Valley';
 
   @override
-  String get settingsCoopChooserIntro => 'Choisissez comment débloquer le coop sur ce téléphone.';
+  String get settingsCoopChooserIntro =>
+      'Choisissez comment débloquer le coop sur ce téléphone.';
 
   @override
   String get settingsCoopRootTitle => 'Direct avec ROOT';
@@ -2106,21 +2281,25 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get makeHostNewCopyNote => 'Une nouvelle sauvegarde est créée. Vous déciderez ensuite quoi faire de l\'originale.';
+  String get makeHostNewCopyNote =>
+      'Une nouvelle sauvegarde est créée. Vous déciderez ensuite quoi faire de l\'originale.';
 
   @override
   String makeHostMoveCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count objets de la ferme seront déplacés pour faire de la place à la maison. Rien n\'est supprimé.',
-      one: '1 objet de la ferme sera déplacé pour faire de la place à la maison. Rien n\'est supprimé.',
+      other:
+          '$count objets de la ferme seront déplacés pour faire de la place à la maison. Rien n\'est supprimé.',
+      one:
+          '1 objet de la ferme sera déplacé pour faire de la place à la maison. Rien n\'est supprimé.',
     );
     return '$_temp0';
   }
 
   @override
-  String get makeHostHouseWarning => 'La maison du nouvel hôte ressemblera à la grande ferme du jeu. L\'apparence de cabane n\'est pas prise en charge sans mods.';
+  String get makeHostHouseWarning =>
+      'La maison du nouvel hôte ressemblera à la grande ferme du jeu. L\'apparence de cabane n\'est pas prise en charge sans mods.';
 
   @override
   String get makeHostConfirmButton => 'Devenir hôte';
@@ -2131,28 +2310,36 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get hostSwapErrInvalid => 'Cette sauvegarde a une structure inattendue. Rien n\'a été modifié.';
+  String get hostSwapErrInvalid =>
+      'Cette sauvegarde a une structure inattendue. Rien n\'a été modifié.';
 
   @override
-  String get hostSwapErrNoSpace => 'Pas d\'espace libre dans la ferme pour déplacer les objets. Rien n\'a été modifié.';
+  String get hostSwapErrNoSpace =>
+      'Pas d\'espace libre dans la ferme pour déplacer les objets. Rien n\'a été modifié.';
 
   @override
-  String get hostSwapErrWrite => 'Impossible d\'écrire la nouvelle sauvegarde (disque/permissions). Rien n\'a été modifié.';
+  String get hostSwapErrWrite =>
+      'Impossible d\'écrire la nouvelle sauvegarde (disque/permissions). Rien n\'a été modifié.';
 
   @override
-  String get hostSwapErrValidation => 'La vérification de la nouvelle sauvegarde a échoué, elle a donc été supprimée. L\'originale est intacte.';
+  String get hostSwapErrValidation =>
+      'La vérification de la nouvelle sauvegarde a échoué, elle a donc été supprimée. L\'originale est intacte.';
 
   @override
-  String get makeHostDeleteOriginalTitle => 'Supprimer la sauvegarde d\'origine de cet appareil ?';
+  String get makeHostDeleteOriginalTitle =>
+      'Supprimer la sauvegarde d\'origine de cet appareil ?';
 
   @override
-  String get makeHostDeleteOriginalBody => 'La nouvelle sauvegarde est prête. Sauvegardez d\'abord l\'originale sur votre Drive (vous pourrez la retélécharger plus tard) ou supprimez simplement la copie locale.';
+  String get makeHostDeleteOriginalBody =>
+      'La nouvelle sauvegarde est prête. Sauvegardez d\'abord l\'originale sur votre Drive (vous pourrez la retélécharger plus tard) ou supprimez simplement la copie locale.';
 
   @override
-  String get makeHostDeleteOriginalNoBackupBody => 'Pas de connexion à Drive : aucune sauvegarde ne subsistera. Seule la copie locale sur cet appareil sera supprimée.';
+  String get makeHostDeleteOriginalNoBackupBody =>
+      'Pas de connexion à Drive : aucune sauvegarde ne subsistera. Seule la copie locale sur cet appareil sera supprimée.';
 
   @override
-  String get makeHostDeleteOriginalUploadBody => 'La sauvegarde d\'origine sera d\'abord téléversée sur votre Drive comme sauvegarde de secours, puis la copie locale sur cet appareil sera supprimée.';
+  String get makeHostDeleteOriginalUploadBody =>
+      'La sauvegarde d\'origine sera d\'abord téléversée sur votre Drive comme sauvegarde de secours, puis la copie locale sur cet appareil sera supprimée.';
 
   @override
   String get makeHostDeleteWithoutUpload => 'Supprimer sans téléverser';
@@ -2181,7 +2368,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get savesFolderNoneDetected => 'Aucun dossier détecté automatiquement.';
+  String get savesFolderNoneDetected =>
+      'Aucun dossier détecté automatiquement.';
 
   @override
   String get savesFolderBrowse => 'Parcourir les dossiers…';
@@ -2201,7 +2389,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get savesFolderVerifyEmpty => 'Aucune sauvegarde dans ce dossier. Vous pouvez quand même l\'utiliser.';
+  String get savesFolderVerifyEmpty =>
+      'Aucune sauvegarde dans ce dossier. Vous pouvez quand même l\'utiliser.';
 
   @override
   String get savesFolderVerifyMissing => 'Dossier introuvable ou illisible.';
@@ -2252,7 +2441,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsSmapiNotDetected => 'non détecté';
 
   @override
-  String get settingsSmapiSavesShared => 'Sauvegardes : même dossier (sur PC, SMAPI ne les sépare pas)';
+  String get settingsSmapiSavesShared =>
+      'Sauvegardes : même dossier (sur PC, SMAPI ne les sépare pas)';
 
   @override
   String settingsSmapiModsPath(String path) {
@@ -2266,7 +2456,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsSmapiSearch => 'Rechercher';
 
   @override
-  String get settingsSmapiNotFoundHint => 'Installez SMAPI, ou indiquez où se trouve le jeu dans la section « Jeu » ci-dessus.';
+  String get settingsSmapiNotFoundHint =>
+      'Installez SMAPI, ou indiquez où se trouve le jeu dans la section « Jeu » ci-dessus.';
 
   @override
   String get snackInvalidFolder => 'Ce dossier ne peut pas être utilisé.';
@@ -2288,13 +2479,16 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get moveToSmapiBody => 'Vous la verrez dans l\'onglet SMAPI et, quand vous l\'enverrez, elle ira dans le dossier SMAPI de votre Drive.';
+  String get moveToSmapiBody =>
+      'Vous la verrez dans l\'onglet SMAPI et, quand vous l\'enverrez, elle ira dans le dossier SMAPI de votre Drive.';
 
   @override
-  String get moveToNormalBody => 'Vous la verrez dans l\'onglet Normal et, quand vous l\'enverrez, elle ira dans le dossier normal de votre Drive.';
+  String get moveToNormalBody =>
+      'Vous la verrez dans l\'onglet Normal et, quand vous l\'enverrez, elle ira dans le dossier normal de votre Drive.';
 
   @override
-  String get moveAreaNoFilesTouched => 'Sur PC, aucun fichier n\'est déplacé ni modifié : le jeu normal et SMAPI utilisent le même dossier de sauvegardes. Vous pouvez la ramener quand vous voulez. Sa copie dans l\'autre dossier Drive reste où elle est.';
+  String get moveAreaNoFilesTouched =>
+      'Sur PC, aucun fichier n\'est déplacé ni modifié : le jeu normal et SMAPI utilisent le même dossier de sauvegardes. Vous pouvez la ramener quand vous voulez. Sa copie dans l\'autre dossier Drive reste où elle est.';
 
   @override
   String get moveToSmapiConfirm => 'Déplacer vers SMAPI';
@@ -2337,7 +2531,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get modWithConfig => 'avec ses réglages';
 
   @override
-  String get modsCompatLegend => 'Android : ✓ fonctionne en général · ⚠ peut échouer (mod de code) · ✗ exige une version de SMAPI qu\'Android n\'a pas encore.';
+  String get modsCompatLegend =>
+      'Android : ✓ fonctionne en général · ⚠ peut échouer (mod de code) · ✗ exige une version de SMAPI qu\'Android n\'a pas encore.';
 
   @override
   String modsUploadAction(int count) {
@@ -2353,7 +2548,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get modsDownloadSubtitle => 'Choisissez ceux à installer sur cet appareil. Ceux que vous avez déjà dans la même version ne sont pas touchés.';
+  String get modsDownloadSubtitle =>
+      'Choisissez ceux à installer sur cet appareil. Ceux que vous avez déjà dans la même version ne sont pas touchés.';
 
   @override
   String modsDownloadWarning(String mods) {
@@ -2388,10 +2584,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get modsNeedNoLink => 'Envoyez-le depuis l’appareil qui l’a, ou installez-le à la main.';
+  String get modsNeedNoLink =>
+      'Envoyez-le depuis l’appareil qui l’a, ou installez-le à la main.';
 
   @override
-  String get modsNeedUnsupportedHere => 'ne fonctionne pas sur cette plateforme';
+  String get modsNeedUnsupportedHere =>
+      'ne fonctionne pas sur cette plateforme';
 
   @override
   String snackModsUploaded(int done, int failed) {
@@ -2404,7 +2602,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get modsAutoSyncToggle => 'Envoyer et télécharger ses mods avec la sauvegarde';
+  String get modsAutoSyncToggle =>
+      'Envoyer et télécharger ses mods avec la sauvegarde';
 
   @override
   String modUpdateAvailable(String version) {
@@ -2423,23 +2622,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forcedUpdateInstalling => 'Installation…';
 
   @override
-  String get forcedUpdateInstallingBody => 'ValleySave va se fermer et se rouvrir avec la nouvelle version.';
+  String get forcedUpdateInstallingBody =>
+      'ValleySave va se fermer et se rouvrir avec la nouvelle version.';
 
   @override
   String get forcedUpdateAlmostDone => 'Presque terminé';
 
   @override
-  String get forcedUpdateAndroidConfirm => 'Android vous demande de confirmer l’installation. C’est obligatoire pour des raisons de sécurité.';
+  String get forcedUpdateAndroidConfirm =>
+      'Android vous demande de confirmer l’installation. C’est obligatoire pour des raisons de sécurité.';
 
   @override
   String get forcedUpdateFailedTitle => 'Impossible de mettre à jour';
 
   @override
-  String get forcedUpdateFailedBody => 'Cette version ne peut plus synchroniser. Connectez-vous à Internet et réessayez.';
+  String get forcedUpdateFailedBody =>
+      'Cette version ne peut plus synchroniser. Connectez-vous à Internet et réessayez.';
 
   @override
   String get forcedUpdateRetry => 'Réessayer';
 
   @override
-  String get forcedUpdateSafe => 'Vos sauvegardes sont en sécurité : elles restent sur votre appareil et dans votre Drive.';
+  String get forcedUpdateSafe =>
+      'Vos sauvegardes sont en sécurité : elles restent sur votre appareil et dans votre Drive.';
 }

@@ -1,4 +1,4 @@
-﻿{
+{
   "@@locale": "ja",
   "appTitle": "ValleySave",
   "welcomeTitle": "あなたの農場を失わないで、持ち歩きましょう。",
@@ -1070,6 +1070,21 @@
   "backupsDeleteOwnOnly": "自分のDriveからのみ",
   "backupsDeleteSharedOnly": "共有Driveからのみ",
   "backupsDeleteAll": "すべてのコピーから",
+  "backupsGameSummary": "{year}年目 · {season} {day}日 · {money} g",
+  "backupsSectionManual": "手動",
+  "backupsSectionAuto": "自動",
+  "backupsSectionPreRestore": "復元前",
+  "backupsSectionLast": "最新 {date}",
+  "backupsInUseShort": "使用中",
+  "backupsInUseTag": "使用中",
+  "backupsRuleManual": "自動では削除されません",
+  "backupsRuleKeep": "{count}件まで保持",
+  "backupsKeep": "保持",
+  "backupsKeepOk": "バックアップを「手動」に保持しました。",
+  "backupsKeepRemoteErr": "この端末には保持しましたが、Drive での名前変更に失敗しました: {error}",
+  "backupsKeepErr": "バックアップを保持できませんでした: {error}",
+  "backupsExpandAll": "すべて展開",
+  "backupsCollapseAll": "すべて折りたたむ",
   "deleteUnifiedTitle": "{farmName}を削除しますか?",
   "@deleteUnifiedTitle": {
     "placeholders": {

@@ -45,25 +45,29 @@ class AppLocalizationsKo extends AppLocalizations {
   String get privacyTitle => '개인정보 보호 및 데이터 사용';
 
   @override
-  String get privacyDescription => 'ValleySave는 Stardew Valley 저장 파일을 자신의 Google Drive 계정과 동기화하는 앱입니다.';
+  String get privacyDescription =>
+      'ValleySave는 Stardew Valley 저장 파일을 자신의 Google Drive 계정과 동기화하는 앱입니다.';
 
   @override
   String get whatDataTitle => '사용하는 데이터';
 
   @override
-  String get whatDataDesc => 'ValleySave는 복사본을 만들고, 동기화하거나 복원하는 데 필요한 Stardew Valley 저장 파일에만 액세스합니다.';
+  String get whatDataDesc =>
+      'ValleySave는 복사본을 만들고, 동기화하거나 복원하는 데 필요한 Stardew Valley 저장 파일에만 액세스합니다.';
 
   @override
   String get googleDriveTitle => 'Google Drive';
 
   @override
-  String get googleDriveDesc => '저장 파일은 자신의 Google Drive 계정에 업로드됩니다. ValleySave는 게임을 저장하기 위해 자체 서버를 사용하지 않습니다.';
+  String get googleDriveDesc =>
+      '저장 파일은 자신의 Google Drive 계정에 업로드됩니다. ValleySave는 게임을 저장하기 위해 자체 서버를 사용하지 않습니다.';
 
   @override
   String get androidPermissionsTitle => 'Android 권한';
 
   @override
-  String get androidPermissionsDesc => 'ValleySave는 저장 파일에 액세스하기 위해 저장 공간 권한 또는 Shizuku와 같은 도구가 필요할 수 있습니다.';
+  String get androidPermissionsDesc =>
+      'ValleySave는 저장 파일에 액세스하기 위해 저장 공간 권한 또는 Shizuku와 같은 도구가 필요할 수 있습니다.';
 
   @override
   String get adsTitle => '광고';
@@ -81,13 +85,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get deleteDataTitle => '데이터 삭제';
 
   @override
-  String get deleteDataDesc => 'Google Drive에서 ValleySave 폴더를 수동으로 삭제하여 동기화된 복사본을 삭제할 수 있습니다.';
+  String get deleteDataDesc =>
+      'Google Drive에서 ValleySave 폴더를 수동으로 삭제하여 동기화된 복사본을 삭제할 수 있습니다.';
 
   @override
   String get sourceCodeTitle => '소스 코드 및 연락처';
 
   @override
-  String get sourceCodeDesc => 'ValleySave는 Polyform Noncommercial 라이선스에 따라 사용 가능한 코드가 있는 프로젝트입니다.';
+  String get sourceCodeDesc =>
+      'ValleySave는 Polyform Noncommercial 라이선스에 따라 사용 가능한 코드가 있는 프로젝트입니다.';
 
   @override
   String get upToDate => '최신';
@@ -186,7 +192,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get welcomeHeroPost => '\n가져가세요.';
 
   @override
-  String get welcomeSubtitle => '모든 기기에서 Stardew Valley 저장을 동기화하세요. 데이터는 자신의 Google Drive에 있습니다 — 서버 없음, 구독 없음, 완전한 제어.';
+  String get welcomeSubtitle =>
+      '모든 기기에서 Stardew Valley 저장을 동기화하세요. 데이터는 자신의 Google Drive에 있습니다 — 서버 없음, 구독 없음, 완전한 제어.';
 
   @override
   String get welcomeDriveConnected => 'Drive 연결됨';
@@ -299,7 +306,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get updateError => '오류 — 다시 시도하려면 탭하세요';
 
   @override
-  String get updateNeedsPermission => 'ValleySave에 대해 \'알 수 없는 앱 설치\'를 허용한 후 업데이트를 다시 눌러주세요';
+  String get updateNeedsPermission =>
+      'ValleySave에 대해 \'알 수 없는 앱 설치\'를 허용한 후 업데이트를 다시 눌러주세요';
 
   @override
   String get disconnectTitle => 'Drive 연결을 끊으시겠습니까?';
@@ -468,7 +476,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shareEmailPlaceholder => 'name@example.com';
 
   @override
-  String get shareInfoNote => '공유하면 보기 및 다운로드 권한이 부여됩니다. Drive의 사본을 수정하거나 삭제할 수 있는 사람은 회원님뿐입니다.';
+  String get shareInfoNote =>
+      '공유하면 보기 및 다운로드 권한이 부여됩니다. Drive의 사본을 수정하거나 삭제할 수 있는 사람은 회원님뿐입니다.';
 
   @override
   String get shareRoleReader => '읽기 전용';
@@ -477,7 +486,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shareRoleWriter => '동기화 허용';
 
   @override
-  String get shareInfoNoteCoop => '\'읽기 전용\'은 보기와 다운로드를 허용합니다. \'동기화 허용\'은 Drive의 사본을 덮어쓸 수 있게 합니다 — 절대 삭제할 수는 없습니다.';
+  String get shareInfoNoteCoop =>
+      '\'읽기 전용\'은 보기와 다운로드를 허용합니다. \'동기화 허용\'은 Drive의 사본을 덮어쓸 수 있게 합니다 — 절대 삭제할 수는 없습니다.';
 
   @override
   String get shareConfirmButton => '공유하기';
@@ -505,10 +515,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get driveOnlyControlsYourCopy => '공유는 Drive에 있는 회원님의 사본을 제어합니다. 누군가 다운로드하면 그 사본은 그 사람의 것이 됩니다.';
+  String get driveOnlyControlsYourCopy =>
+      '공유는 Drive에 있는 회원님의 사본을 제어합니다. 누군가 다운로드하면 그 사본은 그 사람의 것이 됩니다.';
 
   @override
-  String get driveOnlyControlsYourCopyCoop => '동기화는 Drive에 있는 회원님의 사본을 제어합니다 — 허용한 사람이 덮어쓸 수는 있지만 절대 삭제할 수는 없습니다.';
+  String get driveOnlyControlsYourCopyCoop =>
+      '동기화는 Drive에 있는 회원님의 사본을 제어합니다 — 허용한 사람이 덮어쓸 수는 있지만 절대 삭제할 수는 없습니다.';
 
   @override
   String get sharedWithMeTitle => '나와 공유됨';
@@ -695,7 +707,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get sharedDownloadChooseTitle => '어떤 사본을 다운로드하시겠습니까?';
 
   @override
-  String get sharedDownloadChooseBody => '앞서 있는 사본이 하나 이상 있습니다. 이 기기로 가져올 사본을 선택하세요.';
+  String get sharedDownloadChooseBody =>
+      '앞서 있는 사본이 하나 이상 있습니다. 이 기기로 가져올 사본을 선택하세요.';
 
   @override
   String get sharedDownloadSourceOwn => '내 Drive에서';
@@ -766,7 +779,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupsRestoreConfirmTitle => '이 백업을 복원하시겠습니까?';
 
   @override
-  String get backupsRestoreConfirmBody => '현재 세이브가 이 이전 버전으로 덮어써집니다. 되돌릴 수 없습니다.';
+  String get backupsRestoreConfirmBody =>
+      '현재 세이브가 이 이전 버전으로 덮어써집니다. 되돌릴 수 없습니다.';
 
   @override
   String get backupsDelete => '삭제';
@@ -775,7 +789,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupsDeleteConfirmTitle => '이 백업을 삭제하시겠습니까?';
 
   @override
-  String get backupsDeleteConfirmBody => '존재하는 모든 위치(이 기기, 업로드했다면 Drive)에서 삭제됩니다. 되돌릴 수 없습니다.';
+  String get backupsDeleteConfirmBody =>
+      '존재하는 모든 위치(이 기기, 업로드했다면 Drive)에서 삭제됩니다. 되돌릴 수 없습니다.';
 
   @override
   String get backupsRestoreOk => '백업이 복원되었습니다.';
@@ -784,7 +799,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupsRestoreManualTitle => '수동으로 복원';
 
   @override
-  String get backupsRestoreManualBody => '브리지 모드에서는 ValleySave가 게임 폴더에 자동으로 쓸 수 없습니다. 이 백업의 .zip 파일을 Stardew Valley의 Saves 폴더에 직접 압축 해제하거나, 설정에서 Root/Shizuku 모드로 전환하여 자동으로 복원하세요.';
+  String get backupsRestoreManualBody =>
+      '브리지 모드에서는 ValleySave가 게임 폴더에 자동으로 쓸 수 없습니다. 이 백업의 .zip 파일을 Stardew Valley의 Saves 폴더에 직접 압축 해제하거나, 설정에서 Root/Shizuku 모드로 전환하여 자동으로 복원하세요.';
 
   @override
   String backupsRestoreErr(String error) {
@@ -800,7 +816,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupsCreate => '로컬 백업 생성';
 
   @override
-  String get backupsCreateLocalHint => '백업은 먼저 이 기기에 생성됩니다. 이후 Drive에 업로드할 수 있습니다.';
+  String get backupsCreateLocalHint =>
+      '백업은 먼저 이 기기에 생성됩니다. 이후 Drive에 업로드할 수 있습니다.';
 
   @override
   String get backupsCreateOk => '백업이 생성되었습니다.';
@@ -848,7 +865,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupsLocationSharedDrive => '공유 Drive';
 
   @override
-  String get backupsDeleteChooseBody => '정확히 어디서 삭제할지 선택하세요. 이 백업이 존재하는 위치만 표시됩니다.';
+  String get backupsDeleteChooseBody =>
+      '정확히 어디서 삭제할지 선택하세요. 이 백업이 존재하는 위치만 표시됩니다.';
 
   @override
   String get backupsDeleteLocalOnly => '이 기기에서만';
@@ -864,58 +882,58 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String backupsGameSummary(int year, String season, int day, String money) {
-    return 'Year $year · $season $day · $money g';
+    return '$year년차 · $season $day일 · $money g';
   }
 
   @override
-  String get backupsSectionManual => 'Manual';
+  String get backupsSectionManual => '수동';
 
   @override
-  String get backupsSectionAuto => 'Automatic';
+  String get backupsSectionAuto => '자동';
 
   @override
-  String get backupsSectionPreRestore => 'Before restoring';
+  String get backupsSectionPreRestore => '복원 전';
 
   @override
   String backupsSectionLast(String date) {
-    return 'last $date';
+    return '최근 $date';
   }
 
   @override
-  String get backupsInUseShort => 'in use';
+  String get backupsInUseShort => '사용 중';
 
   @override
-  String get backupsInUseTag => 'In use';
+  String get backupsInUseTag => '사용 중';
 
   @override
-  String get backupsRuleManual => 'never deleted automatically';
+  String get backupsRuleManual => '자동으로 삭제되지 않음';
 
   @override
   String backupsRuleKeep(int count) {
-    return 'keeps $count';
+    return '$count개 보관';
   }
 
   @override
-  String get backupsKeep => 'Keep';
+  String get backupsKeep => '보관';
 
   @override
-  String get backupsKeepOk => 'Backup kept in Manual.';
+  String get backupsKeepOk => '백업을 \'수동\'에 보관했습니다.';
 
   @override
   String backupsKeepRemoteErr(String error) {
-    return 'Kept on this device, but renaming it on Drive failed: $error';
+    return '이 기기에는 보관했지만 Drive에서 이름을 바꾸지 못했습니다: $error';
   }
 
   @override
   String backupsKeepErr(String error) {
-    return 'Could not keep the backup: $error';
+    return '백업을 보관하지 못했습니다: $error';
   }
 
   @override
-  String get backupsExpandAll => 'Expand all';
+  String get backupsExpandAll => '모두 펼치기';
 
   @override
-  String get backupsCollapseAll => 'Collapse all';
+  String get backupsCollapseAll => '모두 접기';
 
   @override
   String deleteUnifiedTitle(String farmName) {
@@ -923,7 +941,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get deleteChooseLocationBody => '삭제할 위치를 선택하세요. 이 기기의 사본은 영구적으로 삭제됩니다. Drive의 사본은 휴지통으로 이동합니다(30일).';
+  String get deleteChooseLocationBody =>
+      '삭제할 위치를 선택하세요. 이 기기의 사본은 영구적으로 삭제됩니다. Drive의 사본은 휴지통으로 이동합니다(30일).';
 
   @override
   String deleteDriveContextTitle(String farmName) {
@@ -931,7 +950,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get deleteDriveContextBody => 'Drive 사본은 휴지통으로 이동하며, 30일 동안 복원할 수 있습니다.';
+  String get deleteDriveContextBody =>
+      'Drive 사본은 휴지통으로 이동하며, 30일 동안 복원할 수 있습니다.';
 
   @override
   String get deleteDriveLocalKept => '이 기기의 사본은 변경 없이 그대로 유지됩니다.';
@@ -1064,7 +1084,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwConnectTitle => '계정 연결하기';
 
   @override
-  String get hiwConnectDesc => 'ValleySave는 회원님의 Google 계정을 사용하여 세이브를 회원님 자신의 Drive에 있는 비공개 ValleySave 폴더에 저장합니다.';
+  String get hiwConnectDesc =>
+      'ValleySave는 회원님의 Google 계정을 사용하여 세이브를 회원님 자신의 Drive에 있는 비공개 ValleySave 폴더에 저장합니다.';
 
   @override
   String get hiwConnectStepGoogle => 'Google\n계정';
@@ -1076,13 +1097,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwConnectStepReady => '동기화\n준비 완료';
 
   @override
-  String get hiwConnectTipOwnership => 'Drive에 있는 사본을 수정하거나 삭제할 수 있는 사람은 오직 회원님뿐입니다 — ValleySave는 자신의 폴더 안에서만 읽고 씁니다.';
+  String get hiwConnectTipOwnership =>
+      'Drive에 있는 사본을 수정하거나 삭제할 수 있는 사람은 오직 회원님뿐입니다 — ValleySave는 자신의 폴더 안에서만 읽고 씁니다.';
 
   @override
   String get hiwSyncTitle => '동기화 방식';
 
   @override
-  String get hiwSyncIntro => 'ValleySave는 기기 간에 저장을 이동하기 위해 자신의 Google Drive를 사용합니다. 중개 서버 없음: 파일은 귀하의 것입니다.';
+  String get hiwSyncIntro =>
+      'ValleySave는 기기 간에 저장을 이동하기 위해 자신의 Google Drive를 사용합니다. 중개 서버 없음: 파일은 귀하의 것입니다.';
 
   @override
   String get hiwSyncDevice => '귀하의\n기기';
@@ -1097,19 +1120,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwUploadTitle => '저장 업로드';
 
   @override
-  String get hiwUploadDesc => '업로드할 때 ValleySave는 두 저장 파일 (SaveGameInfo + 농장 파일)을 Drive의 ValleySave/ 폴더에 복사합니다.';
+  String get hiwUploadDesc =>
+      '업로드할 때 ValleySave는 두 저장 파일 (SaveGameInfo + 농장 파일)을 Drive의 ValleySave/ 폴더에 복사합니다.';
 
   @override
   String get hiwDownloadTitle => '저장 다운로드';
 
   @override
-  String get hiwDownloadDesc => '다운로드할 때 ValleySave는 Drive의 파일을 가져와 게임 폴더에 직접 배치합니다.';
+  String get hiwDownloadDesc =>
+      '다운로드할 때 ValleySave는 Drive의 파일을 가져와 게임 폴더에 직접 배치합니다.';
 
   @override
   String get hiwCompareTitle => '무엇을 비교합니까?';
 
   @override
-  String get hiwCompareIntro => '어느 버전이 더 최신인지 알기 위해 ValleySave는 총 플레이 시간을 사용합니다 — 유일하게 증가할 수 있는 데이터입니다.';
+  String get hiwCompareIntro =>
+      '어느 버전이 더 최신인지 알기 위해 ValleySave는 총 플레이 시간을 사용합니다 — 유일하게 증가할 수 있는 데이터입니다.';
 
   @override
   String get hiwCompareNote => '확인하기 전에 다음도 표시되므로 결정할 수 있습니다:';
@@ -1130,22 +1156,26 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwCompareStamina => '체력 및 건강';
 
   @override
-  String get hiwCompareNotShown => '다음은 표시되지 않습니다 — 어느 방향으로든 변하며 어느 저장이 더 최신인지를 나타내지 않습니다.';
+  String get hiwCompareNotShown =>
+      '다음은 표시되지 않습니다 — 어느 방향으로든 변하며 어느 저장이 더 최신인지를 나타내지 않습니다.';
 
   @override
   String get hiwCompareNotShownExamples => '작물 및 동물 상태, 인벤토리 및 아이템, 개별 관계';
 
   @override
-  String get hiwCompareWarning => '다음은 표시되지 않습니다 — 어느 방향으로든 변하며 어느 저장이 더 최신인지를 나타내지 않습니다.';
+  String get hiwCompareWarning =>
+      '다음은 표시되지 않습니다 — 어느 방향으로든 변하며 어느 저장이 더 최신인지를 나타내지 않습니다.';
 
   @override
   String get hiwConflictTitle => '동기화하지 않고 플레이하면';
 
   @override
-  String get hiwConflictDesc => '모바일과 PC에서 세션 간에 동기화하지 않고 진행하면 동일한 저장의 두 버전을 얻습니다.';
+  String get hiwConflictDesc =>
+      '모바일과 PC에서 세션 간에 동기화하지 않고 진행하면 동일한 저장의 두 버전을 얻습니다.';
 
   @override
-  String get hiwConflictNoMerge => '병합할 수 없습니다. ValleySave는 항상 두 버전을 모두 표시하므로 어느 버전을 유지할지 선택할 수 있습니다.';
+  String get hiwConflictNoMerge =>
+      '병합할 수 없습니다. ValleySave는 항상 두 버전을 모두 표시하므로 어느 버전을 유지할지 선택할 수 있습니다.';
 
   @override
   String get hiwConflictMobile => '모바일';
@@ -1163,7 +1193,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwDeleteTitle => '저장이 삭제되면';
 
   @override
-  String get hiwDeleteDesc => 'Drive에서 저장을 삭제하면 즉시 사라지지 않습니다: Google Drive 휴지통으로 이동합니다.';
+  String get hiwDeleteDesc =>
+      'Drive에서 저장을 삭제하면 즉시 사라지지 않습니다: Google Drive 휴지통으로 이동합니다.';
 
   @override
   String get hiwCompatTitle => '플랫폼 호환성';
@@ -1175,22 +1206,26 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwShizukuTitle => 'Shizuku 사용';
 
   @override
-  String get hiwShizukuSubtitle => '한 번 설정하세요. 그 후 ValleySave는 자동으로 동기화되며, 다시 건드릴 필요가 없습니다.';
+  String get hiwShizukuSubtitle =>
+      '한 번 설정하세요. 그 후 ValleySave는 자동으로 동기화되며, 다시 건드릴 필요가 없습니다.';
 
   @override
   String get hiwShizukuBadge => '자동 · 권장';
 
   @override
-  String get hiwShizukuDone => '✓  완료. 그 후부터는 다운로드 및 업로드 저장이 직접적이며, 컴퓨터처럼 작동합니다.';
+  String get hiwShizukuDone =>
+      '✓  완료. 그 후부터는 다운로드 및 업로드 저장이 직접적이며, 컴퓨터처럼 작동합니다.';
 
   @override
-  String get hiwShizukuNote => '페어링은 처음만 필요합니다. 새 Shizuku 버전은 휴대폰을 다시 시작한 후 자동으로 다시 활성화됩니다.';
+  String get hiwShizukuNote =>
+      '페어링은 처음만 필요합니다. 새 Shizuku 버전은 휴대폰을 다시 시작한 후 자동으로 다시 활성화됩니다.';
 
   @override
   String get hiwBridgeTitle => '수동 브리지';
 
   @override
-  String get hiwBridgeSubtitle => 'Android 11 및 12에서만 작동합니다. 추가로 설치하지 않습니다. 대신 동기화할 때마다 파일 앱으로 수동으로 저장을 복사합니다.';
+  String get hiwBridgeSubtitle =>
+      'Android 11 및 12에서만 작동합니다. 추가로 설치하지 않습니다. 대신 동기화할 때마다 파일 앱으로 수동으로 저장을 복사합니다.';
 
   @override
   String get hiwBridgeBadge => '수동 대안 · ANDROID 11-12';
@@ -1202,7 +1237,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwBridgeValleySaveFolder => 'ValleySave의 폴더';
 
   @override
-  String get hiwBridgeNote => '시스템 파일 앱이 이러한 폴더에 액세스할 수 있기 때문에 작동합니다 (ValleySave는 할 수 없음).';
+  String get hiwBridgeNote =>
+      '시스템 파일 앱이 이러한 폴더에 액세스할 수 있기 때문에 작동합니다 (ValleySave는 할 수 없음).';
 
   @override
   String get hiwTipAlwaysShow => '항상 덮어쓰기 전에 Drive에 있는 내용을 표시하므로 비교할 수 있습니다.';
@@ -1214,7 +1250,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwTipComparison => '확인하기 전에 로컬과 Drive 간의 비교를 표시합니다.';
 
   @override
-  String get hiwTipDownloadOverwrite => '다운로드는 로컬 저장을 덮어씁니다. 동기화하지 않은 진행률은 손실됩니다.';
+  String get hiwTipDownloadOverwrite =>
+      '다운로드는 로컬 저장을 덮어씁니다. 동기화하지 않은 진행률은 손실됩니다.';
 
   @override
   String get hiwTipSync => '기기를 전환하기 전에 항상 업로드하고, 도착했을 때 다운로드하세요.';
@@ -1235,7 +1272,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get bridgeTitle => '저장 가져오기';
 
   @override
-  String get bridgeDesc => '로컬 저장을 보고 업로드하려면 파일 앱으로 Stardew 폴더에서 이 ValleySave 폴더로 복사하세요. 그 다음 새로고침합니다.';
+  String get bridgeDesc =>
+      '로컬 저장을 보고 업로드하려면 파일 앱으로 Stardew 폴더에서 이 ValleySave 폴더로 복사하세요. 그 다음 새로고침합니다.';
 
   @override
   String get bridgeRefresh => '새로고침';
@@ -1280,7 +1318,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shizukuStep3Desc => 'ValleySave가 액세스를 요청합니다';
 
   @override
-  String get shizukuDone => '✓  완료. 그 후부터는 저장 다운로드 및 업로드가 직접적으로 작동하며, 컴퓨터처럼 입니다.';
+  String get shizukuDone =>
+      '✓  완료. 그 후부터는 저장 다운로드 및 업로드가 직접적으로 작동하며, 컴퓨터처럼 입니다.';
 
   @override
   String get dlgDeleteDriveTitle => 'Drive에서 삭제';
@@ -1383,7 +1422,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get overwriteVerdictMoneySpent => '💰 현재 소지금은 줄었지만 전체 진행 상황은 앞으로 나아가고 있습니다 — 아마 무언가에 사용하신 것 같습니다. 실제 손실이 아닙니다.';
+  String get overwriteVerdictMoneySpent =>
+      '💰 현재 소지금은 줄었지만 전체 진행 상황은 앞으로 나아가고 있습니다 — 아마 무언가에 사용하신 것 같습니다. 실제 손실이 아닙니다.';
 
   @override
   String overwriteVerdictNegligible(String delta) {
@@ -1472,13 +1512,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get snackDownloaded => '저장이 게임으로 다운로드됨';
 
   @override
-  String get snackReplacePrepareFailed => '세이브를 준비하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다';
+  String get snackReplacePrepareFailed =>
+      '세이브를 준비하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다';
 
   @override
-  String get snackReplaceValidationFailed => '다운로드한 세이브가 유효하지 않거나 불완전한 것 같습니다. 디스크에는 아무것도 변경되지 않았습니다';
+  String get snackReplaceValidationFailed =>
+      '다운로드한 세이브가 유효하지 않거나 불완전한 것 같습니다. 디스크에는 아무것도 변경되지 않았습니다';
 
   @override
-  String get snackReplaceBackupFailed => '백업을 생성하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다';
+  String get snackReplaceBackupFailed =>
+      '백업을 생성하지 못했습니다. 디스크에는 아무것도 변경되지 않았습니다';
 
   @override
   String get snackReplaceSwapFailed => '교체에 실패했지만 원본 세이브는 백업에서 복원되었습니다';
@@ -1487,7 +1530,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get snackReplaceBusy => '이 세이브에 대한 작업이 이미 진행 중입니다';
 
   @override
-  String get snackUploadIncomplete => '로컬 세이브가 불완전하거나 손상되었습니다. 아무것도 업로드되지 않았습니다';
+  String get snackUploadIncomplete =>
+      '로컬 세이브가 불완전하거나 손상되었습니다. 아무것도 업로드되지 않았습니다';
 
   @override
   String get snackDownloadIncomplete => '다운로드할 수 없습니다: Drive에 콘텐츠가 부족합니다';
@@ -1524,10 +1568,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get autoSyncExplainSafe => '명백히 앞서 있고 아무것도 잃지 않을 때만 작동합니다.';
 
   @override
-  String get autoSyncExplainDanger => '진행 상황을 잃을 위험이 있다면 절대 자동으로 작동하지 않습니다 — 지금처럼 늘 사용하던 대화상자로 회원님이 직접 결정합니다.';
+  String get autoSyncExplainDanger =>
+      '진행 상황을 잃을 위험이 있다면 절대 자동으로 작동하지 않습니다 — 지금처럼 늘 사용하던 대화상자로 회원님이 직접 결정합니다.';
 
   @override
-  String get autoSyncExplainMissing => '두 사본 중 하나가 없으면 자동으로 만들지 않습니다 — 첫 업로드나 다운로드는 회원님이 직접 결정합니다.';
+  String get autoSyncExplainMissing =>
+      '두 사본 중 하나가 없으면 자동으로 만들지 않습니다 — 첫 업로드나 다운로드는 회원님이 직접 결정합니다.';
 
   @override
   String get autoSyncExplainDontShowAgain => '이 알림 다시 표시하지 않기';
@@ -1539,19 +1585,23 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwAutoSyncTitle => '스스로 동기화';
 
   @override
-  String get hiwAutoSyncDesc => '각 세이브 카드에는 AUTO 칩이 있습니다. 활성화하면 앱이 변경을 감지했을 때 해당 세이브가 자동으로 업로드되거나 다운로드됩니다 — 직접 열어서 확인할 필요가 없습니다.';
+  String get hiwAutoSyncDesc =>
+      '각 세이브 카드에는 AUTO 칩이 있습니다. 활성화하면 앱이 변경을 감지했을 때 해당 세이브가 자동으로 업로드되거나 다운로드됩니다 — 직접 열어서 확인할 필요가 없습니다.';
 
   @override
   String get hiwAutoSyncTipSafe => '명백히 앞서 있고 아무것도 잃지 않을 때만 스스로 동기화됩니다.';
 
   @override
-  String get hiwAutoSyncTipDanger => '진행 상황을 잃을 위험이 있다면 절대 스스로 하지 않습니다 — 지금처럼 늘 사용하던 비교 화면으로 계속 물어봅니다.';
+  String get hiwAutoSyncTipDanger =>
+      '진행 상황을 잃을 위험이 있다면 절대 스스로 하지 않습니다 — 지금처럼 늘 사용하던 비교 화면으로 계속 물어봅니다.';
 
   @override
-  String get hiwAutoSyncTipPerSave => '한 번에 전체가 아니라 세이브별로 개별 설정합니다 — 내 세이브에서는 켜고 공유 세이브에서는 꺼둘 수 있습니다.';
+  String get hiwAutoSyncTipPerSave =>
+      '한 번에 전체가 아니라 세이브별로 개별 설정합니다 — 내 세이브에서는 켜고 공유 세이브에서는 꺼둘 수 있습니다.';
 
   @override
-  String get hiwAutoSyncTipMissing => '이미 존재하는 두 사본만 동기화된 상태로 유지합니다. 하나가 없으면 첫 업로드나 다운로드는 회원님이 직접 합니다.';
+  String get hiwAutoSyncTipMissing =>
+      '이미 존재하는 두 사본만 동기화된 상태로 유지합니다. 하나가 없으면 첫 업로드나 다운로드는 회원님이 직접 합니다.';
 
   @override
   String get hiwAutoSyncTipRefresh => '설정에서 변경 사항의 자동 확인을 완전히 끌 수 있습니다.';
@@ -1588,7 +1638,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get snackShizukuRequired => 'Shizuku 활성화…';
 
   @override
-  String get snackWriteError => '게임에 쓸 수 없습니다. 일부 휴대폰은 Shizuku를 사용해도 /Android/data를 차단합니다.';
+  String get snackWriteError =>
+      '게임에 쓸 수 없습니다. 일부 휴대폰은 Shizuku를 사용해도 /Android/data를 차단합니다.';
 
   @override
   String get snackPlatformNotSupported => '이 플랫폼은 아직 로컬 저장 쓰기를 지원하지 않습니다.';
@@ -1600,28 +1651,35 @@ class AppLocalizationsKo extends AppLocalizations {
   String get snackOpenShizukuApp => '앱 드로어에서 Shizuku를 여세요.';
 
   @override
-  String get hiwTipDeletePermanent => 'ValleySave는 영구 삭제된 저장을 복구할 수 없습니다. Drive 파일은 귀하의 책임입니다.';
+  String get hiwTipDeletePermanent =>
+      'ValleySave는 영구 삭제된 저장을 복구할 수 없습니다. Drive 파일은 귀하의 책임입니다.';
 
   @override
-  String get hiwCompatAchievements => 'Steam 및 Google Play 성취는 전송되지 않습니다. 각 플랫폼은 실시간으로 발생하는 성취만 추적합니다 — 저장 파일이 이를 소급 적용하지 않습니다.';
+  String get hiwCompatAchievements =>
+      'Steam 및 Google Play 성취는 전송되지 않습니다. 각 플랫폼은 실시간으로 발생하는 성취만 추적합니다 — 저장 파일이 이를 소급 적용하지 않습니다.';
 
   @override
-  String get hiwCompatOverwrite => '설정된 순서 없이 두 기기에서 동기화하면 한 저장이 다른 저장을 덮어쓸 수 있습니다. 항상 다운로드하기 전에 업로드하세요.';
+  String get hiwCompatOverwrite =>
+      '설정된 순서 없이 두 기기에서 동기화하면 한 저장이 다른 저장을 덮어쓸 수 있습니다. 항상 다운로드하기 전에 업로드하세요.';
 
   @override
-  String get hiwCompatVersions => '다른 게임 버전의 저장은 올바르게 로드되지 않을 수 있습니다. ValleySave는 다운로드 전에 버전 불일치를 감지하면 경고합니다.';
+  String get hiwCompatVersions =>
+      '다른 게임 버전의 저장은 올바르게 로드되지 않을 수 있습니다. ValleySave는 다운로드 전에 버전 불일치를 감지하면 경고합니다.';
 
   @override
-  String get hiwCompatMods => 'SMAPI 모드는 저장에 추가 데이터를 추가합니다. 해당 모드가 설치되지 않은 기기에서 모드된 저장을 로드하면 게임이 충돌하거나 모드 데이터가 손실될 수 있습니다.\n\nAndroid에서는 모드를 사용하기 위해 SMAPI를 설치할 수도 있습니다.';
+  String get hiwCompatMods =>
+      'SMAPI 모드는 저장에 추가 데이터를 추가합니다. 해당 모드가 설치되지 않은 기기에서 모드된 저장을 로드하면 게임이 충돌하거나 모드 데이터가 손실될 수 있습니다.\n\nAndroid에서는 모드를 사용하기 위해 SMAPI를 설치할 수도 있습니다.';
 
   @override
-  String get hiwCompatIncomplete => '세이브에 \"Drive에서 불완전함\"이 표시되면 클라우드에 필요한 파일이 없다는 뜻입니다 — 다른 기기에서 다시 올바르게 업로드되기 전까지는 다운로드할 수 없습니다.';
+  String get hiwCompatIncomplete =>
+      '세이브에 \"Drive에서 불완전함\"이 표시되면 클라우드에 필요한 파일이 없다는 뜻입니다 — 다른 기기에서 다시 올바르게 업로드되기 전까지는 다운로드할 수 없습니다.';
 
   @override
   String get hiwShareTitle => '다른 사람과 공유';
 
   @override
-  String get hiwShareDesc => '이메일로 다른 플레이어와 세이브를 공유하세요. 상대방은 자신의 기기에서 \'나와 공유됨\'에서 볼 수 있습니다.';
+  String get hiwShareDesc =>
+      '이메일로 다른 플레이어와 세이브를 공유하세요. 상대방은 자신의 기기에서 \'나와 공유됨\'에서 볼 수 있습니다.';
 
   @override
   String get hiwShareStepYourSave => '회원님의\n세이브';
@@ -1633,16 +1691,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwShareStepFriend => '나와\n공유됨';
 
   @override
-  String get hiwShareTipRoles => '역할은 두 가지입니다. \'읽기 전용\'은 보기와 다운로드만 허용합니다. \'동기화 허용\'은 회원님의 Drive 사본을 덮어쓸 수 있게 합니다. 어떤 경우에도 삭제는 할 수 없습니다 — 소유자인 회원님만 세이브를 삭제할 수 있습니다.';
+  String get hiwShareTipRoles =>
+      '역할은 두 가지입니다. \'읽기 전용\'은 보기와 다운로드만 허용합니다. \'동기화 허용\'은 회원님의 Drive 사본을 덮어쓸 수 있게 합니다. 어떤 경우에도 삭제는 할 수 없습니다 — 소유자인 회원님만 세이브를 삭제할 수 있습니다.';
 
   @override
-  String get hiwShareTipDisconnect => '\'연결 해제\'는 상대방 쪽의 동기화만 중단시킵니다 — 공유 관리에서 정말로 나가기 전까지는 공유 자체가 계속 유지됩니다.';
+  String get hiwShareTipDisconnect =>
+      '\'연결 해제\'는 상대방 쪽의 동기화만 중단시킵니다 — 공유 관리에서 정말로 나가기 전까지는 공유 자체가 계속 유지됩니다.';
 
   @override
   String get hiwHostSwapTitle => '호스트 교체';
 
   @override
-  String get hiwHostSwapDesc => '어떤 팜핸드가 세이브의 호스트가 될지 변경하며, 그 자리에서 교체합니다 — 동일한 세이브 슬롯, 동일한 공유 권한이 유지됩니다.';
+  String get hiwHostSwapDesc =>
+      '어떤 팜핸드가 세이브의 호스트가 될지 변경하며, 그 자리에서 교체합니다 — 동일한 세이브 슬롯, 동일한 공유 권한이 유지됩니다.';
 
   @override
   String get hiwHostSwapStepPick => '팜핸드\n선택';
@@ -1654,16 +1715,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwHostSwapStepDone => '새 세이브\n생성됨';
 
   @override
-  String get hiwHostSwapTipMove => '집을 위한 공간을 확보하기 위해 농장의 일부 오브젝트가 재배치될 수 있습니다 — 아무것도 삭제되지 않습니다.';
+  String get hiwHostSwapTipMove =>
+      '집을 위한 공간을 확보하기 위해 농장의 일부 오브젝트가 재배치될 수 있습니다 — 아무것도 삭제되지 않습니다.';
 
   @override
-  String get hiwHostSwapTipHouse => '새 호스트의 집은 게임의 기본 큰 집처럼 보입니다 — 오두막 외관은 모드 없이는 지원되지 않습니다.';
+  String get hiwHostSwapTipHouse =>
+      '새 호스트의 집은 게임의 기본 큰 집처럼 보입니다 — 오두막 외관은 모드 없이는 지원되지 않습니다.';
 
   @override
   String get hiwBackupsTitle => '백업';
 
   @override
-  String get hiwBackupsDesc => '백업은 나중에 복원할 수 있는 세이브의 스냅샷입니다. 언제든 직접 만들거나, 세이브를 덮어쓰기 전(다운로드, 가져오기, 복원, 호스트 교체 시)에 ValleySave가 자동으로 만들도록 할 수 있습니다.';
+  String get hiwBackupsDesc =>
+      '백업은 나중에 복원할 수 있는 세이브의 스냅샷입니다. 언제든 직접 만들거나, 세이브를 덮어쓰기 전(다운로드, 가져오기, 복원, 호스트 교체 시)에 ValleySave가 자동으로 만들도록 할 수 있습니다.';
 
   @override
   String get hiwBackupsStepSave => '회원님의\n세이브';
@@ -1675,19 +1739,24 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwBackupsStepStore => '로컬 및/또는\nDrive';
 
   @override
-  String get hiwBackupsTipRestore => '복원하면 현재 세이브가 이전 버전으로 덮어써집니다 — 되돌릴 수 없습니다.';
+  String get hiwBackupsTipRestore =>
+      '복원하면 현재 세이브가 이전 버전으로 덮어써집니다 — 되돌릴 수 없습니다.';
 
   @override
-  String get hiwBackupsTipDelete => '백업을 삭제하면 존재하는 모든 위치(이 기기, 업로드했다면 Drive)에서 삭제됩니다 — 되돌릴 수 없습니다.';
+  String get hiwBackupsTipDelete =>
+      '백업을 삭제하면 존재하는 모든 위치(이 기기, 업로드했다면 Drive)에서 삭제됩니다 — 되돌릴 수 없습니다.';
 
   @override
-  String get hiwBackupsTipExport => '세이브를 zip으로 내보내 원하는 곳에 보관하고, 나중에 다시 가져올 수도 있습니다 — 내장 백업의 수동적이고 이동 가능한 대안입니다.';
+  String get hiwBackupsTipExport =>
+      '세이브를 zip으로 내보내 원하는 곳에 보관하고, 나중에 다시 가져올 수도 있습니다 — 내장 백업의 수동적이고 이동 가능한 대안입니다.';
 
   @override
-  String get hiwBackupsTipRetention => 'ValleySave는 각 세이브에 대해 가장 최근 자동 백업 5개를 보관합니다. 직접 만든 백업은 자동으로 삭제되지 않습니다.';
+  String get hiwBackupsTipRetention =>
+      'ValleySave는 각 세이브에 대해 가장 최근 자동 백업 5개를 보관합니다. 직접 만든 백업은 자동으로 삭제되지 않습니다.';
 
   @override
-  String get hiwBackupsTipRestoreBridge => '브리지 모드(루트/Shizuku 없는 Android)에서는 백업을 복원할 때 Stardew 폴더에 .zip을 직접 압축 해제하라는 요청을 받습니다 — 다운로드할 때와 동일합니다.';
+  String get hiwBackupsTipRestoreBridge =>
+      '브리지 모드(루트/Shizuku 없는 Android)에서는 백업을 복원할 때 Stardew 폴더에 .zip을 직접 압축 해제하라는 요청을 받습니다 — 다운로드할 때와 동일합니다.';
 
   @override
   String get hiwComparePrimary => '총 플레이 시간';
@@ -1711,10 +1780,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwShizuku3 => '메시지가 표시되면 ValleySave에 권한을 부여하세요.';
 
   @override
-  String get hiwBridge1 => 'Drive에서 다운로드: ValleySave는 저장을 폴더에 남깁니다. 파일 앱으로 Stardew의 폴더에 복사합니다.';
+  String get hiwBridge1 =>
+      'Drive에서 다운로드: ValleySave는 저장을 폴더에 남깁니다. 파일 앱으로 Stardew의 폴더에 복사합니다.';
 
   @override
-  String get hiwBridge2 => 'Drive에 업로드: Stardew에서 ValleySave의 폴더로 저장을 복사하세요. ValleySave가 감지하고 업로드합니다.';
+  String get hiwBridge2 =>
+      'Drive에 업로드: Stardew에서 ValleySave의 폴더로 저장을 복사하세요. ValleySave가 감지하고 업로드합니다.';
 
   @override
   String get snackShizukuBattery => '설정 → 앱 → Shizuku → 배터리 → 무제한.';
@@ -1777,16 +1848,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get pathLabelToValleySave => '대상 (ValleySave)';
 
   @override
-  String get chooserDesc => 'Android는 게임 폴더를 보호합니다. ValleySave에 액세스를 제공하는 방법을 선택하세요 — 언제든지 변경할 수 있습니다.';
+  String get chooserDesc =>
+      'Android는 게임 폴더를 보호합니다. ValleySave에 액세스를 제공하는 방법을 선택하세요 — 언제든지 변경할 수 있습니다.';
 
   @override
-  String get chooserShizukuDesc => '한 번 설정됨. 그 후 ValleySave는 자동으로 동기화되며, 아무것도 건드릴 필요가 없습니다. Android 13 이상에서만 신뢰할 수 있는 방법입니다.';
+  String get chooserShizukuDesc =>
+      '한 번 설정됨. 그 후 ValleySave는 자동으로 동기화되며, 아무것도 건드릴 필요가 없습니다. Android 13 이상에서만 신뢰할 수 있는 방법입니다.';
 
   @override
   String get chooserManualBadge => 'Android 11-12만';
 
   @override
-  String get chooserBridgeDesc => '파일 앱으로 저장을 복사하세요. 추가 설치 없음. Android 11 및 12에서만.';
+  String get chooserBridgeDesc =>
+      '파일 앱으로 저장을 복사하세요. 추가 설치 없음. Android 11 및 12에서만.';
 
   @override
   String get chooserRootBadge => 'ROOT';
@@ -1795,7 +1869,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chooserRootTitle => '루트 접근';
 
   @override
-  String get chooserRootDesc => '루팅된 기기용 (Magisk / SuperSU). 루트 권한을 한 번 승인하면 이후 자동으로 작동합니다.';
+  String get chooserRootDesc =>
+      '루팅된 기기용 (Magisk / SuperSU). 루트 권한을 한 번 승인하면 이후 자동으로 작동합니다.';
 
   @override
   String get snackRootDenied => '루트 접근이 거부되었습니다. Shizuku를 사용해 보세요.';
@@ -1828,7 +1903,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shizukuGuideHeader => '단계별 가이드';
 
   @override
-  String get shizukuStep1DescFull => '무료. Google Play에서 차단되면 공식 GitHub APK를 사용하세요.';
+  String get shizukuStep1DescFull =>
+      '무료. Google Play에서 차단되면 공식 GitHub APK를 사용하세요.';
 
   @override
   String get btnPlayStore => 'Play Store';
@@ -1840,13 +1916,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shizukuStep2TitleFull => '개발자 옵션 활성화';
 
   @override
-  String get shizukuStep2DescFull => '설정 → 휴대폰 정보 → 소프트웨어 정보 → \"빌드 번호\" 7번 탭하세요.';
+  String get shizukuStep2DescFull =>
+      '설정 → 휴대폰 정보 → 소프트웨어 정보 → \"빌드 번호\" 7번 탭하세요.';
 
   @override
   String get shizukuStep3TitleFull => '무선 디버깅 활성화';
 
   @override
-  String get shizukuStep3DescFull => '버튼이 해당 위치로 이동합니다 (강조됨). 활성화하세요 (ON). \"페어링 코드로 기기 페어링\" 탭하세요 — 화면에 6자리 코드가 나타납니다.';
+  String get shizukuStep3DescFull =>
+      '버튼이 해당 위치로 이동합니다 (강조됨). 활성화하세요 (ON). \"페어링 코드로 기기 페어링\" 탭하세요 — 화면에 6자리 코드가 나타납니다.';
 
   @override
   String get btnOpenAndHighlight => '열기 및 강조';
@@ -1855,7 +1933,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shizukuStep4Title => '페어링 및 Shizuku 시작';
 
   @override
-  String get shizukuStep4Desc => 'Shizuku 열기 → \"무선 디버깅 시작\" → \"페어링 코드로 페어링\". Shizuku가 대기 중이라는 알림을 보냅니다. 무선 디버깅 화면에서 6자리 코드를 입력하세요. 페어링 후 시작을 누르세요 — 마지막 탭이 없으면 Shizuku가 활성화되지 않습니다.';
+  String get shizukuStep4Desc =>
+      'Shizuku 열기 → \"무선 디버깅 시작\" → \"페어링 코드로 페어링\". Shizuku가 대기 중이라는 알림을 보냅니다. 무선 디버깅 화면에서 6자리 코드를 입력하세요. 페어링 후 시작을 누르세요 — 마지막 탭이 없으면 Shizuku가 활성화되지 않습니다.';
 
   @override
   String get btnOpenShizuku => 'Shizuku 열기';
@@ -1864,7 +1943,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shizukuStep5Title => 'Shizuku 배터리를 무제한으로 설정';
 
   @override
-  String get shizukuStep5Desc => '앱 정보 열기 → 배터리 → 무제한. 그렇지 않으면 시스템이 백그라운드에서 Shizuku를 닫고 다시 시작을 눌러야 합니다.';
+  String get shizukuStep5Desc =>
+      '앱 정보 열기 → 배터리 → 무제한. 그렇지 않으면 시스템이 백그라운드에서 Shizuku를 닫고 다시 시작을 눌러야 합니다.';
 
   @override
   String get btnShizukuAppInfo => 'Shizuku 앱 정보';
@@ -1925,31 +2005,38 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hiwLaunchTitle => '게임 실행';
 
   @override
-  String get hiwLaunchDesc => '내 세이브 화면 상단 바의 ▶ 버튼으로 앱에서 바로 Stardew Valley를 실행할 수 있습니다.';
+  String get hiwLaunchDesc =>
+      '내 세이브 화면 상단 바의 ▶ 버튼으로 앱에서 바로 Stardew Valley를 실행할 수 있습니다.';
 
   @override
-  String get hiwLaunchTipWindows => 'Windows에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.';
+  String get hiwLaunchTipWindows =>
+      'Windows에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.';
 
   @override
   String get hiwLaunchTipAndroid => 'Android에서는 게임이 설치되어 있으면 실행됩니다.';
 
   @override
-  String get hiwLaunchTipLinux => 'Linux에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.';
+  String get hiwLaunchTipLinux =>
+      'Linux에서 게임이 자동으로 감지되지 않으면 설정 → 게임에서 실행 파일 경로를 설정하세요.';
 
   @override
   String get hiwSaveLocationsTitle => '세이브가 저장되는 위치';
 
   @override
-  String get hiwSaveLocationsDesc => 'ValleySave는 각 플랫폼에서 게임의 세이브 폴더에 직접 읽고 씁니다.';
+  String get hiwSaveLocationsDesc =>
+      'ValleySave는 각 플랫폼에서 게임의 세이브 폴더에 직접 읽고 씁니다.';
 
   @override
-  String get hiwSaveLocationWindows => 'Windows: %AppData%\\StardewValley\\Saves';
+  String get hiwSaveLocationWindows =>
+      'Windows: %AppData%\\StardewValley\\Saves';
 
   @override
-  String get hiwSaveLocationAndroid => 'Android: 보호된 폴더이며 Shizuku 또는 Bridge를 통해 접근합니다';
+  String get hiwSaveLocationAndroid =>
+      'Android: 보호된 폴더이며 Shizuku 또는 Bridge를 통해 접근합니다';
 
   @override
-  String get hiwSaveLocationLinux => 'Linux: ~/.config/StardewValley/Saves (Steam을 snap으로 설치한 경우 ~/snap/steam/common/.config/StardewValley/Saves)';
+  String get hiwSaveLocationLinux =>
+      'Linux: ~/.config/StardewValley/Saves (Steam을 snap으로 설치한 경우 ~/snap/steam/common/.config/StardewValley/Saves)';
 
   @override
   String get settingsGameSection => '게임';
@@ -1961,10 +2048,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsCoopTitle => '숨겨진 코옵 메뉴 잠금 해제';
 
   @override
-  String get settingsCoopDescription => '환경설정을 직접 변경하는 옵션에는 ROOT가 필요합니다. Stardew는 종료되어 있어야 하며, 설정을 바꾸기 전에 ValleySave가 백업을 만듭니다.';
+  String get settingsCoopDescription =>
+      '환경설정을 직접 변경하는 옵션에는 ROOT가 필요합니다. Stardew는 종료되어 있어야 하며, 설정을 바꾸기 전에 ValleySave가 백업을 만듭니다.';
 
   @override
-  String get settingsCoopManual => 'ROOT 없이: Stardew를 열고 ↑↑↓↓←→←→를 입력한 다음 ?를 탭하여 나가세요.';
+  String get settingsCoopManual =>
+      'ROOT 없이: Stardew를 열고 ↑↑↓↓←→←→를 입력한 다음 ?를 탭하여 나가세요.';
 
   @override
   String get settingsCoopActivate => 'ROOT로 활성화';
@@ -1976,13 +2065,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsCoopSuccess => '코옵 메뉴의 잠금이 해제되었습니다. 환경설정 백업이 저장되었습니다.';
 
   @override
-  String get settingsCoopCreated => '코옵 메뉴의 잠금이 해제되었습니다. Stardew에 환경설정 파일이 없어 새로 만들었습니다.';
+  String get settingsCoopCreated =>
+      '코옵 메뉴의 잠금이 해제되었습니다. Stardew에 환경설정 파일이 없어 새로 만들었습니다.';
 
   @override
   String get settingsCoopAlready => '코옵 메뉴는 이미 잠금 해제되어 있습니다.';
 
   @override
-  String get settingsCoopRootDenied => 'ROOT 접근을 사용할 수 없거나 거부되었습니다. 루트 설정을 확인한 후 다시 시도하세요.';
+  String get settingsCoopRootDenied =>
+      'ROOT 접근을 사용할 수 없거나 거부되었습니다. 루트 설정을 확인한 후 다시 시도하세요.';
 
   @override
   String get settingsCoopGameRunning => 'Stardew Valley를 완전히 종료한 후 다시 시도하세요.';
@@ -1991,55 +2082,66 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsCoopUnsupported => '기본 Android 사용자에게 게임이 설치되어 있어야 합니다.';
 
   @override
-  String get settingsCoopChanged => '활성화하는 동안 Stardew의 환경설정이 변경되었습니다. 아무것도 변경되지 않았습니다. 다시 시도하세요.';
+  String get settingsCoopChanged =>
+      '활성화하는 동안 Stardew의 환경설정이 변경되었습니다. 아무것도 변경되지 않았습니다. 다시 시도하세요.';
 
   @override
-  String get settingsCoopUnavailable => 'Stardew의 환경설정을 읽을 수 없었습니다. 아무것도 변경되지 않았습니다.';
+  String get settingsCoopUnavailable =>
+      'Stardew의 환경설정을 읽을 수 없었습니다. 아무것도 변경되지 않았습니다.';
 
   @override
   String get settingsCoopInvalid => '환경설정 파일의 형식이 예상과 다릅니다. 아무것도 변경되지 않았습니다.';
 
   @override
-  String get settingsCoopWriteFailed => '환경설정을 안전하게 업데이트할 수 없었습니다. 다시 시도하기 전에 백업을 확인하세요.';
+  String get settingsCoopWriteFailed =>
+      '환경설정을 안전하게 업데이트할 수 없었습니다. 다시 시도하기 전에 백업을 확인하세요.';
 
   @override
   String get settingsCoopShizukuTitle => 'Shizuku로 보정';
 
   @override
-  String get settingsCoopShizukuDescription => '실험적 기능: 다른 앱 위에 표시 권한을 허용한 다음, Stardew 타이틀 화면에서 표시된 다섯 곳(W, V, S, Y, ?)을 탭하세요. 좌표는 이 세션 동안에만 사용됩니다.';
+  String get settingsCoopShizukuDescription =>
+      '실험적 기능: 다른 앱 위에 표시 권한을 허용한 다음, Stardew 타이틀 화면에서 표시된 다섯 곳(W, V, S, Y, ?)을 탭하세요. 좌표는 이 세션 동안에만 사용됩니다.';
 
   @override
   String get settingsCoopShizukuActivate => 'Shizuku로 보정';
 
   @override
-  String get settingsCoopShizukuSent => '탭을 전송했습니다. ? 화면을 직접 닫고 코옵이 나타나는지 확인하세요. ValleySave는 잠금 해제 여부를 확인할 수 없습니다.';
+  String get settingsCoopShizukuSent =>
+      '탭을 전송했습니다. ? 화면을 직접 닫고 코옵이 나타나는지 확인하세요. ValleySave는 잠금 해제 여부를 확인할 수 없습니다.';
 
   @override
-  String get settingsCoopShizukuUnavailable => 'Shizuku가 실행 중이 아닙니다. 실행한 후 다시 시도하세요.';
+  String get settingsCoopShizukuUnavailable =>
+      'Shizuku가 실행 중이 아닙니다. 실행한 후 다시 시도하세요.';
 
   @override
   String get settingsCoopShizukuDenied => 'ValleySave에 Shizuku 권한이 없습니다.';
 
   @override
-  String get settingsCoopOverlayPermission => 'ValleySave가 다른 앱 위에 표시되도록 허용한 다음, Shizuku 버튼을 다시 탭하세요.';
+  String get settingsCoopOverlayPermission =>
+      'ValleySave가 다른 앱 위에 표시되도록 허용한 다음, Shizuku 버튼을 다시 탭하세요.';
 
   @override
-  String get settingsCoopCalibrationTimeout => '보정 시간이 초과되었습니다. Stardew 타이틀 화면에서 다시 시작하세요.';
+  String get settingsCoopCalibrationTimeout =>
+      '보정 시간이 초과되었습니다. Stardew 타이틀 화면에서 다시 시작하세요.';
 
   @override
   String get settingsCoopSequenceTimeout => '탭 순서 시간이 초과되어 취소되었습니다.';
 
   @override
-  String get settingsCoopNotForeground => 'Stardew가 포그라운드에서 벗어났습니다. 더 이상 탭이 전송되지 않았습니다. 타이틀 화면으로 돌아가 다시 시도하세요.';
+  String get settingsCoopNotForeground =>
+      'Stardew가 포그라운드에서 벗어났습니다. 더 이상 탭이 전송되지 않았습니다. 타이틀 화면으로 돌아가 다시 시도하세요.';
 
   @override
-  String get settingsCoopDisplayChanged => '보정 중에 화면이 변경되었습니다. 탭이 전송되지 않았습니다. 다시 보정하세요.';
+  String get settingsCoopDisplayChanged =>
+      '보정 중에 화면이 변경되었습니다. 탭이 전송되지 않았습니다. 다시 보정하세요.';
 
   @override
   String get settingsCoopCancelled => '코옵 활성화가 취소되었습니다.';
 
   @override
-  String get settingsCoopExperimentalManual => '모바일 코옵 기능은 실험적입니다. Stardew를 타이틀 화면에 둔 채 ? 페이지를 직접 닫고 코옵이 나타나는지 확인하세요.';
+  String get settingsCoopExperimentalManual =>
+      '모바일 코옵 기능은 실험적입니다. Stardew를 타이틀 화면에 둔 채 ? 페이지를 직접 닫고 코옵이 나타나는지 확인하세요.';
 
   @override
   String get settingsCoopRowTitle => '모바일 코옵';
@@ -2117,7 +2219,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get makeHostHouseWarning => '새 호스트의 집은 게임의 메인 농장 주택처럼 보입니다. 오두막 외관은 모드 없이는 지원되지 않습니다.';
+  String get makeHostHouseWarning =>
+      '새 호스트의 집은 게임의 메인 농장 주택처럼 보입니다. 오두막 외관은 모드 없이는 지원되지 않습니다.';
 
   @override
   String get makeHostConfirmButton => '호스트로 만들기';
@@ -2131,7 +2234,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hostSwapErrInvalid => '이 세이브 파일의 구조가 예상과 다릅니다. 아무것도 변경되지 않았습니다.';
 
   @override
-  String get hostSwapErrNoSpace => '오브젝트를 재배치할 여유 공간이 농장에 없습니다. 아무것도 변경되지 않았습니다.';
+  String get hostSwapErrNoSpace =>
+      '오브젝트를 재배치할 여유 공간이 농장에 없습니다. 아무것도 변경되지 않았습니다.';
 
   @override
   String get hostSwapErrWrite => '새 세이브 파일을 쓸 수 없습니다(디스크/권한). 아무것도 변경되지 않았습니다.';
@@ -2143,13 +2247,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get makeHostDeleteOriginalTitle => '이 기기에서 원본 세이브 파일을 삭제할까요?';
 
   @override
-  String get makeHostDeleteOriginalBody => '새 세이브 파일이 준비되었습니다. 원본을 먼저 Drive에 백업하거나(나중에 다시 다운로드할 수 있습니다) 로컬 사본만 삭제할 수 있습니다.';
+  String get makeHostDeleteOriginalBody =>
+      '새 세이브 파일이 준비되었습니다. 원본을 먼저 Drive에 백업하거나(나중에 다시 다운로드할 수 있습니다) 로컬 사본만 삭제할 수 있습니다.';
 
   @override
-  String get makeHostDeleteOriginalNoBackupBody => 'Drive 연결 없음: 백업이 남지 않습니다. 이 기기의 로컬 사본만 삭제됩니다.';
+  String get makeHostDeleteOriginalNoBackupBody =>
+      'Drive 연결 없음: 백업이 남지 않습니다. 이 기기의 로컬 사본만 삭제됩니다.';
 
   @override
-  String get makeHostDeleteOriginalUploadBody => '원본 세이브 파일이 먼저 백업으로 Drive에 업로드된 다음, 이 기기의 로컬 사본이 삭제됩니다.';
+  String get makeHostDeleteOriginalUploadBody =>
+      '원본 세이브 파일이 먼저 백업으로 Drive에 업로드된 다음, 이 기기의 로컬 사본이 삭제됩니다.';
 
   @override
   String get makeHostDeleteWithoutUpload => '업로드 없이 삭제';
@@ -2263,7 +2370,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsSmapiSearch => '검색';
 
   @override
-  String get settingsSmapiNotFoundHint => 'SMAPI를 설치하거나 위의 “게임” 섹션에서 게임 위치를 지정하세요.';
+  String get settingsSmapiNotFoundHint =>
+      'SMAPI를 설치하거나 위의 “게임” 섹션에서 게임 위치를 지정하세요.';
 
   @override
   String get snackInvalidFolder => '해당 폴더는 사용할 수 없습니다.';
@@ -2291,7 +2399,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get moveToNormalBody => '일반 탭에 표시되며, 업로드하면 Drive의 일반 폴더로 올라갑니다.';
 
   @override
-  String get moveAreaNoFilesTouched => 'PC에서는 파일이 이동되거나 변경되지 않습니다. 일반 게임과 SMAPI는 같은 저장 폴더를 사용합니다. 언제든지 다시 옮길 수 있습니다. 다른 Drive 폴더에 있는 사본은 그대로 유지됩니다.';
+  String get moveAreaNoFilesTouched =>
+      'PC에서는 파일이 이동되거나 변경되지 않습니다. 일반 게임과 SMAPI는 같은 저장 폴더를 사용합니다. 언제든지 다시 옮길 수 있습니다. 다른 Drive 폴더에 있는 사본은 그대로 유지됩니다.';
 
   @override
   String get moveToSmapiConfirm => 'SMAPI로 이동';
@@ -2334,7 +2443,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get modWithConfig => '설정 포함';
 
   @override
-  String get modsCompatLegend => 'Android: ✓ 대체로 작동 · ⚠ 실패할 수 있음(코드 모드) · ✗ Android에 아직 없는 SMAPI 버전이 필요함.';
+  String get modsCompatLegend =>
+      'Android: ✓ 대체로 작동 · ⚠ 실패할 수 있음(코드 모드) · ✗ Android에 아직 없는 SMAPI 버전이 필요함.';
 
   @override
   String modsUploadAction(int count) {
@@ -2350,7 +2460,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get modsDownloadSubtitle => '이 기기에 설치할 항목을 선택하세요. 이미 같은 버전이 있는 mod는 건드리지 않습니다.';
+  String get modsDownloadSubtitle =>
+      '이 기기에 설치할 항목을 선택하세요. 이미 같은 버전이 있는 mod는 건드리지 않습니다.';
 
   @override
   String modsDownloadWarning(String mods) {
@@ -2426,13 +2537,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get forcedUpdateAlmostDone => '거의 완료';
 
   @override
-  String get forcedUpdateAndroidConfirm => 'Android에서 설치 확인을 요청합니다. 보안상 필수 단계입니다.';
+  String get forcedUpdateAndroidConfirm =>
+      'Android에서 설치 확인을 요청합니다. 보안상 필수 단계입니다.';
 
   @override
   String get forcedUpdateFailedTitle => '업데이트할 수 없습니다';
 
   @override
-  String get forcedUpdateFailedBody => '이 버전은 더 이상 동기화할 수 없습니다. 인터넷에 연결한 뒤 다시 시도하세요.';
+  String get forcedUpdateFailedBody =>
+      '이 버전은 더 이상 동기화할 수 없습니다. 인터넷에 연결한 뒤 다시 시도하세요.';
 
   @override
   String get forcedUpdateRetry => '다시 시도';

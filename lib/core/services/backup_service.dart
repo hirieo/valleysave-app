@@ -17,6 +17,15 @@ const kMaxAutoBackups = 5;
 /// (`BackupOrigin.preRestore`, spec 012).
 const kMaxPreRestoreBackups = 3;
 
+/// Resultado de [BackupService.keepBackup]: la entrada ya actualizada y, si
+/// alguna copia en Drive no se pudo renombrar, el motivo.
+class KeepBackupResult {
+  const KeepBackupResult({required this.entry, this.remoteError});
+
+  final BackupEntry entry;
+  final String? remoteError;
+}
+
 /// Listar/restaurar respaldos LOCALES (spec 007 + spec
 /// 001-integridad-transaccional-saves). Dart puro, sin dependencia de Drive
 /// — la parte de Drive vive en `DriveService`
@@ -242,6 +251,92 @@ class BackupService {
         }
       }
     }
+  }
+
+  /// «Conservar» (spec 012, D5): convierte un automático o un «antes de
+  /// restaurar» en manual cambiando el tag del nombre a `_backup_` (la fecha
+  /// no cambia). Renombra el zip local y, vía [renameRemote], el de Mi Drive
+  /// y el de la carpeta compartida cuando [renameShared] indica que hay
+  /// permiso de edición. [renameRemote] se inyecta para que este servicio no
+  /// dependa de `DriveService`.
+  ///
+  /// Si el renombrado en Drive falla, el local ya queda renombrado y el motivo
+  /// va en [KeepBackupResult.remoteError]: nunca falla en silencio. La copia
+  /// remota que no se pudo renombrar se quita de la entrada devuelta (sigue
+  /// existiendo en Drive con el nombre antiguo). Si el backup solo está en
+  /// Drive y el renombrado falla, devuelve la entrada sin cambios.
+  Future<KeepBackupResult> keepBackup(
+    BackupEntry entry, {
+    Future<void> Function(String fileId, String newName)? renameRemote,
+    bool renameShared = false,
+  }) async {
+    final newName = entry.keptFileName;
+    if (newName == null) return KeepBackupResult(entry: entry);
+
+    var updated = entry.copyWith(
+      fileName: newName,
+      origin: BackupOrigin.manual,
+    );
+    var changed = false;
+
+    if (entry.localPath != null) {
+      final dir = File(entry.localPath!).parent.path;
+      final destination = '$dir${Platform.pathSeparator}$newName';
+      if (await File(destination).exists()) {
+        throw StateError('Ya existe un backup manual con el nombre $newName.');
+      }
+      await File(entry.localPath!).rename(destination);
+      updated = updated.copyWith(localPath: destination);
+      changed = true;
+    }
+
+    final errors = <String>[];
+    Future<void> renameOne(String id) async {
+      if (renameRemote == null) {
+        errors.add('Sin conexión con Drive');
+        return;
+      }
+      try {
+        await renameRemote(id, newName);
+        changed = true;
+      } catch (e) {
+        errors.add(e.toString());
+      }
+    }
+
+    var keepOwn = false;
+    var keepShared = false;
+    if (entry.driveFileId != null) {
+      final before = errors.length;
+      await renameOne(entry.driveFileId!);
+      keepOwn = errors.length == before;
+    }
+    if (entry.sharedDriveFileId != null && renameShared) {
+      final before = errors.length;
+      await renameOne(entry.sharedDriveFileId!);
+      keepShared = errors.length == before;
+    }
+    if (!keepOwn) updated = updated.copyWith(clearDriveFileId: true);
+    if (!keepShared) updated = updated.copyWith(clearSharedDriveFileId: true);
+
+    if (!changed) {
+      return KeepBackupResult(entry: entry, remoteError: errors.join('; '));
+    }
+
+    try {
+      await const BackupHashCache().rename(entry.fileName, newName);
+      await const BackupInUseStore().rename(
+        entry.folderName,
+        entry.fileName,
+        newName,
+      );
+    } catch (_) {
+      // Solo cachés: se recalculan.
+    }
+    return KeepBackupResult(
+      entry: updated,
+      remoteError: errors.isEmpty ? null : errors.join('; '),
+    );
   }
 
   /// Marca [entry] «en uso» con la huella que [restoreBackup] dejó en caché.

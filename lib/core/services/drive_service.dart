@@ -1332,6 +1332,17 @@ class DriveService {
     return out;
   }
 
+  /// Renombra un backup en Drive (spec 012, D5 «Conservar»). Sirve para Mi
+  /// Drive y para la carpeta compartida (el caller solo lo pide con permiso
+  /// de edición).
+  Future<void> renameBackup(String fileId, String newName) async {
+    await _api.files.update(
+      drive.File()..name = newName,
+      fileId,
+      $fields: 'id',
+    );
+  }
+
   /// Borra el archivo directamente (NO `trashed:true`) — un backup no
   /// necesita pasar por la papelera de 30 días, es descartable a propósito.
   Future<void> deleteDriveBackup(String fileId) async {

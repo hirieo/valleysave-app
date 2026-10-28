@@ -75,7 +75,18 @@ class BackupEntry {
     }
   }
 
+  /// Nombre que toma un automático o «antes de restaurar» al conservarlo
+  /// (spec 012, D5): el tag pasa a `backup`, la fecha no cambia.
+  /// `null` si el origen ya es manual (nada que convertir).
+  String? get keptFileName => origin == BackupOrigin.manual
+      ? null
+      : fileName
+            .replaceFirst('_autobackup_', '_backup_')
+            .replaceFirst('_prerestore_', '_backup_');
+
   BackupEntry copyWith({
+    String? fileName,
+    BackupOrigin? origin,
     String? localPath,
     String? driveFileId,
     String? sharedDriveFileId,
@@ -85,7 +96,7 @@ class BackupEntry {
     bool clearSharedDriveFileId = false,
   }) {
     return BackupEntry(
-      fileName: fileName,
+      fileName: fileName ?? this.fileName,
       folderName: folderName,
       timestamp: timestamp,
       localPath: clearLocalPath ? null : localPath ?? this.localPath,
@@ -94,7 +105,7 @@ class BackupEntry {
           ? null
           : sharedDriveFileId ?? this.sharedDriveFileId,
       sizeBytes: sizeBytes ?? this.sizeBytes,
-      origin: origin,
+      origin: origin ?? this.origin,
     );
   }
 

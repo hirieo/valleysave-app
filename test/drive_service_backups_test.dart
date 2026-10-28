@@ -155,6 +155,26 @@ void main() {
     });
   });
 
+  group('renameBackup (Conservar)', () {
+    test('hace PATCH al archivo con el nombre nuevo', () async {
+      String? patchBody;
+      final client = _FakeAuthClient((request, body) {
+        if (request.method == 'PATCH') patchBody = body;
+        return null;
+      });
+      final service = DriveService(client);
+
+      await service.renameBackup('b1', 'Farm_123_backup_20260713-120000.zip');
+
+      final patch = client.requests.firstWhere((r) => r.method == 'PATCH');
+      expect(patch.url.path, endsWith('/b1'));
+      expect(
+        jsonDecode(patchBody!)['name'],
+        'Farm_123_backup_20260713-120000.zip',
+      );
+    });
+  });
+
   group('listSharedSaveBackups', () {
     test(
       'lista solo backups del folder compartido y marca esa ubicación',

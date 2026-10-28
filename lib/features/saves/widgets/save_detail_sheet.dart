@@ -471,7 +471,7 @@ class _DetailSheetState extends State<_DetailSheet>
                 child: Container(
                   key: const ValueKey('save-detail-sheet'),
                   decoration: BoxDecoration(
-                    color: glassPanelFill(active.color),
+                    color: glassPanelFill(currentSeasonAccent),
                     border: Border.all(
                       color: active.color.withValues(alpha: 0.55),
                       width: 1.5,

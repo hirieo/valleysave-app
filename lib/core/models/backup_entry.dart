@@ -2,8 +2,9 @@
 /// automáticamente por `SaveReplaceService` antes de una sobrescritura
 /// (spec 001-integridad-transaccional-saves). Los automáticos participan en
 /// la retención (`BackupService.enforceAutoRetention`); los manuales nunca
-/// se borran solos.
-enum BackupOrigin { manual, auto }
+/// se borran solos. [preRestore] es el que se crea justo antes de cargar un
+/// backup sobre la partida (spec 012).
+enum BackupOrigin { manual, auto, preRestore }
 
 /// Respaldo de un save (zip generado por `HostSwapService.execute`,
 /// `BackupService.createBackup` o `SaveReplaceService`, formato
@@ -37,14 +38,15 @@ class BackupEntry {
       (isLocal ? 1 : 0) + (isOnDrive ? 1 : 0) + (isOnSharedDrive ? 1 : 0);
 
   static final _pattern = RegExp(
-    r'^(.+)_(?:pre-swap|backup|autobackup)_(\d{8}-\d{6})\.zip$',
+    r'^(.+)_(?:pre-swap|backup|autobackup|prerestore)_(\d{8}-\d{6})\.zip$',
   );
 
-  /// Parsea `<folderName>_{pre-swap|backup|autobackup}_<yyyyMMdd-HHmmss>.zip`.
+  /// Parsea
+  /// `<folderName>_{pre-swap|backup|autobackup|prerestore}_<yyyyMMdd-HHmmss>.zip`.
   /// Devuelve `null` si el nombre no sigue el patrón (archivo ajeno en la
   /// misma carpeta). `pre-swap` y `backup` se tratan como origen manual —
-  /// son anteriores a la distinción de origen; solo `autobackup` es
-  /// [BackupOrigin.auto].
+  /// son anteriores a la distinción de origen; `autobackup` es
+  /// [BackupOrigin.auto] y `prerestore` es [BackupOrigin.preRestore].
   static ({String folderName, DateTime timestamp, BackupOrigin origin})?
   parseFileName(String fileName) {
     final match = _pattern.firstMatch(fileName);
@@ -60,6 +62,8 @@ class BackupEntry {
       final second = int.parse(ts.substring(13, 15));
       final origin = fileName.contains('_autobackup_')
           ? BackupOrigin.auto
+          : fileName.contains('_prerestore_')
+          ? BackupOrigin.preRestore
           : BackupOrigin.manual;
       return (
         folderName: folderName,

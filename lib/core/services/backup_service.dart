@@ -11,6 +11,10 @@ import 'transfer_service.dart';
 /// (`BackupOrigin.auto`). Los manuales nunca se borran solos (FR-005).
 const kMaxAutoBackups = 5;
 
+/// Nº máximo de respaldos «Antes de restaurar» conservados por partida
+/// (`BackupOrigin.preRestore`, spec 012).
+const kMaxPreRestoreBackups = 3;
+
 /// Listar/restaurar respaldos LOCALES (spec 007 + spec
 /// 001-integridad-transaccional-saves). Dart puro, sin dependencia de Drive
 /// — la parte de Drive vive en `DriveService`
@@ -21,7 +25,8 @@ class BackupService {
   /// que exportación/importación y lo conserva fuera de `Saves`.
   /// [origin] distingue un respaldo pedido por el usuario
   /// ([BackupOrigin.manual], default) de uno creado automáticamente por
-  /// `SaveReplaceService` antes de sobrescribir ([BackupOrigin.auto]).
+  /// `SaveReplaceService` antes de sobrescribir ([BackupOrigin.auto]), o por
+  /// uno de antes de cargar un backup ([BackupOrigin.preRestore]).
   Future<BackupEntry> createBackup({
     required String saveFolderPath,
     required String folderName,
@@ -34,7 +39,11 @@ class BackupService {
       folderName,
     );
     final timestamp = now ?? DateTime.now();
-    final tag = origin == BackupOrigin.auto ? 'autobackup' : 'backup';
+    final tag = switch (origin) {
+      BackupOrigin.auto => 'autobackup',
+      BackupOrigin.preRestore => 'prerestore',
+      BackupOrigin.manual => 'backup',
+    };
     final fileName = '${folderName}_${tag}_${_timestamp(timestamp)}.zip';
     final destinationDir = Directory(backupsDir);
     await destinationDir.create(recursive: true);

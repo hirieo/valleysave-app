@@ -52,6 +52,22 @@ void main() {
       expect(parsed.timestamp, DateTime(2026, 7, 13, 12));
     });
 
+    test('parsea los 4 tags y su origen (pre-swap y backup → manual)', () {
+      const cases = {
+        'Farm_1_backup_20260713-120000.zip': BackupOrigin.manual,
+        'Farm_1_pre-swap_20260713-120000.zip': BackupOrigin.manual,
+        'Farm_1_autobackup_20260713-120000.zip': BackupOrigin.auto,
+        'Farm_1_prerestore_20260713-120000.zip': BackupOrigin.preRestore,
+      };
+      cases.forEach((name, origin) {
+        final parsed = BackupEntry.parseFileName(name);
+        expect(parsed, isNotNull, reason: name);
+        expect(parsed!.folderName, 'Farm_1', reason: name);
+        expect(parsed.timestamp, DateTime(2026, 7, 13, 12), reason: name);
+        expect(parsed.origin, origin, reason: name);
+      });
+    });
+
     test('devuelve null para nombres que no siguen el patrón', () {
       expect(BackupEntry.parseFileName('readme.txt'), isNull);
       expect(BackupEntry.parseFileName('Stardust_443121237.zip'), isNull);
@@ -137,6 +153,51 @@ void main() {
       expect(await info.readAsString(), '<Farmer />');
       expect(await main.readAsString(), '<SaveGame />');
     });
+  });
+
+  group('createBackup — nombre por origen', () {
+    Future<BackupEntry> create(BackupOrigin origin) async {
+      final save = Directory(
+        '${tempDir.path}${Platform.pathSeparator}Farm_123',
+      );
+      await save.create(recursive: true);
+      await File(
+        '${save.path}${Platform.pathSeparator}SaveGameInfo',
+      ).writeAsString('<Farmer />');
+      await File(
+        '${save.path}${Platform.pathSeparator}Farm_123',
+      ).writeAsString('<SaveGame />');
+      return service.createBackup(
+        saveFolderPath: save.path,
+        folderName: 'Farm_123',
+        backupsDir: '${tempDir.path}${Platform.pathSeparator}Backups',
+        origin: origin,
+        now: DateTime(2026, 7, 13, 12, 34, 56),
+      );
+    }
+
+    test(
+      'preRestore usa el tag prerestore y se lee de vuelta como tal',
+      () async {
+        final entry = await create(BackupOrigin.preRestore);
+        expect(entry.fileName, 'Farm_123_prerestore_20260713-123456.zip');
+        expect(entry.origin, BackupOrigin.preRestore);
+
+        final listed = await service.listLocalBackups(
+          '${tempDir.path}${Platform.pathSeparator}Backups',
+        );
+        expect(listed.single.origin, BackupOrigin.preRestore);
+      },
+    );
+
+    test('auto usa el tag autobackup', () async {
+      final entry = await create(BackupOrigin.auto);
+      expect(entry.fileName, 'Farm_123_autobackup_20260713-123456.zip');
+    });
+  });
+
+  test('kMaxPreRestoreBackups es 3', () {
+    expect(kMaxPreRestoreBackups, 3);
   });
 
   group('listLocalBackups (G9)', () {

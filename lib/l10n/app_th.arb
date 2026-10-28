@@ -1339,5 +1339,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "forcedUpdateTitle": "กำลังอัปเดต ValleySave",
+  "forcedUpdateInstalling": "กำลังติดตั้ง…",
+  "forcedUpdateInstallingBody": "ValleySave จะปิดและเปิดใหม่ด้วยเวอร์ชันใหม่",
+  "forcedUpdateAlmostDone": "ใกล้เสร็จแล้ว",
+  "forcedUpdateAndroidConfirm": "Android จะขอให้ยืนยันการติดตั้ง ซึ่งจำเป็นเพื่อความปลอดภัย",
+  "forcedUpdateFailedTitle": "อัปเดตไม่สำเร็จ",
+  "forcedUpdateFailedBody": "เวอร์ชันนี้ซิงค์ไม่ได้อีกต่อไป เชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง",
+  "forcedUpdateRetry": "ลองอีกครั้ง",
+  "forcedUpdateSafe": "เซฟของคุณปลอดภัย ยังอยู่ในอุปกรณ์และใน Drive ของคุณ"
 }

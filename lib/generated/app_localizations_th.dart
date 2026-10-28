@@ -2524,4 +2524,35 @@ class AppLocalizationsTh extends AppLocalizations {
   String modsUpdateCheckFailed(String reason) {
     return 'ตรวจสอบม็อดเวอร์ชันใหม่ไม่ได้ ($reason)';
   }
+
+  @override
+  String get forcedUpdateTitle => 'กำลังอัปเดต ValleySave';
+
+  @override
+  String get forcedUpdateInstalling => 'กำลังติดตั้ง…';
+
+  @override
+  String get forcedUpdateInstallingBody =>
+      'ValleySave จะปิดและเปิดใหม่ด้วยเวอร์ชันใหม่';
+
+  @override
+  String get forcedUpdateAlmostDone => 'ใกล้เสร็จแล้ว';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Android จะขอให้ยืนยันการติดตั้ง ซึ่งจำเป็นเพื่อความปลอดภัย';
+
+  @override
+  String get forcedUpdateFailedTitle => 'อัปเดตไม่สำเร็จ';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'เวอร์ชันนี้ซิงค์ไม่ได้อีกต่อไป เชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง';
+
+  @override
+  String get forcedUpdateRetry => 'ลองอีกครั้ง';
+
+  @override
+  String get forcedUpdateSafe =>
+      'เซฟของคุณปลอดภัย ยังอยู่ในอุปกรณ์และใน Drive ของคุณ';
 }

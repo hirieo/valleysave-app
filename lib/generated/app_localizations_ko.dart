@@ -2468,4 +2468,33 @@ class AppLocalizationsKo extends AppLocalizations {
   String modsUpdateCheckFailed(String reason) {
     return 'mod 새 버전을 확인하지 못했습니다($reason).';
   }
+
+  @override
+  String get forcedUpdateTitle => 'ValleySave 업데이트 중';
+
+  @override
+  String get forcedUpdateInstalling => '설치 중…';
+
+  @override
+  String get forcedUpdateInstallingBody => 'ValleySave가 종료된 뒤 새 버전으로 다시 열립니다.';
+
+  @override
+  String get forcedUpdateAlmostDone => '거의 완료';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Android에서 설치 확인을 요청합니다. 보안상 필수 단계입니다.';
+
+  @override
+  String get forcedUpdateFailedTitle => '업데이트할 수 없습니다';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      '이 버전은 더 이상 동기화할 수 없습니다. 인터넷에 연결한 뒤 다시 시도하세요.';
+
+  @override
+  String get forcedUpdateRetry => '다시 시도';
+
+  @override
+  String get forcedUpdateSafe => '세이브는 안전합니다. 기기와 Drive에 그대로 남아 있습니다.';
 }

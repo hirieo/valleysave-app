@@ -1346,5 +1346,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "forcedUpdateTitle": "Mise à jour de ValleySave",
+  "forcedUpdateInstalling": "Installation…",
+  "forcedUpdateInstallingBody": "ValleySave va se fermer et se rouvrir avec la nouvelle version.",
+  "forcedUpdateAlmostDone": "Presque terminé",
+  "forcedUpdateAndroidConfirm": "Android vous demande de confirmer l’installation. C’est obligatoire pour des raisons de sécurité.",
+  "forcedUpdateFailedTitle": "Impossible de mettre à jour",
+  "forcedUpdateFailedBody": "Cette version ne peut plus synchroniser. Connectez-vous à Internet et réessayez.",
+  "forcedUpdateRetry": "Réessayer",
+  "forcedUpdateSafe": "Vos sauvegardes sont en sécurité : elles restent sur votre appareil et dans votre Drive."
 }

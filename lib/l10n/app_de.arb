@@ -1346,5 +1346,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "forcedUpdateTitle": "ValleySave wird aktualisiert",
+  "forcedUpdateInstalling": "Wird installiert…",
+  "forcedUpdateInstallingBody": "ValleySave wird geschlossen und mit der neuen Version wieder geöffnet.",
+  "forcedUpdateAlmostDone": "Fast fertig",
+  "forcedUpdateAndroidConfirm": "Android fragt nach einer Bestätigung der Installation. Das ist aus Sicherheitsgründen nötig.",
+  "forcedUpdateFailedTitle": "Aktualisierung fehlgeschlagen",
+  "forcedUpdateFailedBody": "Diese Version kann nicht mehr synchronisieren. Verbinde dich mit dem Internet und versuche es erneut.",
+  "forcedUpdateRetry": "Erneut versuchen",
+  "forcedUpdateSafe": "Deine Spielstände sind sicher: Sie bleiben auf deinem Gerät und in deinem Drive."
 }

@@ -972,5 +972,14 @@
   "snackModsInstalled": "Mods instalados: {done} · fallidos: {failed}",
   "modsAutoSyncToggle": "Subir y bajar sus mods con la partida",
   "modUpdateAvailable": "v{version} disponible",
-  "modsUpdateCheckFailed": "No se pudo comprobar si hay versiones nuevas de los mods ({reason})."
+  "modsUpdateCheckFailed": "No se pudo comprobar si hay versiones nuevas de los mods ({reason}).",
+  "forcedUpdateTitle": "Actualizando ValleySave",
+  "forcedUpdateInstalling": "Instalando…",
+  "forcedUpdateInstallingBody": "ValleySave se cerrará y se volverá a abrir con la versión nueva.",
+  "forcedUpdateAlmostDone": "Casi listo",
+  "forcedUpdateAndroidConfirm": "Android pide confirmar la instalación. Es obligatorio por seguridad.",
+  "forcedUpdateFailedTitle": "No se pudo actualizar",
+  "forcedUpdateFailedBody": "Esta versión ya no puede sincronizar. Conéctate a internet y vuelve a intentarlo.",
+  "forcedUpdateRetry": "Reintentar",
+  "forcedUpdateSafe": "Tus partidas están a salvo: siguen en tu equipo y en tu Drive."
 }

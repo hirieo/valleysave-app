@@ -2540,4 +2540,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String modsUpdateCheckFailed(String reason) {
     return 'Não foi possível verificar novas versões dos mods ($reason).';
   }
+
+  @override
+  String get forcedUpdateTitle => 'A atualizar o ValleySave';
+
+  @override
+  String get forcedUpdateInstalling => 'A instalar…';
+
+  @override
+  String get forcedUpdateInstallingBody =>
+      'O ValleySave vai fechar e abrir de novo com a nova versão.';
+
+  @override
+  String get forcedUpdateAlmostDone => 'Quase pronto';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'O Android pede para confirmar a instalação. É obrigatório por segurança.';
+
+  @override
+  String get forcedUpdateFailedTitle => 'Não foi possível atualizar';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'Esta versão já não consegue sincronizar. Liga-te à internet e tenta de novo.';
+
+  @override
+  String get forcedUpdateRetry => 'Tentar de novo';
+
+  @override
+  String get forcedUpdateSafe =>
+      'Os teus jogos guardados estão seguros: continuam no teu dispositivo e no teu Drive.';
 }

@@ -2531,4 +2531,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String modsUpdateCheckFailed(String reason) {
     return 'Couldn’t check for new mod versions ($reason).';
   }
+
+  @override
+  String get forcedUpdateTitle => 'Updating ValleySave';
+
+  @override
+  String get forcedUpdateInstalling => 'Installing…';
+
+  @override
+  String get forcedUpdateInstallingBody =>
+      'ValleySave will close and reopen with the new version.';
+
+  @override
+  String get forcedUpdateAlmostDone => 'Almost done';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Android asks you to confirm the installation. It’s required for security.';
+
+  @override
+  String get forcedUpdateFailedTitle => 'Couldn’t update';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'This version can no longer sync. Connect to the internet and try again.';
+
+  @override
+  String get forcedUpdateRetry => 'Retry';
+
+  @override
+  String get forcedUpdateSafe =>
+      'Your saves are safe: they stay on your device and in your Drive.';
 }

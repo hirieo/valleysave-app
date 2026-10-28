@@ -2558,4 +2558,35 @@ class AppLocalizationsRu extends AppLocalizations {
   String modsUpdateCheckFailed(String reason) {
     return 'Не удалось проверить новые версии модов ($reason).';
   }
+
+  @override
+  String get forcedUpdateTitle => 'Обновление ValleySave';
+
+  @override
+  String get forcedUpdateInstalling => 'Установка…';
+
+  @override
+  String get forcedUpdateInstallingBody =>
+      'ValleySave закроется и снова откроется в новой версии.';
+
+  @override
+  String get forcedUpdateAlmostDone => 'Почти готово';
+
+  @override
+  String get forcedUpdateAndroidConfirm =>
+      'Android попросит подтвердить установку. Это обязательно в целях безопасности.';
+
+  @override
+  String get forcedUpdateFailedTitle => 'Не удалось обновить';
+
+  @override
+  String get forcedUpdateFailedBody =>
+      'Эта версия больше не может синхронизировать. Подключитесь к интернету и попробуйте снова.';
+
+  @override
+  String get forcedUpdateRetry => 'Повторить';
+
+  @override
+  String get forcedUpdateSafe =>
+      'Ваши сохранения в безопасности: они остаются на устройстве и в вашем Drive.';
 }

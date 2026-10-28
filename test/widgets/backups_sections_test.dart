@@ -207,7 +207,7 @@ void main() {
   ) async {
     await pump(tester, entries: [], inUse: 'x');
 
-    expect(find.text('Sin respaldos todavía.'), findsOneWidget);
+    expect(find.text('Sin backups todavía.'), findsOneWidget);
     expect(find.byKey(const ValueKey('backups-toggle-all')), findsNothing);
   });
 

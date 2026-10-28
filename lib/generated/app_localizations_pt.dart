@@ -899,6 +899,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get backupsDeleteAll => 'De todas as cópias';
 
   @override
+  String backupsGameSummary(int year, String season, int day, String money) {
+    return 'Year $year · $season $day · $money g';
+  }
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Deletar $farmName?';
   }

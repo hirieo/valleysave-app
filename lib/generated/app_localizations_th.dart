@@ -895,6 +895,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get backupsDeleteAll => 'จากสำเนาทั้งหมด';
 
   @override
+  String backupsGameSummary(int year, String season, int day, String money) {
+    return 'Year $year · $season $day · $money g';
+  }
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'ลบ $farmName หรือไม่?';
   }

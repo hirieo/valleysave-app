@@ -882,6 +882,7 @@
   "backupsDeleteOwnOnly": "Solo de mi Drive",
   "backupsDeleteSharedOnly": "Solo del Drive compartido",
   "backupsDeleteAll": "De todas las copias",
+  "backupsGameSummary": "Año {year} · {season} {day} · {money} g",
   "deleteUnifiedTitle": "¿Eliminar {farmName}?",
   "deleteChooseLocationBody": "Elige de dónde. La copia de este equipo se borra para siempre; la de Drive va a la papelera (30 días).",
   "deleteDriveContextTitle": "¿Eliminar {farmName} de Drive?",

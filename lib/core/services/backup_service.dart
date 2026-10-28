@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:archive/archive.dart';
+import 'package:meta/meta.dart';
 
 import '../models/backup_entry.dart';
 import 'backup_content_hash.dart';
@@ -16,6 +18,41 @@ const kMaxAutoBackups = 5;
 /// Nº máximo de respaldos «Antes de restaurar» conservados por partida
 /// (`BackupOrigin.preRestore`, spec 012).
 const kMaxPreRestoreBackups = 3;
+
+/// Datos de partida de un backup (spec 012, D6), leídos del `SaveGameInfo` del
+/// zip. [season] es la clave del juego (`spring`, `summer`, `fall`, `winter`);
+/// quien lo muestra la traduce.
+typedef BackupGameSummary = ({int year, String season, int day, int money});
+
+BackupGameSummary? _summaryFromZip(String zipPath) {
+  try {
+    final archive = ZipDecoder().decodeBytes(File(zipPath).readAsBytesSync());
+    for (final f in archive.files) {
+      if (!f.isFile) continue;
+      final name = f.name.replaceAll('\\', '/');
+      if (name != 'SaveGameInfo' && !name.endsWith('/SaveGameInfo')) continue;
+      final segments = name.split('/');
+      final folderName = segments.length > 1
+          ? segments[segments.length - 2]
+          : '';
+      final parsed = SaveService.parseSaveGameInfo(
+        utf8.decode(f.content, allowMalformed: true),
+        folderName: folderName,
+        lastModified: DateTime.now(),
+      );
+      if (parsed == null) return null;
+      return (
+        year: parsed.year,
+        season: parsed.currentSeason,
+        day: parsed.dayOfMonth,
+        money: parsed.currentMoney,
+      );
+    }
+  } catch (_) {
+    // zip ilegible o sin SaveGameInfo: sin datos, no un error.
+  }
+  return null;
+}
 
 /// Resultado de [BackupService.keepBackup]: la entrada ya actualizada y, si
 /// alguna copia en Drive no se pudo renombrar, el motivo.
@@ -252,6 +289,30 @@ class BackupService {
       }
     }
   }
+
+  static final Map<String, BackupGameSummary> _summaryCache = {};
+
+  /// Año, estación, día y dinero del backup [zipPath] (D6), o `null` si el
+  /// zip no se puede leer — la fila entonces muestra solo la fecha. La
+  /// lectura va en un isolate para no congelar la interfaz. Caché en memoria
+  /// por nombre de archivo (el nombre ya es único por contenido); un `null`
+  /// no se cachea, por si el zip aún se estaba descargando.
+  Future<BackupGameSummary?> readGameSummary(String zipPath) async {
+    final fileName = zipPath.split(RegExp(r'[\\/]')).last;
+    final cached = _summaryCache[fileName];
+    if (cached != null) return cached;
+    try {
+      final summary = await Isolate.run(() => _summaryFromZip(zipPath));
+      if (summary != null) _summaryCache[fileName] = summary;
+      return summary;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Vacía la caché de [readGameSummary]. Solo para tests.
+  @visibleForTesting
+  static void clearSummaryCache() => _summaryCache.clear();
 
   /// «Conservar» (spec 012, D5): convierte un automático o un «antes de
   /// restaurar» en manual cambiando el tag del nombre a `_backup_` (la fecha

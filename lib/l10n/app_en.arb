@@ -460,6 +460,23 @@
   "backupsDeleteOwnOnly": "Only from my Drive",
   "backupsDeleteSharedOnly": "Only from shared Drive",
   "backupsDeleteAll": "From all copies",
+  "backupsGameSummary": "Year {year} · {season} {day} · {money} g",
+  "@backupsGameSummary": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "season": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      },
+      "money": {
+        "type": "String"
+      }
+    }
+  },
   "deleteUnifiedTitle": "Delete {farmName}?",
   "@deleteUnifiedTitle": {
     "placeholders": {

@@ -1669,6 +1669,12 @@ abstract class AppLocalizations {
   /// **'From all copies'**
   String get backupsDeleteAll;
 
+  /// No description provided for @backupsGameSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Year {year} · {season} {day} · {money} g'**
+  String backupsGameSummary(int year, String season, int day, String money);
+
   /// No description provided for @deleteUnifiedTitle.
   ///
   /// In en, this message translates to:

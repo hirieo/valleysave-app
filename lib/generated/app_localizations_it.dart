@@ -906,6 +906,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get backupsDeleteAll => 'Da tutte le copie';
 
   @override
+  String backupsGameSummary(int year, String season, int day, String money) {
+    return 'Year $year · $season $day · $money g';
+  }
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return 'Eliminare $farmName?';
   }

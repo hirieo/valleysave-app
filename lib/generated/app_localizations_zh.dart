@@ -874,6 +874,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backupsDeleteAll => '从所有副本';
 
   @override
+  String backupsGameSummary(int year, String season, int day, String money) {
+    return 'Year $year · $season $day · $money g';
+  }
+
+  @override
   String deleteUnifiedTitle(String farmName) {
     return '要删除 $farmName 吗？';
   }

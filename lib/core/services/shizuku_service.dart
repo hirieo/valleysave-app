@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shizuku_api/shizuku_api.dart';
 
+import 'android_file_access.dart';
 import 'android_protected_commands.dart';
 import 'stardew_coop_calibration.dart';
 import 'stardew_coop_preferences.dart';
@@ -247,6 +248,8 @@ class ShizukuService {
     if (!_isSafeSaveName(folderName)) return false;
     final ext = await getExternalStorageDirectory();
     final src = '${ext!.path}/game_out/$folderName';
+    // Shizuku (usuario shell) no puede leer lo que la app dejó con modo 0600.
+    await makeGroupAccessible('${ext.path}/game_out');
     await AndroidSavesPath.instance.ensureLoaded();
     final script = AndroidProtectedCommands.replace(
       src: src,

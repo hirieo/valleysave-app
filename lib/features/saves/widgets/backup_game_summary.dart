@@ -16,15 +16,17 @@ String formatBackupGameSummary(
 );
 
 /// Tamaño del zip para la línea de la fila: «12,4 MB» con el decimal del
-/// idioma; por debajo de 1 MB en KB, y por debajo de 1 KB en bytes.
+/// idioma; por debajo de 1 MB en KB, y por debajo de 1 KB en bytes. El
+/// espacio entre número y unidad es irrompible (U+00A0): en una fila estrecha
+/// la línea no debe partirse entre «12,4» y «MB».
 String formatBackupSize(int bytes, String localeName) {
-  if (bytes < 1024) return '$bytes B';
-  if (bytes < 1024 * 1024) return '${(bytes / 1024).round()} KB';
+  if (bytes < 1024) return '$bytes B';
+  if (bytes < 1024 * 1024) return '${(bytes / 1024).round()} KB';
   final mb = bytes / (1024 * 1024);
   try {
-    return '${NumberFormat('0.0', localeName).format(mb)} MB';
+    return '${NumberFormat('0.0', localeName).format(mb)} MB';
   } catch (_) {
-    return '${mb.toStringAsFixed(1)} MB';
+    return '${mb.toStringAsFixed(1)} MB';
   }
 }
 

@@ -317,7 +317,7 @@ void main() {
     );
     await pump(tester, entries: [big], inUse: 'x', open: {BackupOrigin.manual});
 
-    expect(find.text('12,4 MB'), findsOneWidget);
+    expect(find.text('12,4 MB'), findsOneWidget);
   });
   testWidgets('ningún texto del diálogo baja de 11 px', (tester) async {
     await pump(tester, open: BackupOrigin.values.toSet());

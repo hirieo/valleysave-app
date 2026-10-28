@@ -2,6 +2,33 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+/// Cristal translúcido común a la hoja «En este equipo» y al diálogo de
+/// Backups (valores elegidos con el usuario sobre el mockup, 2026-10-28):
+/// la lista de atrás se queda visible al 40 %, el panel oscurece al 64 % y
+/// el desenfoque es mínimo para que lo de atrás siga reconociéndose.
+const double kGlassBehindOpacity = 0.40;
+const double kGlassPanelAlpha = 0.64;
+const double kGlassBlurSigma = 2;
+
+/// Relleno del panel translúcido: tinte de la estación sobre el fondo oscuro.
+Color glassPanelFill(Color accent) => Color.alphaBlend(
+  accent.withValues(alpha: 0.12),
+  const Color(0xFF14110A).withValues(alpha: kGlassPanelAlpha),
+);
+
+/// Cuántas hojas de cristal (hoja de detalle, Backups) están abiertas. La
+/// pantalla de partidas atenúa su lista mientras sea > 0. Backups se abre
+/// desde la hoja, que se cierra antes: el contador sube antes de que baje,
+/// así la lista no vuelve a verse entera entre una y otra.
+class GlassBackdrop {
+  GlassBackdrop._();
+  static final ValueNotifier<int> depth = ValueNotifier<int>(0);
+  static void open() => depth.value++;
+  static void close() {
+    if (depth.value > 0) depth.value--;
+  }
+}
+
 /// Cristal oscuro con blur + borde de acento — el fondo de TODOS los
 /// diálogos de la app (antes solo vivía duplicado dentro de
 /// `saves_screen.dart`; extraído 2026-07-15 para que cualquier pantalla

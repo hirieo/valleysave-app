@@ -129,10 +129,6 @@ class SavesScreen extends StatefulWidget {
 class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
   List<SaveEntry> _entries = [];
   int _staggerVersion = 0;
-
-  /// `true` mientras el diálogo de Backups está abierto: la pantalla de atrás
-  /// (barra y tarjetas) se funde y solo queda el fondo animado.
-  final ValueNotifier<bool> _backupsOpen = ValueNotifier(false);
   bool _loading = true;
   bool _refreshing = false;
   bool _gameCanLaunch = false;
@@ -336,7 +332,6 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _stopAutoRefresh();
     _autoSyncTimer?.cancel();
-    _backupsOpen.dispose();
     super.dispose();
   }
 
@@ -3393,6 +3388,28 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     bool canEditShared = false,
     String? sharedOwnerEmail,
   }) async {
+    // Se cuenta desde el primer instante: la hoja de detalle se cierra justo
+    // antes y, mientras se leen los backups, la lista no debe volver a verse
+    // entera.
+    GlassBackdrop.open();
+    try {
+      await _openBackups(
+        entry,
+        sharedFolderId: sharedFolderId,
+        canEditShared: canEditShared,
+        sharedOwnerEmail: sharedOwnerEmail,
+      );
+    } finally {
+      GlassBackdrop.close();
+    }
+  }
+
+  Future<void> _openBackups(
+    SaveEntry entry, {
+    String? sharedFolderId,
+    bool canEditShared = false,
+    String? sharedOwnerEmail,
+  }) async {
     final source = entry.local ?? entry.drive;
     if (source == null) return;
 
@@ -3477,10 +3494,9 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     final initialOpen = await BackupsSectionsPrefs.load();
     if (!mounted) return;
     var inUse = initialInUse;
-    _backupsOpen.value = true;
     await showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.12),
+      barrierColor: Colors.transparent,
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -3498,18 +3514,15 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               setState(() => inUse = marked?.fileName);
             }
 
-            // Cristal casi transparente con tinte de la estación (variante C
-            // aprobada): se ve el fondo animado y no las cards, que se funden
-            // mientras el diálogo está abierto (`_backupsOpen`).
+            // Mismo cristal que la hoja «En este equipo» (valores comunes en
+            // glass_dialog.dart); la lista de atrás se atenúa con
+            // `GlassBackdrop`.
             final accent = _seasonAccent;
             return _glassDialogShell(
               maxWidth: 420,
               accent: accent,
-              blurSigma: 14,
-              fill: Color.alphaBlend(
-                accent.withValues(alpha: 0.12),
-                const Color(0xFF14110A).withValues(alpha: 0.30),
-              ),
+              blurSigma: kGlassBlurSigma,
+              fill: glassPanelFill(accent),
               child: _dialogBody(
                 title: Text(
                   l10n.backupsScreenTitle(farmName),
@@ -3616,7 +3629,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
           },
         ),
       ),
-    ).whenComplete(() => _backupsOpen.value = false);
+    );
   }
 
   /// Vuelve a leer los backups LOCALES de [folderName] y los fusiona en
@@ -6370,10 +6383,10 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               ),
             ),
             SafeArea(
-              child: ValueListenableBuilder<bool>(
-                valueListenable: _backupsOpen,
-                builder: (context, backupsOpen, child) => AnimatedOpacity(
-                  opacity: backupsOpen ? 0 : 1,
+              child: ValueListenableBuilder<int>(
+                valueListenable: GlassBackdrop.depth,
+                builder: (context, depth, child) => AnimatedOpacity(
+                  opacity: depth > 0 ? kGlassBehindOpacity : 1,
                   duration: MediaQuery.of(context).disableAnimations
                       ? Duration.zero
                       : const Duration(milliseconds: 220),

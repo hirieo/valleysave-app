@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,8 @@ import '../../../core/models/player_stats.dart';
 import '../../../core/models/save_entry.dart';
 import '../../../core/models/save_file.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/glass_dialog.dart'
+    show GlassBackdrop, glassPanelFill, kGlassBlurSigma;
 import '../../../shared/widgets/pressable_scale.dart';
 import '../save_card.dart';
 import 'save_area_tabs.dart' show currentSeasonAccent;
@@ -209,11 +212,12 @@ void showSaveDetail(
       ? requestedPage
       : (startOnLocal ? 0 : sides.length - 1).clamp(0, sides.length - 1);
 
+  GlassBackdrop.open();
   showGeneralDialog<void>(
     context: context,
     barrierDismissible: true,
     barrierLabel: l10n.cardCloseBarrier,
-    barrierColor: Colors.black.withValues(alpha: 0.70),
+    barrierColor: Colors.transparent,
     transitionDuration: const Duration(milliseconds: 260),
     transitionBuilder: (ctx, animation, _, child) {
       const curve = Cubic(0.23, 1, 0.32, 1);
@@ -240,7 +244,7 @@ void showSaveDetail(
         onToggleAutoSync: onToggleAutoSync,
       ),
     ),
-  );
+  ).whenComplete(GlassBackdrop.close);
 }
 
 class _DetailSheet extends StatefulWidget {
@@ -459,183 +463,194 @@ class _DetailSheetState extends State<_DetailSheet>
             constraints: BoxConstraints(maxWidth: 420, maxHeight: maxH),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
-              child: Container(
-                key: const ValueKey('save-detail-sheet'),
-                decoration: BoxDecoration(
-                  color: Color.alphaBlend(
-                    active.color.withValues(alpha: 0.06),
-                    const Color(0xFF0B0B0D),
-                  ),
-                  border: Border.all(
-                    color: active.color.withValues(alpha: 0.55),
-                    width: 1.5,
-                  ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: kGlassBlurSigma,
+                  sigmaY: kGlassBlurSigma,
                 ),
-                child: SafeArea(
-                  top: false,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 7),
-                      Center(
-                        child: Container(
-                          width: 40,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.20),
-                            borderRadius: BorderRadius.circular(2),
+                child: Container(
+                  key: const ValueKey('save-detail-sheet'),
+                  decoration: BoxDecoration(
+                    color: glassPanelFill(active.color),
+                    border: Border.all(
+                      color: active.color.withValues(alpha: 0.55),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: SafeArea(
+                    top: false,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 7),
+                        Center(
+                          child: Container(
+                            width: 40,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.20),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      if (sides.length > 1) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _navArrow(
-                              Icons.chevron_left_rounded,
-                              key: const ValueKey('save-detail-nav-left'),
-                              enabled: _index > 0,
-                              color: sides[0].color,
-                              onTap: () => _navigate(-1),
-                            ),
-                            const SizedBox(width: 12),
-                            ...List.generate(sides.length, (i) {
-                              final on = i == _index;
-                              final c = sides[i].color;
-                              return AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.easeOut,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 3,
-                                ),
-                                width: on ? 18 : 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: on ? c : c.withValues(alpha: 0.35),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              );
-                            }),
-                            const SizedBox(width: 12),
-                            _navArrow(
-                              Icons.chevron_right_rounded,
-                              key: const ValueKey('save-detail-nav-right'),
-                              enabled: _index < sides.length - 1,
-                              color: sides[sides.length - 1].color,
-                              onTap: () => _navigate(1),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                      ],
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: SingleChildScrollView(
-                          child: Stack(
+                        const SizedBox(height: 8),
+                        if (sides.length > 1) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // El IndexedStack invisible mide TODAS las caras.
-                              // Así la hoja usa la altura natural de la más alta
-                              // de esta partida, no un 90 % fijo de la ventana.
-                              ExcludeSemantics(
-                                child: IgnorePointer(
-                                  child: Opacity(
-                                    opacity: 0,
-                                    child: IndexedStack(
-                                      index: 0,
-                                      children: [
-                                        for (final side in sides)
-                                          _DetailPage(
-                                            side: side,
-                                            selectedPlayerId: _selectedPlayerId,
-                                            fallbackPlayerIndex:
-                                                _fallbackPlayerIndex,
-                                            onSelectPlayer: _selectPlayer,
-                                            entrance:
-                                                const AlwaysStoppedAnimation(1),
-                                            fillAvailable: false,
-                                            autoSyncEnabled: _autoSync,
-                                            onToggleAutoSync:
-                                                widget.onToggleAutoSync == null
-                                                ? null
-                                                : _toggleAutoSyncLocal,
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              _navArrow(
+                                Icons.chevron_left_rounded,
+                                key: const ValueKey('save-detail-nav-left'),
+                                enabled: _index > 0,
+                                color: sides[0].color,
+                                onTap: () => _navigate(-1),
                               ),
-                              Positioned.fill(
-                                child: GestureDetector(
-                                  onHorizontalDragEnd: (details) {
-                                    final v = details.primaryVelocity ?? 0;
-                                    if (v < -100 && _index < sides.length - 1) {
-                                      _navigate(1);
-                                    } else if (v > 100 && _index > 0) {
-                                      _navigate(-1);
-                                    }
-                                  },
-                                  child: AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 260),
-                                    transitionBuilder: (child, animation) {
-                                      const curve = Cubic(0.23, 1, 0.32, 1);
-                                      final isNew =
-                                          child.key == ValueKey(_index);
-                                      final dir = _direction.toDouble();
-                                      return FadeTransition(
-                                        opacity: CurvedAnimation(
-                                          parent: animation,
-                                          curve: curve,
-                                        ),
-                                        child: SlideTransition(
-                                          position:
-                                              Tween<Offset>(
-                                                begin: isNew
-                                                    ? Offset(dir * 0.08, 0)
-                                                    : Offset(-dir * 0.08, 0),
-                                                end: Offset.zero,
-                                              ).animate(
-                                                CurvedAnimation(
-                                                  parent: animation,
-                                                  curve: curve,
-                                                ),
-                                              ),
-                                          child: child,
-                                        ),
-                                      );
-                                    },
-                                    layoutBuilder: (current, previous) => Stack(
-                                      fit: StackFit.expand,
-                                      alignment: Alignment.topCenter,
-                                      children: [...previous, ?current],
-                                    ),
-                                    child: KeyedSubtree(
-                                      key: ValueKey(
-                                        'save-detail-${active.location.name}',
-                                      ),
-                                      child: _DetailPage(
-                                        side: active,
-                                        selectedPlayerId: _selectedPlayerId,
-                                        fallbackPlayerIndex:
-                                            _fallbackPlayerIndex,
-                                        onSelectPlayer: _selectPlayer,
-                                        entrance: _entrance,
-                                        fillAvailable: true,
-                                        autoSyncEnabled: _autoSync,
-                                        onToggleAutoSync:
-                                            widget.onToggleAutoSync == null
-                                            ? null
-                                            : _toggleAutoSyncLocal,
-                                      ),
-                                    ),
+                              const SizedBox(width: 12),
+                              ...List.generate(sides.length, (i) {
+                                final on = i == _index;
+                                final c = sides[i].color;
+                                return AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeOut,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 3,
                                   ),
-                                ),
+                                  width: on ? 18 : 6,
+                                  height: 6,
+                                  decoration: BoxDecoration(
+                                    color: on ? c : c.withValues(alpha: 0.35),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                );
+                              }),
+                              const SizedBox(width: 12),
+                              _navArrow(
+                                Icons.chevron_right_rounded,
+                                key: const ValueKey('save-detail-nav-right'),
+                                enabled: _index < sides.length - 1,
+                                color: sides[sides.length - 1].color,
+                                onTap: () => _navigate(1),
                               ),
                             ],
                           ),
+                          const SizedBox(height: 4),
+                        ],
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: SingleChildScrollView(
+                            child: Stack(
+                              children: [
+                                // El IndexedStack invisible mide TODAS las caras.
+                                // Así la hoja usa la altura natural de la más alta
+                                // de esta partida, no un 90 % fijo de la ventana.
+                                ExcludeSemantics(
+                                  child: IgnorePointer(
+                                    child: Opacity(
+                                      opacity: 0,
+                                      child: IndexedStack(
+                                        index: 0,
+                                        children: [
+                                          for (final side in sides)
+                                            _DetailPage(
+                                              side: side,
+                                              selectedPlayerId:
+                                                  _selectedPlayerId,
+                                              fallbackPlayerIndex:
+                                                  _fallbackPlayerIndex,
+                                              onSelectPlayer: _selectPlayer,
+                                              entrance:
+                                                  const AlwaysStoppedAnimation(
+                                                    1,
+                                                  ),
+                                              fillAvailable: false,
+                                              autoSyncEnabled: _autoSync,
+                                              onToggleAutoSync:
+                                                  widget.onToggleAutoSync ==
+                                                      null
+                                                  ? null
+                                                  : _toggleAutoSyncLocal,
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned.fill(
+                                  child: GestureDetector(
+                                    onHorizontalDragEnd: (details) {
+                                      final v = details.primaryVelocity ?? 0;
+                                      if (v < -100 &&
+                                          _index < sides.length - 1) {
+                                        _navigate(1);
+                                      } else if (v > 100 && _index > 0) {
+                                        _navigate(-1);
+                                      }
+                                    },
+                                    child: AnimatedSwitcher(
+                                      duration: const Duration(
+                                        milliseconds: 260,
+                                      ),
+                                      transitionBuilder: (child, animation) {
+                                        const curve = Cubic(0.23, 1, 0.32, 1);
+                                        final isNew =
+                                            child.key == ValueKey(_index);
+                                        final dir = _direction.toDouble();
+                                        return FadeTransition(
+                                          opacity: CurvedAnimation(
+                                            parent: animation,
+                                            curve: curve,
+                                          ),
+                                          child: SlideTransition(
+                                            position:
+                                                Tween<Offset>(
+                                                  begin: isNew
+                                                      ? Offset(dir * 0.08, 0)
+                                                      : Offset(-dir * 0.08, 0),
+                                                  end: Offset.zero,
+                                                ).animate(
+                                                  CurvedAnimation(
+                                                    parent: animation,
+                                                    curve: curve,
+                                                  ),
+                                                ),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                      layoutBuilder: (current, previous) =>
+                                          Stack(
+                                            fit: StackFit.expand,
+                                            alignment: Alignment.topCenter,
+                                            children: [...previous, ?current],
+                                          ),
+                                      child: KeyedSubtree(
+                                        key: ValueKey(
+                                          'save-detail-${active.location.name}',
+                                        ),
+                                        child: _DetailPage(
+                                          side: active,
+                                          selectedPlayerId: _selectedPlayerId,
+                                          fallbackPlayerIndex:
+                                              _fallbackPlayerIndex,
+                                          onSelectPlayer: _selectPlayer,
+                                          entrance: _entrance,
+                                          fillAvailable: true,
+                                          autoSyncEnabled: _autoSync,
+                                          onToggleAutoSync:
+                                              widget.onToggleAutoSync == null
+                                              ? null
+                                              : _toggleAutoSyncLocal,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

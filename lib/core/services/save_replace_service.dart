@@ -208,7 +208,11 @@ class SaveReplaceService {
               error: ReplaceError.backupFailed,
             );
           }
-          await BackupService().enforceAutoRetention(backupsDir, folderName);
+          await BackupService().enforceRetention(
+            backupsDir,
+            folderName,
+            BackupOrigin.auto,
+          );
         } catch (_) {
           await _safeDelete(tmpRoot);
           return const ReplaceResult(

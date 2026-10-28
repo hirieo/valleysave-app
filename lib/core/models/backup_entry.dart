@@ -1,7 +1,7 @@
 /// Origen de un respaldo: creado a propósito por el usuario, o generado
 /// automáticamente por `SaveReplaceService` antes de una sobrescritura
 /// (spec 001-integridad-transaccional-saves). Los automáticos participan en
-/// la retención (`BackupService.enforceAutoRetention`); los manuales nunca
+/// la retención (`BackupService.enforceRetention`); los manuales nunca
 /// se borran solos. [preRestore] es el que se crea justo antes de cargar un
 /// backup sobre la partida (spec 012).
 enum BackupOrigin { manual, auto, preRestore }

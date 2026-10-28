@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 
 import '../models/backup_entry.dart';
+import 'backup_in_use_store.dart';
 import 'save_service.dart';
 import 'transfer_service.dart';
 
@@ -97,20 +98,32 @@ class BackupService {
     return out;
   }
 
-  /// Borra los respaldos AUTOMÁTICOS más antiguos de [folderName] que
-  /// excedan [kMaxAutoBackups] (FR-005). Los manuales no se tocan. Se llama
-  /// tras crear un auto-backup nuevo — best-effort: un fallo al borrar no
-  /// interrumpe la operación que lo disparó.
-  Future<void> enforceAutoRetention(
+  /// Retención por tipo (FR-005, spec 012 D2): borra los respaldos más
+  /// antiguos de [folderName] cuyo origen es [origin] y que excedan su límite
+  /// ([kMaxAutoBackups] para auto, [kMaxPreRestoreBackups] para preRestore).
+  /// Los manuales no se tocan, y un tipo nunca borra del otro. NUNCA borra el
+  /// backup «en uso» (`BackupInUseStore`): cuenta dentro del límite pero se
+  /// salta. Se llama tras crear un backup nuevo — best-effort: un fallo al
+  /// borrar no interrumpe la operación que lo disparó.
+  Future<void> enforceRetention(
     String backupsDir,
     String folderName,
+    BackupOrigin origin,
   ) async {
+    final limit = switch (origin) {
+      BackupOrigin.auto => kMaxAutoBackups,
+      BackupOrigin.preRestore => kMaxPreRestoreBackups,
+      BackupOrigin.manual => null,
+    };
+    if (limit == null) return;
     try {
       final all = await listLocalBackups(backupsDir, folderName: folderName);
-      final autos = all.where((e) => e.origin == BackupOrigin.auto).toList()
+      final ofType = all.where((e) => e.origin == origin).toList()
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
-      if (autos.length <= kMaxAutoBackups) return;
-      for (final old in autos.skip(kMaxAutoBackups)) {
+      if (ofType.length <= limit) return;
+      final inUse = (await const BackupInUseStore().get(folderName))?.fileName;
+      for (final old in ofType.skip(limit)) {
+        if (old.fileName == inUse) continue;
         if (old.localPath != null) await deleteLocalBackup(old.localPath!);
       }
     } catch (_) {

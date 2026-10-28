@@ -10,11 +10,11 @@ const double kGlassBehindOpacity = 0.40;
 const double kGlassPanelAlpha = 0.64;
 const double kGlassBlurSigma = 2;
 
-/// Relleno del panel translúcido: tinte de la estación sobre el fondo oscuro.
-Color glassPanelFill(Color accent) => Color.alphaBlend(
-  accent.withValues(alpha: 0.12),
-  const Color(0xFF14110A).withValues(alpha: kGlassPanelAlpha),
-);
+/// Relleno del panel translúcido: oscuro puro, sin tinte (el color de la
+/// estación o de la cara queda en el borde; un tinte amarilleaba la cara de
+/// Drive, 2026-10-28).
+Color glassPanelFill() =>
+    const Color(0xFF14110A).withValues(alpha: kGlassPanelAlpha);
 
 /// Cuántas hojas de cristal (hoja de detalle, Backups) están abiertas. La
 /// pantalla de partidas atenúa su lista mientras sea > 0. Backups se abre

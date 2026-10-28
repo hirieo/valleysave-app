@@ -3522,7 +3522,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
               maxWidth: 420,
               accent: accent,
               blurSigma: kGlassBlurSigma,
-              fill: glassPanelFill(accent),
+              fill: glassPanelFill(),
               child: _dialogBody(
                 title: Text(
                   l10n.backupsScreenTitle(farmName),

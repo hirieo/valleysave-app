@@ -48,7 +48,9 @@ class ReplaceResult {
   final ReplaceError? error;
 
   /// Respaldo automático del contenido previo del destino — presente solo si
-  /// `ok` y el destino ya existía antes de la operación.
+  /// `ok` y el destino ya existía antes de la operación. Si ya existía un
+  /// backup verificado con ese mismo contenido (spec 012, D4), es ese y no
+  /// se crea otro.
   final BackupEntry? autoBackup;
 
   static const ReplaceResult busy = ReplaceResult(
@@ -190,29 +192,41 @@ class SaveReplaceService {
       BackupEntry? autoBackup;
       if (destinationExists && preverifiedBackupPath == null) {
         try {
-          autoBackup = await BackupService().createBackup(
+          // D4 (spec 012): si ya hay un backup verificado con el MISMO
+          // contenido que el destino, ese zip es el respaldo: no se crea otro
+          // ni se aplica retención (no ha entrado nada nuevo).
+          final identical = await BackupService().findIdenticalBackup(
             saveFolderPath: destination.path,
             folderName: folderName,
             backupsDir: backupsDir,
-            origin: BackupOrigin.auto,
           );
-          final verified = await verifyBackupZipContents(
-            autoBackup.localPath!,
-            folderName,
-          );
-          if (!verified) {
-            await BackupService().deleteLocalBackup(autoBackup.localPath!);
-            await _safeDelete(tmpRoot);
-            return const ReplaceResult(
-              ok: false,
-              error: ReplaceError.backupFailed,
+          if (identical != null) {
+            autoBackup = identical;
+          } else {
+            autoBackup = await BackupService().createBackup(
+              saveFolderPath: destination.path,
+              folderName: folderName,
+              backupsDir: backupsDir,
+              origin: BackupOrigin.auto,
+            );
+            final verified = await verifyBackupZipContents(
+              autoBackup.localPath!,
+              folderName,
+            );
+            if (!verified) {
+              await BackupService().deleteLocalBackup(autoBackup.localPath!);
+              await _safeDelete(tmpRoot);
+              return const ReplaceResult(
+                ok: false,
+                error: ReplaceError.backupFailed,
+              );
+            }
+            await BackupService().enforceRetention(
+              backupsDir,
+              folderName,
+              BackupOrigin.auto,
             );
           }
-          await BackupService().enforceRetention(
-            backupsDir,
-            folderName,
-            BackupOrigin.auto,
-          );
         } catch (_) {
           await _safeDelete(tmpRoot);
           return const ReplaceResult(
@@ -399,6 +413,17 @@ class SaveReplaceService {
           // manda, el rollback se archiva como respaldo automático — nunca
           // se borra sin verificar que el zip resultante es un save real.
           try {
+            // D4: si el contenido del rollback ya está en un backup
+            // verificado, ese zip es el archivo; no se crea otro.
+            final identical = await BackupService().findIdenticalBackup(
+              saveFolderPath: saveDir.path,
+              folderName: folderName,
+              backupsDir: backupsDir,
+            );
+            if (identical != null) {
+              await _safeDelete(entity);
+              continue;
+            }
             final zip = await BackupService().createBackup(
               saveFolderPath: saveDir.path,
               folderName: folderName,

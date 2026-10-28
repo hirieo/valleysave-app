@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 
 import '../models/backup_entry.dart';
+import 'backup_content_hash.dart';
 import 'backup_in_use_store.dart';
 import 'save_service.dart';
 import 'transfer_service.dart';
@@ -59,6 +60,10 @@ class BackupService {
         // Limpieza best-effort; el respaldo final ya está fuera del temporal.
       }
     }
+    // Huella del zip ya escrito (no de la carpeta): garantiza que la caché
+    // describe exactamente lo que hay en el archivo. Best-effort.
+    final hash = await hashBackupZip(destination.path, folderName);
+    if (hash != null) await const BackupHashCache().put(fileName, hash);
     return BackupEntry(
       fileName: fileName,
       folderName: folderName,
@@ -67,6 +72,43 @@ class BackupService {
       sizeBytes: await destination.length(),
       origin: origin,
     );
+  }
+
+  /// D4 (spec 012): busca un backup LOCAL de [folderName] cuyo contenido sea
+  /// idéntico al de [saveFolderPath] ahora mismo. Se compara el contenido
+  /// (huella), nunca la fecha. El zip encontrado se verifica
+  /// ([verifyBackupZipContents]) antes de devolverlo, porque el caller lo
+  /// usará como único respaldo. Los zips sin huella en caché se calculan y
+  /// se guardan. Best-effort: ante cualquier fallo devuelve `null` y el
+  /// caller crea el backup como siempre.
+  Future<BackupEntry?> findIdenticalBackup({
+    required String saveFolderPath,
+    required String folderName,
+    required String backupsDir,
+  }) async {
+    try {
+      final current = await hashSaveFolder(saveFolderPath);
+      const cache = BackupHashCache();
+      final candidates = await listLocalBackups(
+        backupsDir,
+        folderName: folderName,
+      );
+      for (final entry in candidates) {
+        var hash = await cache.get(entry.fileName);
+        if (hash == null) {
+          hash = await hashBackupZip(entry.localPath!, folderName);
+          if (hash == null) continue;
+          await cache.put(entry.fileName, hash);
+        }
+        if (hash != current) continue;
+        if (await verifyBackupZipContents(entry.localPath!, folderName)) {
+          return entry;
+        }
+      }
+    } catch (_) {
+      // Sin dedupe, se crea el backup normal.
+    }
+    return null;
   }
 
   /// Nunca hace llamadas de red (G9) — solo lee el directorio local.
@@ -158,12 +200,19 @@ class BackupService {
       await downloadToPath(zipPath);
     }
     try {
-      return await TransferService().importSave(
+      final result = await TransferService().importSave(
         zipPath,
         savesDir: savesDir,
         backupsDir: backupsDir,
         overwrite: true,
       );
+      if (result.ok) {
+        final hash = await hashBackupZip(zipPath, entry.folderName);
+        if (hash != null) {
+          await const BackupHashCache().put(entry.fileName, hash);
+        }
+      }
+      return result;
     } finally {
       if (tempDir != null) {
         try {

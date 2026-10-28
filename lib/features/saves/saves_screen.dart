@@ -3863,7 +3863,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
     if (!await _saveCurrentAndroidGame(folderName)) {
       if (!mounted) return false;
       final goOn = await _confirmBackupAction(
-        accent: const Color(0xFFE05252),
+        accent: _seasonAccent,
         title: l10n.backupsRestoreNoSafetyTitle,
         body: l10n.backupsRestoreNoSafetyBody,
         confirmLabel: l10n.backupsRestoreNoSafetyConfirm,

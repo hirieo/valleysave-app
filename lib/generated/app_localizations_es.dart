@@ -2638,4 +2638,13 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'Tus partidas están a salvo: siguen en tu equipo y en tu Drive.';
+
+  @override
+  String get settingsCreditsSection => 'Créditos';
+
+  @override
+  String get creditsEmail => 'Correo';
+
+  @override
+  String get creditsEmailCopied => 'Correo copiado';
 }

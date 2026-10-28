@@ -2562,4 +2562,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get forcedUpdateSafe => '세이브는 안전합니다. 기기와 Drive에 그대로 남아 있습니다.';
+
+  @override
+  String get settingsCreditsSection => '크레딧';
+
+  @override
+  String get creditsEmail => '이메일';
+
+  @override
+  String get creditsEmailCopied => '이메일을 복사했습니다';
 }

@@ -1366,5 +1366,8 @@
   "forcedUpdateFailedTitle": "업데이트할 수 없습니다",
   "forcedUpdateFailedBody": "이 버전은 더 이상 동기화할 수 없습니다. 인터넷에 연결한 뒤 다시 시도하세요.",
   "forcedUpdateRetry": "다시 시도",
-  "forcedUpdateSafe": "세이브는 안전합니다. 기기와 Drive에 그대로 남아 있습니다."
+  "forcedUpdateSafe": "세이브는 안전합니다. 기기와 Drive에 그대로 남아 있습니다.",
+  "settingsCreditsSection": "크레딧",
+  "creditsEmail": "이메일",
+  "creditsEmailCopied": "이메일을 복사했습니다"
 }

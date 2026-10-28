@@ -2556,4 +2556,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get forcedUpdateSafe => 'セーブデータは安全です。端末と Drive にそのまま残ります。';
+
+  @override
+  String get settingsCreditsSection => 'クレジット';
+
+  @override
+  String get creditsEmail => 'メール';
+
+  @override
+  String get creditsEmailCopied => 'メールをコピーしました';
 }

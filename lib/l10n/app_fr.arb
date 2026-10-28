@@ -1373,5 +1373,8 @@
   "forcedUpdateFailedTitle": "Impossible de mettre à jour",
   "forcedUpdateFailedBody": "Cette version ne peut plus synchroniser. Connectez-vous à Internet et réessayez.",
   "forcedUpdateRetry": "Réessayer",
-  "forcedUpdateSafe": "Vos sauvegardes sont en sécurité : elles restent sur votre appareil et dans votre Drive."
+  "forcedUpdateSafe": "Vos sauvegardes sont en sécurité : elles restent sur votre appareil et dans votre Drive.",
+  "settingsCreditsSection": "Crédits",
+  "creditsEmail": "E-mail",
+  "creditsEmailCopied": "E-mail copié"
 }

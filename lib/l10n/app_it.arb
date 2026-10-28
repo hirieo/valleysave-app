@@ -1373,5 +1373,8 @@
   "forcedUpdateFailedTitle": "Impossibile aggiornare",
   "forcedUpdateFailedBody": "Questa versione non può più sincronizzare. Connettiti a internet e riprova.",
   "forcedUpdateRetry": "Riprova",
-  "forcedUpdateSafe": "I tuoi salvataggi sono al sicuro: restano sul tuo dispositivo e nel tuo Drive."
+  "forcedUpdateSafe": "I tuoi salvataggi sono al sicuro: restano sul tuo dispositivo e nel tuo Drive.",
+  "settingsCreditsSection": "Crediti",
+  "creditsEmail": "E-mail",
+  "creditsEmailCopied": "E-mail copiata"
 }

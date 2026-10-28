@@ -1373,5 +1373,8 @@
   "forcedUpdateFailedTitle": "Не удалось обновить",
   "forcedUpdateFailedBody": "Эта версия больше не может синхронизировать. Подключитесь к интернету и попробуйте снова.",
   "forcedUpdateRetry": "Повторить",
-  "forcedUpdateSafe": "Ваши сохранения в безопасности: они остаются на устройстве и в вашем Drive."
+  "forcedUpdateSafe": "Ваши сохранения в безопасности: они остаются на устройстве и в вашем Drive.",
+  "settingsCreditsSection": "Авторы",
+  "creditsEmail": "Почта",
+  "creditsEmailCopied": "Почта скопирована"
 }

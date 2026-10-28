@@ -2504,6 +2504,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get forcedUpdateSafe => '你的存档很安全：它们仍在你的设备和 Drive 中。';
+
+  @override
+  String get settingsCreditsSection => '制作人员';
+
+  @override
+  String get creditsEmail => '邮箱';
+
+  @override
+  String get creditsEmailCopied => '已复制邮箱';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -5003,4 +5012,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get forcedUpdateSafe => '你的存檔很安全：它們仍在你的裝置和 Drive 中。';
+
+  @override
+  String get settingsCreditsSection => '製作人員';
+
+  @override
+  String get creditsEmail => '電子郵件';
+
+  @override
+  String get creditsEmailCopied => '已複製電子郵件';
 }

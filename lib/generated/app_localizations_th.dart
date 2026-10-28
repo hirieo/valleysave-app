@@ -2620,4 +2620,13 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'เซฟของคุณปลอดภัย ยังอยู่ในอุปกรณ์และใน Drive ของคุณ';
+
+  @override
+  String get settingsCreditsSection => 'เครดิต';
+
+  @override
+  String get creditsEmail => 'อีเมล';
+
+  @override
+  String get creditsEmailCopied => 'คัดลอกอีเมลแล้ว';
 }

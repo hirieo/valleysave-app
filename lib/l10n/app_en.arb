@@ -1333,5 +1333,8 @@
   "forcedUpdateFailedTitle": "Couldn’t update",
   "forcedUpdateFailedBody": "This version can no longer sync. Connect to the internet and try again.",
   "forcedUpdateRetry": "Retry",
-  "forcedUpdateSafe": "Your saves are safe: they stay on your device and in your Drive."
+  "forcedUpdateSafe": "Your saves are safe: they stay on your device and in your Drive.",
+  "settingsCreditsSection": "Credits",
+  "creditsEmail": "Email",
+  "creditsEmailCopied": "Email copied"
 }

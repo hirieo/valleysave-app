@@ -2637,4 +2637,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'Os teus jogos guardados estão seguros: continuam no teu dispositivo e no teu Drive.';
+
+  @override
+  String get settingsCreditsSection => 'Créditos';
+
+  @override
+  String get creditsEmail => 'E-mail';
+
+  @override
+  String get creditsEmailCopied => 'E-mail copiado';
 }

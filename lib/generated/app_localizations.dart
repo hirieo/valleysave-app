@@ -4566,6 +4566,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your saves are safe: they stay on your device and in your Drive.'**
   String get forcedUpdateSafe;
+
+  /// No description provided for @settingsCreditsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get settingsCreditsSection;
+
+  /// No description provided for @creditsEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get creditsEmail;
+
+  /// No description provided for @creditsEmailCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Email copied'**
+  String get creditsEmailCopied;
 }
 
 class _AppLocalizationsDelegate

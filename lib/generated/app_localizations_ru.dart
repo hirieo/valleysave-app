@@ -2655,4 +2655,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'Ваши сохранения в безопасности: они остаются на устройстве и в вашем Drive.';
+
+  @override
+  String get settingsCreditsSection => 'Авторы';
+
+  @override
+  String get creditsEmail => 'Почта';
+
+  @override
+  String get creditsEmailCopied => 'Почта скопирована';
 }

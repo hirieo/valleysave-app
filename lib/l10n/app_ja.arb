@@ -1366,5 +1366,8 @@
   "forcedUpdateFailedTitle": "更新できませんでした",
   "forcedUpdateFailedBody": "このバージョンでは同期できなくなりました。インターネットに接続して再試行してください。",
   "forcedUpdateRetry": "再試行",
-  "forcedUpdateSafe": "セーブデータは安全です。端末と Drive にそのまま残ります。"
+  "forcedUpdateSafe": "セーブデータは安全です。端末と Drive にそのまま残ります。",
+  "settingsCreditsSection": "クレジット",
+  "creditsEmail": "メール",
+  "creditsEmailCopied": "メールをコピーしました"
 }

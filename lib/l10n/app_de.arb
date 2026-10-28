@@ -1373,5 +1373,8 @@
   "forcedUpdateFailedTitle": "Aktualisierung fehlgeschlagen",
   "forcedUpdateFailedBody": "Diese Version kann nicht mehr synchronisieren. Verbinde dich mit dem Internet und versuche es erneut.",
   "forcedUpdateRetry": "Erneut versuchen",
-  "forcedUpdateSafe": "Deine Spielstände sind sicher: Sie bleiben auf deinem Gerät und in deinem Drive."
+  "forcedUpdateSafe": "Deine Spielstände sind sicher: Sie bleiben auf deinem Gerät und in deinem Drive.",
+  "settingsCreditsSection": "Credits",
+  "creditsEmail": "E-Mail",
+  "creditsEmailCopied": "E-Mail kopiert"
 }

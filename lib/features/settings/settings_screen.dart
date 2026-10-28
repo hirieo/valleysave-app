@@ -28,6 +28,7 @@ import '../../shared/widgets/update_download_animation.dart';
 import '../../shared/widgets/valley_canvas_widget.dart';
 import '../saves/save_card.dart' show ActionBtn;
 import '../saves/widgets/seasonal_loader.dart';
+import 'widgets/credits_tile.dart';
 import 'widgets/language_dialog.dart';
 import 'widgets/locations_tile.dart';
 import 'widgets/saves_folder_dialog.dart';
@@ -528,6 +529,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                                     .accentColor,
                                 l10n,
                               ),
+                              const SizedBox(height: 32),
+                              Text(
+                                l10n.settingsCreditsSection.toUpperCase(),
+                                style: AppTypography.eyebrow(),
+                              ),
+                              const SizedBox(height: 12),
+                              CreditsTile(accent: accent),
                               if (widget.showDisconnect) ...[
                                 const SizedBox(height: 32),
                                 _disconnectButton(l10n),

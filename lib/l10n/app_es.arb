@@ -999,5 +999,8 @@
   "forcedUpdateFailedTitle": "No se pudo actualizar",
   "forcedUpdateFailedBody": "Esta versión ya no puede sincronizar. Conéctate a internet y vuelve a intentarlo.",
   "forcedUpdateRetry": "Reintentar",
-  "forcedUpdateSafe": "Tus partidas están a salvo: siguen en tu equipo y en tu Drive."
+  "forcedUpdateSafe": "Tus partidas están a salvo: siguen en tu equipo y en tu Drive.",
+  "settingsCreditsSection": "Créditos",
+  "creditsEmail": "Correo",
+  "creditsEmailCopied": "Correo copiado"
 }

@@ -2647,4 +2647,13 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'I tuoi salvataggi sono al sicuro: restano sul tuo dispositivo e nel tuo Drive.';
+
+  @override
+  String get settingsCreditsSection => 'Crediti';
+
+  @override
+  String get creditsEmail => 'E-mail';
+
+  @override
+  String get creditsEmailCopied => 'E-mail copiata';
 }

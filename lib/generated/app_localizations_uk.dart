@@ -2652,4 +2652,13 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'Ваші збереження в безпеці: вони залишаються на пристрої та у вашому Drive.';
+
+  @override
+  String get settingsCreditsSection => 'Автори';
+
+  @override
+  String get creditsEmail => 'Пошта';
+
+  @override
+  String get creditsEmailCopied => 'Пошту скопійовано';
 }

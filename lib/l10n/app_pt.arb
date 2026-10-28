@@ -1373,5 +1373,8 @@
   "forcedUpdateFailedTitle": "Não foi possível atualizar",
   "forcedUpdateFailedBody": "Esta versão já não consegue sincronizar. Liga-te à internet e tenta de novo.",
   "forcedUpdateRetry": "Tentar de novo",
-  "forcedUpdateSafe": "Os teus jogos guardados estão seguros: continuam no teu dispositivo e no teu Drive."
+  "forcedUpdateSafe": "Os teus jogos guardados estão seguros: continuam no teu dispositivo e no teu Drive.",
+  "settingsCreditsSection": "Créditos",
+  "creditsEmail": "E-mail",
+  "creditsEmailCopied": "E-mail copiado"
 }

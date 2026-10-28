@@ -2647,4 +2647,13 @@ class AppLocalizationsEu extends AppLocalizations {
   @override
   String get forcedUpdateSafe =>
       'Zure partidak salbu daude: zure gailuan eta zure Drive-n jarraitzen dute.';
+
+  @override
+  String get settingsCreditsSection => 'Kredituak';
+
+  @override
+  String get creditsEmail => 'Posta';
+
+  @override
+  String get creditsEmailCopied => 'Posta kopiatu da';
 }

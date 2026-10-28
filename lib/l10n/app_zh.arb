@@ -1373,5 +1373,8 @@
   "forcedUpdateFailedTitle": "无法更新",
   "forcedUpdateFailedBody": "此版本已无法同步。请连接网络后重试。",
   "forcedUpdateRetry": "重试",
-  "forcedUpdateSafe": "你的存档很安全：它们仍在你的设备和 Drive 中。"
+  "forcedUpdateSafe": "你的存档很安全：它们仍在你的设备和 Drive 中。",
+  "settingsCreditsSection": "制作人员",
+  "creditsEmail": "邮箱",
+  "creditsEmailCopied": "已复制邮箱"
 }

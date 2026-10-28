@@ -138,6 +138,17 @@ void main() {
     });
   });
 
+  group('formatBackupSize', () {
+    test('MB con el decimal del idioma', () {
+      expect(formatBackupSize(13000000, 'es'), '12,4 MB');
+      expect(formatBackupSize(13000000, 'en'), '12.4 MB');
+    });
+
+    test('por debajo de 1 MB en KB y por debajo de 1 KB en bytes', () {
+      expect(formatBackupSize(512 * 1024, 'es'), '512 KB');
+      expect(formatBackupSize(10, 'es'), '10 B');
+    });
+  });
   group('formatBackupGameSummary', () {
     const summary = (year: 3, season: 'fall', day: 12, money: 248310);
 

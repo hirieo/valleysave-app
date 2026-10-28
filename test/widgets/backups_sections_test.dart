@@ -48,6 +48,7 @@ void main() {
     String? inUse,
     Set<BackupOrigin> open = const {},
     Future<void> Function()? onCreate,
+    String? hint,
     Future<void> Function(BackupEntry)? onKeep,
     bool disableAnimations = false,
   }) async {
@@ -77,6 +78,7 @@ void main() {
                 inUseFileName: inUse ?? _autoInUse.fileName,
                 initialOpen: open,
                 onCreate: onCreate,
+                hint: hint,
                 loadSummary: (_) async => null,
                 actionsFor: (e) => BackupRowActions(
                   onRestore: () async {},
@@ -285,6 +287,28 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+  testWidgets('el aviso aparece solo si se pasa, en 11 px', (tester) async {
+    await pump(tester);
+    expect(find.text('Aviso de prueba'), findsNothing);
+
+    await pump(tester, hint: 'Aviso de prueba');
+    expect(find.text('Aviso de prueba'), findsOneWidget);
+    final text = tester.widget<Text>(find.text('Aviso de prueba'));
+    expect(text.style!.fontSize, 11);
+  });
+
+  testWidgets('la fila muestra lo que ocupa el zip', (tester) async {
+    final big = BackupEntry(
+      fileName: 'Granja_1_backup_20261020-180200.zip',
+      folderName: 'Granja_1',
+      timestamp: DateTime(2026, 10, 20, 18, 2),
+      localPath: 'C:/b/x.zip',
+      sizeBytes: 13000000,
+    );
+    await pump(tester, entries: [big], inUse: 'x', open: {BackupOrigin.manual});
+
+    expect(find.text('12,4 MB'), findsOneWidget);
+  });
   testWidgets('ningún texto del diálogo baja de 11 px', (tester) async {
     await pump(tester, open: BackupOrigin.values.toSet());
 

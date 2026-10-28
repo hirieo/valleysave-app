@@ -15,6 +15,19 @@ String formatBackupGameSummary(
   _money(summary.money, l10n.localeName),
 );
 
+/// Tamaño del zip para la línea de la fila: «12,4 MB» con el decimal del
+/// idioma; por debajo de 1 MB en KB, y por debajo de 1 KB en bytes.
+String formatBackupSize(int bytes, String localeName) {
+  if (bytes < 1024) return '$bytes B';
+  if (bytes < 1024 * 1024) return '${(bytes / 1024).round()} KB';
+  final mb = bytes / (1024 * 1024);
+  try {
+    return '${NumberFormat('0.0', localeName).format(mb)} MB';
+  } catch (_) {
+    return '${mb.toStringAsFixed(1)} MB';
+  }
+}
+
 String _seasonLabel(String season, AppLocalizations l10n) =>
     switch (season.toLowerCase()) {
       'spring' => l10n.seasonSpring,

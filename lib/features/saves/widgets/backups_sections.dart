@@ -98,6 +98,7 @@ class BackupsSections extends StatefulWidget {
     required this.actionsFor,
     required this.loadSummary,
     this.onCreate,
+    this.hint,
     this.showSharedLocation = false,
   });
 
@@ -111,6 +112,9 @@ class BackupsSections extends StatefulWidget {
 
   /// `null` oculta «Crear backup» (partida sin copia local).
   final Future<void> Function()? onCreate;
+
+  /// Aviso fino bajo el título (11 px, sin borde); `null` lo oculta.
+  final String? hint;
   final bool showSharedLocation;
 
   @override
@@ -160,6 +164,10 @@ class _BackupsSectionsState extends State<BackupsSections> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (widget.hint != null) ...[
+          _Hint(text: widget.hint!),
+          const SizedBox(height: 12),
+        ],
         Row(
           children: [
             if (widget.onCreate != null)
@@ -213,6 +221,44 @@ class _BackupsSectionsState extends State<BackupsSections> {
 
   /// Los antiguos `_pre-swap_` ya llegan como manuales desde el modelo.
   static BackupOrigin _groupOf(BackupEntry e) => e.origin;
+}
+
+/// Aviso tintado de verde, sin borde, como el de la opción B aprobada.
+class _Hint extends StatelessWidget {
+  const _Hint({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: _useColor.withValues(alpha: .07),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 1),
+            child: Icon(Icons.laptop_mac_rounded, size: 13, color: _useColor),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              style: GoogleFonts.firaCode(
+                fontSize: 11,
+                height: 1.5,
+                color: _useColor.withValues(alpha: .9),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _ToggleAllChip extends StatelessWidget {
@@ -593,12 +639,17 @@ class _BackupRowState extends State<_BackupRow> {
               FutureBuilder<BackupGameSummary?>(
                 future: _summary,
                 builder: (context, snapshot) {
+                  // Datos de partida (si se pudieron leer) y lo que ocupa el
+                  // zip, en la misma línea. Sin datos, solo el tamaño.
                   final data = snapshot.data;
-                  if (data == null) return const SizedBox.shrink();
+                  final line = [
+                    if (data != null) formatBackupGameSummary(data, l10n),
+                    formatBackupSize(entry.sizeBytes, l10n.localeName),
+                  ].join(' · ');
                   return Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
-                      formatBackupGameSummary(data, l10n),
+                      line,
                       style: GoogleFonts.firaCode(fontSize: 11, color: _t2),
                     ),
                   );

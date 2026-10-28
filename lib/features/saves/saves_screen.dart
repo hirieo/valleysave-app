@@ -3497,6 +3497,7 @@ class _SavesScreenState extends State<SavesScreen> with WidgetsBindingObserver {
                 ),
                 content: BackupsSections(
                   entries: entries,
+                  hint: localSave == null ? null : l10n.backupsCreateLocalHint,
                   inUseFileName: inUse,
                   initialOpen: initialOpen,
                   showSharedLocation: sharedFolderId != null,
